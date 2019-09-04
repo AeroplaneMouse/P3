@@ -3,10 +3,10 @@
 ## Resourcer
 
 **Gruppe e-mail:**<br>
-SW2B2-25@student.aau.dk
+
 
 **Mappe på Google:**<br>
-[Google drive](https://drive.google.com/drive/folders/1l7tTU4KZo-XR6WaBhbQvfrLpGL0eXOYl?fbclid=IwAR2EaNAcenm-GH5acLG9r5YsRtwFM7lhoiyN28hODmAFViE5Orc1oGzXU0Q)
+[Google drive]()
 
 ## Medlemmer
 
