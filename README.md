@@ -4,7 +4,6 @@
 
 **Gruppe e-mail:**<br>
 
-
 **Mappe på Google:**<br>
 [Google drive]()
 
@@ -21,6 +20,3 @@
 | FLY | Daniel Fly | dfly18@student.aau.dk | 60622036 |
 
 ## Vejledere
-**Hovedvejleder:**<br>
-<br><br>
-
