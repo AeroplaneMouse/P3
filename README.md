@@ -14,11 +14,10 @@ SW2B2-25@student.aau.dk
 | ------------- | ------------- | ------------- | ------------- |
 | TGL | Thomas Gjedsted Lorentzen | tglo18@student.aau.dk | 26836007 |
 | NFSV | Niels Vistisen | nvisti18@student.aau.dk  | 31901999 |
-| CLD | Christopher Lykke Davids | cdavid18@student.aau.dk | 22584440 |
+| ASJ | Ane Søgaard Jørgensen | asja18@student.aau.dk | 61706737 |
 | AZP | Adrian Zippor Plesner | aplesn18@student.aau.dk | 21825955 |
 | RHØ | Rikke Husted Østergaard | raster16@student.aau.dk | 60202966 |
-| AMN | Alexander Nykjær| anykja18@student.aau.dk| 21860918|
-| FLY | Daniel Fly | dfly18@student.aau.dk | 60622036 |
+|AMN| Alexander Nykjær| anykja18@student.aau.dk| 21860918|
 
 ## Vejledere
 **Hovedvejleder:**<br>Mads Vestergaard Carlsen (madpyro@cs.aau.dk/ mvc@netcompany.com) 61248562
