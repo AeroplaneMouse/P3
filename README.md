@@ -20,6 +20,6 @@
 |AMN| Alexander Nykjær| anykja18@student.aau.dk| 21860918|
 
 ## Vejledere
-**Hovedvejleder:**<br>Mads Vestergaard Carlsen (madpyro@cs.aau.dk/ mvc@netcompany.com) 61248562
+**Hovedvejleder:**<br>
 <br><br>
 
