@@ -20,5 +20,6 @@ ds303e19@cs.aau.dk
 | AMN | Alexander Nykjær| anykja18@student.aau.dk| 21860918 |
 | FLY | Daniel Fly | dfly18@student.aau.dk | 60622036 |
 
-## Vejledere
-Lu Chen luchen@cs.aau.dk
+## Vejleder
+Lu Chen 
+luchen@cs.aau.dk
