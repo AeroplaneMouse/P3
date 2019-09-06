@@ -3,6 +3,7 @@
 ## Resourcer
 
 **Gruppe e-mail:**<br>
+ds303e19@cs.aau.dk
 
 **Mappe på Google:**<br>
 [Google drive](https://drive.google.com/drive/folders/1V0mrdWoIKeoWhyUC1-GAwlDI-MhLqEaa?usp=sharing)
@@ -20,3 +21,4 @@
 | FLY | Daniel Fly | dfly18@student.aau.dk | 60622036 |
 
 ## Vejledere
+Lu Chen luchen@cs.aau.dk
