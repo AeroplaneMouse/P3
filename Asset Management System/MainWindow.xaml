@@ -5,8 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Asset_Management_System"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Asset Management System" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50px"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200px"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         
+        <!--Top navigation frame -->
+        <Frame
+            Name="Frame_topNavigation"
+            Source="Top_navigation.xaml"
+            Grid.Row="0"
+            Grid.ColumnSpan="2"
+        />
+        
+        <!--Left navigation frame -->
+        <Frame
+            Name="Fram_leftNavigation"
+            Source="Left_navigation.xaml"
+            Grid.RowSpan="2"
+            Grid.Column="0"
+        />
+        
+        <!--Top navigation frame -->
+        <Frame
+            Name="Frame_mainContent"
+            Source="Home.xaml"
+            Grid.Row="1"
+            Grid.Column="1"
+        />
+
     </Grid>
 </Window>
