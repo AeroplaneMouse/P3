@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Daniel\\OneDrive\\AAU\\P3\\P3\\Asset Management System\\Asset Management System.csproj": {}
+    "C:\\Users\\aneso\\Documents\\P3\\Asset Management System\\Asset Management System.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Daniel\\OneDrive\\AAU\\P3\\P3\\Asset Management System\\Asset Management System.csproj": {
+    "C:\\Users\\aneso\\Documents\\P3\\Asset Management System\\Asset Management System.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Daniel\\OneDrive\\AAU\\P3\\P3\\Asset Management System\\Asset Management System.csproj",
+        "projectUniqueName": "C:\\Users\\aneso\\Documents\\P3\\Asset Management System\\Asset Management System.csproj",
         "projectName": "Asset Management System",
-        "projectPath": "C:\\Users\\Daniel\\OneDrive\\AAU\\P3\\P3\\Asset Management System\\Asset Management System.csproj",
-        "packagesPath": "C:\\Users\\Daniel\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Daniel\\OneDrive\\AAU\\P3\\P3\\Asset Management System\\obj\\",
+        "projectPath": "C:\\Users\\aneso\\Documents\\P3\\Asset Management System\\Asset Management System.csproj",
+        "packagesPath": "C:\\Users\\aneso\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\aneso\\Documents\\P3\\Asset Management System\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Daniel\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\aneso\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
