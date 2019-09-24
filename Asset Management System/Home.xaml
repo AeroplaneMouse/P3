@@ -9,6 +9,15 @@
       Title="Home">
 
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50px"/>
+            <RowDefinition Height="50px"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Center">This is a test</Label>
+        <Label Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">If you can see this. It works</Label>
+        <Label Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">If you can see this. It works</Label>
+        <Label Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center">Yeaah xD</Label>
     </Grid>
 </Page>

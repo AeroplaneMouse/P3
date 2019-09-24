@@ -22,14 +22,16 @@
             Source="Top_navigation.xaml"
             Grid.Row="0"
             Grid.ColumnSpan="2"
+            Background="Gray"
         />
         
         <!--Left navigation frame -->
         <Frame
             Name="Fram_leftNavigation"
             Source="Left_navigation.xaml"
-            Grid.RowSpan="2"
+            Grid.Row="1"
             Grid.Column="0"
+            Background="#999999"
         />
         
         <!--Top navigation frame -->
@@ -38,6 +40,7 @@
             Source="Home.xaml"
             Grid.Row="1"
             Grid.Column="1"
+            Background="#EEEEEE"
         />
 
     </Grid>
