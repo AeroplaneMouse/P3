@@ -351,3 +351,10 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+Asset Management System/obj/project.assets.json
+
+*.cache
+
+Asset Management System/obj/Asset Management System.csproj.nuget.dgspec.json
+
+Asset Management System/obj/Asset Management System.csproj.nuget.g.props
