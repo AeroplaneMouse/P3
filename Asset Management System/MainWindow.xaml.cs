@@ -23,6 +23,25 @@ namespace Asset_Management_System
         public MainWindow()
         {
             InitializeComponent();
+            Left_navigation.ChangeSourceRequest += ChangeSourceReguest;
+            Assets.ChangeSourceRequest += ChangeSourceReguest;
+        }
+
+        public void ChangeSourceReguest(Object sender, EventArgs e)
+        {
+            Button b = (e as RoutedEventArgs).OriginalSource as Button;
+            switch (b.Name)
+            {
+                case "Btn_homePage":
+                    Frame_mainContent.Source = new Uri("Home.xaml", UriKind.Relative);
+                    break;
+                case "Btn_assetsPage":
+                    Frame_mainContent.Source = new Uri("Assets.xaml", UriKind.Relative);
+                    break;
+                case "Btn_AddNewAsset":
+                    Frame_mainContent.Source = new Uri("NewAsset.xaml", UriKind.Relative);
+                    break;
+            }
         }
     }
 }

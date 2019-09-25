@@ -18,9 +18,33 @@ namespace Asset_Management_System
     /// </summary>
     public partial class Left_navigation : Page
     {
+        public static event EventHandler ChangeSourceRequest;
+
         public Left_navigation()
         {
             InitializeComponent();
+        }
+
+        private void Btn_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Button but = sender as Button;
+            but.BorderThickness = new Thickness(1);
+        }
+
+        private void Btn_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Button but = sender as Button;
+            but.BorderThickness = new Thickness(0);
+        }
+
+        private void Btn_OnClick(object sender, RoutedEventArgs e)
+        {
+            OnChangeSourceRequest(e);
+        }
+
+        void OnChangeSourceRequest(EventArgs e)
+        {
+            ChangeSourceRequest?.Invoke(this, e);
         }
     }
 }

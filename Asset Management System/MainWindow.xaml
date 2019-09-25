@@ -23,24 +23,27 @@
             Grid.Row="0"
             Grid.ColumnSpan="2"
             Background="Gray"
+            NavigationUIVisibility="Hidden"
         />
         
         <!--Left navigation frame -->
         <Frame
-            Name="Fram_leftNavigation"
+            Name="Frame_leftNavigation"
             Source="Left_navigation.xaml"
             Grid.Row="1"
             Grid.Column="0"
             Background="#999999"
+            NavigationUIVisibility="Hidden"
         />
         
-        <!--Top navigation frame -->
+        <!--Main content frame -->
         <Frame
             Name="Frame_mainContent"
             Source="Home.xaml"
             Grid.Row="1"
             Grid.Column="1"
             Background="#EEEEEE"
+            NavigationUIVisibility="Hidden"
         />
 
     </Grid>
