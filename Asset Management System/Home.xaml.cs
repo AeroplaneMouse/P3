@@ -22,5 +22,11 @@ namespace Asset_Management_System
         {
             InitializeComponent();
         }
+
+        private void Btn_Test_Click(object sender, RoutedEventArgs e)
+        {
+            Assets newAssetsPage = new Assets();
+            this.NavigationService.Navigate(newAssetsPage);
+        }
     }
 }

@@ -8,16 +8,37 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Home">
 
+    
+    
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="50px"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Center">This is a test</Label>
-        <Label Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">If you can see this. It works</Label>
-        <Label Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">If you can see this. It works</Label>
-        <Label Grid.Row="3" VerticalAlignment="Top" HorizontalAlignment="Center">Yeaah xD</Label>
+
+        <Label
+            TextBlock.FontSize="30px"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Bottom"
+            Grid.Row="0"
+            Content="HOME"
+        />
+
+        <ListView
+            HorizontalAlignment="Center"
+            HorizontalContentAlignment="Center"
+            TextBlock.FontSize="15px"
+            TextBlock.FontStyle="Italic"
+            TextBlock.FontWeight="Light"
+            Grid.Row="1"
+            BorderThickness="0px"
+            Background="Transparent"
+        >
+            <Label>Skrift med kursiv er en guide til hvad der er muligt.</Label>
+            <Label>Hvis du skal tilbage fra en side, tryk på 'Home' i venstre side,</Label>
+            <Label>og tryk på den side du vil hen til.</Label>
+        </ListView>
+
     </Grid>
 </Page>
