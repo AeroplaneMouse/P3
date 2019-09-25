@@ -28,13 +28,13 @@ namespace Asset_Management_System
         private void Btn_MouseEnter(object sender, MouseEventArgs e)
         {
             Button but = sender as Button;
-            but.BorderThickness = new Thickness(1);
+            but.BorderBrush = Brushes.White;
         }
 
         private void Btn_MouseLeave(object sender, MouseEventArgs e)
         {
             Button but = sender as Button;
-            but.BorderThickness = new Thickness(0);
+            but.BorderBrush = Brushes.Transparent;
         }
 
         private void Btn_OnClick(object sender, RoutedEventArgs e)
@@ -42,7 +42,7 @@ namespace Asset_Management_System
             OnChangeSourceRequest(e);
         }
 
-        void OnChangeSourceRequest(EventArgs e)
+        private void OnChangeSourceRequest(EventArgs e)
         {
             ChangeSourceRequest?.Invoke(this, e);
         }

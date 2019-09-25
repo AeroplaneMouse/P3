@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,13 +42,25 @@ namespace Asset_Management_System
             switch (b.Name)
             {
                 case "Btn_homePage":
-                    Frame_mainContent.Source = new Uri("Home.xaml", UriKind.Relative);
+                    Frame_mainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
                     break;
                 case "Btn_assetsPage":
-                    Frame_mainContent.Source = new Uri("Assets.xaml", UriKind.Relative);
+                    Frame_mainContent.Source = new Uri("Pages/Assets.xaml", UriKind.Relative);
+                    break;
+                case "Btn_templatesPage":
+                    Frame_mainContent.Source = new Uri("Pages/Templates.xaml", UriKind.Relative);
+                    break;
+                case "Btn_tagsPage":
+                    Frame_mainContent.Source = new Uri("Pages/Tags.xaml", UriKind.Relative);
+                    break;
+                case "Btn_settingsPage":
+                    Frame_mainContent.Source = new Uri("Pages/Settings.xaml", UriKind.Relative);
+                    break;
+                case "Btn_helpPage":
+                    Frame_mainContent.Source = new Uri("Pages/Help.xaml", UriKind.Relative);
                     break;
                 case "Btn_AddNewAsset":
-                    Frame_mainContent.Source = new Uri("NewAsset.xaml", UriKind.Relative);
+                    Frame_mainContent.Source = new Uri("Pages/NewAsset.xaml", UriKind.Relative);
                     break;
             }
         }

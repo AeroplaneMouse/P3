@@ -25,20 +25,23 @@
             Content="HOME"
         />
 
-        <ListView
+        <StackPanel
             HorizontalAlignment="Center"
-            HorizontalContentAlignment="Center"
             TextBlock.FontSize="15px"
             TextBlock.FontStyle="Italic"
             TextBlock.FontWeight="Light"
             Grid.Row="1"
-            BorderThickness="0px"
             Background="Transparent"
         >
+            <StackPanel.Resources>
+                <Style TargetType="Label">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                </Style>
+            </StackPanel.Resources>
             <Label>Skrift med kursiv er en guide til hvad der er muligt.</Label>
             <Label>Hvis du skal tilbage fra en side, tryk på 'Home' i venstre side,</Label>
             <Label>og tryk på den side du vil hen til.</Label>
-        </ListView>
+        </StackPanel>
 
     </Grid>
 </Page>

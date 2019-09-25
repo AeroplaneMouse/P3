@@ -1,4 +1,4 @@
-<Window x:Class="Asset_Management_System.MainWindow"
+﻿<Window x:Class="Asset_Management_System.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -13,14 +13,14 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200px"/>
+            <ColumnDefinition Width="150px"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         
         <!--Top navigation frame -->
         <Frame
             Name="Frame_topNavigation"
-            Source="Top_navigation.xaml"
+            Source="Pages/Top_navigation.xaml"
             Grid.Row="0"
             Grid.ColumnSpan="2"
             Background="Gray"
@@ -30,7 +30,7 @@
         <!--Left navigation frame -->
         <Frame
             Name="Frame_leftNavigation"
-            Source="Left_navigation.xaml"
+            Source="Pages/Left_navigation.xaml"
             Grid.Row="1"
             Grid.Column="0"
             Background="#999999"
@@ -40,7 +40,7 @@
         <!--Main content frame -->
         <Frame
             Name="Frame_mainContent"
-            Source="Home.xaml"
+            Source="Pages/Home.xaml"
             Grid.Row="1"
             Grid.Column="1"
             Background="#EEEEEE"
