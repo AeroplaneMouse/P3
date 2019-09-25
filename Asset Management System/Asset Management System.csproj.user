@@ -7,10 +7,16 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Assets.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Home.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Left_navigation.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="NewAsset.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Top_navigation.xaml.cs">
@@ -18,6 +24,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Assets.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Home.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -25,6 +34,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="NewAsset.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Top_navigation.xaml">
