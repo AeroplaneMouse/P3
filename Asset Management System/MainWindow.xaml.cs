@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +20,20 @@ namespace Asset_Management_System
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool showingSplashPage = true;
         public MainWindow()
         {
             InitializeComponent();
             Left_navigation.ChangeSourceRequest += ChangeSourceReguest;
             Assets.ChangeSourceRequest += ChangeSourceReguest;
+        }
+
+        public void SystemLoaded()
+        {
+            // Remove splash page
+            Frame_splash.Visibility = Visibility.Hidden;
+            Frame_splash.Source = null;
+            showingSplashPage = false;
         }
 
         public void ChangeSourceReguest(Object sender, EventArgs e)
@@ -42,6 +51,12 @@ namespace Asset_Management_System
                     Frame_mainContent.Source = new Uri("NewAsset.xaml", UriKind.Relative);
                     break;
             }
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (showingSplashPage && e.Key == Key.Escape)
+                SystemLoaded();
         }
     }
 }
