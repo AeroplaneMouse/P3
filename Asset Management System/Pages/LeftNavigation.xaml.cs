@@ -16,11 +16,11 @@ namespace Asset_Management_System
     /// <summary>
     /// Interaction logic for Left_navigation.xaml
     /// </summary>
-    public partial class Left_navigation : Page
+    public partial class LeftNavigation : Page
     {
-        public static event EventHandler ChangeSourceRequest;
+        public event EventHandler ChangeSourceRequest;
 
-        public Left_navigation()
+        public LeftNavigation()
         {
             InitializeComponent();
         }
@@ -39,12 +39,8 @@ namespace Asset_Management_System
 
         private void Btn_OnClick(object sender, RoutedEventArgs e)
         {
-            OnChangeSourceRequest(e);
-        }
-
-        private void OnChangeSourceRequest(EventArgs e)
-        {
-            ChangeSourceRequest?.Invoke(this, e);
+            if (ChangeSourceRequest != null)
+                ChangeSourceRequest?.Invoke(this, e);
         }
     }
 }

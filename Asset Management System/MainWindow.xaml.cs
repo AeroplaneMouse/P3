@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,21 +12,41 @@ namespace Asset_Management_System
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool _showingSplashPage = true;
+        //List<Page> pages = new List<Page>();
+
+        TopNavigation topNavigationPage;
+        LeftNavigation leftNavigationPage;
 
         public MainWindow()
         {
             InitializeComponent();
-            Left_navigation.ChangeSourceRequest += ChangeSourceReguest;
+            
+            // Create pages
+            // Hmm.. How should this shit work?!
+            
+            SplashPage page = new SplashPage();
+            FrameSplash.Content = page;
+            page.SessionAuthenticated += SystemLoaded;
+
             Assets.ChangeSourceRequest += ChangeSourceReguest;
         }
 
-        public void SystemLoaded()
+        public void SystemLoaded(object sender, EventArgs e)
         {
             // Remove splash page
-            Frame_splash.Visibility = Visibility.Hidden;
-            Frame_splash.Source = null;
-            _showingSplashPage = false;
+            FrameSplash.Visibility = Visibility.Hidden;
+            FrameSplash.Source = null;
+
+            // Set stuff
+            topNavigationPage = new TopNavigation();
+            topNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
+            FrameTopNavigation.Content = topNavigationPage;
+
+            leftNavigationPage = new LeftNavigation();
+            leftNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
+            FrameLeftNavigation.Content = leftNavigationPage;
+
+            FrameMainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
         }
 
         public void ChangeSourceReguest(Object sender, EventArgs e)
@@ -34,38 +55,33 @@ namespace Asset_Management_System
             switch (b.Name)
             {
                 case "Btn_homePage":
-                    Frame_mainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
                     break;
                 case "Btn_assetsPage":
-                    Frame_mainContent.Source = new Uri("Pages/Assets.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/Assets.xaml", UriKind.Relative);
                     break;
                 case "Btn_templatesPage":
-                    Frame_mainContent.Source = new Uri("Pages/Templates.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/Templates.xaml", UriKind.Relative);
                     break;
                 case "Btn_tagsPage":
-                    Frame_mainContent.Source = new Uri("Pages/Tags.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/Tags.xaml", UriKind.Relative);
                     break;
                 case "Btn_settingsPage":
-                    Frame_mainContent.Source = new Uri("Pages/Settings.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/Settings.xaml", UriKind.Relative);
                     break;
                 case "Btn_helpPage":
-                    Frame_mainContent.Source = new Uri("Pages/Help.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/Help.xaml", UriKind.Relative);
                     break;
                 case "Btn_AddNewAsset":
-                    Frame_mainContent.Source = new Uri("Pages/NewAsset.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/NewAsset.xaml", UriKind.Relative);
                     break;
             }
         }
         
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (_showingSplashPage && e.Key == Key.Escape)
-                SystemLoaded();
-        }
-
-        private void Frame_splash_LoadCompleted(object sender, NavigationEventArgs e)
-        {
-            SystemLoaded();
+            //if (showingSplashPage && e.Key == Key.Escape)
+            //    SystemLoaded();
         }
     }
 }

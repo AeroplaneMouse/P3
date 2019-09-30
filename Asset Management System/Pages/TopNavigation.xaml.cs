@@ -15,11 +15,13 @@ using Asset_Management_System;
 namespace Asset_Management_System
 {
     /// <summary>
-    /// Interaction logic for Top_navigation.xaml
+    /// Interaction logic for TopNavigation.xaml
     /// </summary>
-    public partial class Top_navigation : Page
+    public partial class TopNavigation : Page
     {
-        public Top_navigation()
+        public event EventHandler ChangeSourceRequest;
+
+        public TopNavigation()
         {
             InitializeComponent();
             Session session = new Session();
