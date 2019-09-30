@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.DirectoryServices;
 using System.Security.Principal;
+using System.Threading;
 
 namespace Asset_Management_System
 {
@@ -9,7 +10,7 @@ namespace Asset_Management_System
     {
         public readonly String Username;
         public readonly String Domain;
-        public Boolean IsAdmin = false;
+        public Boolean IsAdmin = true;
 
         public Session()
         {
@@ -44,6 +45,7 @@ namespace Asset_Management_System
                 Console.WriteLine(ex);
             }
             */
+            Thread.Sleep(1000);
             return true;
         }
 

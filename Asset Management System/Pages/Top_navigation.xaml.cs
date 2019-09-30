@@ -23,7 +23,7 @@ namespace Asset_Management_System
         {
             InitializeComponent();
             Session session = new Session();
-            Lbl_currentUser.Content = session.Username;
+            Lbl_currentUser.Content = $"{ (session.IsAdmin ? "Admin : ": "") }{ session.Username }";
         }
     }
 }

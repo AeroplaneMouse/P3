@@ -58,6 +58,7 @@
             NavigationUIVisibility="Hidden"
             Background="#EEEEEE"
             Visibility="Visible"
+            LoadCompleted="Frame_splash_LoadCompleted"
         />
     </Grid>
 </Window>

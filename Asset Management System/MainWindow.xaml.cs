@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Asset_Management_System;
 
 namespace Asset_Management_System
 {
@@ -21,8 +22,11 @@ namespace Asset_Management_System
     public partial class MainWindow : Window
     {
         private bool showingSplashPage = true;
+        Session currentSession;
+
         public MainWindow()
         {
+            currentSession = new Session();
             InitializeComponent();
             Left_navigation.ChangeSourceRequest += ChangeSourceReguest;
             Assets.ChangeSourceRequest += ChangeSourceReguest;
@@ -68,6 +72,12 @@ namespace Asset_Management_System
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (showingSplashPage && e.Key == Key.Escape)
+                SystemLoaded();
+        }
+
+        private void Frame_splash_LoadCompleted(object sender, NavigationEventArgs e)
+        {
+            if (currentSession.Validate())
                 SystemLoaded();
         }
     }

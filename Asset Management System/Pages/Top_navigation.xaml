@@ -9,13 +9,21 @@
       Title="Top_navigation">
 
     <Grid>
-        <Label
-            Name="Lbl_currentUser"
+        <Border
+            CornerRadius="8"
+            BorderThickness="1"
+            BorderBrush="Black"
             HorizontalAlignment="Right"
-            VerticalAlignment="Center"
-            TextBlock.FontSize="20"
-            Margin="0, 0, 10, 0"
-        />
+            Margin="5"
+        >
+            <Label
+                Name="Lbl_currentUser"
+                VerticalAlignment="Center"
+                TextBlock.FontSize="20"
+                Margin="10, 0, 10, 0"
+            />
+
+        </Border>
 
     </Grid>
 </Page>
