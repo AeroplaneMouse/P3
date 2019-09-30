@@ -5,6 +5,7 @@ namespace Asset_Management_System
     {
         public Department()
         {
+
         }
 
         public int ID { get; }
