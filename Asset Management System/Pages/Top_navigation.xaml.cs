@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Asset_Management_System;
 
 namespace Asset_Management_System
 {
@@ -21,6 +22,8 @@ namespace Asset_Management_System
         public Top_navigation()
         {
             InitializeComponent();
+            Session session = new Session();
+            Lbl_currentUser.Content = session.Username;
         }
     }
 }
