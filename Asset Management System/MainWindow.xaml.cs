@@ -21,23 +21,28 @@ namespace Asset_Management_System
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool showingSplashPage = true;
-        Session currentSession;
-
         public MainWindow()
         {
-            currentSession = new Session();
             InitializeComponent();
+            SplashPage page = new SplashPage();
+            Frame_splash.Content = page;
+
+            page.SessionAuthenticated += SystemLoaded;
+
             Left_navigation.ChangeSourceRequest += ChangeSourceReguest;
             Assets.ChangeSourceRequest += ChangeSourceReguest;
         }
 
-        public void SystemLoaded()
+        public void SystemLoaded(object sender, EventArgs e)
         {
             // Remove splash page
             Frame_splash.Visibility = Visibility.Hidden;
             Frame_splash.Source = null;
-            showingSplashPage = false;
+
+            // Set stuff
+            Frame_topNavigation.Source = new Uri("Pages/Top_navigation.xaml", UriKind.Relative);
+            Frame_leftNavigation.Source = new Uri("Pages/Left_navigation.xaml", UriKind.Relative);
+            Frame_mainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
         }
 
         public void ChangeSourceReguest(Object sender, EventArgs e)
@@ -71,14 +76,8 @@ namespace Asset_Management_System
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (showingSplashPage && e.Key == Key.Escape)
-                SystemLoaded();
-        }
-
-        private void Frame_splash_LoadCompleted(object sender, NavigationEventArgs e)
-        {
-            if (currentSession.Validate())
-                SystemLoaded();
+            //if (showingSplashPage && e.Key == Key.Escape)
+            //    SystemLoaded();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Asset_Management_System
                 Console.WriteLine(ex);
             }
             */
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
             return true;
         }
 
