@@ -14,8 +14,8 @@ namespace Asset_Management_System
     {
         //List<Page> pages = new List<Page>();
 
-        Top_navigation topNavigationPage;
-        Left_navigation leftNavigationPage;
+        TopNavigation topNavigationPage;
+        LeftNavigation leftNavigationPage;
 
         public MainWindow()
         {
@@ -25,7 +25,7 @@ namespace Asset_Management_System
             // Hmm.. How should this shit work?!
             
             SplashPage page = new SplashPage();
-            Frame_splash.Content = page;
+            FrameSplash.Content = page;
             page.SessionAuthenticated += SystemLoaded;
 
             Assets.ChangeSourceRequest += ChangeSourceReguest;
@@ -34,19 +34,19 @@ namespace Asset_Management_System
         public void SystemLoaded(object sender, EventArgs e)
         {
             // Remove splash page
-            Frame_splash.Visibility = Visibility.Hidden;
-            Frame_splash.Source = null;
+            FrameSplash.Visibility = Visibility.Hidden;
+            FrameSplash.Source = null;
 
             // Set stuff
-            topNavigationPage = new Top_navigation();
+            topNavigationPage = new TopNavigation();
             topNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
-            Frame_topNavigation.Content = topNavigationPage;
+            FrameTopNavigation.Content = topNavigationPage;
 
-            leftNavigationPage = new Left_navigation();
+            leftNavigationPage = new LeftNavigation();
             leftNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
-            Frame_leftNavigation.Content = leftNavigationPage;
+            FrameLeftNavigation.Content = leftNavigationPage;
 
-            Frame_mainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
+            FrameMainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
         }
 
         public void ChangeSourceReguest(Object sender, EventArgs e)
@@ -55,25 +55,25 @@ namespace Asset_Management_System
             switch (b.Name)
             {
                 case "Btn_homePage":
-                    Frame_mainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
                     break;
                 case "Btn_assetsPage":
-                    Frame_mainContent.Source = new Uri("Pages/Assets.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/Assets.xaml", UriKind.Relative);
                     break;
                 case "Btn_templatesPage":
-                    Frame_mainContent.Source = new Uri("Pages/Templates.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/Templates.xaml", UriKind.Relative);
                     break;
                 case "Btn_tagsPage":
-                    Frame_mainContent.Source = new Uri("Pages/Tags.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/Tags.xaml", UriKind.Relative);
                     break;
                 case "Btn_settingsPage":
-                    Frame_mainContent.Source = new Uri("Pages/Settings.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/Settings.xaml", UriKind.Relative);
                     break;
                 case "Btn_helpPage":
-                    Frame_mainContent.Source = new Uri("Pages/Help.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/Help.xaml", UriKind.Relative);
                     break;
                 case "Btn_AddNewAsset":
-                    Frame_mainContent.Source = new Uri("Pages/NewAsset.xaml", UriKind.Relative);
+                    FrameMainContent.Source = new Uri("Pages/NewAsset.xaml", UriKind.Relative);
                     break;
             }
         }

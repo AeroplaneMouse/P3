@@ -16,11 +16,11 @@ namespace Asset_Management_System
     /// <summary>
     /// Interaction logic for Left_navigation.xaml
     /// </summary>
-    public partial class Left_navigation : Page
+    public partial class LeftNavigation : Page
     {
         public event EventHandler ChangeSourceRequest;
 
-        public Left_navigation()
+        public LeftNavigation()
         {
             InitializeComponent();
         }

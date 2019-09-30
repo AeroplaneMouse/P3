@@ -16,7 +16,7 @@
     <Compile Update="Pages\Home.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Left_navigation.xaml.cs">
+    <Compile Update="Pages\LeftNavigation.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\NewAsset.xaml.cs">
@@ -31,7 +31,7 @@
     <Compile Update="Pages\Templates.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Top_navigation.xaml.cs">
+    <Compile Update="Pages\TopNavigation.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\Tags.xaml.cs">
@@ -48,7 +48,7 @@
     <Page Update="Pages\Home.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Left_navigation.xaml">
+    <Page Update="Pages\LeftNavigation.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
@@ -66,7 +66,7 @@
     <Page Update="Pages\Templates.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Top_navigation.xaml">
+    <Page Update="Pages\TopNavigation.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\Tags.xaml">

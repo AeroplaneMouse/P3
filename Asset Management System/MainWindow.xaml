@@ -19,7 +19,7 @@
         
         <!--Top navigation frame -->
         <Frame
-            Name="Frame_topNavigation"
+            Name="FrameTopNavigation"
             Grid.Row="0"
             Grid.ColumnSpan="2"
             Background="Gray"
@@ -28,7 +28,7 @@
         
         <!--Left navigation frame -->
         <Frame
-            Name="Frame_leftNavigation"
+            Name="FrameLeftNavigation"
             Grid.Row="1"
             Grid.Column="0"
             Background="#999999"
@@ -37,7 +37,7 @@
         
         <!--Main content frame -->
         <Frame
-            Name="Frame_mainContent"
+            Name="FrameMainContent"
             Grid.Row="1"
             Grid.Column="1"
             Background="#EEEEEE"
@@ -46,7 +46,7 @@
         
         <!--Splash page frame  -->
         <Frame
-            Name="Frame_splash"
+            Name="FrameSplash"
             Grid.Row="0"
             Grid.Column="0"
             Grid.RowSpan="2"
