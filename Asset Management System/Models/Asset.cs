@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Windows.Documents;
 
 namespace Asset_Management_System
 {
@@ -22,5 +24,13 @@ namespace Asset_Management_System
         public int DepartmentID { get; set; }
 
         public string Fields { get; set; }
+
+        private List<Field> _fieldsList;
+        public void SerializeFields()
+        {
+            
+        }
+
+
     }
 }
