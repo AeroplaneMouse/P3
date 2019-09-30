@@ -5,14 +5,6 @@ namespace Asset_Management_System
     class Asset
     {
 
-        public Asset()
-        {
-        }
-
-        public int ID { get; }
-
-        public string Name { get; set; }
-
         public Asset(string label, string description)
         {
             Label = label;
