@@ -24,6 +24,6 @@ namespace Asset_Management_System
         
         public int Department_ID { get; set; }
 
-        public Field[] Fields { get; set }
+        public Field[] Fields { get; set; }
     }
 }
