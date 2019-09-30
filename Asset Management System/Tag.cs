@@ -16,11 +16,11 @@ namespace Asset_Management_System
         
         public string Name { get; set; }
         
-        public int Department_ID { get; set; }
+        public int DepartmentID { get; set; }
         
-        public DateTime Created_at { get; set; }
+        public DateTime CreatedAt { get; set; }
         
-        public DateTime Updated_at { get; set; }
+        public DateTime UpdatedAt { get; set; }
 
         public Field[] Fields { get; set; }
 
