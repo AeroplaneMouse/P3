@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Asset_Management_System.Models;
+using Newtonsoft.Json;
 
 namespace Asset_Management_System
 {
@@ -20,7 +23,7 @@ namespace Asset_Management_System
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool showingSplashPage = true;
+        private bool _showingSplashPage = true;
         public MainWindow()
         {
             InitializeComponent();
@@ -33,7 +36,7 @@ namespace Asset_Management_System
             // Remove splash page
             Frame_splash.Visibility = Visibility.Hidden;
             Frame_splash.Source = null;
-            showingSplashPage = false;
+            _showingSplashPage = false;
         }
 
         public void ChangeSourceReguest(Object sender, EventArgs e)
@@ -64,11 +67,13 @@ namespace Asset_Management_System
                     break;
             }
         }
-
+        
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (showingSplashPage && e.Key == Key.Escape)
+            if (_showingSplashPage && e.Key == Key.Escape)
                 SystemLoaded();
         }
+        
+        
     }
 }
