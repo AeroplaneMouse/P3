@@ -38,5 +38,10 @@ namespace Asset_Management_System
             //    handler(this, e)
             ChangeSourceRequest?.Invoke(this, e);
         }
+
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            // Load assets from database
+        }
     }
 }
