@@ -1,21 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Asset_Management_System.Models;
-using Newtonsoft.Json;
-using Asset_Management_System;
 
 namespace Asset_Management_System
 {
@@ -28,7 +15,6 @@ namespace Asset_Management_System
 
         public MainWindow()
         {
-            currentSession = new Session();
             InitializeComponent();
             Left_navigation.ChangeSourceRequest += ChangeSourceReguest;
             Assets.ChangeSourceRequest += ChangeSourceReguest;
@@ -79,8 +65,7 @@ namespace Asset_Management_System
 
         private void Frame_splash_LoadCompleted(object sender, NavigationEventArgs e)
         {
-            if (currentSession.Validate())
-                SystemLoaded();
+            SystemLoaded();
         }
     }
 }
