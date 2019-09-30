@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
 namespace Asset_Management_System
@@ -9,24 +8,15 @@ namespace Asset_Management_System
     /// </summary>
     public partial class AssetsPage : Page
     {
-        public static event EventHandler ChangeSourceRequest;
+        public static event RoutedEventHandler ChangeSourceRequest;
 
         public AssetsPage()
         {
             InitializeComponent();
-
         }
 
         private void Btn_AddNewAsset_Click(object sender, RoutedEventArgs e)
         {
-            OnChangeSourceRequest(e);
-        }
-
-        void OnChangeSourceRequest(EventArgs e)
-        {
-            //EventHandler handler = ChangeSourceRequest;
-            //if (handler != null)
-            //    handler(this, e)
             ChangeSourceRequest?.Invoke(this, e);
         }
 

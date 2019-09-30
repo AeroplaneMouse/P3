@@ -6,11 +6,11 @@ using System.Threading;
 
 namespace Asset_Management_System
 {
-    class Session
+    public class Session
     {
         public readonly String Username;
         public readonly String Domain;
-        public Boolean IsAdmin = true;
+        public Boolean IsAdmin = false;
 
         public Session()
         {
