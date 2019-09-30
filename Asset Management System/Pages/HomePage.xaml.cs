@@ -14,13 +14,19 @@ using System.Windows.Shapes;
 namespace Asset_Management_System
 {
     /// <summary>
-    /// Interaction logic for NewAsset.xaml
+    /// Interaction logic for HomePage.xaml
     /// </summary>
-    public partial class NewAsset : Page
+    public partial class HomePage : Page
     {
-        public NewAsset()
+        public HomePage()
         {
             InitializeComponent();
+        }
+
+        private void Btn_Test_Click(object sender, RoutedEventArgs e)
+        {
+            AssetsPage newAssetsPage = new AssetsPage();
+            this.NavigationService.Navigate(newAssetsPage);
         }
     }
 }

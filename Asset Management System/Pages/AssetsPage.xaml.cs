@@ -14,13 +14,13 @@ using System.Windows.Shapes;
 namespace Asset_Management_System
 {
     /// <summary>
-    /// Interaction logic for Assets.xaml
+    /// Interaction logic for AssetsPage.xaml
     /// </summary>
-    public partial class Assets : Page
+    public partial class AssetsPage : Page
     {
         public static event EventHandler ChangeSourceRequest;
 
-        public Assets()
+        public AssetsPage()
         {
             InitializeComponent();
 

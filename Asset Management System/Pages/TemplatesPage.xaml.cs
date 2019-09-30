@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Asset_Management_System.Pages
+namespace Asset_Management_System
 {
     /// <summary>
-    /// Interaction logic for Templates.xaml
+    /// Interaction logic for TemplatesPage.xaml
     /// </summary>
-    public partial class Templates : Page
+    public partial class TemplatesPage : Page
     {
-        public Templates()
+        public TemplatesPage()
         {
             InitializeComponent();
         }

@@ -28,7 +28,7 @@ namespace Asset_Management_System
             FrameSplash.Content = page;
             page.SessionAuthenticated += SystemLoaded;
 
-            Assets.ChangeSourceRequest += ChangeSourceReguest;
+            AssetsPage.ChangeSourceRequest += ChangeSourceReguest;
         }
 
         public void SystemLoaded(object sender, EventArgs e)
@@ -46,34 +46,38 @@ namespace Asset_Management_System
             leftNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
             FrameLeftNavigation.Content = leftNavigationPage;
 
-            FrameMainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
+            Button b = new Button();
+            b.Name = "Btn_homePage";
+            ChangeSourceReguest(b, null);
+            //FrameMainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
         }
 
         public void ChangeSourceReguest(Object sender, EventArgs e)
         {
-            Button b = (e as RoutedEventArgs).OriginalSource as Button;
+            //(e as RoutedEventArgs).OriginalSource as Button
+            Button b = sender as Button;
             switch (b.Name)
             {
                 case "Btn_homePage":
-                    FrameMainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
+                    FrameMainContent.Content = new HomePage();
                     break;
                 case "Btn_assetsPage":
-                    FrameMainContent.Source = new Uri("Pages/Assets.xaml", UriKind.Relative);
+                    FrameMainContent.Content = new AssetsPage();
                     break;
                 case "Btn_templatesPage":
-                    FrameMainContent.Source = new Uri("Pages/Templates.xaml", UriKind.Relative);
+                    FrameMainContent.Content = new TemplatesPage();
                     break;
                 case "Btn_tagsPage":
-                    FrameMainContent.Source = new Uri("Pages/Tags.xaml", UriKind.Relative);
+                    FrameMainContent.Content = new TagsPage();
                     break;
                 case "Btn_settingsPage":
-                    FrameMainContent.Source = new Uri("Pages/Settings.xaml", UriKind.Relative);
+                    FrameMainContent.Content = new SettingsPage();
                     break;
                 case "Btn_helpPage":
-                    FrameMainContent.Source = new Uri("Pages/Help.xaml", UriKind.Relative);
+                    FrameMainContent.Content = new HelpPage();
                     break;
                 case "Btn_AddNewAsset":
-                    FrameMainContent.Source = new Uri("Pages/NewAsset.xaml", UriKind.Relative);
+                    FrameMainContent.Content = new NewAssetPage();
                     break;
             }
         }

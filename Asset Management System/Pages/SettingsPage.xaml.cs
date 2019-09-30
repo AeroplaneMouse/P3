@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Asset_Management_System.Pages
+namespace Asset_Management_System
 {
     /// <summary>
-    /// Interaction logic for Help.xaml
+    /// Interaction logic for SettingsPage.xaml
     /// </summary>
-    public partial class Help : Page
+    public partial class SettingsPage : Page
     {
-        public Help()
+        public SettingsPage()
         {
             InitializeComponent();
         }

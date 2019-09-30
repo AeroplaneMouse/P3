@@ -14,11 +14,11 @@ using System.Windows.Shapes;
 namespace Asset_Management_System
 {
     /// <summary>
-    /// Interaction logic for Tags.xaml
+    /// Interaction logic for TagsPage.xaml
     /// </summary>
-    public partial class Tags : Page
+    public partial class TagsPage : Page
     {
-        public Tags()
+        public TagsPage()
         {
             InitializeComponent();
         }
