@@ -1,11 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Asset_Management_System.Models
 {
-    class Tag
+    class Tag : DoContainFields
     {
-        public Tag()
+        public Tag(int departmentId,string name)
         {
+            DepartmentID = departmentId;
+            CreatedAt = DateTime.Now;
+            Name = name;
+            FieldsList = new List<Field>();
         }
 
         public int ID { get; }
@@ -17,7 +22,6 @@ namespace Asset_Management_System.Models
         public DateTime CreatedAt { get; set; }
 
         public DateTime UpdatedAt { get; set; }
-
-        public Field[] Fields { get; set; }
+        
     }
 }

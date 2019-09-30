@@ -5,17 +5,8 @@ using Newtonsoft.Json;
 namespace Asset_Management_System.Models
 {
     [Serializable]
-    class Field
+    public class Field
     {
-        public int ID { get; }
-        public string Name { get; set; }
-        public string Content { get; set; }
-        public bool Required { get; set; }
-
-        private string _fieldType;
-
-        public readonly string DefaultValue;
-
         /// <summary>
         /// Default constructor for initiating a new Field object.
         /// </summary>
@@ -52,6 +43,15 @@ namespace Asset_Management_System.Models
             this._fieldType = fieldType;
             this.DefaultValue = defaultValue;
         }
+        
+        public int ID { get; }
+        public string Name { get; set; }
+        public string Content { get; set; }
+        public bool Required { get; set; }
+
+        private string _fieldType;
+
+        public readonly string DefaultValue;
 
         /// <summary>
         /// Returns the object information as a dictionary.
