@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,15 +12,22 @@ namespace Asset_Management_System
     /// </summary>
     public partial class MainWindow : Window
     {
+        //List<Page> pages = new List<Page>();
+
+        Top_navigation topNavigationPage;
+        Left_navigation leftNavigationPage;
+
         public MainWindow()
         {
             InitializeComponent();
+            
+            // Create pages
+            // Hmm.. How should this shit work?!
+            
             SplashPage page = new SplashPage();
             Frame_splash.Content = page;
-
             page.SessionAuthenticated += SystemLoaded;
 
-            Left_navigation.ChangeSourceRequest += ChangeSourceReguest;
             Assets.ChangeSourceRequest += ChangeSourceReguest;
         }
 
@@ -30,8 +38,14 @@ namespace Asset_Management_System
             Frame_splash.Source = null;
 
             // Set stuff
-            Frame_topNavigation.Source = new Uri("Pages/Top_navigation.xaml", UriKind.Relative);
-            Frame_leftNavigation.Source = new Uri("Pages/Left_navigation.xaml", UriKind.Relative);
+            topNavigationPage = new Top_navigation();
+            topNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
+            Frame_topNavigation.Content = topNavigationPage;
+
+            leftNavigationPage = new Left_navigation();
+            leftNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
+            Frame_leftNavigation.Content = leftNavigationPage;
+
             Frame_mainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
         }
 

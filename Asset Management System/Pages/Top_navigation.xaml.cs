@@ -19,6 +19,8 @@ namespace Asset_Management_System
     /// </summary>
     public partial class Top_navigation : Page
     {
+        public event EventHandler ChangeSourceRequest;
+
         public Top_navigation()
         {
             InitializeComponent();
