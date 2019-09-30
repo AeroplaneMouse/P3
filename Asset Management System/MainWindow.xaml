@@ -59,6 +59,5 @@
             Background="#EEEEEE"
             Visibility="Visible"
         />
-
     </Grid>
 </Window>
