@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Asset_Management_System.Models;
 using Newtonsoft.Json;
+using Asset_Management_System;
 
 namespace Asset_Management_System
 {
@@ -24,8 +25,10 @@ namespace Asset_Management_System
     public partial class MainWindow : Window
     {
         private bool _showingSplashPage = true;
+
         public MainWindow()
         {
+            currentSession = new Session();
             InitializeComponent();
             Left_navigation.ChangeSourceRequest += ChangeSourceReguest;
             Assets.ChangeSourceRequest += ChangeSourceReguest;
@@ -73,7 +76,11 @@ namespace Asset_Management_System
             if (_showingSplashPage && e.Key == Key.Escape)
                 SystemLoaded();
         }
-        
-        
+
+        private void Frame_splash_LoadCompleted(object sender, NavigationEventArgs e)
+        {
+            if (currentSession.Validate())
+                SystemLoaded();
+        }
     }
 }
