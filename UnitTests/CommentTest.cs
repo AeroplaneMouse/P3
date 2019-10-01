@@ -20,7 +20,6 @@ namespace UnitTests
 
             //Assert
             Assert.AreEqual("This is a comment", result);
-
         }
     }
 }
