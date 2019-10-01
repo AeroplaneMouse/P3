@@ -19,8 +19,7 @@
         
         <!--Top navigation frame -->
         <Frame
-            Name="Frame_topNavigation"
-            Source="Pages/Top_navigation.xaml"
+            Name="FrameTopNavigation"
             Grid.Row="0"
             Grid.ColumnSpan="2"
             Background="Gray"
@@ -29,8 +28,7 @@
         
         <!--Left navigation frame -->
         <Frame
-            Name="Frame_leftNavigation"
-            Source="Pages/Left_navigation.xaml"
+            Name="FrameLeftNavigation"
             Grid.Row="1"
             Grid.Column="0"
             Background="#999999"
@@ -39,8 +37,7 @@
         
         <!--Main content frame -->
         <Frame
-            Name="Frame_mainContent"
-            Source="Pages/Home.xaml"
+            Name="FrameMainContent"
             Grid.Row="1"
             Grid.Column="1"
             Background="#EEEEEE"
@@ -49,15 +46,13 @@
         
         <!--Splash page frame  -->
         <Frame
-            Name="Frame_splash"
-            Source="Pages/SplashPage.xaml"
+            Name="FrameSplash"
             Grid.Row="0"
             Grid.Column="0"
             Grid.RowSpan="2"
             Grid.ColumnSpan="2"
             NavigationUIVisibility="Hidden"
             Background="#EEEEEE"
-            Visibility="Visible"
         />
     </Grid>
 </Window>

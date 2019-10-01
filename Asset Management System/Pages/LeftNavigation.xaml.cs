@@ -1,27 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Asset_Management_System
 {
     /// <summary>
     /// Interaction logic for Left_navigation.xaml
     /// </summary>
-    public partial class Left_navigation : Page
+    public partial class LeftNavigation : Page
     {
-        public static event EventHandler ChangeSourceRequest;
+        public event RoutedEventHandler ChangeSourceRequest;
+        private readonly Session _currentSession;
 
-        public Left_navigation()
+        public LeftNavigation(Session session)
         {
+            if (session != null)
+                _currentSession = session;
+            else
+                throw new ArgumentNullException();
+
             InitializeComponent();
         }
 
@@ -39,12 +38,8 @@ namespace Asset_Management_System
 
         private void Btn_OnClick(object sender, RoutedEventArgs e)
         {
-            OnChangeSourceRequest(e);
-        }
-
-        private void OnChangeSourceRequest(EventArgs e)
-        {
-            ChangeSourceRequest?.Invoke(this, e);
+            if (ChangeSourceRequest != null)
+                ChangeSourceRequest?.Invoke(this, e);
         }
     }
 }

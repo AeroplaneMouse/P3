@@ -3,10 +3,11 @@ using System.Data.SqlClient;
 using System.DirectoryServices;
 using System.Security.Principal;
 using System.Configuration;
+using System.Threading;
 
 namespace Asset_Management_System
 {
-    class Session
+    public class Session
     {
         public readonly String Username;
         public readonly String Domain;
@@ -14,14 +15,9 @@ namespace Asset_Management_System
 
         public Session()
         {
-
-
             string[] parts = WindowsIdentity.GetCurrent().Name.Split('\\');
             this.Domain = parts[0];
             this.Username = parts[1];
-
-            
-            
         }
 
         public Boolean Validate()
@@ -50,6 +46,7 @@ namespace Asset_Management_System
                 Console.WriteLine(ex);
             }
             */
+            Thread.Sleep(2000);
             return true;
         }
 

@@ -5,19 +5,8 @@ using Newtonsoft.Json;
 namespace Asset_Management_System.Models
 {
     [Serializable]
-    class Field
+    public class Field
     {
-        public int ID { get; }
-        public string Name { get; set; }
-        public string Content { get; set; }
-        public bool Required { get; set; }
-        [JsonIgnore]
-        private int SelectedType { get; set; }
-
-        private string _fieldType;
-        
-        public readonly string DefaultValue;
-
         /// <summary>
         /// Default constructor for initiating a new Field object.
         /// </summary>
@@ -26,15 +15,15 @@ namespace Asset_Management_System.Models
         /// <param name="required">A boolean, whether the field is required or not</param>
         /// <param name="selectedType">Selecting the type of the field. 1= Int,2 = String,3= TextBox, 4 = Date, 5 = Boolean</param>
         /// <param name="defaultValue">The default value which should be entered into the field</param>
-        public Field(string name, string content, bool required, int selectedType, string defaultValue)
+        public Field(string name, string content, int selectedType, string defaultValue, bool required = false)
         {
             this.Name = name;
             this.Content = content;
             this.Required = required;
-            this.SelectedType = selectedType;
             this.DefaultValue = defaultValue;
-            GetFieldType();
+            GetFieldType(selectedType);
         }
+
         /// <summary>
         /// JSON constructor, not for code use.
         /// </summary>
@@ -42,17 +31,27 @@ namespace Asset_Management_System.Models
         /// <param name="name"></param>
         /// <param name="content"></param>
         /// <param name="required"></param>
+        /// <param name="fieldType"></param>
         /// <param name="defaultValue"></param>
         [JsonConstructor]
-        private Field(int id, string name, string content, bool required, string defaultValue)
+        private Field(int id, string name, string content, bool required, string fieldType, string defaultValue)
         {
             this.ID = id;
             this.Name = name;
             this.Content = content;
             this.Required = required;
+            this._fieldType = fieldType;
             this.DefaultValue = defaultValue;
-            GetFieldType();
         }
+        
+        public int ID { get; }
+        public string Name { get; set; }
+        public string Content { get; set; }
+        public bool Required { get; set; }
+
+        private string _fieldType;
+
+        public readonly string DefaultValue;
 
         /// <summary>
         /// Returns the object information as a dictionary.
@@ -65,9 +64,10 @@ namespace Asset_Management_System.Models
             output.Add("Description", Content);
             output.Add("Required", Required.ToString());
             output.Add("FieldType", _fieldType);
-            output.Add("DefaultValue",DefaultValue);
+            output.Add("DefaultValue", DefaultValue);
             return output;
         }
+
         /// <summary>
         /// Gets the saved content of the field.
         /// </summary>
@@ -81,9 +81,9 @@ namespace Asset_Management_System.Models
         /// Returns the FieldType of the field.
         /// </summary>
         /// <returns></returns>
-        private string GetFieldType()
+        private string GetFieldType(int typeInt)
         {
-            switch (this.SelectedType)
+            switch (typeInt)
             {
                 case 1:
                     _fieldType = "TextBox";
@@ -92,7 +92,7 @@ namespace Asset_Management_System.Models
                     _fieldType = "String";
                     break;
                 case 3:
-                    _fieldType = "TextBox";
+                    _fieldType = "Int";
                     break;
                 case 4:
                     _fieldType = "Date";

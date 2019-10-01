@@ -1,17 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Asset_Management_System
 {
@@ -20,55 +12,98 @@ namespace Asset_Management_System
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool showingSplashPage = true;
+        //List<Page> pages = new List<Page>();
+        private readonly Session currentSession = new Session();
+
+        TopNavigation topNavigationPage;
+        LeftNavigation leftNavigationPage;
+
         public MainWindow()
         {
             InitializeComponent();
-            Left_navigation.ChangeSourceRequest += ChangeSourceReguest;
-            Assets.ChangeSourceRequest += ChangeSourceReguest;
+            
+            // Create pages
+            // Hmm.. How should this shit work?!
+            
+            SplashPage page = new SplashPage(currentSession);
+            page.SessionAuthenticated += SystemLoaded;
+            FrameSplash.Content = page;
+
+            AssetsPage.ChangeSourceRequest += ChangeSourceReguest;
         }
 
-        public void SystemLoaded()
+        /// <summary>
+        /// Unloades the splash page, and sets the menu windows up.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void SystemLoaded(object sender, EventArgs e)
         {
-            // Remove splash page
-            Frame_splash.Visibility = Visibility.Hidden;
-            Frame_splash.Source = null;
-            showingSplashPage = false;
+            // Removing the splash page
+            FrameSplash.Content = null;
+
+            // Setting up top navigation menu
+            topNavigationPage = new TopNavigation(currentSession);
+            topNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
+            FrameTopNavigation.Content = topNavigationPage;
+
+            // Setting up left navigation menu
+            leftNavigationPage = new LeftNavigation(currentSession);
+            leftNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
+            FrameLeftNavigation.Content = leftNavigationPage;
+
+            // Requesting the home page to be viewed in the main content frame
+            Button tempButton = new Button() { Name = "Btn_homePage" };
+            ChangeSourceReguest(null, new RoutedEventArgs() { Source = tempButton });
+            //FrameMainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
         }
 
-        public void ChangeSourceReguest(Object sender, EventArgs e)
+        /// <summary>
+        /// Changes the main content frame's content depending on the name of source button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void ChangeSourceReguest(object sender, RoutedEventArgs e)
         {
-            Button b = (e as RoutedEventArgs).OriginalSource as Button;
-            switch (b.Name)
+            //(e as RoutedEventArgs).OriginalSource as Button
+            if(e.Source is Button btn)
             {
-                case "Btn_homePage":
-                    Frame_mainContent.Source = new Uri("Pages/Home.xaml", UriKind.Relative);
-                    break;
-                case "Btn_assetsPage":
-                    Frame_mainContent.Source = new Uri("Pages/Assets.xaml", UriKind.Relative);
-                    break;
-                case "Btn_templatesPage":
-                    Frame_mainContent.Source = new Uri("Pages/Templates.xaml", UriKind.Relative);
-                    break;
-                case "Btn_tagsPage":
-                    Frame_mainContent.Source = new Uri("Pages/Tags.xaml", UriKind.Relative);
-                    break;
-                case "Btn_settingsPage":
-                    Frame_mainContent.Source = new Uri("Pages/Settings.xaml", UriKind.Relative);
-                    break;
-                case "Btn_helpPage":
-                    Frame_mainContent.Source = new Uri("Pages/Help.xaml", UriKind.Relative);
-                    break;
-                case "Btn_AddNewAsset":
-                    Frame_mainContent.Source = new Uri("Pages/NewAsset.xaml", UriKind.Relative);
-                    break;
+                switch (btn.Name)
+                {
+                    case "Btn_homePage":
+                        FrameMainContent.Content = new HomePage();
+                        break;
+                    case "Btn_assetsPage":
+                        FrameMainContent.Content = new AssetsPage();
+                        break;
+                    case "Btn_templatesPage":
+                        FrameMainContent.Content = new TemplatesPage();
+                        break;
+                    case "Btn_tagsPage":
+                        FrameMainContent.Content = new TagsPage();
+                        break;
+                    case "Btn_settingsPage":
+                        FrameMainContent.Content = new SettingsPage();
+                        break;
+                    case "Btn_helpPage":
+                        FrameMainContent.Content = new HelpPage();
+                        break;
+                    case "Btn_AddNewAsset":
+                        FrameMainContent.Content = new NewAssetPage();
+                        break;
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("An unknown button has been pressed.");
             }
         }
-
+        
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (showingSplashPage && e.Key == Key.Escape)
-                SystemLoaded();
+            //if (showingSplashPage && e.Key == Key.Escape)
+            //    SystemLoaded();
         }
     }
 }
