@@ -28,10 +28,7 @@
     <Compile Update="Pages\SplashPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Templates.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Pages\TopNavigation.xaml.cs">
+    <Compile Update="Pages\TopNavigationPart2.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\Tags.xaml.cs">
@@ -63,10 +60,7 @@
     <Page Update="Pages\SplashPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Templates.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Pages\TopNavigation.xaml">
+    <Page Update="Pages\TopNavigationPart2.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\Tags.xaml">

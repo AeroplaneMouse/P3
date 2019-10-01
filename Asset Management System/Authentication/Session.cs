@@ -44,7 +44,7 @@ namespace Asset_Management_System.Authentication
                 Console.WriteLine(ex);
             }
             */
-            Thread.Sleep(2000);
+            //Thread.Sleep(2000);
             return true;
         }
 

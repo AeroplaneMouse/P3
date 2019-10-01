@@ -7,7 +7,38 @@
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
     Title="Left_navigation">
-     
+
+    <Page.Resources>
+        <Style x:Key="MyButton" TargetType="Button">
+            <EventSetter Event="Click" Handler="Btn_OnClick"/>
+            <EventSetter Event="MouseEnter" Handler="Btn_MouseEnter"/>
+            <EventSetter Event="MouseLeave" Handler="Btn_MouseLeave"/>
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="TextBlock.FontSize" Value="15px"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            
+            <!--<Setter Property="Padding" Value="20, 10, 20, 10"/>-->
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="Black" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8"/>
+                                <Setter Property="Background" Value="LightGray"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    
     <!--<Page.Resources>
         <Style TargetType="Button">
             <Setter Property="Margin" Value="5"/>
@@ -18,65 +49,44 @@
 
     </Page.Resources>-->
     <Grid>
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="50px"/>
-        </Grid.RowDefinitions>-->
-
-
-        <!--Margin="5px"
-            TextBlock.FontSize="20px"
-            Background="Transparent"
-            BorderThickness="0px"
-            MouseEnter="Btn_MouseEnter"
-            MouseLeave="Btn_MouseLeave"-->
-        <StackPanel>
-            <StackPanel.Resources>
-                <Style TargetType="Button">
-                    <EventSetter Event="Click" Handler="Btn_OnClick"/>
-                    <EventSetter Event="MouseEnter" Handler="Btn_MouseEnter"/>
-                    <EventSetter Event="MouseLeave" Handler="Btn_MouseLeave"/>
-                    <Setter Property="TextBlock.FontSize" Value="20px"/>
-                    <Setter Property="BorderThickness" Value="1px"/>
-                    <Setter Property="BorderBrush" Value="Transparent"/>
-                    <Setter Property="Margin" Value="5, 10, 5, 0"/>
-                    <Setter Property="Background" Value="Transparent"/>
-                </Style>
-            </StackPanel.Resources>
+        
+        <StackPanel Margin="10, 10, 10, 10">
             <Button
                 Name="Btn_homePage"
                 Content="Home"
+                Style="{StaticResource MyButton}"
             />
+
 
             <Button
                 Name="Btn_assetsPage"
                 Content="Assets"
+                Style="{StaticResource MyButton}"
             />
 
             <Button
                 Name="Btn_templatesPage"
                 Content="Templates"
+                Style="{StaticResource MyButton}"
             />
 
             <Button
                 Name="Btn_tagsPage"
                 Content="Tags"
+                Style="{StaticResource MyButton}"
             />
 
             <Button
                 Name="Btn_settingsPage"
                 Content="Settings"
+                Style="{StaticResource MyButton}"
             />
-        
+
             <Button
                 Name="Btn_helpPage"
                 Content="Help"
+                Style="{StaticResource MyButton}"
             />
         </StackPanel>
-
     </Grid>
 </Page>
