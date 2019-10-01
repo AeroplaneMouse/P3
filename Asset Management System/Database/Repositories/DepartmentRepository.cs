@@ -26,7 +26,7 @@ namespace Asset_Management_System.Database.Repositories
                 cmd.Parameters.Add("@name", MySqlDbType.String);
                 cmd.Parameters["@name"].Value = entity.Name;
                 cmd.ExecuteNonQuery();
-                //dbcon.Close();
+                dbcon.Close();
             }
         }
 
@@ -65,12 +65,20 @@ namespace Asset_Management_System.Database.Repositories
 
         public void Delete(Department entity)
         {
-            throw new NotImplementedException();
+            if (dbcon.IsConnect())
+            {
+                string query = "DELETE FROM departments WHERE id=@id";
+                var cmd = new MySqlCommand(query, dbcon.Connection);
+                cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                cmd.Parameters["@id"].Value = entity.ID;
+                cmd.ExecuteNonQuery();
+                dbcon.Close();
+            }
         }
 
         public List<Department> GetAll()
         {
-            if (this.dbcon.IsConnect())
+            if (dbcon.IsConnect())
             {
                 string query = "SELECT id, name FROM departments ORDER BY name ASC";
                 var cmd = new MySqlCommand(query, dbcon.Connection);
