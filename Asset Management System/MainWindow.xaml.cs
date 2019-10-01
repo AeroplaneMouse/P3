@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using Asset_Management_System.Pages;
 
 namespace Asset_Management_System
 {

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Asset_Management_System.Models
@@ -26,7 +27,7 @@ namespace Asset_Management_System.Models
         }
 
         /// <summary>
-        /// Adds a fields to the list of fields. For the content to be saved on the element, use SerializeFields afterwards.
+        /// Adds a fields to the list of fields. And Serializes the current state of fields.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="fieldType"></param>
@@ -39,6 +40,25 @@ namespace Asset_Management_System.Models
             Field currentField = new Field(name, content, fieldType, defaultValue, required);
 
             FieldsList.Add(currentField);
+            ShowField();
+            SerializeFields();
+            return true;
+        }
+
+        /// <summary>
+        /// Removes field from list of fields.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public bool RemoveField(int id)
+        {
+            var itemToRemove = FieldsList.SingleOrDefault(r => r.ID == id);
+            if (itemToRemove != null)
+            {
+                FieldsList.Remove(itemToRemove);
+            }
+
+            SerializeFields();
             ShowField();
             return true;
         }

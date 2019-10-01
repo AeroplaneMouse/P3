@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.DirectoryServices;
 using System.Security.Principal;
 using System.Threading;
 
-namespace Asset_Management_System
+namespace Asset_Management_System.Authentication
 {
     class Session
     {

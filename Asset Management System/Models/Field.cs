@@ -77,6 +77,12 @@ namespace Asset_Management_System.Models
             return this.Content;
         }
 
+        public bool UpdateContent(string input)
+        {
+            this.Content = input;
+            return true;
+        }
+
         /// <summary>
         /// Returns the FieldType of the field.
         /// </summary>
