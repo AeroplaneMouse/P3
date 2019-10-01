@@ -5,10 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Asset_Management_System"
         mc:Ignorable="d"
-        Title="Asset Management System" Height="450" Width="800"
-        WindowStyle="SingleBorderWindow"
-        >
+        KeyDown="Window_KeyDown"
+        WindowStartupLocation="CenterScreen"
+        Title="Asset Management System" Height="450" Width="800">
     <Grid>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="0"/>
             <RowDefinition Height="80px"/>
