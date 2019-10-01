@@ -21,7 +21,14 @@ namespace Asset_Management_System.Models
             this.Name = name;
             this.Content = content;
             this.Required = required;
-            this._fieldType = fieldType;
+            if (fieldType <= 5)
+            {
+                this._fieldType = fieldType;
+            }
+            else
+            {
+                throw new ArgumentOutOfRangeException("fieldType","fieldType is out of range. Must be an integer between 1-5 (both included)");
+            }
             this.DefaultValue = defaultValue;
         }
 
@@ -40,12 +47,14 @@ namespace Asset_Management_System.Models
         /// <returns>Returns dictionary compilation of the object</returns>
         public Dictionary<string, string> GetInformation()
         {
-            Dictionary<string, string> output = new Dictionary<string, string>();
-            output.Add("Name", Name);
-            output.Add("Description", Content);
-            output.Add("Required", Required.ToString());
-            output.Add("FieldType", this.GetFieldType());
-            output.Add("DefaultValue", DefaultValue);
+            Dictionary<string, string> output = new Dictionary<string, string>
+            {
+                { "Name", Name },
+                { "Description", Content },
+                { "Required", Required.ToString() },
+                { "FieldType", this.GetFieldType() },
+                { "DefaultValue", DefaultValue }
+            };
             return output;
         }
 
@@ -70,21 +79,15 @@ namespace Asset_Management_System.Models
         /// <returns></returns>
         private string GetFieldType()
         {
-            switch (this._fieldType)
+            return this._fieldType switch
             {
-                case 1:
-                    return "TextBox";
-                case 2:
-                    return "String";
-                case 3:
-                    return "Int";
-                case 4:
-                    return "Date";
-                case 5:
-                    return "Boolean";
-                default:
-                    return "Field type invalid";
-            }
+                1 => "TextBox",
+                2 => "String",
+                3 => "Int",
+                4 => "Date",
+                5 => "Boolean",
+                _ => "Field type invalid",
+            };
         }
     }
 }
