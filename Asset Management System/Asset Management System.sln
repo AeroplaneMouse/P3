@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29318.209
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asset Management System", "Asset Management System.csproj", "{AD0BCE66-F731-4189-8B52-99DB929D544F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Asset Management System", "Asset Management System.csproj", "{AD0BCE66-F731-4189-8B52-99DB929D544F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "..\UnitTests\UnitTests.csproj", "{677B0604-557C-4545-B0EF-9FD1240209CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{AD0BCE66-F731-4189-8B52-99DB929D544F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD0BCE66-F731-4189-8B52-99DB929D544F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD0BCE66-F731-4189-8B52-99DB929D544F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{677B0604-557C-4545-B0EF-9FD1240209CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{677B0604-557C-4545-B0EF-9FD1240209CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{677B0604-557C-4545-B0EF-9FD1240209CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{677B0604-557C-4545-B0EF-9FD1240209CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using Newtonsoft.Json;
 
 namespace Asset_Management_System.Models
@@ -10,6 +12,8 @@ namespace Asset_Management_System.Models
         public string SerializedFields { get; set; }
 
         public List<Field> FieldsList { get; set; }
+
+        private int IDCounter = 0;
 
         /// <summary>
         /// This function is used for Serializing the list of fields, and their content to SerializedFields.
@@ -38,7 +42,9 @@ namespace Asset_Management_System.Models
         /// <returns></returns>
         public bool AddField(string name, int fieldType, string content, string defaultValue, bool required = false)
         {
-            Field currentField = new Field(name, content, fieldType, defaultValue, required);
+            Field currentField = new Field(this.IDCounter, name, content, fieldType, defaultValue, required);
+
+            this.IDCounter++;
 
             FieldsList.Add(currentField);
             ShowField();
@@ -69,16 +75,21 @@ namespace Asset_Management_System.Models
         /// </summary>
         /// <returns></returns>
         /// <exception cref="NullReferenceException"></exception>
-        public int[] GetChecksum()
+        public string GetChecksum()
         {
-            int[] checksum = new int[FieldsList.Count];
-            for (int i = 0; i < FieldsList.Count; i++)
+            string checksum = "";
+            foreach (Field field in FieldsList)
             {
-                var currentField = FieldsList.SingleOrDefault(r => r.ID == i);
-                if (currentField != null) checksum[i] = currentField.ID;
-                else
+                Dictionary<string,string> information = field.GetInformation();
+                checksum += information["Name"] + information["FieldType"] + information["Required"] + information["DefaultValue"];
+            }
+            using (var md5 = MD5.Create())
+            {
+                using (FileStream fs = new FileStream(checksum, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
                 {
-                    throw new NullReferenceException();
+                    var fileHash = md5.ComputeHash(fs);
+                    checksum = BitConverter.ToString(fileHash).Replace("-", "").ToLower();
+                    fs.Close();
                 }
             }
 
