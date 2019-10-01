@@ -5,14 +5,13 @@ namespace Asset_Management_System.Models
 {
     class Tag : DoContainFields
     {
-        public Tag(string name,int departmentId,int parentId = 0)
+        public Tag(string name, int departmentId = 0, int parentId = 0)
         {
             DepartmentId = departmentId;
             CreatedAt = DateTime.Now;
             Name = name;
             FieldsList = new List<Field>();
             ParentId = parentId;
-
         }
 
         public int ID { get; }
@@ -29,9 +28,9 @@ namespace Asset_Management_System.Models
 
         public bool RenameTag(string newName)
         {
-            if (newName!= null)
+            if (newName != null)
             {
-                Name = newName;    
+                Name = newName;
                 UpdatedAt = DateTime.Now;
             }
             else
@@ -41,6 +40,5 @@ namespace Asset_Management_System.Models
 
             return true;
         }
-        
     }
 }
