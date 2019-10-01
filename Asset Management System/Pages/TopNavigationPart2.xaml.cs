@@ -18,7 +18,7 @@ namespace Asset_Management_System.Pages
         {
             InitializeComponent();
             Session session = new Session();
-            Lbl_currentUser.Content = $"{ (session.IsAdmin ? "Admin : ": "") }{ session.Username }";
+            Lbl_currentUser.Content = session.Username;
         }
 
         private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)
