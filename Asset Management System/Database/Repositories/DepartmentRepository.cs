@@ -14,7 +14,7 @@ namespace Asset_Management_System.Database.Repositories
             throw new NotImplementedException();
         }
 
-        public Department GetById(int id)
+        public Department GetById(long id)
         {
             throw new NotImplementedException();
         }

@@ -1,5 +1,7 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
 using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Pages
 {
@@ -13,7 +15,10 @@ namespace Asset_Management_System.Pages
             InitializeComponent();
 
             TagRepository rep = new TagRepository();
-            
+
+            Tag tag = rep.GetById(1);
+
+            Console.WriteLine(tag.Name);
         }
     }
 }

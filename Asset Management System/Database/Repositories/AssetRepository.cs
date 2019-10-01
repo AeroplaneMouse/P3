@@ -19,7 +19,7 @@ namespace Asset_Management_System.Database.Repositories
             throw new NotImplementedException();
         }
 
-        public Asset GetById(int id)
+        public Asset GetById(long id)
         {
             throw new NotImplementedException();
         }

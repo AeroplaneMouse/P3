@@ -13,24 +13,23 @@ namespace Asset_Management_System.Models
             FieldsList = new List<Field>();
             ParentId = parentId;
         }
-        private Tag(int id,string name, int departmentId, int parentId, DateTime createdAt,DateTime updatedAt)
+
+        internal Tag(long id,string name, long departmentId, long parentId)
         {
             ID = id;
             DepartmentId = departmentId;
-            CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
             Name = name;
             FieldsList = new List<Field>();
             ParentId = parentId;
         }
 
-        public int ID { get; }
+        public long ID { get; }
 
-        public int ParentId;
+        public long ParentId;
 
         public string Name { get; set; }
 
-        public int DepartmentId { get; set; }
+        public long DepartmentId { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

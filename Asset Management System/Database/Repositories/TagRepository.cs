@@ -22,7 +22,7 @@ namespace Asset_Management_System.Database.Repositories
             throw new NotImplementedException();
         }
 
-        public Tag GetById(Int64 id)
+        public Tag GetById(long id)
         {
             if (this.dbcon.IsConnect())
             {
@@ -33,16 +33,24 @@ namespace Asset_Management_System.Database.Repositories
                 cmd.Parameters["@ID"].Value = id;
                 var reader = cmd.ExecuteReader();
 
-                if(reader.HasRows){
+                Tag tag = null;
+
+                if (reader.HasRows){
                     while (reader.Read())
                     {
-                        string someStringFromColumnZero = reader.GetString(0);
-                        Console.WriteLine(someStringFromColumnZero);
+                        long row_id = reader.GetInt64("id");
+                        String row_label = reader.GetString("label");
+                        long row_parent_id = reader.GetInt64("parent_id");
+                        long row_department_id = reader.GetInt64("department_id");
+
+                        tag = new Tag(row_id, row_label, row_department_id, row_parent_id);
                     }
                 }
-                
-                dbcon.Close()
 
+                dbcon.Close();
+                return tag;
+            }else{
+                return null;
             }
         }
 
