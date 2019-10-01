@@ -11,10 +11,16 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class LeftNavigation : Page
     {
-        public event EventHandler ChangeSourceRequest;
+        public event RoutedEventHandler ChangeSourceRequest;
+        private readonly Session _currentSession;
 
-        public LeftNavigation()
+        public LeftNavigation(Session session)
         {
+            if (session != null)
+                _currentSession = session;
+            else
+                throw new ArgumentNullException();
+
             InitializeComponent();
         }
 

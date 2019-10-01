@@ -9,13 +9,18 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class TopNavigation : Page
     {
-        public event EventHandler ChangeSourceRequest;
+        public event RoutedEventHandler ChangeSourceRequest;
+        private readonly Session _currentSession;
 
-        public TopNavigation()
+        public TopNavigation(Session session)
         {
+            if (session != null)
+                _currentSession = session;
+            else
+                throw new ArgumentNullException();
+
             InitializeComponent();
-            Session session = new Session();
-            Lbl_currentUser.Content = $"{ (session.IsAdmin ? "Admin : ": "") }{ session.Username }";
+            Lbl_currentUser.Content = $"{ (_currentSession.IsAdmin ? "Admin : " : "") }{ _currentSession.Username }";
         }
     }
 }
