@@ -36,12 +36,8 @@ namespace Asset_Management_System.Database
 
         public bool IsConnect()
         {
-            
-
             if (Connection == null)
             {
-                if (String.IsNullOrEmpty(databaseName))
-                    return false;
                 string connstring = "Server=172.25.18.167; database=ds303e19; UID=ds303e19; password=Cisptf8CuT4hLj4T";
                 connection = new MySqlConnection(connstring);
                 connection.Open();

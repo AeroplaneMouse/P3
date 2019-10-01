@@ -14,13 +14,22 @@ namespace Asset_Management_System.Models
             ParentId = parentId;
         }
 
-        public int ID { get; }
+        internal Tag(long id,string name, long departmentId, long parentId)
+        {
+            ID = id;
+            DepartmentId = departmentId;
+            Name = name;
+            FieldsList = new List<Field>();
+            ParentId = parentId;
+        }
 
-        public int ParentId;
+        public long ID { get; }
+
+        public long ParentId;
 
         public string Name { get; set; }
 
-        public int DepartmentId { get; set; }
+        public long DepartmentId { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

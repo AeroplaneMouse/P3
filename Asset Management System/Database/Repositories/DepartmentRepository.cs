@@ -7,29 +7,19 @@ using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Database.Repositories
 {
-    class DepartmentRepository : IRepository<Department>
+    class DepartmentRepository : IDepartmentRepository
     {
-        public void Delete(Department entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<Department> GetAll()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Department GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Insert(Department entity)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<Department> SearchFor(Expression<Func<Department, bool>> predicate)
+        public Department GetById(long id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(Department entity)
         {
             throw new NotImplementedException();
         }
