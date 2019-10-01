@@ -19,6 +19,18 @@ namespace Asset_Management_System.Pages
             Tag tag = rep.GetById(1);
 
             Console.WriteLine(tag.Name);
+
+            Department dep1 = new Department();
+            dep1.Name = "IT Department";
+
+            Department dep2 = new Department();
+            dep2.Name = "HR Department";
+
+            DepartmentRepository dep = new DepartmentRepository();
+
+            dep.Insert(dep1);
+            dep.Insert(dep2);
+
         }
     }
 }

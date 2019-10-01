@@ -17,6 +17,24 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
+        <ListBox
+            Name="LbDepartments"
+            Margin="10"
+            Grid.Row="0"
+        />
+
+        <Button
+            Name="BtnShowDepartments"
+            Grid.Row="1"
+            Width="100"
+            VerticalAlignment="top"
+            HorizontalAlignment="Left"
+            Click="BtnShowDepartments_Click"
+            Content="Show departments"
+            Margin="10"
+        />
+        
+        <!--
         <Label
             TextBlock.FontSize="30px"
             HorizontalAlignment="Center"
@@ -42,6 +60,6 @@
             <Label>Hvis du skal tilbage fra en side, tryk på 'Home' i venstre side,</Label>
             <Label>og tryk på den side du vil hen til.</Label>
         </StackPanel>
-
+        -->
     </Grid>
 </Page>

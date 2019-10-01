@@ -7,6 +7,6 @@ namespace Asset_Management_System.Database.Repositories
 {
     interface IDepartmentRepository : IRepository<Department>
     {
-
+        public List<Department> GetAll();
     }
 }

@@ -49,6 +49,7 @@ namespace Asset_Management_System.Database
         public void Close()
         {
             connection.Close();
+            _instance = null;
         }
     }
 }
