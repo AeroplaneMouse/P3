@@ -62,9 +62,6 @@ namespace Asset_Management_System
                     case "Btn_assetsPage":
                         FrameMainContent.Content = new Assets();
                         break;
-                    case "Btn_templatesPage":
-                        FrameMainContent.Content = new Templates();
-                        break;
                     case "Btn_tagsPage":
                         FrameMainContent.Content = new Tags();
                         break;
