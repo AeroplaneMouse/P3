@@ -13,6 +13,16 @@ namespace Asset_Management_System.Models
             FieldsList = new List<Field>();
             ParentId = parentId;
         }
+        private Tag(int id,string name, int departmentId, int parentId, DateTime createdAt,DateTime updatedAt)
+        {
+            ID = id;
+            DepartmentId = departmentId;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            Name = name;
+            FieldsList = new List<Field>();
+            ParentId = parentId;
+        }
 
         public int ID { get; }
 
