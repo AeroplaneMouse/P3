@@ -1,16 +1,15 @@
 ﻿using System;
 using System.DirectoryServices;
 using System.Security.Principal;
-using System.Configuration;
 using System.Threading;
 
 namespace Asset_Management_System.Authentication
 {
-    public class Session
+    class Session
     {
         public readonly String Username;
         public readonly String Domain;
-        public Boolean IsAdmin = false;
+        public Boolean IsAdmin = true;
 
         public Session()
         {
