@@ -23,26 +23,21 @@ namespace Asset_Management_System.Pages
 
         private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)
         {
-            if (SpDepartments.Visibility == Visibility.Hidden)
+            if (LbDepartments.Visibility == Visibility.Hidden)
             {
-                SpDepartments.Visibility = Visibility.Visible;
-                SpDepartments.Background = StackPanelUpper.Background;
+                LbDepartments.Visibility = Visibility.Visible;
+                LbDepartments.Background = StackPanelUpper.Background;
                 List<string> testElements = new List<string>();
                 testElements.Add("IT");
                 testElements.Add("HR");
                 testElements.Add("Finance");
 
-                
-                foreach (string str in testElements)
-                {
-                    MenuItem item = new MenuItem();
-                    item.Header = str;
-                    MenuDepartments.Items.Add(item);
-                }
+                LbDepartments.ItemsSource = testElements;
+
             }
             else
             {
-                SpDepartments.Visibility = Visibility.Hidden;
+                LbDepartments.Visibility = Visibility.Hidden;
             }
         }
     }

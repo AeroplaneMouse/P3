@@ -60,8 +60,8 @@
         </StackPanel>
 
 
-        <StackPanel
-            Name="SpDepartments"
+        <ListBox
+            Name="LbDepartments"
             Visibility="Hidden"
             Width="200"
             VerticalAlignment="Top"
@@ -70,8 +70,7 @@
             Grid.RowSpan="2"
             TextBlock.FontSize="20"
         >
-            <Menu Name="MenuDepartments"/>
-        </StackPanel>
+        </ListBox>
 
     </Grid>
 </Page>
