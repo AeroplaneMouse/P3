@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.Pages
 {
@@ -10,6 +11,9 @@ namespace Asset_Management_System.Pages
         public Tags()
         {
             InitializeComponent();
+
+            TagRepository rep = new TagRepository();
+            
         }
     }
 }
