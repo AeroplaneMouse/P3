@@ -32,7 +32,35 @@ namespace Asset_Management_System.Database.Repositories
 
         public Department GetById(long id)
         {
-            throw new NotImplementedException();
+            if (dbcon.IsConnect())
+            {
+                //suppose col0 and col1 are defined as VARCHAR in the DB
+                string query = "SELECT id, name, FROM departments WHERE id=@id";
+                var cmd = new MySqlCommand(query, dbcon.Connection);
+                cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                cmd.Parameters["@id"].Value = id;
+                var reader = cmd.ExecuteReader();
+
+                Department department = null;
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        long row_id = reader.GetInt64("id");
+                        String row_name = reader.GetString("name");
+
+                        department = new Department(row_id, row_name);
+                    }
+                }
+
+                dbcon.Close();
+                return department;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void Delete(Department entity)
