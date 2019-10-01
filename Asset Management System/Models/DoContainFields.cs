@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -61,6 +62,27 @@ namespace Asset_Management_System.Models
             SerializeFields();
             ShowField();
             return true;
+        }
+
+        /// <summary>
+        /// Gets checksum of all the contained fields.
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public int[] GetChecksum()
+        {
+            int[] checksum = new int[FieldsList.Count];
+            for (int i = 0; i < FieldsList.Count; i++)
+            {
+                var currentField = FieldsList.SingleOrDefault(r => r.ID == i);
+                if (currentField != null) checksum[i] = currentField.ID;
+                else
+                {
+                    throw new NullReferenceException();
+                }
+            }
+
+            return checksum;
         }
 
         public void ShowField()

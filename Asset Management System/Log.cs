@@ -9,29 +9,25 @@ namespace Asset_Management_System
 {
     class Log
     {
-        public Log(int assetId,User doneBy,string comment)
+        public Log(int assetId,User doneBy,string description)
         {
             this.AssetId = assetId;
             this.DoneBy = doneBy;
-            this.Comment = comment;
+            this.Description = description;
             this.RegistrationTime = DateTime.Now;
-            
+
+            Save();
         }
 
         public int ID { get; }
 
-        public string Comment { get; set; }
+        public string Description { get; set; }
 
         public DateTime RegistrationTime { get; set; }
 
         public User DoneBy { get; set; }
         
         public int AssetId;
-
-        public bool UpdateComment(string newComment)
-        {
-            return true;
-        }
 
         private bool Save()
         {
