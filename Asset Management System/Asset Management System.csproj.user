@@ -7,45 +7,45 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Pages\AssetsPage.xaml.cs">
+    <Compile Update="Pages\Assets.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\HelpPage.xaml.cs">
+    <Compile Update="Pages\Help.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\HomePage.xaml.cs">
+    <Compile Update="Pages\Home.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\LeftNavigation.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\NewAssetPage.xaml.cs">
+    <Compile Update="Pages\NewAsset.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\SettingsPage.xaml.cs">
+    <Compile Update="Pages\Settings.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\SplashPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\TemplatesPage.xaml.cs">
+    <Compile Update="Pages\Templates.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Pages\TopNavigation.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\TagsPage.xaml.cs">
+    <Compile Update="Pages\Tags.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Pages\AssetsPage.xaml">
+    <Page Update="Pages\Assets.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\HelpPage.xaml">
+    <Page Update="Pages\Help.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\HomePage.xaml">
+    <Page Update="Pages\Home.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\LeftNavigation.xaml">
@@ -54,22 +54,22 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\NewAssetPage.xaml">
+    <Page Update="Pages\NewAsset.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\SettingsPage.xaml">
+    <Page Update="Pages\Settings.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\SplashPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\TemplatesPage.xaml">
+    <Page Update="Pages\Templates.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Pages\TopNavigation.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\TagsPage.xaml">
+    <Page Update="Pages\Tags.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
