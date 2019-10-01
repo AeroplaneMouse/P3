@@ -8,47 +8,43 @@
         KeyDown="Window_KeyDown"
         WindowStartupLocation="CenterScreen"
         Title="Asset Management System" Height="450" Width="800">
-
-    
-
     <Grid>
-    
-        
-        
-        
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="50px"/>
+            <RowDefinition Height="0"/>
+            <RowDefinition Height="80px"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150px"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        
-        <!--Top navigation frame -->
+
         <Frame
-            Name="FrameTopNavigation"
+            Name="FrameTopNavigationPart1"
             Grid.Row="0"
             Grid.ColumnSpan="2"
-            Background="Gray"
+            Background="#24292e"
             NavigationUIVisibility="Hidden"
         />
         
         <!--Left navigation frame -->
         <Frame
             Name="FrameLeftNavigation"
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="0"
-            Background="#999999"
+            Background="White"
+            BorderBrush="LightGray"
+            BorderThickness="0, 0, 1, 0"
             NavigationUIVisibility="Hidden"
         />
         
         <!--Main content frame -->
         <Frame
             Name="FrameMainContent"
-            Grid.Row="1"
+            Grid.Row="2"
             Grid.Column="1"
-            Background="#EEEEEE"
+            Background="White"
             NavigationUIVisibility="Hidden"
         />
         
@@ -57,10 +53,21 @@
             Name="FrameSplash"
             Grid.Row="0"
             Grid.Column="0"
-            Grid.RowSpan="2"
+            Grid.RowSpan="3"
             Grid.ColumnSpan="2"
             NavigationUIVisibility="Hidden"
             Background="#EEEEEE"
         />
+        
+        <!--Top navigation frame -->
+        <Frame
+            Name="FrameTopNavigationPart2"
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.ColumnSpan="2"
+            Background="Transparent"
+            NavigationUIVisibility="Hidden"
+        />
     </Grid>
 </Window>
+

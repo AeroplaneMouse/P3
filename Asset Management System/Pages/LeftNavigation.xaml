@@ -49,24 +49,8 @@
 
     </Page.Resources>-->
     <Grid>
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="50px"/>
-        </Grid.RowDefinitions>-->
-
-
-        <!--Margin="5px"
-            TextBlock.FontSize="20px"
-            Background="Transparent"
-            BorderThickness="0px"
-            MouseEnter="Btn_MouseEnter"
-            MouseLeave="Btn_MouseLeave"-->
+        
         <StackPanel Margin="10, 10, 10, 10">
-
             <Button
                 Name="Btn_homePage"
                 Content="Home"

@@ -11,7 +11,7 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class LeftNavigation : Page
     {
-        public event EventHandler ChangeSourceRequest;
+        public event RoutedEventHandler ChangeSourceRequest;
 
         public LeftNavigation()
         {
