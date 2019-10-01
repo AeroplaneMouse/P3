@@ -357,17 +357,6 @@ Asset Management System/obj/project.assets.json
 
 *.cache
 
-Asset Management System/obj/Asset Management System.csproj.nuget.dgspec.json
-
-Asset Management System/obj/Asset Management System.csproj.nuget.g.props
-
-Asset Management System/obj/Debug/netcoreapp3.0/Asset Management System.designer.runtimeconfig.json
-Asset Management System/.idea/.idea.Asset Management System/.idea/contentModel.xml
-Asset Management System/.idea/.idea.Asset Management System/.idea/encodings.xml
-Asset Management System/.idea/.idea.Asset Management System/.idea/indexLayout.xml
-Asset Management System/.idea/.idea.Asset Management System/.idea/modules.xml
-Asset Management System/.idea/.idea.Asset Management System/.idea/projectSettingsUpdater.xml
-Asset Management System/.idea/.idea.Asset Management System/.idea/vcs.xml
-Asset Management System/.idea/.idea.Asset Management System/riderModule.iml
-Asset Management System/bin/Debug/netcoreapp3.0/Asset Management System.deps.json
-Asset Management System/obj/Debug/netcoreapp3.0/Asset Management System.designer.deps.json
+Asset Management System/obj/
+Asset Management System/.idea/
+Asset Management System/bin/
