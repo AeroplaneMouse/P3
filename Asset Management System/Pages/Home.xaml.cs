@@ -18,5 +18,13 @@ namespace Asset_Management_System.Pages
             Assets newAssetsPage = new Assets();
             this.NavigationService.Navigate(newAssetsPage);
         }
+
+        private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)
+        {
+
+
+
+            //LbDepartments.ItemsSource = 
+        }
     }
 }
