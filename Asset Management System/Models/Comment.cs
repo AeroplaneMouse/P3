@@ -2,7 +2,7 @@
 
 namespace Asset_Management_System.Models
 {
-    class Comment
+    public class Comment
     {
         private string _comment = String.Empty;
         public Comment(string comment)
