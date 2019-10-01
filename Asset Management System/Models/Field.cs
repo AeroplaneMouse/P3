@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Asset_Management_System
+namespace Asset_Management_System.Models
 {
     [Serializable]
     class Field

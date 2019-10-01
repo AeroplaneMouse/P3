@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.DirectoryServices;
 using System.Security.Principal;
+using System.Configuration;
 
 namespace Asset_Management_System
 {
@@ -13,9 +14,14 @@ namespace Asset_Management_System
 
         public Session()
         {
+
+
             string[] parts = WindowsIdentity.GetCurrent().Name.Split('\\');
             this.Domain = parts[0];
             this.Username = parts[1];
+
+            
+            
         }
 
         public Boolean Validate()

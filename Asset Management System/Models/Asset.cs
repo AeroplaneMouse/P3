@@ -1,28 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Documents;
+using LinqToDB.Mapping;
 
-namespace Asset_Management_System
+namespace Asset_Management_System.Models
 {
-    class Asset
+    [Table(Name = "assets")]
+    public class Asset
     {
 
-        public Asset(string label, string description)
+        public Asset(string name, string description)
         {
-            Label = label;
+            Name = name;
             Description = description;
         }
 
-        public int ID { get; }
-        
-        public string Label { get; set; }
-        
+        [PrimaryKey, Identity, Column(Name = "id")]
+        public int Id { get; }
+
+        [Column(Name = "name"), NotNull]
+        public string Name { get; set; }
+
+        [Column(Name = "description"), Nullable]
         public string Description { get; set; }
 
+        [Column(Name = "created_at"), Nullable]
         public DateTime CreatedAt { get; set; }
 
+        [Column(Name = "department_id"), NotNull]
         public int DepartmentID { get; set; }
 
+        [Column(Name = "options"), NotNull]
         public string Fields { get; set; }
 
         private List<Field> _fieldsList;
@@ -30,7 +38,8 @@ namespace Asset_Management_System
         {
             
         }
-
+        
+        
 
     }
 }
