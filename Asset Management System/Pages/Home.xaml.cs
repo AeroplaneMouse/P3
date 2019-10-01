@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
+using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Models;
+using System.Linq;
 
 namespace Asset_Management_System.Pages
 {
@@ -21,10 +25,11 @@ namespace Asset_Management_System.Pages
 
         private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)
         {
+            DepartmentRepository dep = new DepartmentRepository();
 
-
-
-            //LbDepartments.ItemsSource = 
+            List<Department> objects = dep.GetAll();
+            List<string> department_names = objects.Select(s => s.Name).ToList();
+            LbDepartments.ItemsSource = department_names;
         }
     }
 }

@@ -54,7 +54,7 @@ namespace Asset_Management_System.Database.Repositories
             }
         }
 
-        public List<Tag> GetChildTags()
+        public List<Tag> GetChildTags(long parent_id)
         {
             throw new NotImplementedException();
         }

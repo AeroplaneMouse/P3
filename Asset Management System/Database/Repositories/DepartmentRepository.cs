@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using Asset_Management_System.Models;
 using MySql.Data.MySqlClient;
+using System.Collections.Generic;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Database.Repositories
 {
@@ -26,23 +23,59 @@ namespace Asset_Management_System.Database.Repositories
                 cmd.Parameters.Add("@name", MySqlDbType.String);
                 cmd.Parameters["@name"].Value = entity.Name;
                 cmd.ExecuteNonQuery();
-                //dbcon.Close();
+                dbcon.Close();
             }
         }
 
         public Department GetById(long id)
         {
-            throw new NotImplementedException();
+            if (dbcon.IsConnect())
+            {
+                //suppose col0 and col1 are defined as VARCHAR in the DB
+                string query = "SELECT id, name, FROM departments WHERE id=@id";
+                var cmd = new MySqlCommand(query, dbcon.Connection);
+                cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                cmd.Parameters["@id"].Value = id;
+                var reader = cmd.ExecuteReader();
+
+                Department department = null;
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        long row_id = reader.GetInt64("id");
+                        String row_name = reader.GetString("name");
+
+                        department = new Department(row_id, row_name);
+                    }
+                }
+
+                dbcon.Close();
+                return department;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void Delete(Department entity)
         {
-            throw new NotImplementedException();
+            if (dbcon.IsConnect())
+            {
+                string query = "DELETE FROM departments WHERE id=@id";
+                var cmd = new MySqlCommand(query, dbcon.Connection);
+                cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                cmd.Parameters["@id"].Value = entity.ID;
+                cmd.ExecuteNonQuery();
+                dbcon.Close();
+            }
         }
 
         public List<Department> GetAll()
         {
-            if (this.dbcon.IsConnect())
+            if (dbcon.IsConnect())
             {
                 string query = "SELECT id, name FROM departments ORDER BY name ASC";
                 var cmd = new MySqlCommand(query, dbcon.Connection);

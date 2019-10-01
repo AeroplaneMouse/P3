@@ -15,41 +15,22 @@ namespace Asset_Management_System.Models
         /// <param name="required">A boolean, whether the field is required or not</param>
         /// <param name="selectedType">Selecting the type of the field. 1= Int,2 = String,3= TextBox, 4 = Date, 5 = Boolean</param>
         /// <param name="defaultValue">The default value which should be entered into the field</param>
-        public Field(string name, string content, int selectedType, string defaultValue, bool required = false)
+        public Field(int ID, string name, string content, int fieldType, string defaultValue, bool required = false)
         {
-            this.Name = name;
-            this.Content = content;
-            this.Required = required;
-            this.DefaultValue = defaultValue;
-            GetFieldType(selectedType);
-        }
-
-        /// <summary>
-        /// JSON constructor, not for code use.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="name"></param>
-        /// <param name="content"></param>
-        /// <param name="required"></param>
-        /// <param name="fieldType"></param>
-        /// <param name="defaultValue"></param>
-        [JsonConstructor]
-        private Field(int id, string name, string content, bool required, string fieldType, string defaultValue)
-        {
-            this.ID = id;
+            this.ID = ID;
             this.Name = name;
             this.Content = content;
             this.Required = required;
             this._fieldType = fieldType;
             this.DefaultValue = defaultValue;
         }
-        
+
         public int ID { get; }
         public string Name { get; set; }
         public string Content { get; set; }
         public bool Required { get; set; }
 
-        private string _fieldType;
+        private int _fieldType;
 
         public readonly string DefaultValue;
 
@@ -63,7 +44,7 @@ namespace Asset_Management_System.Models
             output.Add("Name", Name);
             output.Add("Description", Content);
             output.Add("Required", Required.ToString());
-            output.Add("FieldType", _fieldType);
+            output.Add("FieldType", this.GetFieldType());
             output.Add("DefaultValue", DefaultValue);
             return output;
         }
@@ -87,31 +68,23 @@ namespace Asset_Management_System.Models
         /// Returns the FieldType of the field.
         /// </summary>
         /// <returns></returns>
-        private string GetFieldType(int typeInt)
+        private string GetFieldType()
         {
-            switch (typeInt)
+            switch (this._fieldType)
             {
                 case 1:
-                    _fieldType = "TextBox";
-                    break;
+                    return "TextBox";
                 case 2:
-                    _fieldType = "String";
-                    break;
+                    return "String";
                 case 3:
-                    _fieldType = "Int";
-                    break;
+                    return "Int";
                 case 4:
-                    _fieldType = "Date";
-                    break;
+                    return "Date";
                 case 5:
-                    _fieldType = "Boolean";
-                    break;
+                    return "Boolean";
                 default:
-                    _fieldType = "Invalid field entry";
-                    break;
+                    return "Field type invalid";
             }
-
-            return _fieldType;
         }
     }
 }
