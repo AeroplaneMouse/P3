@@ -16,7 +16,6 @@ namespace Asset_Management_System.Events
         public static string Down = "down";
         public static string Up = "up";
 
-
         public int NewFrameMode = Collapse;
         public int OldFrameMode;
         public string Direction;

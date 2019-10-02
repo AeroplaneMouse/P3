@@ -36,6 +36,7 @@
             <!-- The content of the lable is filled from code, as the selected department
                  that is being deleted, whould have to be a part of the warning. -->
             <Label
+                Name="LbInfo"
                 Grid.Row="0"
                 Grid.ColumnSpan="2"
                 VerticalAlignment="Center"
