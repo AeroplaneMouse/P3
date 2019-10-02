@@ -36,34 +36,17 @@
         </Style>
     </Page.Resources>
     
-    <!--<Page.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="TextBlock.FontSize" Value="20px"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-        </Style>
-
-    </Page.Resources>-->
     <Grid>
-        
-        <StackPanel Margin="10, 10, 10, 10">
+        <StackPanel Margin="10">
             <Button
                 Name="Btn_homePage"
                 Content="Home"
                 Style="{StaticResource MyButton}"
             />
 
-
             <Button
                 Name="Btn_assetsPage"
                 Content="Assets"
-                Style="{StaticResource MyButton}"
-            />
-
-            <Button
-                Name="Btn_templatesPage"
-                Content="Templates"
                 Style="{StaticResource MyButton}"
             />
 

@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Asset_Management_System.Events;
+using Asset_Management_System.Pages;
 
 namespace Asset_Management_System.Pages
 {
@@ -33,9 +34,21 @@ namespace Asset_Management_System.Pages
 
         private void Btn_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new ArgumentException();
-            //if (ChangeSourceRequest != null)
-            //    ChangeSourceRequest?.Invoke(this, );
+            if(sender is Button btn)
+            {
+                Page page;
+                page = btn.Name switch
+                {
+                    "Btn_homePage" => new Home(),
+                    "Btn_assetsPage" => new Assets(),
+                    "Btn_tagsPage" => new Tags(),
+                    "Btn_settingsPage" => new Settings(),
+                    "Btn_helpPage" => new Help(),
+                    _ => null,
+                };
+
+                ChangeSourceRequest?.Invoke(this, new ChangeSourceEventArgs(page));
+            }
         }
     }
 }
