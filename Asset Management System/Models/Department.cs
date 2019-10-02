@@ -1,7 +1,7 @@
 ﻿
 namespace Asset_Management_System.Models
 {
-    class Department
+    public class Department
     {
         public Department()
         {
@@ -15,5 +15,7 @@ namespace Asset_Management_System.Models
 
         public long ID { get; }
         public string Name { get; set; }
+
+        public override string ToString() => Name;
     }
 }

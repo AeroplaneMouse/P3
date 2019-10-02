@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Asset_Management_System;
 using Asset_Management_System.Events;
+using Asset_Management_System.Models;
 using Asset_Management_System.Authentication;
 
 namespace Asset_Management_System.Pages
@@ -61,14 +62,15 @@ namespace Asset_Management_System.Pages
                 ChangeDepartmentVisuals("expand");
 
                 // Fill suggestion list
-                List<string> testDepartments = new List<string>();
-                testDepartments.Add("IT");
-                testDepartments.Add("HR");
-                testDepartments.Add("Finance");
+                List<Department> testDepartments = new List<Department>();
+                testDepartments.Add(new Department() { Name = "IT" } );
+                testDepartments.Add(new Department() { Name = "HR" } );
+                testDepartments.Add(new Department() { Name = "Finance" } );
+                testDepartments.Add(new Department() { Name = "Zookeeper" } );
 
                 List<Grid> testElements = new List<Grid>();
 
-                foreach (string department in testDepartments)
+                foreach (Department department in testDepartments)
                 {
                     testElements.Add(GenerateBlockElement(department));
                 }
@@ -79,7 +81,7 @@ namespace Asset_Management_System.Pages
                 ChangeDepartmentVisuals("expand");
         }
 
-        private Grid GenerateBlockElement(string department)
+        private Grid GenerateBlockElement(Department department)
         {
             Grid grid = new Grid();
             ColumnDefinition c0 = new ColumnDefinition();
@@ -93,11 +95,11 @@ namespace Asset_Management_System.Pages
             grid.ColumnDefinitions.Add(c2);
 
             // Creating label
-            Label label = new Label() {
+            ListBoxItem item = new ListBoxItem() {
                 Content = department,
                 Width = 150
             };
-            Grid.SetColumn(label, 0);
+            Grid.SetColumn(item, 0);
 
             // Creating pencil
             //Image img = new Image();
@@ -123,7 +125,7 @@ namespace Asset_Management_System.Pages
             trash.Click += BtnRemove_Click;
             Grid.SetColumn(trash, 2);
 
-            grid.Children.Add(label);
+            grid.Children.Add(item);
             grid.Children.Add(pencil);
             grid.Children.Add(trash);
 
@@ -138,13 +140,28 @@ namespace Asset_Management_System.Pages
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
             ChangeDepartmentVisuals("collapse");
-            UIElement item = sender as Button;
-            for (int i = 0; i < 4; i++)
+            try
             {
-                item = VisualTreeHelper.GetParent(item) as UIElement;
+                Grid grid = VisualTreeHelper.GetParent(sender as Button) as Grid;
+                ListBoxItem item = grid.Children[0] as ListBoxItem;
+                ChangeSourceEventArgs args = new ChangeSourceEventArgs(new EditDepartment((Department)item.Content));
+
+                if (ChangeSourceRequest != null)
+                    ChangeSourceRequest?.Invoke(this, args);
+            }
+            catch(Exception f)
+            {
+                Console.WriteLine($"There was an error when rerouting to the edit department page: { f }");
             }
 
-            LbDepartments.SelectedItem = item as ListBoxItem;
+
+            //UIElement item = sender as Button;
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    item = VisualTreeHelper.GetParent(item) as UIElement;
+            //}
+
+            //LbDepartments.SelectedItem = item as ListBoxItem;
 
             //if (ChangeSourceRequest != null)
             //    ChangeSourceRequest?.Invoke(this, e);

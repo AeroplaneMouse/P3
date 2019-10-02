@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Pages
 {
@@ -19,19 +20,10 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class EditDepartment : Page
     {
-        private TopNavigationPart2 nav;
-        public EditDepartment(TopNavigationPart2 nav)
+        public EditDepartment(Department department)
         {
             InitializeComponent();
-            this.nav = nav;
-
-            Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(GetSelectedDepartment));
-        }
-
-        private void GetSelectedDepartment()
-        {
-            string department = nav.LbDepartments.SelectedItem.ToString();
-            Test.Content = department;
+            Test.Content = $"You are now on a new page, where you can edit the department: { department.ID } : { department.Name}";
         }
     }
 }

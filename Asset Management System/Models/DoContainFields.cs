@@ -32,7 +32,7 @@ namespace Asset_Management_System.Models
         }
 
         /// <summary>
-        /// Adds a fields to the list of fields. And Serializes the current state of fields.
+        /// Adds a field to the list of fields. And Serializes the current state of fields.
         /// </summary>
         /// <param name="name"></param>
         /// <param name="fieldType"></param>
