@@ -3,7 +3,7 @@ using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Database.Repositories
 {
-    interface IDepartmentRepository : IRepository<Department>
+    interface IDepartmentRepository : IMysqlRepository<Department>
     {
         List<Department> GetAll();
     }

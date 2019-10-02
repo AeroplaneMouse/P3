@@ -8,7 +8,7 @@ namespace Asset_Management_System.Models
 
         }
 
-        internal Department(long id, string name){
+        private Department(long id, string name){
             this.ID = id;
             this.Name = name;
         }

@@ -16,75 +16,90 @@ namespace Asset_Management_System.Database.Repositories
         {
             this.dbcon = DBConnection.Instance();
         }
-        public void Delete(Asset entity)
-        {
-            throw new NotImplementedException();
-        }
 
-        public IQueryable<Asset> GetAll()
+        public void Delete(Asset entity)
         {
             throw new NotImplementedException();
         }
 
         public Asset GetById(long id)
         {
-            throw new NotImplementedException();
+            Asset asset = null;
+
+            if (dbcon.IsConnect())
+            {
+                string query = "SELECT id, name, description FROM assets WHERE id=@id";
+
+                using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                {
+                    cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                    cmd.Parameters["@id"].Value = id;
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            asset = DBOToModelConvert(reader);
+                        }
+                    }
+
+                    dbcon.Close();
+                }
+            }
+
+            return asset;
         }
 
         public void Insert(Asset entity)
         {
-            void Insert(Department entity)
+            if (dbcon.IsConnect())
             {
-                if (dbcon.IsConnect())
-                {
-                    string query = "INSERT INTO assets (name) VALUES (@name)";
-                    var cmd = new MySqlCommand(query, dbcon.Connection);
-                    cmd.Parameters.Add("@name", MySqlDbType.String);
-                    cmd.Parameters["@name"].Value = entity.Name;
-                    cmd.ExecuteNonQuery();
-                    dbcon.Close();
-                }
+                string query = "INSERT INTO assets (name) VALUES (@name)";
+                var cmd = new MySqlCommand(query, dbcon.Connection);
+                cmd.Parameters.Add("@name", MySqlDbType.String);
+                cmd.Parameters["@name"].Value = entity.Label;
+                cmd.ExecuteNonQuery();
+                dbcon.Close();
             }
         }
 
         public List<Asset> SearchByTags(List<int> tags_ids)
         {
+            List<Asset> assets = new List<Asset>();
+
             if (dbcon.IsConnect())
             {
-                //suppose col0 and col1 are defined as VARCHAR in the DB
-                string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE id=@id";
-                var cmd = new MySqlCommand(query, dbcon.Connection);
-                cmd.Parameters.Add("@ID", MySqlDbType.Int64);
-                cmd.Parameters["@ID"].Value = id;
-                var reader = cmd.ExecuteReader();
+                string query = "SELECT a.* FROM assets AS a " +
+                    "INNER JOIN asset_tags AS atr ON (a.id = atr.asset_id) " +
+                    "WHERE atr.tag_id IN (@ids) GROUP BY a.id";
 
-                Tag tag = null;
+                using (var cmd = new MySqlCommand(query, dbcon.Connection)){
+                    cmd.Parameters.Add("@ids", MySqlDbType.String);
+                    cmd.Parameters["@ids"].Value = string.Join(",", tags_ids);
 
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        long row_id = reader.GetInt64("id");
-                        String row_label = reader.GetString("label");
-                        long row_parent_id = reader.GetInt64("parent_id");
-                        long row_department_id = reader.GetInt64("department_id");
-
-                        tag = new Tag(row_id, row_label, row_department_id, row_parent_id);
+                        while (reader.Read())
+                        {
+                            Asset asset = DBOToModelConvert(reader);
+                            assets.Add(asset);
+                        }
                     }
+
+                    dbcon.Close();
                 }
+            }
 
-                dbcon.Close();
-                return tag;
-            }
-            else
-            {
-                return null;
-            }
+            return assets;
         }
 
-        public IQueryable<Asset> SearchFor(Expression<Func<Asset, bool>> predicate)
+        public Asset DBOToModelConvert(MySqlDataReader reader)
         {
-            throw new NotImplementedException();
+            long row_id = reader.GetInt64("id");
+            string row_label = reader.GetString("name");
+            string row_description = reader.GetString("description");
+            return new Asset(row_id, row_label, row_description);
         }
+
     }
 }
