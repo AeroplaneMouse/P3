@@ -73,7 +73,6 @@
         <Frame
             Name="FramePopup"
             Grid.ColumnSpan="2"
-            VerticalAlignment="Top"
             Background="Black"
             Opacity="0.34"
         />

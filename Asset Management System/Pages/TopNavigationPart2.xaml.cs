@@ -21,14 +21,15 @@ namespace Asset_Management_System.Pages
 
         private const string Expand = "Expand";
         private const string Collapse = "Collapse";
+        private Frame PopupFrame;
 
 
-
-        public TopNavigationPart2()
+        public TopNavigationPart2(Frame popupFrame)
         {
             InitializeComponent();
             Session session = new Session();
             LblCurrentUser.Content = session.Username;
+            PopupFrame = popupFrame;
         }
 
         private void ChangeDepartmentVisuals(string newState)
@@ -137,29 +138,35 @@ namespace Asset_Management_System.Pages
 
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
         {
+            Department selectedDeparment = GetDeparment(sender);
+
             // Generate popup window
-            Frame frame = new Frame();
+            Popup page = new Popup();
+            page.LbInfo.Content = $"Are you sure that you want to DELETE department: { selectedDeparment.ID }:{ selectedDeparment.Name }?";
 
-
-
-            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down, frame);
+            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down, PopupFrame);
+            PopupFrame.Content = page;
 
             if (ExpandFrameRequest != null)
                 ExpandFrameRequest?.Invoke(this, args);
+        }
 
+        private Department GetDeparment(object sender)
+        {
+            Grid grid = VisualTreeHelper.GetParent(sender as Button) as Grid;
+            ListBoxItem item = grid.Children[0] as ListBoxItem;
+            return (Department)item.Content;
         }
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
-            ChangeDepartmentVisuals("collapse");
+            ChangeDepartmentVisuals(Collapse);
             try
             {
-                Grid grid = VisualTreeHelper.GetParent(sender as Button) as Grid;
-                ListBoxItem item = grid.Children[0] as ListBoxItem;
-                ChangeSourceEventArgs args = new ChangeSourceEventArgs(new EditDepartment((Department)item.Content));
+                Page page = new EditDepartment(GetDeparment(sender));
 
                 if (ChangeSourceRequest != null)
-                    ChangeSourceRequest?.Invoke(this, args);
+                    ChangeSourceRequest?.Invoke(this, new ChangeSourceEventArgs(page));
             }
             catch(Exception f)
             {

@@ -41,7 +41,7 @@ namespace Asset_Management_System
             FrameSplash.Source = null;
 
             // Set stuff
-            topNavigationPage = new TopNavigationPart2();
+            topNavigationPage = new TopNavigationPart2(FramePopup);
             topNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
             topNavigationPage.ExpandFrameRequest += ChangeFrameMode;
             FrameTopNavigationPart2.Content = topNavigationPage;
@@ -86,7 +86,6 @@ namespace Asset_Management_System
         public void ChangeSourceReguest(Object sender, ChangeSourceEventArgs e)
         {
             FrameMainContent.Content = e.NewSource;
-
 
             //if (e.OriginalSource is Button btn)
             //{
