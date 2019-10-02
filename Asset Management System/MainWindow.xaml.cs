@@ -30,6 +30,7 @@ namespace Asset_Management_System
             page.SessionAuthenticated += SystemLoaded;
 
             Assets.ChangeSourceRequest += ChangeSourceReguest;
+            //FrameTopNavigationPart2.op
         }
 
         public void SystemLoaded(object sender, EventArgs e)
@@ -41,6 +42,7 @@ namespace Asset_Management_System
             // Set stuff
             topNavigationPage = new TopNavigationPart2();
             topNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
+            topNavigationPage.ExpandFrameRequest += ChangeFrameMode;
             FrameTopNavigationPart2.Content = topNavigationPage;
 
             leftNavigationPage = new LeftNavigation();
@@ -48,6 +50,35 @@ namespace Asset_Management_System
             FrameLeftNavigation.Content = leftNavigationPage;
 
             FrameMainContent.Content = new Home();
+        }
+
+        public void ChangeFrameMode(object sender, ChangeFrameModeEventArgs e)
+        {
+            if (sender is TopNavigationPart2 nav)
+            {
+                if (e.NewFrameMode == ChangeFrameModeEventArgs.Extend)
+                    ExpandFrame(FrameTopNavigationPart2, e.Direction);
+                else if (e.NewFrameMode == ChangeFrameModeEventArgs.Collapse)
+                    CollapseFrame(FrameTopNavigationPart2, e.Direction);
+            }
+        }
+
+        public void ExpandFrame(Frame frame, string dir)
+        {
+            if (dir == ChangeFrameModeEventArgs.Right)
+                Grid.SetColumnSpan(frame, 10);
+            else if (dir == ChangeFrameModeEventArgs.Down)
+                Grid.SetRowSpan(frame, 10);
+            else
+                throw new ArgumentException("Unknown argument value for dir.");
+        }
+
+        public void CollapseFrame(Frame frame, string dir)
+        {
+            if (dir == ChangeFrameModeEventArgs.Left)
+                Grid.SetColumnSpan(frame, 1);
+            else if (dir == ChangeFrameModeEventArgs.Up)
+                Grid.SetRowSpan(frame, 1);
         }
 
         public void ChangeSourceReguest(Object sender, RoutedEventArgs e)

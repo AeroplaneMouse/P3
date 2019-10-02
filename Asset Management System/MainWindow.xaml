@@ -64,7 +64,6 @@
             Grid.Row="1"
             Grid.RowSpan="1"
             Grid.ColumnSpan="2"
-            Background="Transparent"
             NavigationUIVisibility="Hidden"
         />
     </Grid>
