@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Pages
 {
@@ -21,6 +23,16 @@ namespace Asset_Management_System.Pages
         public Settings()
         {
             InitializeComponent();
+
+            List<int> tags = new List<int>();
+            tags.Add(5);
+
+            AssetRepository rep = new AssetRepository();
+            List<Asset> assetsByTags = rep.SearchByTags(tags);
+
+            foreach(Asset asset in assetsByTags){
+                Console.WriteLine(asset.Label);
+            }
         }
     }
 }

@@ -24,34 +24,30 @@ namespace Asset_Management_System.Database.Repositories
 
         public Tag GetById(long id)
         {
-            if (this.dbcon.IsConnect())
+            Tag tag = null;
+
+            if (dbcon.IsConnect())
             {
-                //suppose col0 and col1 are defined as VARCHAR in the DB
                 string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE id=@id";
-                var cmd = new MySqlCommand(query, dbcon.Connection);
-                cmd.Parameters.Add("@ID", MySqlDbType.Int64);
-                cmd.Parameters["@ID"].Value = id;
-                var reader = cmd.ExecuteReader();
 
-                Tag tag = null;
+                using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                {
+                    cmd.Parameters.Add("@ID", MySqlDbType.Int64);
+                    cmd.Parameters["@ID"].Value = id;
 
-                if (reader.HasRows){
-                    while (reader.Read())
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        long row_id = reader.GetInt64("id");
-                        String row_label = reader.GetString("label");
-                        long row_parent_id = reader.GetInt64("parent_id");
-                        long row_department_id = reader.GetInt64("department_id");
-
-                        tag = new Tag(row_id, row_label, row_department_id, row_parent_id);
+                        while (reader.Read())
+                        {
+                            tag = DBOToModelConvert(reader);
+                        }
                     }
                 }
 
                 dbcon.Close();
-                return tag;
-            }else{
-                return null;
             }
+
+            return tag;
         }
 
         public List<Tag> GetChildTags(long parent_id)
@@ -72,8 +68,15 @@ namespace Asset_Management_System.Database.Repositories
         public void Insert(Tag entity)
         {
             throw new NotImplementedException();
+        }
 
-            
+        public Tag DBOToModelConvert(MySqlDataReader reader)
+        {
+            long row_id = reader.GetInt64("id");
+            String row_label = reader.GetString("label");
+            long row_parent_id = reader.GetInt64("parent_id");
+            long row_department_id = reader.GetInt64("department_id");
+            return new Tag(row_id, row_label, row_department_id, row_parent_id);
         }
     }
 }

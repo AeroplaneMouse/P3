@@ -6,15 +6,16 @@ namespace Asset_Management_System.Models
     [Serializable]
     class Asset : DoContainFields
     {
-        public Asset(string label, string description)
+        public Asset(long id, string label, string description)
         {
+            ID = id;
             Label = label;
             Description = description;
             CreatedAt = DateTime.Now;
             FieldsList = new List<Field>();
         }
 
-        public int ID { get; }
+        public long ID { get; }
         
         public string Label { get; set; }
         
