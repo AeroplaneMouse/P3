@@ -8,7 +8,7 @@ using MySql.Data.MySqlClient;
 
 namespace Asset_Management_System.Database.Repositories
 {
-    class AssetRepository : IRepository<Asset>
+    class AssetRepository : IAssetRepository
     {
         private DBConnection dbcon;
 
@@ -44,6 +44,41 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.ExecuteNonQuery();
                     dbcon.Close();
                 }
+            }
+        }
+
+        public List<Asset> SearchByTags(List<int> tags_ids)
+        {
+            if (dbcon.IsConnect())
+            {
+                //suppose col0 and col1 are defined as VARCHAR in the DB
+                string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE id=@id";
+                var cmd = new MySqlCommand(query, dbcon.Connection);
+                cmd.Parameters.Add("@ID", MySqlDbType.Int64);
+                cmd.Parameters["@ID"].Value = id;
+                var reader = cmd.ExecuteReader();
+
+                Tag tag = null;
+
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
+                        long row_id = reader.GetInt64("id");
+                        String row_label = reader.GetString("label");
+                        long row_parent_id = reader.GetInt64("parent_id");
+                        long row_department_id = reader.GetInt64("department_id");
+
+                        tag = new Tag(row_id, row_label, row_department_id, row_parent_id);
+                    }
+                }
+
+                dbcon.Close();
+                return tag;
+            }
+            else
+            {
+                return null;
             }
         }
 
