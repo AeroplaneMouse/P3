@@ -24,22 +24,42 @@ namespace Asset_Management_System.Pages
             LblCurrentUser.Content = session.Username;
         }
 
-        private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)
+        private void ChangeDepartmentVisuals(string newState)
         {
-            if (LbDepartments.Visibility == Visibility.Hidden)
+            if (newState == "expand")
             {
                 // Make the suggestion list visible
                 LbDepartments.Visibility = Visibility.Visible;
                 BtnShowDepartments.Background = Brushes.White;
                 BtnShowDepartments.Foreground = Brushes.Black;
 
-                // Expand the navigation frame
                 ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down);
                 if (ExpandFrameRequest != null)
                     ExpandFrameRequest?.Invoke(this, args);
+            }
+            else if (newState == "collapse")
+            {
+                // Hide the suggestion list
+                LbDepartments.Visibility = Visibility.Hidden;
+                BtnShowDepartments.Background = Brushes.Transparent;
+                BtnShowDepartments.Foreground = Brushes.White;
+
+                // Collapse the navigation frame
+                ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Collapse, ChangeFrameModeEventArgs.Up);
+                if (ExpandFrameRequest != null)
+                    ExpandFrameRequest?.Invoke(this, args);
+            }
+            else
+                throw new ArgumentException();
+        }
+
+        private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)
+        {
+            if (LbDepartments.Visibility == Visibility.Hidden)
+            {
+                ChangeDepartmentVisuals("expand");
 
                 // Fill suggestion list
-
                 List<string> testDepartments = new List<string>();
                 testDepartments.Add("IT");
                 testDepartments.Add("HR");
@@ -55,17 +75,7 @@ namespace Asset_Management_System.Pages
                 LbDepartments.ItemsSource = testElements;
             }
             else
-            {
-                // Hide the suggestion list
-                LbDepartments.Visibility = Visibility.Hidden;
-                BtnShowDepartments.Background = Brushes.Transparent;
-                BtnShowDepartments.Foreground = Brushes.White;
-
-                // Collapse the navigation frame
-                ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Collapse, ChangeFrameModeEventArgs.Up);
-                if (ExpandFrameRequest != null)
-                    ExpandFrameRequest?.Invoke(this, args);
-            }
+                ChangeDepartmentVisuals("expand");
         }
 
         private Grid GenerateBlockElement(string department)
@@ -126,7 +136,17 @@ namespace Asset_Management_System.Pages
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
+            ChangeDepartmentVisuals("collapse");
+            UIElement item = sender as Button;
+            for (int i = 0; i < 4; i++)
+            {
+                item = VisualTreeHelper.GetParent(item) as UIElement;
+            }
 
+            LbDepartments.SelectedItem = item as ListBoxItem;
+
+            //if (ChangeSourceRequest != null)
+            //    ChangeSourceRequest?.Invoke(this, e);
         }
     }
 }

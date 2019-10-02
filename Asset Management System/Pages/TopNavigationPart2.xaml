@@ -81,7 +81,7 @@
             BorderThickness="0" 
             Grid.Row="1"
         />
-        
+
         <Image
             Width="100"
             Height="100"
@@ -89,6 +89,5 @@
             VerticalAlignment="Top"
             Source="/Resources/Pencil.png" Stretch="Fill"
         />
-
     </Grid>
 </Page>

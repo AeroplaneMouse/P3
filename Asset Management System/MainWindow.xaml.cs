@@ -105,6 +105,9 @@ namespace Asset_Management_System
                     case "Btn_AddNewAsset":
                         FrameMainContent.Content = new NewAsset();
                         break;
+                    case "":
+                        FrameMainContent.Content = new EditDepartment(topNavigationPage);
+                        break;
                 }
             }
         }
