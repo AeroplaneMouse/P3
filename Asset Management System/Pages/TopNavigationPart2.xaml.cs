@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Asset_Management_System;
+using Asset_Management_System.Events;
 using Asset_Management_System.Authentication;
 
 namespace Asset_Management_System.Pages
@@ -14,7 +15,7 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class TopNavigationPart2 : Page
     {
-        public event RoutedEventHandler ChangeSourceRequest;
+        public event ChangeSourceEventHandler ChangeSourceRequest;
         public event ChangeFrameModeEventHandler ExpandFrameRequest;
 
         public TopNavigationPart2()

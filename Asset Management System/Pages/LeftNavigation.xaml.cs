@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Asset_Management_System.Events;
 
 namespace Asset_Management_System.Pages
 {
@@ -11,7 +12,7 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class LeftNavigation : Page
     {
-        public event RoutedEventHandler ChangeSourceRequest;
+        public event ChangeSourceEventHandler ChangeSourceRequest;
 
         public LeftNavigation()
         {
@@ -32,8 +33,9 @@ namespace Asset_Management_System.Pages
 
         private void Btn_OnClick(object sender, RoutedEventArgs e)
         {
-            if (ChangeSourceRequest != null)
-                ChangeSourceRequest?.Invoke(this, e);
+            throw new ArgumentException();
+            //if (ChangeSourceRequest != null)
+            //    ChangeSourceRequest?.Invoke(this, );
         }
     }
 }

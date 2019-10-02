@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Asset_Management_System
+namespace Asset_Management_System.Events
 {
+    public delegate void ChangeFrameModeEventHandler(object sender, ChangeFrameModeEventArgs e);
+
     public class ChangeFrameModeEventArgs : EventArgs
     {
         public static int Collapse = 0;

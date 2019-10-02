@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using Asset_Management_System.Pages;
+using Asset_Management_System.Events;
 
 namespace Asset_Management_System
 {
@@ -80,36 +81,31 @@ namespace Asset_Management_System
             else if (dir == ChangeFrameModeEventArgs.Up)
                 Grid.SetRowSpan(frame, 1);
         }
-
-        public void ChangeSourceReguest(Object sender, RoutedEventArgs e)
+        
+        /// <summary>
+        /// Changes the content of the main frame for content, to the new page object received through
+        /// the changeSourceEventArgs
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void ChangeSourceReguest(Object sender, ChangeSourceEventArgs e)
         {
-            if (e.OriginalSource is Button btn)
-            {
-                switch (btn.Name)
-                {
-                    case "Btn_homePage":
-                        FrameMainContent.Content = new Home();
-                        break;
-                    case "Btn_assetsPage":
-                        FrameMainContent.Content = new Assets();
-                        break;
-                    case "Btn_tagsPage":
-                        FrameMainContent.Content = new Tags();
-                        break;
-                    case "Btn_settingsPage":
-                        FrameMainContent.Content = new Settings();
-                        break;
-                    case "Btn_helpPage":
-                        FrameMainContent.Content = new Help();
-                        break;
-                    case "Btn_AddNewAsset":
-                        FrameMainContent.Content = new NewAsset();
-                        break;
-                    case "":
-                        FrameMainContent.Content = new EditDepartment(topNavigationPage);
-                        break;
-                }
-            }
+            FrameMainContent.Content = e.NewSource;
+
+
+            //if (e.OriginalSource is Button btn)
+            //{
+            //    FrameMainContent.Content = btn.Name switch
+            //    {
+            //        "Btn_homePage" => new Home(),
+            //        "Btn_assetsPage" => new Assets(),
+            //        "Btn_tagsPage" => new Tags(),
+            //        "Btn_settingsPage" => new Settings(),
+            //        "Btn_helpPage" => new Help(),
+            //        "Btn_AddNewAsset" => new NewAsset(),
+            //        _ => throw new ArgumentException($"Unknown routing. A change of source has been requested, but no "),
+            //    };
+            //}
         }
     }
 }

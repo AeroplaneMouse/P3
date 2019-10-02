@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using Asset_Management_System.Database;
+using Asset_Management_System.Events;
 
 namespace Asset_Management_System.Pages
 {
@@ -10,7 +11,7 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class Assets : Page
     {
-        public static event RoutedEventHandler ChangeSourceRequest;
+        public static event ChangeSourceEventHandler ChangeSourceRequest;
 
         public Assets()
         {
@@ -25,7 +26,7 @@ namespace Asset_Management_System.Pages
         private void Btn_AddNewAsset_Click(object sender, RoutedEventArgs e)
         {
             if (ChangeSourceRequest != null)
-                ChangeSourceRequest?.Invoke(this, e);
+                ChangeSourceRequest?.Invoke(this, new ChangeSourceEventArgs(new NewAsset()));
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
