@@ -29,8 +29,6 @@ namespace Asset_Management_System.Models
 
         public long DepartmentId { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-
         public DateTime UpdatedAt { get; set; }
 
         public bool RenameTag(string newName)
