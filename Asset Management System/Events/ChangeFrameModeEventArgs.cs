@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Controls;
 
 namespace Asset_Management_System.Events
 {
@@ -19,12 +20,17 @@ namespace Asset_Management_System.Events
         public int NewFrameMode = Collapse;
         public int OldFrameMode;
         public string Direction;
+        public Frame Frame;
 
         public ChangeFrameModeEventArgs(int mode, string dir)
+            : this(mode, dir, null) { }
+
+        public ChangeFrameModeEventArgs(int mode, string dir, Frame frame)
         {
             OldFrameMode = NewFrameMode;
             NewFrameMode = mode;
             Direction = dir;
+            Frame = frame;
         }
 
     }

@@ -8,7 +8,10 @@
         WindowStartupLocation="CenterScreen"
         Title="Asset Management System" Height="450" Width="800">
     <Grid>
-
+        <!-- When adding or removing rows and columns, remember that some 
+             row- and columnspans might need to be changed. Also in code
+             Ask Fly
+        -->
         <Grid.RowDefinitions>
             <RowDefinition Height="0"/>
             <RowDefinition Height="80px"/>
@@ -66,6 +69,15 @@
             Grid.ColumnSpan="2"
             NavigationUIVisibility="Hidden"
         />
+
+        <Frame
+            Name="FramePopup"
+            Grid.ColumnSpan="2"
+            VerticalAlignment="Top"
+            Background="Black"
+            Opacity="0.34"
+        />
+
     </Grid>
 </Window>
 

@@ -57,31 +57,26 @@ namespace Asset_Management_System
         {
             if (sender is TopNavigationPart2 nav)
             {
-                if (e.NewFrameMode == ChangeFrameModeEventArgs.Extend)
-                    ExpandFrame(FrameTopNavigationPart2, e.Direction);
-                else if (e.NewFrameMode == ChangeFrameModeEventArgs.Collapse)
-                    CollapseFrame(FrameTopNavigationPart2, e.Direction);
+                // If the frame is null, 
+                if (e.Frame == null)
+                    e.Frame = FrameTopNavigationPart2;
+
+                ChangeFrameExpasion(e.Frame, e.Direction);
             }
         }
 
-        public void ExpandFrame(Frame frame, string dir)
+        public void ChangeFrameExpasion(Frame frame, string dir)
         {
             if (dir == ChangeFrameModeEventArgs.Right)
                 Grid.SetColumnSpan(frame, 10);
+            else if (dir == ChangeFrameModeEventArgs.Left)
+                Grid.SetColumnSpan(frame, 1);
             else if (dir == ChangeFrameModeEventArgs.Down)
                 Grid.SetRowSpan(frame, 10);
-            else
-                throw new ArgumentException("Unknown argument value for dir.");
-        }
-
-        public void CollapseFrame(Frame frame, string dir)
-        {
-            if (dir == ChangeFrameModeEventArgs.Left)
-                Grid.SetColumnSpan(frame, 1);
             else if (dir == ChangeFrameModeEventArgs.Up)
                 Grid.SetRowSpan(frame, 1);
         }
-        
+
         /// <summary>
         /// Changes the content of the main frame for content, to the new page object received through
         /// the changeSourceEventArgs

@@ -68,7 +68,7 @@
             Background="Black"
             Opacity="0.34"
         />
-        
+
         <ListBox
             Name="LbDepartments"
             Visibility="Hidden"
@@ -83,11 +83,12 @@
         />
 
         <Image
-            Width="100"
-            Height="100"
+            Width="115"
+            Height="82"
             HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Source="/Resources/Pencil.png" Stretch="Fill"
+            VerticalAlignment="Center"
+            Source="/Resources/Pencil.png" 
+            Stretch="Fill"
         />
     </Grid>
 </Page>

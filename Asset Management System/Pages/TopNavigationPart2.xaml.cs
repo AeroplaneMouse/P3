@@ -78,7 +78,7 @@ namespace Asset_Management_System.Pages
                 LbDepartments.ItemsSource = testElements;
             }
             else
-                ChangeDepartmentVisuals("expand");
+                ChangeDepartmentVisuals("collapse");
         }
 
         private Grid GenerateBlockElement(Department department)
@@ -134,6 +134,15 @@ namespace Asset_Management_System.Pages
 
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
         {
+            // Generate popup window
+            Frame frame = new Frame();
+
+
+
+            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down, frame);
+
+            if (ExpandFrameRequest != null)
+                ExpandFrameRequest?.Invoke(this, args);
 
         }
 
