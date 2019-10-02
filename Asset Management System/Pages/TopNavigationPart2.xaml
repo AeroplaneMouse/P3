@@ -72,14 +72,15 @@
         <ListBox
             Name="LbDepartments"
             Visibility="Hidden"
-            Width="200"
+            Width="250"
             VerticalAlignment="Top"
             HorizontalAlignment="Right"
             Margin="0,0,10,0"
             TextBlock.FontSize="20"
             Foreground="Black"
             Background="White"
-            BorderThickness="0" Grid.Row="1"
+            BorderThickness="0" 
+            Grid.Row="1"
         />
 
     </Grid>
