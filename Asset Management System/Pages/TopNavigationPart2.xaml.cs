@@ -97,7 +97,7 @@ namespace Asset_Management_System.Pages
             grid.ColumnDefinitions.Add(c1);
             grid.ColumnDefinitions.Add(c2);
 
-            // Creating label
+            // Creating item
             ListBoxItem item = new ListBoxItem() {
                 Content = department,
                 Width = 150
