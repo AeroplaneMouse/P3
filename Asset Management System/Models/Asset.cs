@@ -8,7 +8,7 @@ namespace Asset_Management_System.Models
     {
         public Asset(long id, string label, string description)
         {
-            ID = id;
+            Id = id;
             Label = label;
             Description = description;
             CreatedAt = DateTime.Now;
