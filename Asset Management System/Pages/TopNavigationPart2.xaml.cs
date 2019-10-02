@@ -74,31 +74,40 @@ namespace Asset_Management_System.Pages
             ColumnDefinition c0 = new ColumnDefinition();
             ColumnDefinition c1 = new ColumnDefinition();
             ColumnDefinition c2 = new ColumnDefinition();
-            c0.Width = new GridLength(100, GridUnitType.Pixel);
-            c1.Width = new GridLength(50, GridUnitType.Pixel);
-            c2.Width = new GridLength(50, GridUnitType.Pixel);
+            c0.Width = new GridLength(10, GridUnitType.Star);
+            c1.Width = new GridLength(30, GridUnitType.Pixel);
+            c2.Width = new GridLength(30, GridUnitType.Pixel);
             grid.ColumnDefinitions.Add(c0);
             grid.ColumnDefinitions.Add(c1);
             grid.ColumnDefinitions.Add(c2);
-            
+
             // Creating label
-            Label label = new Label() { Content = department };
+            Label label = new Label() {
+                Content = department,
+                Width = 150
+            };
             Grid.SetColumn(label, 0);
 
             // Creating pencil
+            //Image img = new Image();
+            //Console.WriteLine(System.Reflection.Assembly.GetEntryAssembly().GetName());
+            //img.Source = new BitmapImage(new Uri(@"pack://application:,,,/Asset Management System;component/Resources/pencil.png"));
+            
             Button pencil = new Button() { 
-                Content="E",
-                Margin = new Thickness(5),
-                Background = Brushes.Transparent
+                Content= "E",
+                Background = Brushes.Transparent,
+                BorderThickness = new Thickness(0),
+                Margin = new Thickness(5)
             };
             pencil.Click += BtnEdit_Click;
             Grid.SetColumn(pencil, 1);
 
             // Creating trashcan
             Button trash = new Button() { 
-                Content="R",
-                Margin = new Thickness(5),
-                Background = Brushes.Transparent
+                Content= "R",
+                Background = Brushes.Transparent,
+                BorderThickness = new Thickness(0),
+                Margin = new Thickness(5)
             };
             trash.Click += BtnRemove_Click;
             Grid.SetColumn(trash, 2);
