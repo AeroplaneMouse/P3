@@ -72,7 +72,6 @@
         <ListBox
             Name="LbDepartments"
             Visibility="Hidden"
-            Width="250"
             VerticalAlignment="Top"
             HorizontalAlignment="Right"
             Margin="0,0,10,0"
@@ -81,6 +80,14 @@
             Background="White"
             BorderThickness="0" 
             Grid.Row="1"
+        />
+        
+        <Image
+            Width="100"
+            Height="100"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Source="/Resources/Pencil.png" Stretch="Fill"
         />
 
     </Grid>
