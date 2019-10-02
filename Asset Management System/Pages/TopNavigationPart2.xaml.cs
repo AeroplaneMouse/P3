@@ -19,6 +19,11 @@ namespace Asset_Management_System.Pages
         public event ChangeSourceEventHandler ChangeSourceRequest;
         public event ChangeFrameModeEventHandler ExpandFrameRequest;
 
+        private const string Expand = "Expand";
+        private const string Collapse = "Collapse";
+
+
+
         public TopNavigationPart2()
         {
             InitializeComponent();
@@ -28,7 +33,7 @@ namespace Asset_Management_System.Pages
 
         private void ChangeDepartmentVisuals(string newState)
         {
-            if (newState == "expand")
+            if (newState == Expand)
             {
                 // Make the suggestion list visible
                 LbDepartments.Visibility = Visibility.Visible;
@@ -39,7 +44,7 @@ namespace Asset_Management_System.Pages
                 if (ExpandFrameRequest != null)
                     ExpandFrameRequest?.Invoke(this, args);
             }
-            else if (newState == "collapse")
+            else if (newState == Collapse)
             {
                 // Hide the suggestion list
                 LbDepartments.Visibility = Visibility.Hidden;
@@ -59,7 +64,7 @@ namespace Asset_Management_System.Pages
         {
             if (LbDepartments.Visibility == Visibility.Hidden)
             {
-                ChangeDepartmentVisuals("expand");
+                ChangeDepartmentVisuals(Expand);
 
                 // Fill suggestion list
                 List<Department> testDepartments = new List<Department>();
@@ -68,17 +73,15 @@ namespace Asset_Management_System.Pages
                 testDepartments.Add(new Department() { Name = "Finance" } );
                 testDepartments.Add(new Department() { Name = "Zookeeper" } );
 
+                // Adding department items to list of department
                 List<Grid> testElements = new List<Grid>();
-
                 foreach (Department department in testDepartments)
-                {
                     testElements.Add(GenerateBlockElement(department));
-                }
 
                 LbDepartments.ItemsSource = testElements;
             }
             else
-                ChangeDepartmentVisuals("collapse");
+                ChangeDepartmentVisuals(Collapse);
         }
 
         private Grid GenerateBlockElement(Department department)
