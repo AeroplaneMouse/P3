@@ -14,13 +14,9 @@ namespace Asset_Management_System.Models
             FieldsList = new List<Field>();
         }
 
-        public int ID { get; }
-        
         public string Label { get; set; }
         
         public string Description { get; set; }
-
-        public DateTime CreatedAt { get; set; }
 
         public int DepartmentID { get; set; }
 
