@@ -14,7 +14,7 @@
         -->
         <Grid.RowDefinitions>
             <RowDefinition Height="0"/>
-            <RowDefinition Height="80px"/>
+            <RowDefinition Height="50px"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -22,13 +22,39 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
+        <!--Splash page frame  -->
         <Frame
-            Name="FrameTopNavigationPart1"
+            Name="FrameSplash"
             Grid.Row="0"
+            Grid.Column="0"
+            Grid.RowSpan="3"
             Grid.ColumnSpan="2"
-            Background="#24292e"
+            NavigationUIVisibility="Hidden"
+            Background="#EEEEEE"
+        />
+        
+        
+        <!--Main content frame -->
+        <Frame
+            Name="FrameMainContent"
+            Grid.Row="2"
+            Grid.Column="1"
+            Background="White"
             NavigationUIVisibility="Hidden"
         />
+        
+        <!-- Notification bar -->
+        <Canvas
+            Name="CanvasNotificationBar"
+            Grid.Column="1"
+            Grid.Row="2"
+            Background="Red"
+            Height="20"
+            VerticalAlignment="Top"
+            Visibility="Hidden"
+        >
+            <Label Name="LbNotification" Content="Test" TextBlock.FontSize="10" Foreground="White"/>
+        </Canvas>
         
         <!--Left navigation frame -->
         <Frame
@@ -41,26 +67,6 @@
             NavigationUIVisibility="Hidden"
         />
         
-        <!--Main content frame -->
-        <Frame
-            Name="FrameMainContent"
-            Grid.Row="2"
-            Grid.Column="1"
-            Background="White"
-            NavigationUIVisibility="Hidden"
-        />
-        
-        <!--Splash page frame  -->
-        <Frame
-            Name="FrameSplash"
-            Grid.Row="0"
-            Grid.Column="0"
-            Grid.RowSpan="3"
-            Grid.ColumnSpan="2"
-            NavigationUIVisibility="Hidden"
-            Background="#EEEEEE"
-        />
-        
         <!--Top navigation frame -->
         <Frame
             Name="FrameTopNavigationPart2"
@@ -70,12 +76,14 @@
             NavigationUIVisibility="Hidden"
         />
 
+        <!-- Popup frame -->
         <Frame
             Name="FramePopup"
             Grid.ColumnSpan="2"
             NavigationUIVisibility="Hidden"
         />
 
+        
     </Grid>
 </Window>
 

@@ -74,6 +74,11 @@
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description"/>
                 </GridView>
             </ListView.View>
+            <ListView.Resources>
+                <Style TargetType="ListViewItem">
+                    <EventSetter Event="MouseDoubleClick" Handler="Lv_mouseDoubleClick"/>
+                </Style>
+            </ListView.Resources>
         </ListView>
     </Grid>
 </Page>

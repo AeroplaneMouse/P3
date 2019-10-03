@@ -8,9 +8,6 @@
     ShowsNavigationUI="False"
     d:DesignHeight="450" d:DesignWidth="800"
     Title="Home">
-
-    
-    
     
     <Grid>
         <Grid.RowDefinitions>
@@ -24,16 +21,25 @@
             Grid.Row="0"
         />
 
-        <Button
-            Name="BtnShowDepartments"
-            Grid.Row="1"
-            Width="100"
-            VerticalAlignment="top"
-            HorizontalAlignment="Left"
-            Click="BtnShowDepartments_Click"
-            Content="Show departments"
-            Margin="10"
-        />
+        <StackPanel
+            Orientation="Horizontal"
+            Grid.Row="1">
+            <Button
+                Name="BtnShowDepartments"
+                Width="100"
+                VerticalAlignment="top"
+                HorizontalAlignment="Left"
+                Click="BtnShowDepartments_Click"
+                Content="Show departments"
+                Margin="10"
+            />
+
+            <Button
+                Name="BtnShowNotification"
+                Click="Btn_Test_Click"
+                Content="Test notification"
+                VerticalAlignment="Top"/>
+        </StackPanel>
         
         <!--
         <Label

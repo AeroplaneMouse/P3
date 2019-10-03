@@ -14,10 +14,12 @@ namespace Asset_Management_System.Pages
     public partial class LeftNavigation : Page
     {
         public event ChangeSourceEventHandler ChangeSourceRequest;
+        private MainWindow Main;
 
-        public LeftNavigation()
+        public LeftNavigation(MainWindow main)
         {
             InitializeComponent();
+            Main = main;
         }
 
         private void Btn_MouseEnter(object sender, MouseEventArgs e)
@@ -39,7 +41,7 @@ namespace Asset_Management_System.Pages
                 Page page;
                 page = btn.Name switch
                 {
-                    "Btn_homePage" => new Home(),
+                    "Btn_homePage" => new Home(Main),
                     "Btn_assetsPage" => new Assets(),
                     "Btn_tagsPage" => new Tags(),
                     "Btn_settingsPage" => new Settings(),
