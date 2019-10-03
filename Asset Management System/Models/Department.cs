@@ -3,9 +3,9 @@ namespace Asset_Management_System.Models
 {
     class Department
     {
-        public Department()
+        public Department(string name)
         {
-
+            this.Name = name;
         }
 
         private Department(long id, string name){

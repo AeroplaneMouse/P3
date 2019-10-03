@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace Asset_Management_System.Models
 {
-    public abstract class DoContainFields : Model
+    public abstract class DoesContainFields : Model
     {
         public string SerializedFields { get; set; }
 

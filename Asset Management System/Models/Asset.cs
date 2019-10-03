@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Asset_Management_System.Models
 {
     [Serializable]
-    class Asset : DoContainFields
+    class Asset : DoesContainFields
     {
         public Asset(long id, string label, string description)
         {

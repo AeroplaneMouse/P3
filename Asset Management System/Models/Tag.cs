@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Asset_Management_System.Models
 {
-    class Tag : DoContainFields
+    class Tag : DoesContainFields
     {
         public Tag(string name, int departmentId = 0, int parentId = 0)
         {
