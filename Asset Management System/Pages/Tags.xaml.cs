@@ -21,7 +21,6 @@ namespace Asset_Management_System.Pages
             Console.WriteLine(tag.Name);
 
             Department dep1 = new Department("IT Department");
-
             Department dep2 = new Department("HR Department");
 
             DepartmentRepository dep = new DepartmentRepository();
