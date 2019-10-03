@@ -19,13 +19,10 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class TopNavigationPart2 : Page
     {
-        public event ChangeFrameModeEventHandler ExpandFrameRequest;
-
         private const string Expand = "Expand";
         private const string Collapse = "Collapse";
         private MainWindow Main;
         private Department SelectedDepartment;
-
 
         public TopNavigationPart2(MainWindow main)
         {
@@ -44,7 +41,7 @@ namespace Asset_Management_System.Pages
                 BtnShowDepartments.Background = Brushes.White;
                 BtnShowDepartments.Foreground = Brushes.Black;
 
-                Main.ChangeFrameExpasion(Main.FrameTopNavigationPart2, ChangeFrameModeEventArgs.Down);
+                Main.ChangeFrameExpasion(Main.FrameTopNavigationPart2, FrameExpansionEventArgs.Down);
             }
             else if (newState == Collapse)
             {
@@ -54,7 +51,7 @@ namespace Asset_Management_System.Pages
                 BtnShowDepartments.Foreground = Brushes.White;
 
                 // Collapse the navigation frame
-                Main.ChangeFrameExpasion(Main.FrameTopNavigationPart2, ChangeFrameModeEventArgs.Up);
+                Main.ChangeFrameExpasion(Main.FrameTopNavigationPart2, FrameExpansionEventArgs.Up);
             }
             else
                 throw new ArgumentException();
@@ -146,11 +143,8 @@ namespace Asset_Management_System.Pages
             page.LbInfoLine3.Content = $"{ SelectedDepartment.Name }";
             page.BtnYes.Click += DeleteDepartment;
             page.BtnNo.Click += RemovePopup;
-            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down, Main.FramePopup);
+            Main.ChangeFrameExpasion(Main.FramePopup, FrameExpansionEventArgs.Down);
             Main.FramePopup.Content = page;
-
-            if (ExpandFrameRequest != null)
-                ExpandFrameRequest?.Invoke(this, args);
         }
 
         private void DeleteDepartment(object sender, RoutedEventArgs e)
@@ -165,7 +159,7 @@ namespace Asset_Management_System.Pages
         private void RemovePopup(object sender, RoutedEventArgs e)
         {
             Main.FramePopup.Content = null;
-            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Collapse, ChangeFrameModeEventArgs.Up, Main.FramePopup);
+            Main.ChangeFrameExpasion(Main.FramePopup, FrameExpansionEventArgs.Up);
         }
 
         private Department GetDeparment(object sender)
@@ -192,6 +186,7 @@ namespace Asset_Management_System.Pages
 
         private void LbDepartment_mouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            // Change department.
 
         }
     }

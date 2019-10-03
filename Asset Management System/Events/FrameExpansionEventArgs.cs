@@ -5,9 +5,9 @@ using System.Windows.Controls;
 
 namespace Asset_Management_System.Events
 {
-    public delegate void ChangeFrameModeEventHandler(object sender, ChangeFrameModeEventArgs e);
+    public delegate void FrameExpansionEventHandler(object sender, FrameExpansionEventArgs e);
 
-    public class ChangeFrameModeEventArgs : EventArgs
+    public class FrameExpansionEventArgs : EventArgs
     {
         public static int Collapse = 0;
         public static int Extend = 1;
@@ -21,10 +21,10 @@ namespace Asset_Management_System.Events
         public string Direction;
         public Frame Frame;
 
-        public ChangeFrameModeEventArgs(int mode, string dir)
+        public FrameExpansionEventArgs(int mode, string dir)
             : this(mode, dir, null) { }
 
-        public ChangeFrameModeEventArgs(int mode, string dir, Frame frame)
+        public FrameExpansionEventArgs(int mode, string dir, Frame frame)
         {
             OldFrameMode = NewFrameMode;
             NewFrameMode = mode;

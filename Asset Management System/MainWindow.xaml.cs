@@ -25,7 +25,7 @@ namespace Asset_Management_System
         {
             InitializeComponent();
             DBConnection.Instance().SqlConnectionFailed += ShowNotification;
-            FrameSplash.Content = new SplashPage(this);
+            ChangeSourceRequest(new SplashPage(this), FrameSplash);
         }
 
         public async void ShowNotification(object sender, NotificationEventArgs e)
@@ -59,27 +59,27 @@ namespace Asset_Management_System
             ChangeSourceRequest(new Home(this));
         }
 
-        public void ChangeFrameMode(object sender, ChangeFrameModeEventArgs e)
-        {
-            if (sender is TopNavigationPart2 nav)
-            {
-                // If the frame is null, 
-                if (e.Frame == null)
-                    e.Frame = FrameTopNavigationPart2;
+        //public void ChangeFrameMode(object sender, ChangeFrameModeEventArgs e)
+        //{
+        //    if (sender is TopNavigationPart2 nav)
+        //    {
+        //        // If the frame is null, 
+        //        if (e.Frame == null)
+        //            e.Frame = FrameTopNavigationPart2;
 
-                ChangeFrameExpasion(e.Frame, e.Direction);
-            }
-        }
+        //        ChangeFrameExpasion(e.Frame, e.Direction);
+        //    }
+        //}
 
         public void ChangeFrameExpasion(Frame frame, string dir)
         {
-            if (dir == ChangeFrameModeEventArgs.Right)
+            if (dir == FrameExpansionEventArgs.Right)
                 Grid.SetColumnSpan(frame, 10);
-            else if (dir == ChangeFrameModeEventArgs.Left)
+            else if (dir == FrameExpansionEventArgs.Left)
                 Grid.SetColumnSpan(frame, 1);
-            else if (dir == ChangeFrameModeEventArgs.Down)
+            else if (dir == FrameExpansionEventArgs.Down)
                 Grid.SetRowSpan(frame, 10);
-            else if (dir == ChangeFrameModeEventArgs.Up)
+            else if (dir == FrameExpansionEventArgs.Up)
                 Grid.SetRowSpan(frame, 1);
         }
 
@@ -89,7 +89,8 @@ namespace Asset_Management_System
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void ChangeSourceRequest(Page newPage)
+        public void ChangeSourceRequest(Page newPage) => ChangeSourceRequest(newPage, FrameMainContent);
+        public void ChangeSourceRequest(Page newPage, Frame frame)
         {
             Page setPage = null;
             foreach(Page page in pages)
@@ -106,7 +107,7 @@ namespace Asset_Management_System
                 setPage = newPage;
                 pages.Add(setPage);
             }
-            FrameMainContent.Content = setPage;
+            frame.Content = setPage;
         }
     }
 }
