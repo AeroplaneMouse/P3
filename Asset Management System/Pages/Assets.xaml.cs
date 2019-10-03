@@ -33,7 +33,7 @@ namespace Asset_Management_System.Pages
 
         private void Btn_AddNewAsset_Click(object sender, RoutedEventArgs e)
         { 
-            Main.ChangeSourceRequest(this, new ChangeSourceEventArgs(new NewAsset()));
+            Main.ChangeSourceRequest(this, new ChangeSourceEventArgs(new NewAsset(Main)));
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
