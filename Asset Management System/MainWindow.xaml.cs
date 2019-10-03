@@ -8,6 +8,7 @@ using System.Threading;
 using Asset_Management_System.Pages;
 using Asset_Management_System.Events;
 using System.Threading.Tasks;
+using Asset_Management_System.Database;
 
 namespace Asset_Management_System
 {
@@ -23,22 +24,8 @@ namespace Asset_Management_System
         public MainWindow()
         {
             InitializeComponent();
-
-            //pages.Add(new Home(this));
-
-
-
-            // Create pages
-            // Hmm.. How should this shit work?!
-
-            //home.ShowNotification += ShowNotification;
-
-            SplashPage page = new SplashPage();
-            FrameSplash.Content = page;
-            page.SessionAuthenticated += SystemLoaded;
-
-            //Assets.ChangeSourceRequest += ChangeSourceReguest;
-            //FrameTopNavigationPart2.op
+            DBConnection.Instance().SqlConnectionFailed += ShowNotification;
+            FrameSplash.Content = new SplashPage(this);
         }
 
         public async void ShowNotification(object sender, NotificationEventArgs e)
@@ -57,7 +44,7 @@ namespace Asset_Management_System
 
         }
 
-        public void SystemLoaded(object sender, EventArgs e)
+        public void SystemLoaded()
         {
             // Remove splash page
             FrameSplash.Visibility = Visibility.Hidden;
@@ -65,9 +52,8 @@ namespace Asset_Management_System
 
             // Set stuff
             topNavigationPage = new TopNavigationPart2(this);
-            FrameTopNavigationPart2.Content = topNavigationPage;
-
             leftNavigationPage = new LeftNavigation(this);
+            FrameTopNavigationPart2.Content = topNavigationPage;
             FrameLeftNavigation.Content = leftNavigationPage;
 
             ChangeSourceRequest(new Home(this));

@@ -11,11 +11,11 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class SplashPage : Page
     {
-        public event EventHandler SessionAuthenticated;
-
-        public SplashPage()
+        private MainWindow Main;
+        public SplashPage(MainWindow main)
         {
             InitializeComponent();
+            Main = main;
 
             // Call the authenticate method when all child elements of the page has been loaded.
             Dispatcher.BeginInvoke(DispatcherPriority.Loaded, new Action(() => Authenticate()));
@@ -23,9 +23,8 @@ namespace Asset_Management_System.Pages
 
         private void Authenticate()
         {
-            Session currentSession = new Session();
-            if (currentSession.Validate())
-                SessionAuthenticated?.Invoke(this, null);
+            if (new Session().Validate())
+                Main.SystemLoaded();
         }
 
         private void Btn_loadConfigs_Click(object sender, RoutedEventArgs e)
