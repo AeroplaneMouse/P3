@@ -5,6 +5,8 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Asset_Management_System;
+using Asset_Management_System.Events;
+using Asset_Management_System.Models;
 using Asset_Management_System.Authentication;
 
 namespace Asset_Management_System.Pages
@@ -14,47 +16,37 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class TopNavigationPart2 : Page
     {
-        public event RoutedEventHandler ChangeSourceRequest;
+        public event ChangeSourceEventHandler ChangeSourceRequest;
         public event ChangeFrameModeEventHandler ExpandFrameRequest;
 
-        public TopNavigationPart2()
+        private const string Expand = "Expand";
+        private const string Collapse = "Collapse";
+        private Frame PopupFrame;
+        private Department SelectedDepartment;
+
+
+        public TopNavigationPart2(Frame popupFrame)
         {
             InitializeComponent();
             Session session = new Session();
             LblCurrentUser.Content = session.Username;
+            PopupFrame = popupFrame;
         }
 
-        private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)
+        private void ChangeDepartmentVisuals(string newState)
         {
-            if (LbDepartments.Visibility == Visibility.Hidden)
+            if (newState == Expand)
             {
                 // Make the suggestion list visible
                 LbDepartments.Visibility = Visibility.Visible;
                 BtnShowDepartments.Background = Brushes.White;
                 BtnShowDepartments.Foreground = Brushes.Black;
 
-                // Expand the navigation frame
                 ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down);
                 if (ExpandFrameRequest != null)
                     ExpandFrameRequest?.Invoke(this, args);
-
-                // Fill suggestion list
-
-                List<string> testDepartments = new List<string>();
-                testDepartments.Add("IT");
-                testDepartments.Add("HR");
-                testDepartments.Add("Finance");
-
-                List<Grid> testElements = new List<Grid>();
-
-                foreach (string department in testDepartments)
-                {
-                    testElements.Add(GenerateBlockElement(department));
-                }
-
-                LbDepartments.ItemsSource = testElements;
             }
-            else
+            else if (newState == Collapse)
             {
                 // Hide the suggestion list
                 LbDepartments.Visibility = Visibility.Hidden;
@@ -66,9 +58,35 @@ namespace Asset_Management_System.Pages
                 if (ExpandFrameRequest != null)
                     ExpandFrameRequest?.Invoke(this, args);
             }
+            else
+                throw new ArgumentException();
         }
 
-        private Grid GenerateBlockElement(string department)
+        private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)
+        {
+            if (LbDepartments.Visibility == Visibility.Hidden)
+            {
+                ChangeDepartmentVisuals(Expand);
+
+                // Fill suggestion list
+                List<Department> testDepartments = new List<Department>();
+                testDepartments.Add(new Department() { Name = "IT" } );
+                testDepartments.Add(new Department() { Name = "HR" } );
+                testDepartments.Add(new Department() { Name = "Finance" } );
+                testDepartments.Add(new Department() { Name = "Zookeeper" } );
+
+                // Adding department items to list of department
+                List<Grid> testElements = new List<Grid>();
+                foreach (Department department in testDepartments)
+                    testElements.Add(GenerateBlockElement(department));
+
+                LbDepartments.ItemsSource = testElements;
+            }
+            else
+                ChangeDepartmentVisuals(Collapse);
+        }
+
+        private Grid GenerateBlockElement(Department department)
         {
             Grid grid = new Grid();
             ColumnDefinition c0 = new ColumnDefinition();
@@ -81,12 +99,12 @@ namespace Asset_Management_System.Pages
             grid.ColumnDefinitions.Add(c1);
             grid.ColumnDefinitions.Add(c2);
 
-            // Creating label
-            Label label = new Label() {
+            // Creating item
+            Label item = new Label() {
                 Content = department,
                 Width = 150
             };
-            Grid.SetColumn(label, 0);
+            Grid.SetColumn(item, 0);
 
             // Creating pencil
             //Image img = new Image();
@@ -112,7 +130,7 @@ namespace Asset_Management_System.Pages
             trash.Click += BtnRemove_Click;
             Grid.SetColumn(trash, 2);
 
-            grid.Children.Add(label);
+            grid.Children.Add(item);
             grid.Children.Add(pencil);
             grid.Children.Add(trash);
 
@@ -121,12 +139,70 @@ namespace Asset_Management_System.Pages
 
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
         {
+            SelectedDepartment = GetDeparment(sender);
 
+            // Generate popup window
+            Popup page = new Popup();
+            page.LbInfoLine1.Content = $"Are you sure that you want";
+            page.LbInfoLine2.Content = $"to DELETE department";
+            page.LbInfoLine3.Content = $"{ SelectedDepartment.Name }";
+            page.BtnYes.Click += DeleteDepartment;
+            page.BtnNo.Click += RemovePopup;
+            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down, PopupFrame);
+            PopupFrame.Content = page;
+
+            if (ExpandFrameRequest != null)
+                ExpandFrameRequest?.Invoke(this, args);
+        }
+
+        private void DeleteDepartment(object sender, RoutedEventArgs e)
+        {
+            RemovePopup();
+
+            // Delete the department from the database
+            throw new NotImplementedException("The removal of departments has not yet been implemented.");
+        }
+
+        private void RemovePopup() => RemovePopup(null, null);
+        private void RemovePopup(object sender, RoutedEventArgs e)
+        {
+            PopupFrame.Content = null;
+            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Collapse, ChangeFrameModeEventArgs.Up, PopupFrame);
+        }
+
+        private Department GetDeparment(object sender)
+        {
+            Grid grid = VisualTreeHelper.GetParent(sender as Button) as Grid;
+            Label item = grid.Children[0] as Label;
+            return (Department)item.Content;
         }
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
+            ChangeDepartmentVisuals(Collapse);
+            try
+            {
+                Page page = new EditDepartment(GetDeparment(sender));
 
+                if (ChangeSourceRequest != null)
+                    ChangeSourceRequest?.Invoke(this, new ChangeSourceEventArgs(page));
+            }
+            catch(Exception f)
+            {
+                Console.WriteLine($"There was an error when rerouting to the edit department page: { f }");
+            }
+
+
+            //UIElement item = sender as Button;
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    item = VisualTreeHelper.GetParent(item) as UIElement;
+            //}
+
+            //LbDepartments.SelectedItem = item as ListBoxItem;
+
+            //if (ChangeSourceRequest != null)
+            //    ChangeSourceRequest?.Invoke(this, e);
         }
     }
 }
