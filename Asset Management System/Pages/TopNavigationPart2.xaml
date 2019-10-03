@@ -7,6 +7,7 @@
     mc:Ignorable="d" 
     d:DesignHeight="800" d:DesignWidth="800"
     Title="Top_navigation"
+    ShowsNavigationUI="False"
 >
 
     <Grid>
@@ -41,26 +42,13 @@
                     Content="None"
                     Grid.Row="1"
                     Foreground="White"
-                    TextBlock.FontSize="16"
+                    TextBlock.FontSize="14"
                     TextBlock.FontFamily="Roboto"
                     Background="Transparent"
                     BorderThickness="0"
                     Click="BtnShowDepartments_Click"
                 />
             </Grid>
-            <!-- 
-            <MenuItem 
-                Click="AddPresetButton_Click" 
-                x:Name="AddPresetButton"
-            >
-                <MenuItem.Header>
-                    <TextBlock Text="Add Preset" HorizontalAlignment="Right"/>
-                </MenuItem.Header>
-                <MenuItem.ContextMenu>
-                    <ContextMenu Name="Items"/>
-                </MenuItem.ContextMenu>
-            </MenuItem>
-            -->
         </StackPanel>
 
         <Canvas
@@ -68,14 +56,14 @@
             Background="Black"
             Opacity="0.34"
         />
-        
+
         <ListBox
             Name="LbDepartments"
             Visibility="Hidden"
             VerticalAlignment="Top"
             HorizontalAlignment="Right"
             Margin="0,0,10,0"
-            TextBlock.FontSize="20"
+            TextBlock.FontSize="14"
             Foreground="Black"
             Background="White"
             BorderThickness="0" 
@@ -83,11 +71,12 @@
         />
 
         <Image
-            Width="100"
-            Height="100"
+            Width="115"
+            Height="82"
             HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Source="/Resources/Pencil.png" Stretch="Fill"
+            VerticalAlignment="Center"
+            Source="/Resources/Pencil.png" 
+            Stretch="Fill"
         />
     </Grid>
 </Page>
