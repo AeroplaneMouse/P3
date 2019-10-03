@@ -84,11 +84,10 @@ namespace Asset_Management_System
         }
 
         /// <summary>
-        /// Changes the content of the main frame for content, to the new page object received through
-        /// the changeSourceEventArgs
+        /// Changes the content for the main content frame to the new page. If the page exists in the
+        /// list of loaded pages, that one would be used. One can also specify a different frame of 
+        /// which content will be modified to contain the new page.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public void ChangeSourceRequest(Page newPage) => ChangeSourceRequest(newPage, FrameMainContent);
         public void ChangeSourceRequest(Page newPage, Frame frame)
         {
