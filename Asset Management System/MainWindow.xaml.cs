@@ -4,8 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
+using System.Threading;
 using Asset_Management_System.Pages;
 using Asset_Management_System.Events;
+using System.Threading.Tasks;
 
 namespace Asset_Management_System
 {
@@ -14,24 +16,39 @@ namespace Asset_Management_System
     /// </summary>
     public partial class MainWindow : Window
     {
-        //List<Page> pages = new List<Page>();
-
         TopNavigationPart2 topNavigationPage;
         LeftNavigation leftNavigationPage;
+
+        Home home = new Home();
 
         public MainWindow()
         {
             InitializeComponent();
-            
+
             // Create pages
             // Hmm.. How should this shit work?!
-            
+
+            home.ShowNotification += ShowNotification;
+
             SplashPage page = new SplashPage();
             FrameSplash.Content = page;
             page.SessionAuthenticated += SystemLoaded;
 
             Assets.ChangeSourceRequest += ChangeSourceReguest;
             //FrameTopNavigationPart2.op
+        }
+
+        private async void ShowNotification(object sender, string notification)
+        {
+            CanvasNotificationBar.Visibility = Visibility.Visible;
+            await Task.Delay(2000);
+            HideNotification();
+        }
+
+        private void HideNotification()
+        {
+            CanvasNotificationBar.Visibility = Visibility.Hidden;
+
         }
 
         public void SystemLoaded(object sender, EventArgs e)
@@ -50,7 +67,7 @@ namespace Asset_Management_System
             leftNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
             FrameLeftNavigation.Content = leftNavigationPage;
 
-            FrameMainContent.Content = new Home();
+            FrameMainContent.Content = home;
         }
 
         public void ChangeFrameMode(object sender, ChangeFrameModeEventArgs e)

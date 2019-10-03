@@ -54,5 +54,12 @@ namespace Asset_Management_System.Pages
 
             LV_assetList.ItemsSource = assets;
         }
+
+        private void Lv_mouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Asset selectedAsset = LV_assetList.SelectedItem as Asset;
+            Console.WriteLine(selectedAsset.Label);
+
+        }
     }
 }

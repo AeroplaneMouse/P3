@@ -3,7 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
+using Asset_Management_System.Events;
 using System.Linq;
+using System;
 
 namespace Asset_Management_System.Pages
 {
@@ -12,6 +14,8 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class Home : Page
     {
+        public event NotificationEventHandler ShowNotification;
+
         public Home()
         {
             InitializeComponent();
@@ -19,8 +23,7 @@ namespace Asset_Management_System.Pages
 
         private void Btn_Test_Click(object sender, RoutedEventArgs e)
         {
-            Assets newAssetsPage = new Assets();
-            this.NavigationService.Navigate(newAssetsPage);
+            ShowNotification(sender, "This is a test notification");
         }
 
         private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)
