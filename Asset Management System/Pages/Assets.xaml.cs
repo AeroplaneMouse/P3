@@ -3,6 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using Asset_Management_System.Database;
 using Asset_Management_System.Events;
+using Asset_Management_System.Models;
+using Asset_Management_System.Database.Repositories;
+using System.Collections.Generic;
 
 namespace Asset_Management_System.Pages
 {
@@ -21,6 +24,8 @@ namespace Asset_Management_System.Pages
             //{
 
             //}
+
+            //LV_assetList.ItemsSource = 
         }
 
         private void Btn_AddNewAsset_Click(object sender, RoutedEventArgs e)
@@ -32,6 +37,22 @@ namespace Asset_Management_System.Pages
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             // Load assets from database
+            AssetRepository rep = new AssetRepository();
+            List<Asset> assets = rep.Search("");
+            LV_assetList.ItemsSource = assets;
+        }
+
+        private void Btn_search_Click(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("Searching for: "+Tb_search.Text);
+            AssetRepository rep = new AssetRepository();
+            List<Asset> assets = rep.Search(Tb_search.Text);
+
+            foreach(Asset asset in assets){
+                Console.WriteLine(asset.Label);
+            }
+
+            LV_assetList.ItemsSource = assets;
         }
     }
 }

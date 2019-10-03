@@ -101,5 +101,37 @@ namespace Asset_Management_System.Database.Repositories
             return new Asset(row_id, row_label, row_description);
         }
 
+        public List<Asset> Search(string keyword)
+        {
+            List<Asset> assets = new List<Asset>();
+
+            if (dbcon.IsConnect())
+            {
+                string query = "SELECT id, name, description FROM assets WHERE name LIKE @keyword";
+
+                if(!keyword.Contains("%")){
+                    keyword = "%" + keyword + "%";
+                }
+
+                using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                {
+                    cmd.Parameters.Add("@keyword", MySqlDbType.String);
+                    cmd.Parameters["@keyword"].Value = keyword;
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Asset asset = DBOToModelConvert(reader);
+                            assets.Add(asset);
+                        }
+                    }
+
+                    dbcon.Close();
+                }
+            }
+
+            return assets;
+        }
     }
 }
