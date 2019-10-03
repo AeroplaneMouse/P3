@@ -65,12 +65,9 @@ namespace Asset_Management_System
 
             // Set stuff
             topNavigationPage = new TopNavigationPart2(this);
-            topNavigationPage.ChangeSourceRequest += ChangeSourceRequest;
-            topNavigationPage.ExpandFrameRequest += ChangeFrameMode;
             FrameTopNavigationPart2.Content = topNavigationPage;
 
             leftNavigationPage = new LeftNavigation(this);
-            leftNavigationPage.ChangeSourceRequest += ChangeSourceRequest;
             FrameLeftNavigation.Content = leftNavigationPage;
 
             ChangeSourceRequest(this, new ChangeSourceEventArgs(new Home(this)));

@@ -10,6 +10,7 @@ using Asset_Management_System.Models;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using System.Linq;
+using System.Windows.Input;
 
 namespace Asset_Management_System.Pages
 {
@@ -18,7 +19,6 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class TopNavigationPart2 : Page
     {
-        public event ChangeSourceEventHandler ChangeSourceRequest;
         public event ChangeFrameModeEventHandler ExpandFrameRequest;
 
         private const string Expand = "Expand";
@@ -70,25 +70,15 @@ namespace Asset_Management_System.Pages
             {
                 ChangeDepartmentVisuals(Expand);
 
-                // Fill suggestion list
                 DepartmentRepository dep = new DepartmentRepository();
                 List<Department> departments = dep.GetAll();
-                //List<string> department_names = departments.Select(s => s.Name).ToList();
-
-                //LbDepartments.ItemsSource = department_names;
-
-                //List<Department> testDepartments = new List<Department>();
-                //testDepartments.Add(new Department("IT"));
-                //testDepartments.Add(new Department("HR"));
-                //testDepartments.Add(new Department("Finance"));
-                //testDepartments.Add(new Department("Zookeeper"));
 
                 // Adding department items to list of department
-                List<Grid> testElements = new List<Grid>();
+                List<Grid> elements = new List<Grid>();
                 foreach (Department department in departments)
-                    testElements.Add(GenerateBlockElement(department));
+                    elements.Add(GenerateBlockElement(department));
 
-                LbDepartments.ItemsSource = testElements;
+                LbDepartments.ItemsSource = elements;
             }
             else
             {
@@ -196,25 +186,17 @@ namespace Asset_Management_System.Pages
             {
                 Page page = new EditDepartment(GetDeparment(sender));
 
-                if (ChangeSourceRequest != null)
-                    ChangeSourceRequest?.Invoke(this, new ChangeSourceEventArgs(page));
+                Main.ChangeSourceRequest(page);
             }
             catch(Exception f)
             {
                 Console.WriteLine($"There was an error when rerouting to the edit department page: { f }");
             }
+        }
 
+        private void LBdepartment_mouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
 
-            //UIElement item = sender as Button;
-            //for (int i = 0; i < 4; i++)
-            //{
-            //    item = VisualTreeHelper.GetParent(item) as UIElement;
-            //}
-
-            //LbDepartments.SelectedItem = item as ListBoxItem;
-
-            //if (ChangeSourceRequest != null)
-            //    ChangeSourceRequest?.Invoke(this, e);
         }
     }
 }

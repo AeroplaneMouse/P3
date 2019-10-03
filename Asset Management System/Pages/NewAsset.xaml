@@ -20,7 +20,7 @@
             <RowDefinition Height="80"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Label TextBlock.FontSize="20" Margin="10">Create new asset</Label>
+        <Label Grid.ColumnSpan="2" TextBlock.FontSize="20" Margin="10">Create new asset</Label>
 
         <StackPanel
             Grid.Row="1"

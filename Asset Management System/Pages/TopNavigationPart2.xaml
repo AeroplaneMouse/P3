@@ -68,7 +68,13 @@
             Background="White"
             BorderThickness="0" 
             Grid.Row="1"
-        />
+        >
+            <ListBox.Resources>
+                <Style TargetType="ListBoxItem">
+                    <EventSetter Event="MouseLeftButtonDown" Handler="LBdepartment_mouseLeftButtonDown"/>
+                </Style>
+            </ListBox.Resources>
+        </ListBox>
 
         <Image
             Width="115"
