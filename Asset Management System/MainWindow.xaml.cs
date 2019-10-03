@@ -38,8 +38,11 @@ namespace Asset_Management_System
             //FrameTopNavigationPart2.op
         }
 
-        private async void ShowNotification(object sender, string notification)
+        private async void ShowNotification(object sender, NotificationEventArgs e)
         {
+            LbNotification.Content = e.Notification;
+            CanvasNotificationBar.Background = e.Color;
+
             CanvasNotificationBar.Visibility = Visibility.Visible;
             await Task.Delay(2000);
             HideNotification();

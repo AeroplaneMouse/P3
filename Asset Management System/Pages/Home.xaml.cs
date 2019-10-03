@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Controls;
+using System.Collections.Generic;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
 using Asset_Management_System.Events;
 using System.Linq;
-using System;
 
 namespace Asset_Management_System.Pages
 {
@@ -23,7 +24,8 @@ namespace Asset_Management_System.Pages
 
         private void Btn_Test_Click(object sender, RoutedEventArgs e)
         {
-            ShowNotification(sender, "This is a test notification");
+            NotificationEventArgs args = new NotificationEventArgs("Test notification", Brushes.Green);
+            ShowNotification(sender, args);
         }
 
         private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)
