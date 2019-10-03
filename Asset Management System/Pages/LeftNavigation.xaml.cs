@@ -13,7 +13,6 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class LeftNavigation : Page
     {
-        public event ChangeSourceEventHandler ChangeSourceRequest;
         private MainWindow Main;
 
         public LeftNavigation(MainWindow main)
@@ -43,13 +42,13 @@ namespace Asset_Management_System.Pages
                 {
                     "Btn_homePage" => new Home(Main),
                     "Btn_assetsPage" => new Assets(Main),
-                    "Btn_tagsPage" => new Tags(),
-                    "Btn_settingsPage" => new Settings(),
-                    "Btn_helpPage" => new Help(),
+                    "Btn_tagsPage" => new Tags(Main),
+                    "Btn_settingsPage" => new Settings(Main),
+                    "Btn_helpPage" => new Help(Main),
                     _ => null,
                 };
 
-                ChangeSourceRequest?.Invoke(this, new ChangeSourceEventArgs(page));
+                Main.ChangeSourceRequest(page);
             }
         }
     }

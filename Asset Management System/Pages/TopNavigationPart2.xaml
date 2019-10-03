@@ -71,7 +71,7 @@
         >
             <ListBox.Resources>
                 <Style TargetType="ListBoxItem">
-                    <EventSetter Event="MouseLeftButtonDown" Handler="LBdepartment_mouseLeftButtonDown"/>
+                    <EventSetter Event="MouseLeftButtonDown" Handler="LbDepartment_mouseLeftButtonDown"/>
                 </Style>
             </ListBox.Resources>
         </ListBox>

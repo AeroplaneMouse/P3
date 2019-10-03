@@ -10,10 +10,10 @@ namespace Asset_Management_System.Pages
     public partial class NewAsset : Page
     {
         private MainWindow Main;
-        public NewAsset(MainWindow Main)
+        public NewAsset(MainWindow main)
         {
             InitializeComponent();
-            this.Main = Main;
+            Main = main;
         }
 
         private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -27,8 +27,7 @@ namespace Asset_Management_System.Pages
 
             AssetRepository rep = new AssetRepository();
             rep.Insert(asset);
-            this.Main.ChangeSourceRequest(this, new Events.ChangeSourceEventArgs(new Assets(Main)));
-
+            Main.ChangeSourceRequest(new Assets(Main));
         }
     }
 }

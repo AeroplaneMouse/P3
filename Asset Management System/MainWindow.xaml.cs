@@ -70,7 +70,7 @@ namespace Asset_Management_System
             leftNavigationPage = new LeftNavigation(this);
             FrameLeftNavigation.Content = leftNavigationPage;
 
-            ChangeSourceRequest(this, new ChangeSourceEventArgs(new Home(this)));
+            ChangeSourceRequest(new Home(this));
         }
 
         public void ChangeFrameMode(object sender, ChangeFrameModeEventArgs e)
@@ -103,24 +103,24 @@ namespace Asset_Management_System
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void ChangeSourceRequest(object sender, ChangeSourceEventArgs e)
+        public void ChangeSourceRequest(Page newPage)
         {
-            Page newPage = null;
+            Page setPage = null;
             foreach(Page page in pages)
             {
-                if (page.GetType() == e.NewSource.GetType()){
+                if (page.GetType() == newPage.GetType()){
                     Console.WriteLine("Found new page in pages.");
-                    newPage = page;
+                    setPage = page;
                 }
             }
 
-            if (newPage == null)
+            if (setPage == null)
             {
                 Console.WriteLine("Unable to find new page in pages. Creating new page.");
-                newPage = e.NewSource;
-                pages.Add(newPage);
+                setPage = newPage;
+                pages.Add(setPage);
             }
-            FrameMainContent.Content = newPage;
+            FrameMainContent.Content = setPage;
         }
     }
 }

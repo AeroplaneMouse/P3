@@ -44,9 +44,7 @@ namespace Asset_Management_System.Pages
                 BtnShowDepartments.Background = Brushes.White;
                 BtnShowDepartments.Foreground = Brushes.Black;
 
-                ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down);
-                if (ExpandFrameRequest != null)
-                    ExpandFrameRequest?.Invoke(this, args);
+                Main.ChangeFrameExpasion(Main.FrameTopNavigationPart2, ChangeFrameModeEventArgs.Down);
             }
             else if (newState == Collapse)
             {
@@ -56,9 +54,7 @@ namespace Asset_Management_System.Pages
                 BtnShowDepartments.Foreground = Brushes.White;
 
                 // Collapse the navigation frame
-                ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Collapse, ChangeFrameModeEventArgs.Up);
-                if (ExpandFrameRequest != null)
-                    ExpandFrameRequest?.Invoke(this, args);
+                Main.ChangeFrameExpasion(Main.FrameTopNavigationPart2, ChangeFrameModeEventArgs.Up);
             }
             else
                 throw new ArgumentException();
@@ -194,7 +190,7 @@ namespace Asset_Management_System.Pages
             }
         }
 
-        private void LBdepartment_mouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void LbDepartment_mouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
 
         }

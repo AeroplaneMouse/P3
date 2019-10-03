@@ -10,10 +10,11 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class Tags : Page
     {
-        public Tags()
+        private MainWindow Main;
+        public Tags(MainWindow main)
         {
             InitializeComponent();
-
+            Main = main;
         }
     }
 }
