@@ -6,6 +6,8 @@ namespace Asset_Management_System.Models
     [Serializable]
     class Asset : DoesContainFields
     {
+        public Asset(){ }
+
         public Asset(long id, string label, string description)
         {
             Id = id;

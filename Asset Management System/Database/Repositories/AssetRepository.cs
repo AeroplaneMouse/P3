@@ -54,11 +54,22 @@ namespace Asset_Management_System.Database.Repositories
         {
             if (dbcon.IsConnect())
             {
-                string query = "INSERT INTO assets (name) VALUES (@name)";
-                var cmd = new MySqlCommand(query, dbcon.Connection);
-                cmd.Parameters.Add("@name", MySqlDbType.String);
-                cmd.Parameters["@name"].Value = entity.Label;
-                cmd.ExecuteNonQuery();
+                string query = "INSERT INTO assets (name, description, department_id) VALUES (@name, @description, @department)";
+
+                using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                {
+                    cmd.Parameters.Add("@name", MySqlDbType.String);
+                    cmd.Parameters["@name"].Value = entity.Label;
+
+                    cmd.Parameters.Add("@description", MySqlDbType.String);
+                    cmd.Parameters["@description"].Value = entity.Description;
+
+                    cmd.Parameters.Add("@department", MySqlDbType.UInt64);
+                    cmd.Parameters["@department"].Value = 1;
+
+                    cmd.ExecuteNonQuery();
+                }
+
                 dbcon.Close();
             }
         }
