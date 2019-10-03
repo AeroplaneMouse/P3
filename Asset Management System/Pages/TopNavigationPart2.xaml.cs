@@ -8,6 +8,8 @@ using Asset_Management_System;
 using Asset_Management_System.Events;
 using Asset_Management_System.Models;
 using Asset_Management_System.Authentication;
+using Asset_Management_System.Database.Repositories;
+using System.Linq;
 
 namespace Asset_Management_System.Pages
 {
@@ -69,15 +71,21 @@ namespace Asset_Management_System.Pages
                 ChangeDepartmentVisuals(Expand);
 
                 // Fill suggestion list
-                List<Department> testDepartments = new List<Department>();
-                testDepartments.Add(new Department("IT"));
-                testDepartments.Add(new Department("HR"));
-                testDepartments.Add(new Department("Finance"));
-                testDepartments.Add(new Department("Zookeeper"));
+                DepartmentRepository dep = new DepartmentRepository();
+                List<Department> departments = dep.GetAll();
+                //List<string> department_names = departments.Select(s => s.Name).ToList();
+
+                //LbDepartments.ItemsSource = department_names;
+
+                //List<Department> testDepartments = new List<Department>();
+                //testDepartments.Add(new Department("IT"));
+                //testDepartments.Add(new Department("HR"));
+                //testDepartments.Add(new Department("Finance"));
+                //testDepartments.Add(new Department("Zookeeper"));
 
                 // Adding department items to list of department
                 List<Grid> testElements = new List<Grid>();
-                foreach (Department department in testDepartments)
+                foreach (Department department in departments)
                     testElements.Add(GenerateBlockElement(department));
 
                 LbDepartments.ItemsSource = testElements;

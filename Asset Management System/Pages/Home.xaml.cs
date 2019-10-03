@@ -33,11 +33,7 @@ namespace Asset_Management_System.Pages
 
         private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)
         {
-            DepartmentRepository dep = new DepartmentRepository();
-
-            List<Department> objects = dep.GetAll();
-            List<string> department_names = objects.Select(s => s.Name).ToList();
-            LbDepartments.ItemsSource = department_names;
+            
         }
     }
 }
