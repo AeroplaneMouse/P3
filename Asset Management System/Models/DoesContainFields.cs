@@ -7,10 +7,12 @@ using Newtonsoft.Json;
 
 namespace Asset_Management_System.Models
 {
+    [Serializable]
     public abstract class DoesContainFields : Model
     {
         public string SerializedFields { get; set; }
-
+        
+        [JsonIgnore]
         public List<Field> FieldsList { get; set; }
 
         private int IDCounter = 0;
