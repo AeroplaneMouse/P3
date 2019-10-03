@@ -100,7 +100,7 @@ namespace Asset_Management_System.Pages
             grid.ColumnDefinitions.Add(c2);
 
             // Creating item
-            ListBoxItem item = new ListBoxItem() {
+            Label item = new Label() {
                 Content = department,
                 Width = 150
             };
@@ -173,7 +173,7 @@ namespace Asset_Management_System.Pages
         private Department GetDeparment(object sender)
         {
             Grid grid = VisualTreeHelper.GetParent(sender as Button) as Grid;
-            ListBoxItem item = grid.Children[0] as ListBoxItem;
+            Label item = grid.Children[0] as Label;
             return (Department)item.Content;
         }
 
