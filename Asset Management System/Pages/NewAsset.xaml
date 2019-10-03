@@ -30,7 +30,7 @@
             <Label>Name</Label>
             <TextBox Name="TbName"></TextBox>
 
-            <Label>Description</Label>
+            <Label>Department</Label>
             <TextBox Name="TbDepartment"></TextBox>
             
             <Label>Description</Label>
