@@ -73,6 +73,7 @@
         <Frame
             Name="FramePopup"
             Grid.ColumnSpan="2"
+            NavigationUIVisibility="Hidden"
         />
 
     </Grid>
