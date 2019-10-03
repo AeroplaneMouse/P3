@@ -42,7 +42,7 @@ namespace Asset_Management_System.Pages
                 page = btn.Name switch
                 {
                     "Btn_homePage" => new Home(Main),
-                    "Btn_assetsPage" => new Assets(),
+                    "Btn_assetsPage" => new Assets(Main),
                     "Btn_tagsPage" => new Tags(),
                     "Btn_settingsPage" => new Settings(),
                     "Btn_helpPage" => new Help(),

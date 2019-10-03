@@ -14,11 +14,14 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class Assets : Page
     {
-        public static event ChangeSourceEventHandler ChangeSourceRequest;
+        //public static event ChangeSourceEventHandler ChangeSourceRequest;
+        private MainWindow Main;
 
-        public Assets()
+        public Assets(MainWindow main)
         {
             InitializeComponent();
+            Main = main;
+
             //DBConnection db = DBConnection.Instance();
             //if(db.IsConnect())
             //{
@@ -29,9 +32,8 @@ namespace Asset_Management_System.Pages
         }
 
         private void Btn_AddNewAsset_Click(object sender, RoutedEventArgs e)
-        {
-            if (ChangeSourceRequest != null)
-                ChangeSourceRequest?.Invoke(this, new ChangeSourceEventArgs(new NewAsset()));
+        { 
+            Main.ChangeSourceRequest(this, new ChangeSourceEventArgs(new NewAsset()));
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

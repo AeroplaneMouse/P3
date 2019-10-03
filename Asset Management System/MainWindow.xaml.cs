@@ -65,15 +65,15 @@ namespace Asset_Management_System
 
             // Set stuff
             topNavigationPage = new TopNavigationPart2(this);
-            topNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
+            topNavigationPage.ChangeSourceRequest += ChangeSourceRequest;
             topNavigationPage.ExpandFrameRequest += ChangeFrameMode;
             FrameTopNavigationPart2.Content = topNavigationPage;
 
             leftNavigationPage = new LeftNavigation(this);
-            leftNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
+            leftNavigationPage.ChangeSourceRequest += ChangeSourceRequest;
             FrameLeftNavigation.Content = leftNavigationPage;
 
-            ChangeSourceReguest(this, new ChangeSourceEventArgs(new Home(this)));
+            ChangeSourceRequest(this, new ChangeSourceEventArgs(new Home(this)));
         }
 
         public void ChangeFrameMode(object sender, ChangeFrameModeEventArgs e)
@@ -106,7 +106,7 @@ namespace Asset_Management_System
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void ChangeSourceReguest(Object sender, ChangeSourceEventArgs e)
+        public void ChangeSourceRequest(object sender, ChangeSourceEventArgs e)
         {
             Page newPage = null;
             foreach(Page page in pages)
