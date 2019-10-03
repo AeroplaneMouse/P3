@@ -22,6 +22,7 @@ namespace Asset_Management_System.Pages
         private const string Expand = "Expand";
         private const string Collapse = "Collapse";
         private Frame PopupFrame;
+        private Department SelectedDepartment;
 
 
         public TopNavigationPart2(Frame popupFrame)
@@ -138,17 +139,35 @@ namespace Asset_Management_System.Pages
 
         private void BtnRemove_Click(object sender, RoutedEventArgs e)
         {
-            Department selectedDeparment = GetDeparment(sender);
+            SelectedDepartment = GetDeparment(sender);
 
             // Generate popup window
             Popup page = new Popup();
-            page.LbInfo.Content = $"Are you sure that you want to DELETE department: { selectedDeparment.ID }:{ selectedDeparment.Name }?";
-
+            page.LbInfoLine1.Content = $"Are you sure that you want";
+            page.LbInfoLine2.Content = $"to DELETE department";
+            page.LbInfoLine3.Content = $"{ SelectedDepartment.Name }";
+            page.BtnYes.Click += DeleteDepartment;
+            page.BtnNo.Click += RemovePopup;
             ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down, PopupFrame);
             PopupFrame.Content = page;
 
             if (ExpandFrameRequest != null)
                 ExpandFrameRequest?.Invoke(this, args);
+        }
+
+        private void DeleteDepartment(object sender, RoutedEventArgs e)
+        {
+            RemovePopup();
+
+            // Delete the department from the database
+            throw new NotImplementedException("The removal of departments has not yet been implemented.");
+        }
+
+        private void RemovePopup() => RemovePopup(null, null);
+        private void RemovePopup(object sender, RoutedEventArgs e)
+        {
+            PopupFrame.Content = null;
+            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Collapse, ChangeFrameModeEventArgs.Up, PopupFrame);
         }
 
         private Department GetDeparment(object sender)

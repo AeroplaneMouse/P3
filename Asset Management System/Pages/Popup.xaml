@@ -6,9 +6,16 @@
       xmlns:local="clr-namespace:Asset_Management_System.Pages"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Popup">
+      Title="Popup"
+      ShowsNavigationUI="False"
+      >
 
     <Grid>
+        <Canvas
+            Opacity="0.34"
+            Background="Black"
+        />
+        
         <Grid
             Width="300"
             Height="160"
@@ -21,6 +28,10 @@
                     <Setter Property="TextBlock.FontSize" Value="20"/>
                     <Setter Property="Background" Value="Transparent"/>
                     <Setter Property="Margin" Value="40, 15, 40, 15"/>
+                </Style>
+                <Style TargetType="Label">
+                    <Setter Property="HorizontalAlignment" Value="Center"/>
+                    <Setter Property="TextBlock.FontSize" Value="18"/>
                 </Style>
             </Grid.Resources>
             
@@ -35,14 +46,13 @@
             
             <!-- The content of the lable is filled from code, as the selected department
                  that is being deleted, whould have to be a part of the warning. -->
-            <Label
-                Name="LbInfo"
-                Grid.Row="0"
-                Grid.ColumnSpan="2"
-                VerticalAlignment="Center"
-                TextBlock.TextAlignment="Center"
-            />
-
+            <StackPanel Grid.ColumnSpan="2">
+                <Label Name="LbInfoLine1" Content="Test line 1"/>
+                <Label Name="LbInfoLine2" Content="Test line 2"/>
+                <Label Name="LbInfoLine3" Content="Test line 3"/>
+            </StackPanel>
+            
+            
             <Button
                 Name="BtnYes"
                 Content="Yes"
@@ -53,7 +63,6 @@
                 Content="No"
                 Grid.Column="1"
             />
-
         </Grid>
     </Grid>
 </Page>
