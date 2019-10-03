@@ -21,16 +21,16 @@ namespace Asset_Management_System.Pages
 
         private const string Expand = "Expand";
         private const string Collapse = "Collapse";
-        private Frame PopupFrame;
+        private MainWindow Main;
         private Department SelectedDepartment;
 
 
-        public TopNavigationPart2(Frame popupFrame)
+        public TopNavigationPart2(MainWindow main)
         {
             InitializeComponent();
+            Main = main;
             Session session = new Session();
             LblCurrentUser.Content = session.Username;
-            PopupFrame = popupFrame;
         }
 
         private void ChangeDepartmentVisuals(string newState)
@@ -83,7 +83,11 @@ namespace Asset_Management_System.Pages
                 LbDepartments.ItemsSource = testElements;
             }
             else
+            {
                 ChangeDepartmentVisuals(Collapse);
+                LbDepartments.ItemsSource = null;
+                LbDepartments.Items.Clear();
+            }
         }
 
         private Grid GenerateBlockElement(Department department)
@@ -148,8 +152,8 @@ namespace Asset_Management_System.Pages
             page.LbInfoLine3.Content = $"{ SelectedDepartment.Name }";
             page.BtnYes.Click += DeleteDepartment;
             page.BtnNo.Click += RemovePopup;
-            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down, PopupFrame);
-            PopupFrame.Content = page;
+            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down, Main.FramePopup);
+            Main.FramePopup.Content = page;
 
             if (ExpandFrameRequest != null)
                 ExpandFrameRequest?.Invoke(this, args);
@@ -166,8 +170,8 @@ namespace Asset_Management_System.Pages
         private void RemovePopup() => RemovePopup(null, null);
         private void RemovePopup(object sender, RoutedEventArgs e)
         {
-            PopupFrame.Content = null;
-            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Collapse, ChangeFrameModeEventArgs.Up, PopupFrame);
+            Main.FramePopup.Content = null;
+            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Collapse, ChangeFrameModeEventArgs.Up, Main.FramePopup);
         }
 
         private Department GetDeparment(object sender)

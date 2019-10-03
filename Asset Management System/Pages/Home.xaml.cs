@@ -16,16 +16,19 @@ namespace Asset_Management_System.Pages
     public partial class Home : Page
     {
         public event NotificationEventHandler ShowNotification;
+        private MainWindow Main;
 
-        public Home()
+        public Home(MainWindow main)
         {
             InitializeComponent();
+            Main = main;
         }
 
         private void Btn_Test_Click(object sender, RoutedEventArgs e)
         {
             NotificationEventArgs args = new NotificationEventArgs("Test notification", Brushes.Green);
-            ShowNotification(sender, args);
+            Main.ShowNotification(this, args);
+            //ShowNotification(sender, args);
         }
 
         private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)

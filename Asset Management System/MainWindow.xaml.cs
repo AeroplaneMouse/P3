@@ -16,29 +16,32 @@ namespace Asset_Management_System
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<Page> pages = new List<Page>();
         TopNavigationPart2 topNavigationPage;
         LeftNavigation leftNavigationPage;
-
-        Home home = new Home();
 
         public MainWindow()
         {
             InitializeComponent();
 
+            //pages.Add(new Home(this));
+
+
+
             // Create pages
             // Hmm.. How should this shit work?!
 
-            home.ShowNotification += ShowNotification;
+            //home.ShowNotification += ShowNotification;
 
             SplashPage page = new SplashPage();
             FrameSplash.Content = page;
             page.SessionAuthenticated += SystemLoaded;
 
-            Assets.ChangeSourceRequest += ChangeSourceReguest;
+            //Assets.ChangeSourceRequest += ChangeSourceReguest;
             //FrameTopNavigationPart2.op
         }
 
-        private async void ShowNotification(object sender, NotificationEventArgs e)
+        public async void ShowNotification(object sender, NotificationEventArgs e)
         {
             LbNotification.Content = e.Notification;
             CanvasNotificationBar.Background = e.Color;
@@ -61,16 +64,16 @@ namespace Asset_Management_System
             FrameSplash.Source = null;
 
             // Set stuff
-            topNavigationPage = new TopNavigationPart2(FramePopup);
+            topNavigationPage = new TopNavigationPart2(this);
             topNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
             topNavigationPage.ExpandFrameRequest += ChangeFrameMode;
             FrameTopNavigationPart2.Content = topNavigationPage;
 
-            leftNavigationPage = new LeftNavigation();
+            leftNavigationPage = new LeftNavigation(this);
             leftNavigationPage.ChangeSourceRequest += ChangeSourceReguest;
             FrameLeftNavigation.Content = leftNavigationPage;
 
-            FrameMainContent.Content = home;
+            ChangeSourceReguest(this, new ChangeSourceEventArgs(new Home(this)));
         }
 
         public void ChangeFrameMode(object sender, ChangeFrameModeEventArgs e)
@@ -105,21 +108,22 @@ namespace Asset_Management_System
         /// <param name="e"></param>
         public void ChangeSourceReguest(Object sender, ChangeSourceEventArgs e)
         {
-            FrameMainContent.Content = e.NewSource;
+            Page newPage = null;
+            foreach(Page page in pages)
+            {
+                if (page.GetType() == e.NewSource.GetType()){
+                    Console.WriteLine("Found new page in pages.");
+                    newPage = page;
+                }
+            }
 
-            //if (e.OriginalSource is Button btn)
-            //{
-            //    FrameMainContent.Content = btn.Name switch
-            //    {
-            //        "Btn_homePage" => new Home(),
-            //        "Btn_assetsPage" => new Assets(),
-            //        "Btn_tagsPage" => new Tags(),
-            //        "Btn_settingsPage" => new Settings(),
-            //        "Btn_helpPage" => new Help(),
-            //        "Btn_AddNewAsset" => new NewAsset(),
-            //        _ => throw new ArgumentException($"Unknown routing. A change of source has been requested, but no "),
-            //    };
-            //}
+            if (newPage == null)
+            {
+                Console.WriteLine("Unable to find new page in pages. Creating new page.");
+                newPage = e.NewSource;
+                pages.Add(newPage);
+            }
+            FrameMainContent.Content = newPage;
         }
     }
 }
