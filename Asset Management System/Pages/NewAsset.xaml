@@ -10,7 +10,43 @@
     Title="NewAsset">
 
     <Grid>
-        <Label>Create a new asset page</Label>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label TextBlock.FontSize="20" Margin="10">Create new asset</Label>
+
+        <StackPanel
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="10"
+        >
+            <Label>Name</Label>
+            <TextBox Name="TbName"></TextBox>
+
+            <Label>Description</Label>
+            <TextBox Name="TbDepartment"></TextBox>
+            
+            <Label>Description</Label>
+            <TextBox Name="TbDescription"></TextBox>
+        </StackPanel>
+
+        <Button
+            Name="BtnSaveNewAsset"
+            Content="Save asset"
+            Grid.Row="1"
+            Grid.Column="3"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Margin="10"
+            Click="BtnSaveNewAsset_Click"
+        />
+
     </Grid>
 </Page>

@@ -25,7 +25,7 @@
             VerticalAlignment="Top"
             Margin="10px"
             Content="Add New Asset"
-            TextBlock.FontSize="20px"
+            TextBlock.FontSize="14px"
             Click="Btn_AddNewAsset_Click"
         />
 

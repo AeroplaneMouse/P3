@@ -11,5 +11,10 @@ namespace Asset_Management_System.Pages
         {
             InitializeComponent();
         }
+
+        private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+
+        }
     }
 }
