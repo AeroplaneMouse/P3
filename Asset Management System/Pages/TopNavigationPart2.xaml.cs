@@ -70,10 +70,10 @@ namespace Asset_Management_System.Pages
 
                 // Fill suggestion list
                 List<Department> testDepartments = new List<Department>();
-                testDepartments.Add(new Department() { Name = "IT" } );
-                testDepartments.Add(new Department() { Name = "HR" } );
-                testDepartments.Add(new Department() { Name = "Finance" } );
-                testDepartments.Add(new Department() { Name = "Zookeeper" } );
+                testDepartments.Add(new Department("IT"));
+                testDepartments.Add(new Department("HR"));
+                testDepartments.Add(new Department("Finance"));
+                testDepartments.Add(new Department("Zookeeper"));
 
                 // Adding department items to list of department
                 List<Grid> testElements = new List<Grid>();
