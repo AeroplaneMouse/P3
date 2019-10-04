@@ -187,7 +187,8 @@ namespace Asset_Management_System.Pages
         private void LbDepartment_mouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             // Change department.
-            SelectedDepartment = sender as Department;
+            Label label = (sender as Grid).Children[0] as Label;
+            SelectedDepartment = label.Content as Department;
             BtnShowDepartments.Content = SelectedDepartment;
 
             // Hide dropdown
