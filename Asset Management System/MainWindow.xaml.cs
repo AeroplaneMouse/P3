@@ -18,8 +18,8 @@ namespace Asset_Management_System
     public partial class MainWindow : Window
     {
         List<Page> pages = new List<Page>();
-        TopNavigationPart2 topNavigationPage;
-        LeftNavigation leftNavigationPage;
+        public TopNavigationPart2 topNavigationPage;
+        public LeftNavigation leftNavigationPage;
 
         public MainWindow()
         {
@@ -30,6 +30,7 @@ namespace Asset_Management_System
 
         public async void ShowNotification(object sender, NotificationEventArgs e)
         {
+            // TODO: If another notification is to be displayed before the last has disappeared. Make them stack.
             LbNotification.Content = e.Notification;
             CanvasNotificationBar.Background = e.Color;
 

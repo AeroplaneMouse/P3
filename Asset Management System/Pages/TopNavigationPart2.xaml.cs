@@ -52,6 +52,10 @@ namespace Asset_Management_System.Pages
 
                 // Collapse the navigation frame
                 Main.ChangeFrameExpasion(Main.FrameTopNavigationPart2, FrameExpansionEventArgs.Up);
+
+                // Clear the suggestion list
+                LbDepartments.ItemsSource = null;
+                LbDepartments.Items.Clear();
             }
             else
                 throw new ArgumentException();
@@ -74,11 +78,7 @@ namespace Asset_Management_System.Pages
                 LbDepartments.ItemsSource = elements;
             }
             else
-            {
                 ChangeDepartmentVisuals(Collapse);
-                LbDepartments.ItemsSource = null;
-                LbDepartments.Items.Clear();
-            }
         }
 
         private Grid GenerateBlockElement(Department department)
@@ -187,7 +187,12 @@ namespace Asset_Management_System.Pages
         private void LbDepartment_mouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             // Change department.
+            Label label = (sender as Grid).Children[0] as Label;
+            SelectedDepartment = label.Content as Department;
+            BtnShowDepartments.Content = SelectedDepartment;
 
+            // Hide dropdown
+            ChangeDepartmentVisuals(Collapse);
         }
     }
 }

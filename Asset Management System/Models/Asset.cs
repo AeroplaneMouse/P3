@@ -21,7 +21,7 @@ namespace Asset_Management_System.Models
         
         public string Description { get; set; }
 
-        public int DepartmentID { get; set; }
+        public long DepartmentID { get; set; }
 
         public int TagId { get; set; }
 
