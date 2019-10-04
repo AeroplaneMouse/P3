@@ -6,6 +6,7 @@ using Asset_Management_System.Events;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace Asset_Management_System.Pages
 {
@@ -33,7 +34,6 @@ namespace Asset_Management_System.Pages
             // Load assets from database
             AssetRepository rep = new AssetRepository();
             List<Asset> assets = rep.Search("");
-            LV_assetList.Items.Clear();
             LV_assetList.ItemsSource = assets;
         }
 
@@ -55,6 +55,12 @@ namespace Asset_Management_System.Pages
             Asset selectedAsset = LV_assetList.SelectedItem as Asset;
             Console.WriteLine(selectedAsset.Label);
 
+        }
+
+        private void Tb_search_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+                Btn_search_Click(sender, new RoutedEventArgs());
         }
     }
 }
