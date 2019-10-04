@@ -7,9 +7,74 @@
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
     ShowsNavigationUI="False"
-    Title="Tags">
+    Title="Tags"
+    Loaded="Page_Loaded"
+    >
 
     <Grid>
-        <Label>Tags page</Label>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Label 
+            Name="LbTitle"
+            Content="Tags"
+            TextBlock.FontSize="20"
+            Margin="10"
+            Grid.Row="0"
+            Grid.ColumnSpan="3"
+        />
+
+        <Button
+            Name="BtnCreateNewTag"
+            Grid.Row="0"
+            Grid.Column="3"
+            VerticalAlignment="top"
+            HorizontalAlignment="Right"
+            Content="New tag"
+            TextBlock.FontSize="14"
+            Padding="10, 5, 10, 5"
+            Margin="10"
+            Click="BtnCreateNewTag_Click"
+        />
+
+        <TextBox
+            Name="TbSearch"
+            Grid.Row="1"
+            Grid.Column="0"
+            VerticalAlignment="Bottom"
+            Margin="10, 0, 10, 0"
+            TextBlock.FontSize="14"
+            Padding="5"
+            KeyDown="TbSearch_KeyDown"
+        />
+        <Button
+            Name="BtnSearch"
+            Grid.Row="1"
+            Grid.Column="1"
+            Content="Search"
+            TextBlock.FontSize="14"
+            VerticalAlignment="Bottom"
+            HorizontalAlignment="Left"
+            Padding="10, 5, 10, 5"
+            Click="BtnSearch_Click"
+        />
+
+        <ListView
+            Name="LvTags"
+            Grid.Row="2"
+            Grid.ColumnSpan="3"
+            Margin="10"
+            TextBlock.FontSize="14"
+        >
+            
+        </ListView>
     </Grid>
 </Page>

@@ -118,7 +118,7 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-                string query = "SELECT id, name, description FROM assets WHERE name LIKE @keyword";
+                string query = "SELECT id, name, description, departmentID FROM assets WHERE name LIKE @keyword";
 
                 if(!keyword.Contains("%")){
                     keyword = "%" + keyword + "%";

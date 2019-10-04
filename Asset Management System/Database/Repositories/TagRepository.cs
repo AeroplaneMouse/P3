@@ -78,5 +78,37 @@ namespace Asset_Management_System.Database.Repositories
             long row_department_id = reader.GetInt64("department_id");
             return new Tag(row_id, row_label, row_department_id, row_parent_id);
         }
+
+        public List<Tag> Search(string keyword)
+        {
+            List<Tag> tags = new List<Tag>();
+
+            if (dbcon.IsConnect())
+            {
+                string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE label LIKE @keyword";
+
+                if (!keyword.Contains('%'))
+                    keyword = $"%{keyword}%";
+
+                using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                {
+                    cmd.Parameters.Add("@keyword", MySqlDbType.String);
+                    cmd.Parameters["@keyword"].Value = keyword;
+
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Tag tag = DBOToModelConvert(reader);
+                            tags.Add(tag);
+                        }
+                    }
+
+                    dbcon.Close();
+                }
+            }
+
+            return tags;
+        }
     }
 }
