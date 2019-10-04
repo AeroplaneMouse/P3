@@ -10,6 +10,7 @@ using Asset_Management_System.Models;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using System.Linq;
+using System.Windows.Input;
 
 namespace Asset_Management_System.Pages
 {
@@ -18,14 +19,10 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class TopNavigationPart2 : Page
     {
-        public event ChangeSourceEventHandler ChangeSourceRequest;
-        public event ChangeFrameModeEventHandler ExpandFrameRequest;
-
         private const string Expand = "Expand";
         private const string Collapse = "Collapse";
         private MainWindow Main;
         private Department SelectedDepartment;
-
 
         public TopNavigationPart2(MainWindow main)
         {
@@ -44,9 +41,7 @@ namespace Asset_Management_System.Pages
                 BtnShowDepartments.Background = Brushes.White;
                 BtnShowDepartments.Foreground = Brushes.Black;
 
-                ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down);
-                if (ExpandFrameRequest != null)
-                    ExpandFrameRequest?.Invoke(this, args);
+                Main.ChangeFrameExpasion(Main.FrameTopNavigationPart2, FrameExpansionEventArgs.Down);
             }
             else if (newState == Collapse)
             {
@@ -56,9 +51,7 @@ namespace Asset_Management_System.Pages
                 BtnShowDepartments.Foreground = Brushes.White;
 
                 // Collapse the navigation frame
-                ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Collapse, ChangeFrameModeEventArgs.Up);
-                if (ExpandFrameRequest != null)
-                    ExpandFrameRequest?.Invoke(this, args);
+                Main.ChangeFrameExpasion(Main.FrameTopNavigationPart2, FrameExpansionEventArgs.Up);
             }
             else
                 throw new ArgumentException();
@@ -70,25 +63,15 @@ namespace Asset_Management_System.Pages
             {
                 ChangeDepartmentVisuals(Expand);
 
-                // Fill suggestion list
                 DepartmentRepository dep = new DepartmentRepository();
                 List<Department> departments = dep.GetAll();
-                //List<string> department_names = departments.Select(s => s.Name).ToList();
-
-                //LbDepartments.ItemsSource = department_names;
-
-                //List<Department> testDepartments = new List<Department>();
-                //testDepartments.Add(new Department("IT"));
-                //testDepartments.Add(new Department("HR"));
-                //testDepartments.Add(new Department("Finance"));
-                //testDepartments.Add(new Department("Zookeeper"));
 
                 // Adding department items to list of department
-                List<Grid> testElements = new List<Grid>();
+                List<Grid> elements = new List<Grid>();
                 foreach (Department department in departments)
-                    testElements.Add(GenerateBlockElement(department));
+                    elements.Add(GenerateBlockElement(department));
 
-                LbDepartments.ItemsSource = testElements;
+                LbDepartments.ItemsSource = elements;
             }
             else
             {
@@ -160,11 +143,8 @@ namespace Asset_Management_System.Pages
             page.LbInfoLine3.Content = $"{ SelectedDepartment.Name }";
             page.BtnYes.Click += DeleteDepartment;
             page.BtnNo.Click += RemovePopup;
-            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Extend, ChangeFrameModeEventArgs.Down, Main.FramePopup);
+            Main.ChangeFrameExpasion(Main.FramePopup, FrameExpansionEventArgs.Down);
             Main.FramePopup.Content = page;
-
-            if (ExpandFrameRequest != null)
-                ExpandFrameRequest?.Invoke(this, args);
         }
 
         private void DeleteDepartment(object sender, RoutedEventArgs e)
@@ -179,7 +159,7 @@ namespace Asset_Management_System.Pages
         private void RemovePopup(object sender, RoutedEventArgs e)
         {
             Main.FramePopup.Content = null;
-            ChangeFrameModeEventArgs args = new ChangeFrameModeEventArgs(ChangeFrameModeEventArgs.Collapse, ChangeFrameModeEventArgs.Up, Main.FramePopup);
+            Main.ChangeFrameExpasion(Main.FramePopup, FrameExpansionEventArgs.Up);
         }
 
         private Department GetDeparment(object sender)
@@ -196,25 +176,18 @@ namespace Asset_Management_System.Pages
             {
                 Page page = new EditDepartment(GetDeparment(sender));
 
-                if (ChangeSourceRequest != null)
-                    ChangeSourceRequest?.Invoke(this, new ChangeSourceEventArgs(page));
+                Main.ChangeSourceRequest(page);
             }
             catch(Exception f)
             {
                 Console.WriteLine($"There was an error when rerouting to the edit department page: { f }");
             }
+        }
 
+        private void LbDepartment_mouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            // Change department.
 
-            //UIElement item = sender as Button;
-            //for (int i = 0; i < 4; i++)
-            //{
-            //    item = VisualTreeHelper.GetParent(item) as UIElement;
-            //}
-
-            //LbDepartments.SelectedItem = item as ListBoxItem;
-
-            //if (ChangeSourceRequest != null)
-            //    ChangeSourceRequest?.Invoke(this, e);
         }
     }
 }

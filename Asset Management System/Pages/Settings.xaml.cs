@@ -20,9 +20,11 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class Settings : Page
     {
-        public Settings()
+        private MainWindow Main;
+        public Settings(MainWindow main)
         {
             InitializeComponent();
+            Main = main;
 
             List<int> tags = new List<int>();
             tags.Add(5);

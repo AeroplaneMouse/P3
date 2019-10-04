@@ -15,7 +15,6 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class Home : Page
     {
-        public event NotificationEventHandler ShowNotification;
         private MainWindow Main;
 
         public Home(MainWindow main)

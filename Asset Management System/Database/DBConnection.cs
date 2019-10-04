@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Media;
+using Asset_Management_System.Events;
 using MySql.Data.MySqlClient;
 
 namespace Asset_Management_System.Database
 {
     public class DBConnection
     {
+        public event NotificationEventHandler SqlConnectionFailed;
 
         private DBConnection()
         {
@@ -36,15 +39,23 @@ namespace Asset_Management_System.Database
 
         public bool IsConnect()
         {
-            if (Connection == null)
+            try
             {
-
-                string connstring = "Server=172.17.191.31; database=ds303e19; UID=ds303e19; password=Cisptf8CuT4hLj4T";
-                connection = new MySqlConnection(connstring);
-                connection.Open();
+                if (Connection == null)
+                {
+                    string connstring = "Server=192.38.49.9; database=ds303e19; UID=ds303e19; password=Cisptf8CuT4hLj4T";
+                    connection = new MySqlConnection(connstring);
+                    connection.Open();
+                }
+                return true;
             }
-
-            return true;
+            catch (MySqlException)
+            {
+                connection = null;
+                if (SqlConnectionFailed != null)
+                    SqlConnectionFailed(this, new NotificationEventArgs("Unable to connect to SQL database.", Brushes.Red));
+                return false;
+            }
         }
 
         public void Close()

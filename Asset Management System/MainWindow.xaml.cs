@@ -8,6 +8,7 @@ using System.Threading;
 using Asset_Management_System.Pages;
 using Asset_Management_System.Events;
 using System.Threading.Tasks;
+using Asset_Management_System.Database;
 
 namespace Asset_Management_System
 {
@@ -23,22 +24,8 @@ namespace Asset_Management_System
         public MainWindow()
         {
             InitializeComponent();
-
-            //pages.Add(new Home(this));
-
-
-
-            // Create pages
-            // Hmm.. How should this shit work?!
-
-            //home.ShowNotification += ShowNotification;
-
-            SplashPage page = new SplashPage();
-            FrameSplash.Content = page;
-            page.SessionAuthenticated += SystemLoaded;
-
-            //Assets.ChangeSourceRequest += ChangeSourceReguest;
-            //FrameTopNavigationPart2.op
+            DBConnection.Instance().SqlConnectionFailed += ShowNotification;
+            ChangeSourceRequest(new SplashPage(this), FrameSplash);
         }
 
         public async void ShowNotification(object sender, NotificationEventArgs e)
@@ -57,7 +44,7 @@ namespace Asset_Management_System
 
         }
 
-        public void SystemLoaded(object sender, EventArgs e)
+        public void SystemLoaded()
         {
             // Remove splash page
             FrameSplash.Visibility = Visibility.Hidden;
@@ -65,65 +52,61 @@ namespace Asset_Management_System
 
             // Set stuff
             topNavigationPage = new TopNavigationPart2(this);
-            topNavigationPage.ChangeSourceRequest += ChangeSourceRequest;
-            topNavigationPage.ExpandFrameRequest += ChangeFrameMode;
-            FrameTopNavigationPart2.Content = topNavigationPage;
-
             leftNavigationPage = new LeftNavigation(this);
-            leftNavigationPage.ChangeSourceRequest += ChangeSourceRequest;
+            FrameTopNavigationPart2.Content = topNavigationPage;
             FrameLeftNavigation.Content = leftNavigationPage;
 
-            ChangeSourceRequest(this, new ChangeSourceEventArgs(new Home(this)));
+            ChangeSourceRequest(new Home(this));
         }
 
-        public void ChangeFrameMode(object sender, ChangeFrameModeEventArgs e)
-        {
-            if (sender is TopNavigationPart2 nav)
-            {
-                // If the frame is null, 
-                if (e.Frame == null)
-                    e.Frame = FrameTopNavigationPart2;
+        //public void ChangeFrameMode(object sender, ChangeFrameModeEventArgs e)
+        //{
+        //    if (sender is TopNavigationPart2 nav)
+        //    {
+        //        // If the frame is null, 
+        //        if (e.Frame == null)
+        //            e.Frame = FrameTopNavigationPart2;
 
-                ChangeFrameExpasion(e.Frame, e.Direction);
-            }
-        }
+        //        ChangeFrameExpasion(e.Frame, e.Direction);
+        //    }
+        //}
 
         public void ChangeFrameExpasion(Frame frame, string dir)
         {
-            if (dir == ChangeFrameModeEventArgs.Right)
+            if (dir == FrameExpansionEventArgs.Right)
                 Grid.SetColumnSpan(frame, 10);
-            else if (dir == ChangeFrameModeEventArgs.Left)
+            else if (dir == FrameExpansionEventArgs.Left)
                 Grid.SetColumnSpan(frame, 1);
-            else if (dir == ChangeFrameModeEventArgs.Down)
+            else if (dir == FrameExpansionEventArgs.Down)
                 Grid.SetRowSpan(frame, 10);
-            else if (dir == ChangeFrameModeEventArgs.Up)
+            else if (dir == FrameExpansionEventArgs.Up)
                 Grid.SetRowSpan(frame, 1);
         }
 
         /// <summary>
-        /// Changes the content of the main frame for content, to the new page object received through
-        /// the changeSourceEventArgs
+        /// Changes the content for the main content frame to the new page. If the page exists in the
+        /// list of loaded pages, that one would be used. One can also specify a different frame of 
+        /// which content will be modified to contain the new page.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public void ChangeSourceRequest(object sender, ChangeSourceEventArgs e)
+        public void ChangeSourceRequest(Page newPage) => ChangeSourceRequest(newPage, FrameMainContent);
+        public void ChangeSourceRequest(Page newPage, Frame frame)
         {
-            Page newPage = null;
+            Page setPage = null;
             foreach(Page page in pages)
             {
-                if (page.GetType() == e.NewSource.GetType()){
+                if (page.GetType() == newPage.GetType()){
                     Console.WriteLine("Found new page in pages.");
-                    newPage = page;
+                    setPage = page;
                 }
             }
 
-            if (newPage == null)
+            if (setPage == null)
             {
                 Console.WriteLine("Unable to find new page in pages. Creating new page.");
-                newPage = e.NewSource;
-                pages.Add(newPage);
+                setPage = newPage;
+                pages.Add(setPage);
             }
-            FrameMainContent.Content = newPage;
+            frame.Content = setPage;
         }
     }
 }

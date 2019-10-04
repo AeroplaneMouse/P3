@@ -21,19 +21,11 @@ namespace Asset_Management_System.Pages
         {
             InitializeComponent();
             Main = main;
-
-            //DBConnection db = DBConnection.Instance();
-            //if(db.IsConnect())
-            //{
-
-            //}
-
-            //LV_assetList.ItemsSource = 
         }
 
         private void Btn_AddNewAsset_Click(object sender, RoutedEventArgs e)
         { 
-            Main.ChangeSourceRequest(this, new ChangeSourceEventArgs(new NewAsset(Main)));
+            Main.ChangeSourceRequest(new NewAsset(Main));
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -41,6 +33,7 @@ namespace Asset_Management_System.Pages
             // Load assets from database
             AssetRepository rep = new AssetRepository();
             List<Asset> assets = rep.Search("");
+            LV_assetList.Items.Clear();
             LV_assetList.ItemsSource = assets;
         }
 

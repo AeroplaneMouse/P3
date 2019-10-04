@@ -18,9 +18,11 @@ namespace Asset_Management_System.Pages
     /// </summary>
     public partial class Help : Page
     {
-        public Help()
+        private MainWindow Main;
+        public Help(MainWindow main)
         {
             InitializeComponent();
+            Main = main;
         }
     }
 }
