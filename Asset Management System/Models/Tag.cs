@@ -45,5 +45,7 @@ namespace Asset_Management_System.Models
 
             return true;
         }
+
+        public override string ToString() => Name;
     }
 }

@@ -8,5 +8,6 @@ namespace Asset_Management_System.Database.Repositories
         Department GetDepartment();
         List<Tag> GetChildTags(long parent_id);
         Tag GetParentTag();
+        List<Tag> Search(string keyword);
     }
 }
