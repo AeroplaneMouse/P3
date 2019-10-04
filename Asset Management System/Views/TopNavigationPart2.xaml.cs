@@ -12,7 +12,7 @@ using Asset_Management_System.Database.Repositories;
 using System.Linq;
 using System.Windows.Input;
 
-namespace Asset_Management_System.Pages
+namespace Asset_Management_System.Views
 {
     /// <summary>
     /// Interaction logic for TopNavigation.xaml

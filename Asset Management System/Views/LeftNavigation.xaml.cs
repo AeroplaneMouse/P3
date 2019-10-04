@@ -4,9 +4,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using Asset_Management_System.Events;
-using Asset_Management_System.Pages;
+using Asset_Management_System.Views;
 
-namespace Asset_Management_System.Pages
+namespace Asset_Management_System.Views
 {
     /// <summary>
     /// Interaction logic for Left_navigation.xaml

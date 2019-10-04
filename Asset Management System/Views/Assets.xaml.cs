@@ -8,7 +8,7 @@ using Asset_Management_System.Database.Repositories;
 using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace Asset_Management_System.Pages
+namespace Asset_Management_System.Views
 {
     /// <summary>
     /// Interaction logic for Assets.xaml

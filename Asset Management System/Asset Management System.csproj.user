@@ -7,75 +7,75 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Pages\Assets.xaml.cs">
+    <Compile Update="Views\Assets.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\EditDepartment.xaml.cs">
+    <Compile Update="Views\EditDepartment.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Help.xaml.cs">
+    <Compile Update="Views\Help.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Home.xaml.cs">
+    <Compile Update="Views\Home.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\LeftNavigation.xaml.cs">
+    <Compile Update="Views\LeftNavigation.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\NewAsset.xaml.cs">
+    <Compile Update="Views\NewAsset.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Popup.xaml.cs">
+    <Compile Update="Views\Popup.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Settings.xaml.cs">
+    <Compile Update="Views\Settings.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\SplashPage.xaml.cs">
+    <Compile Update="Views\SplashPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\TopNavigationPart2.xaml.cs">
+    <Compile Update="Views\TopNavigationPart2.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Pages\Tags.xaml.cs">
+    <Compile Update="Views\Tags.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Pages\Assets.xaml">
+    <Page Update="Views\Assets.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\EditDepartment.xaml">
+    <Page Update="Views\EditDepartment.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Help.xaml">
+    <Page Update="Views\Help.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Home.xaml">
+    <Page Update="Views\Home.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\LeftNavigation.xaml">
+    <Page Update="Views\LeftNavigation.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\NewAsset.xaml">
+    <Page Update="Views\NewAsset.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Popup.xaml">
+    <Page Update="Views\Popup.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Settings.xaml">
+    <Page Update="Views\Settings.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\SplashPage.xaml">
+    <Page Update="Views\SplashPage.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\TopNavigationPart2.xaml">
+    <Page Update="Views\TopNavigationPart2.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Pages\Tags.xaml">
+    <Page Update="Views\Tags.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

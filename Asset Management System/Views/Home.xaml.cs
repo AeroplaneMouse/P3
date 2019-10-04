@@ -8,7 +8,7 @@ using Asset_Management_System.Models;
 using Asset_Management_System.Events;
 using System.Linq;
 
-namespace Asset_Management_System.Pages
+namespace Asset_Management_System.Views
 {
     /// <summary>
     /// Interaction logic for Home.xaml

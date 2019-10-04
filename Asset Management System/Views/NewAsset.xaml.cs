@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 
-namespace Asset_Management_System.Pages
+namespace Asset_Management_System.Views
 {
     /// <summary>
     /// Interaction logic for NewAsset.xaml

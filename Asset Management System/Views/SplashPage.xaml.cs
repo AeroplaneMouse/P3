@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using Asset_Management_System.Authentication;
 
-namespace Asset_Management_System.Pages
+namespace Asset_Management_System.Views
 {
     /// <summary>
     /// Interaction logic for SplashPage.xaml

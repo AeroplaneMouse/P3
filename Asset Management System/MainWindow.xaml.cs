@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Threading;
-using Asset_Management_System.Pages;
+using Asset_Management_System.Views;
 using Asset_Management_System.Events;
 using System.Threading.Tasks;
 using Asset_Management_System.Database;
@@ -111,3 +111,5 @@ namespace Asset_Management_System
         }
     }
 }
+
+namespace Asset_Management_System.Pages { }
