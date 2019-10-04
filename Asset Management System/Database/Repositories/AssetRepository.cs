@@ -109,7 +109,8 @@ namespace Asset_Management_System.Database.Repositories
             long row_id = reader.GetInt64("id");
             string row_label = reader.GetString("name");
             string row_description = reader.GetString("description");
-            return new Asset(row_id, row_label, row_description);
+            long row_department_id = reader.GetInt64("department_id");
+            return new Asset(row_id, row_label, row_description, row_department_id);
         }
 
         public List<Asset> Search(string keyword)
@@ -118,7 +119,7 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-                string query = "SELECT id, name, description, departmentID FROM assets WHERE name LIKE @keyword";
+                string query = "SELECT id, name, description, department_id FROM assets WHERE name LIKE @keyword";
 
                 if(!keyword.Contains("%")){
                     keyword = "%" + keyword + "%";
