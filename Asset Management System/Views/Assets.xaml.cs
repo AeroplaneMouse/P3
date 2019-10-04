@@ -39,10 +39,18 @@ namespace Asset_Management_System.Views
 
         private void Btn_search_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine();
             Console.WriteLine("Searching for: "+Tb_search.Text);
             AssetRepository rep = new AssetRepository();
             List<Asset> assets = rep.Search(Tb_search.Text);
 
+            Console.WriteLine("Found: "+assets.Count.ToString());
+
+            if(assets.Count > 0)
+            {
+                Console.WriteLine("-----------");
+            }
+            
             foreach(Asset asset in assets){
                 Console.WriteLine(asset.Label);
             }
