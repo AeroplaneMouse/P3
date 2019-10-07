@@ -14,7 +14,7 @@ namespace Asset_Management_System.Models
             ParentId = parentId;
         }
 
-        internal Tag(long id, string name, long departmentId, long parentId)
+        private Tag(long id, string name, long departmentId, long parentId)
         {
             Id = id;
             DepartmentId = departmentId;

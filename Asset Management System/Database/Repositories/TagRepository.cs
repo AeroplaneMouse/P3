@@ -6,6 +6,7 @@ using System.Text;
 using Asset_Management_System.Models;
 using MySql.Data;
 using MySql.Data.MySqlClient;
+using System.Reflection;
 
 namespace Asset_Management_System.Database.Repositories
 {
@@ -17,7 +18,17 @@ namespace Asset_Management_System.Database.Repositories
             this.dbcon = DBConnection.Instance();
         }
 
-        public void Delete(Tag entity)
+        public bool Insert(Tag entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update(Tag entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(Tag entity)
         {
             throw new NotImplementedException();
         }
@@ -65,20 +76,6 @@ namespace Asset_Management_System.Database.Repositories
             throw new NotImplementedException();
         }
 
-        public void Insert(Tag entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Tag DBOToModelConvert(MySqlDataReader reader)
-        {
-            long row_id = reader.GetInt64("id");
-            String row_label = reader.GetString("label");
-            long row_parent_id = reader.GetInt64("parent_id");
-            long row_department_id = reader.GetInt64("department_id");
-            return new Tag(row_id, row_label, row_department_id, row_parent_id);
-        }
-
         public List<Tag> Search(string keyword)
         {
             List<Tag> tags = new List<Tag>();
@@ -109,6 +106,16 @@ namespace Asset_Management_System.Database.Repositories
             }
 
             return tags;
+        }
+
+        public Tag DBOToModelConvert(MySqlDataReader reader)
+        {
+            long row_id = reader.GetInt64("id");
+            String row_label = reader.GetString("label");
+            long row_parent_id = reader.GetInt64("parent_id");
+            long row_department_id = reader.GetInt64("department_id");
+
+            return (Tag)Activator.CreateInstance(typeof(Tag), BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { row_id, row_label, row_department_id, row_parent_id }, null, null);
         }
     }
 }

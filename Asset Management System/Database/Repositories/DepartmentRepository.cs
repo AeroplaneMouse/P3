@@ -15,8 +15,10 @@ namespace Asset_Management_System.Database.Repositories
             this.dbcon = DBConnection.Instance();
         }
 
-        public void Insert(Department entity)
+        public bool Insert(Department entity)
         {
+            bool query_success = false;
+
             if (dbcon.IsConnect())
             {
                 string query = "INSERT INTO departments (name) VALUES (@name)";
@@ -25,11 +27,39 @@ namespace Asset_Management_System.Database.Repositories
                 {
                     cmd.Parameters.Add("@name", MySqlDbType.String);
                     cmd.Parameters["@name"].Value = entity.Name;
-                    cmd.ExecuteNonQuery();
+                    query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
                 }
 
                 dbcon.Close();
             }
+
+            return query_success;
+        }
+
+        public bool Update(Department entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Delete(Department entity)
+        {
+            bool query_success = false;
+
+            if (dbcon.IsConnect())
+            {
+                string query = "DELETE FROM departments WHERE id=@id";
+
+                using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                {
+                    cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                    cmd.Parameters["@id"].Value = entity.ID;
+                    query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                }
+
+                dbcon.Close();
+            }
+
+            return query_success;
         }
 
         public Department GetById(long id)
@@ -60,22 +90,7 @@ namespace Asset_Management_System.Database.Repositories
             return department;
         }
 
-        public void Delete(Department entity)
-        {
-            if (dbcon.IsConnect())
-            {
-                string query = "DELETE FROM departments WHERE id=@id";
-
-                using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                {
-                    cmd.Parameters.Add("@id", MySqlDbType.Int64);
-                    cmd.Parameters["@id"].Value = entity.ID;
-                    cmd.ExecuteNonQuery();
-                }
-
-                dbcon.Close();
-            }
-        }
+        
 
         public List<Department> GetAll()
         {
@@ -106,8 +121,7 @@ namespace Asset_Management_System.Database.Repositories
             long row_id = reader.GetInt64("id");
             string row_name = reader.GetString("name");
 
-            Department f = (Department)Activator.CreateInstance(typeof(Department), BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { row_id, row_name }, null, null);
-            return f;
+            return (Department)Activator.CreateInstance(typeof(Department), BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { row_id, row_name }, null, null);
         }
     }
 }

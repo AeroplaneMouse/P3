@@ -8,7 +8,7 @@ namespace Asset_Management_System.Models
     {
         public Asset(){ }
 
-        public Asset(long id, string label, string description, long department_id)
+        private Asset(long id, string label, string description, long department_id)
         {
             Id = id;
             Label = label;

@@ -2,8 +2,10 @@
 {
     interface IRepository<T>
     {
-        void Insert(T entity);
+        bool Insert(T entity);
+        bool Update(T entity);
+        bool Delete(T entity);
+
         T GetById(long id);
-        void Delete(T entity);
     }
 }
