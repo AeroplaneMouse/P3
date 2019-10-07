@@ -23,7 +23,7 @@ namespace Asset_Management_System.Views
             string description = TbDescription.Text;
 
             Asset asset = new Asset();
-            asset.Label = name;
+            asset.Name = name;
             asset.Description = description;
             
             Department department = Main.topNavigationPage.BtnShowDepartments.Content as Department;

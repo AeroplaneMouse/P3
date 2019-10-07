@@ -5,29 +5,27 @@ namespace Asset_Management_System.Models
 {
     class Tag : DoesContainFields
     {
-        public Tag(string name, int departmentId = 0, int parentId = 0)
+        public Tag(string name, int departmentID = 0, int parentID = 0)
         {
-            DepartmentId = departmentId;
+            DepartmentID = departmentID;
             CreatedAt = DateTime.Now;
             Name = name;
             FieldsList = new List<Field>();
-            ParentId = parentId;
+            ParentID = parentID;
         }
 
-        internal Tag(long id, string name, long departmentId, long parentId)
+        internal Tag(long id, string name, long departmentID, long parentID)
         {
-            Id = id;
-            DepartmentId = departmentId;
+            ID = id;
             Name = name;
+            DepartmentID = departmentID;
             FieldsList = new List<Field>();
-            ParentId = parentId;
+            ParentID = parentID;
         }
 
-        public long ParentId;
+        public long ParentID;
 
-        public string Name { get; set; }
-
-        public long DepartmentId { get; set; }
+        public long DepartmentID { get; set; }
 
         public DateTime UpdatedAt { get; set; }
 

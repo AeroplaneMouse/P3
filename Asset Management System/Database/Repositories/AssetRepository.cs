@@ -59,7 +59,7 @@ namespace Asset_Management_System.Database.Repositories
                 using (var cmd = new MySqlCommand(query, dbcon.Connection))
                 {
                     cmd.Parameters.Add("@name", MySqlDbType.String);
-                    cmd.Parameters["@name"].Value = entity.Label;
+                    cmd.Parameters["@name"].Value = entity.Name;
 
                     cmd.Parameters.Add("@description", MySqlDbType.String);
                     cmd.Parameters["@description"].Value = entity.Description;
