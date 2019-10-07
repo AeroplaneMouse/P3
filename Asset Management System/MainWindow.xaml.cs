@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -90,6 +90,7 @@ namespace Asset_Management_System
         /// which content will be modified to contain the new page.
         /// </summary>
         public void ChangeSourceRequest(Page newPage) => ChangeSourceRequest(newPage, FrameMainContent);
+
         public void ChangeSourceRequest(Page newPage, Frame frame)
         {
             Page setPage = null;
