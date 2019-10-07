@@ -2,6 +2,7 @@
 using Asset_Management_System.Models;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace UnitTests
 {
@@ -30,7 +31,14 @@ namespace UnitTests
             Dictionary<string, string> result = field.GetInformation();
 
             //Assert
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(ToAssertableString(expected), ToAssertableString(result));
+        }
+
+        private string ToAssertableString(IDictionary<string, string> dictionary)
+        {
+            var pairStrings = dictionary.OrderBy(p => p.Key)
+                                        .Select(p => p.Key + ": " + string.Join(", ", p.Value));
+            return string.Join("; ", pairStrings);
         }
 
         [TestMethod]
