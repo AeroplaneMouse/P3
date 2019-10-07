@@ -100,6 +100,7 @@ namespace Asset_Management_System
         public void ChangeSourceRequest(Page newPage, Frame frame)
         {
             Page setPage = null;
+            // Search the loaded page list, for the given page to check if it has allready been loaded.
             foreach(Page page in pages)
             {
                 if (page.GetType() == newPage.GetType()){
@@ -108,12 +109,15 @@ namespace Asset_Management_System
                 }
             }
 
+            // If the new page wasn't found in the list, the given newPage object is used and added to the list of pages.
             if (setPage == null)
             {
                 Console.WriteLine("Unable to find new page in pages. Creating new page.");
                 setPage = newPage;
                 pages.Add(setPage);
             }
+
+            // Setting the content of the given frame, to the newPage object to display the requested page.
             frame.Content = setPage;
         }
     }
