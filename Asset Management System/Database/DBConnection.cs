@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Media;
 using Asset_Management_System.Events;
 using MySql.Data.MySqlClient;
+using System.Drawing;
 
 namespace Asset_Management_System.Database
 {
@@ -51,17 +52,22 @@ namespace Asset_Management_System.Database
             }
             catch (MySqlException)
             {
+                /*
                 connection = null;
                 if (SqlConnectionFailed != null)
-                    SqlConnectionFailed(this, new NotificationEventArgs("Unable to connect to SQL database.", Brushes.Red));
+                    SqlConnectionFailed(this, new NotificationEventArgs("Unable to connect to SQL database.", System.Drawing.Brushes.Red));
+                    */
                 return false;
+                
             }
         }
 
         public void Close()
         {
-            connection.Close();
-            _instance = null;
+            if(_instance != null){
+                connection.Close();
+                _instance = null;
+            }
         }
     }
 }
