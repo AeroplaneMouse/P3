@@ -52,7 +52,6 @@ namespace Asset_Management_System
         private void HideNotification()
         {
             CanvasNotificationBar.Visibility = Visibility.Hidden;
-
         }
 
         /// <summary>
