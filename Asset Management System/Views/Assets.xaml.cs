@@ -52,7 +52,7 @@ namespace Asset_Management_System.Views
             }
             
             foreach(Asset asset in assets){
-                Console.WriteLine(asset.Label);
+                Console.WriteLine(asset.Name);
             }
 
             LV_assetList.ItemsSource = assets;
@@ -61,7 +61,7 @@ namespace Asset_Management_System.Views
         private void Lv_mouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Asset selectedAsset = LV_assetList.SelectedItem as Asset;
-            Console.WriteLine(selectedAsset.Label);
+            Console.WriteLine(selectedAsset.Name);
 
         }
 

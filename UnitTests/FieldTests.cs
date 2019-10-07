@@ -2,6 +2,7 @@
 using Asset_Management_System.Models;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace UnitTests
 {
@@ -30,7 +31,14 @@ namespace UnitTests
             Dictionary<string, string> result = field.GetInformation();
 
             //Assert
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(ToAssertableString(expected), ToAssertableString(result));
+        }
+
+        private string ToAssertableString(IDictionary<string, string> dictionary)
+        {
+            var pairStrings = dictionary.OrderBy(p => p.Key)
+                                        .Select(p => p.Key + ": " + string.Join(", ", p.Value));
+            return string.Join("; ", pairStrings);
         }
 
         [TestMethod]
@@ -92,5 +100,23 @@ namespace UnitTests
                 Assert.AreEqual(expectedMessage, e.Message);
             }
         }
+        /*
+        [TestMethod]
+        public void Field_GetFieldTypeWithFieldType3_ReturnsInt()
+        {
+            //Arrange
+            string name = "Name", content = "Content", defaultValue = "Default Value";
+            int id = 1, fieldType = 3;
+
+
+            Field field = new Field(id, name, content, fieldType, defaultValue);
+
+            Type expected = 3.typeof();
+
+            //Act
+            Type result = field.GetType();
+
+
+        }*/
     }
 }
