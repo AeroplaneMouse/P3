@@ -33,7 +33,7 @@ namespace Asset_Management_System.Views
             List<Asset> assetsByTags = rep.SearchByTags(tags);
 
             foreach(Asset asset in assetsByTags){
-                Console.WriteLine(asset.Label);
+                Console.WriteLine(asset.Name);
             }
         }
     }

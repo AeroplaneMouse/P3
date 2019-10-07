@@ -8,23 +8,20 @@ namespace Asset_Management_System.Models
     {
         public Asset(){ }
 
-        public Asset(long id, string label, string description, long department_id)
+        public Asset(long id, string name, string description, long departmentID)
         {
-            Id = id;
-            Label = label;
+            ID = id;
+            Name = name;
             Description = description;
-            DepartmentID = department_id;
+            DepartmentID = departmentID;
             CreatedAt = DateTime.Now;
             FieldsList = new List<Field>();
         }
 
-        public string Label { get; set; }
-        
         public string Description { get; set; }
 
         public long DepartmentID { get; set; }
 
-        public int TagId { get; set; }
-
+        public int TagID { get; set; }
     }
 }
