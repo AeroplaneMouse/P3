@@ -28,6 +28,13 @@ namespace Asset_Management_System
             ChangeSourceRequest(new SplashPage(this), FrameSplash);
         }
 
+        /// <summary>
+        /// Displays a notification with a given background color and text.
+        /// Then calls a remove method after a given amount of time, to 
+        /// remove it.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public async void ShowNotification(object sender, NotificationEventArgs e)
         {
             // TODO: If another notification is to be displayed before the last has disappeared. Make them stack.
@@ -39,12 +46,19 @@ namespace Asset_Management_System
             HideNotification();
         }
 
+        /// <summary>
+        /// Removes a notification.
+        /// </summary>
         private void HideNotification()
         {
             CanvasNotificationBar.Visibility = Visibility.Hidden;
 
         }
 
+        /// <summary>
+        /// Used when the application has connected to the database and other external services,
+        /// to remove the splash page and show the navigation menu's and homepage.
+        /// </summary>
         public void SystemLoaded()
         {
             // Remove splash page
@@ -60,18 +74,11 @@ namespace Asset_Management_System
             ChangeSourceRequest(new Home(this));
         }
 
-        //public void ChangeFrameMode(object sender, ChangeFrameModeEventArgs e)
-        //{
-        //    if (sender is TopNavigationPart2 nav)
-        //    {
-        //        // If the frame is null, 
-        //        if (e.Frame == null)
-        //            e.Frame = FrameTopNavigationPart2;
-
-        //        ChangeFrameExpasion(e.Frame, e.Direction);
-        //    }
-        //}
-
+        /// <summary>
+        /// Changes how many rows or columns a specific frame spans over. 
+        /// </summary>
+        /// <param name="frame"></param>
+        /// <param name="dir"></param>
         public void ChangeFrameExpasion(Frame frame, string dir)
         {
             if (dir == FrameExpansionEventArgs.Right)
@@ -94,6 +101,7 @@ namespace Asset_Management_System
         public void ChangeSourceRequest(Page newPage, Frame frame)
         {
             Page setPage = null;
+            // Search the loaded page list, for the given page to check if it has allready been loaded.
             foreach(Page page in pages)
             {
                 if (page.GetType() == newPage.GetType()){
@@ -102,12 +110,15 @@ namespace Asset_Management_System
                 }
             }
 
+            // If the new page wasn't found in the list, the given newPage object is used and added to the list of pages.
             if (setPage == null)
             {
                 Console.WriteLine("Unable to find new page in pages. Creating new page.");
                 setPage = newPage;
                 pages.Add(setPage);
             }
+
+            // Setting the content of the given frame, to the newPage object to display the requested page.
             frame.Content = setPage;
         }
     }
