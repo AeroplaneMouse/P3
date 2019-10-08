@@ -3,17 +3,14 @@ using System.Collections.Generic;
 
 namespace Asset_Management_System.Models
 {
-    class Tag : DoesContainFields
+    public class Tag : DoesContainFields
     {
-        public Tag(string name, int departmentID = 0, int parentID = 0)
+        public Tag(string name, int departmentID = 0, int parentID = 0) : this(0, name, departmentID, parentID)
         {
-            DepartmentID = departmentID;
             CreatedAt = DateTime.Now;
-            Name = name;
-            FieldsList = new List<Field>();
-            ParentID = parentID;
         }
 
+        /*Constructor used by DB*/
         private Tag(long id, string name, long department_id, long parent_id)
         {
             ID = id;
@@ -38,7 +35,7 @@ namespace Asset_Management_System.Models
             }
             else
             {
-                throw new NullReferenceException();
+                throw new NullReferenceException("Tag cannot be renamed to null");
             }
 
             return true;
