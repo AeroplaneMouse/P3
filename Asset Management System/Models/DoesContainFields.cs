@@ -17,6 +17,11 @@ namespace Asset_Management_System.Models
 
         private int IDCounter = 0;
 
+        public DoesContainFields()
+        {
+            FieldsList = new List<Field>();
+        }
+
         /// <summary>
         /// This function is used for Serializing the list of fields, and their content to SerializedFields.
         /// </summary>
@@ -67,6 +72,14 @@ namespace Asset_Management_System.Models
                 FieldsList.Remove(itemToRemove);
             }
 
+            SerializeFields();
+            ShowField();
+            return true;
+        }
+        public bool RemoveField(Field field)
+        {
+            FieldsList.Remove(field);
+            
             SerializeFields();
             ShowField();
             return true;

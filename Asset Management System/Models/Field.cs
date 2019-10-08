@@ -22,7 +22,7 @@ namespace Asset_Management_System.Models
             this.Required = required;
             if (fieldType <= 5)
             {
-                this._fieldType = fieldType;
+                this.FieldType = fieldType;
             }
             else
             {
@@ -36,7 +36,7 @@ namespace Asset_Management_System.Models
         public string Content { get; set; }
         public bool Required { get; set; }
 
-        private int _fieldType;
+        public int FieldType;
 
         public readonly string DefaultValue;
 
@@ -78,7 +78,7 @@ namespace Asset_Management_System.Models
         /// <returns></returns>
         private string GetFieldType()
         {
-            return this._fieldType switch
+            return this.FieldType switch
             {
                 1 => "TextBox",
                 2 => "String",
