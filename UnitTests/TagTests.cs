@@ -10,17 +10,54 @@ namespace UnitTests
     public class TagTests
     {
         [TestMethod]
-        public void Tag_TryingToGetCreatedAtAfterUsingConstructor_ReturnsTimeOfCreation()
+        public void Tag_ConstructorReceivedName_CheckTimeOfCreationIsCloserToTheTimeOfTheCheckThanHalfASecond()
         {
             //Arrange
             Tag tag = new Tag("TagName");
+            DateTime expected = DateTime.Now;
 
             //Act
-            DateTime expected = new DateTime().AddSeconds(-0.01);
             DateTime result = tag.CreatedAt;
 
             //Assert
-            Assert.IsTrue((result - expected).TotalSeconds < 1);
+            Assert.IsTrue(Math.Abs((result - expected).TotalSeconds) < 0.5);
+        }
+
+        [TestMethod]
+        public void Tag_RenameTagReceivedNewName_CheckOfTagIsNewName()
+        {
+            //Arrange
+            Tag tag = new Tag("TagName");
+            string expected = "NewName";
+
+            //Act
+            tag.RenameTag("NewName");
+            string result = tag.Name;
+
+            //Assert
+            Assert.AreSame(expected, result);
+        }
+
+        [TestMethod]
+        public void Tag_RenameTagReceivedNull_NullReferenceExceptionWithMessageTagCannotBeRenamedToNull()
+        {
+            //Arrange
+            Tag tag = new Tag("TagName");
+            string expected = "Tag cannot be renamed to null";
+
+            try
+            {
+                //Act
+                tag.RenameTag(null);
+
+                //Assert
+                Assert.Fail();
+            }
+            catch (NullReferenceException e)
+            {
+                //Assert
+                Assert.AreEqual(expected, e.Message);
+            }
         }
     }
 }

@@ -35,7 +35,7 @@ namespace Asset_Management_System.Models
             }
             else
             {
-                throw new NullReferenceException();
+                throw new NullReferenceException("Tag cannot be renamed to null");
             }
 
             return true;
