@@ -60,7 +60,7 @@ namespace Asset_Management_System.Views
         /// <exception cref="NotSupportedException"></exception>
         private void OnAddField(object sender, RoutedEventArgs e)
         {
-            Field currentField = (sender as Field);
+            Field currentField =  (sender as FrameworkElement).DataContext as Field;
             switch ((sender as Button).Name)
             {
                 case "AddTextField":
