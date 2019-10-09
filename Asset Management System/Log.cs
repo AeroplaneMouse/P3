@@ -37,7 +37,7 @@ namespace Asset_Management_System
 
         public void Update(Model Subject)
         {
-            Console.Write("Changed " + Subject.Name);
+            Console.Write("Changed " + Subject.ID);
         }
     }
 }

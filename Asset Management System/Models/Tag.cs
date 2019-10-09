@@ -5,7 +5,7 @@ namespace Asset_Management_System.Models
 {
     public class Tag : DoesContainFields
     {
-        public Tag(string label, ulong departmentID, ulong parentID) : this(0, name, departmentID, parentID){}
+        public Tag(string label, ulong departmentID, ulong parentID) : this(0, label, departmentID, parentID){}
 
         /*Constructor used by DB*/
         private Tag(ulong id, string label, ulong department_id, ulong parent_id)
