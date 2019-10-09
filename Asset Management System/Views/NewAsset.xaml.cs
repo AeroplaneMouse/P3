@@ -32,19 +32,23 @@ namespace Asset_Management_System.Views
         {
             string name = TbName.Text;
             string description = TbDescription.Text;
+            _asset.Name = name;
+            _asset.Description = description;
 
-            Asset asset = new Asset();
-            asset.Name = name;
-            asset.Description = description;
-
+            foreach (var field in FieldsList)
+            {
+                _asset.AddField(field);
+                Console.WriteLine(field.Content);
+            }
+            _asset.SerializeFields();
             Department department = Main.topNavigationPage.BtnShowDepartments.Content as Department;
             if (department != null)
-                asset.DepartmentID = department.ID;
+                _asset.DepartmentID = department.ID;
             else
                 Console.WriteLine("ERROR! Department not found.");
 
             AssetRepository rep = new AssetRepository();
-            rep.Insert(asset);
+            rep.Insert(_asset);
             Main.ChangeSourceRequest(new Assets(Main));
         }
 
@@ -55,27 +59,27 @@ namespace Asset_Management_System.Views
                 case "AddTextField":
                     Console.WriteLine("Textfield added");
                     FieldsList.Add(new Field(id++, "TextField", "", 1, ""));
-                    _asset.AddField( "TextField", 1,"", "");
+                    //_asset.AddField( "TextField", 1,"", "");
                     break;
                 case "AddStringField":
                     Console.WriteLine("StringField added");
                     FieldsList.Add(new Field(id++, "Integer", "", 2, ""));
-                    _asset.AddField( "TextField", 2,"", "");
+                    //_asset.AddField( "TextField", 2,"", "");
                     break;
                 case "AddIntegerField":
                     Console.WriteLine("IntegerField added");
                     FieldsList.Add(new Field(id++, "Integer", "", 3, ""));
-                    _asset.AddField( "TextField", 3,"", "");
+                    //_asset.AddField( "TextField", 3,"", "");
                     break;
                 case "AddDateField":
                     Console.WriteLine("DataField added");
                     FieldsList.Add(new Field(id++, "Integer", "", 4, ""));
-                    _asset.AddField( "TextField", 4,"", "");
+                    //_asset.AddField( "TextField", 4,"", "");
                     break;
                 case "AddBooleanField":
                     Console.WriteLine("BooleanField added");
                     FieldsList.Add(new Field(id++, "Integer", "", 5, ""));
-                    _asset.AddField( "TextField", 5,"", "");
+                    //_asset.AddField( "TextField", 5,"", "");
                     break;
                 default:
                     throw  new NotSupportedException();

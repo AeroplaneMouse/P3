@@ -11,9 +11,8 @@ namespace Asset_Management_System.Models
     public abstract class DoesContainFields : Model
     {
         public string SerializedFields { get; set; }
-        
-        [JsonIgnore]
-        public List<Field> FieldsList { get; set; }
+
+        [JsonIgnore] public List<Field> FieldsList { get; set; }
 
         private int IDCounter = 0;
 
@@ -54,8 +53,13 @@ namespace Asset_Management_System.Models
             this.IDCounter++;
 
             FieldsList.Add(currentField);
-            ShowField();
             SerializeFields();
+            return true;
+        }
+
+        public bool AddField(Field input)
+        {
+            FieldsList.Add(input);
             return true;
         }
 
@@ -73,15 +77,14 @@ namespace Asset_Management_System.Models
             }
 
             SerializeFields();
-            ShowField();
             return true;
         }
+
         public bool RemoveField(Field field)
         {
             FieldsList.Remove(field);
-            
+
             SerializeFields();
-            ShowField();
             return true;
         }
 
@@ -95,9 +98,11 @@ namespace Asset_Management_System.Models
             string checksum = "";
             foreach (Field field in FieldsList)
             {
-                Dictionary<string,string> information = field.GetInformation();
-                checksum += information["Name"] + information["FieldType"] + information["Required"] + information["DefaultValue"];
+                Dictionary<string, string> information = field.GetInformation();
+                checksum += information["Name"] + information["FieldType"] + information["Required"] +
+                            information["DefaultValue"];
             }
+
             using (var md5 = MD5.Create())
             {
                 using (FileStream fs = new FileStream(checksum, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -109,11 +114,6 @@ namespace Asset_Management_System.Models
             }
 
             return checksum;
-        }
-
-        public void ShowField()
-        {
-            //Insert fancywancy XAML stuff
         }
     }
 }
