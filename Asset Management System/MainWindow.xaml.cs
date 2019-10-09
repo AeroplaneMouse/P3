@@ -9,6 +9,7 @@ using Asset_Management_System.Views;
 using Asset_Management_System.Events;
 using System.Threading.Tasks;
 using Asset_Management_System.Database;
+using System.ComponentModel;
 
 namespace Asset_Management_System
 {
@@ -27,9 +28,8 @@ namespace Asset_Management_System
             DBConnection.Instance().SqlConnectionFailed += ShowNotification;
             ChangeSourceRequest(new SplashPage(this), FrameSplash);
 
-            // Showing now UI window
-            Main newMain = new Main();
-            newMain.Show();
+            // Starting the new UI window.
+            new Main().Show();
         }
 
         /// <summary>
