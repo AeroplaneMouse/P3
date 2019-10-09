@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Asset_Management_System"
+        xmlns:local="clr-namespace.Asset_Management_System"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Title="Asset Management System" Height="450" Width="800">
@@ -81,8 +81,6 @@
             Grid.ColumnSpan="2"
             NavigationUIVisibility="Hidden"
         />
-
-        
     </Grid>
 </Window>
 
