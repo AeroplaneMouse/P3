@@ -9,7 +9,7 @@
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
 
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="12" />
+        <Setter Property="Padding" Value="9" />
         <Setter Property="Foreground" Value="{StaticResource BackgroundDarkBrush}" />
 
         <!-- Makes the content of the button a textblock -->
@@ -67,7 +67,7 @@
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
 
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="12" />
+        <Setter Property="Padding" Value="9" />
         <Setter Property="Foreground" Value="{StaticResource BackgroundLightBrush}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
 
@@ -76,7 +76,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{TemplateBinding Content}" Foreground="{StaticResource BackgroundLightBrush}"/>
+                        <TextBlock VerticalAlignment="Center" 
+                                   HorizontalAlignment="Center" 
+                                   Text="{TemplateBinding Content}" 
+                                   Foreground="{StaticResource BackgroundLightBrush}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -98,7 +101,7 @@
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
 
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="12" />
+        <Setter Property="Padding" Value="9" />
         <Setter Property="Foreground" Value="{StaticResource BackgroundDarkBrush}" />
 
         <!-- Stretches the buttons so they are bigger. Remove when changing to icon! -->
@@ -113,7 +116,11 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Text="{TemplateBinding Content}" Foreground="{StaticResource BackgroundLightBrush}"/>
+                        <TextBlock VerticalAlignment="Center" 
+                                   HorizontalAlignment="Center" 
+                                   Text="{TemplateBinding Content}"
+                                   TextBlock.FontWeight="Light"
+                                   Foreground="{StaticResource BackgroundLightBrush}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

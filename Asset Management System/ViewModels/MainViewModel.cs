@@ -98,7 +98,7 @@ namespace Asset_Management_System.ViewModels
             WindowMinHeight = 400;
 
             ResizeBorder = 4;
-            TitleHeight = 35;
+            TitleHeight = 25;
             InnerContentPaddingSize = 6;
 
             CurrentPage = DataModels.ApplicationPage.Start;
