@@ -7,9 +7,9 @@ using Asset_Management_System.Models;
 
 namespace Asset_Management_System
 {
-    class Log
+    class Log : IUpdateObserver
     {
-        public Log(int assetId,User doneBy,string description)
+        public Log(long assetId,User doneBy,string description)
         {
             this.AssetId = assetId;
             this.DoneBy = doneBy;
@@ -27,12 +27,17 @@ namespace Asset_Management_System
 
         public User DoneBy { get; set; }
         
-        public int AssetId;
+        public long AssetId;
 
         private bool Save()
         {
             //Todo Save to database stuff
             return true;
+        }
+
+        public void Update(Model Subject)
+        {
+            Console.Write("Changed " + Subject.ID);
         }
     }
 }

@@ -9,6 +9,10 @@
     <StartupObject />
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="placeholder-beaut.png" />
     <None Remove="Resources\Images\Logos\catface.jpg" />

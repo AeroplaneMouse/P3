@@ -15,99 +15,192 @@ namespace Asset_Management_System.Database.Repositories
             this.dbcon = DBConnection.Instance();
         }
 
-        public void Insert(Department entity)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>True if entity was successfully inserted.</returns>
+        public bool Insert(Department entity)
         {
+            bool query_success = false;
+
             if (dbcon.IsConnect())
             {
-                string query = "INSERT INTO departments (name) VALUES (@name)";
-
-                using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                try
                 {
-                    cmd.Parameters.Add("@name", MySqlDbType.String);
-                    cmd.Parameters["@name"].Value = entity.Name;
-                    cmd.ExecuteNonQuery();
-                }
+                    string query = "INSERT INTO departments (name) VALUES (@name)";
 
-                dbcon.Close();
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        cmd.Parameters.Add("@name", MySqlDbType.String);
+                        cmd.Parameters["@name"].Value = entity.Name;
+                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                    }
+                }
+                catch (MySqlException e)
+                { 
+                    
+                }finally{
+                    dbcon.Close();
+                }
             }
+
+            return query_success;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public bool Update(Department entity)
+        {
+            bool query_success = false;
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    string query = "UPDATE departments SET name=@name WHERE id=id";
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        cmd.Parameters.Add("@name", MySqlDbType.String);
+                        cmd.Parameters["@name"].Value = entity.Name;
+                        cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                        cmd.Parameters["@id"].Value = entity.ID;
+
+                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                    }
+                }
+                catch (MySqlException e)
+                {
+
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
+            }
+
+            return query_success;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public bool Delete(Department entity)
+        {
+            bool query_success = false;
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    string query = "DELETE FROM departments WHERE id=@id";
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        cmd.Parameters.AddWithValue  ("@id", MySqlDbType.Int64);
+                        cmd.Parameters["@id"].Value = entity.ID;
+                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                    }
+                }catch(MySqlException e){ 
+                
+                }finally{
+                    dbcon.Close();
+                }
+            }
+
+            return query_success;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Department GetById(long id)
         {
             Department department = null;
 
             if (dbcon.IsConnect())
             {
-                string query = "SELECT id, name, FROM departments WHERE id=@id";
+                try{
+                    string query = "SELECT id, name, FROM departments WHERE id=@id";
 
-                using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                {
-                    cmd.Parameters.Add("@id", MySqlDbType.Int64);
-                    cmd.Parameters["@id"].Value = id;
-
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                        cmd.Parameters["@id"].Value = id;
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            department = DBOToModelConvert(reader);
+                            while (reader.Read())
+                            {
+                                department = DBOToModelConvert(reader);
+                            }
                         }
                     }
+                }catch(MySqlException e){ 
+                    
+                }finally{
+                    dbcon.Close();
                 }
-
-                dbcon.Close();
             }
 
             return department;
         }
 
-        public void Delete(Department entity)
-        {
-            if (dbcon.IsConnect())
-            {
-                string query = "DELETE FROM departments WHERE id=@id";
-
-                using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                {
-                    cmd.Parameters.Add("@id", MySqlDbType.Int64);
-                    cmd.Parameters["@id"].Value = entity.ID;
-                    cmd.ExecuteNonQuery();
-                }
-
-                dbcon.Close();
-            }
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public List<Department> GetAll()
         {
             List<Department> departments = new List<Department>();
 
             if (dbcon.IsConnect())
             {
-                string query = "SELECT id, name FROM departments ORDER BY name ASC";
+                try{
+                    string query = "SELECT id, name FROM departments ORDER BY name ASC";
 
-                using (var cmd = new MySqlCommand(query, dbcon.Connection)){
-                    using (var reader = cmd.ExecuteReader()){
-                        while (reader.Read())
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            Department dep = DBOToModelConvert(reader);
-                            departments.Add(dep);
+                            while (reader.Read())
+                            {
+                                Department dep = DBOToModelConvert(reader);
+                                departments.Add(dep);
+                            }
                         }
-                    } 
+                    }
+                }catch(MySqlException e){ 
+                    
+                }finally{
+                    dbcon.Close();
                 }
-
-                dbcon.Close();
             }
 
             return departments;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
         public Department DBOToModelConvert(MySqlDataReader reader)
         {
-            long row_id = reader.GetInt64("id");
+            ulong row_id = reader.GetUInt64("id");
             string row_name = reader.GetString("name");
 
-            Department f = (Department)Activator.CreateInstance(typeof(Department), BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { row_id, row_name }, null, null);
-            return f;
+            return (Department)Activator.CreateInstance(typeof(Department), 
+                BindingFlags.Instance | BindingFlags.NonPublic, null, 
+                new object[] { row_id, row_name }, null, null);
         }
     }
 }

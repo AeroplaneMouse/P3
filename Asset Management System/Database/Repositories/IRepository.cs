@@ -1,9 +1,15 @@
-﻿namespace Asset_Management_System.Database.Repositories
+﻿using System;
+
+namespace Asset_Management_System.Database.Repositories
 {
     interface IRepository<T>
     {
-        void Insert(T entity);
+        //event EventHandler RepositoryError;
+
+        bool Insert(T entity);
+        bool Update(T entity);
+        bool Delete(T entity);
+
         T GetById(long id);
-        void Delete(T entity);
     }
 }
