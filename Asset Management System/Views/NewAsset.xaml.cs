@@ -51,34 +51,41 @@ namespace Asset_Management_System.Views
             Main.ChangeSourceRequest(new Assets(Main));
         }
 
+        /// <summary>
+        /// Function to add fields to the list of fields.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotSupportedException"></exception>
         private void OnAddField(object sender, RoutedEventArgs e)
         {
+            Field currentField =  (sender as FrameworkElement).DataContext as Field;
             switch ((sender as Button).Name)
             {
                 case "AddTextField":
                     Console.WriteLine("Textfield added");
-                    FieldsList.Add(new Field(id++, "TextField", "", 1, ""));
-                    //_asset.AddField( "TextField", 1,"", "");
+                    currentField.FieldType = 1;
+                    FieldsList.Add(currentField);
                     break;
                 case "AddStringField":
                     Console.WriteLine("StringField added");
-                    FieldsList.Add(new Field(id++, "Integer", "", 2, ""));
-                    //_asset.AddField( "TextField", 2,"", "");
+                    currentField.FieldType = 2;
+                    FieldsList.Add(currentField);
                     break;
                 case "AddIntegerField":
                     Console.WriteLine("IntegerField added");
-                    FieldsList.Add(new Field(id++, "Integer", "", 3, ""));
-                    //_asset.AddField( "TextField", 3,"", "");
+                    currentField.FieldType = 3;
+                    FieldsList.Add(currentField);
                     break;
                 case "AddDateField":
                     Console.WriteLine("DataField added");
-                    FieldsList.Add(new Field(id++, "Integer", "", 4, ""));
-                    //_asset.AddField( "TextField", 4,"", "");
+                    currentField.FieldType = 4;
+                    FieldsList.Add(currentField);
                     break;
                 case "AddBooleanField":
                     Console.WriteLine("BooleanField added");
-                    FieldsList.Add(new Field(id++, "Integer", "", 5, ""));
-                    //_asset.AddField( "TextField", 5,"", "");
+                    currentField.FieldType = 5;
+                    FieldsList.Add(currentField);
                     break;
                 default:
                     throw  new NotSupportedException();
@@ -86,6 +93,12 @@ namespace Asset_Management_System.Views
             }
         }
 
+        /// <summary>
+        /// Function to remove a field from the list of fields.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotSupportedException"></exception>
         private void OnDeleteField(object sender, RoutedEventArgs e)
         {
             switch ((sender as Button).Name)
@@ -93,27 +106,22 @@ namespace Asset_Management_System.Views
                 case "DeleteTextField":
                     Console.WriteLine("Textfield removed");
                     FieldsList.Remove( (sender as FrameworkElement).DataContext as Field);
-                    _asset.RemoveField( (sender as FrameworkElement).DataContext as Field);
                     break;
                 case "DeleteStringField":
                     Console.WriteLine("StringField removed");
                     FieldsList.Remove( (sender as FrameworkElement).DataContext as Field);
-                    _asset.RemoveField( (sender as FrameworkElement).DataContext as Field);
                     break;
                 case "DeleteIntegerField":
                     Console.WriteLine("IntegerField removed");
                     FieldsList.Remove( (sender as FrameworkElement).DataContext as Field);
-                    _asset.RemoveField( (sender as FrameworkElement).DataContext as Field);
                     break;
                 case "DeleteDateField":
                     Console.WriteLine("DataField removed");
                     FieldsList.Remove( (sender as FrameworkElement).DataContext as Field);
-                    _asset.RemoveField( (sender as FrameworkElement).DataContext as Field);
                     break;
                 case "DeleteBooleanField":
                     Console.WriteLine("BooleanField removed");
                     FieldsList.Remove( (sender as FrameworkElement).DataContext as Field);
-                    _asset.RemoveField( (sender as FrameworkElement).DataContext as Field);
                     break;
                 default:
                     throw  new NotSupportedException();
