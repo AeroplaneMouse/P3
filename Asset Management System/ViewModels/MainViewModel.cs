@@ -1,9 +1,12 @@
-﻿using System;
+using System;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Windows.Controls;
+using Asset_Management_System.Models;
+using Asset_Management_System.Authentication;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -64,7 +67,17 @@ namespace Asset_Management_System.ViewModels
         // The height of the title bar / caption of the window
         public int TitleHeight { get; set; }
 
+        public int NavigationHeight { get; set; }
+
         public GridLength TitleHeightGridLength { get { return new GridLength(TitleHeight + ResizeBorder); } }
+
+        public String CurrentUser { get; set; }
+
+        public Department CurrentDepartment { get; set; }
+
+        public Page PageMainContent { get; set; }
+
+        public Frame FrameMainContent { get; set; }
 
         #endregion
 
@@ -79,6 +92,12 @@ namespace Asset_Management_System.ViewModels
         public ICommand SystemMenuCommand { get; set; }
 
         public ICommand ShowWindow { get; set; }
+
+        public ICommand ShowHomePageCommand { get; set; }
+
+        public ICommand ShowAssetPageCommand { get; set; }
+
+        public ICommand ShowTagPageCommand { get; set; }
 
         #endregion
 
@@ -114,6 +133,11 @@ namespace Asset_Management_System.ViewModels
                 //OnPropertyChanged(nameof(WindowCornerRadius));
             };
 
+            CurrentUser = new Session().Username;
+            CurrentDepartment = new Department("Test");
+
+            //// Setting up frames
+            FrameMainContent = new Frame();
 
             // Initialize commands
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
@@ -124,6 +148,9 @@ namespace Asset_Management_System.ViewModels
 
             ShowWindow = new Base.RelayCommand(() => MessageBox.Show("Hey!"));
 
+            ShowHomePageCommand = new Commands.ShowHomePageCommand(this);
+            ShowAssetPageCommand = new Commands.ShowAssetPageCommand(this);
+            ShowTagPageCommand = new Commands.ShowTagPageCommand(this);
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);

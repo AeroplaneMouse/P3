@@ -34,6 +34,7 @@
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="{Binding TitleHeightGridLength}"/>   <!-- Menu bar -->
+                                        <RowDefinition Height="Auto"/>                              <!-- The top navigation bar -->
                                         <RowDefinition Height="*"/>                                 <!-- Window content -->
                                     </Grid.RowDefinitions>
                                     <Grid Grid.Row="0"
@@ -75,9 +76,28 @@
                                         </StackPanel>
 
                                     </Grid>
-
+                                    
+                                    <!-- Navigation content -->
+                                    <Grid Grid.Row="1" Background="{StaticResource BackgroundDarkBrush}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Right"
+                                                    Margin="0, 0, 10, 0">
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding CurrentUser}"
+                                                           Foreground="White"
+                                                           TextBlock.FontSize="{StaticResource FontSizeRegular}"
+                                                           TextBlock.FontFamily="{StaticResource SegoeRegular}"></TextBlock>
+                                                <Button Content="{Binding CurrentDepartment}" Style="{StaticResource MenuButton}"/>
+                                            </StackPanel>
+                                            
+                                        </StackPanel>
+                                    </Grid>
+                                    
                                     <!-- Window content -->
-                                    <Grid Grid.Row="1" Background="{StaticResource BackgroundLightBrush}">
+                                    <Grid Grid.Row="2" Background="{StaticResource BackgroundLightBrush}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="100"/>
                                             <ColumnDefinition Width="*" />
@@ -85,11 +105,15 @@
 
                                         <Border Background="{StaticResource NavigationBackgroundBrush}">
                                             <StackPanel Orientation="Vertical">
-                                                <Button Content="Home" Style="{StaticResource NavigationButton}"/>
-                                                <Button Content="Assets" Style="{StaticResource NavigationButton}"/>
-                                                <Button Content="Tags" Style="{StaticResource NavigationButton}"/>
+                                                <Button Content="Home" Command="{Binding ShowHomePageCommand}" Style="{StaticResource NavigationButton}"/>
+                                                <Button Content="Assets" Command="{Binding ShowAssetPageCommand}" Style="{StaticResource NavigationButton}"/>
+                                                <Button Content="Tags" Command="{Binding ShowTagPageCommand}" Style="{StaticResource NavigationButton}"/>
                                             </StackPanel>
                                         </Border>
+
+                                        <Frame Grid.Column="1"
+                                               NavigationUIVisibility="Hidden"
+                                               Content="{Binding FrameMainContent}"/>
                                     </Grid>
                                 </Grid>
                             </Grid>
