@@ -93,7 +93,7 @@
                 </Grid.RowDefinitions>
                 <Button Grid.Row="1" Grid.Column="0" Click="OnDeleteField" Name="DeleteBooleanField">X</Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Tick boolean"></TextBlock>
-                <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Content}"></CheckBox>
+                <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Content}" Name="CheckBox"></CheckBox>
             </Grid>
         </DataTemplate>
     </Page.Resources>
