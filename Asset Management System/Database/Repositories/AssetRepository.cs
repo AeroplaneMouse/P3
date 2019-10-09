@@ -24,23 +24,28 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-                string query = "INSERT INTO assets (name, description, department_id) VALUES (@name, @description, @department)";
+                try{
+                    string query = "INSERT INTO assets (name, description, department_id) VALUES (@name, @description, @department)";
 
-                using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                {
-                    cmd.Parameters.Add("@name", MySqlDbType.String);
-                    cmd.Parameters["@name"].Value = entity.Name;
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        cmd.Parameters.Add("@name", MySqlDbType.String);
+                        cmd.Parameters["@name"].Value = entity.Name;
 
-                    cmd.Parameters.Add("@description", MySqlDbType.String);
-                    cmd.Parameters["@description"].Value = entity.Description;
+                        cmd.Parameters.Add("@description", MySqlDbType.String);
+                        cmd.Parameters["@description"].Value = entity.Description;
 
-                    cmd.Parameters.Add("@department", MySqlDbType.UInt64);
-                    cmd.Parameters["@department"].Value = 1;
+                        cmd.Parameters.Add("@department", MySqlDbType.UInt64);
+                        cmd.Parameters["@department"].Value = 1;
 
-                    query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                    }
                 }
-
-                dbcon.Close();
+                catch(MySqlException e){ 
+                
+                }finally{
+                    dbcon.Close();
+                }
             }
 
             return query_success;
@@ -62,21 +67,26 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-                string query = "SELECT id, name, description FROM assets WHERE id=@id";
+                try{
+                    string query = "SELECT id, name, description FROM assets WHERE id=@id";
 
-                using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                {
-                    cmd.Parameters.Add("@id", MySqlDbType.Int64);
-                    cmd.Parameters["@id"].Value = id;
-
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                        cmd.Parameters["@id"].Value = id;
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            asset = DBOToModelConvert(reader);
+                            while (reader.Read())
+                            {
+                                asset = DBOToModelConvert(reader);
+                            }
                         }
                     }
-
+                }
+                catch(MySqlException e){ 
+                
+                }finally{
                     dbcon.Close();
                 }
             }
@@ -90,23 +100,29 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-                string query = "SELECT a.* FROM assets AS a " +
-                    "INNER JOIN asset_tags AS atr ON (a.id = atr.asset_id) " +
-                    "WHERE atr.tag_id IN (@ids) GROUP BY a.id";
+                try{
+                    string query = "SELECT a.* FROM assets AS a " +
+                        "INNER JOIN asset_tags AS atr ON (a.id = atr.asset_id) " +
+                        "WHERE atr.tag_id IN (@ids) GROUP BY a.id";
 
-                using (var cmd = new MySqlCommand(query, dbcon.Connection)){
-                    cmd.Parameters.Add("@ids", MySqlDbType.String);
-                    cmd.Parameters["@ids"].Value = string.Join(",", tags_ids);
-
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.Add("@ids", MySqlDbType.String);
+                        cmd.Parameters["@ids"].Value = string.Join(",", tags_ids);
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            Asset asset = DBOToModelConvert(reader);
-                            assets.Add(asset);
+                            while (reader.Read())
+                            {
+                                Asset asset = DBOToModelConvert(reader);
+                                assets.Add(asset);
+                            }
                         }
                     }
-
+                }
+                catch(MySqlException e){ 
+                
+                }finally{
                     dbcon.Close();
                 }
             }
@@ -120,26 +136,32 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-                string query = "SELECT id, name, description, department_id FROM assets WHERE name LIKE @keyword";
+                try{
+                    string query = "SELECT id, name, description, department_id FROM assets WHERE name LIKE @keyword";
 
-                if(!keyword.Contains("%")){
-                    keyword = "%" + keyword + "%";
-                }
-
-                using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                {
-                    cmd.Parameters.Add("@keyword", MySqlDbType.String);
-                    cmd.Parameters["@keyword"].Value = keyword;
-
-                    using (var reader = cmd.ExecuteReader())
+                    if (!keyword.Contains("%"))
                     {
-                        while (reader.Read())
-                        {
-                            Asset asset = DBOToModelConvert(reader);
-                            assets.Add(asset);
-                        }
+                        keyword = "%" + keyword + "%";
                     }
 
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        cmd.Parameters.Add("@keyword", MySqlDbType.String);
+                        cmd.Parameters["@keyword"].Value = keyword;
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Asset asset = DBOToModelConvert(reader);
+                                assets.Add(asset);
+                            }
+                        }
+                    }
+                }
+                catch(MySqlException e){ 
+                
+                }finally{
                     dbcon.Close();
                 }
             }
@@ -149,10 +171,10 @@ namespace Asset_Management_System.Database.Repositories
 
         public Asset DBOToModelConvert(MySqlDataReader reader)
         {
-            long row_id = reader.GetInt64("id");
+            ulong row_id = reader.GetUInt64("id");
             string row_label = reader.GetString("name");
             string row_description = reader.GetString("description");
-            long row_department_id = reader.GetInt64("department_id");
+            ulong row_department_id = reader.GetUInt64("department_id");
 
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { row_id, row_label, row_description, row_department_id }, null, null);
         }

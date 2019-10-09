@@ -5,45 +5,32 @@ namespace Asset_Management_System.Models
 {
     class Tag : DoesContainFields
     {
-        public Tag(string name, int departmentID = 0, int parentID = 0)
+        public Tag(string label, ulong departmentID = 0, ulong parentID = 0)
         {
             DepartmentID = departmentID;
             CreatedAt = DateTime.Now;
-            Name = name;
+            Label = label;
             FieldsList = new List<Field>();
             ParentID = parentID;
         }
 
-        private Tag(long id, string name, long department_id, long parent_id)
+        private Tag(ulong id, string label, ulong department_id, ulong parent_id)
         {
             ID = id;
-            Name = name;
+            Label = label;
             DepartmentID = department_id;
             FieldsList = new List<Field>();
             ParentID = parent_id;
         }
 
-        public long ParentID;
+        public string Label { get; set; }
 
-        public long DepartmentID { get; set; }
+        public string Color { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
+        public ulong ParentID { get; set; }
 
-        public bool RenameTag(string newName)
-        {
-            if (newName != null)
-            {
-                Name = newName;
-                UpdatedAt = DateTime.Now;
-            }
-            else
-            {
-                throw new NullReferenceException();
-            }
+        public ulong DepartmentID { get; set; }
 
-            return true;
-        }
-
-        public override string ToString() => Name;
+        public override string ToString() => Label;
     }
 }

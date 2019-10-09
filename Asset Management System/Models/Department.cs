@@ -8,10 +8,12 @@ namespace Asset_Management_System.Models
             Name = name;
         }
 
-        private Department(long id, string name){
+        private Department(ulong id, string name){
             this.ID = id;
             this.Name = name;
         }
+
+        public string Name { get; set; }
 
         public override string ToString() => Name;
     }
