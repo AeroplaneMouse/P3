@@ -60,38 +60,41 @@ namespace Asset_Management_System.Views
         /// <exception cref="NotSupportedException"></exception>
         private void OnAddField(object sender, RoutedEventArgs e)
         {
-            Field currentField =  (sender as FrameworkElement).DataContext as Field;
             switch ((sender as Button).Name)
             {
                 case "AddTextField":
                     Console.WriteLine("Textfield added");
-                    currentField.FieldType = 1;
-                    FieldsList.Add(currentField);
+                    FieldsList.Add(new Field(id++, "TextField", "", 1, ""));
                     break;
                 case "AddStringField":
                     Console.WriteLine("StringField added");
-                    currentField.FieldType = 2;
-                    FieldsList.Add(currentField);
+                    FieldsList.Add(new Field(id++, "StringField", "", 2, ""));
                     break;
                 case "AddIntegerField":
                     Console.WriteLine("IntegerField added");
-                    currentField.FieldType = 3;
-                    FieldsList.Add(currentField);
+                    FieldsList.Add(new Field(id++, "Integer", "", 3, ""));
                     break;
                 case "AddDateField":
                     Console.WriteLine("DataField added");
-                    currentField.FieldType = 4;
-                    FieldsList.Add(currentField);
+                    FieldsList.Add(new Field(id++, "DateField", "", 4, ""));
                     break;
                 case "AddBooleanField":
                     Console.WriteLine("BooleanField added");
-                    currentField.FieldType = 5;
-                    FieldsList.Add(currentField);
+                    FieldsList.Add(new Field(id++, "BooleanField", "", 5, ""));
                     break;
                 default:
                     throw  new NotSupportedException();
                     
             }
+            Console.WriteLine("List of the current fields after adding the field:");
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Field name | Content of the field");
+            foreach (var test in FieldsList)
+            {
+                Console.WriteLine(test.Name + "|" + test.Content);
+                
+            }
+            Console.WriteLine("---------------------------------------");
         }
 
         /// <summary>
@@ -126,8 +129,16 @@ namespace Asset_Management_System.Views
                     break;
                 default:
                     throw  new NotSupportedException();
-                    
             }
+            Console.WriteLine("List of the current fields after removing the field:");
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("Field name | Content of the field");
+            foreach (var test in FieldsList)
+            {
+                Console.WriteLine(test.Name + "|" + test.Content);
+                
+            }
+            Console.WriteLine("---------------------------------------");
         }
     }
 
