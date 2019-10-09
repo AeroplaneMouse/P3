@@ -34,7 +34,6 @@ namespace Asset_Management_System.Views
             string description = TbDescription.Text;
             _asset.Name = name;
             _asset.Description = description;
-
             foreach (var field in FieldsList)
             {
                 _asset.AddField(field);
