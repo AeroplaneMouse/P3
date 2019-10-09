@@ -52,6 +52,12 @@ namespace Asset_Management_System.Views
             Main.ChangeSourceRequest(new Assets(Main));
         }
 
+        /// <summary>
+        /// Function to add fields to the list of fields.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotSupportedException"></exception>
         private void OnAddField(object sender, RoutedEventArgs e)
         {
             switch ((sender as Button).Name)
@@ -59,27 +65,22 @@ namespace Asset_Management_System.Views
                 case "AddTextField":
                     Console.WriteLine("Textfield added");
                     FieldsList.Add(new Field(id++, "TextField", "", 1, ""));
-                    //_asset.AddField( "TextField", 1,"", "");
                     break;
                 case "AddStringField":
                     Console.WriteLine("StringField added");
                     FieldsList.Add(new Field(id++, "Integer", "", 2, ""));
-                    //_asset.AddField( "TextField", 2,"", "");
                     break;
                 case "AddIntegerField":
                     Console.WriteLine("IntegerField added");
                     FieldsList.Add(new Field(id++, "Integer", "", 3, ""));
-                    //_asset.AddField( "TextField", 3,"", "");
                     break;
                 case "AddDateField":
                     Console.WriteLine("DataField added");
                     FieldsList.Add(new Field(id++, "Integer", "", 4, ""));
-                    //_asset.AddField( "TextField", 4,"", "");
                     break;
                 case "AddBooleanField":
                     Console.WriteLine("BooleanField added");
                     FieldsList.Add(new Field(id++, "Integer", "", 5, ""));
-                    //_asset.AddField( "TextField", 5,"", "");
                     break;
                 default:
                     throw  new NotSupportedException();
@@ -87,6 +88,12 @@ namespace Asset_Management_System.Views
             }
         }
 
+        /// <summary>
+        /// Function to remove a field from the list of fields.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotSupportedException"></exception>
         private void OnDeleteField(object sender, RoutedEventArgs e)
         {
             switch ((sender as Button).Name)

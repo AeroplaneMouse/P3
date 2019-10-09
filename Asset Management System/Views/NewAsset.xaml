@@ -76,7 +76,7 @@
                 </Grid.RowDefinitions>
                 <Button Grid.Row="1" Grid.Column="0" Click="OnDeleteField" Name="DeleteDateField">X</Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Insert an integer"></TextBlock>
-                <DatePicker Grid.Row="1" Grid.Column="1" DataContext="{Binding Content}"></DatePicker>
+                <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Content}"></DatePicker>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="BooleanFieldStyle">
@@ -92,8 +92,8 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Button Grid.Row="1" Grid.Column="0" Click="OnDeleteField" Name="DeleteBooleanField">X</Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="Insert an integer"></TextBlock>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}"/>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="Tick boolean"></TextBlock>
+                <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Content}"></CheckBox>
             </Grid>
         </DataTemplate>
     </Page.Resources>
