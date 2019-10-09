@@ -28,7 +28,7 @@
                 <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Name}" Height="200"/>
             </Grid>
         </DataTemplate>
-        <DataTemplate x:Key="StringFieldType">
+        <DataTemplate x:Key="StringFieldStyle">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width = "20"/>
