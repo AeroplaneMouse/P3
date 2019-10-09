@@ -18,89 +18,216 @@ namespace Asset_Management_System.Database.Repositories
             this.dbcon = DBConnection.Instance();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public bool Insert(Tag entity)
         {
-            throw new NotImplementedException();
+            bool query_success = false;
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    string query = "INSERT INTO tags (label, color, options, department_id, parent_id) " +
+                        "VALUES (@label, @color, @options, @department_id, @parent_id)";
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        cmd.Parameters.Add("@label", MySqlDbType.String);
+                        cmd.Parameters["@label"].Value = entity;
+
+                        cmd.Parameters.Add("@color", MySqlDbType.String);
+                        cmd.Parameters["@color"].Value = entity.Color;
+
+                        cmd.Parameters.Add("@options", MySqlDbType.JSON);
+                        cmd.Parameters["@options"].Value = entity.SerializedFields;
+
+                        cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@department_id"].Value = entity.DepartmentID;
+
+                        cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@parent_id"].Value = entity.ParentID;
+
+                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                    }
+                }
+                catch (MySqlException e)
+                {
+
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
+            }
+
+            return query_success;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public bool Update(Tag entity)
         {
-            throw new NotImplementedException();
+            bool query_success = false;
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    string query = "UPDATE tags SET label=@label, color=@color, options=@options) WHERE id=@id";
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        cmd.Parameters.Add("@label", MySqlDbType.String);
+                        cmd.Parameters["@label"].Value = entity;
+
+                        cmd.Parameters.Add("@color", MySqlDbType.String);
+                        cmd.Parameters["@color"].Value = entity.Color;
+
+                        cmd.Parameters.Add("@options", MySqlDbType.JSON);
+                        cmd.Parameters["@options"].Value = entity.SerializedFields;
+
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = entity.ParentID;
+
+                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                    }
+                }
+                catch (MySqlException e)
+                {
+
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
+            }
+
+            return query_success;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
         public bool Delete(Tag entity)
         {
-            throw new NotImplementedException();
+            bool query_success = false;
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    string query = "DELETE FROM tags WHERE id=@id";
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = entity.ParentID;
+
+                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                    }
+                }
+                catch (MySqlException e)
+                {
+
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
+            }
+
+            return query_success;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Tag GetById(long id)
         {
             Tag tag = null;
 
             if (dbcon.IsConnect())
             {
-                string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE id=@id";
+                try{
+                    string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE id=@id";
 
-                using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                {
-                    cmd.Parameters.Add("@ID", MySqlDbType.Int64);
-                    cmd.Parameters["@ID"].Value = id;
-
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
+                        cmd.Parameters.Add("@ID", MySqlDbType.Int64);
+                        cmd.Parameters["@ID"].Value = id;
+
+                        using var reader = cmd.ExecuteReader();
                         while (reader.Read())
                         {
                             tag = DBOToModelConvert(reader);
                         }
                     }
                 }
-
-                dbcon.Close();
+                catch(MySqlException e){ 
+                
+                }finally{
+                    dbcon.Close();
+                }
             }
 
             return tag;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public List<Tag> GetParentTags()
+        {
+            return this.GetChildTags(0);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="parent_id"></param>
+        /// <returns></returns>
         public List<Tag> GetChildTags(long parent_id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Department GetDepartment()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Tag GetParentTag()
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Tag> Search(string keyword)
         {
             List<Tag> tags = new List<Tag>();
 
             if (dbcon.IsConnect())
             {
-                string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE label LIKE @keyword";
-
-                if (!keyword.Contains('%'))
-                    keyword = $"%{keyword}%";
-
-                using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                try
                 {
-                    cmd.Parameters.Add("@keyword", MySqlDbType.String);
-                    cmd.Parameters["@keyword"].Value = keyword;
+                    string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE parent_id=@id";
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                        cmd.Parameters["@id"].Value = parent_id;
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            Tag tag = DBOToModelConvert(reader);
-                            tags.Add(tag);
+                            while (reader.Read())
+                            {
+                                tags.Add(DBOToModelConvert(reader));
+                            }
                         }
                     }
+                }
+                catch (MySqlException e)
+                {
 
+                }
+                finally
+                {
                     dbcon.Close();
                 }
             }
@@ -108,14 +235,61 @@ namespace Asset_Management_System.Database.Repositories
             return tags;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
+        public List<Tag> Search(string keyword)
+        {
+            List<Tag> tags = new List<Tag>();
+
+            if (dbcon.IsConnect())
+            {
+                try{
+                    string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE label LIKE @keyword";
+
+                    if (!keyword.Contains('%'))
+                        keyword = $"%{keyword}%";
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        cmd.Parameters.Add("@keyword", MySqlDbType.String);
+                        cmd.Parameters["@keyword"].Value = keyword;
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                tags.Add(DBOToModelConvert(reader));
+                            }
+                        }
+                    }
+                }catch(MySqlException e){ 
+                
+                }finally{
+                    dbcon.Close();
+                }
+            }
+
+            return tags;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
         public Tag DBOToModelConvert(MySqlDataReader reader)
         {
-            long row_id = reader.GetInt64("id");
+            ulong row_id = reader.GetUInt64("id");
             String row_label = reader.GetString("label");
-            long row_parent_id = reader.GetInt64("parent_id");
-            long row_department_id = reader.GetInt64("department_id");
+            ulong row_parent_id = reader.GetUInt64("parent_id");
+            ulong row_department_id = reader.GetUInt64("department_id");
 
-            return (Tag)Activator.CreateInstance(typeof(Tag), BindingFlags.Instance | BindingFlags.NonPublic, null, new object[] { row_id, row_label, row_department_id, row_parent_id }, null, null);
+            return (Tag)Activator.CreateInstance(typeof(Tag), 
+                BindingFlags.Instance | BindingFlags.NonPublic, null, 
+                new object[] { row_id, row_label, row_department_id, row_parent_id }, null, null);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Asset_Management_System.Models
     {
         public Asset(){ }
 
-        private Asset(long id, string name, string description, long department_id)
+        private Asset(ulong id, string name, string description, ulong department_id)
         {
             ID = id;
             Name = name;
@@ -18,10 +18,12 @@ namespace Asset_Management_System.Models
             FieldsList = new List<Field>();
         }
 
+        public string Name { get; set; }
+
         public string Description { get; set; }
 
-        public long DepartmentID { get; set; }
+        public ulong DepartmentID { get; set; }
 
-        public int TagID { get; set; }
+        public ulong TagID { get; set; }
     }
 }
