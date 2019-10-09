@@ -100,23 +100,5 @@ namespace UnitTests
                 Assert.AreEqual(expectedMessage, e.Message);
             }
         }
-        /*
-        [TestMethod]
-        public void Field_GetFieldTypeWithFieldType3_ReturnsInt()
-        {
-            //Arrange
-            string name = "Name", content = "Content", defaultValue = "Default Value";
-            int id = 1, fieldType = 3;
-
-
-            Field field = new Field(id, name, content, fieldType, defaultValue);
-
-            Type expected = 3.typeof();
-
-            //Act
-            Type result = field.GetType();
-
-
-        }*/
     }
 }

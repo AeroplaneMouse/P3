@@ -3,17 +3,11 @@ using System.Collections.Generic;
 
 namespace Asset_Management_System.Models
 {
-    class Tag : DoesContainFields
+    public class Tag : DoesContainFields
     {
-        public Tag(string label, ulong departmentID = 0, ulong parentID = 0)
-        {
-            DepartmentID = departmentID;
-            CreatedAt = DateTime.Now;
-            Label = label;
-            FieldsList = new List<Field>();
-            ParentID = parentID;
-        }
+        public Tag(string label, ulong departmentID, ulong parentID) : this(0, name, departmentID, parentID){}
 
+        /*Constructor used by DB*/
         private Tag(ulong id, string label, ulong department_id, ulong parent_id)
         {
             ID = id;

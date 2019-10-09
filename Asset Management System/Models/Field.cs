@@ -12,7 +12,7 @@ namespace Asset_Management_System.Models
         /// <param name="name">The label of the field</param>
         /// <param name="content">The content added to the field</param>
         /// <param name="required">A boolean, whether the field is required or not</param>
-        /// <param name="fieldType">Selecting the type of the field. 1= Int,2 = String,3= TextBox, 4 = Date, 5 = Boolean</param>
+        /// <param name="fieldType">Selecting the type of the field. 1= TextBox,2 = String,3= Int, 4 = Date, 5 = Boolean</param>
         /// <param name="defaultValue">The default value which should be entered into the field</param>
         public Field(int ID, string name, string content, int fieldType, string defaultValue, bool required = false)
         {
@@ -22,7 +22,7 @@ namespace Asset_Management_System.Models
             this.Required = required;
             if (fieldType <= 5)
             {
-                this._fieldType = fieldType;
+                this.FieldType = fieldType;
             }
             else
             {
@@ -36,7 +36,7 @@ namespace Asset_Management_System.Models
         public string Content { get; set; }
         public bool Required { get; set; }
 
-        private int _fieldType;
+        public int FieldType;
 
         public readonly string DefaultValue;
 
@@ -78,7 +78,7 @@ namespace Asset_Management_System.Models
         /// <returns></returns>
         private string GetFieldType()
         {
-            return this._fieldType switch
+            return this.FieldType switch
             {
                 1 => "TextBox",
                 2 => "String",
