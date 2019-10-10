@@ -28,13 +28,13 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    string query = "INSERT INTO departments (name) VALUES (@name)";
+                    const string query = "INSERT INTO departments (name) VALUES (@name)";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@name", MySqlDbType.String);
                         cmd.Parameters["@name"].Value = entity.Name;
-                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                        query_success = cmd.ExecuteNonQuery() > 0;
                     }
                 }
                 catch (MySqlException e)
@@ -61,7 +61,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    string query = "UPDATE departments SET name=@name WHERE id=id";
+                    const string query = "UPDATE departments SET name=@name WHERE id=id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -70,7 +70,7 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters.Add("@id", MySqlDbType.Int64);
                         cmd.Parameters["@id"].Value = entity.ID;
 
-                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                        query_success = cmd.ExecuteNonQuery() > 0;
                     }
                 }
                 catch (MySqlException e)
@@ -99,13 +99,13 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    string query = "DELETE FROM departments WHERE id=@id";
+                    const string query = "DELETE FROM departments WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.AddWithValue  ("@id", MySqlDbType.Int64);
                         cmd.Parameters["@id"].Value = entity.ID;
-                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                        query_success = cmd.ExecuteNonQuery() > 0;
                     }
                 }catch(MySqlException e){ 
                 
@@ -129,7 +129,7 @@ namespace Asset_Management_System.Database.Repositories
             if (dbcon.IsConnect())
             {
                 try{
-                    string query = "SELECT id, name, FROM departments WHERE id=@id";
+                    const string query = "SELECT id, name, FROM departments WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -165,7 +165,7 @@ namespace Asset_Management_System.Database.Repositories
             if (dbcon.IsConnect())
             {
                 try{
-                    string query = "SELECT id, name FROM departments ORDER BY name ASC";
+                    const string query = "SELECT id, name FROM departments ORDER BY name ASC";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {

@@ -10,15 +10,16 @@ namespace Asset_Management_System.Views
     /// <summary>
     /// Interaction logic for NewAsset.xaml
     /// </summary>
-    public partial class NewAsset : Page
+    public partial class NewAsset
     {
-        public ObservableCollection<Field> FieldsList { get; set; }
-
         private Asset _asset;
 
         private MainWindow Main;
 
         private int id = 0;
+
+        public ObservableCollection<Field> FieldsList { get; set; }
+
 
         public NewAsset(MainWindow main)
         {
@@ -39,6 +40,7 @@ namespace Asset_Management_System.Views
                 _asset.AddField(field);
                 Console.WriteLine(field.Content);
             }
+
             _asset.SerializeFields();
             Department department = Main.topNavigationPage.BtnShowDepartments.Content as Department;
             if (department != null)
@@ -59,7 +61,7 @@ namespace Asset_Management_System.Views
         /// <exception cref="NotSupportedException"></exception>
         private void OnAddField(object sender, RoutedEventArgs e)
         {
-            switch ((sender as Button).Name)
+            switch ((sender as Button)?.Name)
             {
                 case "AddTextField":
                     Console.WriteLine("Textfield added");
@@ -82,17 +84,21 @@ namespace Asset_Management_System.Views
                     FieldsList.Add(new Field(id++, "BooleanField", "", 5, ""));
                     break;
                 default:
-                    throw  new NotSupportedException();
-                    
+                    throw new NotSupportedException();
             }
+
             Console.WriteLine("List of the current fields after adding the field:");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Field name | Content of the field");
+            Console.WriteLine("ID  |   Field name   |   Content of the field");
             foreach (var test in FieldsList)
             {
-                Console.WriteLine(test.Name + "|" + test.Content);
+
+                Console.WriteLine(test.id + " | " + test.Label + " | " + test.Content);
                 
+
+
             }
+
             Console.WriteLine("---------------------------------------");
         }
 
@@ -104,39 +110,37 @@ namespace Asset_Management_System.Views
         /// <exception cref="NotSupportedException"></exception>
         private void OnDeleteField(object sender, RoutedEventArgs e)
         {
-            switch ((sender as Button).Name)
+            switch ((sender as Button)?.Name)
             {
                 case "DeleteTextField":
                     Console.WriteLine("Textfield removed");
-                    FieldsList.Remove( (sender as FrameworkElement).DataContext as Field);
                     break;
                 case "DeleteStringField":
                     Console.WriteLine("StringField removed");
-                    FieldsList.Remove( (sender as FrameworkElement).DataContext as Field);
                     break;
                 case "DeleteIntegerField":
                     Console.WriteLine("IntegerField removed");
-                    FieldsList.Remove( (sender as FrameworkElement).DataContext as Field);
                     break;
                 case "DeleteDateField":
                     Console.WriteLine("DataField removed");
-                    FieldsList.Remove( (sender as FrameworkElement).DataContext as Field);
                     break;
                 case "DeleteBooleanField":
                     Console.WriteLine("BooleanField removed");
-                    FieldsList.Remove( (sender as FrameworkElement).DataContext as Field);
                     break;
                 default:
-                    throw  new NotSupportedException();
+                    throw new NotSupportedException();
             }
+
+            FieldsList.Remove((sender as FrameworkElement).DataContext as Field);
             Console.WriteLine("List of the current fields after removing the field:");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Field name | Content of the field");
+            Console.WriteLine("ID |Field name | Content of the field");
             foreach (var test in FieldsList)
             {
-                Console.WriteLine(test.Name + "|" + test.Content);
+                Console.WriteLine(test.id + " | " +test.Label + "|" + test.Content);
                 
             }
+
             Console.WriteLine("---------------------------------------");
         }
     }

@@ -4,6 +4,7 @@ using System.Text;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
 using MySql.Data.MySqlClient;
+using System.Reflection;
 
 namespace Asset_Management_System.Database.Repositories
 {
@@ -32,7 +33,14 @@ namespace Asset_Management_System.Database.Repositories
 
         public Comment DBOToModelConvert(MySqlDataReader reader)
         {
-            throw new NotImplementedException();
+            ulong row_id = reader.GetUInt64("id");
+            String row_content = reader.GetString("content");
+            ulong row_asset_id = reader.GetUInt64("asset_id");
+            DateTime row_created_at = reader.GetDateTime("created_at");
+
+            return (Comment)Activator.CreateInstance(typeof(Comment), 
+                BindingFlags.Instance | BindingFlags.NonPublic, null, 
+                new object[] { row_id, row_content, row_asset_id, row_created_at }, null, null);
         }
     }
 }
