@@ -7,9 +7,15 @@ using Asset_Management_System.Models;
 
 namespace Asset_Management_System
 {
-    class Log : IUpdateObserver
+    class Log
     {
-        public Log(long assetId,User doneBy,string description)
+        /// <summary>
+        /// Default constructor for initiating a new Log object.
+        /// </summary>
+        /// <param name="assetId"></param>
+        /// <param name="doneBy"></param>
+        /// <param name="description"></param>
+        public Log(ulong assetId,Session doneBy,string description)
         {
             this.AssetId = assetId;
             this.DoneBy = doneBy;
@@ -25,19 +31,18 @@ namespace Asset_Management_System
 
         public DateTime RegistrationTime { get; set; }
 
-        public User DoneBy { get; set; }
+        public Session DoneBy { get; set; }
         
-        public long AssetId;
+        public ulong AssetId;
 
+        /// <summary>
+        /// Saves the log to database
+        /// </summary>
+        /// <returns></returns>
         private bool Save()
         {
             //Todo Save to database stuff
             return true;
-        }
-
-        public void Update(Model Subject)
-        {
-            Console.Write("Changed " + Subject.ID);
         }
     }
 }
