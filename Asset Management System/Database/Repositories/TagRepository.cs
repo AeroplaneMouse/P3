@@ -31,8 +31,8 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    string query = "INSERT INTO tags (label, color, options, department_id, parent_id) " +
-                        "VALUES (@label, @color, @options, @department_id, @parent_id)";
+                    const string query = "INSERT INTO tags (label, color, options, department_id, parent_id) " +
+                                         "VALUES (@label, @color, @options, @department_id, @parent_id)";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -51,7 +51,7 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
                         cmd.Parameters["@parent_id"].Value = entity.ParentID;
 
-                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                        query_success = cmd.ExecuteNonQuery() > 0;
                     }
                 }
                 catch (MySqlException e)
@@ -80,7 +80,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    string query = "UPDATE tags SET label=@label, color=@color, options=@options) WHERE id=@id";
+                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options) WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -96,7 +96,7 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = entity.ParentID;
 
-                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                        query_success = cmd.ExecuteNonQuery() > 0;
                     }
                 }
                 catch (MySqlException e)
@@ -125,14 +125,14 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    string query = "DELETE FROM tags WHERE id=@id";
+                    const string query = "DELETE FROM tags WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = entity.ParentID;
+                        cmd.Parameters["@id"].Value = entity.ID;
 
-                        query_success = cmd.ExecuteNonQuery() > 0 ? true : false;
+                        query_success = cmd.ExecuteNonQuery() > 0;
                     }
                 }
                 catch (MySqlException e)
@@ -160,7 +160,7 @@ namespace Asset_Management_System.Database.Repositories
             if (dbcon.IsConnect())
             {
                 try{
-                    string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE id=@id";
+                    const string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -206,7 +206,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE parent_id=@id";
+                    const string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE parent_id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -247,7 +247,7 @@ namespace Asset_Management_System.Database.Repositories
             if (dbcon.IsConnect())
             {
                 try{
-                    string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE label LIKE @keyword";
+                    const string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE label LIKE @keyword";
 
                     if (!keyword.Contains('%'))
                         keyword = $"%{keyword}%";

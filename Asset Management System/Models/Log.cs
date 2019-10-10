@@ -7,7 +7,7 @@ using Asset_Management_System.Models;
 
 namespace Asset_Management_System
 {
-    class Log : IUpdateObserver
+    public class Log : IUpdateObserver
     {
         public Log(long assetId,User doneBy,string description)
         {

@@ -7,7 +7,7 @@ namespace Asset_Management_System.Models
     {
         public ulong ID { get; protected set; }
 
-        public DateTime CreatedAt;
+        public DateTime CreatedAt { get; protected set; }
 
         protected List<IUpdateObserver> observers = new List<IUpdateObserver>();
         public void Attach(IUpdateObserver observer)
