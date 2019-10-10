@@ -87,33 +87,5 @@ namespace Asset_Management_System.Models
             SerializeFields();
             return true;
         }
-
-        /// <summary>
-        /// Gets checksum of all the contained fields.
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NullReferenceException"></exception>
-        public string GetChecksum()
-        {
-            string checksum = "";
-            foreach (Field field in FieldsList)
-            {
-                Dictionary<string, string> information = field.GetInformation();
-                checksum += information["Name"] + information["FieldType"] + information["Required"] +
-                            information["DefaultValue"];
-            }
-
-            using (var md5 = MD5.Create())
-            {
-                using (FileStream fs = new FileStream(checksum, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-                {
-                    var fileHash = md5.ComputeHash(fs);
-                    checksum = BitConverter.ToString(fileHash).Replace("-", "").ToLower();
-                    fs.Close();
-                }
-            }
-
-            return checksum;
-        }
     }
 }
