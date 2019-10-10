@@ -93,6 +93,13 @@
         </Style.Triggers>
 
     </Style>
+    
+    <!-- Regular button -->
+    <Style TargetType="{x:Type Button}" x:Key="RegularButton" BasedOn="{StaticResource NavigationButton}">
+        <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+        <Setter Property="Width" Value="100"/>
+
+    </Style>
 
     <!-- Window control button -->
     <Style TargetType="{x:Type Button}" x:Key="WindowControlButton" BasedOn="{StaticResource BaseStyle}">

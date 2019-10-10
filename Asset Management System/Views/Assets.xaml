@@ -3,13 +3,67 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:local="clr-namespace:Asset_Management_System"
+    xmlns:local="clr-namespace:Asset_Management_System.Views"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
     ShowsNavigationUI="False"
     Title="Assets"
-    Loaded="Page_Loaded"
 >
+    <Page.Resources>
+        <!-- Style of the page -->
+        <Style TargetType="{x:Type local:Assets}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <!-- Overrides the standard template for Page, giving a "blank slate" -->
+                    <ControlTemplate TargetType="{x:Type Page}" x:Uid="1">
+                        <Grid Margin="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="{Binding TitleHeightGridLength}"/>
+                                <RowDefinition Height="{Binding TitleHeightGridLength}"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Assets"
+                                       TextBlock.FontSize="{StaticResource FontSizeLarge}"
+                                       Padding="9"/>
+                            <Button Content="Add asset" Style="{StaticResource RegularButton}" HorizontalAlignment="Right"/>
+
+
+                            <StackPanel Grid.Row="1" Orientation="Horizontal">
+                                <TextBox VerticalAlignment="Center"
+                                         MinWidth="230"
+                                         TextBlock.FontSize="{StaticResource FontSizeRegular}"/>
+
+                                <Button Grid.Column="1"
+                                        Margin="10, 0, 0, 0"
+                                        Content="Search"
+                                        VerticalAlignment="Center"
+                                        Style="{StaticResource RegularButton}"
+                                        TextBlock.FontSize="{StaticResource FontSizeRegular}"/>
+                            </StackPanel>
+
+                            <ListView Grid.Row="2" ItemsSource="{Binding Assets}">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=DepartmentID}" Header="Department ID"/>
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description"/>
+                                    </GridView>
+                                </ListView.View>
+                                <ListView.Resources>
+                                    <Style TargetType="ListViewItem">
+                                    </Style>
+                                </ListView.Resources>
+                            </ListView>
+                            
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -26,7 +80,6 @@
             Margin="10px"
             Content="Add New Asset"
             TextBlock.FontSize="14px"
-            Click="Btn_AddNewAsset_Click"
         />
 
         <TextBox
@@ -38,7 +91,6 @@
             TextBlock.FontSize="12px"
             Margin="10, 0, 0, 0"
             Padding="2,3,2,3"
-            KeyDown="Tb_search_KeyDown"
         />
         
         <Button
@@ -51,7 +103,6 @@
             Content="Search"
             Margin="320, 0, 0, 0"
             Padding="2,3,2,3"
-            Click="Btn_search_Click"
         />
         
         <ListView Name="LV_assetList" Grid.Row="2" Margin="10,10,10,10">
@@ -65,7 +116,6 @@
             </ListView.View>
             <ListView.Resources>
                 <Style TargetType="ListViewItem">
-                    <EventSetter Event="MouseDoubleClick" Handler="Lv_mouseDoubleClick"/>
                 </Style>
             </ListView.Resources>
         </ListView>

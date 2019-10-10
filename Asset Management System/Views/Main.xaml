@@ -133,7 +133,7 @@
                                         <Border Background="{StaticResource NavigationBackgroundBrush}">
                                             <StackPanel Orientation="Vertical">
                                                 <Button Content="Home" Command="{Binding ShowHomePageCommand}" Style="{StaticResource NavigationButton}"/>
-                                                <Button Content="Assets" Command="{Binding ShowAssetPageCommand}" Style="{StaticResource NavigationButton}"/>
+                                                <Button Content="Assets" Command="{Binding ShowAssetsPageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Tags" Command="{Binding ShowTagPageCommand}" Style="{StaticResource NavigationButton}"/>
                                             </StackPanel>
                                         </Border>

@@ -15,60 +15,58 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Assets : Page
     {
-        //public static event ChangeSourceEventHandler ChangeSourceRequest;
-        private MainWindow Main;
 
-        public Assets(MainWindow main)
+        public Assets()
         {
             InitializeComponent();
-            Main = main;
+            DataContext = new ViewModels.AssetsViewModel();
         }
 
-        private void Btn_AddNewAsset_Click(object sender, RoutedEventArgs e)
-        { 
-            Main.ChangeSourceRequest(new NewAsset(Main));
-        }
+        //private void Btn_AddNewAsset_Click(object sender, RoutedEventArgs e)
+        //{ 
+        //    Main.ChangeSourceRequest(new NewAsset(Main));
+        //}
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Load assets from database
-            AssetRepository rep = new AssetRepository();
-            List<Asset> assets = rep.Search("");
-            LV_assetList.ItemsSource = assets;
-        }
+        //private void Page_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    // Load assets from database
+        //    AssetRepository rep = new AssetRepository();
+        //    List<Asset> assets = rep.Search("");
+        //    LV_assetList.ItemsSource = assets;
+        //}
 
-        private void Btn_search_Click(object sender, RoutedEventArgs e)
-        {
-            Console.WriteLine();
-            Console.WriteLine("Searching for: "+Tb_search.Text);
-            AssetRepository rep = new AssetRepository();
-            List<Asset> assets = rep.Search(Tb_search.Text);
+        //private void Btn_search_Click(object sender, RoutedEventArgs e)
+        //{
+        //    Console.WriteLine();
+        //    Console.WriteLine("Searching for: "+Tb_search.Text);
+        //    AssetRepository rep = new AssetRepository();
+        //    List<Asset> assets = rep.Search(Tb_search.Text);
 
-            Console.WriteLine("Found: "+assets.Count.ToString());
+        //    Console.WriteLine("Found: "+assets.Count.ToString());
 
-            if(assets.Count > 0)
-            {
-                Console.WriteLine("-----------");
-            }
+        //    if(assets.Count > 0)
+        //    {
+        //        Console.WriteLine("-----------");
+        //    }
             
-            foreach(Asset asset in assets){
-                Console.WriteLine(asset.Name);
-            }
+        //    foreach(Asset asset in assets){
+        //        Console.WriteLine(asset.Name);
+        //    }
 
-            LV_assetList.ItemsSource = assets;
-        }
+        //    LV_assetList.ItemsSource = assets;
+        //}
 
-        private void Lv_mouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Asset selectedAsset = LV_assetList.SelectedItem as Asset;
-            Console.WriteLine(selectedAsset.Name);
+        //private void Lv_mouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        //{
+        //    Asset selectedAsset = LV_assetList.SelectedItem as Asset;
+        //    Console.WriteLine(selectedAsset.Name);
 
-        }
+        //}
 
-        private void Tb_search_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                Btn_search_Click(sender, new RoutedEventArgs());
-        }
+        //private void Tb_search_KeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if (e.Key == Key.Enter)
+        //        Btn_search_Click(sender, new RoutedEventArgs());
+        //}
     }
 }

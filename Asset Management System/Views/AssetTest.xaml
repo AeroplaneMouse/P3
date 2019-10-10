@@ -8,7 +8,28 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AssetTest">
 
+    <Page.Resources>
+        <!-- Style of the page -->
+        <Style TargetType="{x:Type local:Main}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <!-- Overrides the standard template for Page, giving a "blank slate" -->
+                    <ControlTemplate TargetType="{x:Type Page}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                            </Grid.RowDefinitions>
+                            
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    
+    
+    
     <Grid>
         <Label TextBlock.FontSize="40">Asset test</Label>
+        
     </Grid>
 </Page>

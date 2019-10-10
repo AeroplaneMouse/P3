@@ -21,7 +21,7 @@ namespace Asset_Management_System.Views
         public AssetTest()
         {
             InitializeComponent();
-            DataContext = new ViewModels.AssetViewModel();
+            DataContext = new ViewModels.AssetsViewModel();
         }
     }
 }

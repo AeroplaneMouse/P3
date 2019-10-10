@@ -1,5 +1,4 @@
 using System;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Collections.Generic;
@@ -98,7 +97,7 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand ShowHomePageCommand { get; set; }
 
-        public ICommand ShowAssetPageCommand { get; set; }
+        public ICommand ShowAssetsPageCommand { get; set; }
 
         public ICommand ShowTagPageCommand { get; set; }
 
@@ -153,7 +152,7 @@ namespace Asset_Management_System.ViewModels
             ShowWindow = new Base.RelayCommand(() => MessageBox.Show("Hey!"));
 
             ShowHomePageCommand = new Commands.ShowHomePageCommand(this);
-            ShowAssetPageCommand = new Commands.ShowAssetPageCommand(this);
+            ShowAssetsPageCommand = new Base.RelayCommand(() => FrameMainContent.Content = new Views.Assets());
             ShowTagPageCommand = new Commands.ShowTagPageCommand(this);
 
             // Fixes window sizing issues at maximized
