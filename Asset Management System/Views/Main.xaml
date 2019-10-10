@@ -54,9 +54,24 @@
                                         </Button>
 
                                         <!-- Menu bar -->
+                                        <Menu Grid.Column="1" Background="Transparent" >
+                                            <MenuItem Style="{StaticResource MenuItemButton}" Header="_Settings">
+                                                <MenuItem Background="{StaticResource BackgroundDarkBrush}" Header="_Save"/>
+                                                <MenuItem Header="_Load"/>
+                                                <MenuItem Header="_Clear"/>
+                                            </MenuItem>
+                                            <MenuItem Style="{StaticResource MenuItemButton}" Header="_Help">
+                                                <MenuItem Header="_About"/>
+                                                <MenuItem Header="_Exit"/>
+                                            </MenuItem>
+                                        </Menu>
+                                        <!-- 
                                         <StackPanel Orientation="Horizontal"
                                                     Grid.Column="1">
                                             
+                                                
+                                            </Menu>
+
                                             <Button Content="Settings"
                                                     Style="{StaticResource MenuButton}"
                                                     Command="{Binding ShowWindow}"/>
@@ -64,11 +79,22 @@
                                             <Button Content="Help"
                                                     Style="{StaticResource MenuButton}"/>
                                         </StackPanel>
+                                        -->
 
                                         <!-- Window buttons -->
                                         <StackPanel Grid.Column="2"
                                                     Orientation="Horizontal">
 
+                                            <Menu IsHitTestVisible="True" Margin="0, 0, 20, 0" WindowChrome.IsHitTestVisibleInChrome="True">
+                                                <MenuItem Header="{Binding CurrentDepartment}" ItemsSource="{Binding Departments}"/>
+                                            </Menu>
+                                            
+                                            <TextBlock Text="{Binding CurrentUser}"
+                                                       Foreground="White"
+                                                       TextBlock.FontSize="{StaticResource FontSizeRegular}"
+                                                       TextBlock.FontFamily="{StaticResource SegoeRegular}"
+                                                       Margin="0, 0, 20, 0"/>
+                                            
                                             <Button Content="-" Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}"/>
                                             <Button Content="[ ]" Command="{Binding MaximizeCommand}" Style="{StaticResource WindowControlButton}"/>
                                             <Button Content="X" Command="{Binding CloseCommand}" Style="{StaticResource WindowCloseButton}"/>
@@ -78,20 +104,20 @@
                                     </Grid>
                                     
                                     <!-- Navigation content -->
+                                    <!-- 
                                     <Grid Grid.Row="1" Background="{StaticResource BackgroundDarkBrush}">
                                         <StackPanel Orientation="Horizontal"
                                                     HorizontalAlignment="Right"
                                                     Margin="10, 0, 10, 0">
                                             <StackPanel>
-                                                <TextBlock Text="{Binding CurrentUser}"
-                                                           Foreground="White"
-                                                           TextBlock.FontSize="{StaticResource FontSizeRegular}"
-                                                           TextBlock.FontFamily="{StaticResource SegoeRegular}"></TextBlock>
+                                                
+                                                
                                                 <Button Content="{Binding CurrentDepartment.Name}" Style="{StaticResource MenuButton}"/>
                                             </StackPanel>
                                             
                                         </StackPanel>
                                     </Grid>
+                                    -->
                                     
                                     <!-- Window content -->
                                     <Grid Grid.Row="2" Background="{StaticResource BackgroundLightBrush}">

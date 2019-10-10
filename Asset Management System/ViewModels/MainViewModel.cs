@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Controls;
 using Asset_Management_System.Models;
 using Asset_Management_System.Authentication;
+using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -79,6 +80,8 @@ namespace Asset_Management_System.ViewModels
 
         public Frame FrameMainContent { get; set; }
 
+        public List<Department> Departments { get; set; }
+
         #endregion
 
         #region Commands
@@ -133,8 +136,12 @@ namespace Asset_Management_System.ViewModels
                 //OnPropertyChanged(nameof(WindowCornerRadius));
             };
 
+            //Departments = new List<Departments>();
+            Departments = GetDepartments();
+
             CurrentUser = new Session().Username;
             CurrentDepartment = new Department("Test");
+
 
             //// Setting up frames
             FrameMainContent = new Frame();
@@ -154,6 +161,16 @@ namespace Asset_Management_System.ViewModels
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
+        }
+
+        private List<Department> GetDepartments()
+        {
+            List<Department> departments = new List<Department>();
+
+            DepartmentRepository rep = new DepartmentRepository();
+            departments = rep.GetAll();
+
+            return departments;
         }
 
         #endregion
