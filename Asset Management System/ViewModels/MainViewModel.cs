@@ -80,7 +80,7 @@ namespace Asset_Management_System.ViewModels
 
         public Frame FrameMainContent { get; set; }
 
-        public List<Department> Departments { get; set; }
+        public List<Department> Departments { get => GetDepartments(); } 
 
         #endregion
 
@@ -136,12 +136,9 @@ namespace Asset_Management_System.ViewModels
                 //OnPropertyChanged(nameof(WindowCornerRadius));
             };
 
-            //Departments = new List<Departments>();
-            Departments = GetDepartments();
-
             CurrentUser = new Session().Username;
-            CurrentDepartment = new Department("Test");
-
+            if (Departments.Count > 0)
+                CurrentDepartment = Departments[0];
 
             //// Setting up frames
             FrameMainContent = new Frame();

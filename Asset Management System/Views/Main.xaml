@@ -54,15 +54,15 @@
                                         </Button>
 
                                         <!-- Menu bar -->
-                                        <Menu Grid.Column="1" Background="Transparent" >
-                                            <MenuItem Style="{StaticResource MenuItemButton}" Header="_Settings">
-                                                <MenuItem Background="{StaticResource BackgroundDarkBrush}" Header="_Save"/>
-                                                <MenuItem Header="_Load"/>
-                                                <MenuItem Header="_Clear"/>
+                                        <Menu Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource Menu}">
+                                            <MenuItem Header="_Settings" Style="{StaticResource MenuItem}">
+                                                <MenuItem Header="_Save" Style="{StaticResource MenuItem}"/>
+                                                <MenuItem Header="_Load" Style="{StaticResource MenuItem}"/>
+                                                <MenuItem Header="_Clear" Style="{StaticResource MenuItem}"/>
                                             </MenuItem>
-                                            <MenuItem Style="{StaticResource MenuItemButton}" Header="_Help">
-                                                <MenuItem Header="_About"/>
-                                                <MenuItem Header="_Exit"/>
+                                            <MenuItem Header="_Help" Style="{StaticResource MenuItem}">
+                                                <MenuItem Header="_About" Style="{StaticResource MenuItem}"/>
+                                                <MenuItem Header="_Exit" Style="{StaticResource MenuItem}"/>
                                             </MenuItem>
                                         </Menu>
                                         <!-- 
@@ -85,15 +85,19 @@
                                         <StackPanel Grid.Column="2"
                                                     Orientation="Horizontal">
 
-                                            <Menu IsHitTestVisible="True" Margin="0, 0, 20, 0" WindowChrome.IsHitTestVisibleInChrome="True">
-                                                <MenuItem Header="{Binding CurrentDepartment}" ItemsSource="{Binding Departments}"/>
+                                            <Menu Style="{StaticResource Menu}">
+                                                <MenuItem Header="{Binding CurrentDepartment}" 
+                                                          ItemsSource="{Binding Departments}" 
+                                                          Style="{StaticResource menuParentStyle}">
+                                                </MenuItem>
                                             </Menu>
                                             
                                             <TextBlock Text="{Binding CurrentUser}"
                                                        Foreground="White"
                                                        TextBlock.FontSize="{StaticResource FontSizeRegular}"
                                                        TextBlock.FontFamily="{StaticResource SegoeRegular}"
-                                                       Margin="0, 0, 20, 0"/>
+                                                       VerticalAlignment="Center"
+                                                       Margin="15, 0, 15, 0"/>
                                             
                                             <Button Content="-" Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}"/>
                                             <Button Content="[ ]" Command="{Binding MaximizeCommand}" Style="{StaticResource WindowControlButton}"/>
