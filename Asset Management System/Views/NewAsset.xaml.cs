@@ -93,7 +93,7 @@ namespace Asset_Management_System.Views
             foreach (var test in FieldsList)
             {
 
-                Console.WriteLine(test.id + " | " + test.Label + " | " + test.Content);
+                Console.WriteLine(test.ID + " | " + test.Label + " | " + test.Content);
                 
 
 
@@ -137,7 +137,7 @@ namespace Asset_Management_System.Views
             Console.WriteLine("ID |Field name | Content of the field");
             foreach (var test in FieldsList)
             {
-                Console.WriteLine(test.id + " | " +test.Label + "|" + test.Content);
+                Console.WriteLine(test.ID + " | " +test.Label + "|" + test.Content);
                 
             }
 

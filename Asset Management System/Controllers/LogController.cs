@@ -14,7 +14,7 @@ namespace Asset_Management_System.Controllers
         {
             Session session = new Session();
             string description = GenerateDescription(Subject, session);
-            Log logEntry = new Log(Subject.ID, session, description);
+            //Log logEntry = new Log(Subject.ID, session, description);
         }
 
         /// <summary>
