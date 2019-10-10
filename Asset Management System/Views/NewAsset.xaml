@@ -116,7 +116,7 @@
             Grid.Row="1"
             Grid.Column="0"
             Margin="10">
-            <Label>Name</Label>
+            <Label>Label</Label>
             <TextBox Name="TbName" />
 
             <Label>Department</Label>
