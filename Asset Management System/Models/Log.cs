@@ -7,7 +7,7 @@ using Asset_Management_System.Models;
 
 namespace Asset_Management_System
 {
-    public class Log : IUpdateObserver
+    public class Log
     {
         /// <summary>
         /// Default constructor for initiating a new Log object.
@@ -15,7 +15,7 @@ namespace Asset_Management_System
         /// <param name="assetId"></param>
         /// <param name="doneBy"></param>
         /// <param name="description"></param>
-        public Log(ulong assetId,Session doneBy,string description)
+        public Log(ulong assetId, Session doneBy,string description)
         {
             this.AssetId = assetId;
             this.DoneBy = doneBy;

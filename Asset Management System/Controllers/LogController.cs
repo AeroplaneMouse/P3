@@ -26,29 +26,26 @@ namespace Asset_Management_System.Controllers
         /// </returns>
         private string GenerateDescription(Model subject, Session session)
         {
-            string typeAndName;
+            string name;
             if (subject is Asset)
             {
-                Asset asset = (Asset) subject;
-                typeAndName = "Asset " + asset.Name;
+                name = ((Asset)subject).Name;
             }
             else if (subject is Department)
             {
-                Department department = (Department) subject;
-                typeAndName = "Department" + department.Name;
+                name = ((Department)subject).Name;
             }
             else if (subject is Tag)
             {
-                Tag tag = (Tag) subject;
-                typeAndName =  "Tag" + tag.Label;
+                name = ((Tag)subject).Label;
             }
             else
             {
-                typeAndName = "Unknown subject";
+                name = "Unknown subject";
             }
 
             string type = subject.GetType().ToString();
-            return typeAndName + " was changed by " + session.Username;;
+            return $"{type} {name} was changed by {session.Username}";;
         }
     }
 }

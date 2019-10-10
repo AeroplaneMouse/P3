@@ -10,7 +10,7 @@ using System.Collections;
 
 namespace Asset_Management_System.Authentication
 {
-    class Session
+    public class Session
     {
         public readonly String Username;
         public readonly String Domain;
