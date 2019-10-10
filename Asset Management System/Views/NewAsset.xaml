@@ -120,6 +120,7 @@
             <Label>Name</Label>
             <TextBox Name="TbName" Padding="10"/>
 
+
             <Label>Department</Label>
             <TextBox Name="TbDepartment" Padding="10"/>
 

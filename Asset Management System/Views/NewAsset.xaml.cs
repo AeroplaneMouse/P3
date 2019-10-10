@@ -92,7 +92,11 @@ namespace Asset_Management_System.Views
             Console.WriteLine("ID  |   Field name   |   Content of the field");
             foreach (var test in FieldsList)
             {
-                Console.WriteLine(test.ID + "  |  " + test.Name + "  |  " + test.Content);
+
+                Console.WriteLine(test.id + " | " + test.Label + " | " + test.Content);
+                
+
+
             }
 
             Console.WriteLine("---------------------------------------");
@@ -130,10 +134,11 @@ namespace Asset_Management_System.Views
             FieldsList.Remove((sender as FrameworkElement).DataContext as Field);
             Console.WriteLine("List of the current fields after removing the field:");
             Console.WriteLine("---------------------------------------");
-            Console.WriteLine("Field name | Content of the field");
+            Console.WriteLine("ID |Field name | Content of the field");
             foreach (var test in FieldsList)
             {
-                Console.WriteLine(test.Name + "|" + test.Content);
+                Console.WriteLine(test.id + " | " +test.Label + "|" + test.Content);
+                
             }
 
             Console.WriteLine("---------------------------------------");

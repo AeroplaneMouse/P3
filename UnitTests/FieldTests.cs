@@ -10,20 +10,66 @@ namespace UnitTests
     public class FieldTests
     {
         [TestMethod]
+        public void Field_ConstructorReceivesFieldType20_ThrowsOutOfRangeException()
+        {
+            //Arrange
+            string label = "Label", content = "Content", defaultValue = "Default Value";
+            int id = 1, fieldType = 20;
+
+            string expectedMessage = "fieldType is out of range. Must be an integer between 1-5 (both included) (Parameter 'fieldType')";
+
+            //Act
+            try
+            {
+                Field field = new Field(id, label, content, fieldType, defaultValue);
+                //Assert
+                Assert.Fail();
+            }
+            catch (System.ArgumentOutOfRangeException e)
+            {
+                //Assert
+                Assert.AreEqual(expectedMessage, e.Message);
+            }
+        }
+
+        [TestMethod]
+        public void Field_ConstructorReceivesFieldType0_ThrowsOutOfRangeException()
+        {
+            //Arrange
+            string label = "Label", content = "Content", defaultValue = "Default Value";
+            int id = 1, fieldType = 0;
+
+            string expectedMessage = "fieldType is out of range. Must be an integer between 1-5 (both included) (Parameter 'fieldType')";
+
+            //Act
+            try
+            {
+                Field field = new Field(id, label, content, fieldType, defaultValue);
+                //Assert
+                Assert.Fail();
+            }
+            catch (System.ArgumentOutOfRangeException e)
+            {
+                //Assert
+                Assert.AreEqual(expectedMessage, e.Message);
+            }
+        }
+
+        [TestMethod]
         public void Field_GetInformation_ReturnsDictionaryWithInformation()
         {
             //Arrange
-            string name = "Name", content = "Content", defaultValue = "Default Value";
+            string label = "Label", content = "Content", defaultValue = "Default Value";
             int id = 1, fieldType = 1;
 
 
-            Field field = new Field(id, name, content, fieldType, defaultValue);
+            Field field = new Field(id, label, content, fieldType, defaultValue);
             Dictionary<string, string> expected = new Dictionary<string, string>
             {
-                { "Name", name },
+                { "Label", label },
                 { "Description", content },
                 { "Required", false.ToString() },
-                { "FieldType", "TextBox" },
+                { "FieldType", 1.ToString() },
                 { "DefaultValue", defaultValue }
             };
 
@@ -32,20 +78,20 @@ namespace UnitTests
 
             //Assert
             Assert.AreEqual(ToAssertableString(expected), ToAssertableString(result));
-        }
 
-        private string ToAssertableString(IDictionary<string, string> dictionary)
-        {
-            var pairStrings = dictionary.OrderBy(p => p.Key)
-                                        .Select(p => p.Key + ": " + string.Join(", ", p.Value));
-            return string.Join("; ", pairStrings);
+            string ToAssertableString(IDictionary<string, string> dictionary)
+            {
+                var pairStrings = dictionary.OrderBy(p => p.Key)
+                                            .Select(p => p.Key + ": " + string.Join(", ", p.Value));
+                return string.Join("; ", pairStrings);
+            }
         }
 
         [TestMethod]
-        public void Field_GetContent_ReturnsContentAsString()
+        public void Field_ContentGetter_ReturnsContentAsString()
         {
             //Arrange
-            string name = "Name", content = "Content", defaultValue = "Default Value";
+            string name = "Label", content = "Content", defaultValue = "Default Value";
             int id = 1, fieldType = 1;
 
 
@@ -53,17 +99,17 @@ namespace UnitTests
             string expected = "Content";
 
             //Act
-            string result = field.GetContent();
+            string result = field.Content;
 
             //Assert
             Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
-        public void Field_UpdateContentReceivesString_UpdatesContentToInputString()
+        public void Field_ContentSetterReceivesString_SetsContentToInputString()
         {
             //Arrange
-            string name = "Name", content = "Content", defaultValue = "Default Value";
+            string name = "Label", content = "Content", defaultValue = "Default Value";
             int id = 1, fieldType = 1;
 
 
@@ -71,34 +117,26 @@ namespace UnitTests
             string expected = "New content";
 
             //Act
-            field.UpdateContent(expected);
-            string result = field.GetContent();
+            field.Content = expected;
+            string result = field.Content;
 
             //Assert
             Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
-        public void Field_ConstructorReceivesFieldTypeOutOfRange_ThrowsOutOfRangeException()
+        public void Field_Checksum_ReturnsCorrectChecksumForField()
         {
             //Arrange
-            string name = "Name", content = "Content", defaultValue = "Default Value";
-            int id = 1, fieldType = 20;
-
-            string expectedMessage = "fieldType is out of range. Must be an integer between 1-5 (both included) (Parameter 'fieldType')";
+            Field field = new Field(1, "Field", "Some content", 2, "Default");
+            string expected = "EE42E2903EDB29CA88A78F4AA413B8D6";
 
             //Act
-            try
-            {
-                Field field = new Field(id, name, content, fieldType, defaultValue);
-                //Assert
-                Assert.Fail();
-            }
-            catch(System.ArgumentOutOfRangeException e)
-            {
-                //Assert
-                Assert.AreEqual(expectedMessage, e.Message);
-            }
+            string result = field.GetChecksum();
+
+            //Assert
+            Assert.AreEqual(expected, result);
         }
+
     }
 }
