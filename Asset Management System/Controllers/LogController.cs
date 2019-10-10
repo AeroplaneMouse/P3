@@ -1,4 +1,5 @@
-﻿using Asset_Management_System.Authentication;
+﻿using System;
+using Asset_Management_System.Authentication;
 using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Controllers
@@ -27,25 +28,29 @@ namespace Asset_Management_System.Controllers
         private string GenerateDescription(Model subject, Session session)
         {
             string name;
-            if (subject is Asset)
+            if (subject.GetType().GetProperty("Name") != null)
             {
-                name = ((Asset)subject).Name;
+                name = subject.GetType().GetProperty("Name").Name;
             }
-            else if (subject is Department)
+            else if (subject.GetType().GetProperty("Label") != null)
             {
-                name = ((Department)subject).Name;
-            }
-            else if (subject is Tag)
-            {
-                name = ((Tag)subject).Label;
+                name = subject.GetType().GetProperty("Label").Name;
             }
             else
             {
-                name = "Unknown subject";
+                // If the subject has no name, leave it blank.
+                name = "";
             }
-
             string type = subject.GetType().ToString();
-            return $"{type} {name} was changed by {session.Username}";;
+            
+            string changeType = subject.ID == 0 ? "created" : "updated";
+            
+            return $"{type} {name} was {changeType} by {session.Username}";;
+        }
+
+        private void GetPreviousValue(Model subject)
+        {
+            
         }
     }
 }
