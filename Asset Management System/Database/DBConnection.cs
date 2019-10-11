@@ -14,10 +14,8 @@ namespace Asset_Management_System.Database
 
         private DBConnection()
         {
-            connectionString = "Server=192.38.49.9; database=ds303e19_test; UID=ds303e19; password=Cisptf8CuT4hLj4T; Pooling=true; Min Pool Size=0; Max Pool Size=100; Connection Lifetime=0";
         }
 
-        static string connectionString;
         private string databaseName = string.Empty;
         public string DatabaseName
         {
@@ -46,7 +44,8 @@ namespace Asset_Management_System.Database
             {
                 if (Connection == null)
                 {
-                    connection = new MySqlConnection(connectionString);
+                    string connstring = "Server=192.38.49.9; database=ds303e19_test; UID=ds303e19; password=Cisptf8CuT4hLj4T; Pooling=true; Min Pool Size=0; Max Pool Size=100; Connection Lifetime=0";
+                    connection = new MySqlConnection(connstring);
                     connection.Open();
                 }
                 return true;

@@ -9,7 +9,7 @@ namespace UnitTests
     [TestClass]
     public class AssetRepositoryTests
     {
-        public AssetRepository assetRepository;
+        /*public AssetRepository assetRepository;
         public Asset asset;
 
         [TestInitialize]
@@ -23,21 +23,27 @@ namespace UnitTests
             this.asset.AddField(new Field(1, "Label of first field", "content of first field", 2, "Default value of first field"));
             this.asset.AddField(new Field(2, "Label of second field", "content of second field", 4, "Default value of second field"));
         }
-
+        */
         [TestMethod]
         public void AssetRepository_Insert_ReturnsTrueAsAssetIsInserted()
         {
             //Arrange
-            
+            AssetRepository assetRepository = new AssetRepository();
+            Asset asset = new Asset();
+            asset.Name = "Integrationtest";
+            asset.Description = "Desription";
+            asset.DepartmentID = 1;
+            asset.AddField(new Field(1, "Label of first field", "content of first field", 2, "Default value of first field"));
+            asset.AddField(new Field(2, "Label of second field", "content of second field", 4, "Default value of second field"));
 
             //Act
-            bool result = this.assetRepository.Insert(asset);
+            bool result = assetRepository.Insert(asset);
 
             //Assert
             Assert.IsTrue(result);
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void AssetRepository_Update_ReturnsTrueAsAssertIsUpdated()
         {
             //Arrange
@@ -50,13 +56,14 @@ namespace UnitTests
             bool result = this.assetRepository.Update(assetToUpdate);
 
             //Assert
-            Assert.IsTrue(result);
+            Assert.IsTrue(condition: result);
         }
-
+        
         [TestCleanup]
         public void DeleteAssetsFromRepository()
         {
             this.assetRepository.Delete(asset);
         }
+        */
     }
 }
