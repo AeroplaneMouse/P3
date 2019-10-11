@@ -6,6 +6,7 @@ using Asset_Management_System.Database.Repositories;
 using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Media;
+using Asset_Management_System.Events;
 
 namespace Asset_Management_System.Views
 {

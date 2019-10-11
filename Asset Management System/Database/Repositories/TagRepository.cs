@@ -153,7 +153,7 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Tag GetById(long id)
+        public Tag GetById(ulong id)
         {
             Tag tag = null;
 

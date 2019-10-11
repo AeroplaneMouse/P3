@@ -122,7 +122,7 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Department GetById(long id)
+        public Department GetById(ulong id)
         {
             Department department = null;
 

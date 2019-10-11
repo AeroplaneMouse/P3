@@ -127,7 +127,7 @@ namespace Asset_Management_System.Database.Repositories
             return query_success;
         }
 
-        public Asset GetById(long id)
+        public Asset GetById(ulong id)
         {
             Asset asset = null;
 
