@@ -120,10 +120,6 @@
             <Label>Name</Label>
             <TextBox Name="TbName" Padding="10" />
 
-
-            <Label>Department</Label>
-            <TextBox Name="TbDepartment" Padding="10" />
-
             <Label>Description</Label>
             <TextBox Name="TbDescription" Padding="10" />
             <Button HorizontalAlignment="Left" Click="OnAddField" Margin="10" Name="AddTextField">Add TextField</Button>

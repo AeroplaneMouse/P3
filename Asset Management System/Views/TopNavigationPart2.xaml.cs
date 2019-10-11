@@ -30,6 +30,9 @@ namespace Asset_Management_System.Views
             Main = main;
             Session session = new Session();
             LblCurrentUser.Content = session.Username;
+            if(new DepartmentRepository().GetAll().Count > 0)
+                SelectedDepartment = new DepartmentRepository().GetAll()[0];
+            BtnShowDepartments.Content = SelectedDepartment;
         }
 
         private void ChangeDepartmentVisuals(string newState)
