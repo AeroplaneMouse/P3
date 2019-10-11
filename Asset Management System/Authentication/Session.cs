@@ -26,7 +26,6 @@ namespace Asset_Management_System.Authentication
         public Boolean Validate()
         {
             // Create the new LDAP connection
-            
             LdapDirectoryIdentifier ldi = new LdapDirectoryIdentifier("192.38.49.9", 389);
             LdapConnection ldapConnection = new LdapConnection(ldi);
             Console.WriteLine("LdapConnection is created successfully.");

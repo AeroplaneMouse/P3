@@ -11,7 +11,7 @@ namespace Asset_Management_System.Views
     /// <summary>
     /// Interaction logic for Tags.xaml
     /// </summary>
-    public partial class Tags : Page
+    public partial class Tags : FieldsController
     {
         private MainWindow Main;
         public Tags(MainWindow main)
