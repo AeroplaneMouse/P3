@@ -22,7 +22,7 @@ namespace Asset_Management_System.Views
         private const string Expand = "Expand";
         private const string Collapse = "Collapse";
         private MainWindow Main;
-        private Department SelectedDepartment;
+        public Department SelectedDepartment { get; private set; }
 
         public TopNavigationPart2(MainWindow main)
         {
