@@ -10,7 +10,6 @@ namespace Asset_Management_System.Models
         {
             CreatedAt = DateTime.Now;
             FieldsList = new List<Field>();
-            this.SavePrevValues();
         }
 
         private Asset(ulong id, string name, string description, ulong department_id)
