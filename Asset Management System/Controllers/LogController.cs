@@ -46,7 +46,7 @@ namespace Asset_Management_System.Controllers
             string type = subject.GetType().ToString();
             // Determine if subjec is being created or updated
             string changeType = subject.ID == 0 ? "created" : "updated";
-            
+
             return $"{type} {name} was {changeType}";
         }
     }
