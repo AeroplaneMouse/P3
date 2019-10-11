@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:views="clr-namespace:Asset_Management_System.Views"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
@@ -100,6 +101,7 @@
         </DataTemplate>
     </Page.Resources>
 
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -120,6 +122,9 @@
             <Label>Name</Label>
             <TextBox Name="TbName" Padding="10" />
 
+            <Label>Color of the tag:</Label>
+            <xctk:ColorPicker Name="ColorPicker" SelectedColorChanged="ColorPickerColorChanged"></xctk:ColorPicker>
+            <TextBox Name="Color" Padding="10"/>
 
             <Label>Department</Label>
             <TextBox Name="TbDepartment" Padding="10" />

@@ -56,7 +56,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-
+                    Console.WriteLine(e);
                 }
                 finally
                 {

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
-using Asset_Management_System.Database;
-using Asset_Management_System.Events;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using System.Collections.Generic;
@@ -62,7 +60,7 @@ namespace Asset_Management_System.Views
         private void Lv_mouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Asset selectedAsset = LV_assetList.SelectedItem as Asset;
-            Console.WriteLine(selectedAsset.Name);
+            Console.WriteLine(selectedAsset?.Name);
         }
 
         private void Tb_search_KeyDown(object sender, KeyEventArgs e)
