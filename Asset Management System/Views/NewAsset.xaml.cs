@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Asset_Management_System.Controllers;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
+using System.Windows.Media;
 
 namespace Asset_Management_System.Views
 {
@@ -14,6 +15,7 @@ namespace Asset_Management_System.Views
         private MainWindow Main;
 
         readonly Asset _asset = new Asset();
+
         public NewAsset(MainWindow main)
         {
             InitializeComponent();
@@ -23,7 +25,8 @@ namespace Asset_Management_System.Views
 
         private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            _asset.Name = TbName.Text;;
+            _asset.Name = TbName.Text;
+            ;
             _asset.Description = TbDescription.Text;
             foreach (var field in FieldsList)
             {
@@ -32,19 +35,23 @@ namespace Asset_Management_System.Views
             }
 
             _asset.SerializeFields();
-            Department department = Main.topNavigationPage.BtnShowDepartments.Content as Department;
+            Department department = Main.topNavigationPage.SelectedDepartment;
             if (department != null)
+            {
                 _asset.DepartmentID = department.ID;
+                // Creates a log entry, currently uses for testing.
+                LogController logController = new LogController();
+                _asset.Attach(logController);
+                _asset.Notify();
+                AssetRepository rep = new AssetRepository();
+                rep.Insert(_asset);
+                Main.ChangeSourceRequest(new Assets(Main));
+            }
             else
-                Console.WriteLine("ERROR! Department not found.");
-
-            // Creates a log entry, currently uses for testing.
-            LogController logController = new LogController();
-            _asset.Attach(logController);
-            _asset.Notify();
-            AssetRepository rep = new AssetRepository();
-            rep.Insert(_asset);
-            Main.ChangeSourceRequest(new Assets(Main));
+            {
+                string message = $"ERROR! No department set. Please create a department to attach the asset to.";
+                Main.ShowNotification(sender, new Events.NotificationEventArgs(message, Brushes.Red));
+            }
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters["@description"].Value = entity.Description;
 
                         cmd.Parameters.Add("@department", MySqlDbType.UInt64);
-                        cmd.Parameters["@department"].Value = 1;
+                        cmd.Parameters["@department"].Value = entity.DepartmentID;
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
                         cmd.Parameters["@options"].Value = entity.SerializedFields;

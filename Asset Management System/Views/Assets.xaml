@@ -68,6 +68,7 @@
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name"/>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=DepartmentID}" Header="Department ID"/>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=CreatedAt}" Header="Created"/>
                 </GridView>
             </ListView.View>
             <!--<ListView.Resources>

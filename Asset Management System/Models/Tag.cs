@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Asset_Management_System.Models
 {
@@ -10,20 +11,14 @@ namespace Asset_Management_System.Models
         }
 
         /*Constructor used by DB*/
-        private Tag(ulong id, string label, ulong department_id, ulong parent_id, DateTime created_at)
+        private Tag(ulong id, string label, ulong department_id, ulong parent_id, string color, DateTime created_at)
         {
             ID = id;
             Label = label;
             DepartmentID = department_id;
             FieldsList = new List<Field>();
             ParentID = parent_id;
-            CreatedAt = created_at;
-            
-            // Saves the value of the properties to detect changes
-            if (id != 0)
-            {
-                SavePrevValues(); 
-            }
+            Color = color;
         }
 
         public string Label { get; set; }

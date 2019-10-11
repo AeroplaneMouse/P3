@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Views
@@ -96,6 +98,12 @@ namespace Asset_Management_System.Views
 
             Console.WriteLine("---------------------------------------");
         }
+
+        public void NumberVerification(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
     }
 
     public class FieldDesignSelector : DataTemplateSelector
@@ -104,18 +112,18 @@ namespace Asset_Management_System.Views
         {
             FrameworkElement element = container as FrameworkElement;
             Field field = item as Field;
-            switch (field.FieldType)
+            switch (field?.FieldType)
             {
                 case 1: // Textbox
-                    return element.FindResource("TextBoxFieldStyle") as DataTemplate;
+                    return element?.FindResource("TextBoxFieldStyle") as DataTemplate;
                 case 2: // String
-                    return element.FindResource("StringFieldStyle") as DataTemplate;
+                    return element?.FindResource("StringFieldStyle") as DataTemplate;
                 case 3: // Integer
-                    return element.FindResource("IntegerFieldStyle") as DataTemplate;
+                    return element?.FindResource("IntegerFieldStyle") as DataTemplate;
                 case 4: // Date
-                    return element.FindResource("DateFieldStyle") as DataTemplate;
+                    return element?.FindResource("DateFieldStyle") as DataTemplate;
                 case 5: // Boolean
-                    return element.FindResource("BooleanFieldStyle") as DataTemplate;
+                    return element?.FindResource("BooleanFieldStyle") as DataTemplate;
                 default:
                     throw new NotSupportedException("Wrong formatting syntax.");
             }

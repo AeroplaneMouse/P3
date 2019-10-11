@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Windows.Documents;
+using Google.Protobuf.WellKnownTypes;
 using Newtonsoft.Json;
+using Type = System.Type;
 
 namespace Asset_Management_System.Models
 {
@@ -59,17 +62,19 @@ namespace Asset_Management_System.Models
 
         /// <summary>
         /// Saves all properties in a dictionary.
+        /// Used for comparison when object is changed.
         /// </summary>
-        protected void SavePrevValues()
+        public void SavePrevValues()
         {
-            // Saves values for comparison when object is changed.
-            var props = this.GetType().GetProperties();
+            Type objectType = this.GetType();
+            PropertyInfo[] props = objectType.GetProperties();
+            
             foreach (var prop in props)
             {
                 string key = prop.Name;
-                Console.WriteLine("Value " + key + " was saved");
-                string value = prop.ToString();
+                string value = objectType.GetProperty(key).GetValue(this, null).ToString();
                 prevValues.Add(key, value);
+                Console.WriteLine("Field " + key + " was saved with value: " + value);
             }
         }
 
@@ -81,13 +86,14 @@ namespace Asset_Management_System.Models
         public string GetChanges()
         {
             List<Tuple<string, string, string>> changes = new List<Tuple<string, string, string>>();
-            var props = this.GetType().GetProperties();
+            Type objectType = this.GetType();
+            PropertyInfo[] props = objectType.GetProperties();
             foreach (var prop in props)
             {
                 string key = prop.Name;
                 Console.WriteLine("Key is: " + key);
                 //string newValue = prop.GetValue(this.GetType()).ToString();
-                string newValue = prop.ToString();
+                string newValue = objectType.GetProperty(key).GetValue(this, null).ToString();
                 string oldValue = prevValues[key];
                 if (oldValue != newValue)
                 {

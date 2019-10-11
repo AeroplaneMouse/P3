@@ -61,7 +61,7 @@
                 </Grid.RowDefinitions>
                 <Button Grid.Row="1" Grid.Column="0" Click="OnDeleteField" Name="DeleteIntegerField">X</Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Insert an integer" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" PreviewTextInput="NumberVerification"/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="DateFieldStyle">

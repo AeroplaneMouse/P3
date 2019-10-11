@@ -14,6 +14,7 @@ namespace Asset_Management_System.Controllers
         public void Update(Model Subject)
         {
             string description = GenerateDescription(Subject);
+            Subject.SavePrevValues();
             string changes = Subject.GetChanges();
             Log.Write(Subject, description, changes);
             Console.WriteLine("Creating log entry: " + description);

@@ -14,7 +14,8 @@ namespace Asset_Management_System.Database.Repositories
     {
         private DBConnection dbcon;
 
-        public TagRepository(){ 
+        public TagRepository()
+        {
             this.dbcon = DBConnection.Instance();
         }
 
@@ -56,7 +57,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -101,7 +102,6 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-
                 }
                 finally
                 {
@@ -137,7 +137,6 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-
                 }
                 finally
                 {
@@ -174,9 +173,11 @@ namespace Asset_Management_System.Database.Repositories
                         }
                     }
                 }
-                catch(MySqlException e){ 
-                
-                }finally{
+                catch (MySqlException e)
+                {
+                }
+                finally
+                {
                     dbcon.Close();
                 }
             }
@@ -224,7 +225,6 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-
                 }
                 finally
                 {
@@ -265,9 +265,12 @@ namespace Asset_Management_System.Database.Repositories
                             }
                         }
                     }
-                }catch(MySqlException e){ 
-                
-                }finally{
+                }
+                catch (MySqlException e)
+                {
+                }
+                finally
+                {
                     dbcon.Close();
                 }
             }
@@ -286,11 +289,11 @@ namespace Asset_Management_System.Database.Repositories
             String row_label = reader.GetString("label");
             ulong row_parent_id = reader.GetUInt64("parent_id");
             ulong row_department_id = reader.GetUInt64("department_id");
+            string row_color = reader.GetString("color");
             DateTime row_created_at = reader.GetDateTime("created_at");
 
             return (Tag)Activator.CreateInstance(typeof(Tag), 
                 BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { row_id, row_label, row_department_id, row_parent_id, row_created_at}, null, null);
-        }
+                new object[] { row_id, row_label, row_department_id, row_parent_id, row_color row_created_at}, null, null);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Asset_Management_System.Models
 {
@@ -9,7 +10,6 @@ namespace Asset_Management_System.Models
         public Asset()
         {
             FieldsList = new List<Field>();
-            this.SavePrevValues();
         }
 
         private Asset(ulong id, string name, string description, ulong department_id, DateTime created_at)

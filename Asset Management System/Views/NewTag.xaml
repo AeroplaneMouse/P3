@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:views="clr-namespace:Asset_Management_System.Views"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
@@ -61,7 +62,7 @@
                 </Grid.RowDefinitions>
                 <Button Grid.Row="1" Grid.Column="0" Click="OnDeleteField" Name="DeleteIntegerField">X</Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Insert an integer" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" PreviewTextInput="NumberVerification" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="DateFieldStyle">
@@ -100,6 +101,7 @@
         </DataTemplate>
     </Page.Resources>
 
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -120,6 +122,9 @@
             <Label>Name</Label>
             <TextBox Name="TbName" Padding="10" />
 
+            <Label>Color of the tag:</Label>
+            <xctk:ColorPicker Name="ColorPicker" SelectedColorChanged="ColorPickerColorChanged"></xctk:ColorPicker>
+            <TextBox Name="Color" Padding="10"/>
 
             <Label>Department</Label>
             <TextBox Name="TbDepartment" Padding="10" />
