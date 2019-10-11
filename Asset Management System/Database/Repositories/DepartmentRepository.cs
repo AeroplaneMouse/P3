@@ -122,7 +122,7 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Department GetById(long id)
+        public Department GetById(ulong id)
         {
             Department department = null;
 
@@ -133,7 +133,7 @@ namespace Asset_Management_System.Database.Repositories
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
-                        cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = id;
 
                         using (var reader = cmd.ExecuteReader())
