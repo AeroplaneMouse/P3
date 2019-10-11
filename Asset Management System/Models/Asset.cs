@@ -8,13 +8,13 @@ namespace Asset_Management_System.Models
     {
         public Asset(){ }
 
-        private Asset(ulong id, string name, string description, ulong department_id)
+        private Asset(ulong id, string name, string description, ulong department_id, DateTime created_at)
         {
             ID = id;
             Name = name;
             Description = description;
             DepartmentID = department_id;
-            CreatedAt = DateTime.Now;
+            CreatedAt = created_at;
             FieldsList = new List<Field>();
         }
 

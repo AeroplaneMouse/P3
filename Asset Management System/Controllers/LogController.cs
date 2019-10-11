@@ -1,4 +1,6 @@
-﻿using Asset_Management_System.Authentication;
+﻿using System;
+using Asset_Management_System.Authentication;
+using Asset_Management_System.Logging;
 using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Controllers
@@ -11,44 +13,41 @@ namespace Asset_Management_System.Controllers
         /// <param name="Subject"></param>
         public void Update(Model Subject)
         {
-            Session session = new Session();
-            string description = GenerateDescription(Subject, session);
-            Log logEntry = new Log(Subject.ID, session, description);
+            string description = GenerateDescription(Subject);
+            Log.Write(Subject, description);
         }
 
         /// <summary>
         /// Generates a description for the log entry
         /// </summary>
         /// <param name="subject"></param>
-        /// <param name="session"></param>
         /// <returns>
         /// Description
         /// </returns>
-        private string GenerateDescription(Model subject, Session session)
+        private string GenerateDescription(Model subject)
         {
-            string typeAndName;
-            if (subject is Asset)
+            // Get the name of the subject
+            string name;
+            if (subject.GetType().GetProperty("Name") != null)
             {
-                Asset asset = (Asset) subject;
-                typeAndName = "Asset " + asset.Name;
+                name = subject.GetType().GetProperty("Name").Name;
             }
-            else if (subject is Department)
+            else if (subject.GetType().GetProperty("Label") != null)
             {
-                Department department = (Department) subject;
-                typeAndName = "Department" + department.Name;
-            }
-            else if (subject is Tag)
-            {
-                Tag tag = (Tag) subject;
-                typeAndName =  "Tag" + tag.Label;
+                name = subject.GetType().GetProperty("Label").Name;
             }
             else
             {
-                typeAndName = "Unknown subject";
+                // If the subject has no name, leave it blank.
+                name = "";
             }
 
+            // Get subject Type
             string type = subject.GetType().ToString();
-            return typeAndName + " was changed by " + session.Username;;
+            // Determine if subjec is being created or updated
+            string changeType = subject.ID == 0 ? "created" : "updated";
+
+            return $"{type} {name} was {changeType}";
         }
     }
 }

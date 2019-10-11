@@ -2,14 +2,20 @@
 
 namespace Asset_Management_System.Models
 {
-    public class Comment
+    public class Comment : Model
     {
-        private string _comment = String.Empty;
-        public Comment(string comment)
+        /*Constructor used by DB*/
+        private Comment(ulong id, string content, string username, ulong assetId)
         {
-            _comment = comment;
+            ID = id;
+            Content = content;
+            Username = username;
+            AssetID = assetId;
         }
 
-        public override string ToString() => _comment;
+        public string Content { get; set; }
+        public string Username { get; }
+
+        public ulong AssetID { get; }
     }
 }

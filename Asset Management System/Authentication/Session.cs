@@ -10,7 +10,7 @@ using System.Collections;
 
 namespace Asset_Management_System.Authentication
 {
-    class Session
+    public class Session
     {
         public readonly String Username;
         public readonly String Domain;
@@ -18,7 +18,7 @@ namespace Asset_Management_System.Authentication
 
         public Session()
         {
-            string[] parts = WindowsIdentity.GetCurrent().Name.Split('\\');
+            string[] parts = GetIdentity().Split('\\');
             this.Domain = parts[0];
             this.Username = parts[1];
         }
@@ -192,6 +192,11 @@ namespace Asset_Management_System.Authentication
             ldapConnection.AuthenticationType = AuthenticationTypes.Secure;
 
             return ldapConnection;
+        }
+
+        public static string GetIdentity()
+        {
+            return WindowsIdentity.GetCurrent().Name;
         }
 
         //public SqlConnection Database { get; private set; }

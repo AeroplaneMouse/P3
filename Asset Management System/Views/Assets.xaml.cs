@@ -25,7 +25,7 @@ namespace Asset_Management_System.Views
         }
 
         private void Btn_AddNewAsset_Click(object sender, RoutedEventArgs e)
-        { 
+        {
             Main.ChangeSourceRequest(new NewAsset(Main));
         }
 
@@ -40,18 +40,19 @@ namespace Asset_Management_System.Views
         private void Btn_search_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine();
-            Console.WriteLine("Searching for: "+Tb_search.Text);
+            Console.WriteLine("Searching for: " + Tb_search.Text);
             AssetRepository rep = new AssetRepository();
             List<Asset> assets = rep.Search(Tb_search.Text);
 
-            Console.WriteLine("Found: "+assets.Count.ToString());
+            Console.WriteLine("Found: " + assets.Count.ToString());
 
-            if(assets.Count > 0)
+            if (assets.Count > 0)
             {
                 Console.WriteLine("-----------");
             }
-            
-            foreach(Asset asset in assets){
+
+            foreach (Asset asset in assets)
+            {
                 Console.WriteLine(asset.Name);
             }
 
@@ -62,7 +63,6 @@ namespace Asset_Management_System.Views
         {
             Asset selectedAsset = LV_assetList.SelectedItem as Asset;
             Console.WriteLine(selectedAsset.Name);
-
         }
 
         private void Tb_search_KeyDown(object sender, KeyEventArgs e)
