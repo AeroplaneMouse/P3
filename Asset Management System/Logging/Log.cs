@@ -10,6 +10,12 @@ namespace Asset_Management_System.Logging
 {
     public static class Log
     {
+        /// <summary>
+        /// Creates an entry and inserts it into the database
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="description"></param>
+        /// <param name="options"></param>
         public static void Write(Model model, string description, string options="{}")
         {
             Entry entry = new Entry();
@@ -23,6 +29,12 @@ namespace Asset_Management_System.Logging
             rep.Insert(entry);
         }
         
+        /// <summary>
+        /// Retrieves existing log entries for a model
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="username"></param>
+        /// <returns>List of entries</returns>
         public static List<Entry> GetEntries(Model model, string username = null)
         {
             LogRepository rep = new LogRepository();
