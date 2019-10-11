@@ -4,9 +4,13 @@ using System.Collections.Generic;
 namespace Asset_Management_System.Models
 {
     [Serializable]
-    class Asset : DoesContainFields
+    public class Asset : DoesContainFields
     {
-        public Asset(){ }
+        public Asset()
+        {
+            CreatedAt = DateTime.Now;
+            FieldsList = new List<Field>();
+        }
 
         private Asset(ulong id, string name, string description, ulong department_id, DateTime created_at)
         {
