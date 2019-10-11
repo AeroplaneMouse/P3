@@ -9,7 +9,6 @@ namespace Asset_Management_System.Views
     public abstract class FieldsController : Page
     {
         private int id = 0;
-        
         public ObservableCollection<Field> FieldsList { get; set; }
 
         /// <summary>

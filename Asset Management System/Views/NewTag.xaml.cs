@@ -12,11 +12,11 @@ namespace Asset_Management_System.Views
     {
         private MainWindow Main;
 
-        private Tag tag;
+        private Tag _tag;
         public NewTag(MainWindow main)
         {
             InitializeComponent();
-            tag = new Tag();
+            _tag = new Tag();
             Main = main;
             FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
         }
@@ -24,23 +24,22 @@ namespace Asset_Management_System.Views
         private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             string name = TbName.Text;
-            string description = TbDescription.Text;
-            tag.Label = name;
+            _tag.Label = name;
             foreach (var field in FieldsList)
             {
-                tag.AddField(field);
+                _tag.AddField(field);
                 Console.WriteLine(field.Content);
             }
 
-            tag.SerializeFields();
+            _tag.SerializeFields();
             Department department = Main.topNavigationPage.BtnShowDepartments.Content as Department;
             if (department != null)
-                tag.DepartmentID = department.ID;
+                _tag.DepartmentID = department.ID;
             else
                 Console.WriteLine("ERROR! Department not found.");
 
             TagRepository rep = new TagRepository();
-            rep.Insert(tag);
+            rep.Insert(_tag);
             Main.ChangeSourceRequest(new Tags(Main));
         }
     }

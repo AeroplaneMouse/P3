@@ -12,7 +12,7 @@ namespace Asset_Management_System.Views
     {
         private MainWindow Main;
 
-        Asset Asset = new Asset();
+        readonly Asset _asset = new Asset();
         public NewAsset(MainWindow main)
         {
             InitializeComponent();
@@ -24,23 +24,23 @@ namespace Asset_Management_System.Views
         {
             string name = TbName.Text;
             string description = TbDescription.Text;
-            Asset.Name = name;
-            Asset.Description = description;
+            _asset.Name = name;
+            _asset.Description = description;
             foreach (var field in FieldsList)
             {
-                Asset.AddField(field);
+                _asset.AddField(field);
                 Console.WriteLine(field.Content);
             }
 
-            Asset.SerializeFields();
+            _asset.SerializeFields();
             Department department = Main.topNavigationPage.BtnShowDepartments.Content as Department;
             if (department != null)
-                Asset.DepartmentID = department.ID;
+                _asset.DepartmentID = department.ID;
             else
                 Console.WriteLine("ERROR! Department not found.");
 
             AssetRepository rep = new AssetRepository();
-            rep.Insert(Asset);
+            rep.Insert(_asset);
             Main.ChangeSourceRequest(new Assets(Main));
         }
     }
