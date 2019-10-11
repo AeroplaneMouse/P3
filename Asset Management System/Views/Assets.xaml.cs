@@ -7,6 +7,7 @@ using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using System.Collections.Generic;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Asset_Management_System.Views
 {
@@ -88,7 +89,8 @@ namespace Asset_Management_System.Views
 
             if (seletedAssets.Count != 1)
             {
-                Console.WriteLine("An invalid amount of assets has been seleted.");
+                string message = $"You have selected { seletedAssets.Count }. This is not a valid amount!";
+                Main.ShowNotification(sender, new NotificationEventArgs(message, Brushes.Red));
                 return;
             }
             else
@@ -102,17 +104,27 @@ namespace Asset_Management_System.Views
         {
             System.Collections.IList seletedAssets = LV_assetList.SelectedItems;
 
-            if (seletedAssets.Count != 1)
+            if (seletedAssets.Count == 0)
             {
-                Console.WriteLine("An invalid amount of assets has been seleted.");
+                string message = $"You have selected { seletedAssets.Count }. This is not a valid amount!";
+                Main.ShowNotification(sender, new NotificationEventArgs(message, Brushes.Red));
                 return;
             }
             else
             {
-                Asset asset = (seletedAssets[0] as Asset);
-                Console.WriteLine($"Removing { asset.Name }.");
-                AssetRepository rep = new AssetRepository();
-                rep.Delete(asset);
+                foreach (Asset asset in seletedAssets)
+                {
+                    Console.WriteLine($"Removing { asset.Name }.");
+                    new AssetRepository().Delete(asset);
+                }
+
+                string message;
+                if (seletedAssets.Count > 1)
+                    message = $"Multiple assets has been removed!";
+                else
+                    message = $"{ (seletedAssets[0] as Asset).Name } has been removed!";
+
+                Main.ShowNotification(sender, new NotificationEventArgs(message, Brushes.Green));
 
                 // Reload list
                 Btn_search_Click(sender, e);
