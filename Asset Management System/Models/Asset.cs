@@ -27,5 +27,7 @@ namespace Asset_Management_System.Models
         public string Description { get; set; }
 
         public ulong DepartmentID { get; set; }
+
+        public override string ToString() => Name;
     }
 }
