@@ -29,8 +29,7 @@ namespace Asset_Management_System.Database.Repositories
                 try{
                     const string query = "INSERT INTO assets (name, description, department_id, options) "+ 
                 		                 "VALUES (@name, @description, @department, @options)";
-
-
+                    
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@name", MySqlDbType.String);
@@ -173,8 +172,7 @@ namespace Asset_Management_System.Database.Repositories
                     const string query = "SELECT a.* FROM assets AS a " +
                                          "INNER JOIN asset_tags AS atr ON (a.id = atr.asset_id) " +
                                          "WHERE atr.tag_id IN (@ids) GROUP BY a.id";
-
-
+                    
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@ids", MySqlDbType.String);

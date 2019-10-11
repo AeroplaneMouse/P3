@@ -36,6 +36,11 @@ namespace Asset_Management_System.Views
             AssetRepository rep = new AssetRepository();
             List<Asset> assets = rep.Search("");
             LV_assetList.ItemsSource = assets;
+
+            foreach (var asset in assets)
+            {
+                Console.WriteLine(asset.CreatedAt.Year);
+            }
         }
 
         private void Btn_search_Click(object sender, RoutedEventArgs e)

@@ -9,18 +9,15 @@ namespace Asset_Management_System.Models
         {
         }
 
-        public Tag(string label, ulong departmentID, ulong parentID) : this(0, label, departmentID, parentID)
-        {
-        }
-
         /*Constructor used by DB*/
-        private Tag(ulong id, string label, ulong department_id, ulong parent_id)
+        private Tag(ulong id, string label, ulong department_id, ulong parent_id, DateTime created_at)
         {
             ID = id;
             Label = label;
             DepartmentID = department_id;
             FieldsList = new List<Field>();
             ParentID = parent_id;
+            CreatedAt = created_at;
             
             // Saves the value of the properties to detect changes
             if (id != 0)
