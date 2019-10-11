@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Asset_Management_System.Controllers;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 
@@ -22,10 +23,8 @@ namespace Asset_Management_System.Views
 
         private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            string name = TbName.Text;
-            string description = TbDescription.Text;
-            _asset.Name = name;
-            _asset.Description = description;
+            _asset.Name = TbName.Text;;
+            _asset.Description = TbDescription.Text;
             foreach (var field in FieldsList)
             {
                 _asset.AddField(field);
@@ -39,6 +38,10 @@ namespace Asset_Management_System.Views
             else
                 Console.WriteLine("ERROR! Department not found.");
 
+            // Creates a log entry, currently uses for testing.
+            LogController logController = new LogController();
+            _asset.Attach(logController);
+            _asset.Notify();
             AssetRepository rep = new AssetRepository();
             rep.Insert(_asset);
             Main.ChangeSourceRequest(new Assets(Main));

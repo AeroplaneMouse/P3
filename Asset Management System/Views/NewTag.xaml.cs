@@ -21,10 +21,9 @@ namespace Asset_Management_System.Views
             FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
         }
 
-        private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void BtnSaveNewTag_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            string name = TbName.Text;
-            _tag.Label = name;
+            _tag.Label = TbName.Text;
             foreach (var field in FieldsList)
             {
                 _tag.AddField(field);

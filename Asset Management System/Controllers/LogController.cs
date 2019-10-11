@@ -14,7 +14,9 @@ namespace Asset_Management_System.Controllers
         public void Update(Model Subject)
         {
             string description = GenerateDescription(Subject);
-            Log.Write(Subject, description);
+            string changes = Subject.GetChanges();
+            Log.Write(Subject, description, changes);
+            Console.WriteLine("Creating log entry: " + description);
         }
 
         /// <summary>
@@ -30,11 +32,11 @@ namespace Asset_Management_System.Controllers
             string name;
             if (subject.GetType().GetProperty("Name") != null)
             {
-                name = subject.GetType().GetProperty("Name").Name;
+                name = subject.GetType().Name;
             }
             else if (subject.GetType().GetProperty("Label") != null)
             {
-                name = subject.GetType().GetProperty("Label").Name;
+                name = subject.GetType().Name;
             }
             else
             {
@@ -44,7 +46,7 @@ namespace Asset_Management_System.Controllers
 
             // Get subject Type
             string type = subject.GetType().ToString();
-            // Determine if subjec is being created or updated
+            // Determine if subject is being created or updated
             string changeType = subject.ID == 0 ? "created" : "updated";
 
             return $"{type} {name} was {changeType}";
