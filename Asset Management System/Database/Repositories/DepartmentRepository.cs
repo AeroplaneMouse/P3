@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace Asset_Management_System.Database.Repositories
 {
-    class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository : IDepartmentRepository
     {
         private readonly DBConnection dbcon;
 
