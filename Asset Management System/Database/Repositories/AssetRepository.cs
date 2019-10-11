@@ -25,7 +25,6 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-
                 try{
                     const string query = "INSERT INTO assets (name, description, department_id, options) "+ 
                 		                 "VALUES (@name, @description, @department, @options)";
@@ -49,6 +48,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -86,7 +86,7 @@ namespace Asset_Management_System.Database.Repositories
                     }
                 }
                 catch(MySqlException e){ 
-                
+                    Console.WriteLine(e);
                 }finally{
                     dbcon.Close();
                 }
@@ -115,7 +115,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -126,7 +126,7 @@ namespace Asset_Management_System.Database.Repositories
             return query_success;
         }
 
-        public Asset GetById(long id)
+        public Asset GetById(ulong id)
         {
             Asset asset = null;
 
@@ -137,7 +137,7 @@ namespace Asset_Management_System.Database.Repositories
                     
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
-                        cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = id;
 
                         using (var reader = cmd.ExecuteReader())
@@ -151,6 +151,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -190,6 +191,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -232,6 +234,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {

@@ -26,7 +26,7 @@ namespace Asset_Management_System.Database.Repositories
             throw new NotImplementedException();
         }
 
-        public Comment GetById(long id)
+        public Comment GetById(ulong id)
         {
             throw new NotImplementedException();
         }

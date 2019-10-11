@@ -102,6 +102,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -137,6 +138,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -152,7 +154,7 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public Tag GetById(long id)
+        public Tag GetById(ulong id)
         {
             Tag tag = null;
 
@@ -177,6 +179,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -201,7 +204,7 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="parent_id"></param>
         /// <returns></returns>
-        public List<Tag> GetChildTags(long parent_id)
+        public List<Tag> GetChildTags(ulong parent_id)
         {
             List<Tag> tags = new List<Tag>();
 
@@ -228,6 +231,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -273,6 +277,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {
