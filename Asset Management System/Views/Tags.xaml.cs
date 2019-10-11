@@ -22,7 +22,7 @@ namespace Asset_Management_System.Views
 
         private void BtnCreateNewTag_Click(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            Main.ChangeSourceRequest(new NewTag(Main));
         }
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)

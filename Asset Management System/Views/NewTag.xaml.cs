@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using Asset_Management_System.Controllers;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.Views
 {
     /// <summary>
-    /// Interaction logic for NewAsset.xaml
+    /// Interaction logic for NewTag.xaml
     /// </summary>
-    public partial class NewAsset : FieldsController
+    public partial class NewTag : FieldsController
     {
         private MainWindow Main;
 
-        readonly Asset _asset = new Asset();
-        public NewAsset(MainWindow main)
+        private Tag _tag;
+        public NewTag(MainWindow main)
         {
             InitializeComponent();
+            _tag = new Tag();
             Main = main;
             FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
         }
@@ -24,29 +24,23 @@ namespace Asset_Management_System.Views
         private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             string name = TbName.Text;
-            string description = TbDescription.Text;
-            _asset.Name = name;
-            _asset.Description = description;
+            _tag.Label = name;
             foreach (var field in FieldsList)
             {
-                _asset.AddField(field);
+                _tag.AddField(field);
                 Console.WriteLine(field.Content);
             }
 
-            _asset.SerializeFields();
+            _tag.SerializeFields();
             Department department = Main.topNavigationPage.BtnShowDepartments.Content as Department;
             if (department != null)
-                _asset.DepartmentID = department.ID;
+                _tag.DepartmentID = department.ID;
             else
                 Console.WriteLine("ERROR! Department not found.");
 
-            // Creates a log entry, currently uses for testing.
-            LogController logController = new LogController();
-            Asset.Attach(logController);
-            Asset.Notify();
-            AssetRepository rep = new AssetRepository();
-            rep.Insert(_asset);
-            Main.ChangeSourceRequest(new Assets(Main));
+            TagRepository rep = new TagRepository();
+            rep.Insert(_tag);
+            Main.ChangeSourceRequest(new Tags(Main));
         }
     }
 }
