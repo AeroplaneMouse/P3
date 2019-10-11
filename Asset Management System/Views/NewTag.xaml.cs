@@ -6,16 +6,17 @@ using Asset_Management_System.Database.Repositories;
 namespace Asset_Management_System.Views
 {
     /// <summary>
-    /// Interaction logic for NewAsset.xaml
+    /// Interaction logic for NewTag.xaml
     /// </summary>
-    public partial class NewAsset : FieldsController
+    public partial class NewTag : FieldsController
     {
         private MainWindow Main;
 
-        Asset Asset = new Asset();
-        public NewAsset(MainWindow main)
+        private Tag tag;
+        public NewTag(MainWindow main)
         {
             InitializeComponent();
+            tag = new Tag();
             Main = main;
             FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
         }
@@ -24,24 +25,23 @@ namespace Asset_Management_System.Views
         {
             string name = TbName.Text;
             string description = TbDescription.Text;
-            Asset.Name = name;
-            Asset.Description = description;
+            tag.Label = name;
             foreach (var field in FieldsList)
             {
-                Asset.AddField(field);
+                tag.AddField(field);
                 Console.WriteLine(field.Content);
             }
 
-            Asset.SerializeFields();
+            tag.SerializeFields();
             Department department = Main.topNavigationPage.BtnShowDepartments.Content as Department;
             if (department != null)
-                Asset.DepartmentID = department.ID;
+                tag.DepartmentID = department.ID;
             else
                 Console.WriteLine("ERROR! Department not found.");
 
-            AssetRepository rep = new AssetRepository();
-            rep.Insert(Asset);
-            Main.ChangeSourceRequest(new Assets(Main));
+            TagRepository rep = new TagRepository();
+            rep.Insert(tag);
+            Main.ChangeSourceRequest(new Tags(Main));
         }
     }
 }
