@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Asset_Management_System.Database.Repositories
 {
-    class AssetRepository : IAssetRepository
+    public class AssetRepository : IAssetRepository
     {
         private DBConnection dbcon;
 

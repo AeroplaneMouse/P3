@@ -1,8 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Asset_Management_System.Models;
-using System.Collections.Generic;
-using System;
-using System.Linq;
 
 namespace UnitTests
 {
@@ -10,7 +7,7 @@ namespace UnitTests
     public class TagTests
     {
         [TestMethod]
-        public void Tag_ToString_ReturnsTagAsAString()
+        public void Tag_ToString_ReturnsLabelOfTag()
         {
             //Arrange
             Tag tag = new Tag("Tag_label", 1, 0);
