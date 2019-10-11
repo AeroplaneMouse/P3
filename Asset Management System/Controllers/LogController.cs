@@ -32,11 +32,11 @@ namespace Asset_Management_System.Controllers
             string name;
             if (subject.GetType().GetProperty("Name") != null)
             {
-                name = subject.GetType().GetProperty("Name").ToString();
+                name = subject.GetType().Name;
             }
             else if (subject.GetType().GetProperty("Label") != null)
             {
-                name = subject.GetType().GetProperty("Label").ToString();
+                name = subject.GetType().Name;
             }
             else
             {

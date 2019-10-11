@@ -42,8 +42,8 @@ namespace Asset_Management_System.Views
 
             // Creates a log entry, currently uses for testing.
             LogController logController = new LogController();
-            Asset.Attach(logController);
-            Asset.Notify();
+            _asset.Attach(logController);
+            _asset.Notify();
             AssetRepository rep = new AssetRepository();
             rep.Insert(_asset);
             Main.ChangeSourceRequest(new Assets(Main));
