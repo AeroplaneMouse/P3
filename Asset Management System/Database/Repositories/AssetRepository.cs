@@ -251,6 +251,7 @@ namespace Asset_Management_System.Database.Repositories
             string row_label = reader.GetString("name");
             string row_description = reader.GetString("description");
             ulong row_department_id = reader.GetUInt64("department_id");
+            //DateTime row_created_at = reader.GetDateTime("created_at");
 
             return (Asset) Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
                 new object[] {row_id, row_label, row_description, row_department_id}, null, null);
