@@ -21,12 +21,6 @@ namespace Asset_Management_System.Models
             DepartmentID = department_id;
             FieldsList = new List<Field>();
             ParentID = parent_id;
-            
-            // Saves the value of the properties to detect changes
-            if (id != 0)
-            {
-                SavePrevValues(); 
-            }
         }
 
         public string Label { get; set; }

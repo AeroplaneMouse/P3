@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using Asset_Management_System.Controllers;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
+using System.Windows.Media;
 
 namespace Asset_Management_System.Views
 {
@@ -32,11 +33,15 @@ namespace Asset_Management_System.Views
             }
 
             _asset.SerializeFields();
-            Department department = Main.topNavigationPage.BtnShowDepartments.Content as Department;
+            Department department = Main.topNavigationPage.SelectedDepartment;
             if (department != null)
                 _asset.DepartmentID = department.ID;
             else
-                Console.WriteLine("ERROR! Department not found.");
+            {
+                string message = $"ERROR! No department set. Please create a department to attach the asset to.";
+                Main.ShowNotification(sender, new Events.NotificationEventArgs(message, Brushes.Red));
+                return;
+            }
 
             // Creates a log entry, currently uses for testing.
             LogController logController = new LogController();

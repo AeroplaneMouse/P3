@@ -10,64 +10,83 @@
     Title="Assets"
     Loaded="Page_Loaded"
 >
+    <Page.Resources>
+        <Style x:Key="RegularButton" TargetType="Button">
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="TextBlock.FontSize" Value="12"/>
+            <Setter Property="Padding" Value="5, 2, 5, 2"/>
+        </Style>
+    </Page.Resources>
 
-    <Grid>
+    <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="50px"/>
             <RowDefinition Height="50px"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Button
+            Style="{StaticResource RegularButton}"
             Name="Btn_AddNewAsset"
-            Width="200px"
             Grid.Row="0"
             HorizontalAlignment="Right"
             VerticalAlignment="Top"
-            Margin="10px"
             Content="Add New Asset"
-            TextBlock.FontSize="14px"
             Click="Btn_AddNewAsset_Click"
         />
 
-        <TextBox
-            Name="Tb_search"
-            Width="300px"
-            Grid.Row="1"
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Left"
-            TextBlock.FontSize="12px"
-            Margin="10, 0, 0, 0"
-            Padding="2,3,2,3"
-            KeyDown="Tb_search_KeyDown"
-        />
-        
-        <Button
-            Name="Btn_search"
-            Width="70"
-            Grid.Row="1"
-            TextBlock.FontSize="12px"
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Left"
-            Content="Search"
-            Margin="320, 0, 0, 0"
-            Padding="2,3,2,3"
-            Click="Btn_search_Click"
-        />
+        <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Bottom">
+            <TextBox
+                Name="Tb_search"
+                Width="300"
+                TextBlock.FontSize="12px"
+                Padding="2,3,2,3"
+                KeyDown="Tb_search_KeyDown"
+            />
+
+            <Button Style="{StaticResource RegularButton}"
+                    Name="Btn_search"
+                    Content="Search"
+                    Click="Btn_search_Click"/>
+
+            <Button Style="{StaticResource RegularButton}"
+                    Name="BtnEditAsset"
+                    Content="Edit"
+                    Click="BtnEditAsset_Click"/>
+            
+            <Button Style="{StaticResource RegularButton}"
+                    Name="BtnRemoveAsset"
+                    Content="Remove"
+                    Click="BtnRemoveAsset_Click"/>
+            
+        </StackPanel>
+
         
         <ListView Name="LV_assetList" Grid.Row="2" Margin="10,10,10,10">
             <ListView.View>
                 <GridView x:Name="GridView1">
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID"/>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name"/>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=DepartmentID}" Header="Department ID"/>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Options}" Header="Options"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=CreatedAt}" Header="Created"/>
                 </GridView>
             </ListView.View>
-            <ListView.Resources>
+            <!--<ListView.Resources>
                 <Style TargetType="ListViewItem">
-                    <EventSetter Event="MouseDoubleClick" Handler="Lv_mouseDoubleClick"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <ListViewItem>
+                                    <MenuItem>
+                                        <MenuItem Header="Edit"/>
+                                        <MenuItem Header="Remove"/>
+                                    </MenuItem>
+                                </ListViewItem>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
-            </ListView.Resources>
+            </ListView.Resources>-->
         </ListView>
     </Grid>
 </Page>
