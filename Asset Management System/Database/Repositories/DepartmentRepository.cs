@@ -39,7 +39,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 { 
-                    
+                    Console.WriteLine(e);
                 }finally{
                     dbcon.Close();
                 }
@@ -75,7 +75,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -108,7 +108,7 @@ namespace Asset_Management_System.Database.Repositories
                         query_success = cmd.ExecuteNonQuery() > 0;
                     }
                 }catch(MySqlException e){ 
-                
+                    Console.WriteLine(e);
                 }finally{
                     dbcon.Close();
                 }
@@ -145,7 +145,7 @@ namespace Asset_Management_System.Database.Repositories
                         }
                     }
                 }catch(MySqlException e){ 
-                    
+                    Console.WriteLine(e);
                 }finally{
                     dbcon.Close();
                 }
@@ -179,7 +179,7 @@ namespace Asset_Management_System.Database.Repositories
                         }
                     }
                 }catch(MySqlException e){ 
-                    
+                    Console.WriteLine(e);
                 }finally{
                     dbcon.Close();
                 }
