@@ -23,8 +23,7 @@ namespace Asset_Management_System.Views
 
         private void BtnSaveNewTag_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            string name = TbName.Text;
-            _tag.Label = name;
+            _tag.Label = TbName.Text;
             foreach (var field in FieldsList)
             {
                 _tag.AddField(field);

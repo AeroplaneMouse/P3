@@ -22,10 +22,8 @@ namespace Asset_Management_System.Views
 
         private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            string name = TbName.Text;
-            string description = TbDescription.Text;
-            _asset.Name = name;
-            _asset.Description = description;
+            _asset.Name = TbName.Text;;
+            _asset.Description = TbDescription.Text;
             foreach (var field in FieldsList)
             {
                 _asset.AddField(field);
