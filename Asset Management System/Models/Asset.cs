@@ -6,7 +6,11 @@ namespace Asset_Management_System.Models
     [Serializable]
     public class Asset : DoesContainFields
     {
-        public Asset(){ }
+        public Asset()
+        {
+            CreatedAt = DateTime.Now;
+            FieldsList = new List<Field>();
+        }
 
         private Asset(ulong id, string name, string description, ulong department_id, DateTime created_at)
         {
