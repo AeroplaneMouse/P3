@@ -123,9 +123,7 @@
 
             <Label>Department</Label>
             <TextBox Name="TbDepartment" Padding="10" />
-
-            <Label>Description</Label>
-            <TextBox Name="TbDescription" Padding="10" />
+            
             <Button HorizontalAlignment="Left" Click="OnAddField" Margin="10" Name="AddTextField">Add TextField</Button>
             <Button HorizontalAlignment="Left" Click="OnAddField" Margin="10" Name="AddStringField">Add StringField</Button>
             <Button HorizontalAlignment="Left" Click="OnAddField" Margin="10" Name="AddIntegerField">Add IntegerField</Button>
@@ -157,6 +155,6 @@
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
             Margin="10"
-            Click="BtnSaveNewAsset_Click" />
+            Click="BtnSaveNewTag_Click" />
     </Grid>
 </views:FieldsController>
