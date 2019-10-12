@@ -10,6 +10,6 @@ namespace Asset_Management_System.Database.Repositories
         bool Update(T entity);
         bool Delete(T entity);
 
-        T GetById(long id);
+        T GetById(ulong id);
     }
 }

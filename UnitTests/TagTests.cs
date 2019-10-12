@@ -10,7 +10,8 @@ namespace UnitTests
         public void Tag_ToString_ReturnsLabelOfTag()
         {
             //Arrange
-            Tag tag = new Tag("Tag_label", 1, 0);
+            Tag tag = new Tag();
+            tag.Label = "Tag_label";
 
             //Act
             string result = tag.ToString();

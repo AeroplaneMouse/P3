@@ -75,30 +75,41 @@ namespace Asset_Management_System.Authentication
 
             searchRequest = new SearchRequest("cn=TestDepartment,ou=groups,dc=srv,dc=aau,dc=dk", searchFilter, System.DirectoryServices.Protocols.SearchScope.Subtree, propertiesToQuery);
 
-            response = (SearchResponse)ldapConnection.SendRequest(searchRequest);
-
-            if (response.Entries.Count > 0)
+            try
             {
-                Console.WriteLine("Users in TestDepartment:");
-                for (int i = 0; i < response.Entries.Count; i++)
+                response = (SearchResponse)ldapConnection.SendRequest(searchRequest);
+
+                if (response.Entries.Count > 0)
                 {
-                    var userDN = response.Entries[i];
-                    Console.WriteLine(userDN.DistinguishedName);
-                    /*
-                    foreach(DictionaryEntry attr in userDN.Attributes)
+                    Console.WriteLine("Users in TestDepartment:");
+                    for (int i = 0; i < response.Entries.Count; i++)
                     {
-                        DirectoryAttribute attribute = (DirectoryAttribute) attr.Value;
-                           
-                        foreach(var isf in attribute.GetValues()){
-                            Console.WriteLine(isf);
+                        var userDN = response.Entries[i];
+                        Console.WriteLine(userDN.DistinguishedName);
+                        /*
+                        foreach(DictionaryEntry attr in userDN.Attributes)
+                        {
+                            DirectoryAttribute attribute = (DirectoryAttribute) attr.Value;
+
+                            foreach(var isf in attribute.GetValues()){
+                                Console.WriteLine(isf);
+                            }
+
                         }
-                       
+                        */
                     }
-                    */
                 }
-            }else{
-                Console.WriteLine("Nothing found...");
+                else
+                {
+                    Console.WriteLine("Nothing found...");
+                }
             }
+            catch(LdapException)
+            {
+                Console.WriteLine("Error with LDAP server.");
+            }
+
+            
 
 
             /*
