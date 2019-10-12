@@ -23,10 +23,15 @@ namespace Asset_Management_System.Views
 
         private MainWindow Main;
 
-        private ObservableCollection<Asset> _list;
+
         public TextBox TbSearch { get; set; }
+        
         public List<Selector> SelectedItems { get; set; } = new List<Selector>();
+        
         public string SearchText { get; set; } = "";
+
+        private ObservableCollection<Asset> _list;
+
         public ObservableCollection<Asset> SearchList {
             get
             {

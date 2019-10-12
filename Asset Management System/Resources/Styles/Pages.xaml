@@ -52,7 +52,7 @@
                                   SelectionMode="Multiple"
                                   SelectedItem="{Binding SelectedItems, UpdateSourceTrigger=PropertyChanged}">
                             <ListView.View>
-                                <GridView x:Name="GridView">
+                                <GridView>
                                     <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID"/>
                                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name"/>
                                     <GridViewColumn DisplayMemberBinding="{Binding Path=CreatedAt}" Header="Created"/>
