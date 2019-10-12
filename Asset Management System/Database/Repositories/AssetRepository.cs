@@ -7,6 +7,7 @@ using Asset_Management_System.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
 using Asset_Management_System.Helpers;
+using System.Collections.ObjectModel;
 
 namespace Asset_Management_System.Database.Repositories
 {
@@ -206,9 +207,9 @@ namespace Asset_Management_System.Database.Repositories
             return assets;
         }
 
-        public List<Asset> Search(string keyword)
+        public ObservableCollection<Asset> Search(string keyword)
         {
-            List<Asset> assets = new List<Asset>();
+            ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
 
             if (dbcon.IsConnect())
             {
