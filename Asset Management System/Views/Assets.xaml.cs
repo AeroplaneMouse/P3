@@ -90,7 +90,8 @@ namespace Asset_Management_System.Views
         private void BtnEditAsset_Click(object sender, RoutedEventArgs e)
         {
             System.Collections.IList seletedAssets = LV_assetList.SelectedItems;
-
+            Asset input = (seletedAssets[0] as Asset);
+            
             if (seletedAssets.Count != 1)
             {
                 string message = $"You have selected { seletedAssets.Count }. This is not a valid amount!";
@@ -99,7 +100,7 @@ namespace Asset_Management_System.Views
             }
             else
             {
-                Console.WriteLine($"Editing { (seletedAssets[0] as Asset).Name }.");
+                Main.ChangeSourceRequest(new EditAsset(Main,input));
             }
 
         }
@@ -112,7 +113,6 @@ namespace Asset_Management_System.Views
             {
                 string message = $"You have selected { seletedAssets.Count }. This is not a valid amount!";
                 Main.ShowNotification(sender, new NotificationEventArgs(message, Brushes.Red));
-                return;
             }
             else
             {

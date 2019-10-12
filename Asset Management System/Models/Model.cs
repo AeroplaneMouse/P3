@@ -102,5 +102,6 @@ namespace Asset_Management_System.Models
             }
             return changes.Count == 0 ? "" : JsonConvert.SerializeObject(changes, Formatting.Indented);
         }
+        
     }
 }

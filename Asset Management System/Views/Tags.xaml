@@ -66,16 +66,17 @@
         <ListView
             Name="LvTags"
             Grid.Row="2"
-            Grid.ColumnSpan="3"
+            Grid.ColumnSpan="3" Grid.Column="0"
             Margin="10"
             TextBlock.FontSize="14">
+
 
             <ListView.View>
                 <GridView x:Name="GridView1">
                     <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Label}" Header="Name" />
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Color}" Header="Color" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=CreatedAt}" Header="Created at"></GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created at"></GridViewColumn>
                 </GridView>
             </ListView.View>
         </ListView>
