@@ -32,7 +32,6 @@ namespace Asset_Management_System.Views
             foreach (var field in FieldsList)
             {
                 _asset.AddField(field);
-                Console.WriteLine(field.Content);
             }
 
             _asset.SerializeFields();
@@ -57,11 +56,11 @@ namespace Asset_Management_System.Views
 
         private bool LoadFields()
         {
-            Console.WriteLine("------Field labels | Field content -------");
+            ConsoleWriter.ConsoleWrite("------Field labels | Field content -------");
             _asset.DeserializeFields();
             foreach (var asset in _asset.FieldsList)
             {
-                Console.WriteLine(asset.Label +" | "+ asset.Content);
+                ConsoleWriter.ConsoleWrite(asset.Label +" | "+ asset.Content);
                 FieldsList.Add(asset);
             }
             TbName.Text = _asset.Name ;
