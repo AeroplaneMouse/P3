@@ -24,7 +24,6 @@ namespace Asset_Management_System
         public MainWindow()
         {
             InitializeComponent();
-            DBConnection.Instance().SqlConnectionFailed += ShowNotification;
             ChangeSourceRequest(new SplashPage(this), FrameSplash);
         }
 
