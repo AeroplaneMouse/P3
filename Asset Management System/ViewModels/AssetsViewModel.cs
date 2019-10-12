@@ -17,7 +17,10 @@ namespace Asset_Management_System.ViewModels
 
         public AssetsViewModel(MainWindow main)
         {
+            // Saving reference to the main window
             _main = main;
+
+            // Initializing commands
             AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeSourceRequest(new NewAsset(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
             EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
@@ -30,6 +33,9 @@ namespace Asset_Management_System.ViewModels
 
         private MainWindow _main;
 
+        /// <summary>
+        /// Sends a search request to the database, and sets the list of assets to the result.
+        /// </summary>
         private void Search()
         {
             Console.WriteLine();
@@ -60,6 +66,9 @@ namespace Asset_Management_System.ViewModels
             SearchList = assets;
         }
 
+        /// <summary>
+        /// Opens the edit view for the selected asset.
+        /// </summary>
         private void Edit()
         {
             //System.Collections.IList seletedAssets = LV_assetList.SelectedItems;
@@ -80,6 +89,9 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
+        /// <summary>
+        /// Sends a remove request to the database for the selected assets.
+        /// </summary>
         private void Remove()
         {
             System.Collections.IList seletedAssets = null/*LvList.SelectedItems*/;
