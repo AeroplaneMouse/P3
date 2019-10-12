@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace ASM2.Resources.Window
+namespace Asset_Management_System.Resources.Window
 {
     /// <summary>
     /// Fixes the issue with Windows of Style <see cref="WindowStyle.None"/> covering the taskbar
