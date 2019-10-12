@@ -7,7 +7,13 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- Order is important! -->
+                <!-- Reference to the styles in the Styles folder, so it's available everywhere in the project -->
                 <ResourceDictionary Source="Resources/Styles/Buttons.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Fonts.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Texts.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Windows.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Pages.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
