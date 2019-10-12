@@ -6,7 +6,7 @@ namespace Asset_Management_System.Database.Repositories
     interface ITagRepository : IMysqlRepository<Tag>
     {
         List<Tag> GetParentTags();
-        List<Tag> GetChildTags(long parent_id);
+        List<Tag> GetChildTags(ulong parent_id);
         List<Tag> Search(string keyword);
     }
 }

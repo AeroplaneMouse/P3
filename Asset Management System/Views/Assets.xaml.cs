@@ -104,6 +104,9 @@ namespace Asset_Management_System.Views
 
         private void Edit()
         { 
+            //System.Collections.IList seletedAssets = LV_assetList.SelectedItems;
+            //Asset input = (seletedAssets[0] as Asset);
+            
             if (SelectedItems.Count != 1)
             {
                 string message = $"You have selected { SelectedItems.Count }. This is not a valid amount!";
@@ -112,6 +115,7 @@ namespace Asset_Management_System.Views
             }
             else
             {
+                //Main.ChangeSourceRequest(new EditAsset(Main,input));
                 Console.WriteLine($"Editing { SelectedItems.ElementAt(0) }.");
             }
         }

@@ -25,11 +25,9 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-
                 try{
                     const string query = "INSERT INTO assets (name, description, department_id, options) "+ 
                 		                 "VALUES (@name, @description, @department, @options)";
-                    
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@name", MySqlDbType.String);
@@ -49,6 +47,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -65,9 +64,11 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-                try{
-                    const string query = "UPDATE assets SET name=@name, description=@description, options=@options) WHERE id=@id";
-                    
+                try
+                {
+                    const string query =
+                        "UPDATE assets SET name=@name, description=@description, options=@options WHERE id=@id";
+
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@name", MySqlDbType.String);
@@ -86,7 +87,7 @@ namespace Asset_Management_System.Database.Repositories
                     }
                 }
                 catch(MySqlException e){ 
-                
+                    Console.WriteLine(e);
                 }finally{
                     dbcon.Close();
                 }
@@ -115,7 +116,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -126,18 +127,20 @@ namespace Asset_Management_System.Database.Repositories
             return query_success;
         }
 
-        public Asset GetById(long id)
+        public Asset GetById(ulong id)
         {
             Asset asset = null;
 
             if (dbcon.IsConnect())
             {
-                try{
-                    const string query = "SELECT id, name, description, department_id, created_at FROM assets WHERE id=@id";
-                    
+                try
+                {
+                    const string query =
+                        "SELECT id, name, description, department_id, created_at,options FROM assets WHERE id=@id";
+
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
-                        cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = id;
 
                         using (var reader = cmd.ExecuteReader())
@@ -151,6 +154,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -167,12 +171,13 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-                        //"WHERE atr.tag_id IN (@ids) GROUP BY a.id";
-                try{
+                //"WHERE atr.tag_id IN (@ids) GROUP BY a.id";
+                try
+                {
                     const string query = "SELECT a.* FROM assets AS a " +
                                          "INNER JOIN asset_tags AS atr ON (a.id = atr.asset_id) " +
                                          "WHERE atr.tag_id IN (@ids) GROUP BY a.id";
-                    
+
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@ids", MySqlDbType.String);
@@ -190,6 +195,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -206,9 +212,10 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-
-                try{
-                    const string query = "SELECT id, name, description, department_id, created_at FROM assets WHERE name LIKE @keyword";
+                try
+                {
+                    const string query =
+                        "SELECT id, name, description, department_id, created_at,options FROM assets WHERE name LIKE @keyword";
 
                     if (!keyword.Contains("%"))
                     {
@@ -232,6 +239,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -249,9 +257,13 @@ namespace Asset_Management_System.Database.Repositories
             string row_description = reader.GetString("description");
             ulong row_department_id = reader.GetUInt64("department_id");
             DateTime row_created_at = reader.GetDateTime("created_at");
+            string row_options = reader.GetString("options");
+            Console.WriteLine(row_options);
 
+            
             return (Asset) Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] {row_id, row_label, row_description, row_department_id, row_created_at}, null, null);
+                new object[] {row_id, row_label, row_description, row_department_id, row_created_at,row_options}, null,
+                null);
         }
     }
 }

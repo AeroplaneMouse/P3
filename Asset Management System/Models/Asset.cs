@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Google.Protobuf.WellKnownTypes;
+using Newtonsoft.Json;
 
 namespace Asset_Management_System.Models
 {
@@ -12,13 +13,15 @@ namespace Asset_Management_System.Models
             FieldsList = new List<Field>();
         }
 
-        private Asset(ulong id, string name, string description, ulong department_id, DateTime created_at)
+        [JsonConstructor]
+        private Asset(ulong id, string name, string description, ulong department_id, DateTime created_at, string options)
         {
             ID = id;
             Name = name;
             Description = description;
             DepartmentID = department_id;
             CreatedAt = created_at;
+            SerializedFields = options;
             FieldsList = new List<Field>();
         }
 
