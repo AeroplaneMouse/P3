@@ -22,6 +22,9 @@
     <Compile Update="Views\LeftNavigation.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Main.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\NewAsset.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -34,6 +37,9 @@
     <Compile Update="Views\SplashPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\TagTest.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\TopNavigationPart2.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -42,6 +48,30 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Page Update="Resources\Styles\Buttons.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\Colors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\Fields.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\Fonts.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\Menus.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\Spacings.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\Texts.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\Windows.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Assets.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -60,6 +90,9 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\Main.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\NewAsset.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -70,6 +103,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\SplashPage.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\TagTest.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\TopNavigationPart2.xaml">

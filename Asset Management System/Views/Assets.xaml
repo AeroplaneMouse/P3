@@ -3,95 +3,12 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:local="clr-namespace:Asset_Management_System"
+    xmlns:local="clr-namespace:Asset_Management_System.Views"
     mc:Ignorable="d" 
     d:DesignHeight="450" d:DesignWidth="800"
     ShowsNavigationUI="False"
     Title="Assets"
-    Loaded="Page_Loaded"
+    Style="{StaticResource ListPage}"
 >
-    <Page.Resources>
-        <Style x:Key="RegularButton" TargetType="Button">
-            <Setter Property="Width" Value="60"/>
-            <Setter Property="TextBlock.FontSize" Value="12"/>
-            <Setter Property="Padding" Value="5, 2, 5, 2"/>
-        </Style>
-    </Page.Resources>
-
-    <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="50px"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Button
-            Style="{StaticResource RegularButton}"
-            Name="Btn_AddNewAsset"
-            Grid.Row="0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Content="Add New Asset"
-            Click="Btn_AddNewAsset_Click"
-        />
-
-        <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,0,188,0">
-            <TextBox
-                Name="Tb_search"
-                Width="300"
-                TextBlock.FontSize="12px"
-                Padding="2,3,2,3"
-                KeyDown="Tb_search_KeyDown"
-            />
-
-            <Button Style="{StaticResource RegularButton}"
-                    Name="Btn_search"
-                    Content="Search"
-                    Click="Btn_search_Click"/>
-
-            <Button Style="{StaticResource RegularButton}"
-                    Name="BtnEditAsset"
-                    Content="Edit"
-                    Click="BtnEditAsset_Click"/>
-            
-            <Button Style="{StaticResource RegularButton}"
-                    Name="BtnRemoveAsset"
-                    Content="Remove"
-                    Click="BtnRemoveAsset_Click"/>
-
-            <Button Style="{StaticResource RegularButton}"
-                    Name="BtnPrint"
-                    Content="Print"
-                    Click="BtnPrintList_Click"/>
-
-        </StackPanel>
-
-        
-        <ListView Name="LV_assetList" Grid.Row="2" Margin="10,10,10,10">
-            <ListView.View>
-                <GridView x:Name="GridView1">
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=DepartmentID}" Header="Department ID"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created"/>
-                </GridView>
-            </ListView.View>
-            <!--<ListView.Resources>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListViewItem">
-                                <ListViewItem>
-                                    <MenuItem>
-                                        <MenuItem Header="Edit"/>
-                                        <MenuItem Header="Remove"/>
-                                    </MenuItem>
-                                </ListViewItem>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListView.Resources>-->
-        </ListView>
-    </Grid>
+    
 </Page>

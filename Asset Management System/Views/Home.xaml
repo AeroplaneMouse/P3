@@ -15,7 +15,15 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <ListBox
+        <TextBlock VerticalAlignment="Bottom"
+                   HorizontalAlignment="Center"
+                   FontFamily="{StaticResource SegoeRegular}"
+                   FontSize="{StaticResource FontSizeLarge}"
+                   Text="Welcome to your Asset Management System"/>
+
+
+
+        <!--<ListBox
             Name="LbDepartments"
             Margin="10"
             Grid.Row="0"
@@ -39,34 +47,6 @@
                 Click="Btn_Test_Click"
                 Content="Test notification"
                 VerticalAlignment="Top"/>
-        </StackPanel>
-        
-        <!--
-        <Label
-            TextBlock.FontSize="30px"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Bottom"
-            Grid.Row="0"
-            Content="HOME"
-        />
-
-        <StackPanel
-            HorizontalAlignment="Center"
-            TextBlock.FontSize="15px"
-            TextBlock.FontStyle="Italic"
-            TextBlock.FontWeight="Light"
-            Grid.Row="1"
-            Background="Transparent"
-        >
-            <StackPanel.Resources>
-                <Style TargetType="Label">
-                    <Setter Property="HorizontalAlignment" Value="Center"/>
-                </Style>
-            </StackPanel.Resources>
-            <Label>Skrift med kursiv er en guide til hvad der er muligt.</Label>
-            <Label>Hvis du skal tilbage fra en side, tryk på 'Home' i venstre side,</Label>
-            <Label>og tryk på den side du vil hen til.</Label>
-        </StackPanel>
-        -->
+        </StackPanel>-->
     </Grid>
 </Page>

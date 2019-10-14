@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Asset_Management_System.Models;
@@ -7,7 +8,10 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Media;
 using Asset_Management_System.Events;
-using System.IO;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
+using System.Windows.Controls.Primitives;
+using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
 {
@@ -16,139 +20,15 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Assets : Page
     {
-        //public static event ChangeSourceEventHandler ChangeSourceRequest;
-        private MainWindow Main;
+        private MainViewModel _main;
 
-        public Assets(MainWindow main)
+        public Assets(MainViewModel main)
         {
             InitializeComponent();
-            Main = main;
+            _main = main;
+            DataContext = new ViewModels.AssetsViewModel(_main);
         }
 
-        private void Btn_AddNewAsset_Click(object sender, RoutedEventArgs e)
-        {
-            Main.ChangeSourceRequest(new NewAsset(Main));
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Load assets from database
-            AssetRepository rep = new AssetRepository();
-            List<Asset> assets = rep.Search("");
-            LV_assetList.ItemsSource = assets;
-
-            foreach (var asset in assets)
-            {
-                Console.WriteLine(asset.CreatedAt.Year);
-            }
-        }
-
-        private void Btn_search_Click(object sender, RoutedEventArgs e)
-        {
-            Console.WriteLine();
-            Console.WriteLine("Searching for: " + Tb_search.Text);
-            AssetRepository rep = new AssetRepository();
-            List<Asset> assets = rep.Search(Tb_search.Text);
-
-            Console.WriteLine("Found: " + assets.Count.ToString());
-
-            if (assets.Count > 0)
-                Console.WriteLine("-----------");
-
-            List<MenuItem> assetsFunc = new List<MenuItem>();
-            foreach (Asset asset in assets)
-            {
-                Console.WriteLine(asset.Name);
-
-                //// Creating menuItems
-                //MenuItem item = new MenuItem();
-                //MenuItem edit = new MenuItem() { Header = "Edit" };
-                //MenuItem delete = new MenuItem() { Header = "Remove" };
-
-                //item.Header = asset.Name;
-                ////AddVisualChild(edit);
-                //assetsFunc.Add(item);
-
-
-
-            }
-
-            LV_assetList.ItemsSource = assets;
-        }
-
-        private void Lv_mouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            Asset selectedAsset = LV_assetList.SelectedItem as Asset;
-            Console.WriteLine(selectedAsset?.Name);
-        }
-
-        private void Tb_search_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                Btn_search_Click(sender, new RoutedEventArgs());
-        }
-
-        private void BtnEditAsset_Click(object sender, RoutedEventArgs e)
-        {
-            System.Collections.IList seletedAssets = LV_assetList.SelectedItems;
-            Asset input = (seletedAssets[0] as Asset);
-            
-            if (seletedAssets.Count != 1)
-            {
-                string message = $"You have selected { seletedAssets.Count }. This is not a valid amount!";
-                Main.ShowNotification(sender, new NotificationEventArgs(message, Brushes.Red));
-                return;
-            }
-            else
-            {
-                Main.ChangeSourceRequest(new EditAsset(Main,input));
-            }
-
-        }
-
-        private void BtnRemoveAsset_Click(object sender, RoutedEventArgs e)
-        {
-            System.Collections.IList seletedAssets = LV_assetList.SelectedItems;
-
-            if (seletedAssets.Count == 0)
-            {
-                string message = $"You have selected { seletedAssets.Count }. This is not a valid amount!";
-                Main.ShowNotification(sender, new NotificationEventArgs(message, Brushes.Red));
-            }
-            else
-            {
-                foreach (Asset asset in seletedAssets)
-                {
-                    Console.WriteLine($"Removing { asset.Name }.");
-                    new AssetRepository().Delete(asset);
-                }
-
-                string message;
-                if (seletedAssets.Count > 1)
-                    message = $"Multiple assets has been removed!";
-                else
-                    message = $"{ (seletedAssets[0] as Asset).Name } has been removed!";
-
-                Main.ShowNotification(sender, new NotificationEventArgs(message, Brushes.Green));
-
-                // Reload list
-                Btn_search_Click(sender, e);
-            }
-        }
-
-        private void BtnPrint_Click(object sender, RoutedEventArgs e)
-        {
-            System.Collections.IList fullList = new List<Asset>();
-            string pathToFile = "asset_report_" + DateTime.Now.ToString().Replace(' ', '-');
-
-            using (StreamWriter file = new StreamWriter(@pathToFile, false))
-            {
-                foreach(Asset asset in fullList)
-                {
-                    string fileEntry = asset.ID + asset.Name;
-                    file.WriteLine(fileEntry);
-                }
-            }
-        }
+        //private void Page_Loaded(object sender, RoutedEventArgs e) => Search();
     }
 }

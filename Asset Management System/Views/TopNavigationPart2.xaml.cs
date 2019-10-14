@@ -179,7 +179,7 @@ namespace Asset_Management_System.Views
             {
                 Page page = new EditDepartment(GetDeparment(sender));
 
-                Main.ChangeSourceRequest(page);
+                Main.ChangeMainContent(page);
             }
             catch(Exception f)
             {

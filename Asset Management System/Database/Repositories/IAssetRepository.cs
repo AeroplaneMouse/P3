@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Database.Repositories
@@ -6,6 +7,7 @@ namespace Asset_Management_System.Database.Repositories
     interface IAssetRepository : IMysqlRepository<Asset>
     {
         List<Asset> SearchByTags(List<int> tags_ids);
-        List<Asset> Search(string keyword);
+        ObservableCollection<Asset> Search(string keyword);
+        bool AttachTagsToAsset(Asset asset, List<Tag> tags);
     }
 }
