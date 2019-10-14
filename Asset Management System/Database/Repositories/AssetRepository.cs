@@ -266,36 +266,42 @@ namespace Asset_Management_System.Database.Repositories
         }
         public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
         {
-            if (dbcon.IsConnect())
+            bool query_success = false;
+
+            Console.WriteLine(tags.Count + ": " + tags[0].Label + ", " + tags[0].ID);
+
+            StringBuilder query = new StringBuilder("INSERT INTO asset_tags (asset_id, tag_id) VALUES ");
+            List<string> inserts = new List<string>();
+
+            foreach (var item in tags)
             {
-                string query = "INSERT INTO asset_tags (asset_id, tag_id) VALUES ";
+                inserts.Add(string.Format("({0},{1})", asset.ID, item.ID));
+            }
 
-                foreach (Tag tag in tags)
+            query.Append(string.Join(",", inserts));
+
+            if (dbcon.IsConnect() && tags.Count > 0)
+            {
+                try
                 {
-                }
-
-                using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                {
-                    cmd.
-                    cmd.Parameters.Add("@keyword", MySqlDbType.String);
-                    cmd.Parameters["@keyword"].Value = keyword;
-
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query.ToString(), dbcon.Connection))
                     {
-                        while (reader.Read())
-                        {
-                            Asset asset = DBOToModelConvert(reader);
-                            assets.Add(asset);
-                        }
+                        Console.WriteLine(cmd.CommandText);
+
+                       query_success = cmd.ExecuteNonQuery() > 0;
                     }
                 }
-                
-                
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
             }
-            else
-                return false;
-        }
-                new object[] {row_id, row_label, row_description, row_department_id, row_created_at}, null, null);
+
+            return query_success;
         }
     }
 }
