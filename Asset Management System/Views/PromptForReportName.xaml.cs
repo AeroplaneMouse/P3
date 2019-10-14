@@ -18,16 +18,22 @@ namespace Asset_Management_System.Views
     public partial class PromtForReportName : Window
     {
 
-        public PromtForReportName()
+        public PromtForReportName(string input, string label)
         {
             InitializeComponent();
             DataContext = this;
-            this.ResponseText = "asset_report_" + DateTime.Now.ToString().Replace(@"/", "").Replace(@" ", "-").Replace(@":", "") + ".csv";
+            this.InputText = input;
+            this.LabelText = label;
         }
 
-        public string ResponseText {
+        public string InputText {
             get { return Input.Text; }
             set { Input.Text = value; }
+        }
+
+        public string LabelText {
+            get { return Label.Text; }
+            set { Label.Text = value; }
         }
 
         private void BtnOk_Click(object sender, RoutedEventArgs e)
