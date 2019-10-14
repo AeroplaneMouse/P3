@@ -41,7 +41,6 @@ namespace Asset_Management_System.Views
                 page = btn.Name switch
                 {
                     "Btn_homePage" => new Home(Main),
-                    "Btn_assetsPage" => new Assets(Main),
                     "Btn_tagsPage" => new Tags(Main),
                     "Btn_settingsPage" => new Settings(Main),
                     "Btn_helpPage" => new Help(Main),

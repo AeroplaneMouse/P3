@@ -9,6 +9,7 @@ using Asset_Management_System.Views;
 using Asset_Management_System.Events;
 using System.Threading.Tasks;
 using Asset_Management_System.Database;
+using System.ComponentModel;
 
 namespace Asset_Management_System
 {
@@ -25,6 +26,9 @@ namespace Asset_Management_System
         {
             InitializeComponent();
             ChangeSourceRequest(new SplashPage(this), FrameSplash);
+
+            // Starting the new UI window.
+            new Main().Show();
         }
 
         /// <summary>
@@ -51,7 +55,6 @@ namespace Asset_Management_System
         private void HideNotification()
         {
             CanvasNotificationBar.Visibility = Visibility.Hidden;
-
         }
 
         /// <summary>

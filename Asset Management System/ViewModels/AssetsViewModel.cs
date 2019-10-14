@@ -133,7 +133,6 @@ namespace Asset_Management_System.ViewModels
 
         public List<Selector> SelectedItems { get; set; } = new List<Selector>();
 
-        public string SearchText { get; set; } = "";
 
         private ObservableCollection<Asset> _list;
 
@@ -165,3 +164,5 @@ namespace Asset_Management_System.ViewModels
         #endregion
     }
 }
+
+        public string SearchText { get; set; } = "";

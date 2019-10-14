@@ -1,0 +1,35 @@
+﻿<Page x:Class="Asset_Management_System.Views.AssetTest"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Asset_Management_System.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AssetTest">
+
+    <Page.Resources>
+        <!-- Style of the page -->
+        <Style TargetType="{x:Type local:Main}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <!-- Overrides the standard template for Page, giving a "blank slate" -->
+                    <ControlTemplate TargetType="{x:Type Page}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                            </Grid.RowDefinitions>
+                            
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    
+    
+    
+    <Grid>
+        <Label TextBlock.FontSize="40">Asset test</Label>
+        
+    </Grid>
+</Page>

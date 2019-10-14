@@ -2,11 +2,7 @@
 using System.Net;
 using System.DirectoryServices;
 using System.Security.Principal;
-using System.Threading;
-using System.DirectoryServices;
 using System.DirectoryServices.Protocols;
-using System.Security.Permissions;
-using System.Collections;
 
 namespace Asset_Management_System.Authentication
 {

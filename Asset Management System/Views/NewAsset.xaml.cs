@@ -52,6 +52,62 @@ namespace Asset_Management_System.Views
                 string message = $"ERROR! No department set. Please create a department to attach the asset to.";
                 Main.ShowNotification(sender, new Events.NotificationEventArgs(message, Brushes.Red));
             }
+
+            Console.WriteLine("List of the current fields after adding the field:");
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("ID  |   Field name   |   Content of the field");
+            foreach (var test in FieldsList)
+            {
+
+                Console.WriteLine(test.id + " | " + test.Label + " | " + test.Content);
+                
+
+
+            }
+
+            Console.WriteLine("---------------------------------------");
+        }
+
+        /// <summary>
+        /// Function to remove a field from the list of fields.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <exception cref="NotSupportedException"></exception>
+        private void OnDeleteField(object sender, RoutedEventArgs e)
+        {
+            switch ((sender as Button)?.Name)
+            {
+                case "DeleteTextField":
+                    Console.WriteLine("Textfield removed");
+                    break;
+                case "DeleteStringField":
+                    Console.WriteLine("StringField removed");
+                    break;
+                case "DeleteIntegerField":
+                    Console.WriteLine("IntegerField removed");
+                    break;
+                case "DeleteDateField":
+                    Console.WriteLine("DataField removed");
+                    break;
+                case "DeleteBooleanField":
+                    Console.WriteLine("BooleanField removed");
+                    break;
+                default:
+                    throw new NotSupportedException();
+            }
+
+            FieldsList.Remove((sender as FrameworkElement).DataContext as Field);
+            Console.WriteLine("List of the current fields after removing the field:");
+            Console.WriteLine("---------------------------------------");
+            Console.WriteLine("ID |Field name | Content of the field");
+            foreach (var test in FieldsList)
+            {
+                Console.WriteLine(test.id + " | " +test.Label + "|" + test.Content);
+                
+            }
+
+            Console.WriteLine("---------------------------------------");
         }
     }
 }

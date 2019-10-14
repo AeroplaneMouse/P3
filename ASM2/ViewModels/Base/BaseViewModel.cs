@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace Asset_Management_System.ViewModels.Base
+namespace ASM2.ViewModels.Base
 {
+    /// <summary>
+    /// Base view model that fires Property Changed events as needed
+    /// </summary>
     public class BaseViewModel : INotifyPropertyChanged
     {
         // The event that is fired when any child property changes its value

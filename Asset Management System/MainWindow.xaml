@@ -3,15 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Asset_Management_System"
+        xmlns:local="clr-namespace.Asset_Management_System"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
+        Top="900"
+        Left="200"
+        WindowStartupLocation="Manual"
         Title="Asset Management System" Height="450" Width="800">
     <Grid>
         <!-- When adding or removing rows and columns, remember that some 
              row- and columnspans might need to be changed. Also in code
-             Ask Fly
-        -->
+             Ask Fly -->
         <Grid.RowDefinitions>
             <RowDefinition Height="0"/>
             <RowDefinition Height="50px"/>
@@ -82,8 +83,6 @@
             Grid.ColumnSpan="2"
             NavigationUIVisibility="Hidden"
         />
-
-        
     </Grid>
 </Window>
 

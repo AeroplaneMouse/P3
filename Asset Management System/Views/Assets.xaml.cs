@@ -20,7 +20,7 @@ namespace Asset_Management_System.Views
     public partial class Assets : Page
     {
 
-        public Assets(MainWindow main)
+        public Assets()
         {
             InitializeComponent();
             DataContext = new ViewModels.AssetsViewModel(main);
