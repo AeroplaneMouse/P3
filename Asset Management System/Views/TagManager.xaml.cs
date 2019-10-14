@@ -5,6 +5,7 @@ using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Events;
 using Brushes = System.Windows.Media.Brushes;
+using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
 {
@@ -13,7 +14,7 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class TagManager : FieldsController
     {
-        private readonly MainWindow _main;
+        private readonly MainViewModel _main;
 
         private readonly Tag _tag;
 
@@ -24,7 +25,7 @@ namespace Asset_Management_System.Views
         /// </summary>
         /// <param name="main"></param>
         /// <param name="inputTag">Optional input, only used when editing a tag.</param>
-        public TagManager(MainWindow main,Tag inputTag = null)
+        public TagManager(MainViewModel main,Tag inputTag = null)
         {
             InitializeComponent();
             _main = main;
@@ -60,7 +61,7 @@ namespace Asset_Management_System.Views
             }
 
             _tag.SerializeFields();
-            Department department = _main.topNavigationPage.SelectedDepartment;
+            Department department = _main.CurrentDepartment;
             if (department != null)
             {
                 _tag.DepartmentID = department.ID;
@@ -75,7 +76,7 @@ namespace Asset_Management_System.Views
                     rep.Insert(_tag);
                 }
                 
-                _main.ChangeSourceRequest(new Tags(_main));
+                _main.ChangeMainContent(new Tags(_main));
             }
             else
             {

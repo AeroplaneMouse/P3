@@ -1,0 +1,166 @@
+<Window x:Class="Asset_Management_System.Views.Main"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Asset_Management_System.Views"
+        mc:Ignorable="d"
+        Top="300"
+        Left="200"
+        WindowStartupLocation="Manual"
+        x:Name="AppWindow"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Icon="/Resources/Images/Logos/catface.jpg"
+        MinHeight="{Binding WindowMinHeight}"
+        MinWidth="{Binding WindowMinWidth}"
+        Title="Asset Management System" Height="600" Width="1000">
+    
+    <Window.Resources>
+        <!-- Style of the window -->
+        <Style TargetType="{x:Type local:Main}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <!-- Overrides the standard template for Window, giving a "blank slate" -->
+                    <ControlTemplate TargetType="{x:Type Window}">
+                        <Border Padding="{Binding OuterMarginThicknessSize}">
+                            <Grid>
+                                <!-- Window border and drop shadow -->
+                                <Border Background="{StaticResource BackgroundLightBrush}"
+                                        CornerRadius="0">
+                                    <Border.Effect>
+                                        <DropShadowEffect ShadowDepth="0" Opacity="0.5" />
+                                    </Border.Effect>
+                                </Border>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="{Binding TitleHeightGridLength}"/>   <!-- Menu bar -->
+                                        <RowDefinition Height="*"/>                                 <!-- Window content -->
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0"
+                                          Panel.ZIndex="1"
+                                          Background="{StaticResource BackgroundDarkBrush}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>    <!-- Icon -->
+                                            <ColumnDefinition Width="*" />      <!-- Menu -->
+                                            <ColumnDefinition Width="Auto"/>    <!-- Window buttons -->
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Icon button -->
+                                        <Button Grid.Column="0"
+                                                Style="{StaticResource SystemIconButton}"
+                                                Command="{Binding SystemMenuCommand}">
+                                            <Image Source="/Resources/Images/Logos/catface4.jpg"/>
+                                        </Button>
+
+                                        <!-- Menu bar -->
+                                        <Menu Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource Menu}">
+                                            <MenuItem Header="_Settings" Style="{StaticResource MenuItem}">
+                                                <MenuItem Header="_Save" Style="{StaticResource MenuItem}"/>
+                                                <MenuItem Header="_Load" Style="{StaticResource MenuItem}"/>
+                                                <MenuItem Header="_Clear" Style="{StaticResource MenuItem}"/>
+                                            </MenuItem>
+                                            <MenuItem Header="_Help" Style="{StaticResource MenuItem}">
+                                                <MenuItem Header="_About" Style="{StaticResource MenuItem}"/>
+                                                <MenuItem Header="_Exit" Style="{StaticResource MenuItem}"/>
+                                            </MenuItem>
+                                        </Menu>
+                                        <!-- 
+                                        <StackPanel Orientation="Horizontal"
+                                                    Grid.Column="1">
+                                            
+                                                
+                                            </Menu>
+
+                                            <Button Content="Settings"
+                                                    Style="{StaticResource MenuButton}"
+                                                    Command="{Binding ShowWindow}"/>
+                                            
+                                            <Button Content="Help"
+                                                    Style="{StaticResource MenuButton}"/>
+                                        </StackPanel>
+                                        -->
+
+                                        <!-- Window buttons -->
+                                        <StackPanel Grid.Column="2"
+                                                    Orientation="Horizontal">
+
+                                            <Menu Style="{StaticResource Menu}">
+                                                <MenuItem Header="{Binding CurrentDepartment}" 
+                                                          ItemsSource="{Binding Departments}" 
+                                                          Style="{StaticResource menuParentStyle}">
+                                                </MenuItem>
+                                            </Menu>
+                                            
+                                            <TextBlock Text="{Binding CurrentUser}"
+                                                       Foreground="White"
+                                                       TextBlock.FontSize="{StaticResource FontSizeRegular}"
+                                                       TextBlock.FontFamily="{StaticResource SegoeRegular}"
+                                                       VerticalAlignment="Center"
+                                                       Margin="15, 0, 15, 0"/>
+                                            
+                                            <Button Content="-" Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}"/>
+                                            <Button Content="[ ]" Command="{Binding MaximizeCommand}" Style="{StaticResource WindowControlButton}"/>
+                                            <Button Content="X" Command="{Binding CloseCommand}" Style="{StaticResource WindowCloseButton}"/>
+
+                                        </StackPanel>
+
+                                    </Grid>
+                                    
+                                    <!-- Navigation content -->
+                                    <!-- 
+                                    <Grid Grid.Row="1" Background="{StaticResource BackgroundDarkBrush}">
+                                        <StackPanel Orientation="Horizontal"
+                                                    HorizontalAlignment="Right"
+                                                    Margin="10, 0, 10, 0">
+                                            <StackPanel>
+                                                
+                                                
+                                                <Button Content="{Binding CurrentDepartment.Name}" Style="{StaticResource MenuButton}"/>
+                                            </StackPanel>
+                                            
+                                        </StackPanel>
+                                    </Grid>
+                                    -->
+                                    
+                                    <!-- Window content -->
+                                    <Grid Grid.Row="1" Background="{StaticResource BackgroundLightBrush}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Background="{StaticResource NavigationBackgroundBrush}">
+                                            <StackPanel Orientation="Vertical">
+                                                <Button Content="Home" Command="{Binding ShowHomePageCommand}" Style="{StaticResource NavigationButton}"/>
+                                                <Button Content="Assets" Command="{Binding ShowAssetsPageCommand}" Style="{StaticResource NavigationButton}"/>
+                                                <Button Content="Tags" Command="{Binding ShowTagPageCommand}" Style="{StaticResource NavigationButton}"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Frame Grid.Column="1"
+                                               NavigationUIVisibility="Hidden"
+                                               Content="{Binding FrameMainContent}"/>
+                                    </Grid>
+
+                                    <Frame Grid.Row="1"
+                                           Visibility="{Binding SplashVisibility}"
+                                           Background="{StaticResource BackgroundLightBrush}"
+                                           NavigationUIVisibility="Hidden"
+                                           Content="{Binding FrameSplash}"
+                                           />
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="{Binding ResizeBorderThickness}"
+                      CaptionHeight="{Binding TitleHeight}"
+                      GlassFrameThickness="0"/>
+    </WindowChrome.WindowChrome>
+</Window>

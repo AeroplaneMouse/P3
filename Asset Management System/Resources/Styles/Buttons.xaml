@@ -1,13 +1,157 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Asset_Management_System">
-    
-    <!-- Regular button -->
-    <Style x:Key="RegularButton" TargetType="Button">
-        <Setter Property="Width" Value="60"/>
-        <Setter Property="TextBlock.FontSize" Value="12"/>
-        <Setter Property="Padding" Value="5, 2, 5, 2"/>
+
+    <!-- Menu button -->
+    <Style TargetType="{x:Type Button}" x:Key="MenuButton" BasedOn="{StaticResource BaseStyle}">
+
+        <!-- So it can be clicked -->
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="9" />
+        <Setter Property="Foreground" Value="{StaticResource BackgroundDarkBrush}" />
+
+        <!-- Makes the content of the button a textblock -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                        <TextBlock VerticalAlignment="Center" 
+                                   HorizontalAlignment="Center" 
+                                   Text="{TemplateBinding Content}" 
+                                   Foreground="{StaticResource BackgroundLightBrush}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Adds the hover effect -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}" />
+            </Trigger>
+        </Style.Triggers>
+
+    </Style>
+
+    <!-- Hoverless button -->
+    <Style TargetType="{x:Type Button}" x:Key="Hoverless">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- System icon button-->
+    <Style TargetType="{x:Type Button}" x:Key="SystemIconButton" BasedOn="{StaticResource Hoverless}">
+
+        <!-- So it can be clicked -->
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        <Setter Property="Padding" Value="1" />
+
+    </Style>
+
+    <!-- Navigation bar button -->
+    <Style TargetType="{x:Type Button}" x:Key="NavigationButton" BasedOn="{StaticResource BaseStyle}">
+
+        <!-- So it can be clicked -->
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="9" />
+        <Setter Property="Foreground" Value="{StaticResource BackgroundLightBrush}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+
+        <!-- Makes the content of the button a textblock -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                        <TextBlock VerticalAlignment="Center" 
+                                   HorizontalAlignment="Center" 
+                                   Text="{TemplateBinding Content}" 
+                                   Foreground="{StaticResource BackgroundLightBrush}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Adds the hover effect -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+            </Trigger>
+        </Style.Triggers>
+
+    </Style>
+
+    <!-- Window control button -->
+    <Style TargetType="{x:Type Button}" x:Key="WindowControlButton" BasedOn="{StaticResource BaseStyle}">
+
+        <!-- So it can be clicked -->
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="9" />
+        <Setter Property="Foreground" Value="{StaticResource BackgroundDarkBrush}" />
+
+        <!-- Stretches the buttons so they are bigger. Remove when changing to icon! -->
+        <Setter Property="LayoutTransform">
+            <Setter.Value>
+                <ScaleTransform ScaleX="1.5"/>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Makes the content of the button a textblock. Should be icon! -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                        <TextBlock VerticalAlignment="Center" 
+                                   HorizontalAlignment="Center" 
+                                   Text="{TemplateBinding Content}"
+                                   TextBlock.FontWeight="Light"
+                                   Foreground="{StaticResource BackgroundLightBrush}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Adds the hover effect -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}" />
+            </Trigger>
+        </Style.Triggers>
+
+    </Style>
+
+    <!-- Window control close button needs to be red -->
+    <Style TargetType="{x:Type Button}" x:Key="WindowCloseButton" BasedOn="{StaticResource WindowControlButton}">
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource CloseRedBrush}"/>
+                <!--<Setter Property="Foreground" Value="{StaticResource BackgroundLightBrush}" />-->
+            </Trigger>
+        </Style.Triggers>
+
     </Style>
     
-    
+    <!-- Regular button -->
+    <Style TargetType="{x:Type Button}" x:Key="RegularButton" BasedOn="{StaticResource NavigationButton}">
+        <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+        <Setter Property="Width" Value="100"/>
+
+    </Style>
+
 </ResourceDictionary>

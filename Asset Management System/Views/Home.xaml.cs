@@ -1,12 +1,5 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Controls;
-using System.Collections.Generic;
-using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Models;
-using Asset_Management_System.Events;
-using System.Linq;
+﻿using System.Windows.Controls;
+using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
 {
@@ -15,24 +8,10 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Home : Page
     {
-        private MainWindow Main;
-
-        public Home(MainWindow main)
+        public Home(MainViewModel main)
         {
             InitializeComponent();
-            Main = main;
-        }
-
-        private void Btn_Test_Click(object sender, RoutedEventArgs e)
-        {
-            NotificationEventArgs args = new NotificationEventArgs("Test notification", Brushes.Green);
-            Main.ShowNotification(this, args);
-            //ShowNotification(sender, args);
-        }
-
-        private void BtnShowDepartments_Click(object sender, RoutedEventArgs e)
-        {
-            
+            DataContext = new ViewModels.HomeViewModel(main);
         }
     }
 }

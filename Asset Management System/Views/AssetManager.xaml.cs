@@ -4,6 +4,7 @@ using Asset_Management_System.Controllers;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using System.Windows.Media;
+using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
 {
@@ -12,7 +13,7 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class AssetManager : FieldsController
     {
-        private MainWindow Main;
+        private MainViewModel _main;
         private Asset _asset;
         private bool Editing;
 
@@ -21,10 +22,10 @@ namespace Asset_Management_System.Views
         /// </summary>
         /// <param name="main"></param>
         /// <param name="inputTag">Optional input, only used when editing a asset.</param>
-        public AssetManager(MainWindow main, Asset inputAsset = null)
+        public AssetManager(MainViewModel main, Asset inputAsset = null)
         {
             InitializeComponent();
-            Main = main;
+            _main = main;
             FieldsList = new ObservableCollection<Field>();
             FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
             if (inputAsset != null)
@@ -38,7 +39,6 @@ namespace Asset_Management_System.Views
                 _asset = new Asset();
                 Editing = false;
             }
-
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Asset_Management_System.Views
             }
 
             _asset.SerializeFields();
-            Department department = Main.topNavigationPage.SelectedDepartment;
+            Department department = _main.CurrentDepartment;
             if (department != null)
             {
                 _asset.DepartmentID = department.ID;
@@ -74,12 +74,12 @@ namespace Asset_Management_System.Views
                     rep.Insert(_asset);
                 }
 
-                Main.ChangeSourceRequest(new Assets(Main));
+                _main.ChangeMainContent(new Assets(_main));
             }
             else
             {
                 string message = $"ERROR! No department set. Please create a department to attach the asset to.";
-                Main.ShowNotification(sender, new Events.NotificationEventArgs(message, Brushes.Red));
+                //Main.ShowNotification(sender, new Events.NotificationEventArgs(message, Brushes.Red));
             }
         }
         

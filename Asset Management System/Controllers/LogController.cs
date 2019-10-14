@@ -4,6 +4,7 @@ using System.Reflection;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Logging;
 using Asset_Management_System.Models;
+using Asset_Management_System.Logging;
 
 namespace Asset_Management_System.Controllers
 {
