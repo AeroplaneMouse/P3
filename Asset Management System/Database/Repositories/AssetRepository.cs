@@ -263,6 +263,7 @@ namespace Asset_Management_System.Database.Repositories
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
                 new object[] { row_id, row_label, row_description, row_department_id, row_created_at, row_options }, null, null);
         }
+        
         /// <summary>
         /// Adds a list of tags to an asset
         /// </summary>
@@ -294,8 +295,7 @@ namespace Asset_Management_System.Database.Repositories
                     using (var cmd = new MySqlCommand(query.ToString(), dbcon.Connection))
                     {
                         Console.WriteLine(cmd.CommandText);
-
-                        MySqlDataReader tset = cmd.ExecuteReader();
+                        query_success = cmd.ExecuteNonQuery() > 0;
                     }
                 }
             }
@@ -310,6 +310,7 @@ namespace Asset_Management_System.Database.Repositories
             
             return query_success;
         }
+        
         /// <summary>
         /// Gets a list of all tags on an asset
         /// </summary>
