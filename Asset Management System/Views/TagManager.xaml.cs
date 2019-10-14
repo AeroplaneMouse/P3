@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Windows;
-using System.Windows.Controls;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Events;
