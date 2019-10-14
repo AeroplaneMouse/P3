@@ -47,7 +47,20 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void Update_ReceivesAnAssetExistingInTheDatabase_ReturnsTrueAsTheAssetIsUpdated()
+        public void Insert_ReceivesAssetWithoutFields_ReturnsTrueAsAssetIsInserted()
+        {
+            //Arrange
+            asset.FieldsList = new List<Field>();
+
+            //Act
+            bool result = assetRepository.Insert(asset);
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void Update_WellDefinedAssetFromDatabase_ReturnsTrueAsTheAssetIsUpdated()
         {
             //Arrange
             assetRepository.Insert(asset);
@@ -59,6 +72,25 @@ namespace UnitTests
 
             //Assert
             Assert.IsTrue(condition: result);
+        }
+
+        [TestMethod]
+        public void Update_AssetWithoutFieldsInDatabase_ChecksIfFieldIsAdded()
+        {
+            //Arrange
+            string expected = (new Field(3, "Label of updated field", "content of updated field", 4, "Default value of second field")).ToString();
+            asset.FieldsList = new List<Field>();
+            assetRepository.Insert(asset);
+
+            //Act
+            Asset assetToUpdate = this.assetRepository.GetById(1);
+            assetToUpdate.AddField(new Field(3, "Label of updated field", "content of updated field", 4, "Default value of second field"));
+            assetRepository.Update(assetToUpdate);
+            Asset updatedAsset = this.assetRepository.GetById(1);
+            string result = updatedAsset.FieldsList[0].ToString();
+
+            //Assert
+            Assert.AreEqual(expected, result);
         }
 
         [TestCleanup]
