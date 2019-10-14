@@ -13,18 +13,30 @@ namespace Asset_Management_System.Views
     /// <summary>
     /// Interaction logic for NewTag.xaml
     /// </summary>
-    public partial class NewTag : FieldsController
+    public partial class TagManager : FieldsController
     {
         private MainWindow Main;
 
         private Tag _tag;
 
-        public NewTag(MainWindow main)
+        private bool _editing;
+
+        public TagManager(MainWindow main,Tag inputTag = null)
         {
             InitializeComponent();
-            _tag = new Tag();
             Main = main;
             FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
+            if (inputTag != null)
+            {
+                _tag = inputTag;
+                _editing = true;
+                LoadFields();
+            }
+            else
+            {
+                _tag = new Tag();
+                _editing = false;
+            }
         }
 
         private void BtnSaveNewTag_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -42,8 +54,17 @@ namespace Asset_Management_System.Views
             if (department != null)
             {
                 _tag.DepartmentID = department.ID;
+                _tag.Color = Color.Text;
                 TagRepository rep = new TagRepository();
-                rep.Insert(_tag);
+                if (_editing)
+                {
+                    rep.Update(_tag);
+                }
+                else
+                {
+                    rep.Insert(_tag);
+                }
+                
                 Main.ChangeSourceRequest(new Tags(Main));
             }
             else
@@ -57,6 +78,20 @@ namespace Asset_Management_System.Views
         private void ColorPickerColorChanged(object sender, EventArgs e)
         {
             Color.Text = ColorPicker.SelectedColor.ToString();
+        }
+        
+        private bool LoadFields()
+        {
+            ConsoleWriter.ConsoleWrite("------Field labels | Field content -------");
+            _tag.DeserializeFields();
+            foreach (var field in _tag.FieldsList)
+            {
+                ConsoleWriter.ConsoleWrite(field.Label +" | "+ field.Content);
+                FieldsList.Add(field);
+            }
+            TbName.Text = _tag.Label;
+            Color.Text = _tag.Color;
+            return true;
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Asset_Management_System.Controllers;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
@@ -14,15 +13,26 @@ namespace Asset_Management_System.Views
     {
         private MainWindow Main;
         private Asset _asset;
+        private bool Editing;
 
-        public EditAsset(MainWindow main, Asset inputAsset)
+        public EditAsset(MainWindow main, Asset inputAsset = null)
         {
             InitializeComponent();
             Main = main;
             FieldsList = new ObservableCollection<Field>();
             FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
-            _asset = inputAsset;
-            LoadFields();
+            if (inputAsset != null)
+            {
+                _asset = inputAsset;
+                LoadFields();
+                Editing = true;
+            }
+            else
+            {
+                _asset = new Asset();
+                Editing = false;
+            }
+
         }
 
         private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -44,7 +54,15 @@ namespace Asset_Management_System.Views
                 _asset.Attach(logController);
                 _asset.Notify();
                 AssetRepository rep = new AssetRepository();
-                rep.Update(_asset);
+                if (Editing)
+                {
+                    rep.Update(_asset);
+                }
+                else
+                {
+                    rep.Insert(_asset);
+                }
+
                 Main.ChangeSourceRequest(new Assets(Main));
             }
             else
@@ -58,10 +76,10 @@ namespace Asset_Management_System.Views
         {
             ConsoleWriter.ConsoleWrite("------Field labels | Field content -------");
             _asset.DeserializeFields();
-            foreach (var asset in _asset.FieldsList)
+            foreach (var field in _asset.FieldsList)
             {
-                ConsoleWriter.ConsoleWrite(asset.Label +" | "+ asset.Content);
-                FieldsList.Add(asset);
+                ConsoleWriter.ConsoleWrite(field.Label +" | "+ field.Content);
+                FieldsList.Add(field);
             }
             TbName.Text = _asset.Name ;
             TbDescription.Text = _asset.Description;

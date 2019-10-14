@@ -1,4 +1,4 @@
-﻿<views:FieldsController x:Class="Asset_Management_System.Views.NewTag"
+﻿<views:FieldsController x:Class="Asset_Management_System.Views.TagManager"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -8,7 +8,7 @@
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
-      Title="NewAsset">
+      Title="NewTag">
     <Page.Resources>
         <views:FieldDesignSelector x:Key="MyFieldDesignSelector" />
         <DataTemplate x:Key="TextBoxFieldStyle">
@@ -153,8 +153,8 @@
         </Grid>
 
         <Button
-            Name="BtnSaveNewAsset"
-            Content="Save asset"
+            Name="BtnSaveNewTag"
+            Content="Save tag"
             Grid.Row="1"
             Grid.Column="2"
             VerticalAlignment="Top"

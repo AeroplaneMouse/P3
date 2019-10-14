@@ -16,6 +16,8 @@ namespace Asset_Management_System.Models
 
         private int IDCounter = 0;
 
+        
+        //Used for formatting the DateTimeOutput when showing the elements within a database.
         public string DateToStringConverter => CreatedAt.ToString("MM/dd/yyyy HH:mm:ss");
 
         public DoesContainFields()

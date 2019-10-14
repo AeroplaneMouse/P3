@@ -26,7 +26,7 @@ namespace Asset_Management_System.Views
 
         private void Btn_AddNewAsset_Click(object sender, RoutedEventArgs e)
         {
-            Main.ChangeSourceRequest(new NewAsset(Main));
+            Main.ChangeSourceRequest(new EditAsset(Main));
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)

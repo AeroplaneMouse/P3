@@ -81,7 +81,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options) WHERE id=@id";
+                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -95,7 +95,7 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters["@options"].Value = entity.SerializedFields;
 
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = entity.ParentID;
+                        cmd.Parameters["@id"].Value = entity.ID;
 
                         query_success = cmd.ExecuteNonQuery() > 0;
                     }
