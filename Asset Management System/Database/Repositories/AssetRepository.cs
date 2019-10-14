@@ -7,21 +7,14 @@ using Asset_Management_System.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
 using Asset_Management_System.Helpers;
-using System.Collections.ObjectModel;
 
 namespace Asset_Management_System.Database.Repositories
 {
     public class AssetRepository : IAssetRepository
     {
-        private DBConnection dbcon;
-
-        public AssetRepository()
-        {
-            this.dbcon = DBConnection.Instance();
-        }
-
         public bool Insert(Asset entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -61,6 +54,7 @@ namespace Asset_Management_System.Database.Repositories
 
         public bool Update(Asset entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -99,6 +93,7 @@ namespace Asset_Management_System.Database.Repositories
 
         public bool Delete(Asset entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -130,6 +125,7 @@ namespace Asset_Management_System.Database.Repositories
 
         public Asset GetById(ulong id)
         {
+            DBConnection dbcon = DBConnection.Instance();
             Asset asset = null;
 
             if (dbcon.IsConnect())
@@ -168,6 +164,7 @@ namespace Asset_Management_System.Database.Repositories
 
         public List<Asset> SearchByTags(List<int> tags_ids)
         {
+            DBConnection dbcon = DBConnection.Instance();
             List<Asset> assets = new List<Asset>();
 
             if (dbcon.IsConnect())
@@ -207,9 +204,10 @@ namespace Asset_Management_System.Database.Repositories
             return assets;
         }
 
-        public ObservableCollection<Asset> Search(string keyword)
+        public List<Asset> Search(string keyword)
         {
-            ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
+            DBConnection dbcon = DBConnection.Instance();
+            List<Asset> assets = new List<Asset>();
 
             if (dbcon.IsConnect())
             {
@@ -259,16 +257,53 @@ namespace Asset_Management_System.Database.Repositories
             ulong row_department_id = reader.GetUInt64("department_id");
             DateTime row_created_at = reader.GetDateTime("created_at");
             string row_options = reader.GetString("options");
+            Console.WriteLine(row_options);
 
 
-            return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
+            return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
                 new object[] { row_id, row_label, row_description, row_department_id, row_created_at, row_options }, null, null);
-
         }
-
         public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
         {
-            return false;
+            DBConnection dbcon = DBConnection.Instance();
+            dbcon = DBConnection.Instance();
+            bool query_success = false;
+
+            Console.WriteLine(tags.Count + ": " + tags[0].Label + ", " + tags[0].ID);
+
+            StringBuilder query = new StringBuilder("INSERT INTO asset_tags (asset_id, tag_id) VALUES ");
+            List<string> inserts = new List<string>();
+
+            foreach (var item in tags)
+            {
+                inserts.Add(string.Format("({0},{1})", asset.ID, item.ID));
+            }
+
+            query.Append(string.Join(",", inserts));
+            
+            try{
+                if (dbcon.IsConnect() && tags.Count > 0)
+                {
+                    Console.WriteLine(dbcon.Connection.State);
+
+                    using (var cmd = new MySqlCommand(query.ToString(), dbcon.Connection))
+                    {
+                        Console.WriteLine(cmd.CommandText);
+
+                        MySqlDataReader tset = cmd.ExecuteReader();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                dbcon.Close();
+            }
+            
+            return query_success;
         }
     }
 }
