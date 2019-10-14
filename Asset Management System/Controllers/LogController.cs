@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Reflection;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Logging;
 using Asset_Management_System.Models;
@@ -15,7 +17,7 @@ namespace Asset_Management_System.Controllers
         public void Update(Model Subject)
         {
             string description = GenerateDescription(Subject);
-            Subject.SavePrevValues();
+            //Subject.SavePrevValues();
             string changes = Subject.GetChanges();
             Log.Write(Subject, description, changes);
             Console.WriteLine("Creating log entry: " + description);
@@ -30,15 +32,20 @@ namespace Asset_Management_System.Controllers
         /// </returns>
         private string GenerateDescription(Model subject)
         {
+            Type objectType = subject.GetType();
+            PropertyInfo[] props = objectType.GetProperties();
+            
             // Get the name of the subject
             string name;
             if (subject.GetType().GetProperty("Name") != null)
             {
-                name = subject.GetType().Name;
+                //name = subject.GetType().Name;
+                name = objectType.GetProperty("Name").GetValue(subject, null).ToString();
             }
             else if (subject.GetType().GetProperty("Label") != null)
             {
-                name = subject.GetType().Name;
+                //name = subject.GetType().Name;
+                name = objectType.GetProperty("Label").GetValue(subject, null).ToString();
             }
             else
             {
@@ -47,7 +54,7 @@ namespace Asset_Management_System.Controllers
             }
 
             // Get subject Type
-            string type = subject.GetType().ToString();
+            string type = subject.GetType().Name;
             // Determine if subject is being created or updated
             string changeType = subject.ID == 0 ? "created" : "updated";
 

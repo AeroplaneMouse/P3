@@ -23,6 +23,7 @@ namespace Asset_Management_System.Models
             CreatedAt = created_at;
             SerializedFields = options;
             FieldsList = new List<Field>();
+            SavePrevValues();
         }
 
         public string Name { get; set; }
