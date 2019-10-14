@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Windows;
@@ -54,6 +55,7 @@ namespace Asset_Management_System.Views
         {
             _tag.Label = TbName.Text;
             _tag.Color = Color.Text;
+            _tag.FieldsList = new List<Field>();
             foreach (var field in FieldsList)
             {
                 _tag.AddField(field);
