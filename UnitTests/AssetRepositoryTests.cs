@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Database;
 using System.Collections.Generic;
 using System.Windows;
 
@@ -13,6 +14,8 @@ namespace UnitTests
         public DepartmentRepository departmentRepository;
         public AssetRepository assetRepository;
         public Asset asset;
+        public DBConnection dBConnection;
+        public MySqlHandler mySqlHandler;
 
         [TestInitialize]
         public void InitiateAssetAndRepository()
@@ -20,7 +23,9 @@ namespace UnitTests
             departmentRepository = new DepartmentRepository();
             assetRepository = new AssetRepository();
             asset = new Asset();
-            
+            this.dBConnection = DBConnection.Instance();
+            mySqlHandler = new MySqlHandler(dBConnection.Connection);
+
             departmentRepository.Insert(new Department("IntegrationTestDepartment"));
 
             asset.Name = "Integrationtest";

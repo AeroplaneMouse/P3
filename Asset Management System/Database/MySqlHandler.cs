@@ -1,50 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows.Media;
 using MySql.Data.MySqlClient;
 
 namespace Asset_Management_System.Database
 {
-    class MySqlHandler : ISqlHandler
+    public class MySqlHandler
     {
-        private MySqlConnection connection = null;
-        private string connstring = "Server=192.38.49.9; database=ds303e19; UID=ds303e19; password=Cisptf8CuT4hLj4T; Pooling=true; Min Pool Size=0; Max Pool Size=100; Connection Lifetime=0";
+        private MySqlConnection dbcon;
 
-        private MySqlHandler()
+        public MySqlHandler(MySqlConnection connection)
         {
-            connection = new MySqlConnection(connstring);
+            this.dbcon = connection;
         }
 
-        public MySqlConnection Connection
+        public bool RawQuery(string raw_query, MySqlParameterCollection par = null)
         {
-            get { return connection; }
-        }
+            bool result = false;
 
-        public bool IsConnect()
-        {
-            connection.Open();
-
-            try
+            using (var cmd = new MySqlCommand(raw_query, this.dbcon))
             {
-                if (Connection == null)
+                if (par != null)
                 {
-                    
-                    
-                    connection.Open();
+                    foreach (var param in par)
+                    {
+                        cmd.Parameters.Add(param);
+                    }
                 }
-                return true;
+                result = cmd.ExecuteNonQuery() > 0;
             }
-            catch (MySqlException)
-            {
-                return false;
-            }
+
+            return result;
         }
 
         public void Close()
         {
-            connection.Close();
-   
+            this.dbcon.Close();
         }
     }
 }
