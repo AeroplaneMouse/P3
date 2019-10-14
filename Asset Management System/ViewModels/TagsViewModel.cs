@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using Asset_Management_System.Views;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -19,6 +20,7 @@ namespace Asset_Management_System.ViewModels
         {
             _main = main;
 
+            Search();
             // Initializing commands
             AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.TagManager(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
@@ -39,16 +41,11 @@ namespace Asset_Management_System.ViewModels
         public string SearchQueryText { get; set; } = "";
         public int SelectedItemIndex { get; set; }
 
-        private ObservableCollection<Tag> _list;
+        private ObservableCollection<Tag> _list = new ObservableCollection<Tag>();
 
         public ObservableCollection<Tag> SearchList
         {
-            get
-            {
-                if (_list == null)
-                    _list = new ObservableCollection<Tag>();
-                return _list;
-            }
+            get => _list;
             set
             {
                 _list.Clear();
@@ -108,21 +105,15 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void Edit()
         {
-            //System.Collections.IList seletedAssets = LV_assetList.SelectedItems;
-            //Asset input = (seletedAssets[0] as Asset);
-
-            if (SelectedItems.Count != 1)
+            Tag selectedTag = GetSelectedItem();
+            if (selectedTag != null)
             {
-                string message = $"You have selected { SelectedItems.Count }. This is not a valid amount!";
-                //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Red));
-                Console.WriteLine(message);
-                return;
+                Console.WriteLine("Editing " + selectedTag.Label);
+                _main.ChangeMainContent(new TagManager(_main,selectedTag));
             }
             else
             {
-                //Main.ChangeMainContent(new EditAsset(Main,input));
-                //Console.WriteLine($"Editing { SelectedItems.ElementAt(0) }.");
-                Console.WriteLine("Editing the selected item.");
+                Console.WriteLine("Please select an item");
             }
         }
 
