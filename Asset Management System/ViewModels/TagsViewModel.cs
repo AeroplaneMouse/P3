@@ -18,6 +18,7 @@ namespace Asset_Management_System.ViewModels
         {
             _main = main;
 
+            Search();
             // Initializing commands
             AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.TagManager(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
@@ -39,16 +40,11 @@ namespace Asset_Management_System.ViewModels
 
         public List<Selector> SelectedItems { get; set; } = new List<Selector>();
 
-        private ObservableCollection<Tag> _list;
+        private ObservableCollection<Tag> _list = new ObservableCollection<Tag>();
 
         public ObservableCollection<Tag> SearchList
         {
-            get
-            {
-                if (_list == null)
-                    _list = new ObservableCollection<Tag>();
-                return _list;
-            }
+            get => _list;
             set
             {
                 _list.Clear();
