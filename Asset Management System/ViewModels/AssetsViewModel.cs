@@ -2,6 +2,7 @@
 using Asset_Management_System.Models;
 using Asset_Management_System.Views;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -40,11 +41,9 @@ namespace Asset_Management_System.ViewModels
         #region Public Properties
 
         public string SearchQueryText { get; set; } = "";
+        public int SelectedItemIndex { get; set; }
 
-        public List<Selector> SelectedItems { get; set; } = new List<Selector>();
-        
         private ObservableCollection<Asset> _list;
-
         public ObservableCollection<Asset> SearchList
         {
             get
@@ -103,22 +102,12 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void Edit()
         {
-            //System.Collections.IList seletedAssets = LV_assetList.SelectedItems;
-            //Asset input = (seletedAssets[0] as Asset);
-
-            if (SelectedItems.Count != 1)
-            {
-                string message = $"You have selected { SelectedItems.Count }. This is not a valid amount!";
-                //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Red));
-                Console.WriteLine(message);
-                return;
-            }
+            Asset selectedAsset = GetSelectedItem();
+            if(selectedAsset == null)
+                Console.WriteLine("An asset is not selected!");
             else
-            {
-                //Main.ChangeMainContent(new EditAsset(Main,input));
-                //Console.WriteLine($"Editing { SelectedItems.ElementAt(0) }.");
-                Console.WriteLine("Editing the selected item.");
-            }
+                Console.WriteLine("Do some editing man");
+
         }
 
         /// <summary>
@@ -170,6 +159,15 @@ namespace Asset_Management_System.ViewModels
                 }
             }
         }
+
+        private Asset GetSelectedItem()
+        {
+            if (SearchList.Count == 0)
+                return null;
+            else
+                return SearchList.ElementAt(SelectedItemIndex);
+        }
+
 
         #endregion
 
