@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using Asset_Management_System.Views;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -104,21 +105,15 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void Edit()
         {
-            //System.Collections.IList seletedAssets = LV_assetList.SelectedItems;
-            //Asset input = (seletedAssets[0] as Asset);
-
-            if (SelectedItems.Count != 1)
+            Tag selectedTag = GetSelectedItem();
+            if (selectedTag != null)
             {
-                string message = $"You have selected { SelectedItems.Count }. This is not a valid amount!";
-                //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Red));
-                Console.WriteLine(message);
-                return;
+                Console.WriteLine("Editing " + selectedTag.Label);
+                _main.ChangeMainContent(new TagManager(_main,selectedTag));
             }
             else
             {
-                //Main.ChangeMainContent(new EditAsset(Main,input));
-                //Console.WriteLine($"Editing { SelectedItems.ElementAt(0) }.");
-                Console.WriteLine("Editing the selected item.");
+                Console.WriteLine("Please select an item");
             }
         }
 
