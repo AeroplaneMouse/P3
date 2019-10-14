@@ -8,6 +8,7 @@ namespace Asset_Management_System.Models
         private Department(ulong id, string name){
             this.ID = id;
             this.Name = name;
+            SavePrevValues();
         }
 
         public string Name { get; set; }

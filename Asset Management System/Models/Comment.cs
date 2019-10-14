@@ -11,6 +11,7 @@ namespace Asset_Management_System.Models
             Content = content;
             Username = username;
             AssetID = assetId;
+            SavePrevValues();
         }
 
         public string Content { get; set; }
