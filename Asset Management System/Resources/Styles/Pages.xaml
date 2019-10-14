@@ -44,6 +44,10 @@
                                     Content="Remove"
                                     Command="{Binding RemoveCommand}"/>
 
+                            <Button Style="{StaticResource RegularButton}"
+                                    Content="Print"
+                                    Command="{Binding PrintCommand}"/>
+
                         </StackPanel>
 
                         <ListView ItemsSource="{Binding SearchList}" 

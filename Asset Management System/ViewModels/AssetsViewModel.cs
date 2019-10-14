@@ -4,6 +4,7 @@ using Asset_Management_System.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -25,6 +26,7 @@ namespace Asset_Management_System.ViewModels
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
             EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
             RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
+            PrintCommand = new Base.RelayCommand(() => Print());
         }
 
         #endregion
@@ -153,12 +155,32 @@ namespace Asset_Management_System.ViewModels
 
         #endregion
 
+        #region Methods
+
+        public void Print()
+        {
+            string pathToFile = "asset_report_" + DateTime.Now.ToString().Replace(' ', '-');
+
+            using (StreamWriter file = new StreamWriter(@pathToFile, false))
+            {
+                foreach (Asset asset in SearchList)
+                {
+                    string fileEntry = asset.ID + asset.Name;
+                    file.WriteLine(fileEntry);
+                }
+            }
+        }
+
+        #endregion
+
         #region Commands
 
         public ICommand AddNewCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
+
+        public ICommand PrintCommand { get; set; }
 
         #endregion
     }
