@@ -9,9 +9,9 @@
                         d:DesignHeight="450" d:DesignWidth="800"
                         ShowsNavigationUI="False"
                         Title="Tags"
-                        Loaded="Page_Loaded">
+                        Style="{StaticResource ListPage}">
 
-    <Grid>
+    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
             <RowDefinition Height="60" />
@@ -43,25 +43,31 @@
             Margin="10"
             Click="BtnCreateNewTag_Click" />
 
-        <TextBox
-            Name="TbSearch"
-            Grid.Row="1"
-            Grid.Column="0"
-            VerticalAlignment="Bottom"
-            Margin="10, 0, 10, 0"
-            TextBlock.FontSize="14"
-            Padding="5"
-            KeyDown="TbSearch_KeyDown" />
-        <Button
-            Name="BtnSearch"
-            Grid.Row="1"
-            Grid.Column="1"
-            Content="Search"
-            TextBlock.FontSize="14"
-            VerticalAlignment="Bottom"
-            HorizontalAlignment="Left"
-            Padding="10, 5, 10, 5"
-            Click="BtnSearch_Click" />
+        <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Bottom">
+            <TextBox
+                Name="Tb_search"
+                Width="300"
+                TextBlock.FontSize="12px"
+                Padding="2,3,2,3"
+                KeyDown="Tb_search_KeyDown"
+            />
+
+            <Button Style="{StaticResource RegularButton}"
+                    Name="Btn_search"
+                    Content="Search"
+                    Click="Btn_search_Click"/>
+
+            <Button Style="{StaticResource RegularButton}"
+                    Name="BtnEditAsset"
+                    Content="Edit"
+                    Click="BtnEditTag_Click"/>
+            
+            <Button Style="{StaticResource RegularButton}"
+                    Name="BtnRemoveAsset"
+                    Content="Remove"
+                    Click="BtnRemoveAsset_Click"/>
+            
+        </StackPanel>
 
         <ListView
             Name="LvTags"
@@ -80,5 +86,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-    </Grid>
+    </Grid>-->
 </views:FieldsController>

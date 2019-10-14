@@ -7,6 +7,7 @@ using Asset_Management_System.Models;
 using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Reflection;
+using System.Collections.ObjectModel;
 
 namespace Asset_Management_System.Database.Repositories
 {
@@ -81,7 +82,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options) WHERE id=@id";
+                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -95,7 +96,7 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters["@options"].Value = entity.SerializedFields;
 
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = entity.ParentID;
+                        cmd.Parameters["@id"].Value = entity.ID;
 
                         query_success = cmd.ExecuteNonQuery() > 0;
                     }
@@ -247,9 +248,9 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public List<Tag> Search(string keyword)
+        public ObservableCollection<Tag> Search(string keyword)
         {
-            List<Tag> tags = new List<Tag>();
+            ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
 
             if (dbcon.IsConnect())
             {

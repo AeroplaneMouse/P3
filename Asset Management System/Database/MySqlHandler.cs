@@ -40,13 +40,13 @@ namespace Asset_Management_System.Database
             }
             catch (MySqlException e)
             {
-
+                
             }
             finally
             {
                 this.dbcon.Close();
             }
-
+            
             return result;
         }
     }
