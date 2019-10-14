@@ -1,18 +1,3 @@
-using System;
-using Xunit;
-
-namespace IntegrationTests
-{
-    public class UnitTest1
-    {
-        [Fact]
-        public void Test1()
-        {
-
-        }
-    }
-}
-/*
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
@@ -39,7 +24,7 @@ namespace UnitTests
             assetRepository = new AssetRepository();
             asset = new Asset();
             this.dBConnection = DBConnection.Instance();
-            mySqlHandler = new MySqlHandler(dBConnection.Connection);
+            mySqlHandler = new MySqlHandler(dBConnection);
 
             departmentRepository.Insert(new Department("IntegrationTestDepartment"));
 
@@ -90,4 +75,3 @@ namespace UnitTests
         }
     }
 }
-
