@@ -14,7 +14,6 @@ namespace UnitTests
         public DepartmentRepository departmentRepository;
         public AssetRepository assetRepository;
         public Asset asset;
-        public DBConnection dBConnection;
         public MySqlHandler mySqlHandler;
 
         [TestInitialize]
@@ -23,8 +22,7 @@ namespace UnitTests
             departmentRepository = new DepartmentRepository();
             assetRepository = new AssetRepository();
             asset = new Asset();
-            this.dBConnection = DBConnection.Instance();
-            mySqlHandler = new MySqlHandler(dBConnection);
+            mySqlHandler = new MySqlHandler();
 
             departmentRepository.Insert(new Department("IntegrationTestDepartment"));
 
@@ -63,15 +61,13 @@ namespace UnitTests
         }
 
         [TestCleanup]
-        public void DeleteAssetsFromRepository()
+        public void CleanDatabase()
         {
             //Clear asset
-            Asset assetToDelete = assetRepository.GetById(1);
-            assetRepository.Delete(assetToDelete);
+            mySqlHandler.RawQuery("TRUNCATE TABLE assets");
 
             //Clear department
-            Department departmentToDelete = departmentRepository.GetById(1);
-            departmentRepository.Delete(departmentToDelete);
+            mySqlHandler.RawQuery("TRUNCATE TABLE departments");
         }
     }
 }
