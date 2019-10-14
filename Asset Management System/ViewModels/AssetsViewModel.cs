@@ -22,7 +22,7 @@ namespace Asset_Management_System.ViewModels
             _main = main;
 
             // Initializing commands
-            AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new NewAsset(_main)));
+            //AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new NewAsset(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
             EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
             RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
