@@ -34,7 +34,7 @@
     <Compile Update="Views\Settings.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\SplashPage.xaml.cs">
+    <Compile Update="Views\Splash.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\TagTest.xaml.cs">
@@ -102,7 +102,7 @@
     <Page Update="Views\Settings.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\SplashPage.xaml">
+    <Page Update="Views\Splash.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\TagTest.xaml">

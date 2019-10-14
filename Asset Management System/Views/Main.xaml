@@ -35,7 +35,6 @@
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="{Binding TitleHeightGridLength}"/>   <!-- Menu bar -->
-                                        <RowDefinition Height="Auto"/>                              <!-- The top navigation bar -->
                                         <RowDefinition Height="*"/>                                 <!-- Window content -->
                                     </Grid.RowDefinitions>
                                     <Grid Grid.Row="0"
@@ -125,7 +124,7 @@
                                     -->
                                     
                                     <!-- Window content -->
-                                    <Grid Grid.Row="2" Background="{StaticResource BackgroundLightBrush}">
+                                    <Grid Grid.Row="1" Background="{StaticResource BackgroundLightBrush}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="100"/>
                                             <ColumnDefinition Width="*" />
@@ -143,6 +142,13 @@
                                                NavigationUIVisibility="Hidden"
                                                Content="{Binding FrameMainContent}"/>
                                     </Grid>
+
+                                    <Frame Grid.Row="1"
+                                           Visibility="{Binding SplashVisibility}"
+                                           Background="{StaticResource BackgroundLightBrush}"
+                                           NavigationUIVisibility="Hidden"
+                                           Content="{Binding FrameSplash}"
+                                           />
                                 </Grid>
                             </Grid>
                         </Border>

@@ -50,7 +50,8 @@ namespace Asset_Management_System.ViewModels
 
             // Setting up frames
             FrameMainContent = new Frame();
-            ChangeMainContent(new Views.Home(this));
+            FrameSplash = new Frame();
+            FrameSplash.Content = new Views.Splash(this);
 
             // Initialize commands
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
@@ -150,6 +151,10 @@ namespace Asset_Management_System.ViewModels
 
         public Frame FrameMainContent { get; set; }
 
+        public Frame FrameSplash { get; set; }
+
+        public Visibility SplashVisibility { get; set; } = Visibility.Visible;
+
         public List<Department> Departments { get => GetDepartments(); }
 
         #endregion
@@ -242,6 +247,7 @@ namespace Asset_Management_System.ViewModels
         public void SystemLoaded()
         {
             // Remove splash page
+            SplashVisibility = Visibility.Hidden;
             //FrameSplash.Visibility = Visibility.Hidden;
             //FrameSplash.Source = null;
 
