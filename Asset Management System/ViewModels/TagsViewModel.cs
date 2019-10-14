@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -37,8 +38,7 @@ namespace Asset_Management_System.ViewModels
         #region Public Properties
 
         public string SearchQueryText { get; set; } = "";
-
-        public List<Selector> SelectedItems { get; set; } = new List<Selector>();
+        public int SelectedItemIndex { get; set; }
 
         private ObservableCollection<Tag> _list = new ObservableCollection<Tag>();
 
@@ -161,6 +161,14 @@ namespace Asset_Management_System.ViewModels
         public void Print()
         {
             throw new NotImplementedException();
+        }
+
+        private Tag GetSelectedItem()
+        {
+            if (SearchList.Count == 0)
+                return null;
+            else
+                return SearchList.ElementAt(SelectedItemIndex);
         }
 
         #endregion
