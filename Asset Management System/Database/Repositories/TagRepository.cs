@@ -82,7 +82,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options WHERE id=@id";
+                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options, parent_id=@parent_id WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -94,6 +94,9 @@ namespace Asset_Management_System.Database.Repositories
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
                         cmd.Parameters["@options"].Value = entity.SerializedFields;
+                        
+                        cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@parent_id"].Value = entity.ParentID;
 
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = entity.ID;
