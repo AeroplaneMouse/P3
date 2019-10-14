@@ -19,9 +19,6 @@
     <Compile Update="Views\Home.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\HomeTest.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\LeftNavigation.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -85,9 +82,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Home.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\HomeTest.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\LeftNavigation.xaml">

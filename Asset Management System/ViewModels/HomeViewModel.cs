@@ -6,7 +6,22 @@ namespace Asset_Management_System.ViewModels
 {
     class HomeViewModel : Base.BaseViewModel
     {
+        #region Constructor
+        
+        /// <summary>
+        /// Default contructor
+        /// </summary>
+        public HomeViewModel(MainViewModel main)
+        {
+            // Initialize commands
+            _main = main;
+        }
+
+        #endregion
+
         #region Private Properties
+
+        private MainViewModel _main;
 
         #endregion
 
@@ -18,17 +33,5 @@ namespace Asset_Management_System.ViewModels
 
         #endregion
 
-        #region Constructor
-        
-        /// <summary>
-        /// Default contructor
-        /// </summary>
-        public HomeViewModel()
-        {
-            // Initialize commands
-
-        }
-
-        #endregion
     }
 }
