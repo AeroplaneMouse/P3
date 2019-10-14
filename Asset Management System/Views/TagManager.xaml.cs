@@ -6,6 +6,7 @@ using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Events;
 using Brushes = System.Windows.Media.Brushes;
 using Asset_Management_System.ViewModels;
+using System.Windows;
 
 namespace Asset_Management_System.Views
 {
@@ -49,7 +50,7 @@ namespace Asset_Management_System.Views
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void BtnSaveNewTag_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void BtnSaveNewTag_Click(object sender, RoutedEventArgs e)
         {
             _tag.Label = TbName.Text;
             _tag.Color = Color.Text;

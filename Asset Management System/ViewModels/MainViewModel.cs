@@ -92,8 +92,10 @@ namespace Asset_Management_System.ViewModels
 
         private List<Page> pages = new List<Page>();
 
-        // Radius of the edges of the window
-        //private int _windowRadius;
+        private List<Page> excludedPages = new List<Page> {
+            new Views.AssetManager(null),
+            new Views.TagManager(null)
+        };
 
         #endregion
 
@@ -207,7 +209,8 @@ namespace Asset_Management_System.ViewModels
             {
                 Console.WriteLine("Unable to find new page in pages. Creating new page.");
                 setPage = newPage;
-                pages.Add(setPage);
+                if (!ExcludedFromSaving(setPage))
+                    pages.Add(setPage);
             }
 
             // Setting the content of the given frame, to the newPage object to display the requested page.
@@ -258,6 +261,23 @@ namespace Asset_Management_System.ViewModels
             //FrameLeftNavigation.Content = leftNavigationPage;
 
             ChangeMainContent(new Views.Home(this));
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private bool ExcludedFromSaving(Page page)
+        {
+            foreach (Page excludedPage in excludedPages)
+            {
+                // Return true if the page was found in the list of excluded pages.
+                if (excludedPage.GetType() == page.GetType())
+                    return true;
+            }
+
+            // If the page wasn't found, return false
+            return false;
         }
 
         #endregion
