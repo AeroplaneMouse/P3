@@ -1,4 +1,19 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using Xunit;
+
+namespace IntegrationTests
+{
+    public class UnitTest1
+    {
+        [Fact]
+        public void Test1()
+        {
+
+        }
+    }
+}
+/*
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Database;
@@ -39,7 +54,7 @@ namespace UnitTests
         public void AssetRepository_Insert_ReturnsTrueAsAssetIsInserted()
         {
             //Arrange
-            
+
             //Act
             bool result = assetRepository.Insert(asset);
 
@@ -61,7 +76,7 @@ namespace UnitTests
             //Assert
             Assert.IsTrue(condition: result);
         }
-        
+
         [TestCleanup]
         public void DeleteAssetsFromRepository()
         {
@@ -75,3 +90,4 @@ namespace UnitTests
         }
     }
 }
+
