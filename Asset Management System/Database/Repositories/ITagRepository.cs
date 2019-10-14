@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Database.Repositories
@@ -7,6 +8,6 @@ namespace Asset_Management_System.Database.Repositories
     {
         List<Tag> GetParentTags();
         List<Tag> GetChildTags(ulong parent_id);
-        List<Tag> Search(string keyword);
+        ObservableCollection<Tag> Search(string keyword);
     }
 }
