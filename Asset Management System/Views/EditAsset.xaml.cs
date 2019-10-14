@@ -10,23 +10,24 @@ namespace Asset_Management_System.Views
     /// <summary>
     /// Interaction logic for NewAsset.xaml
     /// </summary>
-    public partial class NewAsset : FieldsController
+    public partial class EditAsset : FieldsController
     {
         private MainWindow Main;
+        private Asset _asset;
 
-        readonly Asset _asset = new Asset();
-
-        public NewAsset(MainWindow main)
+        public EditAsset(MainWindow main, Asset inputAsset)
         {
             InitializeComponent();
             Main = main;
+            FieldsList = new ObservableCollection<Field>();
             FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
+            _asset = inputAsset;
+            LoadFields();
         }
 
         private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _asset.Name = TbName.Text;
-            ;
             _asset.Description = TbDescription.Text;
             foreach (var field in FieldsList)
             {
@@ -44,7 +45,7 @@ namespace Asset_Management_System.Views
                 _asset.Attach(logController);
                 _asset.Notify();
                 AssetRepository rep = new AssetRepository();
-                rep.Insert(_asset);
+                rep.Update(_asset);
                 Main.ChangeSourceRequest(new Assets(Main));
             }
             else
@@ -52,6 +53,21 @@ namespace Asset_Management_System.Views
                 string message = $"ERROR! No department set. Please create a department to attach the asset to.";
                 Main.ShowNotification(sender, new Events.NotificationEventArgs(message, Brushes.Red));
             }
+        }
+
+        private bool LoadFields()
+        {
+            Console.WriteLine("------Field labels | Field content -------");
+            _asset.DeserializeFields();
+            foreach (var asset in _asset.FieldsList)
+            {
+                Console.WriteLine(asset.Label +" | "+ asset.Content);
+                FieldsList.Add(asset);
+            }
+            TbName.Text = _asset.Name ;
+            TbDescription.Text = _asset.Description;
+
+            return true;
         }
     }
 }

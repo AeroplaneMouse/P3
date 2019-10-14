@@ -39,7 +39,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 { 
-                    
+                    Console.WriteLine(e);
                 }finally{
                     dbcon.Close();
                 }
@@ -75,7 +75,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -108,7 +108,7 @@ namespace Asset_Management_System.Database.Repositories
                         query_success = cmd.ExecuteNonQuery() > 0;
                     }
                 }catch(MySqlException e){ 
-                
+                    Console.WriteLine(e);
                 }finally{
                     dbcon.Close();
                 }
@@ -133,7 +133,7 @@ namespace Asset_Management_System.Database.Repositories
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
-                        cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = id;
 
                         using (var reader = cmd.ExecuteReader())
@@ -145,7 +145,7 @@ namespace Asset_Management_System.Database.Repositories
                         }
                     }
                 }catch(MySqlException e){ 
-                    
+                    Console.WriteLine(e);
                 }finally{
                     dbcon.Close();
                 }
@@ -179,7 +179,7 @@ namespace Asset_Management_System.Database.Repositories
                         }
                     }
                 }catch(MySqlException e){ 
-                    
+                    Console.WriteLine(e);
                 }finally{
                     dbcon.Close();
                 }

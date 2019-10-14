@@ -16,6 +16,8 @@ namespace Asset_Management_System.Models
 
         private int IDCounter = 0;
 
+        public string DateToStringConverter => CreatedAt.ToString("MM/dd/yyyy HH:mm:ss");
+
         public DoesContainFields()
         {
             FieldsList = new List<Field>();
@@ -34,7 +36,14 @@ namespace Asset_Management_System.Models
         /// </summary>
         public void DeserializeFields()
         {
-            FieldsList = JsonConvert.DeserializeObject<List<Field>>(SerializedFields);
+            if (SerializedFields != null)
+            {
+                FieldsList = JsonConvert.DeserializeObject<List<Field>>(SerializedFields);
+            }
+            else
+            {
+                FieldsList = new List<Field>();
+            }
         }
 
         /// <summary>
@@ -80,6 +89,11 @@ namespace Asset_Management_System.Models
             return true;
         }
 
+        /// <summary>
+        /// Removes a field from the list
+        /// </summary>
+        /// <param name="field"></param>
+        /// <returns></returns>
         public bool RemoveField(Field field)
         {
             FieldsList.Remove(field);

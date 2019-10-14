@@ -7,5 +7,6 @@ namespace Asset_Management_System.Database.Repositories
     {
         List<Asset> SearchByTags(List<int> tags_ids);
         List<Asset> Search(string keyword);
+        bool AttachTagsToAsset(Asset asset, List<Tag> tags);
     }
 }

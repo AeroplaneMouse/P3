@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Views
@@ -95,6 +97,12 @@ namespace Asset_Management_System.Views
             }
 
             Console.WriteLine("---------------------------------------");
+        }
+
+        public void NumberVerification(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
     }
 

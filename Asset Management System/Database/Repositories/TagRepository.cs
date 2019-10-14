@@ -14,7 +14,8 @@ namespace Asset_Management_System.Database.Repositories
     {
         private DBConnection dbcon;
 
-        public TagRepository(){ 
+        public TagRepository()
+        {
             this.dbcon = DBConnection.Instance();
         }
 
@@ -101,7 +102,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -137,7 +138,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -159,8 +160,10 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-                try{
-                    const string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE id=@id";
+                try
+                {
+                    const string query =
+                        "SELECT id, label, parent_id, department_id, color, options, created_at FROM tags WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -174,9 +177,12 @@ namespace Asset_Management_System.Database.Repositories
                         }
                     }
                 }
-                catch(MySqlException e){ 
-                
-                }finally{
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
                     dbcon.Close();
                 }
             }
@@ -198,7 +204,7 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="parent_id"></param>
         /// <returns></returns>
-        public List<Tag> GetChildTags(long parent_id)
+        public List<Tag> GetChildTags(ulong parent_id)
         {
             List<Tag> tags = new List<Tag>();
 
@@ -206,7 +212,8 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE parent_id=@id";
+                    const string query =
+                        "SELECT id, label, parent_id, department_id, color, options, created_at FROM tags WHERE parent_id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -224,7 +231,7 @@ namespace Asset_Management_System.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-
+                    Console.WriteLine(e);
                 }
                 finally
                 {
@@ -246,8 +253,10 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-                try{
-                    const string query = "SELECT id, label, parent_id, department_id, color, options FROM tags WHERE label LIKE @keyword";
+                try
+                {
+                    const string query =
+                        "SELECT id, label, parent_id, department_id, color, options, created_at FROM tags WHERE label LIKE @keyword";
 
                     if (!keyword.Contains('%'))
                         keyword = $"%{keyword}%";
@@ -265,9 +274,13 @@ namespace Asset_Management_System.Database.Repositories
                             }
                         }
                     }
-                }catch(MySqlException e){ 
-                
-                }finally{
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
                     dbcon.Close();
                 }
             }
@@ -286,10 +299,13 @@ namespace Asset_Management_System.Database.Repositories
             String row_label = reader.GetString("label");
             ulong row_parent_id = reader.GetUInt64("parent_id");
             ulong row_department_id = reader.GetUInt64("department_id");
+            string row_color = reader.GetString("color");
+            DateTime row_created_at = reader.GetDateTime("created_at");
 
-            return (Tag)Activator.CreateInstance(typeof(Tag), 
-                BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { row_id, row_label, row_department_id, row_parent_id }, null, null);
+            return (Tag) Activator.CreateInstance(typeof(Tag),
+                BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new object[] {row_id, row_label, row_department_id, row_parent_id, row_color, row_created_at}, null,
+                null);
         }
     }
 }

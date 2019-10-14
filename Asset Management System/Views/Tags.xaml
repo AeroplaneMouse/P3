@@ -1,37 +1,35 @@
 ﻿<views:FieldsController x:Class="Asset_Management_System.Views.Tags"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-    xmlns:local="clr-namespace:Asset_Management_System"
-    xmlns:views="clr-namespace:Asset_Management_System.Views"
-    mc:Ignorable="d" 
-    d:DesignHeight="450" d:DesignWidth="800"
-    ShowsNavigationUI="False"
-    Title="Tags"
-    Loaded="Page_Loaded"
-    >
+                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                        xmlns:local="clr-namespace:Asset_Management_System"
+                        xmlns:views="clr-namespace:Asset_Management_System.Views"
+                        mc:Ignorable="d"
+                        d:DesignHeight="450" d:DesignWidth="800"
+                        ShowsNavigationUI="False"
+                        Title="Tags"
+                        Loaded="Page_Loaded">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="60"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <Label 
+        <Label
             Name="LbTitle"
             Content="Tags"
             TextBlock.FontSize="20"
             Margin="10"
             Grid.Row="0"
-            Grid.ColumnSpan="3"
-        />
+            Grid.ColumnSpan="3" />
 
         <Button
             Name="BtnCreateNewTag"
@@ -43,8 +41,7 @@
             TextBlock.FontSize="14"
             Padding="10, 5, 10, 5"
             Margin="10"
-            Click="BtnCreateNewTag_Click"
-        />
+            Click="BtnCreateNewTag_Click" />
 
         <TextBox
             Name="TbSearch"
@@ -54,8 +51,7 @@
             Margin="10, 0, 10, 0"
             TextBlock.FontSize="14"
             Padding="5"
-            KeyDown="TbSearch_KeyDown"
-        />
+            KeyDown="TbSearch_KeyDown" />
         <Button
             Name="BtnSearch"
             Grid.Row="1"
@@ -65,17 +61,24 @@
             VerticalAlignment="Bottom"
             HorizontalAlignment="Left"
             Padding="10, 5, 10, 5"
-            Click="BtnSearch_Click"
-        />
+            Click="BtnSearch_Click" />
 
         <ListView
             Name="LvTags"
             Grid.Row="2"
-            Grid.ColumnSpan="3"
+            Grid.ColumnSpan="3" Grid.Column="0"
             Margin="10"
-            TextBlock.FontSize="14"
-        >
-            
+            TextBlock.FontSize="14">
+
+
+            <ListView.View>
+                <GridView x:Name="GridView1">
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Label}" Header="Name" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Color}" Header="Color" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created at"></GridViewColumn>
+                </GridView>
+            </ListView.View>
         </ListView>
     </Grid>
 </views:FieldsController>
