@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
@@ -18,8 +19,9 @@ namespace Asset_Management_System.ViewModels
         {
             _main = main;
 
+            Search();
             // Initializing commands
-            //AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new NewTag(_main)));
+            AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.TagManager(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
             EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
             RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
@@ -36,19 +38,13 @@ namespace Asset_Management_System.ViewModels
         #region Public Properties
 
         public string SearchQueryText { get; set; } = "";
+        public int SelectedItemIndex { get; set; }
 
-        public List<Selector> SelectedItems { get; set; } = new List<Selector>();
-
-        private ObservableCollection<Tag> _list;
+        private ObservableCollection<Tag> _list = new ObservableCollection<Tag>();
 
         public ObservableCollection<Tag> SearchList
         {
-            get
-            {
-                if (_list == null)
-                    _list = new ObservableCollection<Tag>();
-                return _list;
-            }
+            get => _list;
             set
             {
                 _list.Clear();
@@ -165,6 +161,14 @@ namespace Asset_Management_System.ViewModels
         public void Print()
         {
             throw new NotImplementedException();
+        }
+
+        private Tag GetSelectedItem()
+        {
+            if (SearchList.Count == 0)
+                return null;
+            else
+                return SearchList.ElementAt(SelectedItemIndex);
         }
 
         #endregion
