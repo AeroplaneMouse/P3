@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Media;
 using Asset_Management_System.Events;
+using System.IO;
 
 namespace Asset_Management_System.Views
 {
@@ -132,6 +133,17 @@ namespace Asset_Management_System.Views
 
                 // Reload list
                 Btn_search_Click(sender, e);
+            }
+        }
+
+        private void BtnPrint_Click(object sender, RoutedEventArgs e)
+        {
+            System.Collections.IList fullList = new List<Asset>();
+            string pathToFile = "asset_report_" + DateTime.Now.ToString();
+
+            using (StreamWriter file = new StreamWriter(@pathToFile, false))
+            {
+
             }
         }
     }

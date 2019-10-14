@@ -34,7 +34,7 @@
             Click="Btn_AddNewAsset_Click"
         />
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Bottom">
+        <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Bottom" Margin="0,0,188,0">
             <TextBox
                 Name="Tb_search"
                 Width="300"
@@ -57,7 +57,12 @@
                     Name="BtnRemoveAsset"
                     Content="Remove"
                     Click="BtnRemoveAsset_Click"/>
-            
+
+            <Button Style="{StaticResource RegularButton}"
+                    Name="BtnPrint"
+                    Content="Print"
+                    Click="BtnPrintList_Click"/>
+
         </StackPanel>
 
         
