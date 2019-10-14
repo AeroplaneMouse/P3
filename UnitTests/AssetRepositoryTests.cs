@@ -67,8 +67,6 @@ namespace UnitTests
             //Clear department
             Department departmentToDelete = departmentRepository.GetById(1);
             departmentRepository.Delete(departmentToDelete);
-
-
         }
     }
 }
