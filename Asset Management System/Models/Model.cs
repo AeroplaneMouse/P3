@@ -74,13 +74,13 @@ namespace Asset_Management_System.Models
         /// </summary>
         public void SavePrevValues()
         {
-            Type objectType = this.GetType();
+            Type objectType = GetType();
             PropertyInfo[] props = objectType.GetProperties();
             
             foreach (var prop in props)
             {
                 string key = prop.Name;
-                string value = objectType.GetProperty(key).GetValue(this, null).ToString();
+                string value = objectType.GetProperty(key)?.GetValue(this, null).ToString();
                 prevValues.Add(key, value);
                 //Console.WriteLine("Field " + key + " was saved with value: " + value);
             }
