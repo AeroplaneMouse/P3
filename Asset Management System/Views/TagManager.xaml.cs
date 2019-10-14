@@ -1,8 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Drawing;
-using System.Windows;
-using System.Windows.Controls;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Events;
@@ -54,6 +52,7 @@ namespace Asset_Management_System.Views
         {
             _tag.Label = TbName.Text;
             _tag.Color = Color.Text;
+            _tag.FieldsList = new List<Field>();
             foreach (var field in FieldsList)
             {
                 _tag.AddField(field);

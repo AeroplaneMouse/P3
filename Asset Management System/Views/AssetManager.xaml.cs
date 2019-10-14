@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Asset_Management_System.Controllers;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
@@ -50,6 +51,7 @@ namespace Asset_Management_System.Views
         {
             _asset.Name = TbName.Text;
             _asset.Description = TbDescription.Text;
+            _asset.FieldsList = new List<Field>();
             foreach (var field in FieldsList)
             {
                 _asset.AddField(field);
