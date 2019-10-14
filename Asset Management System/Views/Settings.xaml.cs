@@ -26,15 +26,13 @@ namespace Asset_Management_System.Views
             InitializeComponent();
             Main = main;
 
-            List<int> tags = new List<int>();
-            tags.Add(5);
+            TagRepository tag_rep = new TagRepository();
+            List<Tag> tags = tag_rep.GetParentTags();
 
-            AssetRepository rep = new AssetRepository();
-            List<Asset> assetsByTags = rep.SearchByTags(tags);
+            AssetRepository asset_rep = new AssetRepository();
+            Asset asset = asset_rep.GetById(3);
 
-            foreach(Asset asset in assetsByTags){
-                Console.WriteLine(asset.Name);
-            }
+            asset_rep.AttachTagsToAsset(asset, tags);
         }
     }
 }
