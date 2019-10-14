@@ -287,6 +287,42 @@ namespace Asset_Management_System.Database.Repositories
             return tags;
         }
 
+        public List<Tag> GetAll()
+        {
+            DBConnection dbcon = DBConnection.Instance();
+            List<Tag> tags = new List<Tag>();
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    const string query = "SELECT id, label, parent_id, department_id, color, options, created_at FROM tags";
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                tags.Add(DBOToModelConvert(reader));
+                            }
+                        }
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
+            }
+
+            return tags;
+            
+        }
+
         /// <summary>
         /// 
         /// </summary>
