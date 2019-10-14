@@ -52,7 +52,7 @@ namespace Asset_Management_System.Views
         /// <param name="e"></param>
         private void BtnSaveNewTag_Click(object sender, RoutedEventArgs e)
         {
-            _tag.Label = TbName.Text;
+            _tag.Name = TbName.Text;
             _tag.Color = Color.Text;
             _tag.FieldsList = new List<Field>();
             foreach (var field in FieldsList)
@@ -110,7 +110,7 @@ namespace Asset_Management_System.Views
                 ConsoleWriter.ConsoleWrite(field.Label +" | "+ field.Content);
                 FieldsList.Add(field);
             }
-            TbName.Text = _tag.Label;
+            TbName.Text = _tag.Name;
             Color.Text = _tag.Color;
         }
     }

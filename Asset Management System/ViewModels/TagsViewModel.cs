@@ -87,7 +87,7 @@ namespace Asset_Management_System.ViewModels
             //List<MenuItem> assetsFunc = new List<MenuItem>();
             foreach (Tag tag in tags)
             {
-                Console.WriteLine(tag.Label);
+                Console.WriteLine(tag.Name);
 
                 //// Creating menuItems
                 //MenuItem item = new MenuItem();
@@ -110,7 +110,7 @@ namespace Asset_Management_System.ViewModels
             Tag selectedTag = GetSelectedItem();
             if (selectedTag != null)
             {
-                Console.WriteLine("Editing " + selectedTag.Label);
+                Console.WriteLine("Editing " + selectedTag.Name);
                 _main.ChangeMainContent(new TagManager(_main, selectedTag));
             }
             else
@@ -133,7 +133,7 @@ namespace Asset_Management_System.ViewModels
             }
             else
             {
-                Console.WriteLine($"Removing {selectedTag.Label}.");
+                Console.WriteLine($"Removing {selectedTag.Name}.");
                 new TagRepository().Delete(selectedTag);
                 
                 // Reload list

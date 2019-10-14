@@ -11,10 +11,10 @@ namespace Asset_Management_System.Models
         }
 
         /*Constructor used by DB*/
-        private Tag(ulong id, string label, ulong department_id, ulong parent_id, string color, DateTime created_at)
+        private Tag(ulong id, string name, ulong department_id, ulong parent_id, string color, DateTime created_at)
         {
             ID = id;
-            Label = label;
+            Name = name;
             DepartmentID = department_id;
             FieldsList = new List<Field>();
             CreatedAt = created_at;
@@ -22,7 +22,7 @@ namespace Asset_Management_System.Models
             Color = color;
         }
 
-        public string Label { get; set; }
+        public string Name { get; set; }
 
         public string Color { get; set; }
 
@@ -30,6 +30,6 @@ namespace Asset_Management_System.Models
 
         public ulong DepartmentID { get; set; }
 
-        public override string ToString() => Label;
+        public override string ToString() => Name;
     }
 }
