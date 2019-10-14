@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Windows.Documents;
+using Asset_Management_System.Controllers;
 using Google.Protobuf.WellKnownTypes;
 using Newtonsoft.Json;
 using Type = System.Type;
@@ -19,6 +20,13 @@ namespace Asset_Management_System.Models
         protected List<IUpdateObserver> observers = new List<IUpdateObserver>();
         
         protected Dictionary<string, string> prevValues = new Dictionary<string, string>();
+
+        public Model()
+        {
+            //TODO this is not the way this should be done, as it removes the opportunities that observer pattern provides
+            LogController logController = new LogController();
+            Attach(logController);
+        }
 
         /// <summary>
         /// Attaches an observer to this subject. All attached observers vil be updated when notified
@@ -74,7 +82,7 @@ namespace Asset_Management_System.Models
                 string key = prop.Name;
                 string value = objectType.GetProperty(key).GetValue(this, null).ToString();
                 prevValues.Add(key, value);
-                Console.WriteLine("Field " + key + " was saved with value: " + value);
+                //Console.WriteLine("Field " + key + " was saved with value: " + value);
             }
         }
 
@@ -85,21 +93,25 @@ namespace Asset_Management_System.Models
         /// <returns>string</returns>
         public string GetChanges()
         {
-            List<Tuple<string, string, string>> changes = new List<Tuple<string, string, string>>();
+            //Dictionary<string, Change> changes = new Dictionary<string, Change>();
+            Dictionary<string, Change> changes = new Dictionary<string, Change>();
             Type objectType = this.GetType();
             PropertyInfo[] props = objectType.GetProperties();
             foreach (var prop in props)
             {
                 string key = prop.Name;
-                Console.WriteLine("Key is: " + key);
-                //string newValue = prop.GetValue(this.GetType()).ToString();
-                string newValue = objectType.GetProperty(key).GetValue(this, null).ToString();
-                string oldValue = prevValues[key];
-                if (oldValue != newValue)
+                if (prevValues.ContainsKey(key))
                 {
-                    changes.Add(new Tuple<string, string, string>("Value: " + key, "Previous value: " + oldValue, "New value: " + newValue));
+                    string newValue = objectType.GetProperty(key).GetValue(this, null).ToString();
+                    string oldValue = prevValues[key];
+                    if (oldValue != newValue)
+                    {
+                        //changes.Add(new Tuple<string, string, string>("Value: " + key, "Previous value: " + oldValue, "New value: " + newValue));
+                        changes.Add(key, new Change( oldValue, newValue));
+                    }
                 }
             }
+            Console.WriteLine(changes.Count == 0 ? "" : JsonConvert.SerializeObject(changes, Formatting.Indented));
             return changes.Count == 0 ? "" : JsonConvert.SerializeObject(changes, Formatting.Indented);
         }
         

@@ -37,7 +37,7 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters["@description"].Value = entity.Description;
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                        cmd.Parameters["@options"].Value = "{}";
+                        cmd.Parameters["@options"].Value = entity.Options;
 
                         cmd.Parameters.Add("@logable_id", MySqlDbType.UInt64);
                         cmd.Parameters["@logable_id"].Value = entity.LogableId;

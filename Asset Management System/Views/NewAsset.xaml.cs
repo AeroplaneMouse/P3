@@ -40,8 +40,6 @@ namespace Asset_Management_System.Views
             {
                 _asset.DepartmentID = department.ID;
                 // Creates a log entry, currently uses for testing.
-                LogController logController = new LogController();
-                _asset.Attach(logController);
                 _asset.Notify();
                 AssetRepository rep = new AssetRepository();
                 rep.Insert(_asset);
