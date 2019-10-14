@@ -25,7 +25,7 @@ namespace Asset_Management_System
         public MainWindow()
         {
             InitializeComponent();
-            ChangeMainContent(new SplashPage(this), FrameSplash);
+            ChangeFrameContent(new SplashPage(this), FrameSplash);
 
             // Starting the new UI window.
             new Main().Show();

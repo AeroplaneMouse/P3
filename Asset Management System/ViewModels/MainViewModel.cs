@@ -62,7 +62,7 @@ namespace Asset_Management_System.ViewModels
             ShowWindow = new Base.RelayCommand(() => MessageBox.Show("Hey!"));
 
             ShowHomePageCommand = new Commands.ShowHomePageCommand(this);
-            //ShowAssetsPageCommand = new Base.RelayCommand(() => FrameMainContent.Content = new Views.Assets());
+            ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this)));
             ShowTagPageCommand = new Commands.ShowTagPageCommand(this);
 
             // Fixes window sizing issues at maximized
