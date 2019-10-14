@@ -139,11 +139,15 @@ namespace Asset_Management_System.Views
         private void BtnPrint_Click(object sender, RoutedEventArgs e)
         {
             System.Collections.IList fullList = new List<Asset>();
-            string pathToFile = "asset_report_" + DateTime.Now.ToString();
+            string pathToFile = "asset_report_" + DateTime.Now.ToString().Replace(' ', '-');
 
             using (StreamWriter file = new StreamWriter(@pathToFile, false))
             {
-
+                foreach(Asset asset in fullList)
+                {
+                    string fileEntry = asset.ID + asset.Name;
+                    file.WriteLine(fileEntry);
+                }
             }
         }
     }
