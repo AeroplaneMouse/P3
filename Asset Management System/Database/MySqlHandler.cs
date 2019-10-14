@@ -9,35 +9,45 @@ namespace Asset_Management_System.Database
 {
     public class MySqlHandler
     {
-        private MySqlConnection dbcon;
+        private DBConnection dbcon;
 
-        public MySqlHandler(MySqlConnection connection)
+        public MySqlHandler(DBConnection connection)
         {
             this.dbcon = connection;
         }
 
-        public bool RawQuery(string raw_query, MySqlParameterCollection par=null)
+        public bool RawQuery(string raw_query, MySqlParameterCollection par = null)
         {
             bool result = false;
-            
-            using (var cmd = new MySqlCommand(raw_query, this.dbcon))
+
+            try
             {
-                if (par != null)
+                if (this.dbcon.IsConnect())
                 {
-                    foreach (var param in par)
+                    using (var cmd = new MySqlCommand(raw_query, this.dbcon.Connection))
                     {
-                        cmd.Parameters.Add(param);
+                        if (par != null)
+                        {
+                            foreach (var param in par)
+                            {
+                                cmd.Parameters.Add(param);
+                            }
+                        }
+
+                        result = cmd.ExecuteNonQuery() > 0;
                     }
                 }
-                result = cmd.ExecuteNonQuery() > 0;
             }
-
+            catch (MySqlException e)
+            {
+                
+            }
+            finally
+            {
+                this.dbcon.Close();
+            }
+            
             return result;
-        }
-        
-        public void Close()
-        {
-            this.dbcon.Close();
         }
     }
 }
