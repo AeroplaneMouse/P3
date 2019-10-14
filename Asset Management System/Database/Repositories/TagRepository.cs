@@ -248,12 +248,8 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public ObservableCollection<Tag> Search(string keyword)
         {
-<<<<<<< HEAD
-            ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
-=======
             DBConnection dbcon = DBConnection.Instance();
-            List<Tag> tags = new List<Tag>();
->>>>>>> origin/Tagging
+            ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
 
             if (dbcon.IsConnect())
             {
