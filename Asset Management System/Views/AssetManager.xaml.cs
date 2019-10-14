@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Asset_Management_System.Controllers;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
@@ -10,21 +9,43 @@ namespace Asset_Management_System.Views
     /// <summary>
     /// Interaction logic for NewAsset.xaml
     /// </summary>
-    public partial class EditAsset : FieldsController
+    public partial class AssetManager : FieldsController
     {
         private MainWindow Main;
         private Asset _asset;
+        private bool Editing;
 
-        public EditAsset(MainWindow main, Asset inputAsset)
+        /// <summary>
+        /// AssetManager is called when creating, or editing a asset.
+        /// </summary>
+        /// <param name="main"></param>
+        /// <param name="inputTag">Optional input, only used when editing a asset.</param>
+        public AssetManager(MainWindow main, Asset inputAsset = null)
         {
             InitializeComponent();
             Main = main;
             FieldsList = new ObservableCollection<Field>();
             FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
-            _asset = inputAsset;
-            LoadFields();
+            if (inputAsset != null)
+            {
+                _asset = inputAsset;
+                LoadFields();
+                Editing = true;
+            }
+            else
+            {
+                _asset = new Asset();
+                Editing = false;
+            }
+
         }
 
+        /// <summary>
+        /// This function fires when the "Save Asset" button is clicked.
+        /// The function saves or updates the asset in the database.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _asset.Name = TbName.Text;
@@ -32,7 +53,6 @@ namespace Asset_Management_System.Views
             foreach (var field in FieldsList)
             {
                 _asset.AddField(field);
-                Console.WriteLine(field.Content);
             }
 
             _asset.SerializeFields();
@@ -43,7 +63,15 @@ namespace Asset_Management_System.Views
                 // Creates a log entry, currently uses for testing.
                 _asset.Notify();
                 AssetRepository rep = new AssetRepository();
-                rep.Update(_asset);
+                if (Editing)
+                {
+                    rep.Update(_asset);
+                }
+                else
+                {
+                    rep.Insert(_asset);
+                }
+
                 Main.ChangeSourceRequest(new Assets(Main));
             }
             else
@@ -52,15 +80,19 @@ namespace Asset_Management_System.Views
                 Main.ShowNotification(sender, new Events.NotificationEventArgs(message, Brushes.Red));
             }
         }
-
+        
+        /// <summary>
+        /// Runs through the saved fields within the tag, and adds these to the fieldList.
+        /// </summary>
+        /// <returns></returns>
         private bool LoadFields()
         {
-            Console.WriteLine("------Field labels | Field content -------");
+            ConsoleWriter.ConsoleWrite("------Field labels | Field content -------");
             _asset.DeserializeFields();
-            foreach (var asset in _asset.FieldsList)
+            foreach (var field in _asset.FieldsList)
             {
-                Console.WriteLine(asset.Label +" | "+ asset.Content);
-                FieldsList.Add(asset);
+                ConsoleWriter.ConsoleWrite(field.Label +" | "+ field.Content);
+                FieldsList.Add(field);
             }
             TbName.Text = _asset.Name ;
             TbDescription.Text = _asset.Description;

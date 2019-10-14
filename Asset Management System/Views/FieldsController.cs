@@ -99,6 +99,11 @@ namespace Asset_Management_System.Views
             Console.WriteLine("---------------------------------------");
         }
 
+        /// <summary>
+        /// This function is used to verify whether numbers(And only) numbers are used in number fields.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void NumberVerification(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
@@ -106,8 +111,18 @@ namespace Asset_Management_System.Views
         }
     }
 
+    /// <summary>
+    /// Class used for selecting a template for the fields.
+    /// </summary>
     public class FieldDesignSelector : DataTemplateSelector
     {
+        /// <summary>
+        /// Function used for returning the correct template for the individual fields.
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="container"></param>
+        /// <returns></returns>
+        /// <exception cref="NotSupportedException"></exception>
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             FrameworkElement element = container as FrameworkElement;

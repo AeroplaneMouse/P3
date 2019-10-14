@@ -258,12 +258,16 @@ namespace Asset_Management_System.Database.Repositories
             ulong row_department_id = reader.GetUInt64("department_id");
             DateTime row_created_at = reader.GetDateTime("created_at");
             string row_options = reader.GetString("options");
-            Console.WriteLine(row_options);
 
-            
-            return (Asset) Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] {row_id, row_label, row_description, row_department_id, row_created_at,row_options}, null,
-                null);
+
+            return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
+                new object[] { row_id, row_label, row_description, row_department_id, row_created_at, row_options }, null, null);
+
+        }
+
+        public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
+        {
+            return false;
         }
     }
 }

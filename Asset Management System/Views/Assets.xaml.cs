@@ -26,7 +26,7 @@ namespace Asset_Management_System.Views
 
         private void Btn_AddNewAsset_Click(object sender, RoutedEventArgs e)
         {
-            Main.ChangeSourceRequest(new NewAsset(Main));
+            Main.ChangeSourceRequest(new AssetManager(Main));
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -35,11 +35,6 @@ namespace Asset_Management_System.Views
             AssetRepository rep = new AssetRepository();
             List<Asset> assets = rep.Search("");
             LV_assetList.ItemsSource = assets;
-
-            foreach (var asset in assets)
-            {
-                Console.WriteLine(asset.CreatedAt.Year);
-            }
         }
 
         private void Btn_search_Click(object sender, RoutedEventArgs e)
@@ -100,7 +95,7 @@ namespace Asset_Management_System.Views
             }
             else
             {
-                Main.ChangeSourceRequest(new EditAsset(Main,input));
+                Main.ChangeSourceRequest(new AssetManager(Main,input));
             }
 
         }
