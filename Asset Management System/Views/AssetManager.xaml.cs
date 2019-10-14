@@ -9,13 +9,18 @@ namespace Asset_Management_System.Views
     /// <summary>
     /// Interaction logic for NewAsset.xaml
     /// </summary>
-    public partial class EditAsset : FieldsController
+    public partial class AssetManager : FieldsController
     {
         private MainWindow Main;
         private Asset _asset;
         private bool Editing;
 
-        public EditAsset(MainWindow main, Asset inputAsset = null)
+        /// <summary>
+        /// AssetManager is called when creating, or editing a asset.
+        /// </summary>
+        /// <param name="main"></param>
+        /// <param name="inputTag">Optional input, only used when editing a asset.</param>
+        public AssetManager(MainWindow main, Asset inputAsset = null)
         {
             InitializeComponent();
             Main = main;
@@ -35,6 +40,12 @@ namespace Asset_Management_System.Views
 
         }
 
+        /// <summary>
+        /// This function fires when the "Save Asset" button is clicked.
+        /// The function saves or updates the asset in the database.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _asset.Name = TbName.Text;
@@ -71,7 +82,11 @@ namespace Asset_Management_System.Views
                 Main.ShowNotification(sender, new Events.NotificationEventArgs(message, Brushes.Red));
             }
         }
-
+        
+        /// <summary>
+        /// Runs through the saved fields within the tag, and adds these to the fieldList.
+        /// </summary>
+        /// <returns></returns>
         private bool LoadFields()
         {
             ConsoleWriter.ConsoleWrite("------Field labels | Field content -------");

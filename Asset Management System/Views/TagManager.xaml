@@ -11,6 +11,7 @@
       Title="NewTag">
     <Page.Resources>
         <views:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+        <!--Defining the properties of the fields -->
         <DataTemplate x:Key="TextBoxFieldStyle">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -99,6 +100,7 @@
                 <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Content}" Name="CheckBox" />
             </Grid>
         </DataTemplate>
+        <!--End of definition of the properties of the fields -->
     </Page.Resources>
 
     

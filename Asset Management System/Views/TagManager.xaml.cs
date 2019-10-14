@@ -15,16 +15,21 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class TagManager : FieldsController
     {
-        private MainWindow Main;
+        private readonly MainWindow _main;
 
-        private Tag _tag;
+        private readonly Tag _tag;
 
-        private bool _editing;
+        private readonly bool _editing;
 
+        /// <summary>
+        /// TagManager is called when creating, or editing a tag.
+        /// </summary>
+        /// <param name="main"></param>
+        /// <param name="inputTag">Optional input, only used when editing a tag.</param>
         public TagManager(MainWindow main,Tag inputTag = null)
         {
             InitializeComponent();
-            Main = main;
+            _main = main;
             FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
             if (inputTag != null)
             {
@@ -39,6 +44,12 @@ namespace Asset_Management_System.Views
             }
         }
 
+        /// <summary>
+        /// This function fires when the "Save Tag" button is clicked.
+        /// The function saves or updates the tag in the database.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnSaveNewTag_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             _tag.Label = TbName.Text;
@@ -50,7 +61,7 @@ namespace Asset_Management_System.Views
             }
 
             _tag.SerializeFields();
-            Department department = Main.topNavigationPage.SelectedDepartment;
+            Department department = _main.topNavigationPage.SelectedDepartment;
             if (department != null)
             {
                 _tag.DepartmentID = department.ID;
@@ -65,22 +76,31 @@ namespace Asset_Management_System.Views
                     rep.Insert(_tag);
                 }
                 
-                Main.ChangeSourceRequest(new Tags(Main));
+                _main.ChangeSourceRequest(new Tags(_main));
             }
             else
             {
                 
-                Main.ShowNotification(null,new NotificationEventArgs("Department not selected",Brushes.Red));
+                _main.ShowNotification(null,new NotificationEventArgs("Department not selected",Brushes.Red));
                 Console.WriteLine("ERROR! Department not found.");
             }
         }
-
+        
+        /// <summary>
+        /// This function is used for updating the textBox, with the selected color.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ColorPickerColorChanged(object sender, EventArgs e)
         {
             Color.Text = ColorPicker.SelectedColor.ToString();
         }
         
-        private bool LoadFields()
+        /// <summary>
+        /// Runs through the saved fields within the tag, and adds these to the fieldList.
+        /// </summary>
+        /// <returns></returns>
+        private void LoadFields()
         {
             ConsoleWriter.ConsoleWrite("------Field labels | Field content -------");
             _tag.DeserializeFields();
@@ -91,7 +111,6 @@ namespace Asset_Management_System.Views
             }
             TbName.Text = _tag.Label;
             Color.Text = _tag.Color;
-            return true;
         }
     }
 }

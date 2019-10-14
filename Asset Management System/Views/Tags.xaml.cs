@@ -23,12 +23,17 @@ namespace Asset_Management_System.Views
             Main = main;
         }
 
+        
         private void BtnCreateNewTag_Click(object sender, RoutedEventArgs e)
         {
             Main.ChangeSourceRequest(new TagManager(Main));
         }
-
-
+        
+        /// <summary>
+        /// This function submits the searchField when the user hits "enter"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Tb_search_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -36,7 +41,11 @@ namespace Asset_Management_System.Views
         }
 
 
-
+        /// <summary>
+        /// This function initiates the TagManager, if only one element has been selected.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void BtnEditTag_Click(object sender, RoutedEventArgs e)
         {
             System.Collections.IList selectedTags = LvTags.SelectedItems;
@@ -46,7 +55,6 @@ namespace Asset_Management_System.Views
             {
                 string message = $"You have selected {selectedTags.Count}. This is not a valid amount!";
                 Main.ShowNotification(sender, new NotificationEventArgs(message, Brushes.Red));
-                return;
             }
             else
             {
@@ -92,12 +100,11 @@ namespace Asset_Management_System.Views
             LvTags.ItemsSource = tags;
         }
 
-        private void TbSearch_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                Btn_search_Click(sender, new RoutedEventArgs());
-        }
-        
+        /// <summary>
+        /// This function updates the listView with the elements matching the search query.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Btn_search_Click(object sender, RoutedEventArgs e)
         {
             Console.WriteLine();
