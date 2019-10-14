@@ -25,7 +25,7 @@ namespace Asset_Management_System.Commands
         public void Execute(object parameter)
         {
             Console.WriteLine("Showing asset page.");
-            _main.FrameMainContent.Navigate(new Views.AssetTest());
+            _main.FrameMainContent.Navigate(new Views.Assets(_main));
         }
 
         #endregion

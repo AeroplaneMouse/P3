@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
+using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
 {
@@ -13,16 +14,16 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Tags : FieldsController
     {
-        private MainWindow Main;
-        public Tags(MainWindow main)
+        private MainViewModel _main;
+        public Tags(MainViewModel main)
         {
             InitializeComponent();
-            Main = main;
+            _main = main;
         }
 
         private void BtnCreateNewTag_Click(object sender, RoutedEventArgs e)
         {
-            Main.ChangeSourceRequest(new NewTag(Main));
+            //Main.ChangeSourceRequest(new NewTag(Main));
         }
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)

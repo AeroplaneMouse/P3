@@ -73,7 +73,7 @@ namespace Asset_Management_System
             FrameTopNavigationPart2.Content = topNavigationPage;
             FrameLeftNavigation.Content = leftNavigationPage;
 
-            ChangeSourceRequest(new Home(this));
+            //ChangeSourceRequest(new Home(this));
         }
 
         /// <summary>

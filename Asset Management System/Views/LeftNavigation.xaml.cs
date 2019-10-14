@@ -40,10 +40,10 @@ namespace Asset_Management_System.Views
                 Page page;
                 page = btn.Name switch
                 {
-                    "Btn_homePage" => new Home(Main),
-                    "Btn_tagsPage" => new Tags(Main),
-                    "Btn_settingsPage" => new Settings(Main),
-                    "Btn_helpPage" => new Help(Main),
+                    //"Btn_homePage" => new Home(Main),
+                    //"Btn_tagsPage" => new Tags(Main),
+                    //"Btn_settingsPage" => new Settings(Main),
+                    //"Btn_helpPage" => new Help(Main),
                     _ => null,
                 };
 

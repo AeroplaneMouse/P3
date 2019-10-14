@@ -15,7 +15,7 @@ namespace Asset_Management_System.ViewModels
     {
         #region Constructors
 
-        public AssetsViewModel(MainWindow main)
+        public AssetsViewModel(MainViewModel main)
         {
             // Saving reference to the main window
             _main = main;
@@ -31,7 +31,7 @@ namespace Asset_Management_System.ViewModels
 
         #region Private Properties
 
-        private MainWindow _main;
+        private MainViewModel _main;
 
         /// <summary>
         /// Sends a search request to the database, and sets the list of assets to the result.
@@ -39,9 +39,9 @@ namespace Asset_Management_System.ViewModels
         private void Search()
         {
             Console.WriteLine();
-            Console.WriteLine("Searching for: " + SearchText);
+            Console.WriteLine("Searching for: " + SearchQueryText);
             AssetRepository rep = new AssetRepository();
-            ObservableCollection<Asset> assets = rep.Search(SearchText);
+            ObservableCollection<Asset> assets = rep.Search(SearchQueryText);
 
             Console.WriteLine("Found: " + assets.Count.ToString());
 
@@ -129,11 +129,10 @@ namespace Asset_Management_System.ViewModels
 
         #region Public Properties
 
-        public TextBox TbSearch { get; set; }
+        public string SearchQueryText { get; set; } = "";
 
         public List<Selector> SelectedItems { get; set; } = new List<Selector>();
-
-
+        
         private ObservableCollection<Asset> _list;
 
         public ObservableCollection<Asset> SearchList
@@ -164,5 +163,3 @@ namespace Asset_Management_System.ViewModels
         #endregion
     }
 }
-
-        public string SearchText { get; set; } = "";

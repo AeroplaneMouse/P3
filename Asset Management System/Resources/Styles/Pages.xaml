@@ -29,7 +29,7 @@
                                 Width="300"
                                 TextBlock.FontSize="12px"
                                 Padding="2,3,2,3"
-                                Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
                             />
 
                             <Button Style="{StaticResource RegularButton}"

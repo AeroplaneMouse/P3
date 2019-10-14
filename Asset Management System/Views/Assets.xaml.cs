@@ -11,6 +11,7 @@ using Asset_Management_System.Events;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Windows.Controls.Primitives;
+using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
 {
@@ -19,11 +20,13 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Assets : Page
     {
+        private MainViewModel _main;
 
-        public Assets()
+        public Assets(MainViewModel main)
         {
             InitializeComponent();
-            DataContext = new ViewModels.AssetsViewModel(main);
+            _main = main;
+            DataContext = new ViewModels.AssetsViewModel(_main);
         }
 
         //private void Page_Loaded(object sender, RoutedEventArgs e) => Search();

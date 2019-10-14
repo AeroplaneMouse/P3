@@ -7,6 +7,7 @@ using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
 using Asset_Management_System.Events;
 using System.Linq;
+using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
 {
@@ -15,18 +16,18 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Home : Page
     {
-        private MainWindow Main;
+        private MainViewModel _main;
 
-        public Home(MainWindow main)
+        public Home(MainViewModel main)
         {
             InitializeComponent();
-            Main = main;
+            _main = main;
         }
 
         private void Btn_Test_Click(object sender, RoutedEventArgs e)
         {
             NotificationEventArgs args = new NotificationEventArgs("Test notification", Brushes.Green);
-            Main.ShowNotification(this, args);
+            _main.ShowNotification(this, args);
             //ShowNotification(sender, args);
         }
 
