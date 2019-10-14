@@ -32,7 +32,6 @@
     <Folder Include="Resources\Fonts\" />
     <Folder Include="Resources\Images\Logos\" />
     <Folder Include="Resources\Window\" />
-    <Folder Include="Resources\Styles\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using System;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Models;
+using Asset_Management_System.Logging;
 
 namespace Asset_Management_System.Controllers
 {
@@ -14,7 +15,7 @@ namespace Asset_Management_System.Controllers
         {
             Session session = new Session();
             string description = GenerateDescription(Subject, session);
-            Log logEntry = new Log(Subject.ID, session, description);
+            //Log logEntry = new Log(Subject.ID, session, description);
         }
 
         /// <summary>

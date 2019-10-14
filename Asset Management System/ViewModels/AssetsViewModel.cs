@@ -3,6 +3,7 @@ using Asset_Management_System.Models;
 using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -20,10 +21,14 @@ namespace Asset_Management_System.ViewModels
 
         public List<Asset> Assets { get; set; }
 
+        public string SearchQueryText { get; set; }
+
+
         #endregion
 
         #region Commands
 
+        public ICommand SearchAssetsCommand { get; set; }
 
         #endregion
 
@@ -32,9 +37,10 @@ namespace Asset_Management_System.ViewModels
         public AssetsViewModel()
         {
             TitleHeight = 40;
-            Assets = new List<Asset>();
-            //Assets = new AssetRepository().Search("");
+            SearchQueryText = String.Empty;
 
+            // Initialize commands
+            SearchAssetsCommand = new Commands.Asset.SearchAssetsCommand(this);
         }
 
         #endregion

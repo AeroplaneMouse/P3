@@ -169,7 +169,7 @@ namespace Asset_Management_System.Database.Repositories
 
             if (dbcon.IsConnect())
             {
-                        "WHERE atr.tag_id IN (@ids) GROUP BY a.id";
+                        //"WHERE atr.tag_id IN (@ids) GROUP BY a.id";
                 try{
                     const string query = "SELECT a.* FROM assets AS a " +
                                          "INNER JOIN asset_tags AS atr ON (a.id = atr.asset_id) " +
@@ -253,7 +253,7 @@ namespace Asset_Management_System.Database.Repositories
             ulong row_department_id = reader.GetUInt64("department_id");
 
             return (Asset) Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] {row_id, row_label, row_description, row_department_id}, null, null);
+                new object[] {row_id, row_label, row_description, row_department_id, null}, null, null);
         }
     }
 }

@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace.Asset_Management_System"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
+        Top="900"
+        Left="200"
+        WindowStartupLocation="Manual"
         Title="Asset Management System" Height="450" Width="800">
     <Grid>
         <!-- When adding or removing rows and columns, remember that some 

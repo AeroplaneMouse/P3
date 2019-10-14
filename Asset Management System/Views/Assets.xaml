@@ -15,7 +15,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <!-- Overrides the standard template for Page, giving a "blank slate" -->
-                    <ControlTemplate TargetType="{x:Type Page}" x:Uid="1">
+                    <ControlTemplate TargetType="{x:Type Page}">
                         <Grid Margin="10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="{Binding TitleHeightGridLength}"/>
@@ -32,11 +32,13 @@
                             <StackPanel Grid.Row="1" Orientation="Horizontal">
                                 <TextBox VerticalAlignment="Center"
                                          MinWidth="230"
+                                         Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
                                          TextBlock.FontSize="{StaticResource FontSizeRegular}"/>
 
                                 <Button Grid.Column="1"
                                         Margin="10, 0, 0, 0"
                                         Content="Search"
+                                        Command="{Binding SearchAssetsCommand}"
                                         VerticalAlignment="Center"
                                         Style="{StaticResource RegularButton}"
                                         TextBlock.FontSize="{StaticResource FontSizeRegular}"/>
@@ -51,12 +53,7 @@
                                         <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description"/>
                                     </GridView>
                                 </ListView.View>
-                                <ListView.Resources>
-                                    <Style TargetType="ListViewItem">
-                                    </Style>
-                                </ListView.Resources>
                             </ListView>
-                            
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -65,7 +62,7 @@
 
     </Page.Resources>
 
-    <Grid>
+    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50px"/>
             <RowDefinition Height="50px"/>
@@ -119,5 +116,5 @@
                 </Style>
             </ListView.Resources>
         </ListView>
-    </Grid>
+    </Grid>-->
 </Page>
