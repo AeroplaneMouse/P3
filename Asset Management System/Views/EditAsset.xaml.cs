@@ -46,7 +46,7 @@ namespace Asset_Management_System.Views
                 _asset.Notify();
                 AssetRepository rep = new AssetRepository();
                 rep.Update(_asset);
-                //Main.ChangeSourceRequest(new Assets(Main));
+                //Main.ChangeMainContent(new Assets(Main));
             }
             else
             {

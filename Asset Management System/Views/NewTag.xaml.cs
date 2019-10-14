@@ -44,7 +44,7 @@ namespace Asset_Management_System.Views
     //            _tag.DepartmentID = department.ID;
     //            TagRepository rep = new TagRepository();
     //            rep.Insert(_tag);
-    //            Main.ChangeSourceRequest(new Tags(Main));
+    //            Main.ChangeMainContent(new Tags(Main));
     //        }
     //        else
     //        {

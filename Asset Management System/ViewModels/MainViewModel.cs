@@ -13,6 +13,74 @@ namespace Asset_Management_System.ViewModels
 {
     public class MainViewModel : Base.BaseViewModel
     {
+        #region Constructor
+
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        public MainViewModel(Window window)
+        {
+            // Setting private fields
+            _window = window;
+            _outerMarginSize = 10;
+
+            WindowMinWidth = 400;
+            WindowMinHeight = 400;
+
+            ResizeBorder = 4;
+            TitleHeight = 25;
+            InnerContentPaddingSize = 6;
+
+            CurrentPage = DataModels.ApplicationPage.Start;
+
+            // Listen out for the window resizeing
+            _window.StateChanged += (sender, e) =>
+            {
+                // Fire off events for all properties that are affected by a resize
+                OnPropertyChanged(nameof(ResizeBorderThickness));
+                OnPropertyChanged(nameof(OuterMarginSize));
+                OnPropertyChanged(nameof(OuterMarginThicknessSize));
+                //OnPropertyChanged(nameof(WindowRadius));
+                //OnPropertyChanged(nameof(WindowCornerRadius));
+            };
+
+            CurrentUser = new Session().Username;
+            if (Departments.Count > 0)
+                CurrentDepartment = Departments[0];
+
+            // Setting up frames
+            FrameMainContent = new Frame();
+            ChangeMainContent(new Views.Home(this));
+
+            // Initialize commands
+            MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
+            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
+            CloseCommand = new Base.RelayCommand(() => _window.Close());
+
+            SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
+
+            ShowWindow = new Base.RelayCommand(() => MessageBox.Show("Hey!"));
+
+            ShowHomePageCommand = new Commands.ShowHomePageCommand(this);
+            //ShowAssetsPageCommand = new Base.RelayCommand(() => FrameMainContent.Content = new Views.Assets());
+            ShowTagPageCommand = new Commands.ShowTagPageCommand(this);
+
+            // Fixes window sizing issues at maximized
+            var resizer = new Resources.Window.WindowResizer(_window);
+        }
+
+        private List<Department> GetDepartments()
+        {
+            List<Department> departments = new List<Department>();
+
+            DepartmentRepository rep = new DepartmentRepository();
+            departments = rep.GetAll();
+
+            return departments;
+        }
+
+        #endregion
+        
         #region Private Members
 
         // The window this view model controls
@@ -114,9 +182,9 @@ namespace Asset_Management_System.ViewModels
         /// list of loaded pages, that one would be used. One can also specify a different frame of 
         /// which content will be modified to contain the new page.
         /// </summary>
-        public void ChangeSourceRequest(Page newPage) => ChangeSourceRequest(newPage, FrameMainContent);
+        public void ChangeMainContent(Page newPage) => ChangeMainContent(newPage, FrameMainContent);
 
-        public void ChangeSourceRequest(Page newPage, Frame frame)
+        public void ChangeMainContent(Page newPage, Frame frame)
         {
             Page setPage = null;
             // Search the loaded page list, for the given page to check if it has allready been loaded.
@@ -183,7 +251,7 @@ namespace Asset_Management_System.ViewModels
             //FrameTopNavigationPart2.Content = topNavigationPage;
             //FrameLeftNavigation.Content = leftNavigationPage;
 
-            ChangeSourceRequest(new Views.Home(this));
+            ChangeMainContent(new Views.Home(this));
         }
 
         #endregion
@@ -205,74 +273,6 @@ namespace Asset_Management_System.ViewModels
         public ICommand ShowAssetsPageCommand { get; set; }
 
         public ICommand ShowTagPageCommand { get; set; }
-
-        #endregion
-
-        #region Constructor
-
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        public MainViewModel(Window window)
-        {
-            // Setting private fields
-            _window = window;
-            _outerMarginSize = 10;
-            //_windowRadius = 5;
-
-            WindowMinWidth = 400;
-            WindowMinHeight = 400;
-
-            ResizeBorder = 4;
-            TitleHeight = 25;
-            InnerContentPaddingSize = 6;
-
-            CurrentPage = DataModels.ApplicationPage.Start;
-
-            // Listen out for the window resizeing
-            _window.StateChanged += (sender, e) =>
-            {
-                // Fire off events for all properties that are affected by a resize
-                OnPropertyChanged(nameof(ResizeBorderThickness));
-                OnPropertyChanged(nameof(OuterMarginSize));
-                OnPropertyChanged(nameof(OuterMarginThicknessSize));
-                //OnPropertyChanged(nameof(WindowRadius));
-                //OnPropertyChanged(nameof(WindowCornerRadius));
-            };
-
-            CurrentUser = new Session().Username;
-            if (Departments.Count > 0)
-                CurrentDepartment = Departments[0];
-
-            //// Setting up frames
-            FrameMainContent = new Frame();
-
-            // Initialize commands
-            MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
-            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
-            CloseCommand = new Base.RelayCommand(() => _window.Close());
-
-            SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
-
-            ShowWindow = new Base.RelayCommand(() => MessageBox.Show("Hey!"));
-
-            ShowHomePageCommand = new Commands.ShowHomePageCommand(this);
-            //ShowAssetsPageCommand = new Base.RelayCommand(() => FrameMainContent.Content = new Views.Assets());
-            ShowTagPageCommand = new Commands.ShowTagPageCommand(this);
-
-            // Fixes window sizing issues at maximized
-            var resizer = new Resources.Window.WindowResizer(_window);
-        }
-
-        private List<Department> GetDepartments()
-        {
-            List<Department> departments = new List<Department>();
-
-            DepartmentRepository rep = new DepartmentRepository();
-            departments = rep.GetAll();
-
-            return departments;
-        }
 
         #endregion
 

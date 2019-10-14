@@ -47,7 +47,7 @@ namespace Asset_Management_System.Views
                     _ => null,
                 };
 
-                Main.ChangeSourceRequest(page);
+                Main.ChangeMainContent(page);
             }
         }
     }

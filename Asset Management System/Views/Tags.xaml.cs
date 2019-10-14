@@ -23,7 +23,7 @@ namespace Asset_Management_System.Views
 
         private void BtnCreateNewTag_Click(object sender, RoutedEventArgs e)
         {
-            //Main.ChangeSourceRequest(new NewTag(Main));
+            //Main.ChangeMainContent(new NewTag(Main));
         }
 
         private void BtnSearch_Click(object sender, RoutedEventArgs e)

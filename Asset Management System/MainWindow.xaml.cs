@@ -25,7 +25,7 @@ namespace Asset_Management_System
         public MainWindow()
         {
             InitializeComponent();
-            ChangeSourceRequest(new SplashPage(this), FrameSplash);
+            ChangeMainContent(new SplashPage(this), FrameSplash);
 
             // Starting the new UI window.
             new Main().Show();
@@ -73,7 +73,7 @@ namespace Asset_Management_System
             FrameTopNavigationPart2.Content = topNavigationPage;
             FrameLeftNavigation.Content = leftNavigationPage;
 
-            //ChangeSourceRequest(new Home(this));
+            //ChangeMainContent(new Home(this));
         }
 
         /// <summary>
@@ -98,9 +98,9 @@ namespace Asset_Management_System
         /// list of loaded pages, that one would be used. One can also specify a different frame of 
         /// which content will be modified to contain the new page.
         /// </summary>
-        public void ChangeSourceRequest(Page newPage) => ChangeSourceRequest(newPage, FrameMainContent);
+        public void ChangeMainContent(Page newPage) => ChangeFrameContent(newPage, FrameMainContent);
 
-        public void ChangeSourceRequest(Page newPage, Frame frame)
+        public void ChangeFrameContent(Page newPage, Frame frame)
         {
             Page setPage = null;
             // Search the loaded page list, for the given page to check if it has allready been loaded.

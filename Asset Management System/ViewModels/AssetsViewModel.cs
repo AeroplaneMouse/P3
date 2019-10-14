@@ -21,7 +21,7 @@ namespace Asset_Management_System.ViewModels
             _main = main;
 
             // Initializing commands
-            AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeSourceRequest(new NewAsset(_main)));
+            AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new NewAsset(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
             EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
             RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
@@ -83,7 +83,7 @@ namespace Asset_Management_System.ViewModels
             }
             else
             {
-                //Main.ChangeSourceRequest(new EditAsset(Main,input));
+                //Main.ChangeMainContent(new EditAsset(Main,input));
                 //Console.WriteLine($"Editing { SelectedItems.ElementAt(0) }.");
                 Console.WriteLine("Editing the selected item.");
             }
