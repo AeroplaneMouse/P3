@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using Asset_Management_System.Views;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -19,13 +20,16 @@ namespace Asset_Management_System.ViewModels
         {
             _main = main;
 
+            Search();
             // Initializing commands
-            AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.TagManager(_main)));
+            AddNewCommand =
+                new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.TagManager(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
             EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
             RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
             PrintCommand = new Base.RelayCommand(() => Print());
         }
+
         #endregion
 
         #region Private Properties
@@ -39,16 +43,11 @@ namespace Asset_Management_System.ViewModels
         public string SearchQueryText { get; set; } = "";
         public int SelectedItemIndex { get; set; }
 
-        private ObservableCollection<Tag> _list;
+        private ObservableCollection<Tag> _list = new ObservableCollection<Tag>();
 
         public ObservableCollection<Tag> SearchList
         {
-            get
-            {
-                if (_list == null)
-                    _list = new ObservableCollection<Tag>();
-                return _list;
-            }
+            get => _list;
             set
             {
                 _list.Clear();
@@ -88,7 +87,7 @@ namespace Asset_Management_System.ViewModels
             //List<MenuItem> assetsFunc = new List<MenuItem>();
             foreach (Tag tag in tags)
             {
-                Console.WriteLine(tag.Label);
+                Console.WriteLine(tag.Name);
 
                 //// Creating menuItems
                 //MenuItem item = new MenuItem();
@@ -108,21 +107,15 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void Edit()
         {
-            //System.Collections.IList seletedAssets = LV_assetList.SelectedItems;
-            //Asset input = (seletedAssets[0] as Asset);
-
-            if (SelectedItems.Count != 1)
+            Tag selectedTag = GetSelectedItem();
+            if (selectedTag != null)
             {
-                string message = $"You have selected { SelectedItems.Count }. This is not a valid amount!";
-                //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Red));
-                Console.WriteLine(message);
-                return;
+                Console.WriteLine("Editing " + selectedTag.Name);
+                _main.ChangeMainContent(new TagManager(_main, selectedTag));
             }
             else
             {
-                //Main.ChangeMainContent(new EditAsset(Main,input));
-                //Console.WriteLine($"Editing { SelectedItems.ElementAt(0) }.");
-                Console.WriteLine("Editing the selected item.");
+                Console.WriteLine("Please select an item");
             }
         }
 
@@ -131,36 +124,23 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void Remove()
         {
-            System.Collections.IList seletedAssets = null/*LvList.SelectedItems*/;
-
-            if (seletedAssets.Count == 0)
+            Tag selectedTag = GetSelectedItem();
+           
+            if (selectedTag == null)
             {
-                string message = $"You have selected { seletedAssets.Count }. This is not a valid amount!";
-                //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Red));
+                string message = "Please select an item.";
                 Console.WriteLine(message);
-                return;
             }
             else
             {
-                foreach (Asset asset in seletedAssets)
-                {
-                    Console.WriteLine($"Removing { asset.Name }.");
-                    new AssetRepository().Delete(asset);
-                }
-
-                string message;
-                if (seletedAssets.Count > 1)
-                    message = $"Multiple assets has been removed!";
-                else
-                    message = $"{ (seletedAssets[0] as Asset).Name } has been removed!";
-
-                //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Green));
-                Console.WriteLine(message);
-
+                Console.WriteLine($"Removing {selectedTag.Name}.");
+                new TagRepository().Delete(selectedTag);
+                
                 // Reload list
                 Search();
             }
         }
+
 
         public void Print()
         {

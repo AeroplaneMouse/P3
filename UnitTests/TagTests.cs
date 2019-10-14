@@ -11,7 +11,7 @@ namespace UnitTests
         {
             //Arrange
             Tag tag = new Tag();
-            tag.Label = "Tag_label";
+            tag.Name = "Tag_label";
 
             //Act
             string result = tag.ToString();
