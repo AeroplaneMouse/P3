@@ -12,15 +12,9 @@ namespace Asset_Management_System.Database.Repositories
 {
     public class AssetRepository : IAssetRepository
     {
-        private DBConnection dbcon;
-
-        public AssetRepository()
-        {
-            this.dbcon = DBConnection.Instance();
-        }
-
         public bool Insert(Asset entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -60,6 +54,7 @@ namespace Asset_Management_System.Database.Repositories
 
         public bool Update(Asset entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -98,6 +93,7 @@ namespace Asset_Management_System.Database.Repositories
 
         public bool Delete(Asset entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -129,6 +125,7 @@ namespace Asset_Management_System.Database.Repositories
 
         public Asset GetById(ulong id)
         {
+            DBConnection dbcon = DBConnection.Instance();
             Asset asset = null;
 
             if (dbcon.IsConnect())
@@ -167,6 +164,7 @@ namespace Asset_Management_System.Database.Repositories
 
         public List<Asset> SearchByTags(List<int> tags_ids)
         {
+            DBConnection dbcon = DBConnection.Instance();
             List<Asset> assets = new List<Asset>();
 
             if (dbcon.IsConnect())
@@ -208,6 +206,7 @@ namespace Asset_Management_System.Database.Repositories
 
         public List<Asset> Search(string keyword)
         {
+            DBConnection dbcon = DBConnection.Instance();
             List<Asset> assets = new List<Asset>();
 
             if (dbcon.IsConnect())
@@ -266,6 +265,8 @@ namespace Asset_Management_System.Database.Repositories
         }
         public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
         {
+            DBConnection dbcon = DBConnection.Instance();
+            dbcon = DBConnection.Instance();
             bool query_success = false;
 
             Console.WriteLine(tags.Count + ": " + tags[0].Label + ", " + tags[0].ID);
@@ -279,28 +280,29 @@ namespace Asset_Management_System.Database.Repositories
             }
 
             query.Append(string.Join(",", inserts));
-
-            if (dbcon.IsConnect() && tags.Count > 0)
-            {
-                try
+            
+            try{
+                if (dbcon.IsConnect() && tags.Count > 0)
                 {
+                    Console.WriteLine(dbcon.Connection.State);
+
                     using (var cmd = new MySqlCommand(query.ToString(), dbcon.Connection))
                     {
                         Console.WriteLine(cmd.CommandText);
 
-                       query_success = cmd.ExecuteNonQuery() > 0;
+                        MySqlDataReader tset = cmd.ExecuteReader();
                     }
                 }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    dbcon.Close();
-                }
             }
-
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                dbcon.Close();
+            }
+            
             return query_success;
         }
     }
