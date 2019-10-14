@@ -5,6 +5,10 @@ using System;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace Asset_Management_System.ViewModels
@@ -132,14 +136,28 @@ namespace Asset_Management_System.ViewModels
 
         public void Print()
         {
-            string pathToFile = "asset_report_" + DateTime.Now.ToString().Replace(' ', '-');
-
-            using (StreamWriter file = new StreamWriter(@pathToFile, false))
+            var dialog = new PromtForReportName("asset_report_" + DateTime.Now.ToString().Replace(@"/", "").Replace(@" ", "-").Replace(@":", "") + ".csv", "Report name:");
+            if (dialog.ShowDialog() == true)
             {
-                foreach (Asset asset in SearchList)
+                if (dialog.DialogResult == true)
                 {
-                    string fileEntry = asset.ID + asset.Name;
-                    file.WriteLine(fileEntry);
+                    string pathToFile = dialog.InputText;
+
+                    if (!pathToFile.EndsWith(".csv"))
+                    {
+                        pathToFile = pathToFile + ".csv";
+                    }
+
+                    pathToFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + pathToFile;
+
+                    using (StreamWriter file = new StreamWriter(pathToFile, false))
+                    {
+                        foreach (Asset asset in SearchList)
+                        {
+                            string fileEntry = asset.ID + "," + asset.Name;
+                            file.WriteLine(fileEntry);
+                        }
+                    }
                 }
             }
         }
