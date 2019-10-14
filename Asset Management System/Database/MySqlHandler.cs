@@ -10,8 +10,7 @@ namespace Asset_Management_System.Database
     public class MySqlHandler
     {
         private MySqlConnection dbcon;
-        private string query;
-        
+
         public MySqlHandler(MySqlConnection connection)
         {
             this.dbcon = connection;
@@ -21,7 +20,7 @@ namespace Asset_Management_System.Database
         {
             bool result = false;
             
-            using (var cmd = new MySqlCommand(query, this.dbcon))
+            using (var cmd = new MySqlCommand(raw_query, this.dbcon))
             {
                 if (par != null)
                 {
