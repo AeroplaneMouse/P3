@@ -259,44 +259,17 @@ namespace Asset_Management_System.Database.Repositories
             ulong row_department_id = reader.GetUInt64("department_id");
             DateTime row_created_at = reader.GetDateTime("created_at");
             string row_options = reader.GetString("options");
-            Console.WriteLine(row_options);
-
-            
-            return (Asset) Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { row_id, row_label, row_description, row_department_id, row_created_at }, null, null);
-        }
-
-        public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
-        {
-            throw new NotImplementedException();
-        }
-
-        //public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
-        //{
-        //    if (dbcon.IsConnect())
-        //    {
-        //        string query = "INSERT INTO asset_tags (asset_id, tag_id) VALUES ";
-        //        using (var cmd = new MySqlCommand(query, dbcon.Connection))
-        //        {
-        //            cmd.Parameters.Add("@keyword", MySqlDbType.String);
-        //            cmd.Parameters["@keyword"].Value = keyword;
-
-        //            using (var reader = cmd.ExecuteReader())
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    Asset asset = DBOToModelConvert(reader);
-        //                    assets.Add(asset);
-        //                }
-        //            }
-        //        }
-        //        foreach (Tag tag in tags)
-        //        {
-        //        }
-        //    }
-        //    else
-        //        return false;
-        //}
-
+            Console.WriteLine(row_options);
+
+
+            return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
+                new object[] { row_id, row_label, row_description, row_department_id, row_created_at, row_options }, null, null);
+
+        }
+
+        public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
+        {
+            return false;
+        }
     }
 }
