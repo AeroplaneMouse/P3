@@ -133,7 +133,7 @@ namespace Asset_Management_System.ViewModels
             }
             else
             {
-                Console.WriteLine($"Removing {selectedTag.Name}.");
+                Console.WriteLine($"Removing {selectedTag.Label}.");
                 new TagRepository().Delete(selectedTag);
                 
                 // Reload list
