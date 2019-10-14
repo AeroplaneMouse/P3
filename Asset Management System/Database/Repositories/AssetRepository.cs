@@ -260,37 +260,40 @@ namespace Asset_Management_System.Database.Repositories
             string row_options = reader.GetString("options");
             Console.WriteLine(row_options);
 
-            
-            return (Asset) Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
 
-        public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
-        {
-            if (dbcon.IsConnect())
-            {
-                using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                {
-                    cmd.
-                    cmd.Parameters.Add("@keyword", MySqlDbType.String);
-                    cmd.Parameters["@keyword"].Value = keyword;
+            return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
+                new object[] { row_id, row_label, row_description, row_department_id, row_created_at, row_options }, null, null);
 
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Asset asset = DBOToModelConvert(reader);
-                            assets.Add(asset);
-                        }
-                    }
-                }
-                string query = "INSERT INTO asset_tags (asset_id, tag_id) VALUES ";
-                foreach (Tag tag in tags)
-                {
-                }
-            }
-            else
-                return false;
         }
-                new object[] {row_id, row_label, row_description, row_department_id, row_created_at}, null, null);
-        }
+
+        //public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
+        //{
+        //    if (dbcon.IsConnect())
+        //    {
+        //        using (var cmd = new MySqlCommand(query, dbcon.Connection))
+        //        {
+        //            cmd.
+        //            cmd.Parameters.Add("@keyword", MySqlDbType.String);
+        //            cmd.Parameters["@keyword"].Value = keyword;
+
+        //            using (var reader = cmd.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    Asset asset = DBOToModelConvert(reader);
+        //                    assets.Add(asset);
+        //                }
+        //            }
+        //        }
+        //        string query = "INSERT INTO asset_tags (asset_id, tag_id) VALUES ";
+        //        foreach (Tag tag in tags)
+        //        {
+        //        }
+        //    }
+        //    else
+        //        return false;
+        //}
+        //        new object[] {row_id, row_label, row_description, row_department_id, row_created_at}, null, null);
+        //}
     }
 }
