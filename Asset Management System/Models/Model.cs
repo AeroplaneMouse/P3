@@ -93,7 +93,6 @@ namespace Asset_Management_System.Models
         /// <returns>string</returns>
         public string GetChanges()
         {
-            //Dictionary<string, Change> changes = new Dictionary<string, Change>();
             Dictionary<string, Change> changes = new Dictionary<string, Change>();
             Type objectType = this.GetType();
             PropertyInfo[] props = objectType.GetProperties();
@@ -106,7 +105,6 @@ namespace Asset_Management_System.Models
                     string oldValue = prevValues[key];
                     if (oldValue != newValue)
                     {
-                        //changes.Add(new Tuple<string, string, string>("Value: " + key, "Previous value: " + oldValue, "New value: " + newValue));
                         changes.Add(key, new Change( oldValue, newValue));
                     }
                 }
