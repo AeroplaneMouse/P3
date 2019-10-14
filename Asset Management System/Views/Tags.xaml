@@ -9,9 +9,9 @@
                         d:DesignHeight="450" d:DesignWidth="800"
                         ShowsNavigationUI="False"
                         Title="Tags"
-                        Loaded="Page_Loaded">
+                        Style="{StaticResource ListPage}">
 
-    <Grid>
+    <!--<Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60" />
             <RowDefinition Height="60" />
@@ -80,5 +80,5 @@
                 </GridView>
             </ListView.View>
         </ListView>
-    </Grid>
+    </Grid>-->
 </views:FieldsController>

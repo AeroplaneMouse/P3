@@ -20,15 +20,10 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Assets : Page
     {
-        private MainViewModel _main;
-
         public Assets(MainViewModel main)
         {
             InitializeComponent();
-            _main = main;
-            DataContext = new ViewModels.AssetsViewModel(_main);
+            DataContext = new ViewModels.AssetsViewModel(main);
         }
-
-        //private void Page_Loaded(object sender, RoutedEventArgs e) => Search();
     }
 }

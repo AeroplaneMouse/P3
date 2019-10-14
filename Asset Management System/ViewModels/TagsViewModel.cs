@@ -1,34 +1,30 @@
 ﻿using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
-using Asset_Management_System.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class AssetsViewModel
+    public class TagsViewModel : Base.BaseViewModel
     {
         #region Constructors
 
-        public AssetsViewModel(MainViewModel main)
+        public TagsViewModel(MainViewModel main)
         {
-            // Saving reference to the main window
             _main = main;
 
             // Initializing commands
-            AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new NewAsset(_main)));
+            //AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new NewTag(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
             EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
             RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
             PrintCommand = new Base.RelayCommand(() => Print());
         }
-
         #endregion
 
         #region Private Properties
@@ -42,24 +38,34 @@ namespace Asset_Management_System.ViewModels
         public string SearchQueryText { get; set; } = "";
 
         public List<Selector> SelectedItems { get; set; } = new List<Selector>();
-        
-        private ObservableCollection<Asset> _list;
 
-        public ObservableCollection<Asset> SearchList
+        private ObservableCollection<Tag> _list;
+
+        public ObservableCollection<Tag> SearchList
         {
             get
             {
                 if (_list == null)
-                    _list = new ObservableCollection<Asset>();
+                    _list = new ObservableCollection<Tag>();
                 return _list;
             }
             set
             {
                 _list.Clear();
-                foreach (Asset asset in value)
-                    _list.Add(asset);
+                foreach (Tag tag in value)
+                    _list.Add(tag);
             }
         }
+
+        #endregion
+
+        #region Commands
+
+        public ICommand AddNewCommand { get; set; }
+        public ICommand SearchCommand { get; set; }
+        public ICommand EditCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
+        public ICommand PrintCommand { get; set; }
 
         #endregion
 
@@ -72,18 +78,17 @@ namespace Asset_Management_System.ViewModels
         {
             Console.WriteLine();
             Console.WriteLine("Searching for: " + SearchQueryText);
-            AssetRepository rep = new AssetRepository();
-            ObservableCollection<Asset> assets = rep.Search(SearchQueryText);
+            ObservableCollection<Tag> tags = new TagRepository().Search(SearchQueryText);
 
-            Console.WriteLine("Found: " + assets.Count.ToString());
+            Console.WriteLine("Found: " + tags.Count.ToString());
 
-            if (assets.Count > 0)
+            if (tags.Count > 0)
                 Console.WriteLine("-----------");
 
             //List<MenuItem> assetsFunc = new List<MenuItem>();
-            foreach (Asset asset in assets)
+            foreach (Tag tag in tags)
             {
-                Console.WriteLine(asset.Name);
+                Console.WriteLine(tag.Label);
 
                 //// Creating menuItems
                 //MenuItem item = new MenuItem();
@@ -95,7 +100,7 @@ namespace Asset_Management_System.ViewModels
                 //assetsFunc.Add(item);
             }
 
-            SearchList = assets;
+            SearchList = tags;
         }
 
         /// <summary>
@@ -159,27 +164,8 @@ namespace Asset_Management_System.ViewModels
 
         public void Print()
         {
-            string pathToFile = "asset_report_" + DateTime.Now.ToString().Replace(' ', '-');
-
-            using (StreamWriter file = new StreamWriter(@pathToFile, false))
-            {
-                foreach (Asset asset in SearchList)
-                {
-                    string fileEntry = asset.ID + asset.Name;
-                    file.WriteLine(fileEntry);
-                }
-            }
+            throw new NotImplementedException();
         }
-
-        #endregion
-
-        #region Commands
-
-        public ICommand AddNewCommand { get; set; }
-        public ICommand SearchCommand { get; set; }
-        public ICommand EditCommand { get; set; }
-        public ICommand RemoveCommand { get; set; }
-        public ICommand PrintCommand { get; set; }
 
         #endregion
     }

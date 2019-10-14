@@ -14,37 +14,10 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Tags : FieldsController
     {
-        private MainViewModel _main;
         public Tags(MainViewModel main)
         {
             InitializeComponent();
-            _main = main;
-        }
-
-        private void BtnCreateNewTag_Click(object sender, RoutedEventArgs e)
-        {
-            //Main.ChangeMainContent(new NewTag(Main));
-        }
-
-        private void BtnSearch_Click(object sender, RoutedEventArgs e)
-        {
-            TagRepository rep = new TagRepository();
-            List<Tag> tags = rep.Search(TbSearch.Text);
-            LvTags.ItemsSource = tags;
-        }
-
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            // Load all tags
-            TagRepository rep = new TagRepository();
-            List<Tag> tags = rep.Search("");
-            LvTags.ItemsSource = tags;
-        }
-
-        private void TbSearch_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-                BtnSearch_Click(sender, new RoutedEventArgs());
+            DataContext = new ViewModels.TagsViewModel(main);
         }
     }
 }
