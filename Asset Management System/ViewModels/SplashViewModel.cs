@@ -55,8 +55,6 @@ namespace Asset_Management_System.ViewModels
         private void Authenticate()
         {
             // Check database connection
-            
-
 
             Session t = new Session();
 

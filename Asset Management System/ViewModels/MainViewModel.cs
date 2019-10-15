@@ -9,6 +9,8 @@ using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Events;
 using System.Windows.Media;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -63,6 +65,7 @@ namespace Asset_Management_System.ViewModels
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
+            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(message: "Test", background: Brushes.Green, foreground: Brushes.White));
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
@@ -157,7 +160,7 @@ namespace Asset_Management_System.ViewModels
 
         public Session CurrentSession { get; private set; }
 
-        public List<Notification> ActiveNotifications { get; set; } = new List<Notification>();
+        public ObservableCollection<Notification> ActiveNotifications { get; set; } = new ObservableCollection<Notification>();
 
         #endregion
 
@@ -217,15 +220,19 @@ namespace Asset_Management_System.ViewModels
             frame.Content = setPage;
         }
 
-        public async void AddNotification(string message)
+        public async void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
         {
-            Notification n = new Notification();
-            n.Message = message;
-            n.Background = Brushes.Red;
-            n.Foreground = Brushes.Black;
-
-            
+            Notification n = new Notification(message, foreground, background);
             ActiveNotifications.Add(n);
+
+            await Task.Delay(2000);
+
+            RemoveNotification(n);
+        }
+
+        private void RemoveNotification(Notification n)
+        {
+            ActiveNotifications.Remove(n);
         }
 
         public void ShowNotification(object a, object b) { }
@@ -238,10 +245,8 @@ namespace Asset_Management_System.ViewModels
         {
             // Remove reload splash screen menuitem
             ReloadSplashCommand = null;
-            AddNotification("Test");
-            AddNotification("Test 1");
-            AddNotification("Test2");
-            AddNotification("Test3");
+
+            AddNotification("test", Brushes.White, Brushes.Green);
 
             // Remove splash page
             SplashVisibility = Visibility.Hidden;
@@ -305,6 +310,8 @@ namespace Asset_Management_System.ViewModels
         public ICommand ShowLogPageCommand { get; set; }
 
         public ICommand ReloadSplashCommand { get; set; }
+
+        public ICommand AddNotificationTestCommand { get; set; }
 
         #endregion
 
