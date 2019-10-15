@@ -1,5 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Asset_Management_System">
-    
+                    xmlns:local="clr-namespace:Asset_Management_System"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <!-- The active icon to use in the application -->
+    <BitmapImage x:Key="ApplicationIcon" UriSource="/Resources/Images/Logos/catface.jpg"/>
+
 </ResourceDictionary>

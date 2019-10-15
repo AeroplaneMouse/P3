@@ -1,4 +1,5 @@
 ﻿using Asset_Management_System.Authentication;
+using Asset_Management_System.Events;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,8 @@ namespace Asset_Management_System.ViewModels
 {
     public class SplashViewModel : Base.BaseViewModel
     {
+        public event StatusUpdateEventHandler StatusUpdate;
+
         #region Constructors
 
         public SplashViewModel(MainViewModel main)
@@ -31,6 +34,9 @@ namespace Asset_Management_System.ViewModels
 
         #region Public Properties
 
+        public string LoadingText { get; set; } = "Loading...";
+        public string StatusText { get; set; }
+
         #endregion
 
         #region Commands
@@ -41,7 +47,6 @@ namespace Asset_Management_System.ViewModels
 
         #region Methods
 
-        public event Events.StatusUpdateEventHandler StatusUpdate;
 
         private void LoadConfig()
         {
@@ -51,15 +56,17 @@ namespace Asset_Management_System.ViewModels
         private void Authenticate()
         {
             Session t = new Session();
-            t.StatusUpdate += test;
+            t.StatusUpdate += UpdateStatusText;
 
             if (t.Validate())
                 _main.SystemLoaded();
+            else
+                UpdateStatusText(this, new StatusUpdateEventArgs("User not authorized to access the application."));
         }
 
-        public void test(object sender, Events.StatusUpdateEventArgs e)
+        public void UpdateStatusText(object sender, StatusUpdateEventArgs e)
         {
-            Console.WriteLine(e.Message);
+            StatusText = e.Message;
         }
 
         #endregion

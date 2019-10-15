@@ -45,7 +45,7 @@ namespace Asset_Management_System.Authentication
             ldap.Close();
             */
 
-            return true;
+            return false;
         }
 
         private static DirectoryEntry createDirectoryEntry()
