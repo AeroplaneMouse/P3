@@ -66,7 +66,6 @@ namespace Asset_Management_System.Views
                 _main.ChangeMainContent(new AssetManager(_main,_asset));
             }
 
-            _asset.SerializeFields();
             Department department = _main.CurrentDepartment;
             if (department != null)
             {

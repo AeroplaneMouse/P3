@@ -11,15 +11,8 @@ using System.Collections.ObjectModel;
 
 namespace Asset_Management_System.Database.Repositories
 {
-    class TagRepository : ITagRepository
+    public class TagRepository : ITagRepository
     {
-        private DBConnection dbcon;
-
-        public TagRepository()
-        {
-            this.dbcon = DBConnection.Instance();
-        }
-
         /// <summary>
         /// 
         /// </summary>
@@ -27,7 +20,10 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public bool Insert(Tag entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
+
+            entity.SerializeFields();
 
             if (dbcon.IsConnect())
             {
@@ -76,7 +72,10 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public bool Update(Tag entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
+
+            entity.SerializeFields();
 
             if (dbcon.IsConnect())
             {
@@ -124,6 +123,7 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public bool Delete(Tag entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -160,6 +160,7 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public Tag GetById(ulong id)
         {
+            DBConnection dbcon = DBConnection.Instance();
             Tag tag = null;
 
             if (dbcon.IsConnect())
@@ -210,6 +211,7 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public List<Tag> GetChildTags(ulong parent_id)
         {
+            DBConnection dbcon = DBConnection.Instance();
             List<Tag> tags = new List<Tag>();
 
             if (dbcon.IsConnect())
@@ -253,6 +255,7 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public ObservableCollection<Tag> Search(string keyword)
         {
+            DBConnection dbcon = DBConnection.Instance();
             ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
 
             if (dbcon.IsConnect())
@@ -290,6 +293,42 @@ namespace Asset_Management_System.Database.Repositories
             }
 
             return tags;
+        }
+
+        public List<Tag> GetAll()
+        {
+            DBConnection dbcon = DBConnection.Instance();
+            List<Tag> tags = new List<Tag>();
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    const string query = "SELECT id, label, parent_id, department_id, color, options, created_at FROM tags";
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                tags.Add(DBOToModelConvert(reader));
+                            }
+                        }
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
+            }
+
+            return tags;
+            
         }
 
         /// <summary>

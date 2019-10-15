@@ -50,8 +50,9 @@ namespace Asset_Management_System.Database
                 }
                 return true;
             }
-            catch (MySqlException)
+            catch (MySqlException e)
             {
+                Console.WriteLine(e);
                 /*
                 connection = null;
                 if (SqlConnectionFailed != null)
