@@ -75,7 +75,7 @@ namespace Asset_Management_System.ViewModels
             Console.WriteLine("Searching for: " + SearchQueryText);
             ObservableCollection<Tag> tags = new TagRepository().Search(SearchQueryText);
 
-            Console.WriteLine("Found: " + tags.Count.ToString());
+            Console.WriteLine("Found: " + tags.Count);
 
             if (tags.Count > 0)
                 Console.WriteLine("-----------");
