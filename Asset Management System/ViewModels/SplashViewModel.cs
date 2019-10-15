@@ -51,9 +51,8 @@ namespace Asset_Management_System.ViewModels
         private void Authenticate()
         {
             Session t = new Session();
-            t.StatusUpdate += test;
-
-            if (t.Validate())
+            
+            if (t.Authenticated())
                 _main.SystemLoaded();
         }
 
