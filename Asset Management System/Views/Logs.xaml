@@ -16,14 +16,6 @@
                             <RowDefinition Height="70"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        <Button
-                            Style="{StaticResource RegularButton}"
-                            Grid.Row="0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Content="Add new"
-                            Command="{Binding AddNewCommand}"
-                        />
 
                         <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Bottom">
                             <TextBox
@@ -36,14 +28,6 @@
                             <Button Style="{StaticResource RegularButton}"
                                     Content="Search"
                                     Command="{Binding SearchCommand}"/>
-
-                            <Button Style="{StaticResource RegularButton}"
-                                    Content="Edit"
-                                    Command="{Binding EditCommand}"/>
-
-                            <Button Style="{StaticResource RegularButton}"
-                                    Content="Remove"
-                                    Command="{Binding RemoveCommand}"/>
 
                             <Button Style="{StaticResource RegularButton}"
                                     Content="Print"

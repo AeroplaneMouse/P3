@@ -22,21 +22,15 @@ namespace Asset_Management_System.ViewModels
             //Search();
             
             // Initializing commands
-            //AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.AssetManager(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
-            //EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
-            //RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
             PrintCommand = new Base.RelayCommand(() => Print());
         }
 
         
 
         #region Commands
-
-        public ICommand AddNewCommand { get; set; }
+        
         public ICommand SearchCommand { get; set; }
-        public ICommand EditCommand { get; set; }
-        public ICommand RemoveCommand { get; set; }
         public ICommand PrintCommand { get; set; }
 
         #endregion
