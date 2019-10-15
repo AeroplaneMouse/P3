@@ -21,6 +21,7 @@ namespace Asset_Management_System.Views
         {
             InitializeComponent();
             Main = main;
+            this.DataContext = new ViewModels.HomeViewModelTest();
         }
 
         private void Btn_Test_Click(object sender, RoutedEventArgs e)
