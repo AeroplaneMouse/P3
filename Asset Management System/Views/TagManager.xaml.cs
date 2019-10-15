@@ -70,7 +70,6 @@ namespace Asset_Management_System.Views
                 Console.WriteLine(field.Content);
             }
 
-            _tag.SerializeFields();
             Department department = _main.CurrentDepartment;
             if (department != null)
             {

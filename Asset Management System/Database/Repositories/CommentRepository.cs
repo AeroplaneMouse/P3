@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace Asset_Management_System.Database.Repositories
 {
-    class CommentRepository : ICommentRepository
+    public class CommentRepository : ICommentRepository
     {
 
         public bool Insert(Comment entity)
