@@ -20,6 +20,7 @@ namespace Asset_Management_System.ViewModels
 
             // Initializing commands
             LoadConfigCommand = new Base.RelayCommand(() => LoadConfig());
+
             Console.WriteLine("Showing splash screen");
             Authenticate();
         }
@@ -58,13 +59,16 @@ namespace Asset_Management_System.ViewModels
             Session t = new Session();
             t.StatusUpdate += UpdateStatusText;
 
+            // Create database connection
+            UpdateStatusText(new StatusUpdateEventArgs("Estaplishing connection to database..."));
+
             if (t.Validate())
                 _main.SystemLoaded();
             else
-                UpdateStatusText(this, new StatusUpdateEventArgs("User not authorized to access the application."));
+                UpdateStatusText(new StatusUpdateEventArgs("User not authorized to access the application."));
         }
 
-        public void UpdateStatusText(object sender, StatusUpdateEventArgs e)
+        public void UpdateStatusText(StatusUpdateEventArgs e)
         {
             StatusText = e.Message;
         }

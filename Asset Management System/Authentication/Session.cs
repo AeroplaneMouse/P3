@@ -25,6 +25,38 @@ namespace Asset_Management_System.Authentication
 
         public bool Validate()
         {
+            // Make LDAP connection
+            StatusUpdateEventArgs args = new StatusUpdateEventArgs("");
+
+            args.Message = "Establishing connection to LDAP...";
+            StatusUpdate(args);
+            Ldap ldap = new Ldap();
+            try
+            {
+                ldap.Connect();
+            }
+            catch (LdapException e)
+            {
+                args.Message = "Unable to establish connection to LDAP";
+                args.extraMessage = e.Message;
+                StatusUpdate(args);
+            }
+
+            // Validate user
+
+            if (ldap.UserExist("jakob"))
+            {
+                StatusUpdate.Invoke(new StatusUpdateEventArgs("User exist!"));
+                Console.WriteLine("User exist!");
+                return true;
+            }
+            else
+            {
+                StatusUpdate.Invoke(new StatusUpdateEventArgs("User doesn't exist!"));
+                Console.WriteLine("User does not exist!");
+                return false;
+            }
+
             /* Do LDAP Validation */
             /*
             Ldap ldap = new Ldap();
