@@ -6,6 +6,6 @@
         
         void Detach(IUpdateObserver observer);
         
-        void Notify();
+        void Notify(bool delete);
     }
 }

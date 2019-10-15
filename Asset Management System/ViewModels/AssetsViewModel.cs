@@ -121,6 +121,7 @@ namespace Asset_Management_System.ViewModels
             else
             {
                 Console.WriteLine($"Removing {selectedAsset.Name}.");
+                selectedAsset.Notify(true);
                 new AssetRepository().Delete(selectedAsset);
 
                 //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Green));
