@@ -124,6 +124,7 @@ namespace Asset_Management_System.Database.Repositories
 
         public List<Entry> Search(string keyword, int limit=100)
         {
+            DBConnection dbcon = DBConnection.Instance();
             List<Entry> entries = new List<Entry>();
 
             if (dbcon.IsConnect())
