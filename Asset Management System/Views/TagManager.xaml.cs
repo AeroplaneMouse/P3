@@ -7,6 +7,7 @@ using Asset_Management_System.Events;
 using Brushes = System.Windows.Media.Brushes;
 using Asset_Management_System.ViewModels;
 using System.Windows;
+using System.Windows.Documents;
 
 namespace Asset_Management_System.Views
 {
@@ -21,15 +22,26 @@ namespace Asset_Management_System.Views
 
         private readonly bool _editing;
 
+        public List<Tag> ParentTagsList
+        {
+            get
+            {
+                TagRepository tagRepository = new TagRepository();
+                return tagRepository.GetParentTags()
+                ;
+            }
+        }
+
         /// <summary>
         /// TagManager is called when creating, or editing a tag.
         /// </summary>
         /// <param name="main"></param>
         /// <param name="inputTag">Optional input, only used when editing a tag.</param>
-        public TagManager(MainViewModel main,Tag inputTag = null)
+        public TagManager(MainViewModel main, Tag inputTag = null)
         {
             InitializeComponent();
             _main = main;
+            DataContext = this;
             FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
             if (inputTag != null)
             {
@@ -67,26 +79,32 @@ namespace Asset_Management_System.Views
             {
                 _tag.DepartmentID = department.ID;
                 _tag.Color = Color.Text;
+
+                // Logging the Tag
+                _tag.Notify();
                 TagRepository rep = new TagRepository();
                 if (_editing)
                 {
+                    if ((ParentTag.SelectedItem as Tag) != null)
+                    {
+                        _tag.ParentID = (ParentTag.SelectedItem as Tag).ID;
+                    }
                     rep.Update(_tag);
                 }
                 else
                 {
                     rep.Insert(_tag);
                 }
-                
+
                 _main.ChangeMainContent(new Tags(_main));
             }
             else
             {
-                
-                _main.ShowNotification(null,new NotificationEventArgs("Department not selected",Brushes.Red));
+                _main.ShowNotification(null, new NotificationEventArgs("Department not selected", Brushes.Red));
                 Console.WriteLine("ERROR! Department not found.");
             }
         }
-        
+
         /// <summary>
         /// This function is used for updating the textBox, with the selected color.
         /// </summary>
@@ -96,7 +114,7 @@ namespace Asset_Management_System.Views
         {
             Color.Text = ColorPicker.SelectedColor.ToString();
         }
-        
+
         /// <summary>
         /// Runs through the saved fields within the tag, and adds these to the fieldList.
         /// </summary>
@@ -107,9 +125,10 @@ namespace Asset_Management_System.Views
             _tag.DeserializeFields();
             foreach (var field in _tag.FieldsList)
             {
-                ConsoleWriter.ConsoleWrite(field.Label +" | "+ field.Content);
+                ConsoleWriter.ConsoleWrite(field.Label + " | " + field.Content);
                 FieldsList.Add(field);
             }
+
             TbName.Text = _tag.Name;
             Color.Text = _tag.Color;
         }

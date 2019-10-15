@@ -5,10 +5,6 @@ using System;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace Asset_Management_System.ViewModels
@@ -125,6 +121,7 @@ namespace Asset_Management_System.ViewModels
             else
             {
                 Console.WriteLine($"Removing {selectedAsset.Name}.");
+                selectedAsset.Notify(true);
                 new AssetRepository().Delete(selectedAsset);
 
                 //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Green));

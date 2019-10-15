@@ -19,6 +19,9 @@ namespace Asset_Management_System.Authentication
             this.Username = parts[1];
         }
 
+        public event Events.StatusUpdateEventHandler StatusUpdate;
+
+
         public Boolean Validate()
         {
             /* Do LDAP Validation */

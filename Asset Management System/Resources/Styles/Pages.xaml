@@ -50,7 +50,7 @@
 
                         </StackPanel>
 
-                        <ListView ItemsSource="{Binding SearchList}" 
+                        <ListView ItemsSource="{Binding SearchList}"
                                   Grid.Row="2" 
                                   Margin="0, 10, 0, 0"
                                   SelectionMode="Single"
@@ -59,7 +59,7 @@
                                 <GridView>
                                     <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID"/>
                                     <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name"/>
-                                    <GridViewColumn DisplayMemberBinding="{Binding Path=CreatedAt}" Header="Created"/>
+                                    <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created"/>
                                 </GridView>
                             </ListView.View>
                         </ListView>

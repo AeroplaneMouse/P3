@@ -22,7 +22,7 @@ namespace Asset_Management_System.Models
             DepartmentID = department_id;
             CreatedAt = created_at;
             SerializedFields = options;
-            FieldsList = new List<Field>();
+            this.DeserializeFields();
             SavePrevValues();
         }
 

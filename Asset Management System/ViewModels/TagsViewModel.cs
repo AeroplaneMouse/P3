@@ -1,12 +1,8 @@
 ﻿using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Text;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using Asset_Management_System.Views;
 
@@ -134,6 +130,7 @@ namespace Asset_Management_System.ViewModels
             else
             {
                 Console.WriteLine($"Removing {selectedTag.Name}.");
+                selectedTag.Notify(true);
                 new TagRepository().Delete(selectedTag);
                 
                 // Reload list
