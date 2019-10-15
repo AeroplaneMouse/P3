@@ -61,13 +61,25 @@ namespace Asset_Management_System.Views
         /// <param name="e"></param>
         private void BtnSaveNewTag_Click(object sender, RoutedEventArgs e)
         {
+            bool requiredFieldsWritten = true;
             _tag.Name = TbName.Text;
             _tag.Color = Color.Text;
             _tag.FieldsList = new List<Field>();
             foreach (var field in FieldsList)
             {
+                if (field.Required && field.Content == string.Empty)
+                {
+                    requiredFieldsWritten = false;
+                }
+               
                 _tag.AddField(field);
                 Console.WriteLine(field.Content);
+            }
+            if (!requiredFieldsWritten)
+            {
+                _main.ChangeMainContent(new TagManager(_main,_tag));
+                Console.WriteLine("Please fill out the required fields.");
+                return;
             }
 
             Department department = _main.CurrentDepartment;

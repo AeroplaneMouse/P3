@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Asset_Management_System.Controllers;
 using Asset_Management_System.Models;
@@ -61,9 +62,13 @@ namespace Asset_Management_System.Views
                 }
                 _asset.AddField(field);
             }
-            if (requiredFieldsWritten)
+            Console.WriteLine(requiredFieldsWritten);
+            
+            if (!requiredFieldsWritten)
             {
                 _main.ChangeMainContent(new AssetManager(_main,_asset));
+                Console.WriteLine("Please fill out the required fields.");
+                return;
             }
 
             Department department = _main.CurrentDepartment;
