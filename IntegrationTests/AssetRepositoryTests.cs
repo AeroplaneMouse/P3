@@ -72,6 +72,18 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void GetById_ParameterIdDoesNotExistInDatabase_ReturnsNull()
+        {
+            //Arrange
+
+            //Act
+            Asset retrievedAsset = assetRepository.GetById(1);
+
+            //Assert
+            Assert.IsNull(retrievedAsset);
+        }
+
+        [TestMethod]
         public void Update_WellDefinedAssetFromDatabase_ReturnsTrueAsTheAssetIsUpdated()
         {
             //Arrange
@@ -116,11 +128,7 @@ namespace UnitTests
         public void Delete_AssetInDataBase_GetByIdReturnsNullWithDeletedAssetId()
         {
             //Arrange
-            bool isAdded = assetRepository.Insert(asset);
-            if (!isAdded)
-            {
-                Assert.Fail();
-            }
+            assetRepository.Insert(asset);
 
             //Act
             Asset retrievedAsset = assetRepository.GetById(1);
@@ -129,6 +137,24 @@ namespace UnitTests
 
             //Assert
             Assert.AreEqual(null, result);
+        }
+
+        [TestMethod]
+        public void Delete_AssetNotInDatabase_ReturnsFalse()
+        {
+            //Arrange
+
+            //Act
+            bool isDeleted = assetRepository.Delete(asset);
+
+            //Assert
+            Assert.IsFalse(isDeleted);
+        }
+
+        [TestMethod]
+        public void SearchByTags()
+        {
+
         }
 
         [TestCleanup]
