@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Text;
 using System.Windows.Media;
 using Asset_Management_System.Events;
@@ -44,10 +45,15 @@ namespace Asset_Management_System.Database
             {
                 if (Connection == null)
                 {
-                    string connstring = "Server=192.38.49.9; database=ds303e19; UID=ds303e19; password=Cisptf8CuT4hLj4T; Pooling=true; Min Pool Size=0; Max Pool Size=100; Connection Lifetime=60";
+                    string connstring = "Server=192.38.49.9; database=ds303e19; UID=ds303e19; password=Cisptf8CuT4hLj4T; Pooling=true; Min Pool Size=1; Max Pool Size=10; Connection Lifetime=60";
                     connection = new MySqlConnection(connstring);
+                }
+
+                if (connection.State != ConnectionState.Open)
+                {
                     connection.Open();
                 }
+
                 return true;
             }
             catch (MySqlException e)

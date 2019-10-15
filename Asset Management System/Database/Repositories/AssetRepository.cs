@@ -263,13 +263,19 @@ namespace Asset_Management_System.Database.Repositories
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
                 new object[] { row_id, row_label, row_description, row_department_id, row_created_at, row_options }, null, null);
         }
-        public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
+        
+        /// <summary>
+        /// Adds a list of tags to an asset
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <param name="tag_list"></param>
+        /// <returns></returns>
+        public bool AttachTagsToAsset(Asset asset, List<Tag> tag_list)
         {
             DBConnection dbcon = DBConnection.Instance();
-            dbcon = DBConnection.Instance();
             bool query_success = false;
 
-            Console.WriteLine(tags.Count + ": " + tags[0].Label + ", " + tags[0].ID);
+            List<Tag> tags = tag_list.Except(GetAssetTags(asset)).ToList();
 
             StringBuilder query = new StringBuilder("INSERT INTO asset_tags (asset_id, tag_id) VALUES ");
             List<string> inserts = new List<string>();
@@ -289,8 +295,7 @@ namespace Asset_Management_System.Database.Repositories
                     using (var cmd = new MySqlCommand(query.ToString(), dbcon.Connection))
                     {
                         Console.WriteLine(cmd.CommandText);
-
-                        MySqlDataReader tset = cmd.ExecuteReader();
+                        query_success = cmd.ExecuteNonQuery() > 0;
                     }
                 }
             }
@@ -304,6 +309,53 @@ namespace Asset_Management_System.Database.Repositories
             }
             
             return query_success;
+        }
+        
+        /// <summary>
+        /// Gets a list of all tags on an asset
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <returns></returns>
+        public List<Tag> GetAssetTags(Asset asset)
+        {
+            DBConnection dbcon = DBConnection.Instance();
+            List<Tag> tags = new List<Tag>();
+
+            TagRepository tag_rep = new TagRepository();
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    string query = "SELECT * FROM tags AS t " +
+                                   "INNER JOIN asset_tags ON tag_id = t.id " +
+                                   "WHERE asset_id = @asset_id";
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@asset_id"].Value = asset.ID;
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                tags.Add(tag_rep.DBOToModelConvert(reader));
+                            }
+                        }
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
+            }
+
+            return tags;
         }
     }
 }
