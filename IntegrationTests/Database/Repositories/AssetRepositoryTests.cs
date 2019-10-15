@@ -4,6 +4,7 @@ using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Database;
 using System.Collections.Generic;
 using System.Windows;
+using System.Collections.ObjectModel;
 
 namespace UnitTests
 {
@@ -152,9 +153,142 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void SearchByTags()
+        public void SearchByTags_SearchForAssetsWithTag1_ReturnsAssetWithTag1()
         {
+            //Arrange
+            Tag tag = new Tag();
+            tag.Name = "IntegrationTests";
+            (new TagRepository()).Insert(tag);
+            Asset expected = asset;
 
+            //Act
+            List<Asset> assetList = assetRepository.SearchByTags(new List<int>() { 1 });
+
+            //Assert
+            Assert.IsTrue(assetList[0].Equals(expected));
+        }
+
+        [TestMethod]
+        public void SearchByTags_SearchForAssetsWithNonExistingTag_ReturnsEmptyListOfAsset()
+        {
+            //Arrange
+            Tag tag = new Tag();
+            tag.Name = "IntegrationTests";
+            (new TagRepository()).Insert(tag);
+            List<Asset> expected = new List<Asset>();
+
+            //Act
+            List<Asset> assetList = assetRepository.SearchByTags(new List<int>() { 6 });
+
+            //Assert
+            Assert.IsTrue(assetList.Equals(expected));
+        }
+
+        [TestMethod]
+        public void Search_SearchForAssetsStartingWithInt_ReturnsListWithOneAsset()
+        {
+            //Arrange
+            assetRepository.Insert(asset);
+            string keyWord = "Int%";
+            Asset expected = asset;
+
+            //Act
+            ObservableCollection<Asset> assetList = assetRepository.Search(keyWord);
+
+            //Assert
+            Assert.IsTrue(assetList[0].Equals(expected));
+        }
+
+        [TestMethod]
+        public void Search_SearchForAssetsEndingWithTest_ReturnsListWithOneAsset()
+        {
+            //Arrange
+            assetRepository.Insert(asset);
+            string keyWord = "%test";
+            Asset expected = asset;
+
+            //Act
+            ObservableCollection<Asset> assetList = assetRepository.Search(keyWord);
+
+            //Assert
+            Assert.IsTrue(assetList[0].Equals(expected));
+        }
+
+        [TestMethod]
+        public void Search_SearchForAssetsContainingGration_ReturnsListWithOneAsset()
+        {
+            //Arrange
+            assetRepository.Insert(asset);
+            string keyWord = "gration";
+            Asset expected = asset;
+
+            //Act
+            ObservableCollection<Asset> assetList = assetRepository.Search(keyWord);
+
+            //Assert
+            Assert.IsTrue(assetList[0].Equals(expected));
+        }
+
+        [TestMethod]
+        public void Search_SearchForAssetsContainingUnittest_ReturnsEmptyList()
+        {
+            //Arrange
+            assetRepository.Insert(asset);
+            string keyWord = "Unittest";
+
+            //Act
+            ObservableCollection<Asset> assetList = assetRepository.Search(keyWord);
+
+            //Assert
+            Assert.IsTrue(assetList.Equals(new ObservableCollection<Asset>()));
+        }
+
+        [TestMethod]
+        public void AttachTagsToAsset_InputTwoChildTags_CreatesRelationsBetweenTagsAndAsset()
+        {
+            //Arrange
+            TagRepository tagRepository = new TagRepository();
+
+            tagRepository.Insert(new Tag() { Name = "IntegrationTests" });
+            tagRepository.Insert(new Tag() { Name = "Tag 1", ParentID = 1 });
+
+            List<Tag> listOfTags = tagRepository.GetAll();
+
+            assetRepository.Insert(asset);
+
+            Asset expected = asset;
+
+            //Act
+            assetRepository.AttachTagsToAsset(asset, listOfTags);
+
+            List<Asset> assetList = assetRepository.SearchByTags(new List<int>() { 2 });
+
+            //Assert
+            Assert.IsTrue(assetList[0].Equals(expected));
+        }
+
+        [TestMethod]
+        public void AttachTagsToAsset_InputTagNotInDatabase_Returns_______()
+        {
+            //Arrange
+            TagRepository tagRepository = new TagRepository();
+
+            tagRepository.Insert(new Tag() { Name = "IntegrationTests" });
+            tagRepository.Insert(new Tag() { Name = "Tag 1", ParentID = 1 });
+
+            List<Tag> listOfTags = tagRepository.GetAll();
+
+            assetRepository.Insert(asset);
+
+            Asset expected = asset;
+
+            //Act
+            assetRepository.AttachTagsToAsset(asset, listOfTags);
+
+            List<Asset> assetList = assetRepository.SearchByTags(new List<int>() { 2 });
+
+            //Assert
+            Assert.IsTrue(assetList[0].Equals(expected));
         }
 
         [TestCleanup]
