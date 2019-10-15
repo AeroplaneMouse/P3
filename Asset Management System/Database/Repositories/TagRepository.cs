@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 
 namespace Asset_Management_System.Database.Repositories
 {
-    class TagRepository : ITagRepository
+    public class TagRepository : ITagRepository
     {
         /// <summary>
         /// 

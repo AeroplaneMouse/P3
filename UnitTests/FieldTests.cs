@@ -46,7 +46,6 @@ namespace UnitTests
             {
                 Field field = new Field(id, label, content, fieldType, defaultValue);
                 //Assert
-                Assert.Fail();
             }
             catch (System.ArgumentOutOfRangeException e)
             {
