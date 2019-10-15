@@ -3,6 +3,7 @@ using System.Net;
 using System.DirectoryServices;
 using System.Security.Principal;
 using System.DirectoryServices.Protocols;
+using Asset_Management_System.Events;
 
 namespace Asset_Management_System.Authentication
 {
@@ -22,15 +23,17 @@ namespace Asset_Management_System.Authentication
         public event Events.StatusUpdateEventHandler StatusUpdate;
 
 
-        public Boolean Validate()
+        public bool Validate()
         {
             /* Do LDAP Validation */
+            /*
             Ldap ldap = new Ldap();
             
             ldap.Connect();
             //ldap.Search("", [], "cn=*");
             if (ldap.UserExist("jakob"))
             {
+                StatusUpdate.Invoke(this, new StatusUpdateEventArgs("User exist! - Event call!"));
                 Console.WriteLine("User exist!");
             }
             else
@@ -40,8 +43,9 @@ namespace Asset_Management_System.Authentication
 
 
             ldap.Close();
+            */
 
-            return false;
+            return true;
         }
 
         private static DirectoryEntry createDirectoryEntry()

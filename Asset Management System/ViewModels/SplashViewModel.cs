@@ -53,13 +53,13 @@ namespace Asset_Management_System.ViewModels
             Session t = new Session();
             t.StatusUpdate += test;
 
-            if (new Session().Validate())
+            if (t.Validate())
                 _main.SystemLoaded();
         }
 
         public void test(object sender, Events.StatusUpdateEventArgs e)
         {
-            Console.WriteLine(e);
+            Console.WriteLine(e.Message);
         }
 
         #endregion
