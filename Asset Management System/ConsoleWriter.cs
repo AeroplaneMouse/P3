@@ -10,7 +10,7 @@ namespace Asset_Management_System
         /// </summary>
         /// <param name="message">The message to get printed.</param>
         public static void ConsoleWrite(string message){
-            Console.WriteLine(DateTime.Now +" "+ message);
+            Console.WriteLine(DateTime.Now + " " + message);
         }
     }
 }
