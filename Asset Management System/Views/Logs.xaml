@@ -30,6 +30,9 @@
             <Button Style="{StaticResource RegularButton}"
                     Content="Print"
                     Command="{Binding PrintCommand}" />
+            <Button Style="{StaticResource RegularButton}"
+                    Content="View"
+                    Command="{Binding ViewCommand}" />
 
         </StackPanel>
 
@@ -41,7 +44,8 @@
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="ID" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=LogableType}" Header="Name" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Event" />
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="User" />
                     <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
                 </GridView>
             </ListView.View>

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
@@ -22,14 +23,16 @@ namespace Asset_Management_System.ViewModels
             Search();
             
             // Initializing commands
-            SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
-            PrintCommand = new Base.RelayCommand(() => Print());
+            SearchCommand = new ViewModels.Base.RelayCommand(Search);
+            PrintCommand = new Base.RelayCommand(Print);
+            ViewCommand = new Base.RelayCommand(View);
         }
         
         #region Commands
         
         public ICommand SearchCommand { get; set; }
         public ICommand PrintCommand { get; set; }
+        public ICommand ViewCommand { get; set; }
 
         #endregion
 
@@ -69,6 +72,9 @@ namespace Asset_Management_System.ViewModels
             SearchList = entries;
         }
         
+        /// <summary>
+        /// Creates a csv file containing all the log entries
+        /// </summary>
         private void Print()
         {
             // Copied from AssetViewModel
@@ -98,13 +104,23 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        //private Log GetSelectedItem()
-        //{
-        //    if (SearchList.Count == 0)
-        //        return null;
-        //    else
-        //        return SearchList.ElementAt(SelectedItemIndex);
-        //}
+        /// <summary>
+        /// Displays the selected log entry
+        /// </summary>
+        /// <exception cref="NotImplementedException"></exception>
+        private void View()
+        {
+            Entry selected = GetSelectedItem();
+            Console.WriteLine("Displaying log entry saying : " + selected.Description);
+        }
+
+        private Entry GetSelectedItem()
+        {
+            if (SearchList.Count == 0)
+                return null;
+            else
+                return SearchList.ElementAt(SelectedItemIndex);
+        }
 
         #endregion
     }
