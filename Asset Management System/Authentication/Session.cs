@@ -12,6 +12,7 @@ namespace Asset_Management_System.Authentication
         public readonly String Username;
         public readonly String Domain;
         public Boolean IsAdmin = true;
+        public event StatusUpdateEventHandler StatusUpdate;
 
         public Session()
         {
@@ -19,9 +20,6 @@ namespace Asset_Management_System.Authentication
             this.Domain = parts[0];
             this.Username = parts[1];
         }
-
-        public event Events.StatusUpdateEventHandler StatusUpdate;
-
 
         public bool Validate()
         {
