@@ -9,17 +9,22 @@ namespace Asset_Management_System.Database
 {
     public class MySqlHandler
     {
+        private DBConnection dbcon;
+
+        public MySqlHandler(DBConnection connection)
+        {
+            this.dbcon = connection;
+        }
 
         public bool RawQuery(string raw_query, MySqlParameterCollection par = null)
         {
-            DBConnection dbcon = DBConnection.Instance();
             bool result = false;
 
             try
             {
-                if (dbcon.IsConnect())
+                if (this.dbcon.IsConnect())
                 {
-                    using (var cmd = new MySqlCommand(raw_query, dbcon.Connection))
+                    using (var cmd = new MySqlCommand(raw_query, this.dbcon.Connection))
                     {
                         if (par != null)
                         {
@@ -39,7 +44,7 @@ namespace Asset_Management_System.Database
             }
             finally
             {
-                dbcon.Close();
+                this.dbcon.Close();
             }
             
             return result;

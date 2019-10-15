@@ -18,13 +18,3 @@ SELECT * FROM comments WHERE asset_id = @asset_id;
 
 /* Find tags while writing */
 SELECT t.id, t.label FROM tags t WHERE department_id = 1 AND t.label LIKE 'u%';
-
-/* Truncate all tables in integrationtest DB */
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE TABLE ds303e19_test.comments;
-TRUNCATE TABLE ds303e19_test.log;
-TRUNCATE TABLE ds303e19_test.assets;
-TRUNCATE TABLE ds303e19_test.tags;
-TRUNCATE TABLE ds303e19_test.asset_tags;
-TRUNCATE TABLE ds303e19_test.departments;
-SET FOREIGN_KEY_CHECKS = 1;

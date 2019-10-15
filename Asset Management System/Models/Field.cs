@@ -53,6 +53,8 @@ namespace Asset_Management_System.Models
             } }
 
         public readonly string DefaultValue;
+        
+        public string CheckSum { get; set; }
 
         /// <summary>
         /// Returns the object information as a dictionary.
@@ -71,37 +73,24 @@ namespace Asset_Management_System.Models
             return output;
         }
 
-        public override bool Equals(object obj)
+        /// <summary>
+        /// Gets checksum of the field.
+        /// </summary>
+        /// <returns>The checksum</returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public string GetChecksum()
         {
-            if (obj is Field == false)
-            {
-                return false;
-            }
+            string checksum = "";
 
-            Field other = (Field)obj;
-            return (this.GetHashCode() == other.GetHashCode());
-        }
+            checksum += this.Label + this.Required.ToString() + this.FieldType.ToString() + this.DefaultValue;
 
-        public override int GetHashCode()
-        {
-            string hash = "";
+            checksum = this.CalculateMD5Hash(checksum);
 
-            hash += this.Label + this.Required.ToString() + this.FieldType.ToString() + this.DefaultValue;
-
-            hash = this.CalculateMD5Hash(hash);
-
-            int hashCode = 0;
-
-            foreach(char c in hash)
-            {
-                hashCode += (int)c;
-            }
-
-            return hashCode;
+            return checksum;
         }
 
         /// <summary>
-        /// Calculates a MD5 hash for the input string
+        /// Calculates a MD5 hash for a string. (by Jani Järvinen)
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

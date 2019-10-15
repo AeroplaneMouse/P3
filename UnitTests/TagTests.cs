@@ -7,7 +7,7 @@ namespace UnitTests
     public class TagTests
     {
         [TestMethod]
-        public void ToString_ReturnsLabelOfTag()
+        public void Tag_ToString_ReturnsLabelOfTag()
         {
             //Arrange
             Tag tag = new Tag();

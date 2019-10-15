@@ -6,8 +6,15 @@ using System.Reflection;
 
 namespace Asset_Management_System.Database.Repositories
 {
-    public class DepartmentRepository : IDepartmentRepository
+    class DepartmentRepository : IDepartmentRepository
     {
+        private readonly DBConnection dbcon;
+
+        public DepartmentRepository()
+        {
+            this.dbcon = DBConnection.Instance();
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -15,7 +22,6 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>True if entity was successfully inserted.</returns>
         public bool Insert(Department entity)
         {
-            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -49,7 +55,6 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public bool Update(Department entity)
         {
-            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -88,7 +93,6 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public bool Delete(Department entity)
         {
-            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -120,7 +124,6 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public Department GetById(ulong id)
         {
-            DBConnection dbcon = DBConnection.Instance();
             Department department = null;
 
             if (dbcon.IsConnect())
@@ -157,7 +160,6 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public List<Department> GetAll()
         {
-            DBConnection dbcon = DBConnection.Instance();
             List<Department> departments = new List<Department>();
 
             if (dbcon.IsConnect())

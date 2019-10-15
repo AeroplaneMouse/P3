@@ -57,6 +57,7 @@ namespace Asset_Management_System.Views
                 _asset.AddField(field);
             }
 
+            _asset.SerializeFields();
             Department department = _main.CurrentDepartment;
             if (department != null)
             {

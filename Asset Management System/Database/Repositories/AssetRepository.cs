@@ -25,8 +25,6 @@ namespace Asset_Management_System.Database.Repositories
         {
             bool query_success = false;
 
-            entity.SerializeFields();
-
             if (dbcon.IsConnect())
             {
                 try{
@@ -65,8 +63,6 @@ namespace Asset_Management_System.Database.Repositories
         public bool Update(Asset entity)
         {
             bool query_success = false;
-
-            entity.SerializeFields();
 
             if (dbcon.IsConnect())
             {
