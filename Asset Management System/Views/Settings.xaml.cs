@@ -10,8 +10,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Asset_Management_System.Database;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
+using MySql.Data.MySqlClient;
 
 namespace Asset_Management_System.Views
 {
@@ -25,14 +27,6 @@ namespace Asset_Management_System.Views
         {
             InitializeComponent();
             Main = main;
-
-            TagRepository tag_rep = new TagRepository();
-            List<Tag> tags = tag_rep.GetParentTags();
-
-            AssetRepository asset_rep = new AssetRepository();
-            Asset asset = asset_rep.GetById(3);
-
-            asset_rep.AttachTagsToAsset(asset, tags);
         }
     }
 }
