@@ -130,6 +130,7 @@ namespace Asset_Management_System.ViewModels
             else
             {
                 Console.WriteLine($"Removing {selectedTag.Name}.");
+                selectedTag.Notify(true);
                 new TagRepository().Delete(selectedTag);
                 
                 // Reload list

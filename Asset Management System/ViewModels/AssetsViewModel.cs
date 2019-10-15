@@ -18,9 +18,9 @@ namespace Asset_Management_System.ViewModels
             // Saving reference to the main window
             _main = main;
             Search();
+            
             // Initializing commands
-            AddNewCommand =
-                new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.AssetManager(_main)));
+            AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.AssetManager(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
             EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
             RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
@@ -121,6 +121,7 @@ namespace Asset_Management_System.ViewModels
             else
             {
                 Console.WriteLine($"Removing {selectedAsset.Name}.");
+                selectedAsset.Notify(true);
                 new AssetRepository().Delete(selectedAsset);
 
                 //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Green));

@@ -17,7 +17,7 @@ namespace Asset_Management_System.ViewModels
 
             // Initializing commands
             LoadConfigCommand = new Base.RelayCommand(() => LoadConfig());
-
+            Console.WriteLine("Showing splash screen");
             Authenticate();
         }
 
@@ -41,6 +41,8 @@ namespace Asset_Management_System.ViewModels
 
         #region Methods
 
+        public event Events.StatusUpdateEventHandler StatusUpdate;
+
         private void LoadConfig()
         {
             throw new NotImplementedException();
@@ -48,8 +50,16 @@ namespace Asset_Management_System.ViewModels
 
         private void Authenticate()
         {
-            if (new Session().Validate())
+            Session t = new Session();
+            t.StatusUpdate += test;
+
+            if (t.Validate())
                 _main.SystemLoaded();
+        }
+
+        public void test(object sender, Events.StatusUpdateEventArgs e)
+        {
+            Console.WriteLine(e.Message);
         }
 
         #endregion

@@ -4,6 +4,6 @@ namespace Asset_Management_System
 {
     public interface IUpdateObserver
     {
-        void Update(Model Subject);
+        void Update(Model Subject, bool delete);
     }
 }

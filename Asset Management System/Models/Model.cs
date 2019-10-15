@@ -53,13 +53,15 @@ namespace Asset_Management_System.Models
         }
 
         /// <summary>
-        /// Notifies all attached observers.
+        /// Notifies all attached observers. 
+        /// Optional parameter delete, should be true if the subject is being deleted.
         /// </summary>
-        public void Notify()
+        /// <param name="delete"></param>
+        public void Notify(bool delete = false)
         {
             foreach (IUpdateObserver observer in observers)
             {
-                observer.Update(this);
+                observer.Update(this, delete);
             }
         }
 
@@ -101,7 +103,7 @@ namespace Asset_Management_System.Models
                 string key = prop.Name;
                 if (prevValues.ContainsKey(key))
                 {
-                    string newValue = objectType.GetProperty(key).GetValue(this, null).ToString();
+                    string newValue = objectType.GetProperty(key)?.GetValue(this, null)?.ToString();
                     string oldValue = prevValues[key];
                     if (oldValue != newValue)
                     {

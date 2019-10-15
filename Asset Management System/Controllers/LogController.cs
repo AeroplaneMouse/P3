@@ -14,9 +14,10 @@ namespace Asset_Management_System.Controllers
         /// Creates a log entry when notified by subject
         /// </summary>
         /// <param name="Subject"></param>
-        public void Update(Model Subject)
+        /// <param name="delete"></param>
+        public void Update(Model Subject, bool delete)
         {
-            string description = GenerateDescription(Subject);
+            string description = GenerateDescription(Subject, delete);
             //Subject.SavePrevValues();
             string changes = Subject.GetChanges();
             Log.Write(Subject, description, changes);
@@ -27,10 +28,9 @@ namespace Asset_Management_System.Controllers
         /// Generates a description for the log entry
         /// </summary>
         /// <param name="subject"></param>
-        /// <returns>
-        /// Description
-        /// </returns>
-        private string GenerateDescription(Model subject)
+        /// <param name="delete"></param>
+        /// <returns>Description</returns>
+        private string GenerateDescription(Model subject, bool delete)
         {
             Type objectType = subject.GetType();
             PropertyInfo[] props = objectType.GetProperties();
@@ -56,7 +56,7 @@ namespace Asset_Management_System.Controllers
             // Get subject Type
             string type = subject.GetType().Name;
             // Determine if subject is being created or updated
-            string changeType = subject.ID == 0 ? "created" : "updated";
+            string changeType = delete ? "deleted" : subject.ID == 0 ? "created" : "updated";
 
             return $"{type} {name} was {changeType}";
         }

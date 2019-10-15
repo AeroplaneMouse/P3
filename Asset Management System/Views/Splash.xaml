@@ -12,7 +12,7 @@
 
     <Grid>
         <Label
-            TextBlock.FontSize="25px"
+            TextBlock.FontSize="{StaticResource FontSizeXLarge}"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             >Loading...</Label>
@@ -20,6 +20,7 @@
         <Button
             Style="{StaticResource RegularButton}"
             Width="Auto"
+            Margin="10"
             VerticalAlignment="Bottom"
             HorizontalAlignment="Right"
             Content="Load config file"

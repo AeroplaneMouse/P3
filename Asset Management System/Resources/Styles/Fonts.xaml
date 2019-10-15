@@ -28,5 +28,6 @@
     <system:Double x:Key="FontSizeSmall">11</system:Double>
     <system:Double x:Key="FontSizeRegular">14</system:Double>
     <system:Double x:Key="FontSizeLarge">19</system:Double>
+    <system:Double x:Key="FontSizeXLarge">25</system:Double>
 
 </ResourceDictionary>
