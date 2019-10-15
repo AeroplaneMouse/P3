@@ -80,7 +80,7 @@ namespace Asset_Management_System.Models
             foreach (var prop in props)
             {
                 string key = prop.Name;
-                string value = objectType.GetProperty(key)?.GetValue(this, null).ToString();
+                string value = objectType.GetProperty(key)?.GetValue(this, null)?.ToString();
                 prevValues.Add(key, value);
                 //Console.WriteLine("Field " + key + " was saved with value: " + value);
             }
@@ -110,7 +110,7 @@ namespace Asset_Management_System.Models
                 }
             }
             Console.WriteLine(changes.Count == 0 ? "" : JsonConvert.SerializeObject(changes, Formatting.Indented));
-            return changes.Count == 0 ? "" : JsonConvert.SerializeObject(changes, Formatting.Indented);
+            return changes.Count == 0 ? "[]" : JsonConvert.SerializeObject(changes, Formatting.Indented);
         }
         
     }

@@ -80,6 +80,8 @@ namespace Asset_Management_System.Views
                 _tag.DepartmentID = department.ID;
                 _tag.Color = Color.Text;
                 _tag.ParentID = (ParentTag.SelectedItem as Tag).ID;
+                // Logging the Tag
+                _tag.Notify();
                 TagRepository rep = new TagRepository();
                 if (_editing)
                 {
