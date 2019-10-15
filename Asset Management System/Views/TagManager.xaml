@@ -131,7 +131,7 @@
             <Label>Department</Label>
             <TextBox Name="TbDepartment" Padding="10" />
 
-            <Label>TAAAAAGS</Label>
+            <Label>Parent Tag</Label>
             <StackPanel>
                 <ComboBox ItemsSource="{Binding ParentTagsList}" Name="ParentTag">
                     <ComboBox.ItemTemplate>
@@ -141,12 +141,27 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </StackPanel>
-            
-            <Button HorizontalAlignment="Left" Click="OnAddField" Margin="10" Name="AddTextField">Add TextField</Button>
-            <Button HorizontalAlignment="Left" Click="OnAddField" Margin="10" Name="AddStringField">Add StringField</Button>
-            <Button HorizontalAlignment="Left" Click="OnAddField" Margin="10" Name="AddIntegerField">Add IntegerField</Button>
-            <Button HorizontalAlignment="Left" Click="OnAddField" Margin="10" Name="AddDateField">Add DateField</Button>
-            <Button HorizontalAlignment="Left" Click="OnAddField" Margin="10" Name="AddBooleanField">Add BooleanField</Button>
+
+            <Label>Add new field</Label>
+            <StackPanel>
+                <ComboBox>
+                    <ComboBoxItem>
+                        <Button Height="20" Width="300" Click="OnAddField" Name="AddTextField">Add TextField</Button>
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        <Button Height="20" Width="300" Click="OnAddField" Name="AddStringField">Add StringField</Button>
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        <Button Height="20" Width="300" Click="OnAddField" Name="AddIntegerField">Add IntegerField</Button>
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        <Button Height="20" Width="300" Click="OnAddField" Name="AddDateField">Add DateField</Button>
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        <Button Height="20" Width="300" Click="OnAddField" Name="AddBooleanField">Add BooleanField</Button>
+                    </ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
         </StackPanel>
 
 

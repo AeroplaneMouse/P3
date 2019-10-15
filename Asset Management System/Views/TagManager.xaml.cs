@@ -79,10 +79,14 @@ namespace Asset_Management_System.Views
             {
                 _tag.DepartmentID = department.ID;
                 _tag.Color = Color.Text;
-                _tag.ParentID = (ParentTag.SelectedItem as Tag).ID;
+                
                 TagRepository rep = new TagRepository();
                 if (_editing)
                 {
+                    if ((ParentTag.SelectedItem as Tag) != null)
+                    {
+                        _tag.ParentID = (ParentTag.SelectedItem as Tag).ID;
+                    }
                     rep.Update(_tag);
                 }
                 else
