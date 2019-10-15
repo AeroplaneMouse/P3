@@ -56,12 +56,19 @@ namespace Asset_Management_System.ViewModels
 
         private void Authenticate()
         {
+            // Check database connection
+            
+
+
             Session t = new Session();
             
             if (t.Authenticated())
                 _main.SystemLoaded();
             else
-                UpdateStatusText(new StatusUpdateEventArgs("User not authorized to access the application."));
+            {
+                UpdateStatusText(new StatusUpdateEventArgs($"User \"{ Session.GetIdentity() }\" is not authorized to access the application."));
+                LoadingText = "Access denied";
+            }
         }
 
         public void UpdateStatusText(StatusUpdateEventArgs e)
