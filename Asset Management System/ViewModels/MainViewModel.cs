@@ -160,15 +160,11 @@ namespace Asset_Management_System.ViewModels
 
         public Session CurrentSession { get; private set; }
 
-        public ObservableCollection<Notification> ActiveNotifications { get; set; } = new ObservableCollection<Notification>();
+        public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
 
         #endregion
 
         #region Public Methods
-
-
-        //public TopNavigationPart2 topNavigationPage;
-        //public LeftNavigation leftNavigationPage;
 
         /// <summary>
         /// Changes how many rows or columns a specific frame spans over. 
@@ -220,13 +216,14 @@ namespace Asset_Management_System.ViewModels
             frame.Content = setPage;
         }
 
-        public async void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
+        public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background) => AddNotification(new Notification(message, foreground, background));
+        public async void AddNotification(Notification n)
         {
-            Notification n = new Notification(message, foreground, background);
+            // Add notification to the list of active notifications
             ActiveNotifications.Add(n);
 
-            await Task.Delay(2000);
-
+            // Wait some time, then remove it.
+            await Task.Delay(2500);
             RemoveNotification(n);
         }
 

@@ -18,7 +18,9 @@ namespace Asset_Management_System.ViewModels
             // Saving reference to the main window
             _main = main;
             Search();
-            
+
+            _main.AddNotification(new Notification("Showing assets page", Notification.INFO));
+
             // Initializing commands
             AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.AssetManager(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());

@@ -122,7 +122,7 @@
                                         <!-- Notifications -->
                                         <Border Grid.Column="1"
                                                 VerticalAlignment="Top"
-                                                Background="Blue"
+                                                Background="Black"
                                                 IsHitTestVisible="False"
                                                 BorderThickness="0">
                                             <ListView ItemsSource="{Binding ActiveNotifications}"

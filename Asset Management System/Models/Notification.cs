@@ -10,6 +10,14 @@ namespace Asset_Management_System.Models
     {
         private static int _id = 0;
 
+        // Static stuff
+        public static readonly SolidColorBrush ERROR = Brushes.Red;
+        public static readonly SolidColorBrush WARNING = Brushes.DarkGoldenrod;
+        public static readonly SolidColorBrush INFO = Brushes.LightGray;
+        public static readonly SolidColorBrush APPROVE = Brushes.Green;
+
+
+        // Public properties
         public readonly int ID;
         public string Message { get; set; }
         public SolidColorBrush Background { get; set; }
@@ -17,7 +25,7 @@ namespace Asset_Management_System.Models
 
         #region Constructors
         public Notification(string message)
-            : this(message, Brushes.White, Brushes.Yellow) { }
+            : this(message, Brushes.Black, Brushes.DeepPink) { }
 
         public Notification(string message, SolidColorBrush background)
             : this(message, Brushes.White, background) { }
