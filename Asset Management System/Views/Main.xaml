@@ -54,42 +54,27 @@
                                         </Button>
 
                                         <!-- Menu bar -->
-                                        <Menu Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource Menu}">
-                                            <MenuItem Header="_Settings" Style="{StaticResource MenuItem}">
-                                                <MenuItem Header="_Save" Style="{StaticResource MenuItem}"/>
-                                                <MenuItem Header="_Load" Style="{StaticResource MenuItem}"/>
-                                                <MenuItem Header="_Clear" Style="{StaticResource MenuItem}"/>
+                                        <Menu Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource MenuContainer}">
+                                            <MenuItem Header="_Settings" Style="{StaticResource MenuButton}">
+                                                <MenuItem Header="_Save"/>
+                                                <MenuItem Header="_Load"/>
+                                                <MenuItem Header="_Clear"/>
                                             </MenuItem>
-                                            <MenuItem Header="_Help" Style="{StaticResource MenuItem}">
-                                                <MenuItem Header="_About" Style="{StaticResource MenuItem}"/>
-                                                <MenuItem Header="_Exit" Style="{StaticResource MenuItem}"/>
+                                            <MenuItem Header="_Help" Style="{StaticResource MenuButton}">
+                                                <MenuItem Header="_About"/>
+                                                <MenuItem Header="_Exit"/>
                                             </MenuItem>
                                         </Menu>
-                                        <!-- 
-                                        <StackPanel Orientation="Horizontal"
-                                                    Grid.Column="1">
-                                            
-                                                
-                                            </Menu>
-
-                                            <Button Content="Settings"
-                                                    Style="{StaticResource MenuButton}"
-                                                    Command="{Binding ShowWindow}"/>
-                                            
-                                            <Button Content="Help"
-                                                    Style="{StaticResource MenuButton}"/>
-                                        </StackPanel>
-                                        -->
 
                                         <!-- Window buttons -->
                                         <StackPanel Grid.Column="2"
                                                     Orientation="Horizontal">
 
-                                            <Menu Style="{StaticResource Menu}">
+                                            <Menu Style="{StaticResource MenuContainer}" IsEnabled="{Binding DisplayCurrentDepartment}">
                                                 <MenuItem Header="{Binding CurrentDepartment}" 
-                                                          ItemsSource="{Binding Departments}" 
-                                                          Style="{StaticResource menuParentStyle}">
-                                                </MenuItem>
+                                                          ItemsSource="{Binding Departments}"
+                                                          Command="{Binding SelectDepartmentCommand}"
+                                                          Style="{StaticResource MenuButton}"/>
                                             </Menu>
                                             
                                             <TextBlock Text="{Binding CurrentUser}"

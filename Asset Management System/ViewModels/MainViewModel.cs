@@ -45,12 +45,8 @@ namespace Asset_Management_System.ViewModels
             };
 
             CurrentUser = new Session().Username;
-            if (Departments.Count > 0)
-                CurrentDepartment = Departments[0];
 
             // Setting up frames
-            FrameMainContent = new Frame();
-            FrameSplash = new Frame();
             FrameSplash.Content = new Views.Splash(this);
 
             // Initialize commands
@@ -72,12 +68,10 @@ namespace Asset_Management_System.ViewModels
 
         private List<Department> GetDepartments()
         {
-            List<Department> departments = new List<Department>();
-
-            DepartmentRepository rep = new DepartmentRepository();
-            departments = rep.GetAll();
-
-            return departments;
+            if (DisplayCurrentDepartment)
+                return new DepartmentRepository().GetAll();
+            else
+                return new List<Department>();
         }
 
         #endregion
@@ -149,21 +143,21 @@ namespace Asset_Management_System.ViewModels
 
         public Department CurrentDepartment { get; set; }
 
-        public Page PageMainContent { get; set; }
+        public Frame FrameMainContent { get; set; } = new Frame();
 
-        public Frame FrameMainContent { get; set; }
-
-        public Frame FrameSplash { get; set; }
+        public Frame FrameSplash { get; set; } = new Frame();
 
         public Visibility SplashVisibility { get; set; } = Visibility.Visible;
 
         public List<Department> Departments { get => GetDepartments(); }
 
+        public bool DisplayCurrentDepartment { get; set; } = false;
+
         #endregion
 
         #region Public Methods
 
-        
+
         //public TopNavigationPart2 topNavigationPage;
         //public LeftNavigation leftNavigationPage;
 
@@ -251,14 +245,13 @@ namespace Asset_Management_System.ViewModels
         {
             // Remove splash page
             SplashVisibility = Visibility.Hidden;
-            //FrameSplash.Visibility = Visibility.Hidden;
-            //FrameSplash.Source = null;
 
-            //// Set stuff
-            //topNavigationPage = new TopNavigationPart2(this);
-            //leftNavigationPage = new LeftNavigation(this);
-            //FrameTopNavigationPart2.Content = topNavigationPage;
-            //FrameLeftNavigation.Content = leftNavigationPage;
+            // Show department
+            DisplayCurrentDepartment = true;
+
+            // Set current department
+            if (Departments.Count > 0)
+                CurrentDepartment = Departments[0];
 
             ChangeMainContent(new Views.Home(this));
         }
@@ -280,6 +273,11 @@ namespace Asset_Management_System.ViewModels
             return false;
         }
 
+        private void SelectDepartment()
+        {
+
+        }
+
         #endregion
 
         #region Commands
@@ -299,6 +297,8 @@ namespace Asset_Management_System.ViewModels
         public ICommand ShowAssetsPageCommand { get; set; }
 
         public ICommand ShowTagPageCommand { get; set; }
+
+        public ICommand SelectDepartmentCommand { get; set; }
 
         #endregion
 
