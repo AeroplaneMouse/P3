@@ -19,15 +19,13 @@ namespace Asset_Management_System.ViewModels
         {
             // Saving reference to the main window
             _main = main;
-            //Search();
+            Search();
             
             // Initializing commands
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
             PrintCommand = new Base.RelayCommand(() => Print());
         }
-
         
-
         #region Commands
         
         public ICommand SearchCommand { get; set; }
@@ -57,7 +55,7 @@ namespace Asset_Management_System.ViewModels
         #region Private Methods
 
         /// <summary>
-        /// Sends a search request to the database, and sets the list of assets to the result.
+        /// Sends a search request to the database, and sets the list of entires to the result.
         /// </summary>
         private void Search()
         {
@@ -66,46 +64,11 @@ namespace Asset_Management_System.ViewModels
             LogRepository rep = new LogRepository();
             ObservableCollection<Entry> entries = new ObservableCollection<Entry>(rep.Search(SearchQueryText));
 
-            Console.WriteLine("Found: " + entries.Count.ToString());
-            
-            /*
-            if (entries.Count > 0)
-                Console.WriteLine("-----------");
-
-            //List<MenuItem> assetsFunc = new List<MenuItem>();
-            /*
-            foreach (Entry entry in entries)
-            {
-                Console.WriteLine(entry.LogableId);
-
-                //// Creating menuItems
-                //MenuItem item = new MenuItem();
-                //MenuItem edit = new MenuItem() { Header = "Edit" };
-                //MenuItem delete = new MenuItem() { Header = "Remove" };
-
-                //item.Header = asset.Name;
-                ////AddVisualChild(edit);
-                //assetsFunc.Add(item);
-            }
-            /**/
+            Console.WriteLine("Found: " + entries.Count.ToString() + " Log entries");
 
             SearchList = entries;
         }
-
-        /*
-        private void Edit()
-        {
-            //Log selectedLog = GetSelectedItem();
-            throw new NotImplementedException();
-        }
-        */
-        /*
-        private void Remove()
-        {
-            //Log selectedLog = GetSelectedItem();
-            throw new NotImplementedException();
-        }
-        /**/
+        
         private void Print()
         {
             // Copied from AssetViewModel
@@ -127,7 +90,7 @@ namespace Asset_Management_System.ViewModels
                     {
                         foreach (Entry entry in SearchList)
                         {
-                            string fileEntry = entry.Id + "," + entry.LogableType.Name + " With id: " + entry.LogableId + ", Description: " + entry.Description + "Changes: " + entry.Options;
+                            string fileEntry = entry.Id + "," + entry.LogableType.Name + ", ID: " + entry.LogableId + ", Description: " + entry.Description + ", Changes: " + entry.Options;
                             file.WriteLine(fileEntry);
                         }
                     }
