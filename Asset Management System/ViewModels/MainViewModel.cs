@@ -61,6 +61,7 @@ namespace Asset_Management_System.ViewModels
             ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this)));
             ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this)));
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
+            ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
@@ -299,6 +300,8 @@ namespace Asset_Management_System.ViewModels
         public ICommand ShowTagPageCommand { get; set; }
 
         public ICommand SelectDepartmentCommand { get; set; }
+
+        public ICommand ShowLogPageCommand { get; set; }
 
         #endregion
 

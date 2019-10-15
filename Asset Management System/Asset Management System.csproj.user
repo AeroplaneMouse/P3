@@ -10,6 +10,9 @@
     <Compile Update="Views\Assets.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Logs.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\PromptForReportName.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -70,6 +73,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Assets.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Logs.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\PromptForReportName.xaml">
