@@ -10,5 +10,7 @@ namespace Asset_Management_System.Database.Repositories
         
         List<T> GetLogEntries(ulong logable_id, Type logable_type);
         List<T> GetLogEntries(ulong logable_id, Type logable_type, string username);
+
+        List<T> Search(string keyword, int limit);
     }
 }
