@@ -20,15 +20,12 @@ namespace Asset_Management_System.Views
 
         private readonly Tag _tag;
 
-        private readonly bool _editing;
-
         public List<Tag> ParentTagsList
         {
             get
             {
                 TagRepository tagRepository = new TagRepository();
-                return tagRepository.GetParentTags()
-                ;
+                return tagRepository.GetParentTags();
             }
         }
 
@@ -89,10 +86,12 @@ namespace Asset_Management_System.Views
                     {
                         _tag.ParentID = (ParentTag.SelectedItem as Tag).ID;
                     }
+
                     rep.Update(_tag);
                 }
                 else
                 {
+                    _tag.ParentID = (ParentTag.SelectedItem as Tag).ID;
                     rep.Insert(_tag);
                 }
 

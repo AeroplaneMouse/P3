@@ -56,15 +56,7 @@ namespace Asset_Management_System.Controllers
             // Get subject Type
             string type = subject.GetType().Name;
             // Determine if subject is being created or updated
-            string changeType;
-            if (delete)
-            {
-                changeType = "deleted";
-            }
-            else
-            {
-                changeType = subject.ID == 0 ? "created" : "updated";
-            }
+            string changeType = delete ? "deleted" : subject.ID == 0 ? "created" : "updated";
 
             return $"{type} {name} was {changeType}";
         }

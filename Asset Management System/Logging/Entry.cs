@@ -25,6 +25,9 @@ namespace Asset_Management_System.Logging
             CreatedAt = created_at;
         }
 
+        //Used for formatting the DateTimeOutput when showing the elements within a database.
+        public string DateToStringConverter => CreatedAt.ToString("MM/dd/yyyy HH:mm:ss");
+        
         public ulong Id { get; protected set; }
 
         public ulong LogableId { get; set; }
