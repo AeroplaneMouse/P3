@@ -49,15 +49,23 @@ namespace Asset_Management_System.Views
         /// <param name="e"></param>
         private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            bool requiredFieldsWritten = true;
             _asset.Name = TbName.Text;
             _asset.Description = TbDescription.Text;
             _asset.FieldsList = new List<Field>();
             foreach (var field in FieldsList)
             {
+                if (field.Required && field.Content == string.Empty)
+                {
+                    requiredFieldsWritten = false;
+                }
                 _asset.AddField(field);
             }
+            if (requiredFieldsWritten)
+            {
+                _main.ChangeMainContent(new AssetManager(_main,_asset));
+            }
 
-            _asset.SerializeFields();
             Department department = _main.CurrentDepartment;
             if (department != null)
             {

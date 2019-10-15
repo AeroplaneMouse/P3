@@ -10,15 +10,9 @@ namespace Asset_Management_System.Database.Repositories
 {
     public class LogRepository : ILogRepository<Entry>
     {
-        private DBConnection dbcon;
-
-        public LogRepository()
-        {
-            this.dbcon = DBConnection.Instance();
-        }
-        
         public bool Insert(Entry entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -68,6 +62,7 @@ namespace Asset_Management_System.Database.Repositories
 
         public List<Entry> GetLogEntries(ulong logable_id, Type logable_type, string username)
         {
+            DBConnection dbcon = DBConnection.Instance();
             List<Entry> entries = new List<Entry>();
 
             if (dbcon.IsConnect())
@@ -130,6 +125,7 @@ namespace Asset_Management_System.Database.Repositories
         public List<Entry> Search(string keyword, int limit=100)
         {
             List<Entry> entries = new List<Entry>();
+            DBConnection dbcon = DBConnection.Instance();
 
             if (dbcon.IsConnect())
             {
