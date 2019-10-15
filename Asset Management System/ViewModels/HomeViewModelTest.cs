@@ -30,10 +30,10 @@ namespace Asset_Management_System.ViewModels
             {
                 if (_parentID == 0)
                 {
-                    return "Tag groups: ";
+                    return "Tag groups:";
                 }
 
-                return Rep.GetById(_parentID).Label + ": ";
+                return Rep.GetById(_parentID).Label + ":";
             } 
         }
 
@@ -110,17 +110,20 @@ namespace Asset_Management_System.ViewModels
 
             SpaceKeyCommand = new Base.RelayCommand(() =>
             {
-                _tagString = String.Empty;
-                _parentID = _tagList.Select(p => p.ID).First();
-                _tagList = Rep.GetChildTags(_parentID);
-                _tabIndex = 0;
+                if (_parentID == 0)
+                {
+                    _tagString = String.Empty;
+                    _parentID = _tagList.Select(p => p.ID).First();//.ElementAtOrDefault(_tabIndex);
+                    _tagList = Rep.GetChildTags(_parentID);
+                    _tabIndex = 0;
+                }
             });
 
             EscapeKeyCommand = new Base.RelayCommand(() =>
             {
                 _tagString = String.Empty;
                 _parentID = 0;
-                _tagList = Rep.GetChildTags(_parentID);
+                _tagList = Rep.GetChildTags(0);
                 _tabIndex = 0;
             });
 
