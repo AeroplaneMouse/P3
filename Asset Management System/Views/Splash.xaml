@@ -11,13 +11,27 @@
 >
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Image Source="{StaticResource ApplicationIcon}" Margin="30"/>
         <Label
-            TextBlock.FontSize="{StaticResource FontSizeXLarge}"
+            Grid.Row="1"
             HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            >Loading...</Label>
+            TextBlock.FontSize="{StaticResource FontSizeXLarge}"
+            Content="{Binding LoadingText}"/>
+
+        <TextBlock 
+            Text="{Binding StatusText}"
+            HorizontalAlignment="Center"
+            Grid.Row="2"
+            FontSize="{StaticResource FontSizeRegular}"/>
 
         <Button
+            Grid.Row="2"
             Style="{StaticResource RegularButton}"
             Width="Auto"
             Margin="10"

@@ -50,7 +50,7 @@
                                         <Button Grid.Column="0"
                                                 Style="{StaticResource SystemIconButton}"
                                                 Command="{Binding SystemMenuCommand}">
-                                            <Image Source="/Resources/Images/Logos/catface4.jpg"/>
+                                            <Image Source="{StaticResource ApplicationIcon}"/>
                                         </Button>
 
                                         <!-- Menu bar -->
