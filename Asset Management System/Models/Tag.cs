@@ -21,7 +21,7 @@ namespace Asset_Management_System.Models
             CreatedAt = created_at;
             ParentID = parent_id;
             Color = color;
-            //SavePrevValues();
+            SavePrevValues();
         }
 
         public string Name { get; set; }

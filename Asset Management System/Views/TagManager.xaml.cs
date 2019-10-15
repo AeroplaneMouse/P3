@@ -79,7 +79,9 @@ namespace Asset_Management_System.Views
             {
                 _tag.DepartmentID = department.ID;
                 _tag.Color = Color.Text;
-                
+
+                // Logging the Tag
+                _tag.Notify();
                 TagRepository rep = new TagRepository();
                 if (_editing)
                 {
