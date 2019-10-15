@@ -75,7 +75,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     string query = "SELECT id, logable_id, logable_type, username, description, options, created_at " + 
-                                   "FROM logs WHERE logable_id=@logable_id AND logable_type=logable_type"+
+                                   "FROM log WHERE logable_id=@logable_id AND logable_type=logable_type"+
                                    (username != null ? " AND username=@username" : "");
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
@@ -98,7 +98,7 @@ namespace Asset_Management_System.Database.Repositories
                             {
                                 ulong row_id = reader.GetUInt64("id");
                                 ulong row_logable_id = reader.GetUInt64("logable_id");
-                                string row_logable_type = reader.GetString("logable_type");
+                                Type row_logable_type = Type.GetType(reader.GetString("logable_type"));
                                 string row_username = reader.GetString("username");
                                 string row_description = reader.GetString("description");
                                 string row_options = reader.GetString("options");
@@ -136,7 +136,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     string query = "SELECT id, logable_id, logable_type, username, description, options, created_at " +
-                                   "FROM logs WHERE username LIKE @keyword OR description LIKE @keyword ORDER BY id desc LIMIT "+limit;
+                                   "FROM log WHERE username LIKE @keyword OR description LIKE @keyword ORDER BY id desc LIMIT "+limit.ToString();
                     
                     if (!keyword.Contains("%"))
                     {
@@ -154,7 +154,7 @@ namespace Asset_Management_System.Database.Repositories
                             {
                                 ulong row_id = reader.GetUInt64("id");
                                 ulong row_logable_id = reader.GetUInt64("logable_id");
-                                string row_logable_type = reader.GetString("logable_type");
+                                Type row_logable_type = Type.GetType(reader.GetString("logable_type"));
                                 string row_username = reader.GetString("username");
                                 string row_description = reader.GetString("description");
                                 string row_options = reader.GetString("options");

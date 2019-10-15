@@ -2,8 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text;
 using System.Windows.Input;
+using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Models;
+using Asset_Management_System.Views;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -20,8 +24,8 @@ namespace Asset_Management_System.ViewModels
             // Initializing commands
             //AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.AssetManager(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
-            EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
-            RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
+            //EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
+            //RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
             PrintCommand = new Base.RelayCommand(() => Print());
         }
 
@@ -37,46 +41,104 @@ namespace Asset_Management_System.ViewModels
 
         #endregion
 
+        #region Public Properties
         public string SearchQueryText { get; set; } = "";
         public int SelectedItemIndex { get; set; }
+        
+        private ObservableCollection<Entry> _list = new ObservableCollection<Entry>();
 
-        //private ObservableCollection<Log> _list = new ObservableCollection<Log>();
+        public ObservableCollection<Entry> SearchList
+        {
+            get => _list;
+            set
+            {
+                _list.Clear();
+                foreach (Entry entry in value)
+                    _list.Add(entry);
+            }
+        }
 
-        //public ObservableCollection<Log> SearchList
-        //{
-        //    get => _list;
-        //    set
-        //    {
-        //        _list.Clear();
-        //        foreach (Log log in value)
-        //            _list.Add(log);
-        //    }
-        //}
+        #endregion
 
         #region Private Methods
 
+        /// <summary>
+        /// Sends a search request to the database, and sets the list of assets to the result.
+        /// </summary>
         private void Search()
         {
-            //Log selectedLog = GetSelectedItem();
-            throw new NotImplementedException();
+            Console.WriteLine();
+            Console.WriteLine("Searching for: " + SearchQueryText);
+            LogRepository rep = new LogRepository();
+            ObservableCollection<Entry> entries = new ObservableCollection<Entry>(rep.Search(SearchQueryText));
+
+            Console.WriteLine("Found: " + entries.Count.ToString());
+            
+            /*
+            if (entries.Count > 0)
+                Console.WriteLine("-----------");
+
+            //List<MenuItem> assetsFunc = new List<MenuItem>();
+            /*
+            foreach (Entry entry in entries)
+            {
+                Console.WriteLine(entry.LogableId);
+
+                //// Creating menuItems
+                //MenuItem item = new MenuItem();
+                //MenuItem edit = new MenuItem() { Header = "Edit" };
+                //MenuItem delete = new MenuItem() { Header = "Remove" };
+
+                //item.Header = asset.Name;
+                ////AddVisualChild(edit);
+                //assetsFunc.Add(item);
+            }
+            /**/
+
+            SearchList = entries;
         }
 
+        /*
         private void Edit()
         {
             //Log selectedLog = GetSelectedItem();
             throw new NotImplementedException();
         }
-
+        */
+        /*
         private void Remove()
         {
             //Log selectedLog = GetSelectedItem();
             throw new NotImplementedException();
         }
-
+        /**/
         private void Print()
         {
-            //Log selectedLog = GetSelectedItem();
-            throw new NotImplementedException();
+            // Copied from AssetViewModel
+            var dialog = new PromtForReportName("log_report_" + DateTime.Now.ToString().Replace(@"/", "").Replace(@" ", "-").Replace(@":", "") + ".csv", "Report name:");
+            if (dialog.ShowDialog() == true)
+            {
+                if (dialog.DialogResult == true)
+                {
+                    string pathToFile = dialog.InputText;
+
+                    if (!pathToFile.EndsWith(".csv"))
+                    {
+                        pathToFile = pathToFile + ".csv";
+                    }
+
+                    pathToFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + pathToFile;
+
+                    using (StreamWriter file = new StreamWriter(pathToFile, false))
+                    {
+                        foreach (Entry entry in SearchList)
+                        {
+                            string fileEntry = entry.Id + "," + entry.LogableType.Name + " With id: " + entry.LogableId + ", Description: " + entry.Description + "Changes: " + entry.Options;
+                            file.WriteLine(fileEntry);
+                        }
+                    }
+                }
+            }
         }
 
         //private Log GetSelectedItem()
