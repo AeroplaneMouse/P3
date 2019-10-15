@@ -130,7 +130,6 @@ namespace Asset_Management_System.Database.Repositories
         public List<Entry> Search(string keyword, int limit=100)
         {
             List<Entry> entries = new List<Entry>();
-            DBConnection dbcon = DBConnection.Instance();
 
             if (dbcon.IsConnect())
             {
