@@ -17,7 +17,7 @@ namespace Asset_Management_System.ViewModels
 
             // Initializing commands
             LoadConfigCommand = new Base.RelayCommand(() => LoadConfig());
-
+            Console.WriteLine("Showing splash screen");
             Authenticate();
         }
 
