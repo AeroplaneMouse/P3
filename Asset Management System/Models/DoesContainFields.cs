@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.Unicode;
 using Newtonsoft.Json;
 
 namespace Asset_Management_System.Models
@@ -30,7 +31,7 @@ namespace Asset_Management_System.Models
         /// </summary>
         public void SerializeFields()
         {
-            SerializedFields = JsonConvert.SerializeObject(FieldsList, Formatting.Indented);
+            SerializedFields = JsonConvert.SerializeObject(FieldsList, Formatting.None);
         }
 
         /// <summary>

@@ -44,4 +44,10 @@
     <Resource Include="Resources\Images\Logos\placeholder-beaut.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\PromptForFields.xaml.cs">
+      <DependentUpon>PromptForFields.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>
