@@ -64,7 +64,6 @@ namespace Asset_Management_System.Models
             this.IDCounter++;
 
             FieldsList.Add(currentField);
-            SerializeFields();
             return true;
         }
 
@@ -87,7 +86,6 @@ namespace Asset_Management_System.Models
                 FieldsList.Remove(itemToRemove);
             }
 
-            SerializeFields();
             return true;
         }
 
@@ -99,8 +97,6 @@ namespace Asset_Management_System.Models
         public bool RemoveField(Field field)
         {
             FieldsList.Remove(field);
-
-            SerializeFields();
             return true;
         }
     }

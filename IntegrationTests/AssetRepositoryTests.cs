@@ -11,10 +11,10 @@ namespace UnitTests
     public class AssetRepositoryTests
     {
 
-        public DepartmentRepository departmentRepository;
-        public AssetRepository assetRepository;
-        public Asset asset;
-        public MySqlHandler mySqlHandler;
+        private DepartmentRepository departmentRepository;
+        private AssetRepository assetRepository;
+        private Asset asset;
+        private MySqlHandler mySqlHandler;
 
         [TestInitialize]
         public void InitiateAssetAndRepository()
@@ -31,7 +31,6 @@ namespace UnitTests
             asset.DepartmentID = 1;
             asset.AddField(new Field(1, "Label of first field", "content of first field", 2, "Default value of first field"));
             asset.AddField(new Field(2, "Label of second field", "content of second field", 4, "Default value of second field"));
-            asset.SerializeFields();
         }
 
         [TestMethod]
@@ -60,6 +59,19 @@ namespace UnitTests
         }
 
         [TestMethod]
+        public void GetById_ParameterIdExistsInDatabase_RetrievesAssetFromDatabase()
+        {
+            //Arrange
+            assetRepository.Insert(asset);
+
+            //Act
+            Asset retrievedAsset = assetRepository.GetById(1);
+
+            //Assert
+            Assert.AreEqual(asset, retrievedAsset);
+        }
+
+        [TestMethod]
         public void Update_WellDefinedAssetFromDatabase_ReturnsTrueAsTheAssetIsUpdated()
         {
             //Arrange
@@ -75,22 +87,48 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void Update_AssetWithoutFieldsInDatabase_ChecksIfFieldIsAdded()
+        public void Update_AssetWithoutFieldsInDatabase_ChecksIfAssetContainsField()
         {
             //Arrange
-            string expected = (new Field(3, "Label of updated field", "content of updated field", 4, "Default value of second field")).ToString();
-            asset.FieldsList = new List<Field>();
-            assetRepository.Insert(asset);
+            Field expected = new Field(0, "Field", "Some content", 2, "Default");
+            Asset assetWithoutFields = new Asset
+            {
+                Name = "Integrationtest",
+                Description = "Desription",
+                DepartmentID = 1,
+                FieldsList = new List<Field>()
+            };
+
+            assetRepository.Insert(assetWithoutFields);
 
             //Act
             Asset assetToUpdate = this.assetRepository.GetById(1);
-            assetToUpdate.AddField(new Field(3, "Label of updated field", "content of updated field", 4, "Default value of second field"));
+            assetToUpdate.AddField(expected);
             assetRepository.Update(assetToUpdate);
+
             Asset updatedAsset = this.assetRepository.GetById(1);
-            string result = updatedAsset.FieldsList[0].ToString();
 
             //Assert
-            Assert.AreEqual(expected, result);
+            Assert.AreEqual(expected, updatedAsset.FieldsList[0]);
+        }
+
+        [TestMethod]
+        public void Delete_AssetInDataBase_GetByIdReturnsNullWithDeletedAssetId()
+        {
+            //Arrange
+            bool isAdded = assetRepository.Insert(asset);
+            if (!isAdded)
+            {
+                Assert.Fail();
+            }
+
+            //Act
+            Asset retrievedAsset = assetRepository.GetById(1);
+            bool isDeleted = assetRepository.Delete(retrievedAsset);
+            Asset result = assetRepository.GetById(1);
+
+            //Assert
+            Assert.AreEqual(null, result);
         }
 
         [TestCleanup]

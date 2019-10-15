@@ -23,6 +23,8 @@ namespace Asset_Management_System.Database.Repositories
             DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
+            entity.SerializeFields();
+
             if (dbcon.IsConnect())
             {
                 try
@@ -72,6 +74,8 @@ namespace Asset_Management_System.Database.Repositories
         {
             DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
+
+            entity.SerializeFields();
 
             if (dbcon.IsConnect())
             {
