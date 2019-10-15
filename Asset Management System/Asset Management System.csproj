@@ -20,6 +20,8 @@
     <None Remove="Resources\Images\Logos\catface3.jpg" />
     <None Remove="Resources\Images\Logos\catface4.jpg" />
     <None Remove="Resources\Images\Logos\kitten.jpg" />
+    <None Remove="Resources\Images\Logos\logo-light.png" />
+    <None Remove="Resources\Images\Logos\logo-dark.png" />
   </ItemGroup>
   
   <ItemGroup>
@@ -42,6 +44,8 @@
     <Resource Include="Resources\Images\Logos\catface4.jpg" />
     <Resource Include="Resources\Images\Logos\kitten.jpg" />
     <Resource Include="Resources\Images\Logos\placeholder-beaut.png" />
+    <Resource Include="Resources\Images\Logos\logo-light.png" />
+    <Resource Include="Resources\Images\Logos\logo-dark.png" />
   </ItemGroup>
 
   <ItemGroup>

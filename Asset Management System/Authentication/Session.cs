@@ -15,7 +15,7 @@ namespace Asset_Management_System.Authentication
 
         public Session()
         {
-            Console.WriteLine("Username: "+GetIdentity());
+            //Console.WriteLine("Username: "+GetIdentity());
             UserRepository rep = new UserRepository();
             user = rep.GetByUsername(GetIdentity());
         }

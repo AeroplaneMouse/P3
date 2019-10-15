@@ -11,7 +11,7 @@
         x:Name="AppWindow"
         WindowStyle="None"
         AllowsTransparency="True"
-        Icon="/Resources/Images/Logos/catface.jpg"
+        Icon="{StaticResource ApplicationIcon}"
         MinHeight="{Binding WindowMinHeight}"
         MinWidth="{Binding WindowMinWidth}"
         Title="Asset Management System" Height="600" Width="1000">
@@ -41,9 +41,12 @@
                                           Panel.ZIndex="1"
                                           Background="{StaticResource BackgroundDarkBrush}">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>    <!-- Icon -->
-                                            <ColumnDefinition Width="*" />      <!-- Menu -->
-                                            <ColumnDefinition Width="Auto"/>    <!-- Window buttons -->
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- Icon -->
+                                            <ColumnDefinition Width="*" />
+                                            <!-- Menu -->
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- Window buttons -->
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Icon button -->
@@ -62,6 +65,7 @@
                                             </MenuItem>
                                             <MenuItem Header="_Help" Style="{StaticResource MenuButton}">
                                                 <MenuItem Header="_About"/>
+                                                <MenuItem Header="_Reload" Command="{Binding ReloadSplashCommand}"/>
                                                 <MenuItem Header="_Exit"/>
                                             </MenuItem>
                                         </Menu>
@@ -76,14 +80,14 @@
                                                           Command="{Binding SelectDepartmentCommand}"
                                                           Style="{StaticResource MenuButton}"/>
                                             </Menu>
-                                            
+
                                             <TextBlock Text="{Binding CurrentUser}"
                                                        Foreground="White"
                                                        TextBlock.FontSize="{StaticResource FontSizeRegular}"
                                                        TextBlock.FontFamily="{StaticResource SegoeRegular}"
                                                        VerticalAlignment="Center"
                                                        Margin="15, 0, 15, 0"/>
-                                            
+
                                             <Button Content="-" Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}"/>
                                             <Button Content="[ ]" Command="{Binding MaximizeCommand}" Style="{StaticResource WindowControlButton}"/>
                                             <Button Content="X" Command="{Binding CloseCommand}" Style="{StaticResource WindowCloseButton}"/>
@@ -91,23 +95,7 @@
                                         </StackPanel>
 
                                     </Grid>
-                                    
-                                    <!-- Navigation content -->
-                                    <!-- 
-                                    <Grid Grid.Row="1" Background="{StaticResource BackgroundDarkBrush}">
-                                        <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Right"
-                                                    Margin="10, 0, 10, 0">
-                                            <StackPanel>
-                                                
-                                                
-                                                <Button Content="{Binding CurrentDepartment.Name}" Style="{StaticResource MenuButton}"/>
-                                            </StackPanel>
-                                            
-                                        </StackPanel>
-                                    </Grid>
-                                    -->
-                                    
+
                                     <!-- Window content -->
                                     <Grid Grid.Row="1" Background="{StaticResource BackgroundLightBrush}">
                                         <Grid.ColumnDefinitions>
@@ -127,6 +115,25 @@
                                         <Frame Grid.Column="1"
                                                NavigationUIVisibility="Hidden"
                                                Content="{Binding FrameMainContent}"/>
+
+                                        <Border Grid.Column="1"
+                                                VerticalAlignment="Top"
+                                                Background="Blue"
+                                                IsHitTestVisible="False"
+                                                BorderThickness="0">
+                                            <ListView ItemsSource="{Binding ActiveNotifications}"
+                                                      BorderThickness="0">
+                                                <ListView.Resources>
+                                                    <Style TargetType="ListViewItem">
+                                                        <Setter Property="Content" Value="{Binding Path=Message}"/>
+                                                        <Setter Property="BorderThickness" Value="0"/>
+                                                        <Setter Property="Background" Value="{Binding Path=Background}"/>
+                                                        <Setter Property="Foreground" Value="{Binding Path=Foreground}"/>
+                                                    </Style>
+                                                </ListView.Resources>
+                                            </ListView>
+                                        </Border>
+                                        
                                     </Grid>
 
                                     <Frame Grid.Row="1"

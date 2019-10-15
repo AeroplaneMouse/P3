@@ -10,8 +10,6 @@ namespace Asset_Management_System.ViewModels
 {
     public class SplashViewModel : Base.BaseViewModel
     {
-        public event StatusUpdateEventHandler StatusUpdate;
-
         #region Constructors
 
         public SplashViewModel(MainViewModel main)
@@ -61,14 +59,20 @@ namespace Asset_Management_System.ViewModels
 
 
             Session t = new Session();
-            
+
             if (t.Authenticated())
-                _main.SystemLoaded();
+                _main.SystemLoaded(t);
             else
             {
                 UpdateStatusText(new StatusUpdateEventArgs($"User \"{ Session.GetIdentity() }\" is not authorized to access the application."));
-                LoadingText = "Access denied";
+                LoadingText = "!!! Access denied !!!";
             }
+        }
+
+        public void Reload()
+        {
+            Console.WriteLine("Test");
+            Authenticate();
         }
 
         public void UpdateStatusText(StatusUpdateEventArgs e)

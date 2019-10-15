@@ -8,6 +8,7 @@ using Asset_Management_System.Models;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Events;
+using System.Windows.Media;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -44,10 +45,9 @@ namespace Asset_Management_System.ViewModels
                 //OnPropertyChanged(nameof(WindowCornerRadius));
             };
 
-            CurrentUser = new Session().Username;
-
             // Setting up frames
-            FrameSplash.Content = new Views.Splash(this);
+            Views.Splash splashScreen = new Views.Splash(this);
+            FrameSplash.Content = splashScreen;
 
             // Initialize commands
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
@@ -62,6 +62,7 @@ namespace Asset_Management_System.ViewModels
             ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this)));
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
+            ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
@@ -154,6 +155,10 @@ namespace Asset_Management_System.ViewModels
 
         public bool DisplayCurrentDepartment { get; set; } = false;
 
+        public Session CurrentSession { get; private set; }
+
+        public List<Notification> ActiveNotifications { get; set; } = new List<Notification>();
+
         #endregion
 
         #region Public Methods
@@ -212,43 +217,39 @@ namespace Asset_Management_System.ViewModels
             frame.Content = setPage;
         }
 
-        /// <summary>
-        /// Displays a notification with a given background color and text.
-        /// Then calls a remove method after a given amount of time, to 
-        /// remove it.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public async void ShowNotification(object sender, NotificationEventArgs e)
+        public async void AddNotification(string message)
         {
-            // TODO: If another notification is to be displayed before the last has disappeared. Make them stack.
-            //LbNotification.Content = e.Notification;
-            //CanvasNotificationBar.Background = e.Color;
+            Notification n = new Notification();
+            n.Message = message;
+            n.Background = Brushes.Red;
+            n.Foreground = Brushes.Black;
 
-            //CanvasNotificationBar.Visibility = Visibility.Visible;
-            //await Task.Delay(2000);
-            //HideNotification();
+            
+            ActiveNotifications.Add(n);
         }
 
-        /// <summary>
-        /// Removes a notification.
-        /// </summary>
-        private void HideNotification()
-        {
-            //CanvasNotificationBar.Visibility = Visibility.Hidden;
-        }
+        public void ShowNotification(object a, object b) { }
 
         /// <summary>
         /// Used when the application has connected to the database and other external services,
         /// to remove the splash page and show the navigation menu's and homepage.
         /// </summary>
-        public void SystemLoaded()
+        public void SystemLoaded(Session session)
         {
+            // Remove reload splash screen menuitem
+            ReloadSplashCommand = null;
+            AddNotification("Test");
+            AddNotification("Test 1");
+            AddNotification("Test2");
+            AddNotification("Test3");
+
             // Remove splash page
             SplashVisibility = Visibility.Hidden;
 
-            // Show department
+            // Show department and username
             DisplayCurrentDepartment = true;
+            CurrentSession = session;
+            CurrentUser = CurrentSession.Username;
 
             // Set current department
             if (Departments.Count > 0)
@@ -302,6 +303,8 @@ namespace Asset_Management_System.ViewModels
         public ICommand SelectDepartmentCommand { get; set; }
 
         public ICommand ShowLogPageCommand { get; set; }
+
+        public ICommand ReloadSplashCommand { get; set; }
 
         #endregion
 

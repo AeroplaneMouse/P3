@@ -18,7 +18,7 @@
         <TextBlock VerticalAlignment="Bottom"
                    HorizontalAlignment="Center"
                    FontFamily="{StaticResource SegoeRegular}"
-                   FontSize="{StaticResource FontSizeLarge}"
+                   FontSize="{StaticResource FontSizeXLarge}"
                    Text="Welcome to your Asset Management System"/>
 
 
