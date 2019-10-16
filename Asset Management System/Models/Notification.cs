@@ -25,7 +25,7 @@ namespace Asset_Management_System.Models
 
         #region Constructors
         public Notification(string message)
-            : this(message, Brushes.Black, Brushes.DeepPink) { }
+            : this(message, Brushes.Black, RandomColor()) { } 
 
         public Notification(string message, SolidColorBrush background)
             : this(message, Brushes.White, background) { }
@@ -51,6 +51,29 @@ namespace Asset_Management_System.Models
             return (obj as Notification).ID;
         }
         #endregion
+
+        public static SolidColorBrush RandomColor()
+        {
+            int seed = new DateTime().Millisecond;
+            Random r = new Random();
+
+            SolidColorBrush[] backgrounds = new SolidColorBrush[]
+            {
+                Brushes.Black,
+                Brushes.White,
+                Brushes.Red,
+                Brushes.Orange,
+                Brushes.Green,
+                Brushes.Transparent,
+                Brushes.Blue,
+                Brushes.DarkGreen,
+                Brushes.DarkOrange,
+                Brushes.DarkBlue,
+                Brushes.LightBlue
+            };
+
+            return backgrounds[r.Next() % backgrounds.Length];
+        }
 
     }
 }
