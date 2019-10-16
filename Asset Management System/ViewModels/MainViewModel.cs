@@ -35,8 +35,6 @@ namespace Asset_Management_System.ViewModels
             TitleHeight = 25;
             InnerContentPaddingSize = 6;
 
-            CurrentPage = DataModels.ApplicationPage.Start;
-
             // Listen out for the window resizeing
             _window.StateChanged += (sender, e) =>
             {
@@ -100,10 +98,7 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Public Propterties
-
-        // The current page of the application
-        public DataModels.ApplicationPage CurrentPage { get; set; }
-
+        
         // The smallest size the window can have 
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
