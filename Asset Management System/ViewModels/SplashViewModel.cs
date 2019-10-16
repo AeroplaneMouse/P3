@@ -1,4 +1,5 @@
 ﻿using Asset_Management_System.Authentication;
+using Asset_Management_System.Database;
 using Asset_Management_System.Events;
 using System;
 using System.Collections.Generic;
@@ -55,15 +56,23 @@ namespace Asset_Management_System.ViewModels
         private void Authenticate()
         {
             // Check database connection
-
-            Session t = new Session();
-
-            if (t.Authenticated())
-                _main.SystemLoaded(t);
+            DBConnection dbcon = DBConnection.Instance();
+            UpdateStatusText(new StatusUpdateEventArgs("Connecting to database."));
+            if (dbcon.IsConnect())
+            {
+                Session t = new Session();
+                if (t.Authenticated())
+                    _main.SystemLoaded(t);
+                else
+                {
+                    UpdateStatusText(new StatusUpdateEventArgs($"User \"{ Session.GetIdentity() }\" is not authorized to access the application."));
+                    LoadingText = "!!! Access denied !!!";
+                }
+            }
             else
             {
-                UpdateStatusText(new StatusUpdateEventArgs($"User \"{ Session.GetIdentity() }\" is not authorized to access the application."));
-                LoadingText = "!!! Access denied !!!";
+                UpdateStatusText(new StatusUpdateEventArgs("Error! Unable to connect to database."));
+                LoadingText = "Error!";
             }
         }
 

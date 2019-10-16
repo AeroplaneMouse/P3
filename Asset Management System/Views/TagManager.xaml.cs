@@ -110,7 +110,7 @@ namespace Asset_Management_System.Views
             }
             else
             {
-                _main.ShowNotification(null, new NotificationEventArgs("Department not selected", Brushes.Red));
+                _main.AddNotification(new Notification("ERROR! Current department not found.", Notification.ERROR));
                 Console.WriteLine("ERROR! Department not found.");
             }
         }

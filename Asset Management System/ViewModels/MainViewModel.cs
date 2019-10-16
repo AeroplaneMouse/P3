@@ -11,6 +11,7 @@ using Asset_Management_System.Events;
 using System.Windows.Media;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using Asset_Management_System.Database;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -243,7 +244,8 @@ namespace Asset_Management_System.ViewModels
             // Remove reload splash screen menuitem
             ReloadSplashCommand = null;
 
-            AddNotification("test", Brushes.White, Brushes.Green);
+            // Attaching notification
+            DBConnection.Instance().SqlConnectionFailed += AddNotification;
 
             // Remove splash page
             SplashVisibility = Visibility.Hidden;
