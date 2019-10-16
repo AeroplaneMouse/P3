@@ -11,21 +11,30 @@ namespace Asset_Management_System.ViewModels
     {
         #region Private Members
 
+        // The string that the user is searching with
         private string _tagString { get; set; }
 
+        // The id of the parent currently being used
         private ulong _parentID { get; set; } = 0;
 
+        // List of all available tags, based on the search
         private List<Models.Tag> _tagList { get; set; }
 
+        // Index that the user has tabbed to in the search results
         private int _tabIndex { get; set; } = 0;
 
-        private string _groupString { get; set; }
+        // The name of the parent currently displayed
+        private string _parentString { get; set; }
+
+        // A tag repository, for communication with the database
+        private Database.Repositories.TagRepository _rep { get; set; }
 
         #endregion
 
 
         #region Public Properties
 
+        // The current parent exposed to the view
         public string ParentID 
         { 
             get
@@ -35,17 +44,18 @@ namespace Asset_Management_System.ViewModels
                     return "Tag groups:";
                 }
 
-                return Rep.GetById(_parentID).Label + ":";
+                return _rep.GetById(_parentID).Label + ":";
             } 
         }
 
+        // The list exposed to the View
         public List<Models.Tag> TagList 
         { 
             get
             {
                 if (_tagList == null)
                 {
-                    _tagList = Rep.GetChildTags(_parentID);
+                    _tagList = _rep.GetChildTags(_parentID);
                 }
 
                 return _tagList.Take(10).ToList();
@@ -54,6 +64,7 @@ namespace Asset_Management_System.ViewModels
             set { }
         }
 
+        // The string that is being searched for, exposed to the view
         public string TagString
         {
             get
@@ -63,19 +74,13 @@ namespace Asset_Management_System.ViewModels
 
             set
             {
-                AllTags = Rep.GetChildTags(_parentID);
-
-                CheckString(value);
+                SearchAndSortTagList(value);
 
                 _tabIndex = 0;
 
                 _tagString = value;
             }
         }
-
-        public List<Models.Tag> AllTags { get; set; }
-
-        public Database.Repositories.TagRepository Rep { get; set; }
 
         #endregion
 
@@ -92,8 +97,6 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand BackspaceKeyCommand { get; set; }
 
-        public ICommand ShowBoxCommand { get; set; }
-
         #endregion
 
 
@@ -101,29 +104,35 @@ namespace Asset_Management_System.ViewModels
 
         public HomeViewModelTest()
         {
-            Rep = new Database.Repositories.TagRepository();
+            _rep = new Database.Repositories.TagRepository();
 
+            // When the enter key is pressed, do something!
             EnterKeyCommand = new Base.RelayCommand(() => 
             {
                 MessageBox.Show("Hey!");
                 _tabIndex = 0;
             });
 
+            // Tabs through the search results
             TabKeyCommand = new Base.RelayCommand(() =>
             {
                 _tagString = _tagList.Select(p => p.Label).ElementAtOrDefault(_tabIndex++);
             });
 
+            // "Goes into" a parent tags children, and limits the search to these
             SpaceKeyCommand = new Base.RelayCommand(() =>
             {
+                // Can only go in, if the parent tag is at the highest level
                 if (_parentID == 0)
                 {
+                    // Checks if the tag we are "going into" has any children
                     ulong tempID = _tagList.Select(p => p.ID).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                    List<Models.Tag> tempList = Rep.GetChildTags(tempID);
+                    List<Models.Tag> tempList = _rep.GetChildTags(tempID);
 
+                    // If the tag we are "going into" has children, we go into it
                     if (tempList.Count() != 0)
                     {
-                        _groupString = _tagList.Select(p => p.Label).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+                        _parentString = _tagList.Select(p => p.Label).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
                         _tagString = String.Empty;
                         _parentID = tempID; 
                         _tagList = tempList;
@@ -133,45 +142,58 @@ namespace Asset_Management_System.ViewModels
                 }
             });
 
+            // Start the search over
             EscapeKeyCommand = new Base.RelayCommand(() =>
             {
                 _tagString = String.Empty;
                 _parentID = 0;
-                _tagList = Rep.GetChildTags(0);
+                _tagList = _rep.GetChildTags(0);
                 _tabIndex = 0;
             });
 
+            // Deletes charaters from the search query, and if the query is empty, go up a tag level
             BackspaceKeyCommand = new Base.RelayCommand(() =>
             {
+                // If the search query is empty, the search goes up a level (to the highest level of tags)
                 if (_tagString == String.Empty && _parentID != 0)
                 {
                     _parentID = 0;
-                    _tagList = Rep.GetChildTags(_parentID);
+                    _tagList = _rep.GetChildTags(_parentID);
 
-                    _tagString = _groupString;
-                    CheckString(_tagString);
+                    _tagString = _parentString;
+                    SearchAndSortTagList(_tagString);
                     return;
                 }
 
+                // If the search query isn't empty, a letter is simply removed
                 else if (_tagString != String.Empty && _tagString != null)
                 {
                     _tagString = _tagString.Substring(0, _tagString.Length - 1);
-                    CheckString(_tagString);
+                    SearchAndSortTagList(_tagString);
                 }
             });
-
-
-            ShowBoxCommand = new Base.RelayCommand(() => MessageBox.Show("Hej!"));
         }
 
         #endregion
 
-        public void CheckString(string value)
+
+        #region Helpers
+
+        /// <summary>
+        /// Searches through the list of tags, for all the tags that contains the search query,
+        /// and sorts them by looking at what each tag label starts with
+        /// </summary>
+        /// <param name="value">The given search query</param>
+        public void SearchAndSortTagList(string value)
         {
-            _tagList = AllTags
+            _tagList = _rep.GetChildTags(_parentID)
                 .Where(p => p.Label.ToLower().Contains(value.ToLower()))
                 .OrderByDescending(p => p.Label.ToLower().StartsWith(value.ToLower()))
                 .ToList();
         }
+
+        #endregion
+
+
     }
 }
