@@ -6,6 +6,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -18,7 +19,9 @@ namespace Asset_Management_System.ViewModels
             // Saving reference to the main window
             _main = main;
             Search();
-            
+
+            _main.AddNotification(new Notification("Showing assets page"));
+
             // Initializing commands
             AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.AssetManager(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
