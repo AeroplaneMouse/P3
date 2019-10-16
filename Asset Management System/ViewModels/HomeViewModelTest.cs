@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Linq;
+using System.Windows.Controls;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -28,6 +29,9 @@ namespace Asset_Management_System.ViewModels
 
         // A tag repository, for communication with the database
         private Database.Repositories.TagRepository _rep { get; set; }
+
+        // TODO: Kom uden om mig
+        private TextBox _box { get; set; }
 
         #endregion
 
@@ -102,9 +106,12 @@ namespace Asset_Management_System.ViewModels
 
         #region Constructor
 
-        public HomeViewModelTest()
+        public HomeViewModelTest(TextBox box)
         {
             _rep = new Database.Repositories.TagRepository();
+
+            // TODO: Kom uden om mig
+            _box = box;
 
             // When the enter key is pressed, do something!
             EnterKeyCommand = new Base.RelayCommand(() => 
@@ -117,6 +124,9 @@ namespace Asset_Management_System.ViewModels
             TabKeyCommand = new Base.RelayCommand(() =>
             {
                 _tagString = _tagList.Select(p => p.Label).ElementAtOrDefault(_tabIndex++);
+
+                // TODO: Kom uden om mig
+                _box.CaretIndex = _tagString.Length;
             });
 
             // "Goes into" a parent tags children, and limits the search to these
@@ -162,6 +172,9 @@ namespace Asset_Management_System.ViewModels
 
                     _tagString = _parentString;
                     SearchAndSortTagList(_tagString);
+
+                    // TODO: Kom uden om mig
+                    _box.CaretIndex = _tagString.Length;
                     return;
                 }
 
@@ -169,7 +182,11 @@ namespace Asset_Management_System.ViewModels
                 else if (_tagString != String.Empty && _tagString != null)
                 {
                     _tagString = _tagString.Substring(0, _tagString.Length - 1);
+
                     SearchAndSortTagList(_tagString);
+
+                    // TODO: Kom uden om mig
+                    _box.CaretIndex = _tagString.Length;
                 }
             });
         }
