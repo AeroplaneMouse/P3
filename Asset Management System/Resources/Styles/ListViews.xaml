@@ -2,8 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Asset_Management_System">
 
-
-
     <!-- Notification container -->
     <Style TargetType="ListView" x:Key="NotificationView">
         <Setter Property="ItemsSource" Value="{Binding ActiveNotifications}"/>
