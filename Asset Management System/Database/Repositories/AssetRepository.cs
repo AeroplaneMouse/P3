@@ -30,8 +30,8 @@ namespace Asset_Management_System.Database.Repositories
             if (dbcon.IsConnect())
             {
                 try{
-                    const string query = "INSERT INTO assets (name, description, department_id, options) "+ 
-                		                 "VALUES (@name, @description, @department, @options)";
+                    const string query = "INSERT INTO assets (name, description, department_id, options, updated_at) "+ 
+                		                 "VALUES (@name, @description, @department, @options, CURRENT_TIMESTAMP())";
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@name", MySqlDbType.String);
@@ -73,7 +73,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query =
-                        "UPDATE assets SET name=@name, description=@description, options=@options WHERE id=@id";
+                        "UPDATE assets SET name=@name, description=@description, options=@options, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -142,7 +142,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query =
-                        "SELECT id, name, description, department_id, created_at,options FROM assets WHERE id=@id";
+                        "SELECT id, name, description, department_id, options, created_at, updated_at FROM assets WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -221,7 +221,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query =
-                        "SELECT id, name, description, department_id, created_at,options FROM assets WHERE name LIKE @keyword";
+                        "SELECT id, name, description, department_id, options, created_at, updated_at FROM assets WHERE name LIKE @keyword";
 
                     if (!keyword.Contains("%"))
                     {
@@ -258,16 +258,16 @@ namespace Asset_Management_System.Database.Repositories
 
         public Asset DBOToModelConvert(MySqlDataReader reader)
         {
-
             ulong row_id = reader.GetUInt64("id");
             string row_label = reader.GetString("name");
             string row_description = reader.GetString("description");
             ulong row_department_id = reader.GetUInt64("department_id");
-            DateTime row_created_at = reader.GetDateTime("created_at");
             string row_options = reader.GetString("options");
+            DateTime row_created_at = reader.GetDateTime("created_at");
+            DateTime row_updated_at = reader.GetDateTime("updated_at");
+            
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { row_id, row_label, row_description, row_department_id, row_created_at, row_options }, null, null);
-
+                new object[] { row_id, row_label, row_description, row_department_id, row_options, row_created_at, row_updated_at }, null, null);
         }
 
         public bool AttachTagsToAsset(Asset asset, List<Tag> tags)

@@ -11,7 +11,7 @@ namespace Asset_Management_System.Models
         public Asset() : base() { }
 
         [JsonConstructor]
-        private Asset(ulong id, string name, string description, ulong department_id, DateTime created_at, string options)
+        private Asset(ulong id, string name, string description, ulong department_id, string options, DateTime created_at, DateTime updated_at)
         {
             ID = id;
             Name = name;

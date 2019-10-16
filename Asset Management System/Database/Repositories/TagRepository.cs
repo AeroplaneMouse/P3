@@ -29,8 +29,8 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "INSERT INTO tags (label, color, options, department_id, parent_id) " +
-                                         "VALUES (@label, @color, @options, @department_id, @parent_id)";
+                    const string query = "INSERT INTO tags (label, color, options, department_id, parent_id, updated_at) " +
+                                         "VALUES (@label, @color, @options, @department_id, @parent_id, CURRENT_TIMESTAMP())";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -81,7 +81,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options, parent_id=@parent_id WHERE id=@id";
+                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options, parent_id=@parent_id, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -168,7 +168,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query =
-                        "SELECT id, label, parent_id, department_id, color, options, created_at FROM tags WHERE id=@id";
+                        "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at FROM tags WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -219,7 +219,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query =
-                        "SELECT id, label, parent_id, department_id, color, options, created_at FROM tags WHERE parent_id=@id";
+                        "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at FROM tags WHERE parent_id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -263,7 +263,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query =
-                        "SELECT id, label, parent_id, department_id, color, options, created_at FROM tags WHERE label LIKE @keyword";
+                        "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at FROM tags WHERE label LIKE @keyword";
 
                     if (!keyword.Contains('%'))
                         keyword = $"%{keyword}%";
@@ -304,7 +304,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT id, label, parent_id, department_id, color, options, created_at FROM tags";
+                    const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at FROM tags";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -344,10 +344,11 @@ namespace Asset_Management_System.Database.Repositories
             ulong row_department_id = reader.GetUInt64("department_id");
             string row_color = reader.GetString("color");
             DateTime row_created_at = reader.GetDateTime("created_at");
+            DateTime row_updated_at = reader.GetDateTime("updated_at");
 
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] {row_id, row_label, row_department_id, row_parent_id, row_color, row_created_at}, null,
+                new object[] {row_id, row_label, row_department_id, row_parent_id, row_color, row_created_at, row_updated_at}, null,
                 null);
         }
     }

@@ -13,7 +13,7 @@ namespace UnitTests
         public void ToString_ReturnsDepartmentName()
         {
             //Arrange
-            Department department = new Department("UnitTestDepartment");
+            Department department = new Department {Name = "UnitTestDepartment"};
             string expected = "UnitTestDepartment";
 
             //Act
