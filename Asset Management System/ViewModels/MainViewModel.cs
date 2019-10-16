@@ -218,14 +218,18 @@ namespace Asset_Management_System.ViewModels
         }
 
         public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background) => AddNotification(new Notification(message, foreground, background));
-        public async void AddNotification(Notification n)
+        public void AddNotification(Notification n) => AddNotification(n, 2500);
+        public async void AddNotification(Notification n, int displayTime)
         {
             // Add notification to the list of active notifications
             ActiveNotifications.Add(n);
 
             // Wait some time, then remove it.
-            await Task.Delay(2500);
-            RemoveNotification(n);
+            if (displayTime > 0)
+            {
+                await Task.Delay(displayTime);
+                RemoveNotification(n);
+            }
         }
 
         private void RemoveNotification(Notification n)
