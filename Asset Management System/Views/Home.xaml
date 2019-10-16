@@ -51,7 +51,8 @@
                      Padding="5"
                      Margin="5"
                      VerticalAlignment="Top"
-                     Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged}">
+                     Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
+                     SourceUpdated="InputBox_SourceUpdated">
 
                 <TextBox.InputBindings>
 
@@ -59,6 +60,7 @@
                     <KeyBinding Key="Tab" Command="{Binding TabKeyCommand}" />
                     <KeyBinding Key="Space" Command="{Binding SpaceKeyCommand}" />
                     <KeyBinding Key="Esc" Command="{Binding EscapeKeyCommand}" />
+                    <KeyBinding Key="Backspace" Command="{Binding BackspaceKeyCommand}" />
 
                 </TextBox.InputBindings>
 

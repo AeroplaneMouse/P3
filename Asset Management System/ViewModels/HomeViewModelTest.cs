@@ -19,6 +19,8 @@ namespace Asset_Management_System.ViewModels
 
         private int _tabIndex { get; set; } = 0;
 
+        private string _groupString { get; set; }
+
         #endregion
 
 
@@ -41,7 +43,7 @@ namespace Asset_Management_System.ViewModels
         { 
             get
             {
-                if (_tagList == null || _tagList.Count() == 0)
+                if (_tagList == null)
                 {
                     _tagList = Rep.GetChildTags(_parentID);
                 }
@@ -86,6 +88,8 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand EscapeKeyCommand { get; set; }
 
+        public ICommand BackspaceKeyCommand { get; set; }
+
         public ICommand ShowBoxCommand { get; set; }
 
         #endregion
@@ -99,23 +103,32 @@ namespace Asset_Management_System.ViewModels
 
             EnterKeyCommand = new Base.RelayCommand(() => 
             {
-                // SEARCH
+                // DO SOMETHING
                 _tabIndex = 0;
             });
 
             TabKeyCommand = new Base.RelayCommand(() =>
             {
                 _tagString = _tagList.Select(p => p.Label).ElementAtOrDefault(_tabIndex++);
+                CheckString(_tagString);
             });
 
             SpaceKeyCommand = new Base.RelayCommand(() =>
             {
                 if (_parentID == 0)
                 {
-                    _tagString = String.Empty;
-                    _parentID = _tagList.Select(p => p.ID).First();//.ElementAtOrDefault(_tabIndex);
-                    _tagList = Rep.GetChildTags(_parentID);
-                    _tabIndex = 0;
+                    ulong tempID = _tagList.Select(p => p.ID).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+                    List<Models.Tag> tempList = Rep.GetChildTags(tempID);
+
+                    if (tempList.Count() != 0)
+                    {
+                        _groupString = _tagList.Select(p => p.Label).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+                        _tagString = String.Empty;
+                        _parentID = tempID; 
+                        _tagList = tempList;
+
+                        _tabIndex = 0;
+                    }
                 }
             });
 
@@ -125,6 +138,23 @@ namespace Asset_Management_System.ViewModels
                 _parentID = 0;
                 _tagList = Rep.GetChildTags(0);
                 _tabIndex = 0;
+            });
+
+            BackspaceKeyCommand = new Base.RelayCommand(() =>
+            {
+                if (_tagString == String.Empty)
+                {
+                    _parentID = 0;
+                    _tagList = Rep.GetChildTags(_parentID);
+
+                    _tagString = _groupString;
+                    CheckString(_tagString);
+                    return;
+                }
+
+                _tagString = _tagString.Substring(0, _tagString.Length - 1);
+                CheckString(_tagString);
+
             });
 
 

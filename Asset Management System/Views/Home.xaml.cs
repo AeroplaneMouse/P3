@@ -35,5 +35,23 @@ namespace Asset_Management_System.Views
         {
             
         }
+
+        // TODO: Cursor stuff
+        private void InputBox_SourceUpdated(object sender, System.Windows.Data.DataTransferEventArgs e)
+        {
+            //var txtBx = sender as TextBox;
+
+            //if (txtBx == null || txtBx.Text == null)
+            //{
+            //    return;
+            //}
+
+            //txtBx.CaretIndex = txtBx.Text.Length + 1;
+
+            //if (txtBx.CaretIndex == 2 || txtBx.CaretIndex == 5)
+            //{
+            //    txtBx.CaretIndex = txtBx.CaretIndex + 1;
+            //}
+        }
     }
 }
