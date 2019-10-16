@@ -2,8 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Asset_Management_System">
 
-    
-    
     <!-- List page -->
     <Style TargetType="Page" x:Key="ListPage">
         <Setter Property="Template">
@@ -29,8 +27,7 @@
                                 Width="300"
                                 TextBlock.FontSize="12px"
                                 Padding="2,3,2,3"
-                                Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
-                            />
+                                Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"/>
 
                             <Button Style="{StaticResource RegularButton}"
                                     Content="Search"

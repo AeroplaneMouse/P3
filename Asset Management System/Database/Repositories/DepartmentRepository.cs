@@ -22,7 +22,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "INSERT INTO departments (name) VALUES (@name)";
+                    const string query = "INSERT INTO departments (name, updated_at) VALUES (@name, CURRENT_TIMESTAMP())";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -56,7 +56,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "UPDATE departments SET name=@name WHERE id=id";
+                    const string query = "UPDATE departments SET name=@name, updated_at=CURRENT_TIMESTAMP() WHERE id=id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -126,7 +126,7 @@ namespace Asset_Management_System.Database.Repositories
             if (dbcon.IsConnect())
             {
                 try{
-                    const string query = "SELECT id, name, FROM departments WHERE id=@id";
+                    const string query = "SELECT id, name, created_at, updated_at FROM departments WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -163,7 +163,7 @@ namespace Asset_Management_System.Database.Repositories
             if (dbcon.IsConnect())
             {
                 try{
-                    const string query = "SELECT id, name FROM departments ORDER BY name ASC";
+                    const string query = "SELECT id, name, created_at, updated_at FROM departments ORDER BY name ASC";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -195,10 +195,12 @@ namespace Asset_Management_System.Database.Repositories
         {
             ulong row_id = reader.GetUInt64("id");
             string row_name = reader.GetString("name");
+            DateTime row_created_at = reader.GetDateTime("created_at");
+            DateTime row_updated_at = reader.GetDateTime("updated_at");
 
             return (Department)Activator.CreateInstance(typeof(Department), 
                 BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { row_id, row_name }, null, null);
+                new object[] { row_id, row_name, row_created_at, row_updated_at }, null, null);
         }
     }
 }

@@ -111,7 +111,11 @@ namespace Asset_Management_System.ViewModels
         private void View()
         {
             Entry selected = GetSelectedItem();
-            Console.WriteLine("Displaying log entry saying : " + selected.Description);
+            var dialog = new ShowEntry(selected);
+            if (dialog.ShowDialog() == true)
+            {
+                Console.WriteLine("Displaying log entry saying : " + selected.Description);
+            }
         }
 
         private Entry GetSelectedItem()
