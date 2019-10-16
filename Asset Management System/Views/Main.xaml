@@ -120,24 +120,11 @@
                                                Content="{Binding FrameMainContent}"/>
 
                                         <!-- Notifications -->
-                                        <Border Grid.Column="1"
-                                                VerticalAlignment="Top"
-                                                Background="Black"
-                                                IsHitTestVisible="False"
-                                                BorderThickness="0">
-                                            <ListView ItemsSource="{Binding ActiveNotifications}"
-                                                      BorderThickness="0">
-                                                <ListView.Resources>
-                                                    <Style TargetType="ListViewItem">
-                                                        <Setter Property="Content" Value="{Binding Path=Message}"/>
-                                                        <Setter Property="BorderThickness" Value="0"/>
-                                                        <Setter Property="Background" Value="{Binding Path=Background}"/>
-                                                        <Setter Property="Foreground" Value="{Binding Path=Foreground}"/>
-                                                    </Style>
-                                                </ListView.Resources>
-                                            </ListView>
-                                        </Border>
-                                        
+                                        <ListView Grid.Column="1" 
+                                                  VerticalAlignment="Top"
+                                                  IsHitTestVisible="False"
+                                                  Style="{StaticResource NotificationView}"/>
+
                                     </Grid>
 
                                     <Frame Grid.Row="1"

@@ -65,7 +65,7 @@ namespace Asset_Management_System.ViewModels
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
-            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(message: "Test", background: Brushes.Green, foreground: Brushes.White));
+            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test")));
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
