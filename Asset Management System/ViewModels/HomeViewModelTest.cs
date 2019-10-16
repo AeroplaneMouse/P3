@@ -50,6 +50,8 @@ namespace Asset_Management_System.ViewModels
 
                 return _tagList.Take(10).ToList();
             }
+
+            set { }
         }
 
         public string TagString
@@ -61,7 +63,7 @@ namespace Asset_Management_System.ViewModels
 
             set
             {
-                Tags = Rep.GetChildTags(_parentID);
+                AllTags = Rep.GetChildTags(_parentID);
 
                 CheckString(value);
 
@@ -71,7 +73,7 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        public List<Models.Tag> Tags { get; set; }
+        public List<Models.Tag> AllTags { get; set; }
 
         public Database.Repositories.TagRepository Rep { get; set; }
 
@@ -103,14 +105,13 @@ namespace Asset_Management_System.ViewModels
 
             EnterKeyCommand = new Base.RelayCommand(() => 
             {
-                // DO SOMETHING
+                MessageBox.Show("Hey!");
                 _tabIndex = 0;
             });
 
             TabKeyCommand = new Base.RelayCommand(() =>
             {
                 _tagString = _tagList.Select(p => p.Label).ElementAtOrDefault(_tabIndex++);
-                CheckString(_tagString);
             });
 
             SpaceKeyCommand = new Base.RelayCommand(() =>
@@ -142,7 +143,7 @@ namespace Asset_Management_System.ViewModels
 
             BackspaceKeyCommand = new Base.RelayCommand(() =>
             {
-                if (_tagString == String.Empty)
+                if (_tagString == String.Empty && _parentID != 0)
                 {
                     _parentID = 0;
                     _tagList = Rep.GetChildTags(_parentID);
@@ -152,9 +153,11 @@ namespace Asset_Management_System.ViewModels
                     return;
                 }
 
-                _tagString = _tagString.Substring(0, _tagString.Length - 1);
-                CheckString(_tagString);
-
+                else if (_tagString != String.Empty && _tagString != null)
+                {
+                    _tagString = _tagString.Substring(0, _tagString.Length - 1);
+                    CheckString(_tagString);
+                }
             });
 
 
@@ -165,7 +168,7 @@ namespace Asset_Management_System.ViewModels
 
         public void CheckString(string value)
         {
-            _tagList = Tags
+            _tagList = AllTags
                 .Where(p => p.Label.ToLower().Contains(value.ToLower()))
                 .OrderByDescending(p => p.Label.ToLower().StartsWith(value.ToLower()))
                 .ToList();
