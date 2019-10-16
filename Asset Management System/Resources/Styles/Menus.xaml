@@ -15,7 +15,7 @@
     </Style>
     
     <!-- Menu button -->
-    <Style TargetType="MenuItem" x:Key="MenuButton">
+    <Style TargetType="MenuItem" x:Key="MenuItemButton">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
@@ -43,12 +43,43 @@
                                 <Border
                                     Background="{StaticResource BackgroundDarkBrush}">
                                     <StackPanel
+                                        Name="ItemsContainer"
                                         IsItemsHost="True" 
-                                        KeyboardNavigation.DirectionalNavigation="Cycle"/>
+                                        KeyboardNavigation.DirectionalNavigation="Cycle">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="MenuItem">
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="MenuItem">
+                                                            <Border Background="Aqua">
+                                                                <Button Padding="10, 5, 10, 5"
+                                                                        Command="{Binding SelectDepartmentCommand}">
+                                                                    <ContentPresenter Content="{TemplateBinding Header}"/>
+                                                                </Button>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Style>
+                                        </StackPanel.Resources>
+                                    </StackPanel>
                                 </Border>
                             </Popup>
                         </Grid>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Department menu button -->
+    <Style TargetType="MenuItem" x:Key="MenuButtonDepartments">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Button Style="{StaticResource MenuButton}" Content="{Binding CurrentDepartment}">
+                        
+                    </Button>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

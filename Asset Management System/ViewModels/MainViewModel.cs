@@ -66,10 +66,17 @@ namespace Asset_Management_System.ViewModels
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
-            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test")));
+            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test"), 0));
+            SelectDepartmentCommand = new Base.RelayCommand(() => SelectDepartment());
+            RemoveNotificationCommand = new Base.RelayCommand(() => Test());
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
+        }
+
+        public void Test()
+        {
+            Console.WriteLine("Test remove notification");
         }
 
         private List<Department> GetDepartments()
@@ -283,9 +290,10 @@ namespace Asset_Management_System.ViewModels
             return false;
         }
 
-        private void SelectDepartment()
+        public void SelectDepartment()
         {
-
+            Console.WriteLine("Selecting department...");
+            AddNotification(new Notification("Selecting department"));
         }
 
         #endregion
@@ -315,6 +323,8 @@ namespace Asset_Management_System.ViewModels
         public ICommand ReloadSplashCommand { get; set; }
 
         public ICommand AddNotificationTestCommand { get; set; }
+
+        public ICommand RemoveNotificationCommand { get; set; }
 
         #endregion
 

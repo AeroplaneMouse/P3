@@ -12,23 +12,52 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
-                    <Border>
-                        <StackPanel>
-                            <ItemsPresenter/>
-                        </StackPanel>
-                    </Border>
+                    <ItemsPresenter>
+                        <ItemsPresenter.Resources>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <Grid Background="{Binding Path=Background}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Label Content="{Binding Path=Message}"/>
+                                                <Button Content="[X]"
+                                                        Grid.Column="1"
+                                                        IsHitTestVisible="True"
+                                                        FontFamily="{StaticResource SegoeRegular}"
+                                                        FontSize="{StaticResource FontSizeRegular}"
+                                                        Background="Transparent"
+                                                        BorderThickness="0"
+                                                        Margin="0, 0, 10, 0"/>
+
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ItemsPresenter.Resources>
+                    </ItemsPresenter>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        <!--<Style.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Command" Value="{Binding RemoveNotificationCommand}"/>
+                <Setter Property="Background" Value="Red"/>
+            </Style>
+        </Style.Resources>-->
 
         <!-- Style for notification items -->
-        <Style.Resources>
+        <!--<Style.Resources>
             <Style TargetType="ListViewItem">
-                <Setter Property="Background" Value="{Binding Path=Background}"/>
-                <Setter Property="Foreground" Value="{Binding Path=Foreground}"/>
+                --><!--<Setter Property="Background" Value="{Binding Path=Background}"/>
+                <Setter Property="Foreground" Value="{Binding Path=Foreground}"/>--><!--
                 <Setter Property="Content" Value="{Binding Path=Message}"/>
                 <Setter Property="BorderThickness" Value="0"/>
             </Style>
-        </Style.Resources>
+        </Style.Resources>-->
     </Style>
 </ResourceDictionary>

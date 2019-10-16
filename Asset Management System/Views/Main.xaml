@@ -58,12 +58,12 @@
 
                                         <!-- Menu bar -->
                                         <Menu Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource MenuContainer}">
-                                            <MenuItem Header="_Settings" Style="{StaticResource MenuButton}">
+                                            <MenuItem Header="_Settings" Style="{StaticResource MenuItemButton}">
                                                 <MenuItem Header="_Save"/>
                                                 <MenuItem Header="_Load"/>
                                                 <MenuItem Header="_Clear"/>
                                             </MenuItem>
-                                            <MenuItem Header="_Help" Style="{StaticResource MenuButton}">
+                                            <MenuItem Header="_Help" Style="{StaticResource MenuItemButton}">
                                                 <MenuItem Header="_About"/>
                                                 <MenuItem Header="_Reload" Command="{Binding ReloadSplashCommand}"/>
                                                 <MenuItem Header="_Exit"/>
@@ -75,10 +75,9 @@
                                                     Orientation="Horizontal">
 
                                             <Menu Style="{StaticResource MenuContainer}" IsEnabled="{Binding DisplayCurrentDepartment}">
-                                                <MenuItem Header="{Binding CurrentDepartment}" 
-                                                          ItemsSource="{Binding Departments}"
-                                                          Command="{Binding SelectDepartmentCommand}"
-                                                          Style="{StaticResource MenuButton}"/>
+                                                <MenuItem ItemsSource="{Binding Departments}"
+                                                          Style="{StaticResource MenuButtonDepartments}">
+                                                </MenuItem>
                                             </Menu>
 
                                             <TextBlock Text="{Binding CurrentUser}"
@@ -122,7 +121,6 @@
                                         <!-- Notifications -->
                                         <ListView Grid.Column="1" 
                                                   VerticalAlignment="Top"
-                                                  IsHitTestVisible="False"
                                                   Style="{StaticResource NotificationView}"/>
 
                                     </Grid>

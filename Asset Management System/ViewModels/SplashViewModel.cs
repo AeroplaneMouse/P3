@@ -55,6 +55,8 @@ namespace Asset_Management_System.ViewModels
 
         private void Authenticate()
         {
+            LoadingText = "Loading...";
+
             // Check database connection
             DBConnection dbcon = DBConnection.Instance();
             UpdateStatusText(new StatusUpdateEventArgs("Connecting to database."));
@@ -78,7 +80,7 @@ namespace Asset_Management_System.ViewModels
 
         public void Reload()
         {
-            Console.WriteLine("Test");
+            Console.WriteLine("Reloading...");
             Authenticate();
         }
 
