@@ -2,11 +2,13 @@
 using Asset_Management_System.Models;
 using Asset_Management_System.Views;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
 using System.Windows.Media;
+using Asset_Management_System.Logging;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -28,6 +30,7 @@ namespace Asset_Management_System.ViewModels
             EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
             RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
             PrintCommand = new Base.RelayCommand(() => Print());
+            ViewLogCommand = new Base.RelayCommand(() => ViewLog());
         }
 
         #endregion
@@ -162,6 +165,17 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
+        public void ViewLog()
+        {
+            Asset selected = GetSelectedItem();
+            
+            var dialog = new AssetHistory(selected);
+            if (dialog.ShowDialog() == true)
+            {
+                Console.WriteLine("Displaying History for: " + selected.Name);
+            }
+        }
+
         private Asset GetSelectedItem()
         {
             if (SearchList.Count == 0)
@@ -179,6 +193,7 @@ namespace Asset_Management_System.ViewModels
         public ICommand EditCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
         public ICommand PrintCommand { get; set; }
+        public ICommand ViewLogCommand { get; set; }
 
         #endregion
     }

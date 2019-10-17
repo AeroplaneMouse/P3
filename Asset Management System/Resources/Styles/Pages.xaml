@@ -44,6 +44,10 @@
                             <Button Style="{StaticResource RegularButton}"
                                     Content="Print"
                                     Command="{Binding PrintCommand}"/>
+                            
+                            <Button Style="{StaticResource RegularButton}"
+                                    Content="View History"
+                                    Command="{Binding ViewLogCommand}"/>
 
                         </StackPanel>
 

@@ -107,7 +107,6 @@ namespace Asset_Management_System.ViewModels
         /// <summary>
         /// Displays the selected log entry
         /// </summary>
-        /// <exception cref="NotImplementedException"></exception>
         private void View()
         {
             Entry selected = GetSelectedItem();

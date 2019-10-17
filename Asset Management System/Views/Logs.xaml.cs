@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
 {
@@ -22,6 +23,12 @@ namespace Asset_Management_System.Views
         {
             InitializeComponent();
             DataContext = new ViewModels.LogsViewModel(main);
+        }
+
+        private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            LogsViewModel vm = this.DataContext as LogsViewModel;
+            vm.ViewCommand.Execute(null);
         }
     }
 }
