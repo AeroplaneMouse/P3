@@ -1,9 +1,8 @@
-﻿
-using System;
+﻿using System;
 
 namespace Asset_Management_System.Models
 {
-    public class Department : Model
+    public class Department : Model, INotifyOnPropertyChanged
     {
         public Department()
         {
