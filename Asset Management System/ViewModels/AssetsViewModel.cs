@@ -45,6 +45,7 @@ namespace Asset_Management_System.ViewModels
 
         public string SearchQueryText { get; set; } = "";
         public int SelectedItemIndex { get; set; }
+        public int ViewType => 1;
 
         private ObservableCollection<Asset> _list = new ObservableCollection<Asset>();
 

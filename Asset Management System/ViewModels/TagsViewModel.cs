@@ -3,7 +3,10 @@ using Asset_Management_System.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using Asset_Management_System.Resources;
 using Asset_Management_System.Views;
 
 namespace Asset_Management_System.ViewModels
@@ -32,10 +35,13 @@ namespace Asset_Management_System.ViewModels
 
         private MainViewModel _main;
 
+        private int _viewType;
+
         #endregion
 
         #region Public Properties
 
+        public int ViewType => 2;
         public string SearchQueryText { get; set; } = "";
         public int SelectedItemIndex { get; set; }
 
@@ -121,7 +127,7 @@ namespace Asset_Management_System.ViewModels
         private void Remove()
         {
             Tag selectedTag = GetSelectedItem();
-           
+
             if (selectedTag == null)
             {
                 string message = "Please select an item.";
@@ -132,12 +138,11 @@ namespace Asset_Management_System.ViewModels
                 Console.WriteLine($"Removing {selectedTag.Name}.");
                 selectedTag.Notify(true);
                 new TagRepository().Delete(selectedTag);
-                
+
                 // Reload list
                 Search();
             }
         }
-
 
         public void Print()
         {
