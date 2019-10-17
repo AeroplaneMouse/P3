@@ -13,7 +13,7 @@
     <Compile Update="Views\Logs.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\PromptForReportName.xaml.cs">
+    <Compile Update="Views\PromptWithTextInput.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\EditDepartment.xaml.cs">
@@ -78,7 +78,7 @@
     <Page Update="Views\Logs.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\PromptForReportName.xaml">
+    <Page Update="Views\PromptWithTextInput.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\EditDepartment.xaml">

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Collections.ObjectModel;
 
-namespace UnitTests
+namespace IntegrationTests
 {
     [TestClass]
     public class AssetRepositoryTests
