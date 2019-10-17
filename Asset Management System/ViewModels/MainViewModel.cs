@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Asset_Management_System.Database;
+using System.Reflection;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -261,10 +262,12 @@ namespace Asset_Management_System.ViewModels
             CurrentSession = session;
             CurrentUser = CurrentSession.Username;
 
-            // Set current department
-            if (Departments.Count > 0)
-                CurrentDepartment = Departments[0];
+            // Setting the current department, from the default department of the current user.
+            CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);
+            if (CurrentDepartment == null)
+                CurrentDepartment = Department.GetDefault();
 
+            // Load homepage
             ChangeMainContent(new Views.Home(this));
         }
 
