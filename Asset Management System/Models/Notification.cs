@@ -18,7 +18,7 @@ namespace Asset_Management_System.Models
 
 
         // Public properties
-        public readonly int ID;
+        public int ID { get; }
         public string Message { get; set; }
         public SolidColorBrush Background { get; set; }
         public SolidColorBrush Foreground { get; set; }
@@ -59,8 +59,7 @@ namespace Asset_Management_System.Models
 
             SolidColorBrush[] backgrounds = new SolidColorBrush[]
             {
-                Brushes.Black,
-                Brushes.White,
+                Brushes.DarkGray,
                 Brushes.Red,
                 Brushes.Orange,
                 Brushes.Green,
@@ -68,8 +67,9 @@ namespace Asset_Management_System.Models
                 Brushes.Blue,
                 Brushes.DarkGreen,
                 Brushes.DarkOrange,
-                Brushes.DarkBlue,
-                Brushes.LightBlue
+                Brushes.LightBlue,
+                Brushes.Cyan,
+                Brushes.Firebrick
             };
 
             return backgrounds[r.Next() % backgrounds.Length];
