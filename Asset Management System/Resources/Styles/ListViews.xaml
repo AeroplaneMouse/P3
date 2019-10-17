@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Asset_Management_System">
+                    xmlns:local="clr-namespace:Asset_Management_System"
+                    xmlns:v="clr-namespace:Asset_Management_System.ViewModels">
 
     <!-- Notification container -->
     <Style TargetType="ListView" x:Key="NotificationView">
@@ -24,7 +25,8 @@
                                                 <Label Content="{Binding Path=Message}"/>
                                                 <Button Content="[X]"
                                                         Grid.Column="1"
-                                                        IsHitTestVisible="True"
+                                                        Command="{x:Static v:MainViewModel.RemoveNotificationCommand}"
+                                                        CommandParameter="{Binding Path=ID}"
                                                         FontFamily="{StaticResource SegoeRegular}"
                                                         FontSize="{StaticResource FontSizeRegular}"
                                                         Background="Transparent"

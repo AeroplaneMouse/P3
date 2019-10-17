@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Collections.Generic;
@@ -66,10 +67,10 @@ namespace Asset_Management_System.ViewModels
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
-            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test")));
-            //RemoveNotificationCommand = new Base.RelayCommand(() => Test());
+            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test"), 0));
 
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
+            RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
@@ -243,12 +244,13 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        private void RemoveNotification(Notification n)
+        // Removes an active notification.
+        public void RemoveNotification(int id) => RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
+        public void RemoveNotification(Notification n)
         {
             ActiveNotifications.Remove(n);
         }
 
-        public void ShowNotification(object a, object b) { }
 
         /// <summary>
         /// Used when the application has connected to the database and other external services,
@@ -324,7 +326,7 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand AddNotificationTestCommand { get; set; }
 
-        public ICommand RemoveNotificationCommand { get; set; }
+        public static ICommand RemoveNotificationCommand { get; set; }
 
         #endregion
 

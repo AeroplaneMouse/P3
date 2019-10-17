@@ -18,7 +18,7 @@ namespace Asset_Management_System.Models
 
 
         // Public properties
-        public readonly int ID;
+        public int ID { get; }
         public string Message { get; set; }
         public SolidColorBrush Background { get; set; }
         public SolidColorBrush Foreground { get; set; }
