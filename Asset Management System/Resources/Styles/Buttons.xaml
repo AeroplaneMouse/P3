@@ -174,19 +174,18 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Padding" Value="35, 0, 0, 0"/>
+        <Setter Property="Padding" Value="0, 5, 0, 5"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="FocusVisualStyle" Value="{StaticResource ButtonFocusVisual}"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border TextBlock.Foreground="{TemplateBinding Foreground}"
                             x:Name="Border"
-                            BorderThickness="0"
-                            Background="Transparent">
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}">
                         <ContentPresenter
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
@@ -210,11 +209,11 @@
             </Setter.Value>
         </Setter>
 
-        <!--<Style.Triggers>
+        <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="White"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
             </Trigger>
-        </Style.Triggers>-->
+        </Style.Triggers>
     </Style>
     
     <!-- Remove notification button -->
