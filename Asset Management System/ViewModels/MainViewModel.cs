@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Asset_Management_System.Database;
+using System.Reflection;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -64,7 +65,7 @@ namespace Asset_Management_System.ViewModels
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
-            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test"), 0));
+            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test")));
             SelectDepartmentCommand = new Base.RelayCommand(() => SelectDepartment());
             RemoveNotificationCommand = new Base.RelayCommand(() => Test());
 
@@ -261,10 +262,12 @@ namespace Asset_Management_System.ViewModels
             CurrentSession = session;
             CurrentUser = CurrentSession.Username;
 
-            // Set current department
-            if (Departments.Count > 0)
-                CurrentDepartment = Departments[0];
+            // Setting the current department, from the default department of the current user.
+            CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);
+            if (CurrentDepartment == null)
+                CurrentDepartment = Department.GetDefault();
 
+            // Load homepage
             ChangeMainContent(new Views.Home(this));
         }
 

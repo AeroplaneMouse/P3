@@ -71,6 +71,7 @@ namespace Asset_Management_System.Database.Repositories
                 catch (MySqlException e)
                 {
                     Console.WriteLine(e);
+                    //dbcon.SqlConnectionFailed?.Invoke(new Notification("ERROR! Unable to update department", Notification.ERROR));
                 }
                 finally
                 {
