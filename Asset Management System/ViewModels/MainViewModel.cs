@@ -64,7 +64,7 @@ namespace Asset_Management_System.ViewModels
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
-            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test"), 0));
+            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test")));
             SelectDepartmentCommand = new Base.RelayCommand(() => SelectDepartment());
             RemoveNotificationCommand = new Base.RelayCommand(() => Test());
 

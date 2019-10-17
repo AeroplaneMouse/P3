@@ -76,7 +76,8 @@
 
                                             <Menu Style="{StaticResource MenuContainer}" IsEnabled="{Binding DisplayCurrentDepartment}">
                                                 <MenuItem ItemsSource="{Binding Departments}"
-                                                          Style="{StaticResource MenuButtonDepartments}">
+                                                          Header="{Binding CurrentDepartment}"
+                                                          Style="{StaticResource MenuItemButtonDepartments}">
                                                 </MenuItem>
                                             </Menu>
 
@@ -109,7 +110,7 @@
                                                 <Button Content="Assets" Command="{Binding ShowAssetsPageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Tags" Command="{Binding ShowTagPageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Logs" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}"/>
-                                                <Button Content="Add notification" Command="{Binding AddNotificationTestCommand}" Style="{StaticResource NavigationButton}"/>
+                                                <Button Content="Random" Command="{Binding AddNotificationTestCommand}" Style="{StaticResource NavigationButton}"/>
                                             </StackPanel>
                                         </Border>
 
