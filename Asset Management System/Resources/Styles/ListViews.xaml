@@ -23,15 +23,11 @@
                                                     <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
                                                 <Label Content="{Binding Path=Message}"/>
-                                                <Button Content="[X]"
-                                                        Grid.Column="1"
+                                                <Button Grid.Column="1"
+                                                        Style="{StaticResource RemoveNotificationButton}"
                                                         Command="{x:Static v:MainViewModel.RemoveNotificationCommand}"
-                                                        CommandParameter="{Binding Path=ID}"
-                                                        FontFamily="{StaticResource SegoeRegular}"
-                                                        FontSize="{StaticResource FontSizeRegular}"
-                                                        Background="Transparent"
-                                                        BorderThickness="0"
-                                                        Margin="0, 0, 10, 0"/>
+                                                        CommandParameter="{Binding Path=ID}">
+                                                </Button>
 
                                             </Grid>
                                         </ControlTemplate>

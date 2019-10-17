@@ -59,8 +59,7 @@ namespace Asset_Management_System.Models
 
             SolidColorBrush[] backgrounds = new SolidColorBrush[]
             {
-                Brushes.Black,
-                Brushes.White,
+                Brushes.DarkGray,
                 Brushes.Red,
                 Brushes.Orange,
                 Brushes.Green,
@@ -68,8 +67,9 @@ namespace Asset_Management_System.Models
                 Brushes.Blue,
                 Brushes.DarkGreen,
                 Brushes.DarkOrange,
-                Brushes.DarkBlue,
-                Brushes.LightBlue
+                Brushes.LightBlue,
+                Brushes.Cyan,
+                Brushes.Firebrick
             };
 
             return backgrounds[r.Next() % backgrounds.Length];
