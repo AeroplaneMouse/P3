@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using Asset_Management_System.Database;
 using System.Reflection;
+using System.ComponentModel;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -66,7 +67,7 @@ namespace Asset_Management_System.ViewModels
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
             AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test")));
-            RemoveNotificationCommand = new Base.RelayCommand(() => Test());
+            //RemoveNotificationCommand = new Base.RelayCommand(() => Test());
 
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
 
@@ -99,6 +100,8 @@ namespace Asset_Management_System.ViewModels
             new Views.AssetManager(null),
             new Views.TagManager(null)
         };
+
+        private Department _currentDepartment;
 
         #endregion
 
@@ -147,7 +150,15 @@ namespace Asset_Management_System.ViewModels
 
         public String CurrentUser { get; set; }
 
-        public Department CurrentDepartment { get; set; }
+        public Department CurrentDepartment
+        {
+            get => _currentDepartment;
+            set
+            {
+                _currentDepartment = value;
+                OnPropertyChanged("CurrentDepartment");
+            }
+        }
 
         public Frame FrameMainContent { get; set; } = new Frame();
 
