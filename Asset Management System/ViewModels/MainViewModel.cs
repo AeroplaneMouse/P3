@@ -1,17 +1,18 @@
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Windows.Controls;
-using Asset_Management_System.Models;
-using Asset_Management_System.Authentication;
-using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Events;
 using System.Windows.Media;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
+using Asset_Management_System.Models;
+using Asset_Management_System.Events;
 using Asset_Management_System.Database;
+using Asset_Management_System.Authentication;
+using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -65,24 +66,13 @@ namespace Asset_Management_System.ViewModels
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
             AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test"), 0));
-            SelectDepartmentCommand = new Base.RelayCommand(() => SelectDepartment());
-            RemoveNotificationCommand = new Base.RelayCommand(() => Test());
+
+            SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
+            RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
+            RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
-        }
-
-        public void Test()
-        {
-            Console.WriteLine("Test remove notification");
-        }
-
-        private List<Department> GetDepartments()
-        {
-            if (DisplayCurrentDepartment)
-                return new DepartmentRepository().GetAll();
-            else
-                return new List<Department>();
         }
 
         #endregion
@@ -101,6 +91,8 @@ namespace Asset_Management_System.ViewModels
             new Views.AssetManager(null),
             new Views.TagManager(null)
         };
+
+        private Department _currentDepartment;
 
         #endregion
 
@@ -149,7 +141,22 @@ namespace Asset_Management_System.ViewModels
 
         public String CurrentUser { get; set; }
 
-        public Department CurrentDepartment { get; set; }
+        public Department CurrentDepartment
+        {
+            get => _currentDepartment;
+            set
+            {
+                _currentDepartment = value;
+                OnPropertyChanged(nameof(CurrentDepartment));
+
+                // Update default department for user
+                if (_currentDepartment != null)
+                {
+                    CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
+                    new UserRepository().Update(CurrentSession.user);
+                }
+            }
+        }
 
         public Frame FrameMainContent { get; set; } = new Frame();
 
@@ -219,7 +226,8 @@ namespace Asset_Management_System.ViewModels
             frame.Content = setPage;
         }
 
-        public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background) => AddNotification(new Notification(message, foreground, background));
+        public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background) 
+            => AddNotification(new Notification(message, foreground, background));
         public void AddNotification(Notification n) => AddNotification(n, 2500);
         public async void AddNotification(Notification n, int displayTime)
         {
@@ -234,12 +242,13 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        private void RemoveNotification(Notification n)
+        // Removes an active notification.
+        public void RemoveNotification(int id) => RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
+        public void RemoveNotification(Notification n)
         {
             ActiveNotifications.Remove(n);
         }
 
-        public void ShowNotification(object a, object b) { }
 
         /// <summary>
         /// Used when the application has connected to the database and other external services,
@@ -261,10 +270,12 @@ namespace Asset_Management_System.ViewModels
             CurrentSession = session;
             CurrentUser = CurrentSession.Username;
 
-            // Set current department
-            if (Departments.Count > 0)
-                CurrentDepartment = Departments[0];
+            // Setting the current department, from the default department of the current user.
+            CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);
+            if (CurrentDepartment == null)
+                CurrentDepartment = Department.GetDefault();
 
+            // Load homepage
             ChangeMainContent(new Views.Home(this));
         }
 
@@ -285,10 +296,12 @@ namespace Asset_Management_System.ViewModels
             return false;
         }
 
-        public void SelectDepartment()
+        private List<Department> GetDepartments()
         {
-            Console.WriteLine("Selecting department...");
-            AddNotification(new Notification("Selecting department"));
+            if (DisplayCurrentDepartment)
+                return new DepartmentRepository().GetAll();
+            else
+                return new List<Department>();
         }
 
         #endregion
@@ -311,7 +324,7 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand ShowTagPageCommand { get; set; }
 
-        public ICommand SelectDepartmentCommand { get; set; }
+        public static ICommand SelectDepartmentCommand { get; set; }
 
         public ICommand ShowLogPageCommand { get; set; }
 
@@ -319,7 +332,9 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand AddNotificationTestCommand { get; set; }
 
-        public ICommand RemoveNotificationCommand { get; set; }
+        public static ICommand RemoveNotificationCommand { get; set; }
+
+        public ICommand RemoveDepartmentCommand { get; set; }
 
         #endregion
 
