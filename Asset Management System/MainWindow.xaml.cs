@@ -19,8 +19,6 @@ namespace Asset_Management_System
     public partial class MainWindow : Window
     {
         List<Page> pages = new List<Page>();
-        public TopNavigationPart2 topNavigationPage;
-        public LeftNavigation leftNavigationPage;
 
         public MainWindow()
         {
@@ -67,11 +65,6 @@ namespace Asset_Management_System
             FrameSplash.Visibility = Visibility.Hidden;
             FrameSplash.Source = null;
 
-            // Set stuff
-            topNavigationPage = new TopNavigationPart2(this);
-            leftNavigationPage = new LeftNavigation(this);
-            FrameTopNavigationPart2.Content = topNavigationPage;
-            FrameLeftNavigation.Content = leftNavigationPage;
 
             //ChangeMainContent(new Home(this));
         }
