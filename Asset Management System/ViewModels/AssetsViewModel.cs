@@ -185,6 +185,12 @@ namespace Asset_Management_System.ViewModels
                 return SearchList.ElementAt(SelectedItemIndex);
         }
 
+        private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        
         #endregion
 
         #region Commands
