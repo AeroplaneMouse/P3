@@ -54,7 +54,7 @@
                             Grid.Row="3"
                             Margin="10">
                             <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                                <ListView ItemsSource="{Binding SearchList}">
+                                <ListView ItemsSource="{Binding SearchList}" SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
                                     <ListView.Resources>
                                         <GridView x:Key="AssetTemplate">
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
