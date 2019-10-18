@@ -199,7 +199,7 @@ namespace Asset_Management_System.Database.Repositories
         /// 
         /// </summary>
         /// <returns></returns>
-        public List<Tag> GetParentTags()
+        public IEnumerable<Tag> GetParentTags()
         {
             return this.GetChildTags(0);
         }
@@ -209,7 +209,7 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="parent_id"></param>
         /// <returns></returns>
-        public List<Tag> GetChildTags(ulong parent_id)
+        public IEnumerable<Tag> GetChildTags(ulong parent_id)
         {
             DBConnection dbcon = DBConnection.Instance();
             List<Tag> tags = new List<Tag>();
@@ -295,7 +295,7 @@ namespace Asset_Management_System.Database.Repositories
             return tags;
         }
 
-        public List<Tag> GetAll()
+        public IEnumerable<Tag> GetAll()
         {
             DBConnection dbcon = DBConnection.Instance();
             List<Tag> tags = new List<Tag>();

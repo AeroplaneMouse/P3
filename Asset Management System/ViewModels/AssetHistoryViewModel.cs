@@ -27,7 +27,7 @@ namespace Asset_Management_System.ViewModels
             ExitCommand = new Base.RelayCommand(() => Exit());
             
             ILogRepository<Entry> rep = new LogRepository();
-            History = rep.GetLogEntries(asset.ID, asset.GetType());
+            History = (List<Entry>) rep.GetLogEntries(asset.ID, asset.GetType());
 
         }
 

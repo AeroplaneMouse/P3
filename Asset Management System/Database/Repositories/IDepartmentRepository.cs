@@ -5,6 +5,6 @@ namespace Asset_Management_System.Database.Repositories
 {
     interface IDepartmentRepository : IMysqlRepository<Department>
     {
-        List<Department> GetAll();
+        IEnumerable<Department> GetAll();
     }
 }

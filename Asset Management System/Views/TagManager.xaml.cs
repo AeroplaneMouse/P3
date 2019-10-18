@@ -25,7 +25,7 @@ namespace Asset_Management_System.Views
             get
             {
                 TagRepository tagRepository = new TagRepository();
-                return tagRepository.GetParentTags();
+                return (List<Tag>)tagRepository.GetParentTags();
             }
         }
 
