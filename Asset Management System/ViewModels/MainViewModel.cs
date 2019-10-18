@@ -263,6 +263,7 @@ namespace Asset_Management_System.ViewModels
             DisplayCurrentDepartment = true;
             CurrentSession = session;
             CurrentUser = CurrentSession.Username;
+            OnPropertyChanged(nameof(CurrentUser));
 
             // Setting the current department, from the default department of the current user.
             CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);

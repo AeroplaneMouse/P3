@@ -41,12 +41,9 @@
                                           Panel.ZIndex="1"
                                           Background="{StaticResource BackgroundDarkBrush}">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <!-- Icon -->
-                                            <ColumnDefinition Width="*" />
-                                            <!-- Menu -->
-                                            <ColumnDefinition Width="Auto"/>
-                                            <!-- Window buttons -->
+                                            <ColumnDefinition Width="Auto"/> <!-- Icon -->
+                                            <ColumnDefinition Width="*" /> <!-- Menu -->
+                                            <ColumnDefinition Width="Auto"/> <!-- Window buttons -->
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Icon button -->
