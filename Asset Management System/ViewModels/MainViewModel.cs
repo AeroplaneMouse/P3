@@ -173,7 +173,7 @@ namespace Asset_Management_System.ViewModels
 
         public Session CurrentSession { get; private set; }
 
-        public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
+        public List<Notification> ActiveNotifications { get; private set; } = new List<Notification>();
 
         #endregion
 
@@ -229,12 +229,14 @@ namespace Asset_Management_System.ViewModels
             frame.Content = setPage;
         }
 
-        public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background) => AddNotification(new Notification(message, foreground, background));
+        public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background) 
+            => AddNotification(new Notification(message, foreground, background));
         public void AddNotification(Notification n) => AddNotification(n, 2500);
         public async void AddNotification(Notification n, int displayTime)
         {
             // Add notification to the list of active notifications
             ActiveNotifications.Add(n);
+            OnPropertyChanged("ActiveNotifications");
 
             // Wait some time, then remove it.
             if (displayTime > 0)
