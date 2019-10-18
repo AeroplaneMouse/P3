@@ -13,10 +13,9 @@ namespace Asset_Management_System.ViewModels
     public class SplashViewModel : Base.BaseViewModel
     {
         private MainViewModel _main;
-        public BackgroundWorker worker;
+        private BackgroundWorker worker;
         public string LoadingText { get; set; }
         public string StatusText { get; set; }
-
 
         public ICommand LoadConfigCommand { get; set; }
 
@@ -31,8 +30,6 @@ namespace Asset_Management_System.ViewModels
             Console.WriteLine("Showing splash screen");
             Authenticate();
         }
-
-
 
         private void LoadConfig()
         {
@@ -51,17 +48,18 @@ namespace Asset_Management_System.ViewModels
             worker.ProgressChanged += Worker_ProgressChanged;
             worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
 
+            // Starting backgroundworker
             worker.RunWorkerAsync();
         }
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            // Result is the active session, with the authorized user.
             Session t = e.Result as Session;
-
             if (t != null)
                 _main.SystemLoaded(t);
 
-
+            //Dispose the background after use.
             worker.Dispose();
         }
 
@@ -72,11 +70,11 @@ namespace Asset_Management_System.ViewModels
 
         private void Worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            BackgroundWorker worker = sender as BackgroundWorker;
+            BackgroundWorker caller = sender as BackgroundWorker;
 
             // Check database connection
             DBConnection dbcon = DBConnection.Instance();
-            worker.ReportProgress(0, new StatusUpdateEventArgs("Loading...", "Connecting to database."));
+            caller.ReportProgress(0, new StatusUpdateEventArgs("Loading...", "Connecting to database."));
 
             if (dbcon.IsConnect())
             {
@@ -84,20 +82,25 @@ namespace Asset_Management_System.ViewModels
                 if (t.Authenticated())
                     e.Result = t;
                 else
-                    worker.ReportProgress(0, new StatusUpdateEventArgs("!!! Access denied !!!", $"User \"{ Session.GetIdentity() }\" is not authorized to access the application."));
+                    caller.ReportProgress(0, new StatusUpdateEventArgs("!!! Access denied !!!", $"User \"{ Session.GetIdentity() }\" is not authorized to access the application."));
             }
             else
-                worker.ReportProgress(0, new StatusUpdateEventArgs("ERROR!", "Error! Unable to connect to database."));
+                caller.ReportProgress(0, new StatusUpdateEventArgs("ERROR!", "Error! Unable to connect to database."));
         }
 
         public void Reload()
         {
-            Console.WriteLine("Reloading...");
+            // Showing the splash page again
             _main.SplashVisibility = System.Windows.Visibility.Visible;
             _main.OnPropertyChanged(nameof(_main.SplashVisibility));
+            
             Authenticate();
         }
 
+        /// <summary>
+        /// Updates text on the screen with progress and status.
+        /// </summary>
+        /// <param name="e"></param>
         public void UpdateStatusText(StatusUpdateEventArgs e)
         {
             LoadingText = e.Title;

@@ -73,8 +73,6 @@ namespace Asset_Management_System.ViewModels
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
-
-            //(splashScreen.DataContext as ViewModels.SplashViewModel).worker.RunWorkerAsync();
         }
 
         #endregion
@@ -125,10 +123,7 @@ namespace Asset_Management_System.ViewModels
                 return _window.WindowState == WindowState.Maximized ? 0 : _outerMarginSize;
             }
 
-            set
-            {
-                _outerMarginSize = value;
-            }
+            set => _outerMarginSize = value;
         }
 
         // Thickness of the margin around the window to allow a drop shadow.
