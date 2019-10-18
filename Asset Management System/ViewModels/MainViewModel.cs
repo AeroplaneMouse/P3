@@ -2,19 +2,17 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using System.Windows.Controls;
-using Asset_Management_System.Models;
-using Asset_Management_System.Authentication;
-using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Events;
 using System.Windows.Media;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
+using Asset_Management_System.Models;
+using Asset_Management_System.Events;
 using Asset_Management_System.Database;
-using System.Reflection;
-using System.ComponentModel;
+using Asset_Management_System.Authentication;
+using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -173,7 +171,7 @@ namespace Asset_Management_System.ViewModels
 
         public Session CurrentSession { get; private set; }
 
-        public List<Notification> ActiveNotifications { get; private set; } = new List<Notification>();
+        public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
 
         #endregion
 
@@ -236,7 +234,6 @@ namespace Asset_Management_System.ViewModels
         {
             // Add notification to the list of active notifications
             ActiveNotifications.Add(n);
-            OnPropertyChanged("ActiveNotifications");
 
             // Wait some time, then remove it.
             if (displayTime > 0)
