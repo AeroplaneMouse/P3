@@ -69,18 +69,10 @@ namespace Asset_Management_System.ViewModels
 
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
             RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
+            RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
-        }
-
-
-        private List<Department> GetDepartments()
-        {
-            if (DisplayCurrentDepartment)
-                return new DepartmentRepository().GetAll();
-            else
-                return new List<Department>();
         }
 
         #endregion
@@ -155,7 +147,14 @@ namespace Asset_Management_System.ViewModels
             set
             {
                 _currentDepartment = value;
-                OnPropertyChanged("CurrentDepartment");
+                OnPropertyChanged(nameof(CurrentDepartment));
+
+                // Update default department for user
+                if (_currentDepartment != null)
+                {
+                    CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
+                    new UserRepository().Update(CurrentSession.user);
+                }
             }
         }
 
@@ -297,6 +296,14 @@ namespace Asset_Management_System.ViewModels
             return false;
         }
 
+        private List<Department> GetDepartments()
+        {
+            if (DisplayCurrentDepartment)
+                return new DepartmentRepository().GetAll();
+            else
+                return new List<Department>();
+        }
+
         #endregion
 
         #region Commands
@@ -326,6 +333,8 @@ namespace Asset_Management_System.ViewModels
         public ICommand AddNotificationTestCommand { get; set; }
 
         public static ICommand RemoveNotificationCommand { get; set; }
+
+        public ICommand RemoveDepartmentCommand { get; set; }
 
         #endregion
 
