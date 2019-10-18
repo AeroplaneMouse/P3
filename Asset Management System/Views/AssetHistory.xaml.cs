@@ -40,18 +40,8 @@ namespace Asset_Management_System.Views
             set => Label.Text = value;
         }
 
-        private void BtnCLose_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = true;
-        }
-
+        //TODO Figure out how to remove this, and instead bind it to the ViewCommand in the viewModel
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            AssetHistoryViewModel vm = this.DataContext as AssetHistoryViewModel;
-            vm.ViewCommand.Execute(null);
-        }
-        
-        private void BtnSelect_Click(object sender, RoutedEventArgs e)
         {
             AssetHistoryViewModel vm = this.DataContext as AssetHistoryViewModel;
             vm.ViewCommand.Execute(null);
