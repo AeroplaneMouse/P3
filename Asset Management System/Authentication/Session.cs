@@ -9,9 +9,9 @@ namespace Asset_Management_System.Authentication
     {
         public readonly User user;
         
-        public String Username { get => GetIdentity().Split('\\')[1]; }
+        public string Username { get => GetIdentity().Split('\\')[1]; }
         
-        public String Domain { get => GetIdentity().Split('\\')[0]; }
+        public string Domain { get => GetIdentity().Split('\\')[0]; }
 
         public Session()
         {
