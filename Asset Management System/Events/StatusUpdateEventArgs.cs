@@ -8,17 +8,16 @@ namespace Asset_Management_System.Events
 
     public class StatusUpdateEventArgs
     {
+        public string Title;
         public string Message;
         public string extraMessage;
 
-        public StatusUpdateEventArgs()
-            : this("") {}
-
-        public StatusUpdateEventArgs(string message)
-            : this(message, null) { }
+        public StatusUpdateEventArgs(string titleMessage, string message)
+            : this(titleMessage, message, null) { }
         
-        public StatusUpdateEventArgs(string message, string extra)
+        public StatusUpdateEventArgs(string titleMessage, string message, string extra)
         {
+            Title = titleMessage;
             Message = message;
             extraMessage = extra;
         }

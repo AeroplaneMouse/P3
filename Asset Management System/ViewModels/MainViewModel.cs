@@ -73,6 +73,8 @@ namespace Asset_Management_System.ViewModels
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
+
+            //(splashScreen.DataContext as ViewModels.SplashViewModel).worker.RunWorkerAsync();
         }
 
         #endregion
@@ -264,6 +266,7 @@ namespace Asset_Management_System.ViewModels
 
             // Remove splash page
             SplashVisibility = Visibility.Hidden;
+            OnPropertyChanged(nameof(SplashVisibility));
 
             // Show department and username
             DisplayCurrentDepartment = true;

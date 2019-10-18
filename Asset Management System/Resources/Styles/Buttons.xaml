@@ -191,19 +191,6 @@
                             VerticalAlignment="Center"
                             Margin="35, 0, 0, 0"
                             RecognizesAccessKey="True"/>
-                        <!--<VisualStateManager.VisualStateGroups>
-                            <VisualStateGroup x:Name="CommonStates">
-                                <VisualState x:Name="MouseOver">
-                                    <Storyboard>
-                                        
-                                        <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="Background" 
-                                                                      Storyboard.TargetName="Border">
-                                            <EasingColorKeyFrame KeyTime="0" Value="White" />
-                                        </ColorAnimationUsingKeyFrames>
-                                    </Storyboard>
-                                </VisualState>
-                            </VisualStateGroup>
-                        </VisualStateManager.VisualStateGroups>-->
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
