@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Asset_Management_System">
+                    xmlns:local="clr-namespace:Asset_Management_System"
+                    xmlns:v="clr-namespace:Asset_Management_System.ViewModels">
 
     <!-- Menu container -->
     <Style TargetType="{x:Type Menu}" x:Key="MenuContainer" BasedOn="{StaticResource BaseStyle}">
@@ -16,14 +17,13 @@
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
-        <Setter Property="Padding" Value="15, 5, 15, 5"/>
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        
+
         <!-- Content template -->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type MenuItem}">
-                    <Border>
+                    <Border Background="{TemplateBinding Background}"
+                            Padding="15, 2, 15, 2">
                         <Grid>
                             <ContentPresenter
                                 Margin="6,4,6,4"
@@ -32,32 +32,13 @@
                             <Popup
                                 Placement="Bottom"
                                 VerticalOffset="1"
+                                HorizontalOffset="-15"
                                 IsOpen="{TemplateBinding IsSubmenuOpen}"
                                 AllowsTransparency="True"
-                                PopupAnimation="Slide">
-                                <Border
-                                    Background="{StaticResource BackgroundDarkBrush}">
-                                    <StackPanel
-                                        Name="ItemsContainer"
-                                        IsItemsHost="True" 
-                                        KeyboardNavigation.DirectionalNavigation="Cycle">
-                                        <!--<StackPanel.Resources>
-                                            <Style TargetType="MenuItem">
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="MenuItem">
-                                                            <Border Background="Aqua">
-                                                                <Button Padding="10, 5, 10, 5"
-                                                                        Command="{Binding SelectDepartmentCommand}">
-                                                                    <ContentPresenter Content="{TemplateBinding Header}"/>
-                                                                </Button>
-                                                            </Border>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Style>
-                                        </StackPanel.Resources>-->
-                                    </StackPanel>
+                                PopupAnimation="Fade">
+                                <Border Name="PopupContainer"
+                                        Background="{StaticResource NavigationBackgroundBrush}">
+                                    <ItemsPresenter/>
                                 </Border>
                             </Popup>
                         </Grid>
@@ -65,18 +46,102 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
-        <!-- Hover -->
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="OverridesDefaultStyle" Value="True"/>
-                <Setter Property="Background" Value="White"/>
+                <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
     
     <!-- Department menu button -->
-    <Style TargetType="MenuItem" x:Key="MenuItemButtonDepartments" BasedOn="{StaticResource MenuItemButton}">
+    <Style TargetType="MenuItem" x:Key="MenuItemButtonDepartments">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
         
+        <Setter Property="ItemContainerStyle">
+            <Setter.Value>
+                <Style TargetType="MenuItem">
+                    <Setter Property="Command" Value="{x:Static v:MainViewModel.SelectDepartmentCommand}"/>
+                    <Setter Property="CommandParameter" Value="{Binding Path=ID}"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type MenuItem}">
+                    <Border Background="{TemplateBinding Background}" 
+                            BorderThickness="0"
+                            Padding="15, 2, 15, 2">
+                        <Grid>
+                            <ContentPresenter
+                                Margin="6,4,6,4"
+                                ContentSource="Header"
+                                RecognizesAccessKey="True"/>
+                            <Popup
+                                Placement="Bottom"
+                                VerticalOffset="1"
+                                HorizontalOffset="-15"
+                                IsOpen="{TemplateBinding IsSubmenuOpen}"
+                                AllowsTransparency="True"
+                                PopupAnimation="Fade">
+                                <StackPanel Background="{StaticResource NavigationBackgroundBrush}">
+                                    <!-- All department-->
+                                    <Button Style="{StaticResource MenuItemDepartmentButton}"
+                                        Content="All departments"
+                                        Command="{Binding SelectDepartmentCommand}"
+                                        CommandParameter="0"/>
+                                    <Separator Margin="5, 0, 5, 5" Foreground="White"/>
+                                    
+                                    <!-- Departments -->
+                                    <StackPanel Name="ItemsContainer"
+                                                IsItemsHost="True" 
+                                                KeyboardNavigation.DirectionalNavigation="Cycle">
+                                        <StackPanel.Resources>
+                                            <Style TargetType="MenuItem">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                                <Setter Property="Template">
+                                                    <Setter.Value>
+                                                        <ControlTemplate TargetType="MenuItem">
+                                                            <Border Padding="0, 5, 20, 0">
+                                                                <Button Style="{StaticResource MenuItemDepartmentButton}"
+                                                                        Command="{TemplateBinding Command}">
+
+                                                                    <ContentPresenter Content="{TemplateBinding Header}"/>
+                                                                </Button>
+                                                            </Border>
+                                                        </ControlTemplate>
+                                                    </Setter.Value>
+                                                </Setter>
+
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Resources>
+                                    </StackPanel>
+
+                                    <!-- Add new -->
+                                    <Separator Margin="5, 5, 5, 0" Foreground="White"/>
+                                    <Button Style="{StaticResource MenuItemDepartmentButton}"
+                                            Content="Add new"/>
+                                </StackPanel>
+                            </Popup>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>
