@@ -117,12 +117,8 @@ namespace Asset_Management_System.ViewModels
         // Margin around the window to allow a drop shadow. Checks if the window is maximised
         public int OuterMarginSize
         {
-            get
-            {
-                // If the window is maximised, remove the margin around the window, we don't need the drop shadow
-                return _window.WindowState == WindowState.Maximized ? 0 : _outerMarginSize;
-            }
-
+            // If the window is maximised, remove the margin around the window, we don't need the drop shadow
+            get => _window.WindowState == WindowState.Maximized ? 0 : _outerMarginSize;
             set => _outerMarginSize = value;
         }
 
