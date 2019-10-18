@@ -27,7 +27,7 @@ namespace Asset_Management_System.Views
             Main = main;
 
             TagRepository tag_rep = new TagRepository();
-            List<Tag> tags = tag_rep.GetParentTags();
+            List<Tag> tags = (List<Tag>)tag_rep.GetParentTags();
 
             AssetRepository asset_rep = new AssetRepository();
             Asset asset = asset_rep.GetById(3);

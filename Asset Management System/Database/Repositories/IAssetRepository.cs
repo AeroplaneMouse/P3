@@ -6,7 +6,7 @@ namespace Asset_Management_System.Database.Repositories
 {
     interface IAssetRepository : IMysqlRepository<Asset>
     {
-        List<Asset> SearchByTags(List<int> tags_ids);
+        IEnumerable<Asset> SearchByTags(List<int> tags_ids);
         ObservableCollection<Asset> Search(string keyword);
         bool AttachTagsToAsset(Asset asset, List<Tag> tags);
     }

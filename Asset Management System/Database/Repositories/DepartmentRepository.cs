@@ -156,7 +156,7 @@ namespace Asset_Management_System.Database.Repositories
         /// 
         /// </summary>
         /// <returns></returns>
-        public List<Department> GetAll()
+        public IEnumerable<Department> GetAll()
         {
             DBConnection dbcon = DBConnection.Instance();
             List<Department> departments = new List<Department>();

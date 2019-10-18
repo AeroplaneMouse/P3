@@ -299,7 +299,7 @@ namespace Asset_Management_System.ViewModels
         private List<Department> GetDepartments()
         {
             if (DisplayCurrentDepartment)
-                return new DepartmentRepository().GetAll();
+                return (List<Department>) new DepartmentRepository().GetAll();
             else
                 return new List<Department>();
         }

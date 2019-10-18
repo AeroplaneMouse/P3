@@ -30,7 +30,7 @@ namespace Asset_Management_System.Views
             DataContext = this;
             ILogRepository<Entry> rep = new LogRepository();
             //foreach (Entry entry in rep.GetLogEntries(asset.ID, asset.GetType())) History.Add(entry);
-            History = rep.GetLogEntries(asset.ID, asset.GetType());
+            History = (List<Entry>)rep.GetLogEntries(asset.ID, asset.GetType());
             this.LabelText = "History for: " + asset.Name;
         }
         

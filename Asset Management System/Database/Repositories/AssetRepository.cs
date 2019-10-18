@@ -171,7 +171,7 @@ namespace Asset_Management_System.Database.Repositories
             return asset;
         }
 
-        public List<Asset> SearchByTags(List<int> tags_ids)
+        public IEnumerable<Asset> SearchByTags(List<int> tags_ids)
         {
             List<Asset> assets = new List<Asset>();
 

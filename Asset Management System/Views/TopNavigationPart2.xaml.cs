@@ -30,7 +30,8 @@ namespace Asset_Management_System.Views
             Main = main;
             Session session = new Session();
             LblCurrentUser.Content = session.Username;
-            if(new DepartmentRepository().GetAll().Count > 0)
+           
+            if( new DepartmentRepository().GetAll().Count > 0)
                 SelectedDepartment = new DepartmentRepository().GetAll()[0];
             BtnShowDepartments.Content = SelectedDepartment;
         }
@@ -71,7 +72,7 @@ namespace Asset_Management_System.Views
                 ChangeDepartmentVisuals(Expand);
 
                 DepartmentRepository dep = new DepartmentRepository();
-                List<Department> departments = dep.GetAll();
+                List<Department> departments = (List<Department>)dep.GetAll();
 
                 // Adding department items to list of department
                 List<Grid> elements = new List<Grid>();
