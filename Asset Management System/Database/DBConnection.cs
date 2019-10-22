@@ -12,13 +12,19 @@ namespace Asset_Management_System.Database
 {
     public class DBConnection
     {
-        public event NotificationEventHandler SqlConnectionFailed;
-
-        private DBConnection()
-        {
-        }
+        #region Private Members
 
         private string databaseName = string.Empty;
+
+        private MySqlConnection connection = null;
+
+        private static DBConnection _instance = null;
+
+        #endregion
+
+
+        #region Public Properties
+
         public string DatabaseName
         {
             get { return databaseName; }
@@ -26,19 +32,34 @@ namespace Asset_Management_System.Database
         }
 
         public string Password { get; set; }
-        private MySqlConnection connection = null;
+
         public MySqlConnection Connection
         {
             get { return connection; }
         }
 
-        private static DBConnection _instance = null;
         public static DBConnection Instance()
         {
             if (_instance == null)
                 _instance = new DBConnection();
             return _instance;
         }
+
+        public event NotificationEventHandler SqlConnectionFailed;
+
+        #endregion
+
+
+        #region Constructors
+
+        private DBConnection()
+        {
+        }
+
+        #endregion
+
+
+        #region Public Methods
 
         public bool IsConnect()
         {
@@ -68,10 +89,18 @@ namespace Asset_Management_System.Database
 
         public void Close()
         {
-            if(_instance != null){
+            if (_instance != null)
+            {
                 connection.Close();
                 _instance = null;
             }
         }
+
+        #endregion
+
+
+
+
+
     }
 }
