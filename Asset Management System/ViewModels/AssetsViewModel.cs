@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
 using System.Windows.Media;
+using Asset_Management_System.Helpers;
 using Asset_Management_System.Logging;
 
 namespace Asset_Management_System.ViewModels
@@ -128,30 +129,7 @@ namespace Asset_Management_System.ViewModels
 
         public void Print()
         {
-            var dialog = new PromtForReportName("asset_report_" + DateTime.Now.ToString().Replace(@"/", "").Replace(@" ", "-").Replace(@":", "") + ".csv", "Report name:");
-            if (dialog.ShowDialog() == true)
-            {
-                if (dialog.DialogResult == true)
-                {
-                    string pathToFile = dialog.InputText;
-
-                    if (!pathToFile.EndsWith(".csv"))
-                    {
-                        pathToFile = pathToFile + ".csv";
-                    }
-
-                    pathToFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + pathToFile;
-
-                    using (StreamWriter file = new StreamWriter(pathToFile, false))
-                    {
-                        foreach (Asset asset in SearchList)
-                        {
-                            string fileEntry = asset.ID + "," + asset.Name;
-                            file.WriteLine(fileEntry);
-                        }
-                    }
-                }
-            }
+            PrintHelper.Print(SearchList.ToList());
         }
 
         public void ViewLog()

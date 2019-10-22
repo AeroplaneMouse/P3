@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Asset_Management_System.Helpers;
 using Asset_Management_System.Resources;
 using Asset_Management_System.Views;
 
@@ -149,7 +150,7 @@ namespace Asset_Management_System.ViewModels
 
         public void Print()
         {
-            throw new NotImplementedException();
+            PrintHelper.Print(SearchList.ToList());
         }
 
         private Tag GetSelectedItem()
