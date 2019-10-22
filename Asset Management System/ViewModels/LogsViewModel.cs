@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Helpers;
 using Asset_Management_System.Models;
 using Asset_Management_System.Views;
 
@@ -77,31 +78,7 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void Print()
         {
-            // Copied from AssetViewModel
-            var dialog = new PromtForReportName("log_report_" + DateTime.Now.ToString().Replace(@"/", "").Replace(@" ", "-").Replace(@":", "") + ".csv", "Report name:");
-            if (dialog.ShowDialog() == true)
-            {
-                if (dialog.DialogResult == true)
-                {
-                    string pathToFile = dialog.InputText;
-
-                    if (!pathToFile.EndsWith(".csv"))
-                    {
-                        pathToFile = pathToFile + ".csv";
-                    }
-
-                    pathToFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + pathToFile;
-
-                    using (StreamWriter file = new StreamWriter(pathToFile, false))
-                    {
-                        foreach (Entry entry in SearchList)
-                        {
-                            string fileEntry = entry.Id + "," + entry.LogableType.Name + ", ID: " + entry.LogableId + ", Description: " + entry.Description + ", Changes: " + entry.Options;
-                            file.WriteLine(fileEntry);
-                        }
-                    }
-                }
-            }
+            PrintHelper.Print(SearchList.ToList());
         }
 
         /// <summary>
