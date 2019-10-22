@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Asset_Management_System.Models;
 
@@ -10,5 +11,6 @@ namespace Asset_Management_System.Database.Repositories
         ObservableCollection<Asset> Search(string keyword);
         bool AttachTagsToAsset(Asset asset, List<Tag> tags);
         List<Tag> GetAssetTags(Asset asset);
+        Int32 GetCount();
     }
 }
