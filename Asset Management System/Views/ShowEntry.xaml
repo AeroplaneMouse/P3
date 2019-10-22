@@ -7,18 +7,21 @@
         WindowStartupLocation="CenterOwner"
         WindowStyle="ToolWindow"
         Height="500" Width="400">
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding ExitCommand}" />
+    </Window.InputBindings>
     <StackPanel>
-        <TextBlock x:Name="Label" Text="Name" FontSize="18" Margin="10, 10, 10, 8" />
-        <TextBlock x:Name="Description" Text="Entry Description" FontSize="14" Margin="10, 10, 10, 8" />
-        <TextBlock x:Name="User" Text="User" FontSize="14" Margin="10, 10, 10, 8" />
-        <TextBlock x:Name="Time" Text="Time" FontSize="14" Margin="10, 10, 10, 8" />
+        <TextBlock x:Name="Label" Text="{Binding LabelText}" FontSize="18" Margin="10, 10, 10, 8" />
+        <TextBlock x:Name="Description" Text="{Binding DescriptionText}" FontSize="14" Margin="10, 10, 10, 8" />
+        <TextBlock x:Name="User" Text="{Binding UserText}" FontSize="14" Margin="10, 10, 10, 8" />
+        <TextBlock x:Name="Time" Text="{Binding TimeText}" FontSize="14" Margin="10, 10, 10, 8" />
         <TextBlock Text="Changes:" FontSize="14" Margin="10, 10, 10, 8" />
         <StackPanel Orientation="Vertical" CanVerticallyScroll="True">
             <ScrollViewer Height="175">
-                <TextBlock x:Name="Options" Text="Options" FontSize="14" Margin="10, 10, 10, 8" TextWrapping="Wrap"/>
+                <TextBlock x:Name="Options" Text="{Binding OptionsText}" FontSize="14" Margin="10, 10, 10, 8" TextWrapping="Wrap"/>
             </ScrollViewer>
         </StackPanel>
         <Button Name="BtnOk" Content="OK" FontSize="16" Style="{StaticResource RegularButton}" Grid.Column="0"
-                Margin="20,20,0,0" Padding="15" Click="BtnOk_Click" TabIndex="0"/>
+                Margin="20,20,0,0" Padding="15" Command="{Binding ExitCommand}" TabIndex="0"/>
     </StackPanel>
 </Window>

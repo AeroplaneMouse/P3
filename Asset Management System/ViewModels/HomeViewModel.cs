@@ -156,7 +156,7 @@ namespace Asset_Management_System.ViewModels
             int departments = new DepartmentRepository().GetCount();
 
             // Generate strings
-            NumberOfAssets = $"You have { assets } asets";
+            NumberOfAssets = $"You have { assets } assets";
             NumberOfTags = $"You have { tags } tags";
             NumberOfDepartments = $"You have { departments } departments";
 

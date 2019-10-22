@@ -42,6 +42,9 @@
                   SelectionMode="Single"
                   SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                   MouseDoubleClick="ListView_MouseDoubleClick">
+            <ListView.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding ViewCommand}" />
+            </ListView.InputBindings>
             <ListView.View>
                 <GridView>
                     <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="ID" />
