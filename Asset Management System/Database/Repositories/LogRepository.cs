@@ -5,6 +5,7 @@ using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Database;
 using MySql.Data.MySqlClient;
 using Asset_Management_System.Logging;
+using System.Collections.ObjectModel;
 
 namespace Asset_Management_System.Database.Repositories
 {
@@ -122,9 +123,11 @@ namespace Asset_Management_System.Database.Repositories
             return entries;
         }
 
-        public IEnumerable<Entry> Search(string keyword, int limit=100)
+        public ObservableCollection<Entry> Search(string keyword)
         {
-            List<Entry> entries = new List<Entry>();
+            int limit = 100;
+
+            ObservableCollection<Entry> entries = new ObservableCollection<Entry>();
             DBConnection dbcon = DBConnection.Instance();
 
             if (dbcon.IsConnect())

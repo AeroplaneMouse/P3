@@ -12,7 +12,7 @@ using Asset_Management_System.Logging;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class AssetsViewModel
+    public class AssetsViewModel : Base.BaseViewModel
     {
         #region Constructors
 
@@ -81,11 +81,6 @@ namespace Asset_Management_System.ViewModels
 
             if (assets.Count > 0)
                 Console.WriteLine("-----------");
-
-            //foreach (Asset asset in assets)
-            //{
-            //    Console.WriteLine(asset.Name);
-            //}
 
             SearchList = assets;
         }
