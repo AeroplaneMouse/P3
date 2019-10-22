@@ -269,10 +269,260 @@ namespace Asset_Management_System.Database.Repositories
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
                 new object[] { row_id, row_label, row_description, row_department_id, row_options, row_created_at, row_updated_at }, null, null);
         }
-
+        
+        
+        /// <summary>
+        /// Adds a list of tags to an asset
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <param name="tag_list"></param>
+        /// <returns></returns>
         public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
+        {
+            return RemoveTags(asset, tags) && AddTags(asset, tags);
+        }
+
+        /// <summary>
+        /// Removes the tags on the asset that are not in teh list of tags to be added
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <param name="tags"></param>
+        /// <returns></returns>
+        private bool RemoveTags(Asset asset, List<Tag> tags)
+        {
+            DBConnection dbcon = DBConnection.Instance();
+            bool query_success = false;
+
+            // Makes a list of the ids of the tags to be added to the asset
+            List<ulong> tag_ids = tags.Select(p => p.ID).ToList();
+            // Makes a list of the ids of the tags already on the asset
+            List<ulong> asset_tag_ids = GetAssetTags(asset).Select(p => p.ID).ToList();
+
+            // Removes the ids of the tags that are supposed to stilll be on the asset
+            // resulting in a list of ids og tags to be removed from the asset
+            asset_tag_ids = asset_tag_ids.Except(tag_ids).ToList();
+
+
+            StringBuilder query = new StringBuilder("DELETE FROM asset_tags WHERE asset_id = ");
+            List<string> inserts = new List<string>();
+
+            query.Append(asset.ID);
+            query.Append(" AND tag_id IN (");
+
+            foreach (var tag_id in asset_tag_ids)
+            {
+                inserts.Add(tag_id.ToString());
+            }
+
+            query.Append(string.Join(",", inserts));
+            query.Append(")");
+
+            try
+            {
+                if (dbcon.IsConnect() && asset_tag_ids.Count > 0)
+                {
+                    using (var cmd = new MySqlCommand(query.ToString(), dbcon.Connection))
+                    {
+                        Console.WriteLine(cmd.CommandText);
+                        query_success = cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                dbcon.Close();
+            }
+
+            return query_success;
+        }
+       
+        /// <summary>
+        /// Adds the tags that are not already on the asset
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <param name="tags"></param>
+        /// <returns></returns>
+        private bool AddTags(Asset asset, List<Tag> tags)
+        {
+            DBConnection dbcon = DBConnection.Instance();
+            bool query_success = false;
+
+            // Makes a list of the ids of the tags to be added to the asset
+            List<ulong> tag_ids = tags.Select(p => p.ID).ToList();
+            // Makes a list of the ids of the tags already on the asset
+            List<ulong> asset_tag_ids = GetAssetTags(asset).Select(p => p.ID).ToList();
+
+            // Removes the ids of the tags that are already on the asset
+            // resulting in a list of ids of tags to still to be added to the asset
+            tag_ids = tag_ids.Except(asset_tag_ids).ToList();
+
+            StringBuilder query = new StringBuilder("INSERT INTO asset_tags (asset_id, tag_id) VALUES ");
+            List<string> inserts = new List<string>();
+
+            foreach (var tag_id in tag_ids)
+            {
+                inserts.Add(string.Format("({0},{1})", asset.ID, tag_id));
+            }
+
+            query.Append(string.Join(",", inserts));
+
+            try
+            {
+                if (dbcon.IsConnect() && tag_ids.Count > 0)
+                {
+                    using (var cmd = new MySqlCommand(query.ToString(), dbcon.Connection))
+                    {
+                        Console.WriteLine(cmd.CommandText);
+                        query_success = cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                dbcon.Close();
+            }
+
+            return query_success;
+        }
+
+        #region Alternative methods for adding tags to fields
+        //private bool RemoveTags2(Asset asset)
+        //{
+        //    DBConnection dbcon = DBConnection.Instance();
+        //    bool query_success = false;
+
+        //    List<ulong> asset_tag_ids = GetAssetTags(asset).Select(p => p.ID).ToList();
+
+        //    StringBuilder query = new StringBuilder("DELETE FROM asset_tags WHERE asset_id = ");
+        //    List<string> inserts = new List<string>();
+
+        //    query.Append(asset.ID);
+        //    query.Append(" AND tag_id IN (");
+
+        //    foreach (var tag_id in asset_tag_ids)
+        //    {
+        //        inserts.Add(tag_id.ToString());
+        //    }
+
+        //    query.Append(string.Join(",", inserts));
+        //    query.Append(")");
+
+        //    try
+        //    {
+        //        if (dbcon.IsConnect() && asset_tag_ids.Count > 0)
+        //        {
+        //            using (var cmd = new MySqlCommand(query.ToString(), dbcon.Connection))
+        //            {
+        //                Console.WriteLine(cmd.CommandText);
+        //                query_success = cmd.ExecuteNonQuery() > 0;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //    }
+        //    finally
+        //    {
+        //        dbcon.Close();
+        //    }
+
+        //    return query_success;
+        //}
+
+        //private bool AddTags2 (Asset asset, List<Tag> tags)
+        //{
+        //    DBConnection dbcon = DBConnection.Instance();
+        //    bool query_success = false;
+
+        //    List<ulong> tag_ids = tags.Select(p => p.ID).ToList();
+
+        //    StringBuilder query = new StringBuilder("INSERT INTO asset_tags (asset_id, tag_id) VALUES ");
+        //    List<string> inserts = new List<string>();
+
+        //    foreach (var tag_id in tag_ids)
+        //    {
+        //        inserts.Add(string.Format("({0},{1})", asset.ID, tag_id));
+        //    }
+
+        //    query.Append(string.Join(",", inserts));
+
+        //    try
+        //    {
+        //        if (dbcon.IsConnect() && tag_ids.Count > 0)
+        //        {
+        //            using (var cmd = new MySqlCommand(query.ToString(), dbcon.Connection))
+        //            {
+        //                Console.WriteLine(cmd.CommandText);
+        //                query_success = cmd.ExecuteNonQuery() > 0;
+        //            }
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine(e);
+        //    }
+        //    finally
+        //    {
+        //        dbcon.Close();
+        //    }
+
+        //    return query_success;
+        //}
+        #endregion
+
+        /// <summary>
+        /// Gets a list of all tags on an asset
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <returns></returns>
+        public List<Tag> GetAssetTags(Asset asset)
         {
-            return false;
+            DBConnection dbcon = DBConnection.Instance();
+            List<Tag> tags = new List<Tag>();
+
+            TagRepository tag_rep = new TagRepository();
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    string query = "SELECT * FROM tags AS t " +
+                                   "INNER JOIN asset_tags ON tag_id = t.id " +
+                                   "WHERE asset_id = @asset_id";
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@asset_id"].Value = asset.ID;
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                tags.Add(tag_rep.DBOToModelConvert(reader));
+                            }
+                        }
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
+            }
+            return tags;
         }
     }
 }

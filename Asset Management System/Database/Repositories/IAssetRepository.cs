@@ -9,5 +9,6 @@ namespace Asset_Management_System.Database.Repositories
         IEnumerable<Asset> SearchByTags(List<int> tags_ids);
         ObservableCollection<Asset> Search(string keyword);
         bool AttachTagsToAsset(Asset asset, List<Tag> tags);
+        List<Tag> GetAssetTags(Asset asset);
     }
 }
