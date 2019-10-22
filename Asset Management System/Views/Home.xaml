@@ -68,7 +68,7 @@
 
                     <DataTemplate>
 
-                        <TextBlock Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
 
                     </DataTemplate>
 
