@@ -67,7 +67,7 @@ namespace Asset_Management_System.Database
             {
                 if (Connection == null)
                 {
-                    string connstring = "Server=192.38.49.9; database=ds303e19; UID=ds303e19; password=Cisptf8CuT4hLj4T; Pooling=true; Min Pool Size=0; Max Pool Size=100; Connection Lifetime=0; Charset=utf8;";
+                    string connstring = "Server=192.38.49.9; database=ds303e19; UID=ds303e19; password=Cisptf8CuT4hLj4T; Pooling=true; Min Pool Size=0; Max Pool Size=100; Connection Lifetime=0; Charset=utf8; Connect Timeout=5;";
                     connection = new MySqlConnection(connstring);
                 }
 
