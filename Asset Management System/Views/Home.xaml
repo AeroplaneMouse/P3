@@ -30,7 +30,6 @@
                      x:Name="InputBox"
                      Padding="5"
                      Margin="5"
-                     VerticalAlignment="Top"
                      Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}">
 
                 <TextBox.InputBindings>
@@ -50,7 +49,6 @@
                        MinWidth="50"
                        Padding="5"
                        Margin="5"
-                       VerticalAlignment="Top"
                        Text="{Binding ParentID, UpdateSourceTrigger=PropertyChanged}"/>
 
             <!-- List of tags -->
@@ -58,7 +56,6 @@
                      Name="ListBoxTags"
                      MinHeight="30"
                      MaxHeight="150"
-                     VerticalAlignment="Top"
                      Padding="5"
                      Margin="5"
                      Foreground="Black"
