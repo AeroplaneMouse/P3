@@ -5,16 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Asset_Management_System.Views"
         mc:Ignorable="d"
-        Top="300"
-        Left="200"
-        WindowStartupLocation="Manual"
+        WindowStartupLocation="CenterScreen"
         x:Name="AppWindow"
         WindowStyle="None"
         AllowsTransparency="True"
         Icon="{StaticResource ApplicationIcon}"
         MinHeight="{Binding WindowMinHeight}"
         MinWidth="{Binding WindowMinWidth}"
-        Title="Asset Management System" Height="600" Width="1000">
+        Title="Asset Management System" Height="600" Width="1200">
     
     <Window.Resources>
         <!-- Style of the window -->

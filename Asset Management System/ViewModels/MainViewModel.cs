@@ -29,7 +29,7 @@ namespace Asset_Management_System.ViewModels
             _window = window;
             _outerMarginSize = 10;
 
-            WindowMinWidth = 400;
+            WindowMinWidth = 1000;
             WindowMinHeight = 400;
 
             ResizeBorder = 4;

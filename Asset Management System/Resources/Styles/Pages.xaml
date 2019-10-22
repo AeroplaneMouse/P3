@@ -8,25 +8,33 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Page">
                     <Grid Margin="10">
+                        
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="50" />
+                            <RowDefinition Height="70" />
                             <RowDefinition Height="70" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
-                        <Button
-                            Style="{StaticResource RegularButton}"
-                            Grid.Row="0"
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Top"
-                            Content="Add new"
-                            Command="{Binding AddNewCommand}" />
 
-                        <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Bottom">
-                            <TextBox
-                                Width="300"
-                                TextBlock.FontSize="12px"
-                                Padding="2,3,2,3"
-                                Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}" />
+                        <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Bottom" Margin="10">
+                            <Button Style="{StaticResource RegularButton}"
+                                    Content="Add new"
+                                    Command="{Binding AddNewCommand}" />
+
+                            <Button Style="{StaticResource RegularButton}"
+                                    Content="Print"
+                                    Command="{Binding PrintCommand}" />
+
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" 
+                                    Grid.Row="1" 
+                                    VerticalAlignment="Bottom" 
+                                    Margin="10">
+                            
+                            <TextBox Width="300"
+                                     TextBlock.FontSize="12px"
+                                     Padding="2,3,2,3"
+                                     Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}" />
 
                             <Button Style="{StaticResource RegularButton}"
                                     Content="Search"
@@ -41,10 +49,6 @@
                                     Command="{Binding RemoveCommand}" />
 
                             <Button Style="{StaticResource RegularButton}"
-                                    Content="Print"
-                                    Command="{Binding PrintCommand}" />
-
-                            <Button Style="{StaticResource RegularButton}"
                                     Content="View History"
                                     Command="{Binding ViewLogCommand}" />
 
@@ -53,20 +57,25 @@
                         <Grid Grid.Row="3" Margin="10">
                             <ScrollViewer HorizontalScrollBarVisibility="Auto">
                                 <ListView ItemsSource="{Binding SearchList}" SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
+                                    
                                     <ListView.Resources>
+                                        
                                         <GridView x:Key="AssetTemplate">
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
                                         </GridView>
+                                        
                                         <GridView x:Key="TagsTemplate">
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}"
                                                             Header="Created" />
                                         </GridView>
+                                        
                                     </ListView.Resources>
+                                    
                                     <ListView.Style>
                                         <Style TargetType="ListView">
                                             <Style.Triggers>

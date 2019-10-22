@@ -38,6 +38,8 @@ namespace Asset_Management_System.ViewModels
 
         private int _viewType;
 
+        private ObservableCollection<Tag> _list = new ObservableCollection<Tag>();
+
         #endregion
 
         #region Public Properties
@@ -46,7 +48,7 @@ namespace Asset_Management_System.ViewModels
         public string SearchQueryText { get; set; } = "";
         public int SelectedItemIndex { get; set; }
 
-        private ObservableCollection<Tag> _list = new ObservableCollection<Tag>();
+        
 
         public ObservableCollection<Tag> SearchList
         {
@@ -55,7 +57,9 @@ namespace Asset_Management_System.ViewModels
             {
                 _list.Clear();
                 foreach (Tag tag in value)
+                {
                     _list.Add(tag);
+                }
             }
         }
 
