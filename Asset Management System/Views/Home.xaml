@@ -23,35 +23,7 @@
                    Text="Welcome to your Asset Management System"/>
 
 
-
-        <!--<ListBox
-            Name="LbDepartments"
-            Margin="10"
-            Grid.Row="0"
-        />
-
-        <StackPanel
-            Orientation="Horizontal"
-            Grid.Row="1">
-            <Button
-                Name="BtnShowDepartments"
-                Width="Auto"
-                VerticalAlignment="top"
-                HorizontalAlignment="Left"
-                Click="BtnShowDepartments_Click"
-                Content="Show departments"
-                Margin="5"
-                Padding="5"
-            />
-
-            <Button
-                Name="BtnShowNotification"
-                Width="Auto"
-                Click="Btn_Test_Click"
-                Content="Test notification"
-                VerticalAlignment="Top"
-                Margin="5"
-                Padding="5"/>
+        <StackPanel>
 
             <!-- Tag input -->
             <TextBox Width="100"
@@ -59,8 +31,7 @@
                      Padding="5"
                      Margin="5"
                      VerticalAlignment="Top"
-                     Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}"
-                     SourceUpdated="InputBox_SourceUpdated">
+                     Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}">
 
                 <TextBox.InputBindings>
 
@@ -170,6 +141,7 @@
                        Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged}"
                        Margin="5"
                        VerticalAlignment="Top"/>-->
+        
         </StackPanel>
         
         <!--

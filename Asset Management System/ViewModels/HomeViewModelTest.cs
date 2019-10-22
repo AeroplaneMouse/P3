@@ -48,7 +48,7 @@ namespace Asset_Management_System.ViewModels
                     return "Tag groups:";
                 }
 
-                return _rep.GetById(_parentID).Label + ":";
+                return _rep.GetById(_parentID).Name + ":";
             } 
         }
 
@@ -59,7 +59,7 @@ namespace Asset_Management_System.ViewModels
             {
                 if (_tagList == null)
                 {
-                    _tagList = _rep.GetChildTags(_parentID);
+                    _tagList = _rep.GetChildTags(_parentID) as List<Models.Tag>;
                 }
 
                 return _tagList.Take(10).ToList();
@@ -123,7 +123,7 @@ namespace Asset_Management_System.ViewModels
             // Tabs through the search results
             TabKeyCommand = new Base.RelayCommand(() =>
             {
-                _tagString = _tagList.Select(p => p.Label).ElementAtOrDefault(_tabIndex++);
+                _tagString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex++);
 
                 // TODO: Kom uden om mig
                 _box.CaretIndex = _tagString.Length;
@@ -137,12 +137,12 @@ namespace Asset_Management_System.ViewModels
                 {
                     // Checks if the tag we are "going into" has any children
                     ulong tempID = _tagList.Select(p => p.ID).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                    List<Models.Tag> tempList = _rep.GetChildTags(tempID);
+                    List<Models.Tag> tempList = _rep.GetChildTags(tempID) as List<Models.Tag>;
 
                     // If the tag we are "going into" has children, we go into it
                     if (tempList.Count() != 0)
                     {
-                        _parentString = _tagList.Select(p => p.Label).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+                        _parentString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
                         _tagString = String.Empty;
                         _parentID = tempID; 
                         _tagList = tempList;
@@ -157,7 +157,7 @@ namespace Asset_Management_System.ViewModels
             {
                 _tagString = String.Empty;
                 _parentID = 0;
-                _tagList = _rep.GetChildTags(0);
+                _tagList = _rep.GetChildTags(0) as List<Models.Tag>;
                 _tabIndex = 0;
             });
 
@@ -168,7 +168,7 @@ namespace Asset_Management_System.ViewModels
                 if (_tagString == String.Empty && _parentID != 0)
                 {
                     _parentID = 0;
-                    _tagList = _rep.GetChildTags(_parentID);
+                    _tagList = _rep.GetChildTags(_parentID) as List<Models.Tag>;
 
                     _tagString = _parentString;
                     SearchAndSortTagList(_tagString);
@@ -204,8 +204,8 @@ namespace Asset_Management_System.ViewModels
         public void SearchAndSortTagList(string value)
         {
             _tagList = _rep.GetChildTags(_parentID)
-                .Where(p => p.Label.ToLower().Contains(value.ToLower()))
-                .OrderByDescending(p => p.Label.ToLower().StartsWith(value.ToLower()))
+                .Where(p => p.Name.ToLower().Contains(value.ToLower()))
+                .OrderByDescending(p => p.Name.ToLower().StartsWith(value.ToLower()))
                 .ToList();
         }
 
