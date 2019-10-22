@@ -50,19 +50,15 @@
 
                         </StackPanel>
 
-                        <Grid
-                            Grid.Row="3"
-                            Margin="10">
+                        <Grid Grid.Row="3" Margin="10">
                             <ScrollViewer HorizontalScrollBarVisibility="Auto">
                                 <ListView ItemsSource="{Binding SearchList}" SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
                                     <ListView.Resources>
                                         <GridView x:Key="AssetTemplate">
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Description}"
-                                                            Header="Description" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}"
-                                                            Header="Created" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
                                         </GridView>
                                         <GridView x:Key="TagsTemplate">
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />

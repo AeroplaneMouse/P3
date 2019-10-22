@@ -17,15 +17,13 @@ namespace Asset_Management_System.ViewModels
         private MainViewModel _main;
 
         // The string that the user is searching with
-        private string _tagString { get; set; }
+        private string _searchString { get; set; }
 
         // The id of the parent currently being used
         private ulong _parentID { get; set; } = 0;
 
         // List of all available tags, based on the search
         private List<Models.Tag> _tagList { get; set; }
-
-        private ObservableCollection<Models.Tag> _2tagList { get; set; }
 
         // Index that the user has tabbed to in the search results
         private int _tabIndex { get; set; } = 0;
@@ -34,10 +32,15 @@ namespace Asset_Management_System.ViewModels
         private string _parentString { get; set; }
 
         // A tag repository, for communication with the database
-        private Database.Repositories.TagRepository _rep { get; set; }
+        private Database.Repositories.TagRepository _tagRep { get; set; }
 
         // TODO: Kom uden om mig
         private TextBox _box { get; set; }
+
+
+        private List<Models.Asset> _assetList { get; set; }
+
+        private Database.Repositories.AssetRepository _assetRep { get; set; }
 
         #endregion
 
@@ -47,6 +50,8 @@ namespace Asset_Management_System.ViewModels
         public string NumberOfAssets { get; set; }
         public string NumberOfTags { get; set; }
         public string NumberOfDepartments { get; set; }
+
+        public List<Models.Asset> AssetList;
 
         // The current parent exposed to the view
         public string ParentID
@@ -58,16 +63,9 @@ namespace Asset_Management_System.ViewModels
                     return "Tag groups:";
                 }
 
-                return _rep.GetById(_parentID).Name + ":";
+                return _tagRep.GetById(_parentID).Name + ":";
             }
         }
-
-        public List<string> StringList = new List<string>()
-        {
-            "Hej",
-            "Noget",
-            "Hejsa"
-        };
 
         // The list exposed to the View
         public List<Models.Tag> TagList
@@ -76,10 +74,10 @@ namespace Asset_Management_System.ViewModels
             {
                 if (_tagList == null)
                 {
-                    _tagList = _rep.GetChildTags(_parentID) as List<Models.Tag>;
+                    _tagList = _tagRep.GetChildTags(_parentID) as List<Models.Tag>;
                 }
 
-                return _tagList as List<Models.Tag>;
+                return _tagList.Take(10).ToList();
             }
 
             set { }
@@ -90,7 +88,7 @@ namespace Asset_Management_System.ViewModels
         {
             get
             {
-                return _tagString;
+                return _searchString;
             }
 
             set
@@ -99,7 +97,7 @@ namespace Asset_Management_System.ViewModels
 
                 _tabIndex = 0;
 
-                _tagString = value;
+                _searchString = value;
             }
         }
 
@@ -130,7 +128,9 @@ namespace Asset_Management_System.ViewModels
         {
             _main = main;
 
-            _rep = new TagRepository();
+            _tagRep = new TagRepository();
+
+            _assetRep = new Database.Repositories.AssetRepository();
 
             // TODO: Kom uden om mig
             _box = box;
@@ -178,7 +178,7 @@ namespace Asset_Management_System.ViewModels
         /// <param name="value">The given search query</param>
         private void SearchAndSortTagList(string value)
         {
-            _tagList = _rep.GetChildTags(_parentID)
+            _tagList = _tagRep.GetChildTags(_parentID)
                 .Where(p => p.Name.ToLower().Contains(value.ToLower()))
                 .OrderByDescending(p => p.Name.ToLower().StartsWith(value.ToLower()))
                 .ToList();
@@ -193,7 +193,7 @@ namespace Asset_Management_System.ViewModels
 
         private void Apply()
         {
-            MessageBox.Show("You searched for: " + _tagString);
+            MessageBox.Show("You searched for: " + _searchString);
             _tabIndex = 0;
         }
 
@@ -201,16 +201,16 @@ namespace Asset_Management_System.ViewModels
         {
 
 
-            _tagString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex++);
+            _searchString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex++);
 
-            if (_tagString == null)
+            if (_searchString == null)
             {
                 _tabIndex = 0;
-                _tagString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex);
+                _searchString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex);
             }
 
             // TODO: Kom uden om mig
-            _box.CaretIndex = _tagString.Length;
+            _box.CaretIndex = _searchString.Length;
 
         }
 
@@ -221,13 +221,13 @@ namespace Asset_Management_System.ViewModels
             {
                 // Checks if the tag we are "going into" has any children
                 ulong tempID = _tagList.Select(p => p.ID).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                List<Models.Tag> tempList = _rep.GetChildTags(tempID) as List<Models.Tag>;
+                List<Models.Tag> tempList = _tagRep.GetChildTags(tempID) as List<Models.Tag>;
 
                 // If the tag we are "going into" has children, we go into it
                 if (tempList.Count() != 0)
                 {
                     _parentString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                    _tagString = String.Empty;
+                    _searchString = String.Empty;
                     _parentID = tempID;
                     _tagList = tempList;
 
@@ -238,37 +238,37 @@ namespace Asset_Management_System.ViewModels
 
         private void ResetSearch()
         {
-            _tagString = String.Empty;
+            _searchString = String.Empty;
             _parentID = 0;
-            _tagList = _rep.GetChildTags(0) as List<Models.Tag>;
+            _tagList = _tagRep.GetChildTags(0) as List<Models.Tag>;
             _tabIndex = 0;
         }
 
         private void DeleteCharacter()
         {
             // If the search query is empty, the search goes up a level (to the highest level of tags)
-            if (_tagString == String.Empty && _parentID != 0)
+            if (_searchString == String.Empty && _parentID != 0)
             {
                 _parentID = 0;
-                _tagList = _rep.GetChildTags(_parentID) as List<Models.Tag>;
+                _tagList = _tagRep.GetChildTags(_parentID) as List<Models.Tag>;
 
-                _tagString = _parentString;
-                SearchAndSortTagList(_tagString);
+                _searchString = _parentString;
+                SearchAndSortTagList(_searchString);
 
                 // TODO: Kom uden om mig
-                _box.CaretIndex = _tagString.Length;
+                _box.CaretIndex = _searchString.Length;
                 return;
             }
 
             // If the search query isn't empty, a letter is simply removed
-            else if (_tagString != String.Empty && _tagString != null)
+            else if (_searchString != String.Empty && _searchString != null)
             {
-                _tagString = _tagString.Substring(0, _tagString.Length - 1);
+                _searchString = _searchString.Substring(0, _searchString.Length - 1);
 
-                SearchAndSortTagList(_tagString);
+                SearchAndSortTagList(_searchString);
 
                 // TODO: Kom uden om mig
-                _box.CaretIndex = _tagString.Length;
+                _box.CaretIndex = _searchString.Length;
             }
         }
 
