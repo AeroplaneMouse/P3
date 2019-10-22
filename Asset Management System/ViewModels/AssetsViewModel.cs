@@ -18,6 +18,8 @@ namespace Asset_Management_System.ViewModels
 
         public AssetsViewModel(MainViewModel main)
         {
+            _assetRep = new AssetRepository();
+
             // Saving reference to the main window
             _main = main;
             Search();
@@ -37,6 +39,10 @@ namespace Asset_Management_System.ViewModels
 
         private MainViewModel _main;
 
+        private ObservableCollection<Asset> _list = new ObservableCollection<Asset>();
+
+        private AssetRepository _assetRep { get; set; }
+
         #endregion
 
         #region Public Properties
@@ -45,8 +51,6 @@ namespace Asset_Management_System.ViewModels
         public int SelectedItemIndex { get; set; }
         public int ViewType => 1;
 
-        private ObservableCollection<Asset> _list = new ObservableCollection<Asset>();
-
         public ObservableCollection<Asset> SearchList
         {
             get => _list;
@@ -54,7 +58,9 @@ namespace Asset_Management_System.ViewModels
             {
                 _list.Clear();
                 foreach (Asset asset in value)
+                {
                     _list.Add(asset);
+                }       
             }
         }
 
@@ -69,28 +75,17 @@ namespace Asset_Management_System.ViewModels
         {
             Console.WriteLine();
             Console.WriteLine("Searching for: " + SearchQueryText);
-            AssetRepository rep = new AssetRepository();
-            ObservableCollection<Asset> assets = rep.Search(SearchQueryText);
+            ObservableCollection<Asset> assets = _assetRep.Search(SearchQueryText);
 
             Console.WriteLine("Found: " + assets.Count.ToString());
 
             if (assets.Count > 0)
                 Console.WriteLine("-----------");
 
-            //List<MenuItem> assetsFunc = new List<MenuItem>();
-            foreach (Asset asset in assets)
-            {
-                Console.WriteLine(asset.Name);
-
-                //// Creating menuItems
-                //MenuItem item = new MenuItem();
-                //MenuItem edit = new MenuItem() { Header = "Edit" };
-                //MenuItem delete = new MenuItem() { Header = "Remove" };
-
-                //item.Header = asset.Name;
-                ////AddVisualChild(edit);
-                //assetsFunc.Add(item);
-            }
+            //foreach (Asset asset in assets)
+            //{
+            //    Console.WriteLine(asset.Name);
+            //}
 
             SearchList = assets;
         }
@@ -127,7 +122,7 @@ namespace Asset_Management_System.ViewModels
             {
                 Console.WriteLine($"Removing {selectedAsset.Name}.");
                 selectedAsset.Notify(true);
-                new AssetRepository().Delete(selectedAsset);
+                _assetRep.Delete(selectedAsset);
 
                 //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Green));
 
