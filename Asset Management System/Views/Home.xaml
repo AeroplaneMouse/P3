@@ -61,13 +61,14 @@
                      VerticalAlignment="Top"
                      Padding="5"
                      Margin="5"
+                     Foreground="Black"
                      ItemsSource="{Binding TagList, UpdateSourceTrigger=PropertyChanged}">
 
                 <ListBox.ItemTemplate>
 
                     <DataTemplate>
 
-                        <TextBlock Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
 
                     </DataTemplate>
 
