@@ -14,7 +14,6 @@ namespace Asset_Management_System.Views
     {
         private int _id = 0;
         public ObservableCollection<Field> FieldsList { get; set; }
-
         protected bool _editing;
 
         /// <summary>
