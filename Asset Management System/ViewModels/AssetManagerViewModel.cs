@@ -36,11 +36,12 @@ namespace Asset_Management_System.ViewModels
             // Initialize commands
             SaveAssetCommand = new Commands.SaveAssetCommand(this, _main, _asset, _editing);
             AddFieldCommand = new Commands.AddFieldCommand(this);
+            RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
         }
 
         public ICommand SaveAssetCommand { get; set; }
-        public ICommand DeleteFieldCommand { get; set; }
         public ICommand AddFieldCommand { get; set; }
+        public static ICommand RemoveFieldCommand { get; set; }
 
         public bool CanSaveAsset()
         {
@@ -52,20 +53,23 @@ namespace Asset_Management_System.ViewModels
 
         private bool LoadFields()
         {
-            ConsoleWriter.ConsoleWrite("------Field labels | Field content -------");
-            _asset.DeserializeFields();
-            foreach (var field in _asset.FieldsList)
+            try
             {
-                ConsoleWriter.ConsoleWrite(field.Label + " | " + field.Content);
-                FieldsList.Add(field);
+                _asset.DeserializeFields();
+                foreach (var field in _asset.FieldsList)
+                    FieldsList.Add(field);
+
+                Name = _asset.Name;
+                Description = _asset.Description;
+
+                // Notify view about changes
+                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(Description));
             }
-            Name = _asset.Name;
-            Description = _asset.Description;
-
-            // Notify view about changes
-            OnPropertyChanged(nameof(Name));
-            OnPropertyChanged(nameof(Description));
-
+            catch (Exception)
+            {
+                return false;
+            }
 
             return true;
         }
