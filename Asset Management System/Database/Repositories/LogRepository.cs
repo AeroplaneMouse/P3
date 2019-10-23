@@ -5,6 +5,7 @@ using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Database;
 using MySql.Data.MySqlClient;
 using Asset_Management_System.Logging;
+using System.Collections.ObjectModel;
 
 namespace Asset_Management_System.Database.Repositories
 {
@@ -55,12 +56,12 @@ namespace Asset_Management_System.Database.Repositories
             return query_success;
         }
 
-        public List<Entry> GetLogEntries(ulong logable_id, Type logable_type)
+        public IEnumerable<Entry> GetLogEntries(ulong logable_id, Type logable_type)
         {
             return GetLogEntries(logable_id, logable_type, null);
         }
 
-        public List<Entry> GetLogEntries(ulong logable_id, Type logable_type, string username)
+        public IEnumerable<Entry> GetLogEntries(ulong logable_id, Type logable_type, string username)
         {
             DBConnection dbcon = DBConnection.Instance();
             List<Entry> entries = new List<Entry>();
@@ -122,10 +123,12 @@ namespace Asset_Management_System.Database.Repositories
             return entries;
         }
 
-        public List<Entry> Search(string keyword, int limit=100)
+        public ObservableCollection<Entry> Search(string keyword)
         {
+            int limit = 100;
+
+            ObservableCollection<Entry> entries = new ObservableCollection<Entry>();
             DBConnection dbcon = DBConnection.Instance();
-            List<Entry> entries = new List<Entry>();
 
             if (dbcon.IsConnect())
             {

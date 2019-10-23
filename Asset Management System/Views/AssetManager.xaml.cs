@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Asset_Management_System.Controllers;
 using Asset_Management_System.Models;
@@ -49,12 +50,25 @@ namespace Asset_Management_System.Views
         /// <param name="e"></param>
         private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            bool requiredFieldsWritten = true;
             _asset.Name = TbName.Text;
             _asset.Description = TbDescription.Text;
             _asset.FieldsList = new List<Field>();
             foreach (var field in FieldsList)
             {
+                if (field.Required && field.Content == string.Empty)
+                {
+                    requiredFieldsWritten = false;
+                }
                 _asset.AddField(field);
+            }
+            Console.WriteLine(requiredFieldsWritten);
+            
+            if (!requiredFieldsWritten)
+            {
+                _main.ChangeMainContent(new AssetManager(_main,_asset));
+                Console.WriteLine("Please fill out the required fields.");
+                return;
             }
 
             Department department = _main.CurrentDepartment;

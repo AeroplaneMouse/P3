@@ -22,8 +22,8 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "INSERT INTO users (name, username, admin) " +
-                                         "VALUES (@name, @username, @admin)";
+                    const string query = "INSERT INTO users (name, username, admin, updated_at) " +
+                                         "VALUES (@name, @username, @admin, CURRENT_TIMESTAMP())";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -61,7 +61,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "UPDATE users SET name=@name, username=@username, admin=@admin WHERE id=@id";
+                    const string query = "UPDATE users SET name=@name, username=@username, admin=@admin, default_department=@default_department, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -73,6 +73,9 @@ namespace Asset_Management_System.Database.Repositories
 
                         cmd.Parameters.Add("@admin", MySqlDbType.UInt16);
                         cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
+
+                        cmd.Parameters.Add("@default_department", MySqlDbType.UInt64);
+                        cmd.Parameters["@default_department"].Value = entity.DefaultDepartment;
                         
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = entity.ID;
@@ -135,7 +138,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query =
-                        "SELECT id, name, username, admin, created_at FROM users WHERE id=@id";
+                        "SELECT id, name, username, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -172,7 +175,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT id, name, username, admin, created_at FROM users WHERE username=@username";
+                    const string query = "SELECT id, name, username, admin, default_department, created_at, updated_at FROM users WHERE username=@username";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -206,11 +209,13 @@ namespace Asset_Management_System.Database.Repositories
             String row_name = reader.GetString("name");
             String row_username = reader.GetString("username");
             bool row_admin = reader.GetBoolean("admin");
+            ulong row_default_department = reader.GetUInt64("default_department");
             DateTime row_created_at = reader.GetDateTime("created_at");
+            DateTime row_updated_at = reader.GetDateTime("updated_at");
 
             return (User) Activator.CreateInstance(typeof(User),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] {row_id, row_name, row_username, row_admin, row_created_at}, null,
+                new object[] {row_id, row_name, row_username, row_admin, row_default_department, row_created_at, row_updated_at}, null,
                 null);
         }
     }

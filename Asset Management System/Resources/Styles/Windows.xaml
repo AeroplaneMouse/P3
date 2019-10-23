@@ -4,6 +4,7 @@
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
 
     <!-- The active icon to use in the application -->
-    <BitmapImage x:Key="ApplicationIcon" UriSource="/Resources/Images/Logos/catface.jpg"/>
+    <BitmapImage x:Key="ApplicationIcon" UriSource="/Resources/Images/Logos/logo-light.png"/>
+    <BitmapImage x:Key="ApplicationIconDark" UriSource="/Resources/Images/Logos/logo-dark.png"/>
 
 </ResourceDictionary>

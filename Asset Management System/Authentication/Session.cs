@@ -9,25 +9,13 @@ namespace Asset_Management_System.Authentication
     {
         public readonly User user;
         
-        public String Username {
-            get
-            {
-                string[] parts = GetIdentity().Split('\\');
-                return parts[1];
-            }
-        }
+        public string Username { get => GetIdentity().Split('\\')[1]; }
         
-        public String Domain {
-            get
-            {
-                string[] parts = GetIdentity().Split('\\');
-                return parts[0];
-            }
-        }
+        public string Domain { get => GetIdentity().Split('\\')[0]; }
 
         public Session()
         {
-            Console.WriteLine("Username: "+GetIdentity());
+            //Console.WriteLine("Username: "+GetIdentity());
             UserRepository rep = new UserRepository();
             user = rep.GetByUsername(GetIdentity());
         }

@@ -35,7 +35,7 @@ namespace Asset_Management_System.Logging
         /// <param name="model"></param>
         /// <param name="username"></param>
         /// <returns>List of entries</returns>
-        public static List<Entry> GetEntries(Model model, string username = null)
+        public static IEnumerable<Entry> GetEntries(Model model, string username = null)
         {
             LogRepository rep = new LogRepository();
             return rep.GetLogEntries(model.ID, model.GetType(), username);

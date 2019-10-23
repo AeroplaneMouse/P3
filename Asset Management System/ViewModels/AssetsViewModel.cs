@@ -2,29 +2,36 @@
 using Asset_Management_System.Models;
 using Asset_Management_System.Views;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Input;
+using System.Windows.Media;
+using Asset_Management_System.Helpers;
+using Asset_Management_System.Logging;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class AssetsViewModel
+    public class AssetsViewModel : Base.BaseViewModel
     {
         #region Constructors
 
         public AssetsViewModel(MainViewModel main)
         {
+            _assetRep = new AssetRepository();
+
             // Saving reference to the main window
             _main = main;
             Search();
-            
+
             // Initializing commands
             AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.AssetManager(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
             EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
             RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
             PrintCommand = new Base.RelayCommand(() => Print());
+            ViewLogCommand = new Base.RelayCommand(() => ViewLog());
         }
 
         #endregion
@@ -33,14 +40,17 @@ namespace Asset_Management_System.ViewModels
 
         private MainViewModel _main;
 
+        private ObservableCollection<Asset> _list = new ObservableCollection<Asset>();
+
+        private AssetRepository _assetRep { get; set; }
+
         #endregion
 
         #region Public Properties
 
         public string SearchQueryText { get; set; } = "";
         public int SelectedItemIndex { get; set; }
-
-        private ObservableCollection<Asset> _list = new ObservableCollection<Asset>();
+        public int ViewType => 1;
 
         public ObservableCollection<Asset> SearchList
         {
@@ -49,7 +59,9 @@ namespace Asset_Management_System.ViewModels
             {
                 _list.Clear();
                 foreach (Asset asset in value)
+                {
                     _list.Add(asset);
+                }       
             }
         }
 
@@ -64,28 +76,12 @@ namespace Asset_Management_System.ViewModels
         {
             Console.WriteLine();
             Console.WriteLine("Searching for: " + SearchQueryText);
-            AssetRepository rep = new AssetRepository();
-            ObservableCollection<Asset> assets = rep.Search(SearchQueryText);
+            ObservableCollection<Asset> assets = _assetRep.Search(SearchQueryText);
 
             Console.WriteLine("Found: " + assets.Count.ToString());
 
             if (assets.Count > 0)
                 Console.WriteLine("-----------");
-
-            //List<MenuItem> assetsFunc = new List<MenuItem>();
-            foreach (Asset asset in assets)
-            {
-                Console.WriteLine(asset.Name);
-
-                //// Creating menuItems
-                //MenuItem item = new MenuItem();
-                //MenuItem edit = new MenuItem() { Header = "Edit" };
-                //MenuItem delete = new MenuItem() { Header = "Remove" };
-
-                //item.Header = asset.Name;
-                ////AddVisualChild(edit);
-                //assetsFunc.Add(item);
-            }
 
             SearchList = assets;
         }
@@ -122,7 +118,7 @@ namespace Asset_Management_System.ViewModels
             {
                 Console.WriteLine($"Removing {selectedAsset.Name}.");
                 selectedAsset.Notify(true);
-                new AssetRepository().Delete(selectedAsset);
+                _assetRep.Delete(selectedAsset);
 
                 //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Green));
 
@@ -133,29 +129,17 @@ namespace Asset_Management_System.ViewModels
 
         public void Print()
         {
-            var dialog = new PromptWithTextInput("asset_report_" + DateTime.Now.ToString().Replace(@"/", "").Replace(@" ", "-").Replace(@":", "") + ".csv", "Report name:");
+            PrintHelper.Print(SearchList.ToList());
+        }
+
+        public void ViewLog()
+        {
+            Asset selected = GetSelectedItem();
+            
+            var dialog = new AssetHistory(selected);
             if (dialog.ShowDialog() == true)
             {
-                if (dialog.DialogResult == true)
-                {
-                    string pathToFile = dialog.InputText;
-
-                    if (!pathToFile.EndsWith(".csv"))
-                    {
-                        pathToFile = pathToFile + ".csv";
-                    }
-
-                    pathToFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + pathToFile;
-
-                    using (StreamWriter file = new StreamWriter(pathToFile, false))
-                    {
-                        foreach (Asset asset in SearchList)
-                        {
-                            string fileEntry = asset.ID + "," + asset.Name;
-                            file.WriteLine(fileEntry);
-                        }
-                    }
-                }
+                Console.WriteLine("Displaying History for: " + selected.Name);
             }
         }
 
@@ -167,6 +151,12 @@ namespace Asset_Management_System.ViewModels
                 return SearchList.ElementAt(SelectedItemIndex);
         }
 
+        private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        
         #endregion
 
         #region Commands
@@ -176,6 +166,7 @@ namespace Asset_Management_System.ViewModels
         public ICommand EditCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
         public ICommand PrintCommand { get; set; }
+        public ICommand ViewLogCommand { get; set; }
 
         #endregion
     }

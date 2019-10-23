@@ -3,7 +3,11 @@ using Asset_Management_System.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using Asset_Management_System.Helpers;
+using Asset_Management_System.Resources;
 using Asset_Management_System.Views;
 
 namespace Asset_Management_System.ViewModels
@@ -18,8 +22,7 @@ namespace Asset_Management_System.ViewModels
 
             Search();
             // Initializing commands
-            AddNewCommand =
-                new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.TagManager(_main)));
+            AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.TagManager(_main)));
             SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
             EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
             RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
@@ -32,14 +35,19 @@ namespace Asset_Management_System.ViewModels
 
         private MainViewModel _main;
 
+        private int _viewType;
+
+        private ObservableCollection<Tag> _list = new ObservableCollection<Tag>();
+
         #endregion
 
         #region Public Properties
 
+        public int ViewType => 2;
         public string SearchQueryText { get; set; } = "";
         public int SelectedItemIndex { get; set; }
 
-        private ObservableCollection<Tag> _list = new ObservableCollection<Tag>();
+        
 
         public ObservableCollection<Tag> SearchList
         {
@@ -48,7 +56,9 @@ namespace Asset_Management_System.ViewModels
             {
                 _list.Clear();
                 foreach (Tag tag in value)
+                {
                     _list.Add(tag);
+                }
             }
         }
 
@@ -75,7 +85,7 @@ namespace Asset_Management_System.ViewModels
             Console.WriteLine("Searching for: " + SearchQueryText);
             ObservableCollection<Tag> tags = new TagRepository().Search(SearchQueryText);
 
-            Console.WriteLine("Found: " + tags.Count.ToString());
+            Console.WriteLine("Found: " + tags.Count);
 
             if (tags.Count > 0)
                 Console.WriteLine("-----------");
@@ -121,7 +131,7 @@ namespace Asset_Management_System.ViewModels
         private void Remove()
         {
             Tag selectedTag = GetSelectedItem();
-           
+
             if (selectedTag == null)
             {
                 string message = "Please select an item.";
@@ -132,16 +142,15 @@ namespace Asset_Management_System.ViewModels
                 Console.WriteLine($"Removing {selectedTag.Name}.");
                 selectedTag.Notify(true);
                 new TagRepository().Delete(selectedTag);
-                
+
                 // Reload list
                 Search();
             }
         }
 
-
         public void Print()
         {
-            throw new NotImplementedException();
+            PrintHelper.Print(SearchList.ToList());
         }
 
         private Tag GetSelectedItem()
@@ -151,6 +160,12 @@ namespace Asset_Management_System.ViewModels
             else
                 return SearchList.ElementAt(SelectedItemIndex);
         }
+        
+        private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            throw  new  NotImplementedException();
+        }
+
 
         #endregion
     }

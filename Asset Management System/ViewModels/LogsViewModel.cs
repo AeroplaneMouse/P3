@@ -3,9 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Helpers;
 using Asset_Management_System.Models;
 using Asset_Management_System.Views;
 
@@ -22,14 +25,16 @@ namespace Asset_Management_System.ViewModels
             Search();
             
             // Initializing commands
-            SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
-            PrintCommand = new Base.RelayCommand(() => Print());
+            SearchCommand = new ViewModels.Base.RelayCommand(Search);
+            PrintCommand = new Base.RelayCommand(Print);
+            ViewCommand = new Base.RelayCommand(View);
         }
         
         #region Commands
         
         public ICommand SearchCommand { get; set; }
         public ICommand PrintCommand { get; set; }
+        public ICommand ViewCommand { get; set; }
 
         #endregion
 
@@ -69,42 +74,34 @@ namespace Asset_Management_System.ViewModels
             SearchList = entries;
         }
         
+        /// <summary>
+        /// Creates a csv file containing all the log entries
+        /// </summary>
         private void Print()
         {
-            // Copied from AssetViewModel
-            var dialog = new PromptWithTextInput("log_report_" + DateTime.Now.ToString().Replace(@"/", "").Replace(@" ", "-").Replace(@":", "") + ".csv", "Report name:");
+            PrintHelper.Print(SearchList.ToList());
+        }
+
+        /// <summary>
+        /// Displays the selected log entry
+        /// </summary>
+        private void View()
+        {
+            Entry selected = GetSelectedItem();
+            var dialog = new ShowEntry(selected);
             if (dialog.ShowDialog() == true)
             {
-                if (dialog.DialogResult == true)
-                {
-                    string pathToFile = dialog.InputText;
-
-                    if (!pathToFile.EndsWith(".csv"))
-                    {
-                        pathToFile = pathToFile + ".csv";
-                    }
-
-                    pathToFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + pathToFile;
-
-                    using (StreamWriter file = new StreamWriter(pathToFile, false))
-                    {
-                        foreach (Entry entry in SearchList)
-                        {
-                            string fileEntry = entry.Id + "," + entry.LogableType.Name + ", ID: " + entry.LogableId + ", Description: " + entry.Description + ", Changes: " + entry.Options;
-                            file.WriteLine(fileEntry);
-                        }
-                    }
-                }
+                Console.WriteLine("Displaying log entry saying : " + selected.Description);
             }
         }
 
-        //private Log GetSelectedItem()
-        //{
-        //    if (SearchList.Count == 0)
-        //        return null;
-        //    else
-        //        return SearchList.ElementAt(SelectedItemIndex);
-        //}
+        private Entry GetSelectedItem()
+        {
+            if (SearchList.Count == 0)
+                return null;
+            else
+                return SearchList.ElementAt(SelectedItemIndex);
+        }
 
         #endregion
     }

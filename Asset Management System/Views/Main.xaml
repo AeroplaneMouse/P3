@@ -5,16 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Asset_Management_System.Views"
         mc:Ignorable="d"
-        Top="300"
-        Left="200"
-        WindowStartupLocation="Manual"
+        WindowStartupLocation="CenterScreen"
         x:Name="AppWindow"
         WindowStyle="None"
         AllowsTransparency="True"
-        Icon="/Resources/Images/Logos/catface.jpg"
+        Icon="{StaticResource ApplicationIcon}"
         MinHeight="{Binding WindowMinHeight}"
         MinWidth="{Binding WindowMinWidth}"
-        Title="Asset Management System" Height="600" Width="1000">
+        Title="Asset Management System" Height="600" Width="1200">
     
     <Window.Resources>
         <!-- Style of the window -->
@@ -41,9 +39,9 @@
                                           Panel.ZIndex="1"
                                           Background="{StaticResource BackgroundDarkBrush}">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/>    <!-- Icon -->
-                                            <ColumnDefinition Width="*" />      <!-- Menu -->
-                                            <ColumnDefinition Width="Auto"/>    <!-- Window buttons -->
+                                            <ColumnDefinition Width="Auto"/> <!-- Icon -->
+                                            <ColumnDefinition Width="*" /> <!-- Menu -->
+                                            <ColumnDefinition Width="Auto"/> <!-- Window buttons -->
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Icon button -->
@@ -55,13 +53,14 @@
 
                                         <!-- Menu bar -->
                                         <Menu Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource MenuContainer}">
-                                            <MenuItem Header="_Settings" Style="{StaticResource MenuButton}">
+                                            <MenuItem Header="_Settings" Style="{StaticResource MenuItemButton}">
                                                 <MenuItem Header="_Save"/>
                                                 <MenuItem Header="_Load"/>
                                                 <MenuItem Header="_Clear"/>
                                             </MenuItem>
-                                            <MenuItem Header="_Help" Style="{StaticResource MenuButton}">
+                                            <MenuItem Header="_Help" Style="{StaticResource MenuItemButton}">
                                                 <MenuItem Header="_About"/>
+                                                <MenuItem Header="_Reload" Command="{Binding ReloadSplashCommand}"/>
                                                 <MenuItem Header="_Exit"/>
                                             </MenuItem>
                                         </Menu>
@@ -71,19 +70,19 @@
                                                     Orientation="Horizontal">
 
                                             <Menu Style="{StaticResource MenuContainer}" IsEnabled="{Binding DisplayCurrentDepartment}">
-                                                <MenuItem Header="{Binding CurrentDepartment}" 
-                                                          ItemsSource="{Binding Departments}"
-                                                          Command="{Binding SelectDepartmentCommand}"
-                                                          Style="{StaticResource MenuButton}"/>
+                                                <MenuItem ItemsSource="{Binding Departments}"
+                                                          Header="{Binding CurrentDepartment}"
+                                                          Style="{StaticResource MenuItemButtonDepartments}">
+                                                </MenuItem>
                                             </Menu>
-                                            
+
                                             <TextBlock Text="{Binding CurrentUser}"
                                                        Foreground="White"
                                                        TextBlock.FontSize="{StaticResource FontSizeRegular}"
                                                        TextBlock.FontFamily="{StaticResource SegoeRegular}"
                                                        VerticalAlignment="Center"
                                                        Margin="15, 0, 15, 0"/>
-                                            
+
                                             <Button Content="-" Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}"/>
                                             <Button Content="[ ]" Command="{Binding MaximizeCommand}" Style="{StaticResource WindowControlButton}"/>
                                             <Button Content="X" Command="{Binding CloseCommand}" Style="{StaticResource WindowCloseButton}"/>
@@ -91,23 +90,7 @@
                                         </StackPanel>
 
                                     </Grid>
-                                    
-                                    <!-- Navigation content -->
-                                    <!-- 
-                                    <Grid Grid.Row="1" Background="{StaticResource BackgroundDarkBrush}">
-                                        <StackPanel Orientation="Horizontal"
-                                                    HorizontalAlignment="Right"
-                                                    Margin="10, 0, 10, 0">
-                                            <StackPanel>
-                                                
-                                                
-                                                <Button Content="{Binding CurrentDepartment.Name}" Style="{StaticResource MenuButton}"/>
-                                            </StackPanel>
-                                            
-                                        </StackPanel>
-                                    </Grid>
-                                    -->
-                                    
+
                                     <!-- Window content -->
                                     <Grid Grid.Row="1" Background="{StaticResource BackgroundLightBrush}">
                                         <Grid.ColumnDefinitions>
@@ -115,18 +98,27 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
+                                        <!-- Navigation menu -->
                                         <Border Background="{StaticResource NavigationBackgroundBrush}">
                                             <StackPanel Orientation="Vertical">
                                                 <Button Content="Home" Command="{Binding ShowHomePageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Assets" Command="{Binding ShowAssetsPageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Tags" Command="{Binding ShowTagPageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Logs" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}"/>
+                                                <Button Content="Random" Command="{Binding AddNotificationTestCommand}" Style="{StaticResource NavigationButton}"/>
                                             </StackPanel>
                                         </Border>
 
+                                        <!-- Main content -->
                                         <Frame Grid.Column="1"
                                                NavigationUIVisibility="Hidden"
                                                Content="{Binding FrameMainContent}"/>
+
+                                        <!-- Notifications -->
+                                        <ListView Grid.Column="1" 
+                                                  VerticalAlignment="Top"
+                                                  Style="{StaticResource NotificationView}"/>
+
                                     </Grid>
 
                                     <Frame Grid.Row="1"
