@@ -25,7 +25,7 @@ namespace IntegrationTests
             asset = new Asset();
             mySqlHandler = new MySqlHandler();
 
-            departmentRepository.Insert(new Department("IntegrationTestDepartment"));
+            departmentRepository.Insert(new Department { Name = "IntegrationTestDepartment" });
 
             asset.Name = "Integrationtest";
             asset.Description = "Desription";
@@ -162,7 +162,7 @@ namespace IntegrationTests
             Asset expected = asset;
 
             //Act
-            List<Asset> assetList = assetRepository.SearchByTags(new List<int>() { 1 });
+            List<Asset> assetList = (List <Asset>) assetRepository.SearchByTags(new List<int>() { 1 });
 
             //Assert
             Assert.IsTrue(assetList[0].Equals(expected));
@@ -175,13 +175,14 @@ namespace IntegrationTests
             Tag tag = new Tag();
             tag.Name = "IntegrationTests";
             (new TagRepository()).Insert(tag);
-            List<Asset> expected = new List<Asset>();
+            int expected = 0;
 
             //Act
-            List<Asset> assetList = assetRepository.SearchByTags(new List<int>() { 6 });
+            List<Asset> assetList = (List<Asset>) assetRepository.SearchByTags(new List<int>() { 6 });
+            int result = assetList.Count;
 
             //Assert
-            Assert.IsTrue(assetList.Equals(expected));
+            Assert.AreEqual(result, expected);
         }
 
         [TestMethod]
@@ -244,7 +245,7 @@ namespace IntegrationTests
         }
 
         [TestMethod]
-        public void AttachTagsToAsset_InputTwoChildTags_CreatesRelationsBetweenTagsAndAsset()
+        public void AttachTagsToAsset_InputTwoTagsAndCallsGetAssetTags_ReturnsTheTagWithId2()
         {
             //Arrange
             TagRepository tagRepository = new TagRepository();
@@ -252,19 +253,21 @@ namespace IntegrationTests
             tagRepository.Insert(new Tag() { Name = "IntegrationTests" });
             tagRepository.Insert(new Tag() { Name = "Tag 1", ParentID = 1 });
 
-            List<Tag> listOfTags = tagRepository.GetAll();
+            List<Tag> listOfTags = (List<Tag>) tagRepository.GetAll();
 
             assetRepository.Insert(asset);
 
-            Asset expected = asset;
+            Tag expected = tagRepository.GetById(2);
 
             //Act
             assetRepository.AttachTagsToAsset(asset, listOfTags);
 
-            List<Asset> assetList = assetRepository.SearchByTags(new List<int>() { 2 });
+            List<Tag> returnedTags = assetRepository.GetAssetTags(asset);
+
+            Tag result = returnedTags[0];
 
             //Assert
-            Assert.IsTrue(assetList[0].Equals(expected));
+            Assert.AreEqual(result, expected);
         }
 
         [TestMethod]
@@ -276,7 +279,7 @@ namespace IntegrationTests
             tagRepository.Insert(new Tag() { Name = "IntegrationTests" });
             tagRepository.Insert(new Tag() { Name = "Tag 1", ParentID = 1 });
 
-            List<Tag> listOfTags = tagRepository.GetAll();
+            List<Tag> listOfTags = (List<Tag>)tagRepository.GetAll();
 
             assetRepository.Insert(asset);
 
@@ -285,7 +288,7 @@ namespace IntegrationTests
             //Act
             assetRepository.AttachTagsToAsset(asset, listOfTags);
 
-            List<Asset> assetList = assetRepository.SearchByTags(new List<int>() { 2 });
+            List<Asset> assetList = (List<Asset>)assetRepository.SearchByTags(new List<int>() { 2 });
 
             //Assert
             Assert.IsTrue(assetList[0].Equals(expected));
@@ -297,11 +300,14 @@ namespace IntegrationTests
             //Set foreign key check to 0
             mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 0");
 
-            //Clear asset
+            //Clear assets
             mySqlHandler.RawQuery("TRUNCATE TABLE assets");
 
-            //Clear department
+            //Clear departments
             mySqlHandler.RawQuery("TRUNCATE TABLE departments");
+
+            //Clear tags
+            mySqlHandler.RawQuery("TRUNCATE TABLE tags");
 
             //Reset foreign key check
             mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 1");

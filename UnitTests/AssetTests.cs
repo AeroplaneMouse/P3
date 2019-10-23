@@ -49,6 +49,22 @@ namespace UnitTests
             //Assert
             Assert.IsTrue(result);
         }
+        
+        [TestMethod]
+        public void Equals_ReceivesDifferentAsset_ReturnsFalse()
+        {
+            //Arrange
+            Asset otherAsset = new Asset();
+            otherAsset.Name = "AssetTests_Asset";
+            otherAsset.Description = "Desription";
+            otherAsset.DepartmentID = 4;
+            otherAsset.AddField(new Field(1, "Label of first field", "content of first field", 2, "Default value of first field"));
 
+            //Act
+            bool result = asset.Equals(otherAsset);
+
+            //Assert
+            Assert.IsFalse(result);
+        }
     }
 }
