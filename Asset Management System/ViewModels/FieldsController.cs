@@ -15,6 +15,10 @@ namespace Asset_Management_System.ViewModels
         public ObservableCollection<Field> FieldsList { get; set; }
         protected bool _editing;
 
+
+        public ICommand AddFieldCommand { get; set; }
+
+
         protected void OnAddField(object sender, RoutedEventArgs e)
         {
             List<string> promptResults;
@@ -136,6 +140,7 @@ namespace Asset_Management_System.ViewModels
             return outputList;
         }
 
+        protected abstract void LoadFields();
     }
 
 

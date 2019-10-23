@@ -40,8 +40,8 @@ namespace Asset_Management_System.ViewModels
         }
 
         public ICommand SaveAssetCommand { get; set; }
-        public ICommand AddFieldCommand { get; set; }
         public static ICommand RemoveFieldCommand { get; set; }
+
 
         public bool CanSaveAsset()
         {
@@ -51,27 +51,18 @@ namespace Asset_Management_System.ViewModels
         }
 
 
-        private bool LoadFields()
+        protected override void LoadFields()
         {
-            try
-            {
-                _asset.DeserializeFields();
-                foreach (var field in _asset.FieldsList)
-                    FieldsList.Add(field);
+            _asset.DeserializeFields();
+            foreach (var field in _asset.FieldsList)
+                FieldsList.Add(field);
 
-                Name = _asset.Name;
-                Description = _asset.Description;
+            Name = _asset.Name;
+            Description = _asset.Description;
 
-                // Notify view about changes
-                OnPropertyChanged(nameof(Name));
-                OnPropertyChanged(nameof(Description));
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-            return true;
+            // Notify view about changes
+            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(Description));
         }
     }
 }
