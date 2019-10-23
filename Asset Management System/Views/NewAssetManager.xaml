@@ -121,28 +121,28 @@
             Grid.Column="0"
             Margin="10">
             <Label>Name</Label>
-            <TextBox Name="TbName" Padding="10" />
+            <TextBox Padding="10" Text="{Binding Name}" />
 
             <Label>Description</Label>
-            <TextBox Name="TbDescription" Padding="10" />
+            <TextBox Padding="10" Text="{Binding Description}"/>
 
             <Label>Add new field</Label>
             <StackPanel>
                 <ComboBox>
                     <ComboBoxItem>
-                        <Button Height="20" Width="300" Command="{Binding AddFieldCommand}" Name="AddTextField">Add TextField</Button>
+                        <Button Height="20" Width="300" Command="{Binding AddFieldCommand}" CommandParameter="Text Field">Add TextField</Button>
                     </ComboBoxItem>
                     <ComboBoxItem>
-                        <Button Height="20" Width="300" Command="{Binding AddFieldCommand}" Name="AddStringField">Add StringField</Button>
+                        <Button Height="20" Width="300" Command="{Binding AddFieldCommand}" CommandParameter="String Field">Add StringField</Button>
                     </ComboBoxItem>
                     <ComboBoxItem>
-                        <Button Height="20" Width="300" Command="{Binding AddFieldCommand}" Name="AddIntegerField">Add IntegerField</Button>
+                        <Button Height="20" Width="300" Command="{Binding AddFieldCommand}" CommandParameter="Integer Field">Add IntegerField</Button>
                     </ComboBoxItem>
                     <ComboBoxItem>
-                        <Button Height="20" Width="300" Command="{Binding AddFieldCommand}" Name="AddDateField">Add DateField</Button>
+                        <Button Height="20" Width="300" Command="{Binding AddFieldCommand}" CommandParameter="Date Field">Add DateField</Button>
                     </ComboBoxItem>
                     <ComboBoxItem>
-                        <Button Height="20" Width="300" Command="{Binding AddFieldCommand}" Name="AddBooleanField">Add BooleanField</Button>
+                        <Button Height="20" Width="300" Command="{Binding AddFieldCommand}" CommandParameter="Boolean Field">Add BooleanField</Button>
                     </ComboBoxItem>
                 </ComboBox>
             </StackPanel>
@@ -154,7 +154,7 @@
             Grid.Column="1"
             Margin="10">
             <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                <ItemsControl Name="FieldsControl" ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
+                <ItemsControl ItemsSource="{Binding FieldsList}" ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel />
@@ -165,13 +165,13 @@
         </Grid>
 
         <Button
-            Name="BtnSaveNewAsset"
             Content="Save asset"
             Grid.Row="1"
             Grid.Column="2"
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
             Margin="10"
+            Style="{StaticResource RegularButton}"
             Command="{Binding SaveAssetCommand}" />
     </Grid>
 </Page>

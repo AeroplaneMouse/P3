@@ -33,11 +33,9 @@ namespace Asset_Management_System.ViewModels
                 _editing = false;
             }
 
-
-
             // Initialize commands
             SaveAssetCommand = new Commands.SaveAssetCommand(this, _main, _asset, _editing);
-
+            AddFieldCommand = new Commands.AddFieldCommand(this);
         }
 
         public ICommand SaveAssetCommand { get; set; }

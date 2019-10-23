@@ -116,7 +116,7 @@ namespace Asset_Management_System.ViewModels
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private List<string> PromptManager(string label, out bool required)
+        public List<string> PromptManager(string label, out bool required)
         {
             var dialog = new Views.PromptForFields(label);
             List<string> outputList = new List<string>();
