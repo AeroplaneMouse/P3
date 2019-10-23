@@ -63,6 +63,9 @@
     <Page Update="Resources\Styles\Menus.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Resources\Styles\Prompt.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Resources\Styles\Spacings.xaml">
       <SubType>Designer</SubType>
     </Page>

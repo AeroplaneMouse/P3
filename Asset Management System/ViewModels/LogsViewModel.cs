@@ -72,7 +72,7 @@ namespace Asset_Management_System.ViewModels
         private void Print()
         {
             // Copied from AssetViewModel
-            var dialog = new PromtForReportName("log_report_" + DateTime.Now.ToString().Replace(@"/", "").Replace(@" ", "-").Replace(@":", "") + ".csv", "Report name:");
+            var dialog = new PromptWithTextInput("log_report_" + DateTime.Now.ToString().Replace(@"/", "").Replace(@" ", "-").Replace(@":", "") + ".csv", "Report name:");
             if (dialog.ShowDialog() == true)
             {
                 if (dialog.DialogResult == true)
