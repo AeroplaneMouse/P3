@@ -12,7 +12,6 @@ namespace Asset_Management_System.ViewModels
 {
     public abstract class FieldsController : Base.BaseViewModel
     {
-        private int _id = 0;
         public ObservableCollection<Field> FieldsList { get; set; }
         protected bool _editing;
 
@@ -25,7 +24,7 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Textfield added");
                     if ((promptResults = PromptManager("Text box", out bool required)).Count > 0)
                     {
-                        FieldsList.Add(new Field(_id++, promptResults[0], promptResults[1], 1, promptResults[1],
+                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
                             required));
                     }
                     break;
@@ -33,7 +32,7 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("StringField added");
                     if ((promptResults = PromptManager("String Field", out required)).Count > 0)
                     {
-                        FieldsList.Add(new Field(_id++, promptResults[0], promptResults[1], 1, promptResults[1],
+                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
                             required));
                     }
                     break;
@@ -41,7 +40,7 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("IntegerField added");
                     if ((promptResults = PromptManager("Integer FIeld", out required)).Count > 0)
                     {
-                        FieldsList.Add(new Field(_id++, promptResults[0], promptResults[1], 1, promptResults[1],
+                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
                             required));
                     }
                     break;
@@ -49,7 +48,7 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Date Field added");
                     if ((promptResults = PromptManager("Date Field", out required)).Count > 0)
                     {
-                        FieldsList.Add(new Field(_id++, promptResults[0], promptResults[1], 1, promptResults[1],
+                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
                             required));
                     }
                     break;
@@ -57,7 +56,7 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("BooleanField added");
                     if ((promptResults = PromptManager("Boolean Field", out required)).Count > 0)
                     {
-                        FieldsList.Add(new Field(_id++, promptResults[0], promptResults[1], 1, promptResults[1],
+                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
                             required));
                     }
                     break;
