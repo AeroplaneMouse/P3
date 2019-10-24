@@ -1,26 +1,24 @@
+﻿using Asset_Management_System.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Asset_Management_System.Models;
 
-namespace Asset_Management_System.Views
+namespace Asset_Management_System.ViewModels
 {
-    public abstract class FieldsController : Page
+    public abstract class FieldsController : Base.BaseViewModel
     {
         public ObservableCollection<Field> FieldsList { get; set; }
         protected bool _editing;
 
-        /// <summary>
-        /// Function to add fields to the list of fields.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <exception cref="NotSupportedException"></exception>
+
+        public ICommand AddFieldCommand { get; set; }
+
+
         protected void OnAddField(object sender, RoutedEventArgs e)
         {
             List<string> promptResults;
@@ -81,12 +79,6 @@ namespace Asset_Management_System.Views
             Console.WriteLine("---------------------------------------");
         }
 
-        /// <summary>
-        /// Function to remove a field from the list of fields.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        /// <exception cref="NotSupportedException"></exception>
         protected void OnDeleteField(object sender, RoutedEventArgs e)
         {
             switch ((sender as Button)?.Name)
@@ -122,20 +114,15 @@ namespace Asset_Management_System.Views
             Console.WriteLine("---------------------------------------");
         }
 
-        /// <summary>
-        /// This function is used to verify whether numbers(And only) numbers are used in number fields.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         public void NumberVerification(object sender, TextCompositionEventArgs e)
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
         }
 
-        private List<string> PromptManager(string label, out bool required)
+        public List<string> PromptManager(string label, out bool required)
         {
-            var dialog = new PromptForFields(label);
+            var dialog = new Views.PromptForFields(label);
             List<string> outputList = new List<string>();
             required = false;
             if (dialog.ShowDialog() == true)
@@ -150,10 +137,12 @@ namespace Asset_Management_System.Views
                 }
             }
 
-
             return outputList;
         }
+
+        protected abstract void LoadFields();
     }
+
 
     /// <summary>
     /// Class used for selecting a template for the fields.

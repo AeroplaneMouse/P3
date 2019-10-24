@@ -8,6 +8,7 @@ namespace Asset_Management_System.Models
     [Serializable]
     public class Field
     {
+        private static int _id = 0;
         /// <summary>
         /// Default constructor for initiating a new Field object.
         /// </summary>
@@ -16,9 +17,9 @@ namespace Asset_Management_System.Models
         /// <param name="required">A boolean, whether the field is required or not</param>
         /// <param name="fieldType">Selecting the type of the field. 1= TextBox,2 = String,3= Int, 4 = Date, 5 = Boolean</param>
         /// <param name="defaultValue">The default value which should be entered into the field</param>
-        public Field(int ID, string label, string content, int fieldType, string defaultValue, bool required = false)
+        public Field(string label, string content, int fieldType, string defaultValue, bool required = false)
         {
-            this.ID = ID;
+            this.ID = _id++;
             this.Label = label;
             this.Content = content;
             if (fieldType <= 5)
