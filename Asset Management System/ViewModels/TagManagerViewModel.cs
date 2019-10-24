@@ -2,6 +2,7 @@
 using Asset_Management_System.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
 
@@ -30,7 +31,8 @@ namespace Asset_Management_System.ViewModels
             _main = main;
             _tag = inputTag;
 
-            //FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
+            FieldsList = new ObservableCollection<Field>();
+
             if (inputTag != null)
             {
                 _tag = inputTag;

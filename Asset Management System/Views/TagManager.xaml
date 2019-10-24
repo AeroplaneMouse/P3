@@ -125,14 +125,11 @@
             Grid.Column="0"
             Margin="10">
             <Label>Name</Label>
-            <TextBox Name="TbName" Padding="10" />
+            <TextBox Text="{Binding Name}" Padding="10" />
 
             <Label>Color of the tag:</Label>
-            <xctk:ColorPicker Name="ColorPicker" />
-            <TextBox Name="Color" Padding="10" />
-
-            <Label>Department</Label>
-            <TextBox Name="TbDepartment" Padding="10" />
+            <xctk:ColorPicker Name="ColorPicker" SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
+            <TextBox Text="{Binding Color}" Padding="10" />
 
             <Label>Parent Tag</Label>
             <StackPanel>
@@ -149,19 +146,19 @@
             <StackPanel>
                 <ComboBox>
                     <ComboBoxItem>
-                        <Button Style="{StaticResource AddFieldButton}" CommandParameter="Text Field">Add TextField</Button>
+                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Text Field">Add TextField</Button>
                     </ComboBoxItem>
                     <ComboBoxItem>
-                        <Button Style="{StaticResource AddFieldButton}" CommandParameter="String Field">Add StringField</Button>
+                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="String Field">Add StringField</Button>
                     </ComboBoxItem>
                     <ComboBoxItem>
-                        <Button Style="{StaticResource AddFieldButton}" CommandParameter="Integer Field">Add IntegerField</Button>
+                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Integer Field">Add IntegerField</Button>
                     </ComboBoxItem>
                     <ComboBoxItem>
-                        <Button Style="{StaticResource AddFieldButton}" CommandParameter="Date Field">Add DateField</Button>
+                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Date Field">Add DateField</Button>
                     </ComboBoxItem>
                     <ComboBoxItem>
-                        <Button Style="{StaticResource AddFieldButton}" CommandParameter="Boolean Field">Add BooleanField</Button>
+                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Boolean Field">Add BooleanField</Button>
                     </ComboBoxItem>
                 </ComboBox>
             </StackPanel>

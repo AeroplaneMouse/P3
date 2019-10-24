@@ -6,6 +6,7 @@ using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Events;
 using Brushes = System.Windows.Media.Brushes;
 using Asset_Management_System.ViewModels;
+using System.Windows.Media;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Controls;
@@ -44,6 +45,24 @@ namespace Asset_Management_System.Views
             //}
         }
 
+        private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            TagManagerViewModel viewModel = DataContext as TagManagerViewModel;
+
+            Color c = (Color)e.NewValue;
+
+            string hexColor = $"#{ToHexStr(c.R)}{ToHexStr(c.G)}{ToHexStr(c.B)}";
+            viewModel.Color = hexColor;
+        }
+
+        private string ToHexStr(int i)
+        {
+            string hex = i.ToString("X");
+            if (hex.Length == 1)
+                hex = $"0{ hex }";
+            return hex;
+        }
+
         /// <summary>
         /// This function fires when the "Save Tag" button is clicked.
         /// The function saves or updates the tag in the database.
@@ -62,7 +81,7 @@ namespace Asset_Management_System.Views
         //        {
         //            requiredFieldsWritten = false;
         //        }
-               
+
         //        _tag.AddField(field);
         //        Console.WriteLine(field.Content);
         //    }
