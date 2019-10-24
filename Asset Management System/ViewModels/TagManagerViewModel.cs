@@ -54,14 +54,12 @@ namespace Asset_Management_System.ViewModels
         public ICommand SaveTagCommand { get; set; }
         public static ICommand RemoveFieldCommand { get; set; }
 
-
         public bool CanSaveTag()
         {
             // **** TODO ****
             // Only return true, if the entered values are valid.
             return true;
         }
-
 
         /// <summary>
         /// Runs through the saved fields within the tag, and adds these to the fieldList.
@@ -80,7 +78,5 @@ namespace Asset_Management_System.ViewModels
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(Color));
         }
-
-
     }
 }

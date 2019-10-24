@@ -34,6 +34,7 @@ namespace Asset_Management_System.ViewModels.Commands
             _tag.Name = _viewModel.Name;
             _tag.Color = _viewModel.Color;
 
+            // Add fields to tag
             _tag.FieldsList = new List<Field>();
             foreach (var field in _viewModel.FieldsList)
             {
@@ -46,7 +47,7 @@ namespace Asset_Management_System.ViewModels.Commands
             }
 
             Department department = _main.CurrentDepartment;
-            if (department != null)
+            if (department != null && department.ID != 0)
             {
                 _tag.DepartmentID = department.ID;
                 Tag parent = _viewModel.ParentTagsList[_viewModel.SelectedParentIndex];
@@ -54,26 +55,19 @@ namespace Asset_Management_System.ViewModels.Commands
 
                 // Logging the Tag
                 //_tag.Notify();
+
+                // Save tag
                 TagRepository rep = new TagRepository();
                 if (_editing)
-                {
-                    //if (_viewModel.SelectedParentIndex != 0) != null)
-                    //{
-                    //    _tag.ParentID = (ParentTag.SelectedItem as Tag).ID;
-                    //}
-
                     rep.Update(_tag);
-                }
                 else
-                {
-                    //_tag.ParentID = (ParentTag.SelectedItem as Tag).ID;
                     rep.Insert(_tag);
-                }
-
+                
+                // Change view to tags
                 _main.ChangeMainContent(new Tags(_main));
             }
             else
-                _main.AddNotification(new Notification("ERROR! Current department not found.", Notification.ERROR));
+                _main.AddNotification(new Notification("ERROR! Department cannot be none or All Departments. Please select a department.", Notification.ERROR));
         }
     }
 }
