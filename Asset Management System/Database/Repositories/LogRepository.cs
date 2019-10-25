@@ -71,7 +71,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     string query = "SELECT id, logable_id, logable_type, username, description, options, created_at " + 
-                                   "FROM log WHERE logable_id=@logable_id AND logable_type=logable_type"+
+                                   "FROM log WHERE logable_id=@logable_id AND logable_type=@logable_type"+
                                    (username != null ? " AND username=@username" : "");
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
@@ -81,7 +81,6 @@ namespace Asset_Management_System.Database.Repositories
                         
                         cmd.Parameters.Add("@logable_type", MySqlDbType.String);
                         cmd.Parameters["@logable_type"].Value = logable_type.ToString();
-
                         if (username != null)
                         {
                             cmd.Parameters.Add("@username", MySqlDbType.String);
@@ -99,7 +98,7 @@ namespace Asset_Management_System.Database.Repositories
                                 string row_description = reader.GetString("description");
                                 string row_options = reader.GetString("options");
                                 DateTime row_created_at = reader.GetDateTime("created_at");
-
+                                                  
                                 Entry entry = (Entry)Activator.CreateInstance(typeof(Entry), 
                                     BindingFlags.Instance | BindingFlags.NonPublic, null, 
                                     new object[] { row_id, row_logable_id, row_logable_type, row_description, row_username, row_options, row_created_at }, 
