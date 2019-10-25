@@ -101,9 +101,10 @@
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
 
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="9" />
+        <Setter Property="Padding" Value="8" />
         <Setter Property="Foreground" Value="{StaticResource BackgroundDarkBrush}" />
-
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        
         <!-- Stretches the buttons so they are bigger. Remove when changing to icon! -->
         <Setter Property="LayoutTransform">
             <Setter.Value>
@@ -150,8 +151,18 @@
     <!-- Regular button -->
     <Style TargetType="{x:Type Button}" x:Key="RegularButton" BasedOn="{StaticResource NavigationButton}">
         <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
-        <Setter Property="Width" Value="100"/>
-
+        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+    </Style>
+    
+    <!-- Regular cancel button -->
+    <Style TargetType="Button" x:Key="RegularCancelButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="Background" Value="Red"/>
+    </Style>
+    
+    <!-- Regular accept button -->
+    <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="Background" Value="Green"/>
     </Style>
 
     <Style x:Key="ButtonFocusVisual">
