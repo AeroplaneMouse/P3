@@ -27,6 +27,7 @@ namespace Asset_Management_System.ViewModels
             EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
             RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
             PrintCommand = new Base.RelayCommand(() => Print());
+            ViewLogCommand = new Base.RelayCommand(() => ViewLog());
         }
 
         #endregion
@@ -71,6 +72,7 @@ namespace Asset_Management_System.ViewModels
         public ICommand EditCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
         public ICommand PrintCommand { get; set; }
+        public ICommand ViewLogCommand { get; set; }
 
         #endregion
 
@@ -159,6 +161,17 @@ namespace Asset_Management_System.ViewModels
                 return null;
             else
                 return SearchList.ElementAt(SelectedItemIndex);
+        }
+        
+        public void ViewLog()
+        {
+            Tag selected = GetSelectedItem();
+            
+            var dialog = new AssetHistory(selected);
+            if (dialog.ShowDialog() == true)
+            {
+                Console.WriteLine("Displaying History for: " + selected.Name);
+            }
         }
         
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)

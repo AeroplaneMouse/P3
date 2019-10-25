@@ -17,7 +17,7 @@ namespace Asset_Management_System.ViewModels
         /// <summary>
         /// Default contructor
         /// </summary>
-        public AssetHistoryViewModel(Window window, Asset asset)
+        public AssetHistoryViewModel(Window window, Model asset)
         {
             // Initialize commands
             _window = window;

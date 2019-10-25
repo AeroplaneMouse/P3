@@ -35,7 +35,7 @@ namespace Asset_Management_System.Database
             }
             catch (MySqlException e)
             {
-                
+                Console.WriteLine(e);
             }
             finally
             {
