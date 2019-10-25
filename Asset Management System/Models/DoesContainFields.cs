@@ -43,7 +43,7 @@ namespace Asset_Management_System.Models
         /// </summary>
         public void DeserializeFields()
         {
-            if (SerializedFields == "[]")
+            if (SerializedFields != "[]")
             {
                 FieldsList = JsonConvert.DeserializeObject<List<Field>>(SerializedFields);
             }

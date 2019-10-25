@@ -18,6 +18,30 @@ namespace IntegrationTests
         private Tag tag;
         private MySqlHandler mySqlHandler = new MySqlHandler();
 
+        [ClassInitialize]
+        public static void RemoveTableEntries(TestContext testContext)
+        {
+            MySqlHandler mySqlHandler = new MySqlHandler();
+
+            //Set foreign key check to 0
+            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 0");
+
+            //Clear assets
+            mySqlHandler.RawQuery("TRUNCATE TABLE assets");
+
+            //Clear departments
+            mySqlHandler.RawQuery("TRUNCATE TABLE departments");
+
+            //Clear tags
+            mySqlHandler.RawQuery("TRUNCATE TABLE tags");
+
+            //Clear asset_tags
+            mySqlHandler.RawQuery("TRUNCATE TABLE asset_tags");
+
+            //Reset foreign key check
+            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 1");
+        }
+
         [TestInitialize]
         public void SetUpTagAndRepository()
         {
@@ -26,7 +50,7 @@ namespace IntegrationTests
 
             tagRepository = new TagRepository();
 
-            tag = new Tag { Name = "TagRepositoryTests - IntegrationTests", DepartmentID = 1, FieldsList = new List<Field> { new Field("Label", "Content", 1, "Default value") } };
+            tag = new Tag("TagRepositoryTests - IntegrationTests", "Black", 1);
         }
 
         [TestMethod]
@@ -43,6 +67,7 @@ namespace IntegrationTests
         public void Insert_ReceivesTagAndReturnsTags_ReturnsOneTagWithSameName()
         {
             //Arrange
+            tagRepository.Insert(tag);
             string expected = "TagRepositoryTests - IntegrationTests";
 
             //Act
@@ -91,9 +116,24 @@ namespace IntegrationTests
         }
 
         [TestMethod]
-        public void GetAll_()
+        public void GetAll_DatabaseHolds5Tags_ReturnsAll5Tags()
         {
-            Assert.Fail();
+            //Arrange
+            List<Tag> tags = new List<Tag>();
+            for (int i = 0; i < 5; i++)
+            {
+                tags.Add(new Tag("TagRepositoryTests " + i.ToString() + " - IntegrationTests", "Yellow", 1));
+                tagRepository.Insert(tags[i]);
+            }
+
+            int expected = 5;
+
+            //Act
+            List<Tag> returnedTags = (List<Tag>)tagRepository.GetAll();
+            int result = returnedTags.Count;
+
+            //Assert
+            Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
