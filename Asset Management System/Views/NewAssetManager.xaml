@@ -6,7 +6,7 @@
     xmlns:views="clr-namespace:Asset_Management_System.Views"
     xmlns:v="clr-namespace:Asset_Management_System.ViewModels"
     mc:Ignorable="d"
-    d:DesignHeight="450" d:DesignWidth="800"
+    d:DesignHeight="450" d:DesignWidth="600"
     ShowsNavigationUI="False"
     Title="EditAsset">
     
@@ -113,7 +113,94 @@
     </Page.Resources>
 
     <Grid>
-        <Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource TitleStyle}"
+                   VerticalAlignment="Center"
+                   Margin="10 0 0 0">Add asset</TextBlock>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="10">
+            <Button Style="{StaticResource RegularButton}"
+                    Command="{Binding SaveAssetCommand}"
+                    Content="Save"/>
+
+            <Button
+                Style="{StaticResource RegularButton}"
+                Command="{Binding CancelCommand}"
+                Content="Cancel"
+                Margin="10 0, 0, 0"
+                />
+        </StackPanel>
+
+        <Separator VerticalAlignment="Bottom"
+                   Background="Gray" 
+                   Margin="10, 0, 10, 0"/>
+
+
+        <ScrollViewer Grid.Row="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0"
+                        Width="240"
+                        Margin="10"
+                        HorizontalAlignment="Left">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource TitleStyle}" 
+                                   FontSize="{StaticResource FontSizeRegular}"
+                                   Margin="0, 0, 0, 10">Details</TextBlock>
+
+                        <TextBlock Text="Name"/>
+                        <TextBox Style="{StaticResource BoxFieldStyle}"/>
+
+                        <TextBlock Text="Identifier"/>
+                        <TextBox Style="{StaticResource BoxFieldStyle}"/>
+
+                        <TextBlock Text="Description"/>
+                        <TextBox Style="{StaticResource BoxFieldStyle}" 
+                                 TextWrapping="Wrap" 
+                                 MinHeight="80" 
+                                 AcceptsReturn="True" 
+                                 AcceptsTab="True" 
+                                 SpellCheck.IsEnabled="True"/>
+
+                    </StackPanel>
+                </Border>
+
+                <Rectangle Grid.Column="1"
+                            Margin="50, 10, 0, 10"
+                            Fill="Black"
+                            Width=".3"
+                            StrokeThickness="0"
+                            Opacity="1"/>
+
+                <Border Grid.Column="2"
+                        Width="240"
+                        HorizontalAlignment="Left"
+                        Margin="10">
+                    <StackPanel>
+                        <TextBlock Style="{StaticResource TitleStyle}" 
+                                   FontSize="{StaticResource FontSizeRegular}"
+                                   Margin="0, 0, 0 10">Fields</TextBlock>
+                        <TextBlock Text="Name"/>
+                        <TextBox/>
+                    </StackPanel>
+                </Border>
+
+            </Grid>
+
+        </ScrollViewer>
+
+
+        <!--<Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
@@ -175,6 +262,6 @@
             HorizontalAlignment="Left"
             Margin="10"
             Style="{StaticResource RegularButton}"
-            Command="{Binding SaveAssetCommand}" />
+            Command="{Binding SaveAssetCommand}" />-->
     </Grid>
 </Page>

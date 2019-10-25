@@ -1,4 +1,5 @@
 ﻿using Asset_Management_System.Models;
+using Asset_Management_System.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -37,10 +38,12 @@ namespace Asset_Management_System.ViewModels
             SaveAssetCommand = new Commands.SaveAssetCommand(this, _main, _asset, _editing);
             AddFieldCommand = new Commands.AddFieldCommand(this);
             RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
+            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Assets(main)));
         }
 
         public ICommand SaveAssetCommand { get; set; }
         public static ICommand RemoveFieldCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
 
 
         public bool CanSaveAsset()

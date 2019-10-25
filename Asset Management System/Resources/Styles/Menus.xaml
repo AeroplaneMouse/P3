@@ -16,7 +16,7 @@
     <Style TargetType="MenuItem" x:Key="MenuItemButton">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
-        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
 
         <!-- Content template -->
         <Setter Property="Template">
@@ -59,7 +59,7 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
-        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
