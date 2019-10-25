@@ -28,9 +28,9 @@ namespace Asset_Management_System.Database.Repositories
                     if (reader.Read())
                         count = reader.GetInt32("COUNT(*)");
                 }
-                catch (MySqlException)
+                catch (MySqlException e)
                 {
-                    
+                    Console.WriteLine(e);
                 }
                 finally
                 {
