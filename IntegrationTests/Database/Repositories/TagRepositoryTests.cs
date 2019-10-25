@@ -32,8 +32,6 @@ namespace IntegrationTests
         [TestMethod]
         public void Insert_ReceivesTag_ReturnsTrue()
         {
-            //Arrange
-
             //Act
             bool result = tagRepository.Insert(tag);
 
@@ -48,11 +46,9 @@ namespace IntegrationTests
             string expected = "TagRepositoryTests - IntegrationTests";
 
             //Act
-            bool result = tagRepository.Insert(tag);
-
             List<Tag> returnedTags = (List<Tag>)tagRepository.GetAll();
 
-            
+            string result = returnedTags[0].Name;
 
             //Assert
             Assert.AreEqual(expected, result);
