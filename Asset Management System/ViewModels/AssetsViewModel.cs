@@ -18,8 +18,10 @@ namespace Asset_Management_System.ViewModels
     {
         #region Constructors
 
+        private MainViewModel main;
         public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
+            this.main = main;
         }
 
         #endregion
@@ -38,7 +40,7 @@ namespace Asset_Management_System.ViewModels
 
             Asset selected = GetSelectedItem();
 
-            var dialog = new AssetHistory(selected);
+            main.ChangeMainContent(new ObjectViewer(main,selected));
         }
 
         #endregion

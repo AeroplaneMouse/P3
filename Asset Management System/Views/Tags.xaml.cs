@@ -15,7 +15,7 @@ namespace Asset_Management_System.Views
     /// <summary>
     /// Interaction logic for Tags.xaml
     /// </summary>
-    public partial class Tags : FieldsController
+    public partial class Tags : Page
     {
         public Tags(MainViewModel main)
         {
