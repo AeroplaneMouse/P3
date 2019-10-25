@@ -17,6 +17,7 @@
                 <ResourceDictionary Source="Resources/Styles/Menus.xaml" />
                 <ResourceDictionary Source="Resources/Styles/ListViews.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Pages.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Prompt.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

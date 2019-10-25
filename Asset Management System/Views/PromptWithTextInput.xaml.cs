@@ -15,10 +15,10 @@ namespace Asset_Management_System.Views
     /// <summary>
     /// Interaction logic for DialogBoxWithInput.xaml
     /// </summary>
-    public partial class PromtForReportName : Window
+    public partial class PromptWithTextInput : Window
     {
 
-        public PromtForReportName(string input, string label)
+        public PromptWithTextInput(string input, string label)
         {
             InitializeComponent();
             DataContext = this;

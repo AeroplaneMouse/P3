@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace UnitTests
+namespace IntegrationTests
 {
     [TestClass]
     public class DepartmentRepositoryTests

@@ -32,6 +32,10 @@ namespace Asset_Management_System.Models
         public void SerializeFields()
         {
             SerializedFields = JsonConvert.SerializeObject(FieldsList, Formatting.None);
+            if(SerializedFields.Length == 0)
+            {
+                SerializedFields = "[]";
+            }
         }
 
         /// <summary>
@@ -39,7 +43,7 @@ namespace Asset_Management_System.Models
         /// </summary>
         public void DeserializeFields()
         {
-            if (SerializedFields != null)
+            if (SerializedFields != "[]")
             {
                 FieldsList = JsonConvert.DeserializeObject<List<Field>>(SerializedFields);
             }
