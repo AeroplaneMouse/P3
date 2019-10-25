@@ -15,7 +15,7 @@ namespace IntegrationTests
         private DepartmentRepository departmentRepository;
         private AssetRepository assetRepository;
         private Asset asset;
-        private MySqlHandler mySqlHandler;
+        private MySqlHandler mySqlHandler = new MySqlHandler();
 
         [TestInitialize]
         public void InitiateAssetAndRepository()
@@ -23,15 +23,14 @@ namespace IntegrationTests
             departmentRepository = new DepartmentRepository();
             assetRepository = new AssetRepository();
             asset = new Asset();
-            mySqlHandler = new MySqlHandler();
 
             departmentRepository.Insert(new Department { Name = "IntegrationTestDepartment" });
 
-            asset.Name = "Integrationtest";
+            asset.Name = "AssetRepositoryTests - Integrationtest";
             asset.Description = "Desription";
             asset.DepartmentID = 1;
-            asset.AddField(new Field(1, "Label of first field", "content of first field", 2, "Default value of first field"));
-            asset.AddField(new Field(2, "Label of second field", "content of second field", 4, "Default value of second field"));
+            asset.AddField(new Field("Label of first field", "content of first field", 2, "Default value of first field"));
+            asset.AddField(new Field("Label of second field", "content of second field", 4, "Default value of second field"));
         }
 
         [TestMethod]
@@ -90,7 +89,7 @@ namespace IntegrationTests
             //Arrange
             assetRepository.Insert(asset);
             Asset assetToUpdate = this.assetRepository.GetById(1);
-            assetToUpdate.AddField(new Field(3, "Label of updated field", "content of updated field", 4, "Default value of second field"));
+            assetToUpdate.AddField(new Field("Label of updated field", "content of updated field", 4, "Default value of second field"));
 
             //Act
             bool result = this.assetRepository.Update(assetToUpdate);
@@ -103,7 +102,7 @@ namespace IntegrationTests
         public void Update_AssetWithoutFieldsInDatabase_ChecksIfAssetContainsField()
         {
             //Arrange
-            Field expected = new Field(0, "Field", "Some content", 2, "Default");
+            Field expected = new Field("Field", "Some content", 2, "Default");
             Asset assetWithoutFields = new Asset
             {
                 Name = "Integrationtest",
@@ -159,10 +158,14 @@ namespace IntegrationTests
             Tag tag = new Tag();
             tag.Name = "IntegrationTests";
             (new TagRepository()).Insert(tag);
+
+            assetRepository.Insert(asset);
+            assetRepository.AttachTagsToAsset(asset, new List<Tag> { tag });
+            
             Asset expected = asset;
 
             //Act
-            List<Asset> assetList = (List <Asset>) assetRepository.SearchByTags(new List<int>() { 1 });
+            List<Asset> assetList = (List <Asset>)assetRepository.SearchByTags(new List<int>() { 1 });
 
             //Assert
             Assert.IsTrue(assetList[0].Equals(expected));
@@ -241,7 +244,7 @@ namespace IntegrationTests
             ObservableCollection<Asset> assetList = assetRepository.Search(keyWord);
 
             //Assert
-            Assert.IsTrue(assetList.Equals(new ObservableCollection<Asset>()));
+            Assert.IsTrue(assetList.Count == 0);
         }
 
         [TestMethod]
@@ -308,6 +311,9 @@ namespace IntegrationTests
 
             //Clear tags
             mySqlHandler.RawQuery("TRUNCATE TABLE tags");
+
+            //Clear asset_tags
+            mySqlHandler.RawQuery("TRUNCATE TABLE asset_tags");
 
             //Reset foreign key check
             mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 1");
