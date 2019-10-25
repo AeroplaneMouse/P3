@@ -42,8 +42,8 @@ namespace Asset_Management_System.ViewModels
         }
 
         public ICommand SaveAssetCommand { get; set; }
-        public static ICommand RemoveFieldCommand { get; set; }
         public ICommand CancelCommand { get; set; }
+        public static ICommand RemoveFieldCommand { get; set; }
 
 
         public bool CanSaveAsset()

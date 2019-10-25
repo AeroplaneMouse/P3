@@ -29,7 +29,7 @@ namespace Asset_Management_System.ViewModels
             _window = window;
             _outerMarginSize = 10;
 
-            WindowMinWidth = 1000;
+            WindowMinWidth = 300;
             WindowMinHeight = 400;
 
             ResizeBorder = 4;
@@ -65,7 +65,7 @@ namespace Asset_Management_System.ViewModels
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
-            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test"), 0));
+            AddNotificationTestCommand = new Base.RelayCommand(() => PopupTest());
 
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
             RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
@@ -155,6 +155,8 @@ namespace Asset_Management_System.ViewModels
 
         public Frame FrameSplash { get; set; } = new Frame();
 
+        public Page PopupPage { get; set; }
+
         public Visibility SplashVisibility { get; set; } = Visibility.Visible;
 
         public List<Department> Departments { get => GetDepartments(); }
@@ -168,6 +170,16 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Public Methods
+
+        public double GetWindowHeight()
+        {
+            return _window.ActualHeight;
+        }
+
+        public void NotifyOnWindowResize(EventHandler method)
+        {
+            _window.StateChanged += method;
+        }
 
         /// <summary>
         /// Changes how many rows or columns a specific frame spans over. 
@@ -277,6 +289,11 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Private Methods
+
+        private void PopupTest()
+        {
+            PopupPage = new Views.Popup(this);
+        }
 
         private bool ExcludedFromSaving(Page page)
         {

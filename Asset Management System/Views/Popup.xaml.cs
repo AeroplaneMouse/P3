@@ -18,9 +18,10 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Popup : Page
     {
-        public Popup()
+        public Popup(ViewModels.MainViewModel main)
         {
             InitializeComponent();
+            DataContext = new ViewModels.PopupViewModel(main);
         }
     }
 }

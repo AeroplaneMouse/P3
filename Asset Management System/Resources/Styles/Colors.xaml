@@ -23,4 +23,16 @@
     <Color x:Key="NavigationSelected">#263340</Color>
     <SolidColorBrush x:Key="NavigationSelectedBrush" Color="{StaticResource NavigationSelected}"/>
 
+    <Color x:Key="AcceptGreen">#1aff53</Color>
+    <SolidColorBrush x:Key="AcceptGreenBrush" Color="{StaticResource AcceptGreen}"/>
+
+    <Color x:Key="AcceptGreenHighlight">#00e639</Color>
+    <SolidColorBrush x:Key="AcceptGreenHightlightBrush" Color="{StaticResource AcceptGreenHighlight}"/>
+    
+    <Color x:Key="CancelRed">#ff5555</Color>
+    <SolidColorBrush x:Key="CancelRedBrush" Color="{StaticResource CancelRed}"/>
+
+    <Color x:Key="CancelRedHighlight">#ff0000</Color>
+    <SolidColorBrush x:Key="CancelRedHighlightBrush" Color="{StaticResource CancelRedHighlight}"/>
+
 </ResourceDictionary>

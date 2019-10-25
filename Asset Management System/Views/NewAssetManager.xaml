@@ -124,12 +124,12 @@
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="10">
-            <Button Style="{StaticResource RegularButton}"
+            <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding SaveAssetCommand}"
                     Content="Save"/>
 
             <Button
-                Style="{StaticResource RegularButton}"
+                Style="{StaticResource RegularCancelButton}"
                 Command="{Binding CancelCommand}"
                 Content="Cancel"
                 Margin="10 0, 0, 0"

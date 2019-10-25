@@ -115,7 +115,7 @@
         <!-- Makes the content of the button a textblock. Should be icon! -->
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
+                <ControlTemplate TargetType="{x:Type Button}" x:Name="TestSaasd">
                     <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
                         <TextBlock VerticalAlignment="Center" 
                                    HorizontalAlignment="Center" 
@@ -151,18 +151,29 @@
     <!-- Regular button -->
     <Style TargetType="{x:Type Button}" x:Key="RegularButton" BasedOn="{StaticResource NavigationButton}">
         <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
-        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="Width" Value="100"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
     </Style>
     
     <!-- Regular cancel button -->
     <Style TargetType="Button" x:Key="RegularCancelButton" BasedOn="{StaticResource RegularButton}">
-        <Setter Property="Background" Value="Red"/>
+        <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
+        
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource CancelRedHighlightBrush}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
     
     <!-- Regular accept button -->
     <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButton}">
-        <Setter Property="Background" Value="Green"/>
+        <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource AcceptGreenHightlightBrush}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="ButtonFocusVisual">

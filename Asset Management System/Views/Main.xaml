@@ -78,7 +78,7 @@
 
                                             <TextBlock Text="{Binding CurrentUser}"
                                                        Foreground="White"
-                                                       TextBlock.FontSize="{StaticResource FontSizeRegular}"
+                                                       TextBlock.FontSize="{StaticResource FontSizeSmall}"
                                                        TextBlock.FontFamily="{StaticResource SegoeRegular}"
                                                        VerticalAlignment="Center"
                                                        Margin="15, 0, 15, 0"/>
@@ -117,6 +117,7 @@
                                         <!-- Notifications -->
                                         <ListView Grid.Column="1" 
                                                   VerticalAlignment="Top"
+                                                  FontSize="{StaticResource FontSizeRegular}"
                                                   Style="{StaticResource NotificationView}"/>
 
                                     </Grid>
@@ -127,6 +128,12 @@
                                            NavigationUIVisibility="Hidden"
                                            Content="{Binding FrameSplash}"
                                            />
+
+                                    <Frame Grid.Row="1"
+                                           VerticalAlignment="Top"
+                                           NavigationUIVisibility="Hidden"
+                                           Content="{Binding PopupPage}"/>
+
                                 </Grid>
                             </Grid>
                         </Border>

@@ -10,6 +10,12 @@
       >
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="{Binding WindowHeight}"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Canvas
             Opacity="0.34"
             Background="Black"
@@ -53,14 +59,16 @@
             
             
             <Button
-                Name="BtnYes"
+                Grid.Row="1"
+                Style="{StaticResource RegularAcceptButton}"
                 Content="Yes"
             />
 
             <Button
-                Name="BtnNo"
-                Content="No"
+                Grid.Row="1"
                 Grid.Column="1"
+                Style="{StaticResource RegularCancelButton}"
+                Content="No"
             />
         </Grid>
     </Grid>
