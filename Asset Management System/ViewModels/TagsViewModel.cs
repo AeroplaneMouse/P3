@@ -119,7 +119,7 @@ namespace Asset_Management_System.ViewModels
             if (selectedTag != null)
             {
                 Console.WriteLine("Editing " + selectedTag.Name);
-                _main.ChangeMainContent(new ObjectViewer(_main, selectedTag));
+                _main.ChangeMainContent(new TagManager(_main, selectedTag));
             }
             else
             {
