@@ -17,10 +17,8 @@ namespace Asset_Management_System.ViewModels
     {
         #region Constructors
 
-        private MainViewModel main;
         public TagsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
-            this.main = main;
         }
 
         #endregion
@@ -40,7 +38,7 @@ namespace Asset_Management_System.ViewModels
 
             Tag selected = GetSelectedItem();
             
-            main.ChangeMainContent(new ObjectViewer(main,selected));
+            Main.ChangeMainContent(new ObjectViewer(Main, selected));
         }
 
         #endregion
