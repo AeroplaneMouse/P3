@@ -25,11 +25,12 @@
 
             <Button Style="{StaticResource RegularButton}"
                     Content="Search"
-                    Command="{Binding SearchCommand}" />
+                    Command="{Binding SearchCommand}"/>
 
             <Button Style="{StaticResource RegularButton}"
                     Content="Print"
                     Command="{Binding PrintCommand}" />
+            
             <Button Style="{StaticResource RegularButton}"
                     Content="View"
                     Command="{Binding ViewCommand}" />

@@ -1,4 +1,4 @@
-﻿<views:FieldsController x:Class="Asset_Management_System.Views.Tags"
+<views:FieldsController x:Class="Asset_Management_System.Views.Tags"
                         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
