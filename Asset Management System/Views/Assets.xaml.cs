@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 using System.Windows.Controls.Primitives;
 using Asset_Management_System.ViewModels;
+using Asset_Management_System.Resources.DataModels;
 
 namespace Asset_Management_System.Views
 {
@@ -23,7 +24,8 @@ namespace Asset_Management_System.Views
         public Assets(MainViewModel main)
         {
             InitializeComponent();
-            DataContext = new ViewModels.AssetsViewModel(main);
+
+            DataContext = new ViewModels.AssetsViewModel(main, ListPageType.Asset);
         }
     }
 }

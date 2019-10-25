@@ -331,7 +331,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at FROM tags";
+                    const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at,options FROM tags";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -372,10 +372,11 @@ namespace Asset_Management_System.Database.Repositories
             string row_color = reader.GetString("color");
             DateTime row_created_at = reader.GetDateTime("created_at");
             DateTime row_updated_at = reader.GetDateTime("updated_at");
+            string row_options = reader.GetString("options");
 
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] {row_id, row_label, row_department_id, row_parent_id, row_color, row_created_at, row_updated_at}, null,
+                new object[] {row_id, row_label, row_department_id, row_parent_id, row_color, row_created_at, row_updated_at,row_options}, null,
                 null);
         }
     }
