@@ -72,6 +72,9 @@
     <Page Update="Views\AssetHistory.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\NewAssetManager.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Assets.xaml">
       <SubType>Designer</SubType>
     </Page>

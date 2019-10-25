@@ -60,9 +60,7 @@ namespace Asset_Management_System.Models
         /// <returns></returns>
         public bool AddField(string name, int fieldType, string content, string defaultValue, bool required = false)
         {
-            Field currentField = new Field(this.IDCounter, name, content, fieldType, defaultValue, required);
-
-            this.IDCounter++;
+            Field currentField = new Field(name, content, fieldType, defaultValue, required);
 
             FieldsList.Add(currentField);
             return true;

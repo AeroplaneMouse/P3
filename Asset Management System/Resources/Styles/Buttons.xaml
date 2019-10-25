@@ -230,4 +230,11 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    <!-- Add Field button -->
+    <Style TargetType="Button" x:Key="AddFieldButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="Command" Value="{Binding AddFieldCommand}"/>
+        
+    </Style>
+    
 </ResourceDictionary>
