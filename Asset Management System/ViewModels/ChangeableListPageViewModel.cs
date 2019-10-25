@@ -71,7 +71,7 @@ namespace Asset_Management_System.ViewModels
                         break;
 
                     case ListPageType.Tag:
-                        Main.ChangeMainContent(new Views.AssetManager(Main, selected as Models.Asset));
+                        Main.ChangeMainContent(new Views.TagManager(Main, selected as Models.Tag));
                         break;
 
                     default:
