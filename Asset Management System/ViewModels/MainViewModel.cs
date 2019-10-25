@@ -89,7 +89,8 @@ namespace Asset_Management_System.ViewModels
 
         private List<Page> excludedPages = new List<Page> {
             new Views.AssetManager(null),
-            new Views.TagManager(null)
+            new Views.TagManager(null),
+            new Views.ObjectViewer(null, null)
         };
 
         private Department _currentDepartment;
