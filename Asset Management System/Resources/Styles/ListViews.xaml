@@ -3,7 +3,12 @@
                     xmlns:local="clr-namespace:Asset_Management_System"
                     xmlns:v="clr-namespace:Asset_Management_System.ViewModels"
                     xmlns:views="clr-namespace:Asset_Management_System.Views">
-
+    <!-- Regular list -->
+    <Style TargetType="ListView" x:Key="RegularList">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    
     <!-- Notification container -->
     <Style TargetType="ListView" x:Key="NotificationView">
         <Setter Property="ItemsSource" Value="{Binding ActiveNotifications}"/>

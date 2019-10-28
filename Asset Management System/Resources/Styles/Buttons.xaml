@@ -75,7 +75,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                    <Border Padding="{TemplateBinding Padding}" 
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="3">
                         <TextBlock VerticalAlignment="Center" 
                                    HorizontalAlignment="Center" 
                                    Text="{TemplateBinding Content}" 
@@ -149,10 +151,40 @@
     </Style>
     
     <!-- Regular button -->
-    <Style TargetType="{x:Type Button}" x:Key="RegularButton" BasedOn="{StaticResource NavigationButton}">
+    <Style TargetType="{x:Type Button}" x:Key="RegularButton">
+        <!-- So it can be clicked -->
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        
         <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Width" Value="100"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        <Setter Property="Padding" Value="6"/>
+
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+
+        <!-- Makes the content of the button a textblock -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Padding="{TemplateBinding Padding}" 
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="3">
+                        <TextBlock VerticalAlignment="Center" 
+                                   HorizontalAlignment="Center" 
+                                   Text="{TemplateBinding Content}" 
+                                   Foreground="{TemplateBinding Foreground}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Adds the hover effect -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
     
     <!-- Regular cancel button -->

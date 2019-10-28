@@ -8,7 +8,50 @@
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
       Title="Assets"
-      Style="{StaticResource ListPage}"
 >
-    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource TitleStyle}"
+                   VerticalAlignment="Center"
+                   Margin="10 0 0 0">Assets</TextBlock>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="10">
+            <Button
+                Style="{StaticResource RegularAcceptButton}"
+                Command="{Binding AddNewCommand}"
+                Content="Add new"/>
+        </StackPanel>
+
+        <Rectangle Style="{StaticResource HorizontalSeparator}"
+                   VerticalAlignment="Bottom"/>
+        
+        <!-- Content of list assets page -->
+        <Border Padding="10"
+                Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox FontSize="{StaticResource FontSizeSmall}"
+                         MinWidth="200"/>
+                <Button Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        Margin="10 0 0 0"
+                        Style="{StaticResource RegularButton}"/>
+
+            </Grid>
+        </Border>
+    </Grid>
 </Page>
