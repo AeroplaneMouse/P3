@@ -3,7 +3,6 @@ using System.Windows.Media;
 using System.Windows.Controls;
 using Asset_Management_System.Models;
 using Asset_Management_System.ViewModels;
-using System;
 
 namespace Asset_Management_System.Views
 {
@@ -24,29 +23,22 @@ namespace Asset_Management_System.Views
             DataContext = new TagManagerViewModel(main, inputTag);
         }
 
-        private void ParentTag_SelectionChanged(object sender, SelectionChangedEventArgs args)
+        private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
-            //Converts the current DataContext to a TagManagerViewModel
             TagManagerViewModel viewModel = DataContext as TagManagerViewModel;
 
-            //Checks if there was selected a parent tag prior to the selection
-            if (args.RemovedItems.Count > 0)
-            {
-                //Checks if the old color correlates with the old parent tag
-                Tag oldParentTag = (Tag)args.RemovedItems[0];
-                if (viewModel.Color == oldParentTag.Color)
-                {
-                    //Changes the color to the color of the new parent tag
-                    Tag newParentTag = viewModel.ParentTagsList[viewModel.SelectedParentIndex];
-                    viewModel.Color = newParentTag.Color;
-                }
-            }
-            else
-            {
-                //Changes the color to the color of the new parent tag
-                Tag newParentTag = viewModel.ParentTagsList[viewModel.SelectedParentIndex];
-                viewModel.Color = newParentTag.Color;
-            }
+            Color c = (Color)e.NewValue;
+
+            string hexColor = $"#{ToHexStr(c.R)}{ToHexStr(c.G)}{ToHexStr(c.B)}";
+            viewModel.Color = hexColor;
+        }
+
+        private string ToHexStr(int i)
+        {
+            string hex = i.ToString("X");
+            if (hex.Length == 1)
+                hex = $"0{ hex }";
+            return hex;
         }
     }
 }
