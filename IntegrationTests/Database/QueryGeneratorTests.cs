@@ -40,7 +40,7 @@ namespace IntegrationTests
                     new Field("Field 2", "Content 2", 2, "None")
                 }
             };
-            asset2 = new Asset()
+            asset3 = new Asset()
             {
                 Name = "Asset #3",
                 FieldsList = new List<Field>()
@@ -59,15 +59,25 @@ namespace IntegrationTests
                 Name = "QueryGeneratorTestsDepartment"
             };
 
-            departmentRepository = new DepartmentRepository();
             departmentRepository.Insert(department);
-
     }
 
         [TestMethod]
         public void PrepareUpdate_Receives3Columns3ValuesAndATable_BuildsExpectedQueryString()
         {
+            //Arrange
+            QueryGenerator query = new QueryGenerator();
+            query.AddTable("assets");
+            query.Columns.AddRange(new[] { "id", "name" });
+            query.Values.AddRange(new[] { "2", "SejtNavn" });
+            query.Where("name", "Asset #3");
+            string expected = "Hallo";
 
+            //Act
+            string result = query.PrepareUpdate();
+
+            //Assert
+            Assert.AreEqual(expected, result);
         }
 
         [TestCleanup]
