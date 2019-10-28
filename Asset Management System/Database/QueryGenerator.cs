@@ -85,8 +85,16 @@ namespace Asset_Management_System.Database
         {
             if (Tables.Count > 0 && Columns.Count == Values.Count)
             {
-                _query.Append("UPDATE "+Tables[0].Name);
-                _query.Append(" SET "+string.Join(", ", $"{item} = {Values[item[]]}"));
+                _query.Append("UPDATE " + Tables[0].Name);
+
+                string columnValuePairs = "";
+
+                for (int i = Columns.Count; i > 0; i--)
+                {
+                    columnValuePairs += (string.Join(", ", $"{Columns[i - 1]} = {Values[i - 1]}"));
+                }
+                _query.Append(" SET " + columnValuePairs);
+                Console.WriteLine(columnValuePairs);
                 return _query.ToString();
             }
 

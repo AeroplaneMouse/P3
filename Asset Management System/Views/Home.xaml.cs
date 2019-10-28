@@ -17,8 +17,8 @@ namespace Asset_Management_System.Views
             DataContext = new ViewModels.HomeViewModel(main, InputBox);
             
             QueryGenerator query = new QueryGenerator();
-            query.Columns.AddRange(new []{"id", "name"});
-            query.Values.AddRange();
+            query.Columns.AddRange(new []{ "id", "name" });
+            query.Values.AddRange(new[] { "2", "SejtNavn" });
             
             // Table
             query.AddTable("assets");
