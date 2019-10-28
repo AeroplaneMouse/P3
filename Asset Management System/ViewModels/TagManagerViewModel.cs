@@ -96,12 +96,29 @@ namespace Asset_Management_System.ViewModels
             foreach (Field field in _tag.FieldsList)
                 FieldsList.Add(field);
 
+            //Set Name to the name of the chosen tag
             Name = _tag.Name;
+
+            //Set Color to the color of the chosen tag
             Color = _tag.Color;
+
+            //Set the selected parent to the parent of the chosen tag
+            Console.WriteLine(ParentTagsList.Count);
+            int i = ParentTagsList.Count;
+            while(i > 0 && ParentTagsList[i-1].ID != _tag.ParentID)
+            {
+                i--;
+            }
+
+            if (i > 0)
+            {
+                SelectedParentIndex = i-1;
+            }
 
             // Notify view
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(Color));
+            OnPropertyChanged(nameof(SelectedParentIndex));
         }
     }
 }
