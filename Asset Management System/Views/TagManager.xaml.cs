@@ -23,16 +23,6 @@ namespace Asset_Management_System.Views
             DataContext = new TagManagerViewModel(main, inputTag);
         }
 
-        private void ColorPicker_SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
-        {
-            TagManagerViewModel viewModel = DataContext as TagManagerViewModel;
-
-            Color c = (Color)e.NewValue;
-
-            string hexColor = $"#{ToHexStr(c.R)}{ToHexStr(c.G)}{ToHexStr(c.B)}";
-            viewModel.Color = hexColor;
-        }
-
         private void ParentTag_SelectionChanged(object sender, SelectionChangedEventArgs args)
         {
             TagManagerViewModel viewModel = DataContext as TagManagerViewModel;

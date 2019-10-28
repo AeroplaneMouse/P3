@@ -139,8 +139,7 @@
             </StackPanel>
             
             <Label>Color of the tag:</Label>
-            <xctk:ColorPicker Name="ColorPicker" SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
-            <TextBox Text="{Binding Color}" Padding="10" />
+            <xctk:ColorPicker SelectedColor="{Binding Color}" Name="ColorPicker"/>
 
             <Label>Add new field</Label>
             <StackPanel>
