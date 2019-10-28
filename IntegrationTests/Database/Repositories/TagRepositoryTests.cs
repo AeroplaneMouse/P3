@@ -18,30 +18,6 @@ namespace IntegrationTests
         private Tag tag;
         private MySqlHandler mySqlHandler = new MySqlHandler();
 
-        [ClassInitialize]
-        public static void RemoveTableEntries(TestContext testContext)
-        {
-            MySqlHandler mySqlHandler = new MySqlHandler();
-
-            //Set foreign key check to 0
-            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 0");
-
-            //Clear assets
-            mySqlHandler.RawQuery("TRUNCATE TABLE assets");
-
-            //Clear departments
-            mySqlHandler.RawQuery("TRUNCATE TABLE departments");
-
-            //Clear tags
-            mySqlHandler.RawQuery("TRUNCATE TABLE tags");
-
-            //Clear asset_tags
-            mySqlHandler.RawQuery("TRUNCATE TABLE asset_tags");
-
-            //Reset foreign key check
-            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 1");
-        }
-
         [TestInitialize]
         public void SetUpTagAndRepository()
         {
@@ -80,9 +56,21 @@ namespace IntegrationTests
         }
 
         [TestMethod]
-        public void Update_()
+        public void Update_ChangeNameOfTagInDbAndUpdateInDb_GetByIdReturnsTagWithNewName()
         {
-            Assert.Fail();
+            //Arrange
+            tagRepository.Insert(tag);
+            Tag fetchedOriginalTag = tagRepository.GetById(1);
+            string expected = "This is the new name of the tag";
+
+            //Act
+            fetchedOriginalTag.Name = expected;
+            tagRepository.Update(fetchedOriginalTag);
+            Tag fetchedUpdatedTag = tagRepository.GetById(1);
+            string result = fetchedUpdatedTag.Name;
+
+            //Assert
+            Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
@@ -92,9 +80,18 @@ namespace IntegrationTests
         }
 
         [TestMethod]
-        public void GetById_()
+        public void GetById_FetchTagWithId1FromDb_ReturnsTagWithCorrectNameColorAndParentId()
         {
-            Assert.Fail();
+            //Arrange
+            tagRepository.Insert(tag);
+            string expected = tag.Name + tag.Color + tag.ParentID.ToString();
+
+            //Act
+            Tag fetchedTag = tagRepository.GetById(1);
+            string result = fetchedTag.Name + fetchedTag.Color + fetchedTag.ParentID.ToString();
+
+            //Assert
+            Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
@@ -143,25 +140,10 @@ namespace IntegrationTests
         }
 
         [TestCleanup]
-        public void CleanDatabase()
+        public void RemoveTableEntriesAfterEachTest()
         {
-            //Set foreign key check to 0
-            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 0");
-
-            //Clear assets
-            mySqlHandler.RawQuery("TRUNCATE TABLE assets");
-
-            //Clear departments
-            mySqlHandler.RawQuery("TRUNCATE TABLE departments");
-
-            //Clear tags
-            mySqlHandler.RawQuery("TRUNCATE TABLE tags");
-
-            //Clear asset_tags
-            mySqlHandler.RawQuery("TRUNCATE TABLE asset_tags");
-
-            //Reset foreign key check
-            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 1");
+            //Clear database tables
+            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 0;" + "TRUNCATE TABLE assets;" + "TRUNCATE TABLE departments;" + "TRUNCATE TABLE tags;" + "TRUNCATE TABLE asset_tags;" + "SET FOREIGN_KEY_CHECKS = 1;");
         }
     }
 }

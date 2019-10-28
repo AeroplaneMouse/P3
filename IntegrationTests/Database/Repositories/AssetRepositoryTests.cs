@@ -296,23 +296,8 @@ namespace IntegrationTests
         [TestCleanup]
         public void CleanDatabase()
         {
-            //Set foreign key check to 0
-            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 0");
-
-            //Clear assets
-            mySqlHandler.RawQuery("TRUNCATE TABLE assets");
-
-            //Clear departments
-            mySqlHandler.RawQuery("TRUNCATE TABLE departments");
-
-            //Clear tags
-            mySqlHandler.RawQuery("TRUNCATE TABLE tags");
-
-            //Clear asset_tags
-            mySqlHandler.RawQuery("TRUNCATE TABLE asset_tags");
-
-            //Reset foreign key check
-            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 1");
+            //Clear database tables
+            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 0;" + "TRUNCATE TABLE assets;" + "TRUNCATE TABLE departments;" + "TRUNCATE TABLE tags;" + "TRUNCATE TABLE asset_tags;" + "SET FOREIGN_KEY_CHECKS = 1;");
         }
     }
 }
