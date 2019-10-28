@@ -35,3 +35,38 @@
     padding-right: 0px;
 }
 
+.btn-green{
+    background-color: #1aff53;
+    border-radius: 3px;
+    border: none;
+}
+
+.btn-green:hover{
+    background-color: #00e639;
+}
+
+.btn-red{
+    background-color: #ff5555;
+    border-radius: 3px;
+    border: none;
+}
+
+.btn-red:hover{
+    background-color: #ff0000;
+}
+
+.tbl-trash-btn{
+    stroke: gray;
+}
+
+.tbl-trash-btn:hover{
+    stroke: red;
+}
+
+#filter{
+    margin: 20px 0px;
+}
+
+.badge{
+    margin-right: 7px !important;
+}
