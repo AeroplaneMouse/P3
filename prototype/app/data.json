@@ -1,0 +1,33 @@
+{
+    "items": [
+        {
+            "id": 1,
+            "label": "location",
+            "parent_id": 0
+        },{
+            "id": 2,
+            "label": "user",
+            "parent_id": 0
+        },{
+            "id": 3,
+            "label": "løvehuset",
+            "parent_id": 1
+        },{
+            "id": 4,
+            "label": "elefanthuset",
+            "parent_id": 1
+        },{
+            "id": 5,
+            "label": "Morten",
+            "parent_id": 2
+        },{
+            "id": 6,
+            "label": "Kasper",
+            "parent_id": 2
+        },{
+            "id": 7,
+            "label": "Thomas",
+            "parent_id": 2
+        }
+    ]
+}
