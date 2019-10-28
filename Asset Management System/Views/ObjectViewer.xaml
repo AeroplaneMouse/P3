@@ -124,6 +124,32 @@
             </ScrollViewer>
         </Grid>
 
+        <Grid
+            Grid.Row="1"
+            Grid.Column="2"
+            Margin="10">
+            
+                <ItemsControl ItemsSource="{Binding TagsList}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderThickness="1" BorderBrush="Black">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition Width="20" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Name}"
+                                               HorizontalAlignment="Left" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+        </Grid>
 
     </Grid>
 </Page>
