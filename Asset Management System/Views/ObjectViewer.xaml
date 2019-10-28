@@ -30,6 +30,7 @@
                 <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Name}" Padding="10" />
 
                 <Label Grid.Row="1" Grid.Column="1">Description</Label>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Description}" Padding="10" TextWrapping="Wrap" />
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Description}" Padding="10" />
 
                 <!-- Comments -->
@@ -71,14 +72,14 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="1">Name</Label>
+                    <Label Grid.Row="0" Grid.Column="1" Padding="10">Name</Label>
                     <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Name}" Padding="10" />
 
-                    <Label Grid.Row="1" Grid.Column="1">Parent tag</Label>
+                    <Label Grid.Row="1" Grid.Column="1" Padding="10">Parent tag</Label>
                     <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding ParentTag}" Padding="10" />
 
-                    <Label Grid.Row="2" Grid.Column="1">Color</Label>
-                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Color}" Padding="10" />
+                    <Label Grid.Row="2" Grid.Column="1" Padding="10">Color</Label>
+                    <TextBlock Grid.Row="2" Grid.Column="2" Background="{Binding Color}" Padding="10" />
                 </Grid>
             </Border>
         </DataTemplate>
@@ -103,7 +104,7 @@
             Grid.Row="1"
             Grid.Column="0"
             Margin="10">
-            <ContentControl>
+            <ContentControl Content="{Binding}">
                 <ContentControl.Style>
                     <Style>
                         <Style.Triggers>

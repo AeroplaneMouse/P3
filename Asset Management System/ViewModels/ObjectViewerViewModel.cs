@@ -11,9 +11,9 @@ namespace Asset_Management_System.ViewModels
         private Tag TagInput;
         private Asset AssetInput;
 
-        public string Color;
+        public string Color { get; set; }
 
-        public ulong ParentTag;
+        public ulong ParentTag{ get; set; }
         public string Name { get; set; }
 
         public string Description { get; set; }
