@@ -175,13 +175,17 @@ namespace Asset_Management_System.Database.Repositories
         public Comment DBOToModelConvert(MySqlDataReader reader)
         {
             ulong row_id = reader.GetUInt64("id");
-            String row_content = reader.GetString("content");
             ulong row_asset_id = reader.GetUInt64("asset_id");
+            String row_username = reader.GetString("username");
+            String row_content = reader.GetString("content");
             DateTime row_created_at = reader.GetDateTime("created_at");
+            DateTime row_updated_at = reader.GetDateTime("updated_at");
+            // deleted_at
+            DateTime row_deleted_at = reader.GetDateTime("deleted_at");
 
             return (Comment)Activator.CreateInstance(typeof(Comment), 
                 BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { row_id, row_content, row_asset_id, row_created_at }, null, null);
+                new object[] { row_id, row_username, row_content, row_asset_id, row_created_at, row_updated_at, row_deleted_at }, null, null);
         }
     }
 }
