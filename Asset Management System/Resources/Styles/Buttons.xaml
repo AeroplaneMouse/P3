@@ -191,36 +191,29 @@
         </Setter>
     </Style>
     
-    <!-- Department menu item button -->
-    <Style TargetType="Button" x:Key="MenuItemDepartmentButton">
+    <!-- Department content menu item button -->
+    <Style TargetType="Button" x:Key="MenuItemDepartmentContentButton">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Padding" Value="0, 5, 0, 5"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
-        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border TextBlock.Foreground="{TemplateBinding Foreground}"
-                            x:Name="Border"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Background="{TemplateBinding Background}"
-                            Padding="{TemplateBinding Padding}">
+                    <Border>
                         <ContentPresenter
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Margin="35, 0, 0, 0"
+                            Content="{TemplateBinding Content}"
                             RecognizesAccessKey="True"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
+        
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
+                <Setter Property="Background" Value="Transparent"/>
             </Trigger>
         </Style.Triggers>
     </Style>
