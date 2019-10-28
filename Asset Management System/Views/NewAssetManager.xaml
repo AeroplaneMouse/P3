@@ -10,7 +10,7 @@
     ShowsNavigationUI="False"
     Title="EditAsset">
     
-    <Page.Resources>
+    <!--<Page.Resources>
         <views:FieldDesignSelector x:Key="MyFieldDesignSelector" />
         <DataTemplate x:Key="TextBoxFieldStyle">
             <Grid>
@@ -69,7 +69,7 @@
                         CommandParameter="{Binding Path=ID}">X</Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Label}" />
                 <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}"  />
-                <!--PreviewTextInput="NumberVerification" removed from the textbox above -->
+                --><!--PreviewTextInput="NumberVerification" removed from the textbox above --><!--
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="DateFieldStyle">
@@ -110,7 +110,7 @@
                 <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Content}" Name="CheckBox" />
             </Grid>
         </DataTemplate>
-    </Page.Resources>
+    </Page.Resources>-->
 
     <Grid>
         <Grid.RowDefinitions>
@@ -172,11 +172,18 @@
                                  AcceptsTab="True" 
                                  SpellCheck.IsEnabled="True"/>
 
+                        <TextBlock Text="Tag"/>
+                        <TextBox Style="{StaticResource BoxFieldStyle}"
+                                 />
+                        <Button Content="Add field test"
+                                Command="{Binding AddFieldTestCommand}"/>
+                        <Button Content="Add field test 2"
+                                Command="{Binding AddFieldTest2Command}"/>
                     </StackPanel>
                 </Border>
 
                 <Rectangle Grid.Column="1"
-                            Margin="50, 10, 0, 10"
+                            Margin="10, 10, 10, 10"
                             Fill="Black"
                             Width=".3"
                             StrokeThickness="0"
@@ -190,8 +197,13 @@
                         <TextBlock Style="{StaticResource TitleStyle}" 
                                    FontSize="{StaticResource FontSizeRegular}"
                                    Margin="0, 0, 0 10">Fields</TextBlock>
-                        <TextBlock Text="Name"/>
-                        <TextBox/>
+                        <ComboBox Style="{StaticResource FieldComboBox}">
+                            
+                        </ComboBox>
+                        <ListView Style="{StaticResource FieldContainer}">
+
+                        </ListView>
+                        
                     </StackPanel>
                 </Border>
 

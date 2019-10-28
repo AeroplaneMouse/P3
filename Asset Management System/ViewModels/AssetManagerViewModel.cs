@@ -16,7 +16,6 @@ namespace Asset_Management_System.ViewModels
         public string Name { get; set; }
         public string Description { get; set; }
 
-
         public AssetManagerViewModel(MainViewModel main, Asset inputAsset)
         {
             _main = main;
@@ -39,17 +38,42 @@ namespace Asset_Management_System.ViewModels
             AddFieldCommand = new Commands.AddFieldCommand(this);
             RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
             CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Assets(main)));
+            AddFieldTestCommand = new Base.RelayCommand(() => AddField());
+            AddFieldTest2Command = new Base.RelayCommand(() => AddField2());
+        }
+
+        private void AddField()
+        {
+            Field field = new Field("Test field", "", 1, "", false);
+            FieldsList.Add(field);
+            Console.WriteLine("Field added");
+        }
+
+        private void AddField2()
+        {
+            Field field = new Field("Test field 2", "", 2, "", false);
+            FieldsList.Add(field);
+            Console.WriteLine("Field 2 added");
         }
 
         public ICommand SaveAssetCommand { get; set; }
         public ICommand CancelCommand { get; set; }
         public static ICommand RemoveFieldCommand { get; set; }
 
+        public ICommand AddFieldTestCommand { get; set; }
+        public ICommand AddFieldTest2Command { get; set; }
 
         public bool CanSaveAsset()
         {
             // **** TODO ****
             // Only return true, if the entered values are valid.
+
+            foreach (Field field in FieldsList)
+            {
+                if (field.Required && field.Content == String.Empty)
+                    return false;
+            }
+
             return true;
         }
 
