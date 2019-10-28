@@ -1,0 +1,37 @@
+
+#top-bar{
+    height: 40px;
+    width: 100%;
+    background-color: #24292e;
+}
+
+#sidebar{
+    height: 600px !important;
+    background-color: #3d5266;
+}
+
+#sidebar > .list-group {
+    background-color: #3d5266;
+}
+
+#sidebar > .list-group > .list-group-item{
+    background-color: #3d5266;
+}
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: .75rem 1.25rem;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: none !important;
+    color: white;
+    cursor: pointer;
+}
+
+.navbar{
+    background-color: white !important;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
