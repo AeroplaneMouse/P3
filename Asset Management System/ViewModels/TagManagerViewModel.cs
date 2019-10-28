@@ -12,6 +12,7 @@ namespace Asset_Management_System.ViewModels
     {
         private MainViewModel _main;
         private Tag _tag;
+        private string _randomColor;
 
         public string Name { get; set; }
         public string Color { get; set; }
@@ -22,14 +23,38 @@ namespace Asset_Management_System.ViewModels
             get
             {
                 TagRepository tagRepository = new TagRepository();
-                return (List<Tag>)tagRepository.GetParentTags();
+                List<Tag> parentTagsList = new List<Tag>() {
+                    new Tag()
+                    {
+                        Name = "[No Parent Tag]",
+                        ParentID = 0,
+                        Color = _randomColor
+                    }
+                };
+                foreach(Tag parentTag in (List<Tag>)tagRepository.GetParentTags())
+                {
+                    parentTagsList.Add(parentTag);
+                }
+
+                return parentTagsList;
             }
+        }
+
+        private string CreateRandomColor()
+        {
+            //Creates an instance of the Random, to create pseudo random numbers
+            Random random = new Random();
+
+            //Creates a hex values from three random ints converted to bytes and then to string
+            string hex = "#" + ((byte)random.Next(25, 230)).ToString("X2") + ((byte)random.Next(25, 230)).ToString("X2") + ((byte)random.Next(25, 230)).ToString("X2");
+
+            return hex;
         }
 
         public TagManagerViewModel(MainViewModel main, Tag inputTag)
         {
             _main = main;
-            _tag = inputTag;
+            _randomColor = CreateRandomColor();
 
             FieldsList = new ObservableCollection<Field>();
 
