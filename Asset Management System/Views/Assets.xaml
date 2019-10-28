@@ -46,10 +46,23 @@
 
                 <TextBox FontSize="{StaticResource FontSizeSmall}"
                          MinWidth="200"/>
+                
                 <Button Grid.Column="1"
                         HorizontalAlignment="Left"
                         Margin="10 0 0 0"
+                        Content="Search"
                         Style="{StaticResource RegularButton}"/>
+
+                <Button Grid.Column="1"
+                        Style="{StaticResource RegularCancelButton}"
+                        HorizontalAlignment="Right"
+                        Content="Remove"
+                        Visibility="{Binding IsRemoveVisible}"/>
+
+                <ListView Style="{StaticResource RegularList}"
+                          Grid.Row="2"
+                          Margin="0 10 0 0"
+                          Grid.ColumnSpan="2"/>
 
             </Grid>
         </Border>
