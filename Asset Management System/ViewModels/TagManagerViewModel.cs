@@ -103,7 +103,6 @@ namespace Asset_Management_System.ViewModels
             Color = _tag.Color;
 
             //Set the selected parent to the parent of the chosen tag
-            Console.WriteLine(ParentTagsList.Count);
             int i = ParentTagsList.Count;
             while(i > 0 && ParentTagsList[i-1].ID != _tag.ParentID)
             {
