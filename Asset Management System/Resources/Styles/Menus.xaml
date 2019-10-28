@@ -53,6 +53,45 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <!-- Department content MenuItem button -->
+    <Style TargetType="MenuItem" x:Key="MenuItemButtonDepartmentContent">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="20"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Style="{StaticResource MenuItemDepartmentContentButton}"
+                                    Command="{TemplateBinding Command}">
+
+                                <ContentPresenter Content="{TemplateBinding Header}"/>
+                            </Button>
+                            
+                            <Button Content="E"
+                                    Grid.Column="1"
+                                    Style="{StaticResource MenuItemDepartmentContentButton}"/>
+                            <Button Content="R"
+                                    Grid.Column="2"
+                                    Style="{StaticResource MenuItemDepartmentContentButton}"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
     
     <!-- Department menu button -->
     <Style TargetType="MenuItem" x:Key="MenuItemButtonDepartments">
@@ -85,51 +124,29 @@
                                 Placement="Bottom"
                                 VerticalOffset="1"
                                 HorizontalOffset="-15"
-                                IsOpen="{TemplateBinding IsSubmenuOpen}"
+                                IsOpen="True"
                                 AllowsTransparency="True"
                                 PopupAnimation="Fade">
                                 <StackPanel Background="{StaticResource NavigationBackgroundBrush}">
                                     <!-- All department-->
-                                    <Button Style="{StaticResource MenuItemDepartmentButton}"
-                                        Content="All departments"
-                                        Command="{Binding SelectDepartmentCommand}"
-                                        CommandParameter="0"/>
+                                    <MenuItem Style="{StaticResource MenuItemButtonDepartmentContent}"
+                                              Command="{Binding SelectDepartmentButton}"
+                                              CommandParameter="0"
+                                              Header="All departments"/>
+
                                     <Separator Margin="5, 0, 5, 5" Foreground="White"/>
                                     
                                     <!-- Departments -->
                                     <StackPanel Name="ItemsContainer"
-                                                IsItemsHost="True" 
+                                                IsItemsHost="True"
                                                 KeyboardNavigation.DirectionalNavigation="Cycle">
-                                        <StackPanel.Resources>
-                                            <Style TargetType="MenuItem">
-                                                <Setter Property="Background" Value="Transparent"/>
-                                                <Setter Property="Template">
-                                                    <Setter.Value>
-                                                        <ControlTemplate TargetType="MenuItem">
-                                                            <Border Padding="0, 5, 20, 0">
-                                                                <Button Style="{StaticResource MenuItemDepartmentButton}"
-                                                                        Command="{TemplateBinding Command}">
-
-                                                                    <ContentPresenter Content="{TemplateBinding Header}"/>
-                                                                </Button>
-                                                            </Border>
-                                                        </ControlTemplate>
-                                                    </Setter.Value>
-                                                </Setter>
-
-                                                <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
-                                                    </Trigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </StackPanel.Resources>
                                     </StackPanel>
 
-                                    <!-- Add new -->
                                     <Separator Margin="5, 5, 5, 0" Foreground="White"/>
-                                    <Button Style="{StaticResource MenuItemDepartmentButton}"
-                                            Content="Add new"/>
+                                    
+                                    <!-- Add new -->
+                                    <MenuItem Style="{StaticResource MenuItemButtonDepartmentContent}"
+                                              Header="Add new"/>
                                 </StackPanel>
                             </Popup>
                         </Grid>
@@ -144,4 +161,6 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    
 </ResourceDictionary>
