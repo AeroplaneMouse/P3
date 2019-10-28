@@ -24,14 +24,15 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class AssetHistory : Window
     {
-        public AssetHistory(Asset asset)
+        public AssetHistory(Model asset)
         {
             InitializeComponent();
             //DataContext = this;
             DataContext = new AssetHistoryViewModel(this, asset);
             //ILogRepository<Entry> rep = new LogRepository();
             //History = rep.GetLogEntries(asset.ID, asset.GetType());
-            this.LabelText = "History for: " + asset.Name;
+            Type type = asset.GetType();
+            this.LabelText = "History for: " + type.Name + " " + type.GetProperty("Name")?.GetValue(asset).ToString();
         }
         
         public string LabelText

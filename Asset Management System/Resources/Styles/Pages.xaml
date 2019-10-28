@@ -21,7 +21,7 @@
                                     Command="{Binding AddNewCommand}" />
 
                             <Button Style="{StaticResource RegularButton}"
-                                    Content="Print"
+                                    Content="Export"
                                     Command="{Binding PrintCommand}" />
 
                         </StackPanel>
@@ -49,45 +49,42 @@
                                     Command="{Binding RemoveCommand}" />
 
                             <Button Style="{StaticResource RegularButton}"
-                                    Content="View History"
-                                    Command="{Binding ViewLogCommand}" />
+                                    Content="View"
+                                    Command="{Binding ViewCommand}" />
 
                         </StackPanel>
 
                         <Grid Grid.Row="3" Margin="10">
-                            <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                                <ListView ItemsSource="{Binding SearchList}" SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
-                                    
-                                    <ListView.Resources>
-                                        
-                                        <GridView x:Key="AssetTemplate">
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
-                                        </GridView>
-                                        
-                                        <GridView x:Key="TagsTemplate">
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}"
-                                                            Header="Created" />
-                                        </GridView>
-                                        
-                                    </ListView.Resources>
-                                    
-                                    <ListView.Style>
-                                        <Style TargetType="ListView">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ViewType}" Value="1">
-                                                    <Setter Property="View" Value="{StaticResource AssetTemplate}" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                            <Setter Property="View" Value="{StaticResource TagsTemplate}" />
-                                        </Style>
-                                    </ListView.Style>
-                                </ListView>
-                            </ScrollViewer>
+                            <ListView ItemsSource="{Binding SearchList}" SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
+
+                                <ListView.Resources>
+
+                                    <GridView x:Key="AssetTemplate">
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description" />
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
+                                    </GridView>
+
+                                    <GridView x:Key="TagsTemplate">
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
+                                    </GridView>
+
+                                </ListView.Resources>
+
+                                <ListView.Style>
+                                    <Style TargetType="ListView">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ViewType}" Value="1">
+                                                <Setter Property="View" Value="{StaticResource AssetTemplate}" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                        <Setter Property="View" Value="{StaticResource TagsTemplate}" />
+                                    </Style>
+                                </ListView.Style>
+                            </ListView>
                         </Grid>
                     </Grid>
                 </ControlTemplate>
