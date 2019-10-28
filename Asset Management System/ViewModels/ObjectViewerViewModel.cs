@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
+using Asset_Management_System.Views;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -19,15 +21,22 @@ namespace Asset_Management_System.ViewModels
         public string Description { get; set; }
 
         public bool IsTag { get; set; }
+        
+        
+        public ICommand ViewAssetCommand { get; set; }
 
         public ObservableCollection<Field> FieldsList { get; set; }
         
         public List<Tag> TagsList { get; set; }
 
+        private MainViewModel _main;
+
         public ObjectViewerViewModel(MainViewModel main, DoesContainFields inputObject)
         {
             FieldsList = new ObservableCollection<Field>();
             TagsList = new List<Tag>();
+            _main = main;
+            ViewAssetCommand = new Base.RelayCommand((ViewAssetHistory));
 
             if (inputObject is Tag tag)
             {
@@ -68,6 +77,12 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
+        private void ViewAssetHistory()
+        {
+            var assetHistory = new AssetHistory(AssetInput);
+            assetHistory.ShowDialog();
+        }
+        
         /// <summary>
         /// Loads the tags attached to this asset
         /// </summary>
