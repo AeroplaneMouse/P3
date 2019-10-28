@@ -21,6 +21,8 @@ namespace Asset_Management_System.ViewModels
         public bool IsTag { get; set; }
 
         public ObservableCollection<Field> FieldsList { get; set; }
+
+        public ObservableCollection<Comment> CommentList { get; set; }
         
         public List<Tag> TagsList { get; set; }
 
@@ -28,6 +30,8 @@ namespace Asset_Management_System.ViewModels
         {
             FieldsList = new ObservableCollection<Field>();
             TagsList = new List<Tag>();
+
+            CommentList = new ObservableCollection<Comment>();
 
             if (inputObject is Tag tag)
             {
@@ -65,6 +69,17 @@ namespace Asset_Management_System.ViewModels
                 Name = asset.Name;
                 Description = asset.Description;
                 IsTag = false;
+
+                CommentList = new CommentRepository().GetByAssetId(asset.ID);
+
+                Console.WriteLine("Comments:");
+
+                foreach (Comment comment in CommentList)
+                {
+                    Console.WriteLine(comment.Content);
+                }
+
+                Console.WriteLine();
             }
         }
 

@@ -9,7 +9,10 @@
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
       Title="ObjectViewer">
+    
+    <!-- Header -->
     <Page.Resources>
+        <!-- Asset Template -->
         <DataTemplate x:Key="AssetTemplate">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -20,6 +23,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Label Grid.Row="0" Grid.Column="1">Name</Label>
@@ -27,8 +31,32 @@
 
                 <Label Grid.Row="1" Grid.Column="1">Description</Label>
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Description}" Padding="10" />
+
+                <!-- Comments -->
+                <Border Grid.Row="2" Grid.Column="1">
+                    <ListView ItemsSource="{Binding CommentList}" 
+                              SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
+
+                        <ListView.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding ViewCommand}" />
+                        </ListView.InputBindings>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content" />
+                            </GridView>
+                        </ListView.View>
+
+                    </ListView>
+                    
+                </Border>
             </Grid>
+
+            
         </DataTemplate>
+        
+        <!-- Asset Template-->
         <DataTemplate x:Key="TagTemplate">
             <Border BorderThickness="2" BorderBrush="Black">
                 <Grid>
@@ -55,12 +83,16 @@
             </Border>
         </DataTemplate>
     </Page.Resources>
+    
+    <!-- Main content -->
     <Grid>
+        
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200" />
             <ColumnDefinition Width="600" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="500" />
@@ -75,13 +107,17 @@
                 <ContentControl.Style>
                     <Style>
                         <Style.Triggers>
+                            
                             <DataTrigger Binding="{Binding IsTag}" Value="True">
-                                <Setter Property="ContentControl.ContentTemplate" Value="{StaticResource TagTemplate}" />
+                                <Setter Property="ContentControl.ContentTemplate" 
+                                        Value="{StaticResource TagTemplate}" />
                             </DataTrigger>
+                            
                             <DataTrigger Binding="{Binding IsTag}" Value="False">
                                 <Setter Property="ContentControl.ContentTemplate"
                                         Value="{StaticResource AssetTemplate}" />
                             </DataTrigger>
+                            
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
@@ -124,12 +160,10 @@
             </ScrollViewer>
         </Grid>
 
-        <Grid
-            Grid.Row="1"
-            Grid.Column="2"
-            Margin="10">
-            
-                <ItemsControl ItemsSource="{Binding TagsList}">
+        <Grid Grid.Row="1"
+              Grid.Column="2"
+              Margin="10">
+            <ItemsControl ItemsSource="{Binding TagsList}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border BorderThickness="1" BorderBrush="Black">

@@ -26,7 +26,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "INSERT INTO comments (asset_id, username, content, updated_at)" +
+                    const string query = "INSERT INTO comments (asset_id, username, content, updated_at) " +
                                          "VALUES (@asset_id, @username, @content, CURRENT_TIMESTAMP())";
 
                     using (var cmd = new MySqlCommand(query, _dbcon.Connection))
@@ -141,7 +141,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at" +
+                    const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
                                          "FROM comments WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, _dbcon.Connection))
@@ -181,7 +181,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at" +
+                    const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
                                          "FROM comments WHERE asset_id=@asset_id";
 
                     using (var cmd = new MySqlCommand(query, _dbcon.Connection))
@@ -221,12 +221,10 @@ namespace Asset_Management_System.Database.Repositories
             String row_content = reader.GetString("content");
             DateTime row_created_at = reader.GetDateTime("created_at");
             DateTime row_updated_at = reader.GetDateTime("updated_at");
-            // deleted_at
-            DateTime row_deleted_at = reader.GetDateTime("deleted_at");
 
             return (Comment)Activator.CreateInstance(typeof(Comment), 
                 BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { row_id, row_username, row_content, row_asset_id, row_created_at, row_updated_at, row_deleted_at }, null, null);
+                new object[] { row_id, row_username, row_content, row_asset_id, row_created_at, row_updated_at }, null, null);
         }
     }
 }
