@@ -33,6 +33,24 @@ namespace Asset_Management_System.Views
             viewModel.Color = hexColor;
         }
 
+        private void ParentTag_SelectionChanged(object sender, SelectionChangedEventArgs args)
+        {
+            TagManagerViewModel viewModel = DataContext as TagManagerViewModel;
+
+            if(args.RemovedItems.Count > 0)
+            {
+                Tag oldParentTag = (Tag)args.RemovedItems[0];
+                if (viewModel.Color == oldParentTag.Color)
+                {
+                    Tag newParentTag = viewModel.ParentTagsList[viewModel.SelectedParentIndex];
+
+                    System.Console.WriteLine(newParentTag.Color);
+
+                    viewModel.Color = newParentTag.Color;
+                }
+            }
+        }
+
         private string ToHexStr(int i)
         {
             string hex = i.ToString("X");
