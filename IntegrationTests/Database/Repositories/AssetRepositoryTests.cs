@@ -155,8 +155,7 @@ namespace IntegrationTests
         public void SearchByTags_SearchForAssetsWithTag1_ReturnsAssetWithTag1()
         {
             //Arrange
-            Tag tag = new Tag();
-            tag.Name = "IntegrationTests";
+            Tag tag = new Tag("AssetRepositoryTests - IntegrationTests", "Black", 1);
             (new TagRepository()).Insert(tag);
 
             assetRepository.Insert(asset);
@@ -175,8 +174,7 @@ namespace IntegrationTests
         public void SearchByTags_SearchForAssetsWithNonExistingTag_ReturnsEmptyListOfAsset()
         {
             //Arrange
-            Tag tag = new Tag();
-            tag.Name = "IntegrationTests";
+            Tag tag = tag = new Tag("TagRepositoryTests - IntegrationTests", "Black", 1);
             (new TagRepository()).Insert(tag);
             int expected = 0;
 
@@ -248,75 +246,58 @@ namespace IntegrationTests
         }
 
         [TestMethod]
-        public void AttachTagsToAsset_InputTwoTagsAndCallsGetAssetTags_ReturnsTheTagWithId2()
+        public void AttachTagsToAsset_TwoTagsAndAssetInDbToBeAttachedCallsGetAssetTags_Returns2Tags()
         {
             //Arrange
             TagRepository tagRepository = new TagRepository();
 
-            tagRepository.Insert(new Tag() { Name = "IntegrationTests" });
-            tagRepository.Insert(new Tag() { Name = "Tag 1", ParentID = 1 });
+            tagRepository.Insert(new Tag("Parent-TagRepositoryTests - IntegrationTests", "Black", 1));
+            tagRepository.Insert(new Tag("TagRepositoryTests - IntegrationTests", "Blue", 1) { ParentID = 1 });
 
             List<Tag> listOfTags = (List<Tag>) tagRepository.GetAll();
 
             assetRepository.Insert(asset);
 
-            Tag expected = tagRepository.GetById(2);
+            int expected = 2;
 
             //Act
-            assetRepository.AttachTagsToAsset(asset, listOfTags);
+            Asset assetToAttachTagsTo = assetRepository.GetById(1);
+
+            assetRepository.AttachTagsToAsset(assetToAttachTagsTo, listOfTags);
 
             List<Tag> returnedTags = assetRepository.GetAssetTags(asset);
 
-            Tag result = returnedTags[0];
+            int result = returnedTags.Count;
 
             //Assert
             Assert.AreEqual(result, expected);
         }
 
         [TestMethod]
-        public void AttachTagsToAsset_InputTagNotInDatabase_Returns_______()
+        public void AttachTagsToAsset_InputTagNotInDatabase_ReturnsFalse()
         {
             //Arrange
             TagRepository tagRepository = new TagRepository();
-
-            tagRepository.Insert(new Tag() { Name = "IntegrationTests" });
-            tagRepository.Insert(new Tag() { Name = "Tag 1", ParentID = 1 });
-
+            tagRepository.Insert(new Tag("Parent-TagRepositoryTests - IntegrationTests", "Black", 1));
+            tagRepository.Insert(new Tag("TagRepositoryTests - IntegrationTests", "Blue", 1) { ParentID = 1 });
             List<Tag> listOfTags = (List<Tag>)tagRepository.GetAll();
+
+            listOfTags.Add(new Tag("TagRepositoryTestsNotInDb - IntegrationTests", "Blue", 1));
 
             assetRepository.Insert(asset);
 
-            Asset expected = asset;
-
             //Act
-            assetRepository.AttachTagsToAsset(asset, listOfTags);
-
-            List<Asset> assetList = (List<Asset>)assetRepository.SearchByTags(new List<int>() { 2 });
+            bool result = assetRepository.AttachTagsToAsset(asset, listOfTags);
 
             //Assert
-            Assert.IsTrue(assetList[0].Equals(expected));
+            Assert.IsFalse(result);
         }
 
         [TestCleanup]
         public void CleanDatabase()
         {
-            //Set foreign key check to 0
-            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 0");
-
-            //Clear assets
-            mySqlHandler.RawQuery("TRUNCATE TABLE assets");
-
-            //Clear departments
-            mySqlHandler.RawQuery("TRUNCATE TABLE departments");
-
-            //Clear tags
-            mySqlHandler.RawQuery("TRUNCATE TABLE tags");
-
-            //Clear asset_tags
-            mySqlHandler.RawQuery("TRUNCATE TABLE asset_tags");
-
-            //Reset foreign key check
-            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 1");
+            //Clear database tables
+            mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 0;" + "TRUNCATE TABLE assets;" + "TRUNCATE TABLE departments;" + "TRUNCATE TABLE tags;" + "TRUNCATE TABLE asset_tags;" + "SET FOREIGN_KEY_CHECKS = 1;");
         }
     }
 }
