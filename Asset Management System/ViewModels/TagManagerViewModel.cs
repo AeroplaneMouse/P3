@@ -12,6 +12,7 @@ namespace Asset_Management_System.ViewModels
     {
         private MainViewModel _main;
         private Tag _tag;
+        private string _randomColor;
 
         public string Name { get; set; }
         public string Color { get; set; }
@@ -22,14 +23,38 @@ namespace Asset_Management_System.ViewModels
             get
             {
                 TagRepository tagRepository = new TagRepository();
-                return (List<Tag>)tagRepository.GetParentTags();
+                List<Tag> parentTagsList = new List<Tag>() {
+                    new Tag()
+                    {
+                        Name = "[No Parent Tag]",
+                        ParentID = 0,
+                        Color = _randomColor
+                    }
+                };
+                foreach(Tag parentTag in (List<Tag>)tagRepository.GetParentTags())
+                {
+                    parentTagsList.Add(parentTag);
+                }
+
+                return parentTagsList;
             }
+        }
+
+        private string CreateRandomColor()
+        {
+            //Creates an instance of the Random, to create pseudo random numbers
+            Random random = new Random();
+
+            //Creates a hex values from three random ints converted to bytes and then to string
+            string hex = "#" + ((byte)random.Next(25, 230)).ToString("X2") + ((byte)random.Next(25, 230)).ToString("X2") + ((byte)random.Next(25, 230)).ToString("X2");
+
+            return hex;
         }
 
         public TagManagerViewModel(MainViewModel main, Tag inputTag)
         {
             _main = main;
-            _tag = inputTag;
+            _randomColor = CreateRandomColor();
 
             FieldsList = new ObservableCollection<Field>();
 
@@ -71,12 +96,28 @@ namespace Asset_Management_System.ViewModels
             foreach (Field field in _tag.FieldsList)
                 FieldsList.Add(field);
 
+            //Set Name to the name of the chosen tag
             Name = _tag.Name;
+
+            //Set Color to the color of the chosen tag
             Color = _tag.Color;
+
+            //Set the selected parent to the parent of the chosen tag
+            int i = ParentTagsList.Count;
+            while(i > 0 && ParentTagsList[i-1].ID != _tag.ParentID)
+            {
+                i--;
+            }
+
+            if (i > 0)
+            {
+                SelectedParentIndex = i-1;
+            }
 
             // Notify view
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(Color));
+            OnPropertyChanged(nameof(SelectedParentIndex));
         }
     }
 }

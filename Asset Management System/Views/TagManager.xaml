@@ -127,13 +127,9 @@
             <Label>Name</Label>
             <TextBox Text="{Binding Name}" Padding="10" />
 
-            <Label>Color of the tag:</Label>
-            <xctk:ColorPicker Name="ColorPicker" SelectedColorChanged="ColorPicker_SelectedColorChanged"/>
-            <TextBox Text="{Binding Color}" Padding="10" />
-
             <Label>Parent Tag</Label>
             <StackPanel>
-                <ComboBox ItemsSource="{Binding ParentTagsList}" SelectedIndex="{Binding SelectedParentIndex}">
+                <ComboBox ItemsSource="{Binding ParentTagsList}" SelectedIndex="{Binding SelectedParentIndex}" SelectionChanged="ParentTag_SelectionChanged">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}" />
@@ -141,6 +137,9 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </StackPanel>
+            
+            <Label>Color of the tag:</Label>
+            <xctk:ColorPicker SelectedColor="{Binding Color}" Name="ColorPicker"/>
 
             <Label>Add new field</Label>
             <StackPanel>
