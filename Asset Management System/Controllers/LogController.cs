@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Asset_Management_System.Authentication;
@@ -59,6 +60,16 @@ namespace Asset_Management_System.Controllers
             string changeType = subject.ID == 0 ? "created" : "updated";
 
             return $"{type} {name} was {changeType}";
+        }
+
+        public List<Change> GetChanges(object oldEntry, object newEntry)
+        {
+            List<Change> changes = new List<Change>();
+
+            if (oldEntry.GetType() != newEntry.GetType())
+                return changes;
+
+            return changes;
         }
     }
 }
