@@ -12,7 +12,7 @@ namespace Asset_Management_System.Database
         public List<string> Values;
         public List<Table> Tables;
         public List<Statement> WhereStatements;
-        private List<OrderBy> _orderBys;
+        private Dictionary<string, string> _orderBys;
         private string _groupBy;
         private StringBuilder _query;
 
@@ -22,6 +22,7 @@ namespace Asset_Management_System.Database
             Values = new List<string>();
             Tables = new List<Table>();
             WhereStatements = new List<Statement>();
+            _orderBys = new Dictionary<string, string>();
             _query = new StringBuilder();
         }
 
@@ -34,9 +35,14 @@ namespace Asset_Management_System.Database
             Tables.Add(new Table(name));
         }
 
-        public void OrderBy(string column, string order="asc")
+        /// <summary>
+        /// Sets the column to order the fetched data by and the order
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="order">'true' for ascending or 'false' for descending</param>
+        public void OrderBy(string column, bool ascending = true)
         {
-            
+            _orderBys.Add(column, (ascending ? "ASC" : "DESC"));
         }
 
         /// <summary>
@@ -87,6 +93,15 @@ namespace Asset_Management_System.Database
                 _query.Append(" WHERE " + string.Join(" AND ", from item in WhereStatements select item.Render()));
             }
 
+            if (_orderBys.Count > 0)
+            {
+                _query.Append($" ORDER BY {_orderBys.First().Key} {_orderBys.First().Value}");
+
+                foreach (KeyValuePair<string, string> keyValuePair in _orderBys.Skip(1))
+                {
+                    _query.Append($", {keyValuePair.Key} {keyValuePair.Value}");
+                }
+            }
             return _query.ToString();
         }
 
@@ -172,9 +187,6 @@ namespace Asset_Management_System.Database
             return "";
         }
         
-        /// <summary>
-        /// 
-        /// </summary>
         public void Dispose()
         {
         }

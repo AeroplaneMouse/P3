@@ -82,6 +82,42 @@ namespace IntegrationTests
         }
 
         [TestMethod]
+        public void PrepareSelect_SelectLabelAndColorFromTagTableOrderedByIdAscending_BuildsQueryString()
+        {
+            //Arrange
+            QueryGenerator query = new QueryGenerator();
+            query.AddTable("tags");
+            query.Columns.AddRange(new[] { "label", "color" });
+            query.Where("id", "12", ">");
+            query.OrderBy("id", true);
+            string expected = "SELECT label, color FROM tags WHERE id > 12 ORDER BY id ASC";
+
+            //Act
+            string result = query.PrepareSelect();
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void PrepareSelect_SelectLabelAndColorFromTagTableOrderedByIdDescending_BuildsQueryString()
+        {
+            //Arrange
+            QueryGenerator query = new QueryGenerator();
+            query.AddTable("tags");
+            query.Columns.AddRange(new[] { "label", "color" });
+            query.Where("id", "12", ">");
+            query.OrderBy("id", false);
+            string expected = "SELECT label, color FROM tags WHERE id > 12 ORDER BY id DESC";
+
+            //Act
+            string result = query.PrepareSelect();
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
         public void PrepareDelete_DeleteTagFromDatabase_BuildsQueryString()
         {
             //Arrange
