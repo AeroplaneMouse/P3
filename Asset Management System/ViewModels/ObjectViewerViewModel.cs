@@ -26,6 +26,11 @@ namespace Asset_Management_System.ViewModels
 
         public bool HasComment { get; set; }
 
+        public ICommand AddNewCommentCommand { get; set; }
+
+        public CommentRepository CommentRep { get; set; }
+        
+
 
         public ICommand ViewAssetCommand { get; set; }
 
@@ -45,6 +50,10 @@ namespace Asset_Management_System.ViewModels
             ViewAssetCommand = new Base.RelayCommand((ViewAssetHistory));
 
             CommentList = new ObservableCollection<Comment>();
+
+            CommentRep = new CommentRepository();
+
+            // AddNewCommentCommand
 
             if (inputObject is Tag tag)
             {
@@ -67,6 +76,7 @@ namespace Asset_Management_System.ViewModels
                 Color = tag.Color;
                 ParentTag = tag.ParentID;
                 IsTag = true;
+                HasComment = false;
             }
             else if (inputObject is Asset asset)
             {
@@ -105,7 +115,7 @@ namespace Asset_Management_System.ViewModels
                 Description = asset.Description;
                 IsTag = false;
 
-                CommentList = new CommentRepository().GetByAssetId(asset.ID);
+                CommentList = CommentRep.GetByAssetId(asset.ID);
 
                 HasComment = CommentList.Count > 0;
 
