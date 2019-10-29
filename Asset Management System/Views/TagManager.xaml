@@ -48,7 +48,12 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0">X</Button>
+                <Button Grid.Row="1" Grid.Column="0"
+                        MaxHeight="40" VerticalAlignment="Top"
+                        Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
+                        CommandParameter="{Binding Path=ID}">
+                    X
+                </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Insert an string" />
                 <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" />
             </Grid>
@@ -65,7 +70,12 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0">X</Button>
+                <Button Grid.Row="1" Grid.Column="0"
+                        MaxHeight="40" VerticalAlignment="Top"
+                        Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
+                        CommandParameter="{Binding Path=ID}">
+                    X
+                </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Insert an integer" />
                 <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" />
                 <!-- PreviewTextInput="NumberVerification" removed from the textbox above -->
@@ -83,7 +93,12 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0">X</Button>
+                <Button Grid.Row="1" Grid.Column="0"
+                        MaxHeight="40" VerticalAlignment="Top"
+                        Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
+                        CommandParameter="{Binding Path=ID}">
+                    X
+                </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Insert an integer" />
                 <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Content}" />
             </Grid>
@@ -100,7 +115,12 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0">X</Button>
+                <Button Grid.Row="1" Grid.Column="0"
+                        MaxHeight="40" VerticalAlignment="Top"
+                        Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
+                        CommandParameter="{Binding Path=ID}">
+                    X
+                </Button>
                 <TextBlock Grid.Row="1" Grid.Column="1" Text="Tick boolean" />
                 <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Content}" Name="CheckBox" />
             </Grid>
