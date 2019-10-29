@@ -76,11 +76,8 @@ namespace Asset_Management_System.ViewModels.Commands
             }
             if (fieldType != 0)
             {
-                ShownField shownField = new ShownField();
-                Field addedField = new Field(promptResults[0], promptResults[1], fieldType, promptResults[1],
-                    required);
-                shownField.Name = addedField.GetHashCode().ToString();
-                shownField.Field = addedField;
+                ShownField shownField = new ShownField(new Field(promptResults[0], promptResults[1], fieldType, promptResults[1],
+                    required));
                 _viewModel.FieldsList.Add(shownField);
             }
         }
