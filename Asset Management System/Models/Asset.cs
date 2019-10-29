@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Logging;
 using Google.Protobuf.WellKnownTypes;
 using Newtonsoft.Json;
+using Type = System.Type;
 
 namespace Asset_Management_System.Models
 {
     [Serializable]
-    public class Asset : DoesContainFields
+    public class Asset : DoesContainFields, ILoggable<Asset>
     {
         public Asset() : base() { }
 
@@ -21,7 +25,6 @@ namespace Asset_Management_System.Models
             CreatedAt = created_at;
             SerializedFields = options;
             this.DeserializeFields();
-            SavePrevValues();
         }
 
         public string Name { get; set; }
@@ -29,39 +32,6 @@ namespace Asset_Management_System.Models
         public string Description { get; set; }
 
         public ulong DepartmentID { get; set; }
-
-        public string getChanges()
-        {
-            Dictionary<string, Change> changes = new Dictionary<string, Change>();
-            if (prevValues.ContainsKey("Name"))
-            {
-                string oldValue = prevValues["Name"];
-                string newValue = Name;
-                if (oldValue != newValue)
-                {
-                    changes.Add("Name", new Change(oldValue, newValue));
-                }
-
-            }
-            return changes.Count == 0 ? "[]" : JsonConvert.SerializeObject(changes, Formatting.Indented);
-        }
-
-        private void SaveChange(object prop)
-        {
-            string propName = prop.ToString();
-
-            if (prevValues.ContainsKey(propName))
-            {
-                new Change(prevValues[propName], prop.ToString());
-            }
-        }
-
-        public override bool Equals(object obj)
-        {
-            if(obj is Asset == false)
-            {
-                return false;
-            }
 
         public override bool Equals(object obj)
         {
@@ -97,5 +67,49 @@ namespace Asset_Management_System.Models
         }
 
         public override string ToString() => Name;
+        
+        /// <summary>
+        /// Saves all properties to a dictionary with Property name and value
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, string> GetLoggableProperties()
+        {
+            Dictionary<string, string> props = new Dictionary<string, string>();
+            props.Add("ID", ID.ToString());
+            props.Add("Name", Name);
+            props.Add("Description", Description);
+            props.Add("Department ID", DepartmentID.ToString());
+            props.Add("Options", SerializedFields);
+            props.Add("Created at", DateToStringConverter);
+            return props;
+            
+            /* Possible alternative using reflection
+            PropertyInfo[] Props = this.GetType().GetProperties();
+            foreach (var prop in Props)
+            {
+                props.Add(prop.Name, Props.GetValue(0).ToString());
+            }
+            return props
+            /**/
+            
+        }
+
+        /// <summary>
+        /// Returns the Name that should be written in the log
+        /// </summary>
+        /// <returns></returns>
+        public string GetLoggableName() => Name;
+
+        /// <summary>
+        /// Returns the ID
+        /// </summary>
+        /// <returns></returns>
+        public ulong GetId() => ID;
+
+        /// <summary>
+        /// Returns a repository-instance for this class
+        /// </summary>
+        /// <returns></returns>
+        public IRepository<Asset> GetRepository() => new AssetRepository();
     }
 }

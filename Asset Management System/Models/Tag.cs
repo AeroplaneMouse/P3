@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Logging;
 using Google.Protobuf.WellKnownTypes;
 
 namespace Asset_Management_System.Models
 {
-    public class Tag : DoesContainFields
+    public class Tag : DoesContainFields, ILoggable<Tag>
     {
         public Tag()
         {
@@ -22,7 +24,6 @@ namespace Asset_Management_System.Models
             this.SerializedFields = SerializedField;
             CreatedAt = created_at;
             UpdatedAt = updated_at;
-            SavePrevValues();
         }
 
         public string Name { get; set; }
@@ -34,5 +35,40 @@ namespace Asset_Management_System.Models
         public ulong DepartmentID { get; set; }
 
         public override string ToString() => Name;
+        
+        /// <summary>
+        /// Saves all properties to a dictionary with Property name and value
+        /// </summary>
+        /// <returns></returns>
+        public Dictionary<string, string> GetLoggableProperties()
+        {
+            Dictionary<string, string> props = new Dictionary<string, string>();
+            props.Add("ID", ID.ToString());
+            props.Add("Name", Name);
+            props.Add("Department ID", DepartmentID.ToString());
+            props.Add("Parent ID", ParentID.ToString());
+            props.Add("Color", Color);
+            props.Add("Options", SerializedFields);
+            props.Add("Created at", DateToStringConverter);
+            return props;
+        }
+
+        /// <summary>
+        /// Returns the Name that should be written in the log
+        /// </summary>
+        /// <returns></returns>
+        public string GetLoggableName() => Name;
+
+        /// <summary>
+        /// Returns the ID
+        /// </summary>
+        /// <returns></returns>
+        public ulong GetId() => ID;
+
+        /// <summary>
+        /// Returns a repository-instance for this class
+        /// </summary>
+        /// <returns></returns>
+        public IRepository<Tag> GetRepository() => new TagRepository();
     }
 }

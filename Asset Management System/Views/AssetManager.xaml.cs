@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Asset_Management_System.Controllers;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using System.Windows.Media;
+using Asset_Management_System.Logging;
 using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
@@ -76,7 +76,7 @@ namespace Asset_Management_System.Views
             {
                 _asset.DepartmentID = department.ID;
                 // Creates a log entry, currently uses for testing.
-                _asset.Notify();
+                Log<Asset>.CreateLog(_asset);
                 AssetRepository rep = new AssetRepository();
                 if (Editing)
                 {

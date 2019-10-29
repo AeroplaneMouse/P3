@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using Asset_Management_System.Logging;
+using Asset_Management_System.Models;
 using Asset_Management_System.Resources.DataModels;
 
 namespace Asset_Management_System.ViewModels
@@ -91,12 +93,12 @@ namespace Asset_Management_System.ViewModels
                 switch (PageType)
                 {
                     case ListPageType.Asset:
-                        (selected as Models.Asset).Notify(true);
+                        Log<Asset>.CreateLog(selected as ILoggable<Asset>, true);
                         (Rep as Database.Repositories.AssetRepository).Delete(selected as Models.Asset);
                         break;
 
                     case ListPageType.Tag:
-                        (selected as Models.Tag).Notify(true);
+                        Log<Tag>.CreateLog(selected as ILoggable<Tag>, true);
                         (Rep as Database.Repositories.TagRepository).Delete(selected as Models.Tag);
                         break;
 

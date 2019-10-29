@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using Asset_Management_System.Logging;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
@@ -54,7 +55,7 @@ namespace Asset_Management_System.ViewModels.Commands
             {
                 _asset.DepartmentID = department.ID;
                 // Creates a log entry, currently uses for testing.
-                //_asset.Notify();
+                Log<Asset>.CreateLog(_asset);
                 AssetRepository rep = new AssetRepository();
 
                 if (_editing)
