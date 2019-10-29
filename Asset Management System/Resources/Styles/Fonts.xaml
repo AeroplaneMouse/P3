@@ -5,8 +5,7 @@
 
     <FontFamily x:Key="SegoeRegular">pack://application;,,,/Resources/Fonts/#Segoe UI</FontFamily>
     <FontFamily x:Key="SegoeBold">pack://application;,,,/Resources/Fonts/#Segoe UI Bold</FontFamily>
-
-
+    
     <!-- Everything that inherits Control in the application defaults to this font -->
     <Style TargetType="{x:Type Control}" x:Key="BaseStyle">
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}" />
@@ -16,17 +15,16 @@
     <Style TargetType="{x:Type TextBlock}" x:Key="BaseTextBlockStyle">
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}" />
     </Style>
-
-
+    
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource BaseStyle}" />
     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource BaseStyle}" />
     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource BaseStyle}" />
     <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlockStyle}" />
     <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource BaseStyle}" />
-
-
+    
     <system:Double x:Key="FontSizeSmall">11</system:Double>
     <system:Double x:Key="FontSizeRegular">14</system:Double>
     <system:Double x:Key="FontSizeLarge">19</system:Double>
+    <system:Double x:Key="FontSizeXLarge">25</system:Double>
 
 </ResourceDictionary>

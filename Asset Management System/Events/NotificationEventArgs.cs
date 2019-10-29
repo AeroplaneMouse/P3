@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Windows.Media;
 using System.Text;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Events
 {
-    public delegate void NotificationEventHandler(object sender, NotificationEventArgs e);
+    public delegate void NotificationEventHandler(Notification n);
     public class NotificationEventArgs
     {
         public NotificationEventArgs(string notification)

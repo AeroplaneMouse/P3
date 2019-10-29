@@ -7,43 +7,31 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Views\AssetHistory.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Assets.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\PromptForReportName.xaml.cs">
+    <Compile Update="Views\Logs.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\PromptWithTextInput.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\EditDepartment.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Help.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\Home.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\LeftNavigation.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Main.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\NewAsset.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\Popup.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Settings.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\Splash.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\TagTest.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\TopNavigationPart2.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Tags.xaml.cs">
@@ -63,7 +51,13 @@
     <Page Update="Resources\Styles\Fonts.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Resources\Styles\ListViews.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Resources\Styles\Menus.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\Prompt.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resources\Styles\Spacings.xaml">
@@ -75,46 +69,34 @@
     <Page Update="Resources\Styles\Windows.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Views\AssetHistory.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\NewAssetManager.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\Assets.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\PromptForReportName.xaml">
+    <Page Update="Views\Logs.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\PromptWithTextInput.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\EditDepartment.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Help.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Views\Home.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\LeftNavigation.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Main.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\NewAsset.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Views\Popup.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Settings.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Views\Splash.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\TagTest.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\TopNavigationPart2.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Tags.xaml">

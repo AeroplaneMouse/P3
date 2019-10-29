@@ -5,20 +5,15 @@ using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Database;
 using MySql.Data.MySqlClient;
 using Asset_Management_System.Logging;
+using System.Collections.ObjectModel;
 
 namespace Asset_Management_System.Database.Repositories
 {
     public class LogRepository : ILogRepository<Entry>
     {
-        private DBConnection dbcon;
-
-        public LogRepository()
-        {
-            this.dbcon = DBConnection.Instance();
-        }
-        
         public bool Insert(Entry entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -61,13 +56,14 @@ namespace Asset_Management_System.Database.Repositories
             return query_success;
         }
 
-        public List<Entry> GetLogEntries(ulong logable_id, Type logable_type)
+        public IEnumerable<Entry> GetLogEntries(ulong logable_id, Type logable_type)
         {
             return GetLogEntries(logable_id, logable_type, null);
         }
 
-        public List<Entry> GetLogEntries(ulong logable_id, Type logable_type, string username)
+        public IEnumerable<Entry> GetLogEntries(ulong logable_id, Type logable_type, string username)
         {
+            DBConnection dbcon = DBConnection.Instance();
             List<Entry> entries = new List<Entry>();
 
             if (dbcon.IsConnect())
@@ -75,7 +71,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     string query = "SELECT id, logable_id, logable_type, username, description, options, created_at " + 
-                                   "FROM logs WHERE logable_id=@logable_id AND logable_type=logable_type"+
+                                   "FROM log WHERE logable_id=@logable_id AND logable_type=@logable_type"+
                                    (username != null ? " AND username=@username" : "");
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
@@ -85,7 +81,6 @@ namespace Asset_Management_System.Database.Repositories
                         
                         cmd.Parameters.Add("@logable_type", MySqlDbType.String);
                         cmd.Parameters["@logable_type"].Value = logable_type.ToString();
-
                         if (username != null)
                         {
                             cmd.Parameters.Add("@username", MySqlDbType.String);
@@ -98,7 +93,66 @@ namespace Asset_Management_System.Database.Repositories
                             {
                                 ulong row_id = reader.GetUInt64("id");
                                 ulong row_logable_id = reader.GetUInt64("logable_id");
-                                string row_logable_type = reader.GetString("logable_type");
+                                Type row_logable_type = Type.GetType(reader.GetString("logable_type"));
+                                string row_username = reader.GetString("username");
+                                string row_description = reader.GetString("description");
+                                string row_options = reader.GetString("options");
+                                DateTime row_created_at = reader.GetDateTime("created_at");
+                                                  
+                                Entry entry = (Entry)Activator.CreateInstance(typeof(Entry), 
+                                    BindingFlags.Instance | BindingFlags.NonPublic, null, 
+                                    new object[] { row_id, row_logable_id, row_logable_type, row_description, row_username, row_options, row_created_at }, 
+                                    null, null);
+                                
+                                entries.Add(entry);
+                            }
+                        }
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
+            }
+
+            return entries;
+        }
+
+        public ObservableCollection<Entry> Search(string keyword)
+        {
+            int limit = 100;
+
+            ObservableCollection<Entry> entries = new ObservableCollection<Entry>();
+            DBConnection dbcon = DBConnection.Instance();
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    string query = "SELECT id, logable_id, logable_type, username, description, options, created_at " +
+                                   "FROM log WHERE username LIKE @keyword OR description LIKE @keyword ORDER BY id desc LIMIT "+limit.ToString();
+                    
+                    if (!keyword.Contains("%"))
+                    {
+                        keyword = "%" + keyword + "%";
+                    }
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        cmd.Parameters.Add("@keyword", MySqlDbType.String);
+                        cmd.Parameters["@keyword"].Value = keyword;
+                        
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ulong row_id = reader.GetUInt64("id");
+                                ulong row_logable_id = reader.GetUInt64("logable_id");
+                                Type row_logable_type = Type.GetType(reader.GetString("logable_type"));
                                 string row_username = reader.GetString("username");
                                 string row_description = reader.GetString("description");
                                 string row_options = reader.GetString("options");

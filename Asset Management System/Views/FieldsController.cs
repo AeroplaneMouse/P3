@@ -1,5 +1,7 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,8 +12,8 @@ namespace Asset_Management_System.Views
 {
     public abstract class FieldsController : Page
     {
-        private int id = 0;
         public ObservableCollection<Field> FieldsList { get; set; }
+        protected bool _editing;
 
         /// <summary>
         /// Function to add fields to the list of fields.
@@ -21,27 +23,48 @@ namespace Asset_Management_System.Views
         /// <exception cref="NotSupportedException"></exception>
         protected void OnAddField(object sender, RoutedEventArgs e)
         {
+            List<string> promptResults;
             switch ((sender as Button)?.Name)
             {
                 case "AddTextField":
                     Console.WriteLine("Textfield added");
-                    FieldsList.Add(new Field(id++, "TextField", "", 1, ""));
+                    if ((promptResults = PromptManager("Text box", out bool required)).Count > 0)
+                    {
+                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
+                            required));
+                    }
                     break;
                 case "AddStringField":
                     Console.WriteLine("StringField added");
-                    FieldsList.Add(new Field(id++, "StringField", "", 2, ""));
+                    if ((promptResults = PromptManager("String Field", out required)).Count > 0)
+                    {
+                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
+                            required));
+                    }
                     break;
                 case "AddIntegerField":
                     Console.WriteLine("IntegerField added");
-                    FieldsList.Add(new Field(id++, "Integer", "", 3, ""));
+                    if ((promptResults = PromptManager("Integer FIeld", out required)).Count > 0)
+                    {
+                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
+                            required));
+                    }
                     break;
                 case "AddDateField":
-                    Console.WriteLine("DataField added");
-                    FieldsList.Add(new Field(id++, "DateField", "", 4, ""));
+                    Console.WriteLine("Date Field added");
+                    if ((promptResults = PromptManager("Date Field", out required)).Count > 0)
+                    {
+                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
+                            required));
+                    }
                     break;
                 case "AddBooleanField":
                     Console.WriteLine("BooleanField added");
-                    FieldsList.Add(new Field(id++, "BooleanField", "", 5, ""));
+                    if ((promptResults = PromptManager("Boolean Field", out required)).Count > 0)
+                    {
+                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
+                            required));
+                    }
                     break;
                 default:
                     throw new NotSupportedException();
@@ -108,6 +131,27 @@ namespace Asset_Management_System.Views
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private List<string> PromptManager(string label, out bool required)
+        {
+            var dialog = new PromptForFields(label);
+            List<string> outputList = new List<string>();
+            required = false;
+            if (dialog.ShowDialog() == true)
+            {
+                if (dialog.DialogResult == true)
+                {
+                    string name = dialog.FieldName;
+                    string defaultValue = dialog.DefaultValueText;
+                    outputList.Add(name);
+                    outputList.Add(defaultValue);
+                    required = dialog.Required;
+                }
+            }
+
+
+            return outputList;
         }
     }
 

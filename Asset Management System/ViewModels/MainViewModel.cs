@@ -1,13 +1,18 @@
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.Windows.Media;
+using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 using Asset_Management_System.Models;
+using Asset_Management_System.Events;
+using Asset_Management_System.Database;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Events;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -24,14 +29,12 @@ namespace Asset_Management_System.ViewModels
             _window = window;
             _outerMarginSize = 10;
 
-            WindowMinWidth = 400;
+            WindowMinWidth = 1000;
             WindowMinHeight = 400;
 
             ResizeBorder = 4;
             TitleHeight = 25;
             InnerContentPaddingSize = 6;
-
-            CurrentPage = DataModels.ApplicationPage.Start;
 
             // Listen out for the window resizeing
             _window.StateChanged += (sender, e) =>
@@ -44,14 +47,9 @@ namespace Asset_Management_System.ViewModels
                 //OnPropertyChanged(nameof(WindowCornerRadius));
             };
 
-            CurrentUser = new Session().Username;
-            if (Departments.Count > 0)
-                CurrentDepartment = Departments[0];
-
             // Setting up frames
-            FrameMainContent = new Frame();
-            FrameSplash = new Frame();
-            FrameSplash.Content = new Views.Splash(this);
+            Views.Splash splashScreen = new Views.Splash(this);
+            FrameSplash.Content = splashScreen;
 
             // Initialize commands
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
@@ -65,19 +63,16 @@ namespace Asset_Management_System.ViewModels
             ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this)));
             ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this)));
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
+            ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
+            ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
+            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test"), 0));
+
+            SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
+            RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
+            RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
-        }
-
-        private List<Department> GetDepartments()
-        {
-            List<Department> departments = new List<Department>();
-
-            DepartmentRepository rep = new DepartmentRepository();
-            departments = rep.GetAll();
-
-            return departments;
         }
 
         #endregion
@@ -94,16 +89,16 @@ namespace Asset_Management_System.ViewModels
 
         private List<Page> excludedPages = new List<Page> {
             new Views.AssetManager(null),
-            new Views.TagManager(null)
+            new Views.TagManager(null),
+            new Views.ObjectViewer(null, null)
         };
+
+        private Department _currentDepartment;
 
         #endregion
 
         #region Public Propterties
-
-        // The current page of the application
-        public DataModels.ApplicationPage CurrentPage { get; set; }
-
+        
         // The smallest size the window can have 
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
@@ -123,16 +118,9 @@ namespace Asset_Management_System.ViewModels
         // Margin around the window to allow a drop shadow. Checks if the window is maximised
         public int OuterMarginSize
         {
-            get
-            {
-                // If the window is maximised, remove the margin around the window, we don't need the drop shadow
-                return _window.WindowState == WindowState.Maximized ? 0 : _outerMarginSize;
-            }
-
-            set
-            {
-                _outerMarginSize = value;
-            }
+            // If the window is maximised, remove the margin around the window, we don't need the drop shadow
+            get => _window.WindowState == WindowState.Maximized ? 0 : _outerMarginSize;
+            set => _outerMarginSize = value;
         }
 
         // Thickness of the margin around the window to allow a drop shadow.
@@ -147,25 +135,40 @@ namespace Asset_Management_System.ViewModels
 
         public String CurrentUser { get; set; }
 
-        public Department CurrentDepartment { get; set; }
+        public Department CurrentDepartment
+        {
+            get => _currentDepartment;
+            set
+            {
+                _currentDepartment = value;
+                OnPropertyChanged(nameof(CurrentDepartment));
 
-        public Page PageMainContent { get; set; }
+                // Update default department for user
+                if (_currentDepartment != null)
+                {
+                    CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
+                    new UserRepository().Update(CurrentSession.user);
+                }
+            }
+        }
 
-        public Frame FrameMainContent { get; set; }
+        public Frame FrameMainContent { get; set; } = new Frame();
 
-        public Frame FrameSplash { get; set; }
+        public Frame FrameSplash { get; set; } = new Frame();
 
         public Visibility SplashVisibility { get; set; } = Visibility.Visible;
 
         public List<Department> Departments { get => GetDepartments(); }
 
+        public bool DisplayCurrentDepartment { get; set; } = false;
+
+        public Session CurrentSession { get; private set; }
+
+        public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
+
         #endregion
 
         #region Public Methods
-
-        
-        //public TopNavigationPart2 topNavigationPage;
-        //public LeftNavigation leftNavigationPage;
 
         /// <summary>
         /// Changes how many rows or columns a specific frame spans over. 
@@ -217,49 +220,58 @@ namespace Asset_Management_System.ViewModels
             frame.Content = setPage;
         }
 
-        /// <summary>
-        /// Displays a notification with a given background color and text.
-        /// Then calls a remove method after a given amount of time, to 
-        /// remove it.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public async void ShowNotification(object sender, NotificationEventArgs e)
+        public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background) 
+            => AddNotification(new Notification(message, foreground, background));
+        public void AddNotification(Notification n) => AddNotification(n, 2500);
+        public async void AddNotification(Notification n, int displayTime)
         {
-            // TODO: If another notification is to be displayed before the last has disappeared. Make them stack.
-            //LbNotification.Content = e.Notification;
-            //CanvasNotificationBar.Background = e.Color;
+            // Add notification to the list of active notifications
+            ActiveNotifications.Add(n);
 
-            //CanvasNotificationBar.Visibility = Visibility.Visible;
-            //await Task.Delay(2000);
-            //HideNotification();
+            // Wait some time, then remove it.
+            if (displayTime > 0)
+            {
+                await Task.Delay(displayTime);
+                RemoveNotification(n);
+            }
         }
 
-        /// <summary>
-        /// Removes a notification.
-        /// </summary>
-        private void HideNotification()
+        // Removes an active notification.
+        public void RemoveNotification(int id) => RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
+        public void RemoveNotification(Notification n)
         {
-            //CanvasNotificationBar.Visibility = Visibility.Hidden;
+            ActiveNotifications.Remove(n);
         }
+
 
         /// <summary>
         /// Used when the application has connected to the database and other external services,
         /// to remove the splash page and show the navigation menu's and homepage.
         /// </summary>
-        public void SystemLoaded()
+        public void SystemLoaded(Session session)
         {
+            // Remove reload splash screen menuitem
+            ReloadSplashCommand = null;
+
+            // Attaching notification
+            DBConnection.Instance().SqlConnectionFailed += AddNotification;
+
             // Remove splash page
             SplashVisibility = Visibility.Hidden;
-            //FrameSplash.Visibility = Visibility.Hidden;
-            //FrameSplash.Source = null;
+            OnPropertyChanged(nameof(SplashVisibility));
 
-            //// Set stuff
-            //topNavigationPage = new TopNavigationPart2(this);
-            //leftNavigationPage = new LeftNavigation(this);
-            //FrameTopNavigationPart2.Content = topNavigationPage;
-            //FrameLeftNavigation.Content = leftNavigationPage;
+            // Show department and username
+            DisplayCurrentDepartment = true;
+            CurrentSession = session;
+            CurrentUser = CurrentSession.Username;
+            OnPropertyChanged(nameof(CurrentUser));
 
+            // Setting the current department, from the default department of the current user.
+            CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);
+            if (CurrentDepartment == null)
+                CurrentDepartment = Department.GetDefault();
+
+            // Load homepage
             ChangeMainContent(new Views.Home(this));
         }
 
@@ -278,6 +290,14 @@ namespace Asset_Management_System.ViewModels
 
             // If the page wasn't found, return false
             return false;
+        }
+
+        private List<Department> GetDepartments()
+        {
+            if (DisplayCurrentDepartment)
+                return (List<Department>) new DepartmentRepository().GetAll();
+            else
+                return new List<Department>();
         }
 
         #endregion
@@ -299,6 +319,18 @@ namespace Asset_Management_System.ViewModels
         public ICommand ShowAssetsPageCommand { get; set; }
 
         public ICommand ShowTagPageCommand { get; set; }
+
+        public static ICommand SelectDepartmentCommand { get; set; }
+
+        public ICommand ShowLogPageCommand { get; set; }
+
+        public ICommand ReloadSplashCommand { get; set; }
+
+        public ICommand AddNotificationTestCommand { get; set; }
+
+        public static ICommand RemoveNotificationCommand { get; set; }
+
+        public ICommand RemoveDepartmentCommand { get; set; }
 
         #endregion
 

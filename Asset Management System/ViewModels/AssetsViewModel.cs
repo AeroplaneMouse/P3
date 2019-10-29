@@ -2,183 +2,46 @@
 using Asset_Management_System.Models;
 using Asset_Management_System.Views;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using System.Windows.Media;
+using Asset_Management_System.Helpers;
+using Asset_Management_System.Logging;
+using Asset_Management_System.Resources.DataModels;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class AssetsViewModel
+    public class AssetsViewModel : ChangeableListPageViewModel<AssetRepository, Asset>
     {
         #region Constructors
 
-        public AssetsViewModel(MainViewModel main)
+        private MainViewModel main;
+        public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
-            // Saving reference to the main window
-            _main = main;
-            Search();
-            // Initializing commands
-            AddNewCommand =
-                new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.AssetManager(_main)));
-            SearchCommand = new ViewModels.Base.RelayCommand(() => Search());
-            EditCommand = new ViewModels.Base.RelayCommand(() => Edit());
-            RemoveCommand = new ViewModels.Base.RelayCommand(() => Remove());
-            PrintCommand = new Base.RelayCommand(() => Print());
+            this.main = main;
         }
-
-        #endregion
-
-        #region Private Properties
-
-        private MainViewModel _main;
 
         #endregion
 
         #region Public Properties
 
-        public string SearchQueryText { get; set; } = "";
-        public int SelectedItemIndex { get; set; }
-
-        private ObservableCollection<Asset> _list = new ObservableCollection<Asset>();
-
-        public ObservableCollection<Asset> SearchList
-        {
-            get => _list;
-            set
-            {
-                _list.Clear();
-                foreach (Asset asset in value)
-                    _list.Add(asset);
-            }
-        }
+        public int ViewType => 1;
 
         #endregion
 
         #region Methods
 
-        /// <summary>
-        /// Sends a search request to the database, and sets the list of assets to the result.
-        /// </summary>
-        private void Search()
+        protected override void View()
         {
-            Console.WriteLine();
-            Console.WriteLine("Searching for: " + SearchQueryText);
-            AssetRepository rep = new AssetRepository();
-            ObservableCollection<Asset> assets = rep.Search(SearchQueryText);
+            Console.WriteLine("Asset view");
 
-            Console.WriteLine("Found: " + assets.Count.ToString());
+            Asset selected = GetSelectedItem();
 
-            if (assets.Count > 0)
-                Console.WriteLine("-----------");
-
-            //List<MenuItem> assetsFunc = new List<MenuItem>();
-            foreach (Asset asset in assets)
-            {
-                Console.WriteLine(asset.Name);
-
-                //// Creating menuItems
-                //MenuItem item = new MenuItem();
-                //MenuItem edit = new MenuItem() { Header = "Edit" };
-                //MenuItem delete = new MenuItem() { Header = "Remove" };
-
-                //item.Header = asset.Name;
-                ////AddVisualChild(edit);
-                //assetsFunc.Add(item);
-            }
-
-            SearchList = assets;
+            main.ChangeMainContent(new ObjectViewer(main,selected));
         }
-
-        /// <summary>
-        /// Opens the edit view for the selected asset.
-        /// </summary>
-        private void Edit()
-        {
-            Asset selectedAsset = GetSelectedItem();
-            if (selectedAsset == null)
-                Console.WriteLine("An asset is not selected!");
-            else
-            {
-                _main.ChangeMainContent(new AssetManager(_main, selectedAsset));
-            }
-        }
-
-        /// <summary>
-        /// Sends a remove request to the database for the selected assets.
-        /// </summary>
-        private void Remove()
-        {
-            Asset selectedAsset = GetSelectedItem();
-
-            if (selectedAsset == null)
-            {
-                string message = "Please select an item.";
-                //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Red));
-                Console.WriteLine(message);
-                return;
-            }
-            else
-            {
-                Console.WriteLine($"Removing {selectedAsset.Name}.");
-                new AssetRepository().Delete(selectedAsset);
-
-                //Main.ShowNotification(null, new NotificationEventArgs(message, Brushes.Green));
-
-                // Reload list
-                Search();
-            }
-        }
-
-        public void Print()
-        {
-            var dialog = new PromtForReportName("asset_report_" + DateTime.Now.ToString().Replace(@"/", "").Replace(@" ", "-").Replace(@":", "") + ".csv", "Report name:");
-            if (dialog.ShowDialog() == true)
-            {
-                if (dialog.DialogResult == true)
-                {
-                    string pathToFile = dialog.InputText;
-
-                    if (!pathToFile.EndsWith(".csv"))
-                    {
-                        pathToFile = pathToFile + ".csv";
-                    }
-
-                    pathToFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + pathToFile;
-
-                    using (StreamWriter file = new StreamWriter(pathToFile, false))
-                    {
-                        foreach (Asset asset in SearchList)
-                        {
-                            string fileEntry = asset.ID + "," + asset.Name;
-                            file.WriteLine(fileEntry);
-                        }
-                    }
-                }
-            }
-        }
-
-        private Asset GetSelectedItem()
-        {
-            if (SearchList.Count == 0)
-                return null;
-            else
-                return SearchList.ElementAt(SelectedItemIndex);
-        }
-
-        #endregion
-
-        #region Commands
-
-        public ICommand AddNewCommand { get; set; }
-        public ICommand SearchCommand { get; set; }
-        public ICommand EditCommand { get; set; }
-        public ICommand RemoveCommand { get; set; }
-        public ICommand PrintCommand { get; set; }
 
         #endregion
     }

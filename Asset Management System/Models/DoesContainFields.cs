@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.Unicode;
 using Newtonsoft.Json;
 
 namespace Asset_Management_System.Models
@@ -30,7 +31,11 @@ namespace Asset_Management_System.Models
         /// </summary>
         public void SerializeFields()
         {
-            SerializedFields = JsonConvert.SerializeObject(FieldsList, Formatting.Indented);
+            SerializedFields = JsonConvert.SerializeObject(FieldsList, Formatting.None);
+            if(SerializedFields.Length == 0)
+            {
+                SerializedFields = "[]";
+            }
         }
 
         /// <summary>
@@ -38,7 +43,7 @@ namespace Asset_Management_System.Models
         /// </summary>
         public void DeserializeFields()
         {
-            if (SerializedFields != null)
+            if (SerializedFields != "[]")
             {
                 FieldsList = JsonConvert.DeserializeObject<List<Field>>(SerializedFields);
             }
@@ -59,12 +64,9 @@ namespace Asset_Management_System.Models
         /// <returns></returns>
         public bool AddField(string name, int fieldType, string content, string defaultValue, bool required = false)
         {
-            Field currentField = new Field(this.IDCounter, name, content, fieldType, defaultValue, required);
-
-            this.IDCounter++;
+            Field currentField = new Field(name, content, fieldType, defaultValue, required);
 
             FieldsList.Add(currentField);
-            SerializeFields();
             return true;
         }
 
@@ -87,7 +89,6 @@ namespace Asset_Management_System.Models
                 FieldsList.Remove(itemToRemove);
             }
 
-            SerializeFields();
             return true;
         }
 
@@ -99,8 +100,6 @@ namespace Asset_Management_System.Models
         public bool RemoveField(Field field)
         {
             FieldsList.Remove(field);
-
-            SerializeFields();
             return true;
         }
     }

@@ -11,13 +11,33 @@ using System.Collections.ObjectModel;
 
 namespace Asset_Management_System.Database.Repositories
 {
-    class TagRepository : ITagRepository
+    public class TagRepository : ITagRepository
     {
-        private DBConnection dbcon;
-
-        public TagRepository()
+        public int GetCount()
         {
-            this.dbcon = DBConnection.Instance();
+            DBConnection dbcon = DBConnection.Instance();
+            int count = 0;
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    const string query = "SELECT COUNT(*) FROM tags;";
+                    using var cmd = new MySqlCommand(query, dbcon.Connection);
+                    using var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                        count = reader.GetInt32("COUNT(*)");
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
+            }
+            return count;
         }
 
         /// <summary>
@@ -27,14 +47,17 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public bool Insert(Tag entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
+
+            entity.SerializeFields();
 
             if (dbcon.IsConnect())
             {
                 try
                 {
-                    const string query = "INSERT INTO tags (label, color, options, department_id, parent_id) " +
-                                         "VALUES (@label, @color, @options, @department_id, @parent_id)";
+                    const string query = "INSERT INTO tags (label, color, options, department_id, parent_id, updated_at) " +
+                                         "VALUES (@label, @color, @options, @department_id, @parent_id, CURRENT_TIMESTAMP())";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -76,13 +99,16 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public bool Update(Tag entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
+
+            entity.SerializeFields();
 
             if (dbcon.IsConnect())
             {
                 try
                 {
-                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options WHERE id=@id";
+                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options, parent_id=@parent_id, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -94,6 +120,9 @@ namespace Asset_Management_System.Database.Repositories
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
                         cmd.Parameters["@options"].Value = entity.SerializedFields;
+                        
+                        cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@parent_id"].Value = entity.ParentID;
 
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = entity.ID;
@@ -121,6 +150,7 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public bool Delete(Tag entity)
         {
+            DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -157,6 +187,7 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public Tag GetById(ulong id)
         {
+            DBConnection dbcon = DBConnection.Instance();
             Tag tag = null;
 
             if (dbcon.IsConnect())
@@ -164,7 +195,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query =
-                        "SELECT id, label, parent_id, department_id, color, options, created_at FROM tags WHERE id=@id";
+                        "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at FROM tags WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -195,7 +226,7 @@ namespace Asset_Management_System.Database.Repositories
         /// 
         /// </summary>
         /// <returns></returns>
-        public List<Tag> GetParentTags()
+        public IEnumerable<Tag> GetParentTags()
         {
             return this.GetChildTags(0);
         }
@@ -205,8 +236,9 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="parent_id"></param>
         /// <returns></returns>
-        public List<Tag> GetChildTags(ulong parent_id)
+        public IEnumerable<Tag> GetChildTags(ulong parent_id)
         {
+            DBConnection dbcon = DBConnection.Instance();
             List<Tag> tags = new List<Tag>();
 
             if (dbcon.IsConnect())
@@ -214,7 +246,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query =
-                        "SELECT id, label, parent_id, department_id, color, options, created_at FROM tags WHERE parent_id=@id";
+                        "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at FROM tags WHERE parent_id=@id";
 
                     using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
@@ -250,6 +282,7 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public ObservableCollection<Tag> Search(string keyword)
         {
+            DBConnection dbcon = DBConnection.Instance();
             ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
 
             if (dbcon.IsConnect())
@@ -257,7 +290,7 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query =
-                        "SELECT id, label, parent_id, department_id, color, options, created_at FROM tags WHERE label LIKE @keyword";
+                        "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at FROM tags WHERE label LIKE @keyword";
 
                     if (!keyword.Contains('%'))
                         keyword = $"%{keyword}%";
@@ -289,6 +322,42 @@ namespace Asset_Management_System.Database.Repositories
             return tags;
         }
 
+        public IEnumerable<Tag> GetAll()
+        {
+            DBConnection dbcon = DBConnection.Instance();
+            List<Tag> tags = new List<Tag>();
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at,options FROM tags";
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                tags.Add(DBOToModelConvert(reader));
+                            }
+                        }
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
+            }
+
+            return tags;
+            
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -302,10 +371,12 @@ namespace Asset_Management_System.Database.Repositories
             ulong row_department_id = reader.GetUInt64("department_id");
             string row_color = reader.GetString("color");
             DateTime row_created_at = reader.GetDateTime("created_at");
+            DateTime row_updated_at = reader.GetDateTime("updated_at");
+            string row_options = reader.GetString("options");
 
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] {row_id, row_label, row_department_id, row_parent_id, row_color, row_created_at}, null,
+                new object[] {row_id, row_label, row_department_id, row_parent_id, row_color, row_created_at, row_updated_at,row_options}, null,
                 null);
         }
     }

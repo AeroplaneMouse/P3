@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.WellKnownTypes;
@@ -9,13 +9,10 @@ namespace Asset_Management_System.Models
     [Serializable]
     public class Asset : DoesContainFields
     {
-        public Asset()
-        {
-            FieldsList = new List<Field>();
-        }
+        public Asset() : base() { }
 
         [JsonConstructor]
-        private Asset(ulong id, string name, string description, ulong department_id, DateTime created_at, string options)
+        private Asset(ulong id, string name, string description, ulong department_id, string options, DateTime created_at, DateTime updated_at)
         {
             ID = id;
             Name = name;
@@ -23,7 +20,7 @@ namespace Asset_Management_System.Models
             DepartmentID = department_id;
             CreatedAt = created_at;
             SerializedFields = options;
-            FieldsList = new List<Field>();
+            this.DeserializeFields();
             SavePrevValues();
         }
 
@@ -32,7 +29,7 @@ namespace Asset_Management_System.Models
         public string Description { get; set; }
 
         public ulong DepartmentID { get; set; }
-        
+
         public string getChanges()
         {
             Dictionary<string, Change> changes = new Dictionary<string, Change>();
@@ -44,7 +41,7 @@ namespace Asset_Management_System.Models
                 {
                     changes.Add("Name", new Change(oldValue, newValue));
                 }
-                
+
             }
             return changes.Count == 0 ? "[]" : JsonConvert.SerializeObject(changes, Formatting.Indented);
         }
@@ -52,12 +49,19 @@ namespace Asset_Management_System.Models
         private void SaveChange(object prop)
         {
             string propName = prop.ToString();
-            
+
             if (prevValues.ContainsKey(propName))
             {
                 new Change(prevValues[propName], prop.ToString());
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            if(obj is Asset == false)
+            {
+                return false;
+            }
 
         public override bool Equals(object obj)
         {
@@ -83,7 +87,7 @@ namespace Asset_Management_System.Models
                     return false;
                 }
             }
-            
+
             return true;
         }
 
@@ -91,7 +95,7 @@ namespace Asset_Management_System.Models
         {
             return HashCode.Combine(Name, Description, DepartmentID);
         }
-        
+
         public override string ToString() => Name;
     }
 }

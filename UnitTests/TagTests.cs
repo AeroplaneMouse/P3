@@ -7,11 +7,11 @@ namespace UnitTests
     public class TagTests
     {
         [TestMethod]
-        public void Tag_ToString_ReturnsLabelOfTag()
+        public void ToString_ReturnsLabelOfTag()
         {
             //Arrange
             Tag tag = new Tag();
-            tag.Label = "Tag_label";
+            tag.Name = "Tag_label";
 
             //Act
             string result = tag.ToString();

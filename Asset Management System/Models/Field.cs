@@ -8,6 +8,7 @@ namespace Asset_Management_System.Models
     [Serializable]
     public class Field
     {
+        private static int _id = 0;
         /// <summary>
         /// Default constructor for initiating a new Field object.
         /// </summary>
@@ -16,9 +17,9 @@ namespace Asset_Management_System.Models
         /// <param name="required">A boolean, whether the field is required or not</param>
         /// <param name="fieldType">Selecting the type of the field. 1= TextBox,2 = String,3= Int, 4 = Date, 5 = Boolean</param>
         /// <param name="defaultValue">The default value which should be entered into the field</param>
-        public Field(int ID, string label, string content, int fieldType, string defaultValue, bool required = false)
+        public Field(string label, string content, int fieldType, string defaultValue, bool required = false)
         {
-            this.ID = ID;
+            this.ID = _id++;
             this.Label = label;
             this.Content = content;
             if (fieldType <= 5)
@@ -53,8 +54,6 @@ namespace Asset_Management_System.Models
             } }
 
         public readonly string DefaultValue;
-        
-        public string CheckSum { get; set; }
 
         /// <summary>
         /// Returns the object information as a dictionary.
@@ -73,24 +72,37 @@ namespace Asset_Management_System.Models
             return output;
         }
 
-        /// <summary>
-        /// Gets checksum of the field.
-        /// </summary>
-        /// <returns>The checksum</returns>
-        /// <exception cref="NullReferenceException"></exception>
-        public string GetChecksum()
+        public override bool Equals(object obj)
         {
-            string checksum = "";
+            if (obj is Field == false)
+            {
+                return false;
+            }
 
-            checksum += this.Label + this.Required.ToString() + this.FieldType.ToString() + this.DefaultValue;
+            Field other = (Field)obj;
+            return (this.GetHashCode() == other.GetHashCode());
+        }
 
-            checksum = this.CalculateMD5Hash(checksum);
+        public override int GetHashCode()
+        {
+            string hash = "";
 
-            return checksum;
+            hash += this.Label + this.Required.ToString() + this.FieldType.ToString() + this.DefaultValue;
+
+            hash = this.CalculateMD5Hash(hash);
+
+            int hashCode = 0;
+
+            foreach(char c in hash)
+            {
+                hashCode += (int)c;
+            }
+
+            return hashCode;
         }
 
         /// <summary>
-        /// Calculates a MD5 hash for a string. (by Jani Järvinen)
+        /// Calculates a MD5 hash for the input string
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

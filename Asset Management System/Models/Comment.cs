@@ -1,22 +1,29 @@
-﻿using System;
+using System;
 
 namespace Asset_Management_System.Models
 {
     public class Comment : Model
     {
-        /*Constructor used by DB*/
-        private Comment(ulong id, string content, string username, ulong assetId)
-        {
-            ID = id;
-            Content = content;
-            Username = username;
-            AssetID = assetId;
-            SavePrevValues();
-        }
-
-        public string Content { get; set; }
         public string Username { get; }
 
+        public string Content { get; set; }
+
         public ulong AssetID { get; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
+
+        /*Constructor used by DB*/
+        private Comment(ulong id, string username, string content, ulong assetId, DateTime createdAt, DateTime updatedAt)
+        {
+            ID = id;
+            Username = username;
+            Content = content;
+            AssetID = assetId;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            SavePrevValues();
+        }
     }
 }

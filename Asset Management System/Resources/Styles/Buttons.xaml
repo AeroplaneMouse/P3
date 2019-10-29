@@ -151,7 +151,90 @@
     <Style TargetType="{x:Type Button}" x:Key="RegularButton" BasedOn="{StaticResource NavigationButton}">
         <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
         <Setter Property="Width" Value="100"/>
-
+        <Setter Property="Padding" Value="5"></Setter>
     </Style>
 
+    <Style x:Key="ButtonFocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border>
+                        <Rectangle  Margin="2"
+                                    StrokeThickness="1"
+                                    Stroke="#60000000"
+                                    StrokeDashArray="1 2" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Department menu item button -->
+    <Style TargetType="Button" x:Key="MenuItemDepartmentButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="0, 5, 0, 5"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border TextBlock.Foreground="{TemplateBinding Foreground}"
+                            x:Name="Border"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Margin="35, 0, 0, 0"
+                            RecognizesAccessKey="True"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Remove notification button -->
+    <Style TargetType="Button" x:Key="RemoveNotificationButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Content" Value="[X]"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="0, 0, 10, 0"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderThickness="0" Background="{TemplateBinding Background}">
+                        <Label Content="{TemplateBinding Content}" Foreground="{TemplateBinding Foreground}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="Gray"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Add Field button -->
+    <Style TargetType="Button" x:Key="AddFieldButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="Command" Value="{Binding AddFieldCommand}"/>
+        
+    </Style>
+    
 </ResourceDictionary>
