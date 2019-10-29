@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
+using Asset_Management_System.ViewModels.Commands.ViewModelHelper;
 using Asset_Management_System.Views;
 using System.Windows;
 using System.Windows.Controls;
@@ -193,18 +194,5 @@ namespace Asset_Management_System.ViewModels
             Console.WriteLine("Found " + TagsList.Count + " tags");
         }
     }
-
-    public class ShowFields
-    {
-        public string Name { get; set; }
-
-        public Field Field { get; set; }
-
-        public ObservableCollection<Tag> FieldTags { get; set; }
-
-        public ShowFields()
-        {
-            FieldTags = new ObservableCollection<Tag>();
-        }
-    }
+    
 }

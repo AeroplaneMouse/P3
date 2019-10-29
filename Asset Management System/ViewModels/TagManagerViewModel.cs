@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
+using Asset_Management_System.ViewModels.Commands.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -23,7 +24,8 @@ namespace Asset_Management_System.ViewModels
             get
             {
                 TagRepository tagRepository = new TagRepository();
-                List<Tag> parentTagsList = new List<Tag>() {
+                List<Tag> parentTagsList = new List<Tag>()
+                {
                     new Tag()
                     {
                         Name = "[No Parent Tag]",
@@ -31,7 +33,7 @@ namespace Asset_Management_System.ViewModels
                         Color = _randomColor
                     }
                 };
-                foreach(Tag parentTag in (List<Tag>)tagRepository.GetParentTags())
+                foreach (Tag parentTag in (List<Tag>) tagRepository.GetParentTags())
                 {
                     parentTagsList.Add(parentTag);
                 }
@@ -45,7 +47,7 @@ namespace Asset_Management_System.ViewModels
             _main = main;
             _randomColor = CreateRandomColor();
 
-            FieldsList = new ObservableCollection<Field>();
+            FieldsList = new ObservableCollection<ShowFields>();
 
             if (inputTag != null)
             {
@@ -74,7 +76,8 @@ namespace Asset_Management_System.ViewModels
             Random random = new Random();
 
             //Creates a hex values from three random ints converted to bytes and then to string
-            string hex = "#" + ((byte)random.Next(25, 230)).ToString("X2") + ((byte)random.Next(25, 230)).ToString("X2") + ((byte)random.Next(25, 230)).ToString("X2");
+            string hex = "#" + ((byte) random.Next(25, 230)).ToString("X2") +
+                         ((byte) random.Next(25, 230)).ToString("X2") + ((byte) random.Next(25, 230)).ToString("X2");
 
             return hex;
         }
@@ -94,7 +97,12 @@ namespace Asset_Management_System.ViewModels
         {
             _tag.DeserializeFields();
             foreach (Field field in _tag.FieldsList)
-                FieldsList.Add(field);
+            {
+                ShowFields shownField = new ShowFields();
+                shownField.Name = shownField.GetHashCode().ToString();
+                shownField.Field = field;
+                FieldsList.Add(shownField);
+            }
 
             //Set Name to the name of the chosen tag
             Name = _tag.Name;
@@ -104,14 +112,14 @@ namespace Asset_Management_System.ViewModels
 
             //Set the selected parent to the parent of the chosen tag
             int i = ParentTagsList.Count;
-            while(i > 0 && ParentTagsList[i-1].ID != _tag.ParentID)
+            while (i > 0 && ParentTagsList[i - 1].ID != _tag.ParentID)
             {
                 i--;
             }
 
             if (i > 0)
             {
-                SelectedParentIndex = i-1;
+                SelectedParentIndex = i - 1;
             }
 
             // Notify view

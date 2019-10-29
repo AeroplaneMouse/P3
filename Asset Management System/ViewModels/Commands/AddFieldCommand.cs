@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Asset_Management_System.ViewModels.Commands.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
@@ -27,53 +28,60 @@ namespace Asset_Management_System.ViewModels.Commands
         {
             string fieldToAdd = parameter.ToString();
 
+            
             // Getting label, default value and is required
             List<string> promptResults = new List<string>();
+            int fieldType = 0;
+            bool required;
             
             switch (fieldToAdd)
             {
                 case "Text Field":
                     Console.WriteLine("Textfield added");
-                    if ((promptResults = _viewModel.PromptManager("Text box", out bool required)).Count > 0)
+                    if ((promptResults = _viewModel.PromptManager("Text box", out required)).Count > 0)
                     {
-                        _viewModel.FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
-                            required));
+                        fieldType = 1;
                     }
                     break;
                 case "String Field":
                     Console.WriteLine("StringField added");
                     if ((promptResults = _viewModel.PromptManager("String Field", out required)).Count > 0)
                     {
-                        _viewModel.FieldsList.Add(new Field(promptResults[0], promptResults[1], 2, promptResults[1],
-                            required));
+                        fieldType = 2;
                     }
                     break;
                 case "Integer Field":
                     Console.WriteLine("IntegerField added");
                     if ((promptResults = _viewModel.PromptManager("Integer Field", out required)).Count > 0)
                     {
-                        _viewModel.FieldsList.Add(new Field(promptResults[0], promptResults[1], 3, promptResults[1],
-                            required));
+                        fieldType = 3;
                     }
                     break;
                 case "Date Field":
                     Console.WriteLine("Date Field added");
                     if ((promptResults = _viewModel.PromptManager("Date Field", out required)).Count > 0)
                     {
-                        _viewModel.FieldsList.Add(new Field(promptResults[0], promptResults[1], 4, promptResults[1],
-                            required));
+                        fieldType = 4;
                     }
                     break;
                 case "Boolean Field":
                     Console.WriteLine("BooleanField added");
                     if ((promptResults = _viewModel.PromptManager("Boolean Field", out required)).Count > 0)
                     {
-                        _viewModel.FieldsList.Add(new Field(promptResults[0], promptResults[1], 5, promptResults[1],
-                            required));
+                        fieldType = 5;
                     }
                     break;
                 default:
                     throw new NotSupportedException();
+            }
+            if (fieldType != 0)
+            {
+                ShowFields shownField = new ShowFields();
+                Field addedField = new Field(promptResults[0], promptResults[1], fieldType, promptResults[1],
+                    required);
+                shownField.Name = addedField.GetHashCode().ToString();
+                shownField.Field = addedField;
+                _viewModel.FieldsList.Add(shownField);
             }
         }
     }
