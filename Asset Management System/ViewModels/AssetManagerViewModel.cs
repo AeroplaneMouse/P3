@@ -193,8 +193,7 @@ namespace Asset_Management_System.ViewModels
             _asset.DeserializeFields();
             foreach (var field in _asset.FieldsList)
             {
-                ShownField shownField = new ShownField(field);
-                FieldsList.Add(shownField);
+                FieldsList.Add(new ShownField(field));
             }
 
             Name = _asset.Name;

@@ -94,8 +94,7 @@ namespace Asset_Management_System.ViewModels
 
                 foreach (var field in TagInput.FieldsList)
                 {
-                    ShownField showField = new ShownField(field);
-                    FieldsList.Add(showField);
+                    FieldsList.Add(new ShownField(field));
                 }
 
                 if (TagInput.ParentID != 0)
@@ -119,8 +118,7 @@ namespace Asset_Management_System.ViewModels
 
                 foreach (var field in AssetInput.FieldsList)
                 {
-                    ShownField shownField = new ShownField(field);
-                    FieldsList.Add(shownField);
+                    FieldsList.Add(new ShownField(field));
                 }
 
                 // Load all tags into TagsList
