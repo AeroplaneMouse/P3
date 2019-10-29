@@ -94,9 +94,7 @@ namespace Asset_Management_System.ViewModels
 
                 foreach (var field in TagInput.FieldsList)
                 {
-                    ShownField showField = new ShownField();
-                    showField.Name = field.GetHashCode().ToString();
-                    showField.Field = field;
+                    ShownField showField = new ShownField(field);
                     FieldsList.Add(showField);
                 }
 
@@ -121,9 +119,7 @@ namespace Asset_Management_System.ViewModels
 
                 foreach (var field in AssetInput.FieldsList)
                 {
-                    ShownField shownField = new ShownField();
-                    shownField.Name = field.GetHashCode().ToString();
-                    shownField.Field = field;
+                    ShownField shownField = new ShownField(field);
                     FieldsList.Add(shownField);
                 }
 
