@@ -27,7 +27,7 @@ namespace Asset_Management_System.ViewModels.Commands
             int fieldId = int.Parse(parameter.ToString());
 
             // Find field by ID, then remove it.
-            _viewModel.FieldsList.Remove(_viewModel.FieldsList.Single(s=>s.ID == fieldId));
+            _viewModel.FieldsList.Remove(_viewModel.FieldsList.Single(s=>s.Field.ID == fieldId));
         }
     }
 }

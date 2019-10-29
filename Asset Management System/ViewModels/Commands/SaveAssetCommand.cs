@@ -38,15 +38,15 @@ namespace Asset_Management_System.ViewModels.Commands
             _asset.Description = _viewModel.Description;
 
             _asset.FieldsList = new List<Field>();
-            foreach (var field in _viewModel.FieldsList)
+            foreach (var shownField in _viewModel.FieldsList)
             {
-                if (field.Required && field.Content == string.Empty)
+                if (shownField.Field.Required && shownField.Field.Content == string.Empty)
                 {
                     _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
                     return;
                     //requiredFieldsWritten = false;
                 }
-                _asset.AddField(field);
+                _asset.AddField(shownField.Field);
             }
 
             Department department = _main.CurrentDepartment;

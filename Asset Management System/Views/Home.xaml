@@ -68,7 +68,6 @@
 
             <!-- List of tags -->
             <ListBox Width="200"
-                     Name="ListBoxTags"
                      MinHeight="30"
                      MaxHeight="150"
                      Padding="5"

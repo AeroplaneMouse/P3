@@ -14,7 +14,7 @@ namespace Asset_Management_System.Views
         public AssetManager(MainViewModel main, Asset inputAsset = null)
         {
             InitializeComponent();
-            DataContext = new AssetManagerViewModel(main, inputAsset);
+            DataContext = new AssetManagerViewModel(main, inputAsset,InputBox);
         }
     }
 }
