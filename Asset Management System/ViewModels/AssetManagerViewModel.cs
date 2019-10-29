@@ -150,8 +150,8 @@ namespace Asset_Management_System.ViewModels
             AddFieldCommand = new Commands.AddFieldCommand(this);
             RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
             CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Assets(main)));
-            AddFieldTestCommand = new Base.RelayCommand(() => AddField());
-            AddFieldTest2Command = new Base.RelayCommand(() => AddField2());
+            //AddFieldTestCommand = new Base.RelayCommand(() => AddField());
+            //AddFieldTest2Command = new Base.RelayCommand(() => AddField2());
 
             #region Tag related variables
 
@@ -180,19 +180,19 @@ namespace Asset_Management_System.ViewModels
             #endregion
         }
 
-        private void AddField()
-        {
-            Field field = new Field("Test field", "", 1, "", false);
-            FieldsList.Add(field);
-            Console.WriteLine("Field added");
-        }
+        //private void AddField()
+        //{
+        //    Field field = new Field("Test field", "", 1, "", false);
+        //    FieldsList.Add(field);
+        //    Console.WriteLine("Field added");
+        //}
 
-        private void AddField2()
-        {
-            Field field = new Field("Test field 2", "", 2, "", false);
-            FieldsList.Add(field);
-            Console.WriteLine("Field 2 added");
-        }
+        //private void AddField2()
+        //{
+        //    Field field = new Field("Test field 2", "", 2, "", false);
+        //    FieldsList.Add(field);
+        //    Console.WriteLine("Field 2 added");
+        //}
 
         public ICommand SaveAssetCommand { get; set; }
         public ICommand CancelCommand { get; set; }
@@ -206,11 +206,11 @@ namespace Asset_Management_System.ViewModels
             // **** TODO ****
             // Only return true, if the entered values are valid.
 
-            foreach (Field field in FieldsList)
-            {
-                if (field.Required && field.Content == String.Empty)
-                    return false;
-            }
+            //foreach (Field field in FieldsList)
+            //{
+            //    if (field.Required && field.Content == String.Empty)
+            //        return false;
+            //}
 
             return true;
         }
