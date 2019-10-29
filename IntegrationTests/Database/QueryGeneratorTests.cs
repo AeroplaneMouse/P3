@@ -101,10 +101,27 @@ namespace IntegrationTests
             query.Columns.AddRange(new[] { "label", "color" });
             query.Values.AddRange(new[] { "NewLabel", "#666666" });
             query.Where("label", "QueryGeneratorTestsTag");
-            string expected = "UPDATE tags SET color = '#666666', label = 'NewLabel' WHERE label = 'QueryGeneratorTestsTag'";
+            string expected = "UPDATE tags SET label = 'NewLabel', color = '#666666' WHERE label = 'QueryGeneratorTestsTag'";
 
             //Act
             string result = query.PrepareUpdate();
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void PrepareInsert_PrepareInsert_BuildsQueryString()
+        {
+            //Arrange
+            QueryGenerator query = new QueryGenerator();
+            query.AddTable("tags");
+            query.Columns.AddRange(new[] { "label", "color", "parent_id", "department_id", "options" });
+            query.Values.AddRange(new[] { "QueryGeneratorTestsTag", "#666666", "1", "20", "[]" });
+            string expected = "INSERT INTO tags ( label, color, parent_id, department_id, options ) VALUES ( 'QueryGeneratorTestsTag', '#666666', 1, 20, '[]' )";
+
+            //Act
+            string result = query.PrepareInsert();
 
             //Assert
             Assert.AreEqual(expected, result);

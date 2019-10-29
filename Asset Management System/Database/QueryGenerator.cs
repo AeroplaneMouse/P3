@@ -72,19 +72,19 @@ namespace Asset_Management_System.Database
         {
             if (Tables.Count > 0 && Columns.Count == Values.Count)
             {
-                _query.Append("INSERT INTO "+Tables[0].Name);
-                _query.Append(" FROM (" + GetColumns() + ") ");
-                string columnValuePairs;
-                int initialValue = Columns.Count - 1;
+                _query.Append("INSERT INTO " + Tables[0].Name);
+                _query.Append(" ( " + GetColumns() + " )");
+                string values;
+                int length = Values.Count;
 
-                columnValuePairs = (new Statement(Columns[initialValue], Values[initialValue])).Render();
+                values = (int.TryParse(Values[0], out int returnedInt) || bool.TryParse(Values[0], out bool returnedBool) ? Values[0] : $"'{Values[0]}'");
 
-                for (int i = initialValue - 1; i >= 0; i--)
+                for (int i = 1; i < length; i++)
                 {
-                    columnValuePairs += $", {(new Statement(Columns[i], Values[i])).Render()}";
+                    values += $", {(int.TryParse(Values[i], out returnedInt) || bool.TryParse(Values[i], out returnedBool) ? Values[i] : $"'{Values[i]}'")}";
                 }
 
-                _query.Append($" VALUES ( {columnValuePairs} )");
+                _query.Append($" VALUES ( {values} )");
                 return _query.ToString();
             }
 
@@ -100,11 +100,11 @@ namespace Asset_Management_System.Database
                 _query.Append("UPDATE " + Tables[0].Name);
 
                 string columnValuePairs;
-                int initialValue = Columns.Count - 1;
+                int length = Columns.Count;
 
-                columnValuePairs = (new Statement(Columns[initialValue], Values[initialValue])).Render();
+                columnValuePairs = (new Statement(Columns[0], Values[0])).Render();
 
-                for (int i = initialValue - 1; i >= 0; i--)
+                for (int i = 1; i < length; i++)
                 {
                     columnValuePairs += $", {(new Statement(Columns[i], Values[i])).Render()}";
                 }
