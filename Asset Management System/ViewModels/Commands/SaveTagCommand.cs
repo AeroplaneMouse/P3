@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using Asset_Management_System.Logging;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
@@ -54,7 +55,7 @@ namespace Asset_Management_System.ViewModels.Commands
                 _tag.ParentID = parent.ID;
 
                 // Logging the Tag
-                //_tag.Notify();
+                Log<Tag>.CreateLog(_tag);
 
                 // Save tag
                 TagRepository rep = new TagRepository();

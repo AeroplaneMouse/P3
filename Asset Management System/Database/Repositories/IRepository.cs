@@ -2,7 +2,7 @@
 
 namespace Asset_Management_System.Database.Repositories
 {
-    interface IRepository<T>
+    public interface IRepository<T>
     {
         //event EventHandler RepositoryError;
 
