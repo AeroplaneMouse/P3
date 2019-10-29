@@ -30,6 +30,9 @@ namespace Asset_Management_System.ViewModels
 
         public int ViewType => 1;
 
+
+
+
         #endregion
 
         #region Methods

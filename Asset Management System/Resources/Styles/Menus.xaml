@@ -124,7 +124,7 @@
                                 Placement="Bottom"
                                 VerticalOffset="1"
                                 HorizontalOffset="-15"
-                                IsOpen="True"
+                                IsOpen="{TemplateBinding IsSubmenuOpen}"
                                 AllowsTransparency="True"
                                 PopupAnimation="Fade">
                                 <StackPanel Background="{StaticResource NavigationBackgroundBrush}">
