@@ -79,8 +79,7 @@ namespace Asset_Management_System.Logging
             string name = subject.GetLoggableName();
             
             // Determine if subject is being created or updated
-            //TODO Determine and implement a better way to do this
-            bool created = ulong.Parse(subject.GetLoggableProperties()["ID"]) == 0;
+            bool created = subject.GetId() == 0;
             
             string changeType = delete ? "deleted" : created ? "created" : "updated";
 
