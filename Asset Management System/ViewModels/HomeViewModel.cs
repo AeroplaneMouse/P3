@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -16,6 +17,8 @@ namespace Asset_Management_System.ViewModels
 
         private MainViewModel _main;
 
+        private List<Tag> _selectedTagsList;
+
         // The string that the user is searching with
         private string _searchString { get; set; }
 
@@ -23,7 +26,7 @@ namespace Asset_Management_System.ViewModels
         private ulong _parentID { get; set; } = 0;
 
         // List of all available tags, based on the search
-        private List<Models.Tag> _tagList { get; set; }
+        private List<Tag> _tagList { get; set; }
 
         // Index that the user has tabbed to in the search results
         private int _tabIndex { get; set; } = 0;
@@ -68,7 +71,7 @@ namespace Asset_Management_System.ViewModels
         }
 
         // The list exposed to the View
-        public List<Models.Tag> TagList
+        public List<Tag> TagList
         {
             get
             {
@@ -86,10 +89,7 @@ namespace Asset_Management_System.ViewModels
         // The string that is being searched for, exposed to the view
         public string TagString
         {
-            get
-            {
-                return _searchString;
-            }
+            get { return _searchString; }
 
             set
             {
@@ -156,9 +156,9 @@ namespace Asset_Management_System.ViewModels
             int departments = new DepartmentRepository().GetCount();
 
             // Generate strings
-            NumberOfAssets = $"You have { assets } assets";
-            NumberOfTags = $"You have { tags } tags";
-            NumberOfDepartments = $"You have { departments } departments";
+            NumberOfAssets = $"You have {assets} assets";
+            NumberOfTags = $"You have {tags} tags";
+            NumberOfDepartments = $"You have {departments} departments";
 
             // Notify view
             OnPropertyChanged(nameof(NumberOfAssets));
@@ -193,14 +193,13 @@ namespace Asset_Management_System.ViewModels
 
         private void Apply()
         {
-            MessageBox.Show("You searched for: " + _searchString);
+            _tagList.Add(TagList.Single(p => String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
+            Console.WriteLine("Checking:  " +  _tagList.Count);
             _tabIndex = 0;
         }
 
         private void CycleResults()
         {
-
-
             _searchString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex++);
 
             if (_searchString == null)
@@ -211,7 +210,6 @@ namespace Asset_Management_System.ViewModels
 
             // TODO: Kom uden om mig
             _box.CaretIndex = _searchString.Length;
-
         }
 
         private void EnterChildren()
@@ -273,9 +271,5 @@ namespace Asset_Management_System.ViewModels
         }
 
         #endregion
-
-
-
-
     }
 }

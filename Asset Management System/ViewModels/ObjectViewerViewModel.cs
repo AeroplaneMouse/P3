@@ -1,14 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
+using Asset_Management_System.ViewModels.Commands.ViewModelHelper;
 using Asset_Management_System.Views;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class ObjectViewerViewModel
+    public class ObjectViewerViewModel : Base.BaseViewModel
     {
         private Tag TagInput;
 
@@ -22,9 +26,18 @@ namespace Asset_Management_System.ViewModels
         public string Description { get; set; }
 
         public bool IsTag { get; set; }
+
+        public ICommand AddNewCommentCommand { get; set; }
+
+        public ICommand RemoveCommentCommand { get; set; }
+
+        public CommentRepository CommentRep { get; set; }
+
+        public string CommentField { get; set; }
+
+        public int SelectedItemIndex { get; set; }
         
-        public bool HasComment { get; set; }
-        
+
 
         public ICommand ViewAssetCommand { get; set; }
 
@@ -45,6 +58,10 @@ namespace Asset_Management_System.ViewModels
 
             CommentList = new ObservableCollection<Comment>();
 
+            CommentRep = new CommentRepository();
+
+            
+
             if (inputObject is Tag tag)
             {
                 TagInput = tag;
@@ -55,6 +72,11 @@ namespace Asset_Management_System.ViewModels
                     showField.Name = field.GetHashCode().ToString();
                     showField.Field = field;
                     FieldsList.Add(showField);
+                }
+
+                if (tag.ParentID != 0)
+                {
+                    
                 }
 
                 Name = tag.Name;
@@ -91,7 +113,7 @@ namespace Asset_Management_System.ViewModels
                             }
                         }
                     }
-                    
+
                     Console.WriteLine("Tags add " + fieldsCount + " fields");
                 }
 
@@ -99,18 +121,57 @@ namespace Asset_Management_System.ViewModels
                 Description = asset.Description;
                 IsTag = false;
 
-                CommentList = new CommentRepository().GetByAssetId(asset.ID);
+                CommentList = CommentRep.GetByAssetId(asset.ID);
 
-                HasComment = CommentList.Count > 0;
+                AddNewCommentCommand = new Base.RelayCommand(AddNewComment);
+                RemoveCommentCommand = new Base.RelayCommand(RemoveComment);
+            }
+        }
 
-                Console.WriteLine("Comments:");
-
-                foreach (Comment comment in CommentList)
+        private void AddNewComment()
+        {
+            if (CommentField != null && CommentField != String.Empty)
+            {
+                Comment c = new Comment()
                 {
-                    Console.WriteLine(comment.Content);
-                }
+                    Username = _main.CurrentUser,
+                    Content = CommentField,
+                    AssetID = AssetInput.ID,
+                    CreatedAt = DateTime.Now,
+                    UpdatedAt = DateTime.Now
+                };
 
-                Console.WriteLine();
+                CommentRep.Insert(c);
+
+                c.Notify();
+
+                CommentField = String.Empty;
+
+                CommentList = CommentRep.GetByAssetId(AssetInput.ID);
+            }
+        }
+
+        private void RemoveComment()
+        {
+            Comment selected = GetSelectedItem();
+
+            if (selected != null)
+            {
+                selected.Notify(true);
+                CommentRep.Delete(selected);
+            }
+
+            CommentList = CommentRep.GetByAssetId(AssetInput.ID);
+        }
+
+        private Comment GetSelectedItem()
+        {
+            if (CommentList.Count == 0)
+                return null;
+
+            else
+            {
+                return CommentList.ElementAt(SelectedItemIndex);
             }
         }
 
@@ -135,18 +196,5 @@ namespace Asset_Management_System.ViewModels
             Console.WriteLine("Found " + TagsList.Count + " tags");
         }
     }
-
-    public class ShowFields
-    {
-        public string Name { get; set; }
-        
-        public Field Field { get; set; }
-
-        public ObservableCollection<Tag> FieldTags { get; set; }
-
-        public ShowFields()
-        {
-            FieldTags = new ObservableCollection<Tag>();
-        }
-    }
+    
 }

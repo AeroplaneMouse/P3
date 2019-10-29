@@ -1,15 +1,18 @@
-﻿<views:FieldsController x:Class="Asset_Management_System.Views.AssetManager"
-                        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                        xmlns:views="clr-namespace:Asset_Management_System.Views"
-                        mc:Ignorable="d"
-                        d:DesignHeight="450" d:DesignWidth="800"
-                        ShowsNavigationUI="False"
-                        Title="EditAsset">
+﻿<Page x:Class="Asset_Management_System.Views.AssetManager"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:views="clr-namespace:Asset_Management_System.Views"
+      xmlns:v="clr-namespace:Asset_Management_System.ViewModels"
+      xmlns:viewModelHelper="clr-namespace:Asset_Management_System.ViewModels.Commands.ViewModelHelper"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800"
+      ShowsNavigationUI="False"
+      Title="EditAsset">
+
     <Page.Resources>
-        <views:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+        <viewModelHelper:FieldDesignSelector x:Key="MyFieldDesignSelector" />
         <DataTemplate x:Key="TextBoxFieldStyle">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -22,12 +25,14 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0" Click="OnDeleteField" MaxHeight="40" VerticalAlignment="Top"
-                        Name="DeleteTextField">
+                <Button Grid.Row="1" Grid.Column="0"
+                        Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
+                        MaxHeight="40" VerticalAlignment="Top"
+                        CommandParameter="{Binding Path=Field.ID}">
                     X
                 </Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Label}" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" MaxHeight="200" MaxWidth="250"
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" MaxHeight="200" MaxWidth="250"
                          TextWrapping="Wrap" />
             </Grid>
         </DataTemplate>
@@ -43,9 +48,14 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0" Click="OnDeleteField" Name="DeleteStringField">X</Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Label}" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" />
+                <Button Grid.Row="1" Grid.Column="0"
+                        Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
+                        MaxHeight="40" VerticalAlignment="Top"
+                        CommandParameter="{Binding Path=Field.ID}">
+                    X
+                </Button>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="IntegerFieldStyle">
@@ -60,9 +70,15 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0" Click="OnDeleteField" Name="DeleteIntegerField">X</Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Label}" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" PreviewTextInput="NumberVerification" />
+                <Button Grid.Row="1" Grid.Column="0"
+                        Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
+                        MaxHeight="40" VerticalAlignment="Top"
+                        CommandParameter="{Binding Path=Field.ID}">
+                    X
+                </Button>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" />
+                <!--PreviewTextInput="NumberVerification" removed from the textbox above -->
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="DateFieldStyle">
@@ -77,9 +93,14 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0" Click="OnDeleteField" Name="DeleteDateField">X</Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Label}" />
-                <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Content}" />
+                <Button Grid.Row="1" Grid.Column="0"
+                        Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
+                        MaxHeight="40" VerticalAlignment="Top"
+                        CommandParameter="{Binding Path=Field.ID}">
+                    X
+                </Button>
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
+                <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Field.Content}" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="BooleanFieldStyle">
@@ -94,9 +115,14 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0" Click="OnDeleteField" Name="DeleteBooleanField">X</Button>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Name}" />
-                <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Content}" Name="CheckBox" />
+                <Button Grid.Row="1" Grid.Column="0"
+                        Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
+                        MaxHeight="40" VerticalAlignment="Top"
+                        CommandParameter="{Binding Path=Field.ID}">
+                    X
+                </Button>
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Field.Name}" />
+                <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Field.Content}" Name="CheckBox" />
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -119,31 +145,97 @@
             Grid.Column="0"
             Margin="10">
             <Label>Name</Label>
-            <TextBox Name="TbName" Padding="10" />
+            <TextBox Padding="10" Text="{Binding Name}" />
 
             <Label>Description</Label>
-            <TextBox Name="TbDescription" Padding="10" />
+            <TextBox Padding="10" Text="{Binding Description}" />
 
+            <StackPanel>
+
+                <!-- Tag input -->
+                <TextBox Width="100"
+                         x:Name="InputBox"
+                         Padding="5"
+                         Margin="5"
+                         Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}">
+
+                    <TextBox.InputBindings>
+
+                        <KeyBinding Key="Return" Command="{Binding EnterKeyCommand}" />
+                        <KeyBinding Key="Tab" Command="{Binding TabKeyCommand}" />
+                        <KeyBinding Key="Space" Command="{Binding SpaceKeyCommand}" />
+                        <KeyBinding Key="Esc" Command="{Binding EscapeKeyCommand}" />
+                        <KeyBinding Key="Backspace" Command="{Binding BackspaceKeyCommand}" />
+
+                    </TextBox.InputBindings>
+
+                </TextBox>
+
+                <!-- Group -->
+                <TextBlock Width="Auto"
+                           MinWidth="50"
+                           Padding="5"
+                           Margin="5"
+                           Text="{Binding ParentID, UpdateSourceTrigger=PropertyChanged}" />
+
+                <!-- List of tags -->
+                <ListBox Width="200"
+                         Name="ListBoxTags"
+                         MinHeight="30"
+                         MaxHeight="150"
+                         Padding="5"
+                         Margin="5"
+                         Foreground="Black"
+                         ItemsSource="{Binding TagList, UpdateSourceTrigger=PropertyChanged}">
+
+                    <ListBox.ItemTemplate>
+
+                        <DataTemplate>
+
+                            <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+
+                        </DataTemplate>
+
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
             <Label>Add new field</Label>
             <StackPanel>
                 <ComboBox>
                     <ComboBoxItem>
-                        <Button Height="20" Width="300" Click="OnAddField" Name="AddTextField">Add TextField</Button>
+                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Text Field">Add TextField</Button>
                     </ComboBoxItem>
                     <ComboBoxItem>
-                        <Button Height="20" Width="300" Click="OnAddField" Name="AddStringField">Add StringField</Button>
+                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="String Field">Add StringField</Button>
                     </ComboBoxItem>
                     <ComboBoxItem>
-                        <Button Height="20" Width="300" Click="OnAddField" Name="AddIntegerField">Add IntegerField</Button>
+                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Integer Field">Add IntegerField</Button>
                     </ComboBoxItem>
                     <ComboBoxItem>
-                        <Button Height="20" Width="300" Click="OnAddField" Name="AddDateField">Add DateField</Button>
+                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Date Field">Add DateField</Button>
                     </ComboBoxItem>
                     <ComboBoxItem>
-                        <Button Height="20" Width="300" Click="OnAddField" Name="AddBooleanField">Add BooleanField</Button>
+                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Boolean Field">Add BooleanField</Button>
                     </ComboBoxItem>
                 </ComboBox>
             </StackPanel>
+            <Grid
+                
+                Margin="10">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding CurrentlyAddedTags}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Border BorderBrush="{Binding Color}" BorderThickness="1">
+                                        <TextBlock Text="{Binding Name}" Padding="5"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
         </StackPanel>
 
 
@@ -152,7 +244,8 @@
             Grid.Column="1"
             Margin="10">
             <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                <ItemsControl Name="FieldsControl" ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
+                <ItemsControl ItemsSource="{Binding FieldsList}"
+                              ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel />
@@ -163,13 +256,13 @@
         </Grid>
 
         <Button
-            Name="BtnSaveNewAsset"
             Content="Save asset"
             Grid.Row="1"
             Grid.Column="2"
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
             Margin="10"
-            Click="BtnSaveNewAsset_Click" />
+            Style="{StaticResource RegularButton}"
+            Command="{Binding SaveAssetCommand}" />
     </Grid>
-</views:FieldsController>
+</Page>
