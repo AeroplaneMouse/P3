@@ -143,6 +143,8 @@ namespace Asset_Management_System.ViewModels
 
                 CommentRep.Insert(c);
 
+                c.Notify();
+
                 CommentField = String.Empty;
 
                 CommentList = CommentRep.GetByAssetId(AssetInput.ID);
