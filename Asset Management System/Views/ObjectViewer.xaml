@@ -37,26 +37,6 @@
                         Command="{Binding ViewAssetCommand}" />
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Description}" Padding="10" />
 
-                <!-- Comments -->
-                <Border Grid.Row="3" Grid.Column="1">
-                    <ListView ItemsSource="{Binding CommentList}"
-                              SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
-
-                        <ListView.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding ViewCommand}" />
-                        </ListView.InputBindings>
-
-                        <ListView.View>
-                            <GridView>
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content" />
-                            </GridView>
-                        </ListView.View>
-
-                    </ListView>
-
-                </Border>
-
             </Grid>
 
 
@@ -88,7 +68,32 @@
                 </Grid>
             </Border>
         </DataTemplate>
+
+        <!-- Comments -->
+        <DataTemplate x:Key="CommentTemplate">
+            <Border>
+                <ListView ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
+
+                    <ListView.InputBindings>
+                        <KeyBinding Key="Enter" 
+                                    Command="{Binding ViewCommand}" />
+                    </ListView.InputBindings>
+
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="Username" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content" />
+                        </GridView>
+                    </ListView.View>
+                    
+                </ListView>
+            </Border>
+        </DataTemplate>
+        
     </Page.Resources>
+
 
     <!-- Main content -->
     <Grid>
@@ -100,9 +105,9 @@
         </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="500" />
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel
@@ -128,6 +133,7 @@
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
+
         </StackPanel>
 
 
@@ -135,7 +141,6 @@
             Grid.Row="1"
             Grid.Column="1"
             Margin="10">
-
             <ScrollViewer HorizontalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding FieldsList}">
                     <ItemsControl.ItemTemplate>
@@ -212,6 +217,22 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </Grid>
+
+        <ContentControl Content="{Binding}" Grid.Column="1" Grid.Row="2">
+            <ContentControl.Style>
+                <Style>
+                    <Style.Triggers>
+
+                        <DataTrigger Binding="{Binding HasComment}" Value="True">
+                            <Setter Property="ContentControl.ContentTemplate"
+                                    Value="{StaticResource CommentTemplate}" />
+                        </DataTrigger>
+
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+
+        </ContentControl>
 
     </Grid>
 </Page>

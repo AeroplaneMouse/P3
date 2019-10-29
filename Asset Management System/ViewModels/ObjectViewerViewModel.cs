@@ -22,6 +22,9 @@ namespace Asset_Management_System.ViewModels
         public string Description { get; set; }
 
         public bool IsTag { get; set; }
+        
+        public bool HasComment { get; set; }
+        
 
         public ICommand ViewAssetCommand { get; set; }
 
@@ -97,6 +100,8 @@ namespace Asset_Management_System.ViewModels
                 IsTag = false;
 
                 CommentList = new CommentRepository().GetByAssetId(asset.ID);
+
+                HasComment = CommentList.Count > 0;
 
                 Console.WriteLine("Comments:");
 
