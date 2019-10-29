@@ -71,7 +71,8 @@
 
         <!-- Comments -->
         <DataTemplate x:Key="CommentTemplate">
-            <Border>
+            <Border Padding="0 10 0 0">
+
                 <ListView ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged}"
                           SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
 
@@ -87,9 +88,15 @@
                             <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content" />
                         </GridView>
                     </ListView.View>
-                    
+
                 </ListView>
+
             </Border>
+        </DataTemplate>
+        
+        <!-- Empty template -->
+        <DataTemplate x:Key="EmptyTemplate">
+            
         </DataTemplate>
         
     </Page.Resources>
@@ -156,13 +163,33 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                         <RowDefinition />
+                                        <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <TextBlock Grid.Row="0" Grid.Column="1" Text="Label: " />
-                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Label}"
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Field.Label}"
                                                HorizontalAlignment="Left" />
                                     <TextBlock Grid.Row="1" Grid.Column="1" Text="Content: " />
-                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Content}" MaxWidth="250"
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Field.Content}"
+                                               MaxWidth="250"
                                                HorizontalAlignment="Left" TextWrapping="Wrap" />
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="Field comes from: " />
+                                    <ItemsControl Grid.Row="2" Grid.Column="2"  ItemsSource="{Binding FieldTags}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Border BorderBrush="{Binding Color}" BorderThickness="1">
+                                                    <TextBlock Text="{Binding Name}" Padding="5"/>
+                                                    </Border>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
                                 </Grid>
                             </Border>
                         </DataTemplate>
@@ -186,6 +213,8 @@
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
                                 </Grid.RowDefinitions>
                                 <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Name}"
                                            HorizontalAlignment="Left" />
@@ -196,21 +225,38 @@
             </ItemsControl>
         </Grid>
 
-        <ContentControl Content="{Binding}" Grid.Column="1" Grid.Row="2">
-            <ContentControl.Style>
-                <Style>
-                    <Style.Triggers>
+        <StackPanel Grid.Column="1" Grid.Row="2">
 
-                        <DataTrigger Binding="{Binding HasComment}" Value="True">
-                            <Setter Property="ContentControl.ContentTemplate"
+            <Button Content="Add new comment"
+                    Padding="0 5"
+                    Width="200"
+                    Command="{Binding AddNewCommentCommand}"/>
+
+            <ContentControl Content="{Binding}">
+                <ContentControl.Style>
+                    <Style>
+                        <Style.Triggers>
+
+                            <DataTrigger Binding="{Binding HasComment}" Value="True">
+                                <Setter Property="ContentControl.ContentTemplate"
                                     Value="{StaticResource CommentTemplate}" />
-                        </DataTrigger>
+                            </DataTrigger>
 
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
+                            <DataTrigger Binding="{Binding HasComment}" Value="False">
+                                <Setter Property="ContentControl.ContentTemplate"
+                                    Value="{StaticResource EmptyTemplate}" />
 
-        </ContentControl>
+                            </DataTrigger>
+
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+
+            </ContentControl>
+            
+        </StackPanel>
+
+        
 
     </Grid>
 </Page>

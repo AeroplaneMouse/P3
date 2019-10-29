@@ -30,7 +30,7 @@ namespace Asset_Management_System.ViewModels.Commands
             // Getting label, default value and is required
             List<string> promptResults = new List<string>();
             
-            switch ((fieldToAdd))
+            switch (fieldToAdd)
             {
                 case "Text Field":
                     Console.WriteLine("Textfield added");
