@@ -193,10 +193,7 @@ namespace Asset_Management_System.ViewModels
             _asset.DeserializeFields();
             foreach (var field in _asset.FieldsList)
             {
-                ShownField shownField = new ShownField();
-                shownField.Name = field.GetHashCode().ToString();
-                shownField.Field = field;
-                FieldsList.Add(shownField);
+                FieldsList.Add(new ShownField(field));
             }
 
             Name = _asset.Name;

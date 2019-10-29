@@ -41,6 +41,9 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters["@content"].Value = comment.Content;
 
                         query_success = cmd.ExecuteNonQuery() > 0;
+
+                        // TODO: Brug det her
+                        // cmd.LastInsertedId;
                     }
 
                 }

@@ -27,10 +27,10 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="1">Name</Label>
-                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Name}" Padding="10" />
+                <Label Grid.Row="0" Grid.Column="1" Padding="10" >Name</Label>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Name}" Padding="10" TextWrapping="Wrap" />
 
-                <Label Grid.Row="1" Grid.Column="1">Description</Label>
+                <Label Grid.Row="1" Grid.Column="1" Padding="10" >Description</Label>
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Description}" Padding="10" TextWrapping="Wrap" />
 
                 <Button Grid.Row="2" Grid.Column="1" Content="Asset history" Style="{StaticResource RegularButton}"
@@ -122,8 +122,8 @@
     <Grid>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="600" />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="500" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 

@@ -94,10 +94,7 @@ namespace Asset_Management_System.ViewModels
 
                 foreach (var field in TagInput.FieldsList)
                 {
-                    ShownField showField = new ShownField();
-                    showField.Name = field.GetHashCode().ToString();
-                    showField.Field = field;
-                    FieldsList.Add(showField);
+                    FieldsList.Add(new ShownField(field));
                 }
 
                 if (TagInput.ParentID != 0)
@@ -121,10 +118,7 @@ namespace Asset_Management_System.ViewModels
 
                 foreach (var field in AssetInput.FieldsList)
                 {
-                    ShownField shownField = new ShownField();
-                    shownField.Name = field.GetHashCode().ToString();
-                    shownField.Field = field;
-                    FieldsList.Add(shownField);
+                    FieldsList.Add(new ShownField(field));
                 }
 
                 // Load all tags into TagsList

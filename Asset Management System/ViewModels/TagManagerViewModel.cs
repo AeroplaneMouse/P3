@@ -98,9 +98,7 @@ namespace Asset_Management_System.ViewModels
             _tag.DeserializeFields();
             foreach (Field field in _tag.FieldsList)
             {
-                ShownField shownField = new ShownField();
-                shownField.Name = shownField.GetHashCode().ToString();
-                shownField.Field = field;
+                ShownField shownField = new ShownField(field);
                 FieldsList.Add(shownField);
             }
 
