@@ -16,7 +16,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock VerticalAlignment="Bottom"
+        <TextBlock VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    FontFamily="{StaticResource SegoeRegular}"
                    FontSize="{StaticResource FontSizeXLarge}"
@@ -36,124 +36,6 @@
                        FontSize="{StaticResource FontSizeLarge}"
                        FontFamily="{StaticResource SegoeRegular}"/>
 
-        </StackPanel>
-
-        <StackPanel>
-
-            <!-- Tag input -->
-            <TextBox Width="100"
-                     x:Name="InputBox"
-                     Padding="5"
-                     Margin="5"
-                     Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}">
-
-                <TextBox.InputBindings>
-
-                    <KeyBinding Key="Return" Command="{Binding EnterKeyCommand}" />
-                    <KeyBinding Key="Tab" Command="{Binding TabKeyCommand}" />
-                    <KeyBinding Key="Space" Command="{Binding SpaceKeyCommand}" />
-                    <KeyBinding Key="Esc" Command="{Binding EscapeKeyCommand}" />
-                    <KeyBinding Key="Backspace" Command="{Binding BackspaceKeyCommand}" />
-
-                </TextBox.InputBindings>
-
-            </TextBox>
-
-             <!-- Group -->
-            <TextBlock Width="Auto"
-                       MinWidth="50"
-                       Padding="5"
-                       Margin="5"
-                       Text="{Binding ParentID, UpdateSourceTrigger=PropertyChanged}"/>
-
-            <!-- List of tags -->
-            <ListBox Width="200"
-                     MinHeight="30"
-                     MaxHeight="150"
-                     Padding="5"
-                     Margin="5"
-                     Foreground="Black"
-                     ItemsSource="{Binding TagList, UpdateSourceTrigger=PropertyChanged}">
-
-                <ListBox.ItemTemplate>
-
-                    <DataTemplate>
-
-                        <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-
-                    </DataTemplate>
-
-                </ListBox.ItemTemplate>
-            </ListBox>
-
-
-
-
-
-            <!--<ComboBox Width="100"
-                      Name="AutoTags"
-                      VerticalAlignment="Top"
-                      Padding="5"
-                      Margin="5"
-                      IsEditable="True"
-                      Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding TagList, UpdateSourceTrigger=PropertyChanged}"
-                      IsTextSearchEnabled="False"
-                      StaysOpenOnEdit="True">
-
-                <ComboBox.InputBindings>
-
-                    <KeyBinding Key="Return" Command="{Binding EnterKeyCommand}" />
-                    <KeyBinding Key="Tab" Command="{Binding TabKeyCommand}" />
-
-                </ComboBox.InputBindings>
-                
-                <ComboBox.Style>
-
-                    <Style TargetType="{x:Type ComboBox}">
-
-                        <Style.Triggers>
-
-                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
-                                
-                                <Setter Property="IsDropDownOpen" Value="True" />
-                                
-                            </Trigger>
-                            
-                        </Style.Triggers>
-                        
-                    </Style>
-                    
-                </ComboBox.Style>
-                
-                <ComboBox.ItemTemplate>
-                    
-                    <DataTemplate>
-                        
-                        <TextBlock Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}" />
-                        
-                    </DataTemplate>
-                    
-                </ComboBox.ItemTemplate>
-                
-            </ComboBox>-->
-            
-            
-
-            <!--<Button Width="Auto"
-                    VerticalAlignment="Top"
-                    Margin="5"
-                    Padding="5" 
-                    Content="Save"
-                    Command="{Binding ShowBoxCommand}"/>
-
-            <TextBlock Width="200"
-                       Background="LightGray"
-                       Padding="5"
-                       Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged}"
-                       Margin="5"
-                       VerticalAlignment="Top"/>-->
-        
         </StackPanel>
     </Grid>
 </Page>
