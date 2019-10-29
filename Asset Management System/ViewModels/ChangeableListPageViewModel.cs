@@ -67,7 +67,7 @@ namespace Asset_Management_System.ViewModels
                 switch (PageType)
                 {
                     case ListPageType.Asset:
-                        Main.ChangeMainContent(new Views.NewAssetManager(Main, selected as Models.Asset));
+                        Main.ChangeMainContent(new Views.AssetManager(Main, selected as Models.Asset));
                         break;
 
                     case ListPageType.Tag:
