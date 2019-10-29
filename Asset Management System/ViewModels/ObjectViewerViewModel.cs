@@ -11,31 +11,31 @@ namespace Asset_Management_System.ViewModels
     public class ObjectViewerViewModel
     {
         private Tag TagInput;
+
         private Asset AssetInput;
 
         public string Color { get; set; }
 
-        public ulong ParentTag{ get; set; }
+        public ulong ParentTag { get; set; }
         public string Name { get; set; }
 
         public string Description { get; set; }
 
         public bool IsTag { get; set; }
-        
-        
+
         public ICommand ViewAssetCommand { get; set; }
 
-        public ObservableCollection<Field> FieldsList { get; set; }
+        public ObservableCollection<ShowFields> FieldsList { get; set; }
 
         public ObservableCollection<Comment> CommentList { get; set; }
-        
+
         public List<Tag> TagsList { get; set; }
 
         private MainViewModel _main;
 
         public ObjectViewerViewModel(MainViewModel main, DoesContainFields inputObject)
         {
-            FieldsList = new ObservableCollection<Field>();
+            FieldsList = new ObservableCollection<ShowFields>();
             TagsList = new List<Tag>();
             _main = main;
             ViewAssetCommand = new Base.RelayCommand((ViewAssetHistory));
@@ -47,7 +47,12 @@ namespace Asset_Management_System.ViewModels
                 TagInput = tag;
                 tag.DeserializeFields();
                 foreach (var field in tag.FieldsList)
-                    FieldsList.Add(field);
+                {
+                    ShowFields showField = new ShowFields();
+                    showField.Name = field.GetHashCode().ToString();
+                    showField.Field = field;
+                    FieldsList.Add(showField);
+                }
 
                 Name = tag.Name;
                 Color = tag.Color;
@@ -59,22 +64,34 @@ namespace Asset_Management_System.ViewModels
                 AssetInput = asset;
                 asset.DeserializeFields();
                 foreach (var field in asset.FieldsList)
-                    FieldsList.Add(field);
+                {
+                    ShowFields showField = new ShowFields();
+                    showField.Name = field.GetHashCode().ToString();
+                    showField.Field = field;
+                    FieldsList.Add(showField);
+                }
 
                 LoadTags();
                 if (TagsList.Count > 0)
                 {
                     int fieldsCount = 0;
-                    foreach (var Tag in TagsList)
+                    foreach (var currentTag in TagsList)
                     {
-                        foreach (var field in Tag.FieldsList)
+                        foreach (var field in currentTag.FieldsList)
                         {
-                            fieldsCount++;
-                            FieldsList.Add(field);
+                            foreach (var shownField in FieldsList)
+                            {
+                                if (Equals(field, shownField.Field))
+                                {
+                                    shownField.FieldTags.Add(currentTag);
+                                }
+                            }
                         }
                     }
+                    
                     Console.WriteLine("Tags add " + fieldsCount + " fields");
                 }
+
                 Name = asset.Name;
                 Description = asset.Description;
                 IsTag = false;
@@ -97,19 +114,34 @@ namespace Asset_Management_System.ViewModels
             var assetHistory = new AssetHistory(AssetInput);
             assetHistory.ShowDialog();
         }
-        
+
         /// <summary>
         /// Loads the tags attached to this asset
         /// </summary>
         private void LoadTags()
-        {    
+        {
             AssetRepository rep = new AssetRepository();
             TagsList = rep.GetAssetTags(AssetInput);
             foreach (var tag in TagsList)
             {
                 tag.DeserializeFields();
             }
+
             Console.WriteLine("Found " + TagsList.Count + " tags");
+        }
+    }
+
+    public class ShowFields
+    {
+        public string Name { get; set; }
+        
+        public Field Field { get; set; }
+
+        public ObservableCollection<Tag> FieldTags { get; set; }
+
+        public ShowFields()
+        {
+            FieldTags = new ObservableCollection<Tag>();
         }
     }
 }
