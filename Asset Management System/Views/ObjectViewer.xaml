@@ -71,7 +71,8 @@
 
         <!-- Comments -->
         <DataTemplate x:Key="CommentTemplate">
-            <Border>
+            <Border Padding="0 10 0 0">
+
                 <ListView ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged}"
                           SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
 
@@ -87,9 +88,15 @@
                             <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content" />
                         </GridView>
                     </ListView.View>
-                    
+
                 </ListView>
+
             </Border>
+        </DataTemplate>
+        
+        <!-- Empty template -->
+        <DataTemplate x:Key="EmptyTemplate">
+            
         </DataTemplate>
         
     </Page.Resources>
@@ -218,21 +225,38 @@
             </ItemsControl>
         </Grid>
 
-        <ContentControl Content="{Binding}" Grid.Column="1" Grid.Row="2">
-            <ContentControl.Style>
-                <Style>
-                    <Style.Triggers>
+        <StackPanel Grid.Column="1" Grid.Row="2">
 
-                        <DataTrigger Binding="{Binding HasComment}" Value="True">
-                            <Setter Property="ContentControl.ContentTemplate"
+            <Button Content="Add new comment"
+                    Padding="0 5"
+                    Width="200"
+                    Command="{Binding AddNewCommentCommand}"/>
+
+            <ContentControl Content="{Binding}">
+                <ContentControl.Style>
+                    <Style>
+                        <Style.Triggers>
+
+                            <DataTrigger Binding="{Binding HasComment}" Value="True">
+                                <Setter Property="ContentControl.ContentTemplate"
                                     Value="{StaticResource CommentTemplate}" />
-                        </DataTrigger>
+                            </DataTrigger>
 
-                    </Style.Triggers>
-                </Style>
-            </ContentControl.Style>
+                            <DataTrigger Binding="{Binding HasComment}" Value="False">
+                                <Setter Property="ContentControl.ContentTemplate"
+                                    Value="{StaticResource EmptyTemplate}" />
 
-        </ContentControl>
+                            </DataTrigger>
+
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+
+            </ContentControl>
+            
+        </StackPanel>
+
+        
 
     </Grid>
 </Page>
