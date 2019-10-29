@@ -22,9 +22,9 @@ namespace Asset_Management_System.ViewModels
         public string Description { get; set; }
 
         public bool IsTag { get; set; }
-        
+
         public bool HasComment { get; set; }
-        
+
 
         public ICommand ViewAssetCommand { get; set; }
 
@@ -55,6 +55,11 @@ namespace Asset_Management_System.ViewModels
                     showField.Name = field.GetHashCode().ToString();
                     showField.Field = field;
                     FieldsList.Add(showField);
+                }
+
+                if (tag.ParentID != 0)
+                {
+                    
                 }
 
                 Name = tag.Name;
@@ -91,7 +96,7 @@ namespace Asset_Management_System.ViewModels
                             }
                         }
                     }
-                    
+
                     Console.WriteLine("Tags add " + fieldsCount + " fields");
                 }
 
@@ -139,7 +144,7 @@ namespace Asset_Management_System.ViewModels
     public class ShowFields
     {
         public string Name { get; set; }
-        
+
         public Field Field { get; set; }
 
         public ObservableCollection<Tag> FieldTags { get; set; }
