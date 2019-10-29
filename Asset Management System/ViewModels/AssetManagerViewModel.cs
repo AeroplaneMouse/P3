@@ -131,7 +131,7 @@ namespace Asset_Management_System.ViewModels
             _main = main;
 
             CurrentlyAddedTags = new ObservableCollection<Tag>();
-            FieldsList = new ObservableCollection<ShowFields>();
+            FieldsList = new ObservableCollection<ShownField>();
             if (inputAsset != null)
             {
                 _asset = inputAsset;
@@ -208,7 +208,7 @@ namespace Asset_Management_System.ViewModels
             _asset.DeserializeFields();
             foreach (var field in _asset.FieldsList)
             {
-                ShowFields shownField = new ShowFields();
+                ShownField shownField = new ShownField();
                 shownField.Name = field.GetHashCode().ToString();
                 shownField.Field = field;
                 FieldsList.Add(shownField);

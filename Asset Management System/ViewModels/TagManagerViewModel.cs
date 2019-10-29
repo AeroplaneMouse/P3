@@ -47,7 +47,7 @@ namespace Asset_Management_System.ViewModels
             _main = main;
             _randomColor = CreateRandomColor();
 
-            FieldsList = new ObservableCollection<ShowFields>();
+            FieldsList = new ObservableCollection<ShownField>();
 
             if (inputTag != null)
             {
@@ -98,7 +98,7 @@ namespace Asset_Management_System.ViewModels
             _tag.DeserializeFields();
             foreach (Field field in _tag.FieldsList)
             {
-                ShowFields shownField = new ShowFields();
+                ShownField shownField = new ShownField();
                 shownField.Name = shownField.GetHashCode().ToString();
                 shownField.Field = field;
                 FieldsList.Add(shownField);
