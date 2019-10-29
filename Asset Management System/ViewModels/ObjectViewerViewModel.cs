@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
@@ -23,14 +21,14 @@ namespace Asset_Management_System.ViewModels
         public bool IsTag { get; set; }
 
         public bool HasComment { get; set; }
-        
-        
+
+
         public ICommand ViewAssetCommand { get; set; }
 
         public ObservableCollection<Field> FieldsList { get; set; }
 
         public ObservableCollection<Comment> CommentList { get; set; }
-        
+
         public List<Tag> TagsList { get; set; }
 
         private MainViewModel _main;
@@ -63,20 +61,6 @@ namespace Asset_Management_System.ViewModels
                 foreach (var field in asset.FieldsList)
                     FieldsList.Add(field);
 
-                LoadTags();
-                if (TagsList.Count > 0)
-                {
-                    int fieldsCount = 0;
-                    foreach (var Tag in TagsList)
-                    {
-                        foreach (var field in Tag.FieldsList)
-                        {
-                            fieldsCount++;
-                            FieldsList.Add(field);
-                        }
-                    }
-                    Console.WriteLine("Tags add " + fieldsCount + " fields");
-                }
                 Name = asset.Name;
                 Description = asset.Description;
                 IsTag = false;
@@ -101,12 +85,12 @@ namespace Asset_Management_System.ViewModels
             var assetHistory = new AssetHistory(AssetInput);
             assetHistory.ShowDialog();
         }
-        
+
         /// <summary>
         /// Loads the tags attached to this asset
         /// </summary>
         private void LoadTags()
-        {    
+        {
             AssetRepository rep = new AssetRepository();
             TagsList = rep.GetAssetTags(AssetInput);
             foreach (var tag in TagsList)

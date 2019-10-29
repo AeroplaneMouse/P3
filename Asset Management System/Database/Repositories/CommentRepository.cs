@@ -5,20 +5,18 @@ using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
-using System.Collections.ObjectModel;
 
 namespace Asset_Management_System.Database.Repositories
 {
     public class CommentRepository : ICommentRepository
     {
-        private DBConnection _dbcon;
 
-        public CommentRepository()
+        public bool Insert(Comment entity)
         {
-            _dbcon = DBConnection.Instance();
+            throw new NotImplementedException();
         }
 
-        public bool Insert(Comment comment)
+        public bool Update(Comment entity)
         {
             bool query_success = false;
 
@@ -58,79 +56,9 @@ namespace Asset_Management_System.Database.Repositories
             return query_success;
         }
 
-        public bool Update(Comment comment)
+        public bool Delete(Comment entity)
         {
-            bool query_success = false;
-
-            if (_dbcon.IsConnect())
-            {
-                try
-                {
-                    const string query = "UPDATE comments SET asset_id=@asset_id, username=@username, content=@content, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
-
-                    using (var cmd = new MySqlCommand(query, _dbcon.Connection))
-                    {
-                        cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@asset_id"].Value = comment.AssetID;
-
-                        cmd.Parameters.Add("@username", MySqlDbType.String);
-                        cmd.Parameters["@username"].Value = comment.Username;
-
-                        cmd.Parameters.Add("@content", MySqlDbType.String);
-                        cmd.Parameters["@content"].Value = comment.Content;
-
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = comment.ID;
-
-                        query_success = cmd.ExecuteNonQuery() > 0;
-                    }
-                }
-
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-
-                finally
-                {
-                    _dbcon.Close();
-                }
-            }
-
-            return query_success;
-        }
-
-        public bool Delete(Comment comment)
-        {
-            bool query_success = false;
-
-            if (_dbcon.IsConnect())
-            {
-                try
-                {
-                    const string query = "DELETE FROM comments WHERE id=@id";
-
-                    using (var cmd = new MySqlCommand(query, _dbcon.Connection))
-                    {
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = comment.ID;
-
-                        query_success = cmd.ExecuteNonQuery() > 0;
-                    }
-                }
-
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-
-                finally
-                {
-                    _dbcon.Close();
-                }
-            }
-
-            return query_success;
+            throw new NotImplementedException();
         }
 
         public Comment GetById(ulong id)
@@ -216,14 +144,12 @@ namespace Asset_Management_System.Database.Repositories
         public Comment DBOToModelConvert(MySqlDataReader reader)
         {
             ulong row_id = reader.GetUInt64("id");
-            ulong row_asset_id = reader.GetUInt64("asset_id");
-            String row_username = reader.GetString("username");
             String row_content = reader.GetString("content");
+            ulong row_asset_id = reader.GetUInt64("asset_id");
             DateTime row_created_at = reader.GetDateTime("created_at");
             DateTime row_updated_at = reader.GetDateTime("updated_at");
-
-            return (Comment)Activator.CreateInstance(typeof(Comment), 
-                BindingFlags.Instance | BindingFlags.NonPublic, null, 
+            return (Comment)Activator.CreateInstance(typeof(Comment),
+                BindingFlags.Instance | BindingFlags.NonPublic, null,
                 new object[] { row_id, row_username, row_content, row_asset_id, row_created_at, row_updated_at }, null, null);
         }
     }
