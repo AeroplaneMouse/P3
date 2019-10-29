@@ -6,13 +6,9 @@ namespace Asset_Management_System.Models
 {
     public class Tag : DoesContainFields
     {
-        public Tag() { }
-
-        public Tag(string label, string color, ulong departmentId)
+        public Tag()
         {
-            this.Name = label;
-            this.Color = color;
-            this.DepartmentID = departmentId;
+            
         }
 
         /*Constructor used by DB*/
