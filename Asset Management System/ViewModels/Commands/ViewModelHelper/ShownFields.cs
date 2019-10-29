@@ -5,6 +5,12 @@ namespace Asset_Management_System.ViewModels.Commands.ViewModelHelper
 {
     public class ShownField
     {
+
+        public ShownField(Field field)
+        {
+            Name = field.Label;
+            this.Field = field;
+        }
         public string Name { get; set; }
 
         public Field Field { get; set; }
