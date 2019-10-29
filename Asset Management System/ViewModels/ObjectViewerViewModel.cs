@@ -37,7 +37,7 @@ namespace Asset_Management_System.ViewModels
         public string CommentField { get; set; }
 
         public int SelectedItemIndex { get; set; }
-        
+
 
 
         public ICommand ViewAssetCommand { get; set; }
@@ -61,7 +61,7 @@ namespace Asset_Management_System.ViewModels
 
             CommentRep = new CommentRepository();
 
-            
+
 
             if (inputObject is Tag tag)
             {
@@ -77,7 +77,7 @@ namespace Asset_Management_System.ViewModels
 
                 if (tag.ParentID != 0)
                 {
-                    
+
                 }
 
                 Name = tag.Name;
@@ -133,7 +133,7 @@ namespace Asset_Management_System.ViewModels
         {
             if (CommentField != null && CommentField != String.Empty)
             {
-                Comment c = new Comment()
+                Comment newComment = new Comment()
                 {
                     Username = _main.CurrentUser,
                     Content = CommentField,
@@ -142,9 +142,9 @@ namespace Asset_Management_System.ViewModels
                     UpdatedAt = DateTime.Now
                 };
 
-                CommentRep.Insert(c);
-                
-                Log<Comment>.CreateLog(c);
+                CommentRep.Insert(newComment);
+
+                Log<Comment>.CreateLog(newComment);
 
                 CommentField = String.Empty;
 
@@ -197,5 +197,5 @@ namespace Asset_Management_System.ViewModels
             Console.WriteLine("Found " + TagsList.Count + " tags");
         }
     }
-    
+
 }
