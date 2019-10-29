@@ -39,10 +39,22 @@ namespace Asset_Management_System.Database
             }
             else
             {
-                _queryPath.AppendFormat("{0} {1} {2}", Column, Operators, MySqlHelper.EscapeString(Value));
+                _queryPath.AppendFormat("{0} {1} {2}", Column, Operators, GetStringWithSingleQuotes(MySqlHelper.EscapeString(Value)));
             }
 
             return _queryPath.ToString();
+        }
+
+        private string GetStringWithSingleQuotes(string value)
+        {
+            if (int.TryParse(value, out int returnedInt) || bool.TryParse(value, out bool returnedBool))
+            {
+                return $"{value}";
+            }
+            else
+            {
+                return $"'{value}'";
+            }
         }
     }
 }

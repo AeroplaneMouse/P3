@@ -35,19 +35,6 @@ namespace Asset_Management_System.Database
             
         }
 
-        public string PrepareSelect()
-        {
-            _query.Append("SELECT "+GetColumns());
-            _query.Append(" FROM " + string.Join(" ", from item in Tables select item.Render()));
-
-            if (WhereStatements.Count > 0)
-            {
-                _query.Append(" WHERE "+string.Join(" AND ", from item in WhereStatements select item.Render()));
-            }
-
-            return _query.ToString();
-        }
-
         public void Where(string column, string value, string operators="=")
         {
             WhereStatements.Add(new Statement(column, value, operators));
@@ -68,13 +55,36 @@ namespace Asset_Management_System.Database
             return "*";
         }
 
+        public string PrepareSelect()
+        {
+            _query.Append("SELECT " + GetColumns());
+            _query.Append(" FROM " + string.Join(" ", from item in Tables select item.Render()));
+
+            if (WhereStatements.Count > 0)
+            {
+                _query.Append(" WHERE " + string.Join(" AND ", from item in WhereStatements select item.Render()));
+            }
+
+            return _query.ToString();
+        }
+
         public string PrepareInsert()
         {
             if (Tables.Count > 0 && Columns.Count == Values.Count)
             {
                 _query.Append("INSERT INTO "+Tables[0].Name);
-                _query.Append(" FROM ("+GetColumns()+") ");
-                _query.Append(" VALUES ("+MySqlHelper.EscapeString(string.Join(", ", Values)));
+                _query.Append(" FROM (" + GetColumns() + ") ");
+                string columnValuePairs;
+                int initialValue = Columns.Count - 1;
+
+                columnValuePairs = (new Statement(Columns[initialValue], Values[initialValue])).Render();
+
+                for (int i = initialValue - 1; i >= 0; i--)
+                {
+                    columnValuePairs += $", {(new Statement(Columns[i], Values[i])).Render()}";
+                }
+
+                _query.Append($" VALUES ( {columnValuePairs} )");
                 return _query.ToString();
             }
 
@@ -83,18 +93,29 @@ namespace Asset_Management_System.Database
 
         public string PrepareUpdate()
         {
+            //Checks if there is added any tables and if the number of columns and values are the same, to ensure success
             if (Tables.Count > 0 && Columns.Count == Values.Count)
             {
+                //Create the query string
                 _query.Append("UPDATE " + Tables[0].Name);
 
-                string columnValuePairs = "";
+                string columnValuePairs;
+                int initialValue = Columns.Count - 1;
 
-                for (int i = Columns.Count; i > 0; i--)
+                columnValuePairs = (new Statement(Columns[initialValue], Values[initialValue])).Render();
+
+                for (int i = initialValue - 1; i >= 0; i--)
                 {
-                    columnValuePairs += (string.Join(", ", $"{Columns[i - 1]} = {Values[i - 1]}"));
+                    columnValuePairs += $", {(new Statement(Columns[i], Values[i])).Render()}";
                 }
+
                 _query.Append(" SET " + columnValuePairs);
-                Console.WriteLine(columnValuePairs);
+                
+                if (WhereStatements.Count > 0)
+                {
+                    _query.Append(" WHERE " + string.Join(" AND ", from item in WhereStatements select item.Render()));
+                }
+
                 return _query.ToString();
             }
 

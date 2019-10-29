@@ -9,7 +9,7 @@ using Asset_Management_System.Database;
 namespace IntegrationTests
 {
     [TestClass]
-    class QueryGeneratorTests
+    public class QueryGeneratorTests
     {
         private MySqlHandler mySqlHandler;
         private DepartmentRepository departmentRepository;
@@ -18,6 +18,8 @@ namespace IntegrationTests
         private Asset asset1;
         private Asset asset2;
         private Asset asset3;
+        private TagRepository tagRepository;
+        private Tag tag;
 
         [TestInitialize]
         public void InitializeTests()
@@ -50,6 +52,8 @@ namespace IntegrationTests
                 }
             };
 
+            assetRepository = new AssetRepository();
+
             assetRepository.Insert(asset1);
             assetRepository.Insert(asset2);
             assetRepository.Insert(asset3);
@@ -59,19 +63,45 @@ namespace IntegrationTests
                 Name = "QueryGeneratorTestsDepartment"
             };
 
+            departmentRepository = new DepartmentRepository();
+
             departmentRepository.Insert(department);
+
+            tag = new Tag("QueryGeneratorTestsTag", "#FAFAFA", 1);
+
+            tagRepository = new TagRepository();
+
+            tagRepository.Insert(tag);
     }
 
         [TestMethod]
-        public void PrepareUpdate_Receives3Columns3ValuesAndATable_BuildsExpectedQueryString()
+        public void PrepareUpdate_SetNameOfAsset3ToNewName_BuildsQueryString()
         {
             //Arrange
             QueryGenerator query = new QueryGenerator();
             query.AddTable("assets");
-            query.Columns.AddRange(new[] { "id", "name" });
-            query.Values.AddRange(new[] { "2", "SejtNavn" });
+            query.Columns.AddRange(new[] { "name" });
+            query.Values.AddRange(new[] { "NewName" });
             query.Where("name", "Asset #3");
-            string expected = "Hallo";
+            string expected = "UPDATE assets SET name = 'NewName' WHERE name = 'Asset #3'";
+
+            //Act
+            string result = query.PrepareUpdate();
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+
+        [TestMethod]
+        public void PrepareUpdate_SetLabelAndColorOfTag_BuildsQueryString()
+        {
+            //Arrange
+            QueryGenerator query = new QueryGenerator();
+            query.AddTable("tags");
+            query.Columns.AddRange(new[] { "label", "color" });
+            query.Values.AddRange(new[] { "NewLabel", "#666666" });
+            query.Where("label", "QueryGeneratorTestsTag");
+            string expected = "UPDATE tags SET color = '#666666', label = 'NewLabel' WHERE label = 'QueryGeneratorTestsTag'";
 
             //Act
             string result = query.PrepareUpdate();
@@ -83,6 +113,8 @@ namespace IntegrationTests
         [TestCleanup]
         public void CleanupAfterTests()
         {
+            mySqlHandler = new MySqlHandler();
+
             //Clear database tables
             mySqlHandler.RawQuery("SET FOREIGN_KEY_CHECKS = 0;" + "TRUNCATE TABLE assets;" + "TRUNCATE TABLE departments;" + "TRUNCATE TABLE tags;" + "TRUNCATE TABLE asset_tags;" + "SET FOREIGN_KEY_CHECKS = 1;");
         }
