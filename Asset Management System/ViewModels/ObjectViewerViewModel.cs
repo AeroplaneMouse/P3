@@ -132,7 +132,7 @@ namespace Asset_Management_System.ViewModels
         {
             if (CommentField != null && CommentField != String.Empty)
             {
-                Comment c = new Comment()
+                Comment newComment = new Comment()
                 {
                     Username = _main.CurrentUser,
                     Content = CommentField,
@@ -141,9 +141,9 @@ namespace Asset_Management_System.ViewModels
                     UpdatedAt = DateTime.Now
                 };
 
-                CommentRep.Insert(c);
+                CommentRep.Insert(newComment);
 
-                c.Notify();
+                newComment.Notify();
 
                 CommentField = String.Empty;
 
