@@ -72,24 +72,45 @@
         <!-- Comments -->
         <DataTemplate x:Key="CommentTemplate">
             <Border Padding="0 10 0 0">
+                <StackPanel Orientation="Vertical">
 
-                <ListView ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox Text="{Binding CommentField, UpdateSourceTrigger=PropertyChanged}"
+                             Width="200"
+                             Padding="5"/>
 
-                    <ListView.InputBindings>
-                        <KeyBinding Key="Enter" 
-                                    Command="{Binding ViewCommand}" />
-                    </ListView.InputBindings>
+                    <StackPanel>
+                        <Button Content="Add new comment"
+                                Padding="0 5"
+                                Width="200"
+                                Command="{Binding AddNewCommentCommand}"/>
 
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="Username" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content" />
-                        </GridView>
-                    </ListView.View>
+                        <Button Content="Remove comment"
+                                Padding="0 5"
+                                Width="200"
+                                Command="{Binding RemoveCommentCommand}" />
 
-                </ListView>
+                    </StackPanel>
+                    
+
+                    <ListView ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
+
+                        <ListView.InputBindings>
+                            <KeyBinding Key="Enter" 
+                                        Command="{Binding ViewCommand}" />
+                        </ListView.InputBindings>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="Username" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content" />
+                            </GridView>
+                        </ListView.View>
+
+                    </ListView>
+
+                </StackPanel>
 
             </Border>
         </DataTemplate>
@@ -227,22 +248,17 @@
 
         <StackPanel Grid.Column="1" Grid.Row="2">
 
-            <Button Content="Add new comment"
-                    Padding="0 5"
-                    Width="200"
-                    Command="{Binding AddNewCommentCommand}"/>
-
             <ContentControl Content="{Binding}">
                 <ContentControl.Style>
                     <Style>
                         <Style.Triggers>
 
-                            <DataTrigger Binding="{Binding HasComment}" Value="True">
+                            <DataTrigger Binding="{Binding IsTag}" Value="False">
                                 <Setter Property="ContentControl.ContentTemplate"
                                     Value="{StaticResource CommentTemplate}" />
                             </DataTrigger>
 
-                            <DataTrigger Binding="{Binding HasComment}" Value="False">
+                            <DataTrigger Binding="{Binding IsTag}" Value="True">
                                 <Setter Property="ContentControl.ContentTemplate"
                                     Value="{StaticResource EmptyTemplate}" />
 
