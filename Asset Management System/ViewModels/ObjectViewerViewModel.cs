@@ -161,7 +161,7 @@ namespace Asset_Management_System.ViewModels
             CommentList = CommentRep.GetByAssetId(AssetInput.ID);
         }
 
-        protected Comment GetSelectedItem()
+        private Comment GetSelectedItem()
         {
             if (CommentList.Count == 0)
                 return null;

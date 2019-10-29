@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
@@ -31,12 +31,6 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Methods
-
-        protected override void View()
-        {
-            Console.WriteLine("Base view");
-            throw new NotImplementedException();
-        }
 
         protected void AddNew()
         {
