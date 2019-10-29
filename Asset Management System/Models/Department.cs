@@ -16,7 +16,6 @@ namespace Asset_Management_System.Models
             Name = name;
             CreatedAt = created_at;
             UpdatedAt = updated_at;
-            SavePrevValues();
         }
 
         public string Name { get; set; }

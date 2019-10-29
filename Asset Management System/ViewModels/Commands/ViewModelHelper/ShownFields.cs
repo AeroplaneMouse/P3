@@ -3,7 +3,7 @@ using Asset_Management_System.Models;
 
 namespace Asset_Management_System.ViewModels.Commands.ViewModelHelper
 {
-    public class ShowFields
+    public class ShownField
     {
         public string Name { get; set; }
 
@@ -11,7 +11,7 @@ namespace Asset_Management_System.ViewModels.Commands.ViewModelHelper
 
         public ObservableCollection<Tag> FieldTags { get; set; }
 
-        public ShowFields()
+        public ShownField()
         {
             FieldTags = new ObservableCollection<Tag>();
         }

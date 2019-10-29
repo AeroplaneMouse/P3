@@ -34,7 +34,7 @@
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Description}" Padding="10" TextWrapping="Wrap" />
 
                 <Button Grid.Row="2" Grid.Column="1" Content="Asset history" Style="{StaticResource RegularButton}"
-                        Command="{Binding ViewAssetCommand}" />
+                        Command="{Binding ViewAssetHistoryCommand}" />
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Description}" Padding="10" />
 
             </Grid>
@@ -90,15 +90,10 @@
                                 Command="{Binding RemoveCommentCommand}" />
 
                     </StackPanel>
-                    
 
-                    <ListView ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+
+                    <ListView ItemsSource="{Binding CommentsList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                               SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
-
-                        <ListView.InputBindings>
-                            <KeyBinding Key="Enter" 
-                                        Command="{Binding ViewCommand}" />
-                        </ListView.InputBindings>
 
                         <ListView.View>
                             <GridView>

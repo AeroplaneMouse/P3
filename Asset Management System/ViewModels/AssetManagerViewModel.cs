@@ -131,7 +131,7 @@ namespace Asset_Management_System.ViewModels
             _main = main;
 
             CurrentlyAddedTags = new ObservableCollection<Tag>();
-            FieldsList = new ObservableCollection<ShowFields>();
+            FieldsList = new ObservableCollection<ShownField>();
             if (inputAsset != null)
             {
                 _asset = inputAsset;
@@ -173,21 +173,6 @@ namespace Asset_Management_System.ViewModels
             // Deletes charaters from the search query, and if the query is empty, go up a tag level
             BackspaceKeyCommand = new Base.RelayCommand(() => DeleteCharacter());
 
-            // Get the number of stored assets, tags and departments
-            int assets = new AssetRepository().GetCount();
-            int tags = new TagRepository().GetCount();
-            int departments = new DepartmentRepository().GetCount();
-
-            // Generate strings
-            NumberOfAssets = $"You have {assets} assets";
-            NumberOfTags = $"You have {tags} tags";
-            NumberOfDepartments = $"You have {departments} departments";
-
-            // Notify view
-            OnPropertyChanged(nameof(NumberOfAssets));
-            OnPropertyChanged(nameof(NumberOfTags));
-            OnPropertyChanged(nameof(NumberOfDepartments));
-
             #endregion
         }
 
@@ -208,7 +193,7 @@ namespace Asset_Management_System.ViewModels
             _asset.DeserializeFields();
             foreach (var field in _asset.FieldsList)
             {
-                ShowFields shownField = new ShowFields();
+                ShownField shownField = new ShownField();
                 shownField.Name = field.GetHashCode().ToString();
                 shownField.Field = field;
                 FieldsList.Add(shownField);
@@ -235,13 +220,6 @@ namespace Asset_Management_System.ViewModels
                 .Where(p => p.Name.ToLower().Contains(value.ToLower()))
                 .OrderByDescending(p => p.Name.ToLower().StartsWith(value.ToLower()))
                 .ToList();
-
-            foreach (var item in _tagList)
-            {
-                Console.WriteLine(item.Name);
-            }
-
-            Console.WriteLine();
         }
 
         private void Apply()
@@ -256,16 +234,22 @@ namespace Asset_Management_System.ViewModels
 
         private void CycleResults()
         {
-            _searchString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex++);
-
-            if (_searchString == null)
+            if(_tagList != null)
             {
-                _tabIndex = 0;
-                _searchString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex);
-            }
+                _searchString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex++);
 
-            // TODO: Kom uden om mig
-            _box.CaretIndex = _searchString.Length;
+                if (_searchString == null)
+                {
+                    _tabIndex = 0;
+                    _searchString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex);
+                }
+
+                if (_searchString != null)
+                {
+                    // TODO: Kom uden om mig
+                    _box.CaretIndex = _searchString.Length;
+                }
+            } 
         }
 
         private void EnterChildren()

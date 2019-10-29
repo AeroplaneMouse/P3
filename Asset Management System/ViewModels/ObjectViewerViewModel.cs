@@ -9,122 +9,156 @@ using Asset_Management_System.ViewModels.Commands.ViewModelHelper;
 using Asset_Management_System.Views;
 using System.Windows;
 using System.Windows.Controls;
+using Asset_Management_System.Logging;
 
 namespace Asset_Management_System.ViewModels
 {
     public class ObjectViewerViewModel : Base.BaseViewModel
     {
+        #region Private Properties
+
+        private MainViewModel _main;
+
         private Tag TagInput;
 
         private Asset AssetInput;
 
+        #endregion
+
+        #region Public Properties
+
+        public CommentRepository CommentRep { get; set; }
+
+        public ObservableCollection<ShownField> FieldsList { get; set; }
+
+        public ObservableCollection<Comment> CommentsList { get; set; }
+
+        public List<Tag> TagsList { get; set; }
+
         public string Color { get; set; }
 
         public ulong ParentTag { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }
 
+        public string CommentField { get; set; }
+
+        public int SelectedItemIndex { get; set; }
+
         public bool IsTag { get; set; }
+
+        #endregion
+
+        #region Commands
 
         public ICommand AddNewCommentCommand { get; set; }
 
         public ICommand RemoveCommentCommand { get; set; }
 
-        public CommentRepository CommentRep { get; set; }
+        public ICommand ViewAssetHistoryCommand { get; set; }
 
-        public string CommentField { get; set; }
+        #endregion
 
-        public int SelectedItemIndex { get; set; }
-        
-
-
-        public ICommand ViewAssetCommand { get; set; }
-
-        public ObservableCollection<ShowFields> FieldsList { get; set; }
-
-        public ObservableCollection<Comment> CommentList { get; set; }
-
-        public List<Tag> TagsList { get; set; }
-
-        private MainViewModel _main;
+        #region Constructor
 
         public ObjectViewerViewModel(MainViewModel main, DoesContainFields inputObject)
         {
-            FieldsList = new ObservableCollection<ShowFields>();
-            TagsList = new List<Tag>();
+            // Reference to main view model
             _main = main;
-            ViewAssetCommand = new Base.RelayCommand((ViewAssetHistory));
 
-            CommentList = new ObservableCollection<Comment>();
+            FieldsList = new ObservableCollection<ShownField>();
+            TagsList = new List<Tag>();
+            CommentsList = new ObservableCollection<Comment>();
+            
+            // Initialize commands
+            ViewAssetHistoryCommand = new Base.RelayCommand((ViewAssetHistory));
+            AddNewCommentCommand = new Base.RelayCommand(AddNewComment);
+            RemoveCommentCommand = new Base.RelayCommand(RemoveComment);
 
             CommentRep = new CommentRepository();
 
-            
 
+            // If the object being viewed is a tag
             if (inputObject is Tag tag)
             {
                 TagInput = tag;
-                tag.DeserializeFields();
-                foreach (var field in tag.FieldsList)
+
+                Name = TagInput.Name;
+                Color = TagInput.Color;
+                ParentTag = TagInput.ParentID;
+                IsTag = true;
+
+                TagInput.DeserializeFields();
+
+                foreach (var field in TagInput.FieldsList)
                 {
-                    ShowFields showField = new ShowFields();
+                    ShownField showField = new ShownField();
                     showField.Name = field.GetHashCode().ToString();
                     showField.Field = field;
                     FieldsList.Add(showField);
                 }
 
-                if (tag.ParentID != 0)
+                if (TagInput.ParentID != 0)
                 {
-                    
+                    //TODO Gør det her
                 }
-
-                Name = tag.Name;
-                Color = tag.Color;
-                ParentTag = tag.ParentID;
-                IsTag = true;
             }
+
+            // If the object being view is an asset
             else if (inputObject is Asset asset)
             {
                 AssetInput = asset;
-                asset.DeserializeFields();
-                foreach (var field in asset.FieldsList)
+
+                Name = AssetInput.Name;
+                Description = AssetInput.Description;
+                IsTag = false;
+
+                AssetInput.DeserializeFields();
+
+                CommentsList = CommentRep.GetByAssetId(AssetInput.ID);
+
+                foreach (var field in AssetInput.FieldsList)
                 {
-                    ShowFields showField = new ShowFields();
-                    showField.Name = field.GetHashCode().ToString();
-                    showField.Field = field;
-                    FieldsList.Add(showField);
+                    ShownField shownField = new ShownField();
+                    shownField.Name = field.GetHashCode().ToString();
+                    shownField.Field = field;
+                    FieldsList.Add(shownField);
                 }
 
+                // Load all tags into TagsList
                 LoadTags();
-                if (TagsList.Count > 0)
+
+                // Get all the fields coming from the attached tags
+                GetTagFields();  
+            }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void GetTagFields()
+        {
+            if (TagsList.Count > 0)
+            {
+                int fieldsCount = 0;
+                foreach (var currentTag in TagsList)
                 {
-                    int fieldsCount = 0;
-                    foreach (var currentTag in TagsList)
+                    foreach (var field in currentTag.FieldsList)
                     {
-                        foreach (var field in currentTag.FieldsList)
+                        foreach (var shownField in FieldsList)
                         {
-                            foreach (var shownField in FieldsList)
+                            if (Equals(field, shownField.Field))
                             {
-                                if (Equals(field, shownField.Field))
-                                {
-                                    shownField.FieldTags.Add(currentTag);
-                                }
+                                shownField.FieldTags.Add(currentTag);
                             }
                         }
                     }
-
-                    Console.WriteLine("Tags add " + fieldsCount + " fields");
                 }
 
-                Name = asset.Name;
-                Description = asset.Description;
-                IsTag = false;
-
-                CommentList = CommentRep.GetByAssetId(asset.ID);
-
-                AddNewCommentCommand = new Base.RelayCommand(AddNewComment);
-                RemoveCommentCommand = new Base.RelayCommand(RemoveComment);
+                Console.WriteLine("Tags add " + fieldsCount + " fields");
             }
         }
 
@@ -132,7 +166,7 @@ namespace Asset_Management_System.ViewModels
         {
             if (CommentField != null && CommentField != String.Empty)
             {
-                Comment c = new Comment()
+                Comment newComment = new Comment()
                 {
                     Username = _main.CurrentUser,
                     Content = CommentField,
@@ -141,13 +175,13 @@ namespace Asset_Management_System.ViewModels
                     UpdatedAt = DateTime.Now
                 };
 
-                CommentRep.Insert(c);
+                CommentRep.Insert(newComment);
 
-                c.Notify();
+                Log<Comment>.CreateLog(newComment);
 
                 CommentField = String.Empty;
 
-                CommentList = CommentRep.GetByAssetId(AssetInput.ID);
+                CommentsList = CommentRep.GetByAssetId(AssetInput.ID);
             }
         }
 
@@ -157,21 +191,21 @@ namespace Asset_Management_System.ViewModels
 
             if (selected != null)
             {
-                selected.Notify(true);
+                Log<Comment>.CreateLog(selected, true);
                 CommentRep.Delete(selected);
             }
 
-            CommentList = CommentRep.GetByAssetId(AssetInput.ID);
+            CommentsList = CommentRep.GetByAssetId(AssetInput.ID);
         }
 
         private Comment GetSelectedItem()
         {
-            if (CommentList.Count == 0)
+            if (CommentsList.Count == 0)
                 return null;
 
             else
             {
-                return CommentList.ElementAt(SelectedItemIndex);
+                return CommentsList.ElementAt(SelectedItemIndex);
             }
         }
 
@@ -195,6 +229,8 @@ namespace Asset_Management_System.ViewModels
 
             Console.WriteLine("Found " + TagsList.Count + " tags");
         }
+
+        #endregion
     }
-    
+
 }

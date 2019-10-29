@@ -19,7 +19,7 @@ namespace Asset_Management_System.ViewModels.Commands.ViewModelHelper
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             FrameworkElement element = container as FrameworkElement;
-            ShowFields field = item as ShowFields;
+            ShownField field = item as ShownField;
             switch (field?.Field.FieldType)
             {
                 case 1: // Textbox

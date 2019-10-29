@@ -13,7 +13,7 @@ namespace Asset_Management_System.ViewModels
 {
     public abstract class FieldsController : Base.BaseViewModel
     {
-        public ObservableCollection<ShowFields> FieldsList { get; set; }
+        public ObservableCollection<ShownField> FieldsList { get; set; }
         protected bool _editing;
 
 
