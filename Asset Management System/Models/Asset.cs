@@ -33,6 +33,12 @@ namespace Asset_Management_System.Models
 
         public ulong DepartmentID { get; set; }
 
+        /// <summary>
+        /// Checks if the asset is equal to another asset based on
+        /// the length of FieldsList, Name, Description, and DepartmentID
+        /// </summary>
+        /// <param name="obj">The object to compare the asset to</param>
+        /// <returns>Rather the two objects are equal</returns>
         public override bool Equals(object obj)
         {
             if(obj is Asset == false)
@@ -61,11 +67,19 @@ namespace Asset_Management_System.Models
             return true;
         }
 
+        /// <summary>
+        /// Creates hash code based on Name, Description, and DepartmentID
+        /// </summary>
+        /// <returns>The calculated hash code</returns>
         public override int GetHashCode()
         {
             return HashCode.Combine(Name, Description, DepartmentID);
         }
 
+        /// <summary>
+        /// Returns the name of the asset
+        /// </summary>
+        /// <returns>Name of the asset</returns>
         public override string ToString() => Name;
         
         /// <summary>

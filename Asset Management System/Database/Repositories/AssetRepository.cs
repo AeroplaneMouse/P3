@@ -21,6 +21,10 @@ namespace Asset_Management_System.Database.Repositories
             this.dbcon = DBConnection.Instance();
         }
 
+        /// <summary>
+        /// Returns the number of assets in the database
+        /// </summary>
+        /// <returns>Number of assets in database</returns>
         public int GetCount()
         {
             int count = 0;
@@ -47,6 +51,12 @@ namespace Asset_Management_System.Database.Repositories
             return count;
         }
 
+
+        /// <summary>
+        /// Inserts the given asset into the database
+        /// </summary>
+        /// <param name="entity">The asset to be inserted</param>
+        /// <returns>Rather the insertion was successful or not</returns>
         public bool Insert(Asset entity)
         {
             bool query_success = false;
@@ -87,7 +97,11 @@ namespace Asset_Management_System.Database.Repositories
 
             return query_success;
         }
-
+        /// <summary>
+        /// Updates the given asset in the database
+        /// </summary>
+        /// <param name="entity">The locally updated asset</param>
+        /// <returns>Rather the update was successful or not</returns>
         public bool Update(Asset entity)
         {
             bool query_success = false;
@@ -128,6 +142,11 @@ namespace Asset_Management_System.Database.Repositories
             return query_success;
         }
 
+        /// <summary>
+        /// Remvoes the given asset from the database
+        /// </summary>
+        /// <param name="entity">The asset to be deleted</param>
+        /// <returns>Rather the deletion was successful or not</returns>
         public bool Delete(Asset entity)
         {
             bool query_success = false;
@@ -159,6 +178,11 @@ namespace Asset_Management_System.Database.Repositories
             return query_success;
         }
 
+        /// <summary>
+        /// Fetches the asset with the given id from the database
+        /// </summary>
+        /// <param name="id">ID of the desired asset</param>
+        /// <returns>The asset or null, if the asset was not found in the database</returns>
         public Asset GetById(ulong id)
         {
             Asset asset = null;
@@ -197,9 +221,14 @@ namespace Asset_Management_System.Database.Repositories
             return asset;
         }
 
-        public IEnumerable<Asset> SearchByTags(List<int> tags_ids)
+        /// <summary>
+        /// Searches the database for assets with one or more of the given tags
+        /// </summary>
+        /// <param name="tags_ids">A list of IDs of the tags</param>
+        /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
+        public ObservableCollection<Asset> SearchByTags(List<int> tags_ids)
         {
-            List<Asset> assets = new List<Asset>();
+            ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
 
             if (dbcon.IsConnect())
             {
@@ -238,6 +267,15 @@ namespace Asset_Management_System.Database.Repositories
             return assets;
         }
 
+        /// <summary>
+        /// Searches for assets in the database based on the keyword.
+        /// If the keyword starts or ends with '%', they will be used in the query.
+        /// A '%' at the start of the keyword will search for entries ending on the rest of the keyword.
+        /// A '%' at the end of the keyword will search for entries starting with the rest of the keyword.
+        /// If no '%' is added, the search will return every entry containing the keyword (slower).
+        /// </summary>
+        /// <param name="keyword">The search query to search by</param>
+        /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
         public ObservableCollection<Asset> Search(string keyword)
         {
             ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
@@ -249,7 +287,7 @@ namespace Asset_Management_System.Database.Repositories
                     const string query =
                         "SELECT id, name, description, department_id, options, created_at, updated_at FROM assets WHERE name LIKE @keyword";
 
-                    if (!keyword.Contains("%"))
+                    if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
                     {
                         keyword = "%" + keyword + "%";
                     }
@@ -282,6 +320,11 @@ namespace Asset_Management_System.Database.Repositories
             return assets;
         }
 
+        /// <summary>
+        /// Convert a database entry of an asset to an asset in the system
+        /// </summary>
+        /// <param name="reader">A MySQLDataReader containing the data for the asset</param>
+        /// <returns>The asset made from the given data</returns>
         public Asset DBOToModelConvert(MySqlDataReader reader)
         {
             ulong row_id = reader.GetUInt64("id");

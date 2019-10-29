@@ -102,7 +102,7 @@ namespace Asset_Management_System.ViewModels
 
                 if (TagInput.ParentID != 0)
                 {
-                    //TODO G�r det her
+                    //TODO Gør det her
                 }
             }
 
