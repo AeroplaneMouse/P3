@@ -9,6 +9,7 @@ using Asset_Management_System.ViewModels.Commands.ViewModelHelper;
 using Asset_Management_System.Views;
 using System.Windows;
 using System.Windows.Controls;
+using Asset_Management_System.Logging;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -142,8 +143,8 @@ namespace Asset_Management_System.ViewModels
                 };
 
                 CommentRep.Insert(c);
-
-                c.Notify();
+                
+                Log<Comment>.CreateLog(c);
 
                 CommentField = String.Empty;
 
@@ -157,7 +158,7 @@ namespace Asset_Management_System.ViewModels
 
             if (selected != null)
             {
-                selected.Notify(true);
+                Log<Comment>.CreateLog(selected, true);
                 CommentRep.Delete(selected);
             }
 
