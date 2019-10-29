@@ -22,93 +22,137 @@
         <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
     </Style>
 
+    <Style TargetType="Button" x:Key="RemoveFieldButton">
+        <!-- Setting default properties -->
+        <Setter Property="Command" Value="RemoveFieldCommand"/>
+        <Setter Property="CommandParameter" Value="{Binding Path=Field.ID}"/>
+        <Setter Property="Content" Value="X"/>
+        <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+
+        <!-- Creating a new template for the button -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                        <TextBlock VerticalAlignment="Center" 
+                                   HorizontalAlignment="Center" 
+                                   Text="{TemplateBinding Content}" 
+                                   Foreground="{StaticResource BackgroundLightBrush}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Setting a trigger when the mouse is over the element -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource CancelRedHighlightBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+
+    <!-- Data templates -->
     <DataTemplate x:Key="TextBoxFieldStyle">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
-            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <TextBlock Style="{StaticResource FieldLabel}"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="30" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
             
-            <TextBox Grid.Row="1" Grid.ColumnSpan="2" Text="{Binding Content}"
-                     TextWrapping="Wrap"
-                     MinHeight="80"/>
-            <Button Style="{StaticResource DeleteFieldButton}"/>
+            
+            <TextBlock Grid.ColumnSpan="2" Text="{Binding Field.Label}" Style="{StaticResource BaseTextBlockStyle}"/>
+            <Button Grid.Row="1"
+                    Style="{StaticResource RemoveFieldButton}"/>
+
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" 
+                     MinHeight="80"
+                     TextWrapping="Wrap" />
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="StringFieldStyle">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <TextBlock Style="{StaticResource FieldLabel}"/>
-            
-            <TextBlock FontFamily="{StaticResource SegoeRegular}"
-                       FontSize="{StaticResource FontSizeSmall}"
-                       Grid.Row="1"
-                       Text="{Binding Content}"/>
+            <Button Grid.Row="1"
+                    Style="{StaticResource RemoveFieldButton}"/>
 
-            <Button Style="{StaticResource DeleteFieldButton}"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" />
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="IntegerFieldStyle">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <TextBlock Style="{StaticResource FieldLabel}"/>
-            
-            <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource DeleteFieldButton}"/>
-            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Label}" />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}"/>
+            <Button Grid.Row="1"
+                    Style="{StaticResource RemoveFieldButton}"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" />
+            <!--PreviewTextInput="NumberVerification" removed from the textbox above -->
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="DateFieldStyle">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <TextBlock Style="{StaticResource FieldLabel}"/>
-            
-            <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource DeleteFieldButton}"/>
-            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Label}" />
-            <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Content}" />
+            <Button Grid.Row="1"
+                    Style="{StaticResource RemoveFieldButton}"/>
+
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
+            <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Field.Content}" />
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="BooleanFieldStyle">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <TextBlock Style="{StaticResource FieldLabel}"/>
-            
-            <Button Grid.Row="1" Grid.Column="0" Style="{StaticResource DeleteFieldButton}"/>
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Name}" />
-            <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Content}"/>
+            <Button Grid.Row="1"
+                    Style="{StaticResource RemoveFieldButton}"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Field.Name}" />
+            <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Field.Content}" Name="CheckBox" />
         </Grid>
     </DataTemplate>
 </ResourceDictionary>

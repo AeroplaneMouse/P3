@@ -5,30 +5,53 @@
 
     <FontFamily x:Key="SegoeRegular">pack://application;,,,/Resources/Fonts/#Segoe UI</FontFamily>
     <FontFamily x:Key="SegoeBold">pack://application;,,,/Resources/Fonts/#Segoe UI Bold</FontFamily>
+
+    <system:Double x:Key="FontSizeXSmall">11</system:Double>
+    <system:Double x:Key="FontSizeSmall">14</system:Double>
+    <system:Double x:Key="FontSizeRegular">17</system:Double>
+    <system:Double x:Key="FontSizeLarge">23</system:Double>
+    <system:Double x:Key="FontSizeXLarge">28</system:Double>
     
     <!-- Everything that inherits Control in the application defaults to this font -->
     <Style TargetType="{x:Type Control}" x:Key="BaseStyle">
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}" />
     </Style>
 
-    <!-- Special style for TextBlock -->
+    <!-- TextBlock styles -->
     <Style TargetType="{x:Type TextBlock}" x:Key="BaseTextBlockStyle">
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontWeight" Value="Light"/>
     </Style>
     
+    <Style TargetType="TextBlock" x:Key="TitleStyle">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}"/>
+    </Style>
+    
+    <Style TargetType="TextBlock" x:Key="HeaderStyle">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+    </Style>
+    
+    <Style TargetType="TextBlock" x:Key="ParagraphStyle">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+    </Style>
+
+    <!-- TextBox styles -->
+    <Style TargetType="{x:Type TextBox}" x:Key="BaseTextBoxStyle">
+        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontWeight" Value="Light"/>
+    </Style>
+
+
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource BaseStyle}" />
     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource BaseStyle}" />
     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource BaseStyle}" />
     <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlockStyle}" />
     <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource BaseStyle}" />
     
-    <system:Double x:Key="FontSizeSmall">14</system:Double>
-    <system:Double x:Key="FontSizeRegular">17</system:Double>
-    <system:Double x:Key="FontSizeLarge">23</system:Double>
-    <system:Double x:Key="FontSizeXLarge">28</system:Double>
+    
 
-    <Style TargetType="TextBlock" x:Key="TitleStyle">
-        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}"/>
-    </Style>
+    
     
 </ResourceDictionary>
