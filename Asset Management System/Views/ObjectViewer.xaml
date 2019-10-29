@@ -9,26 +9,40 @@
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
       Title="ObjectViewer">
+
+    <!-- Header -->
     <Page.Resources>
+        <!-- Asset Template -->
         <DataTemplate x:Key="AssetTemplate">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20" />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="400" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="1">Name</Label>
-                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Name}" Padding="10" />
+                <Label Grid.Row="0" Grid.Column="1" Padding="10" >Name</Label>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Name}" Padding="10" TextWrapping="Wrap" />
 
-                <Label Grid.Row="1" Grid.Column="1">Description</Label>
+                <Label Grid.Row="1" Grid.Column="1" Padding="10" >Description</Label>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Description}" Padding="10" TextWrapping="Wrap" />
+
+                <Button Grid.Row="2" Grid.Column="1" Content="Asset history" Style="{StaticResource RegularButton}"
+                        Command="{Binding ViewAssetHistoryCommand}" />
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Description}" Padding="10" />
+
             </Grid>
+
+
         </DataTemplate>
+
+        <!-- Asset Template-->
         <DataTemplate x:Key="TagTemplate">
             <Border BorderThickness="2" BorderBrush="Black">
                 <Grid>
@@ -43,49 +57,106 @@
                         <RowDefinition />
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0" Grid.Column="1">Name</Label>
+                    <Label Grid.Row="0" Grid.Column="1" Padding="10">Name</Label>
                     <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Name}" Padding="10" />
 
-                    <Label Grid.Row="1" Grid.Column="1">Parent tag</Label>
+                    <Label Grid.Row="1" Grid.Column="1" Padding="10">Parent tag</Label>
                     <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding ParentTag}" Padding="10" />
 
-                    <Label Grid.Row="2" Grid.Column="1">Color</Label>
-                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Color}" Padding="10" />
+                    <Label Grid.Row="2" Grid.Column="1" Padding="10">Color</Label>
+                    <TextBlock Grid.Row="2" Grid.Column="2" Background="{Binding Color}" Padding="10" />
                 </Grid>
             </Border>
         </DataTemplate>
+
+        <!-- Comments -->
+        <DataTemplate x:Key="CommentTemplate">
+            <Border Padding="0 10 0 0">
+                <StackPanel Orientation="Vertical">
+
+                    <TextBox Text="{Binding CommentField, UpdateSourceTrigger=PropertyChanged}"
+                             Width="200"
+                             Padding="5"/>
+
+                    <StackPanel>
+                        <Button Content="Add new comment"
+                                Padding="0 5"
+                                Width="200"
+                                Command="{Binding AddNewCommentCommand}"/>
+
+                        <Button Content="Remove comment"
+                                Padding="0 5"
+                                Width="200"
+                                Command="{Binding RemoveCommentCommand}" />
+
+                    </StackPanel>
+
+
+                    <ListView ItemsSource="{Binding CommentsList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="Username" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content" />
+                            </GridView>
+                        </ListView.View>
+
+                    </ListView>
+
+                </StackPanel>
+
+            </Border>
+        </DataTemplate>
+        
+        <!-- Empty template -->
+        <DataTemplate x:Key="EmptyTemplate">
+            
+        </DataTemplate>
+        
     </Page.Resources>
+
+
+    <!-- Main content -->
     <Grid>
+
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200" />
-            <ColumnDefinition Width="600" />
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="500" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="500" />
-            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <StackPanel
             Grid.Row="1"
             Grid.Column="0"
             Margin="10">
-            <ContentControl>
+            <ContentControl Content="{Binding}">
                 <ContentControl.Style>
                     <Style>
                         <Style.Triggers>
+
                             <DataTrigger Binding="{Binding IsTag}" Value="True">
-                                <Setter Property="ContentControl.ContentTemplate" Value="{StaticResource TagTemplate}" />
+                                <Setter Property="ContentControl.ContentTemplate"
+                                        Value="{StaticResource TagTemplate}" />
                             </DataTrigger>
+
                             <DataTrigger Binding="{Binding IsTag}" Value="False">
                                 <Setter Property="ContentControl.ContentTemplate"
                                         Value="{StaticResource AssetTemplate}" />
                             </DataTrigger>
+
                         </Style.Triggers>
                     </Style>
                 </ContentControl.Style>
             </ContentControl>
+
         </StackPanel>
 
 
@@ -93,7 +164,6 @@
             Grid.Row="1"
             Grid.Column="1"
             Margin="10">
-
             <ScrollViewer HorizontalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding FieldsList}">
                     <ItemsControl.ItemTemplate>
@@ -109,13 +179,33 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                         <RowDefinition />
+                                        <RowDefinition />
                                     </Grid.RowDefinitions>
                                     <TextBlock Grid.Row="0" Grid.Column="1" Text="Label: " />
-                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Label}"
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Field.Label}"
                                                HorizontalAlignment="Left" />
                                     <TextBlock Grid.Row="1" Grid.Column="1" Text="Content: " />
-                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Content}" MaxHeight="200"
-                                               MaxWidth="250" HorizontalAlignment="Left" />
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Field.Content}"
+                                               MaxWidth="250"
+                                               HorizontalAlignment="Left" TextWrapping="Wrap" />
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="Field comes from: " />
+                                    <ItemsControl Grid.Row="2" Grid.Column="2"  ItemsSource="{Binding FieldTags}">
+                                        <ItemsControl.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <StackPanel Orientation="Horizontal" />
+                                            </ItemsPanelTemplate>
+                                        </ItemsControl.ItemsPanel>
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Border BorderBrush="{Binding Color}" BorderThickness="1">
+                                                    <TextBlock Text="{Binding Name}" Padding="5"/>
+                                                    </Border>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
                                 </Grid>
                             </Border>
                         </DataTemplate>
@@ -124,32 +214,60 @@
             </ScrollViewer>
         </Grid>
 
-        <Grid
-            Grid.Row="1"
-            Grid.Column="2"
-            Margin="10">
-            
-                <ItemsControl ItemsSource="{Binding TagsList}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Border BorderThickness="1" BorderBrush="Black">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="20" />
-                                        <ColumnDefinition Width="20" />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Name}"
-                                               HorizontalAlignment="Left" />
-                                </Grid>
-                            </Border>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
+        <Grid Grid.Row="1"
+              Grid.Column="2"
+              Margin="10">
+            <ItemsControl ItemsSource="{Binding TagsList}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderThickness="1" BorderBrush="Black">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Name}"
+                                           HorizontalAlignment="Left" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Grid>
+
+        <StackPanel Grid.Column="1" Grid.Row="2">
+
+            <ContentControl Content="{Binding}">
+                <ContentControl.Style>
+                    <Style>
+                        <Style.Triggers>
+
+                            <DataTrigger Binding="{Binding IsTag}" Value="False">
+                                <Setter Property="ContentControl.ContentTemplate"
+                                    Value="{StaticResource CommentTemplate}" />
+                            </DataTrigger>
+
+                            <DataTrigger Binding="{Binding IsTag}" Value="True">
+                                <Setter Property="ContentControl.ContentTemplate"
+                                    Value="{StaticResource EmptyTemplate}" />
+
+                            </DataTrigger>
+
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+
+            </ContentControl>
+            
+        </StackPanel>
+
+        
 
     </Grid>
 </Page>

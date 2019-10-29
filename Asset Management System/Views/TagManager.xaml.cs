@@ -12,6 +12,7 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class TagManager : Page
     {
+        private bool _editing;
 
         /// <summary>
         /// TagManager is called when creating, or editing a tag.
@@ -22,12 +23,15 @@ namespace Asset_Management_System.Views
         {
             InitializeComponent();
             DataContext = new TagManagerViewModel(main, inputTag);
+            _editing = (inputTag == null ? false : true);
         }
 
         private void ParentTag_SelectionChanged(object sender, SelectionChangedEventArgs args)
         {
             //Converts the current DataContext to a TagManagerViewModel
             TagManagerViewModel viewModel = DataContext as TagManagerViewModel;
+
+            Tag newParentTag = viewModel.ParentTagsList[viewModel.SelectedParentIndex];
 
             //Checks if there was selected a parent tag prior to the selection
             if (args.RemovedItems.Count > 0)
@@ -37,14 +41,12 @@ namespace Asset_Management_System.Views
                 if (viewModel.Color == oldParentTag.Color)
                 {
                     //Changes the color to the color of the new parent tag
-                    Tag newParentTag = viewModel.ParentTagsList[viewModel.SelectedParentIndex];
                     viewModel.Color = newParentTag.Color;
                 }
             }
-            else
+            else if(!_editing)
             {
                 //Changes the color to the color of the new parent tag
-                Tag newParentTag = viewModel.ParentTagsList[viewModel.SelectedParentIndex];
                 viewModel.Color = newParentTag.Color;
             }
         }

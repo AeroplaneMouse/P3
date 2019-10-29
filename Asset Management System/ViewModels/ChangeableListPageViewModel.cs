@@ -1,7 +1,9 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
-using System.Collections.Generic;
+using Asset_Management_System.Logging;
+using Asset_Management_System.Models;
 using Asset_Management_System.Resources.DataModels;
 using System.Windows;
 
@@ -33,12 +35,6 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Methods
-
-        protected override void View()
-        {
-            Console.WriteLine("Base view");
-            throw new NotImplementedException();
-        }
 
         protected void AddNew()
         {
@@ -93,12 +89,12 @@ namespace Asset_Management_System.ViewModels
                 switch (PageType)
                 {
                     case ListPageType.Asset:
-                        (selected as Models.Asset).Notify(true);
+                        Log<Asset>.CreateLog(selected as ILoggable<Asset>, true);
                         (Rep as Database.Repositories.AssetRepository).Delete(selected as Models.Asset);
                         break;
 
                     case ListPageType.Tag:
-                        (selected as Models.Tag).Notify(true);
+                        Log<Tag>.CreateLog(selected as ILoggable<Tag>, true);
                         (Rep as Database.Repositories.TagRepository).Delete(selected as Models.Tag);
                         break;
 

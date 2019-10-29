@@ -1,23 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Asset_Management_System.Controllers;
+﻿using System.Windows.Controls;
 using Asset_Management_System.Models;
-using Asset_Management_System.Database.Repositories;
-using System.Windows.Media;
 using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
 {
-    /// <summary>
-    /// Interaction logic for NewAsset.xaml
-    /// </summary>
-    public partial class AssetManager : FieldsController
+    public partial class AssetManager : Page
     {
-        private MainViewModel _main;
-        private Asset _asset;
-        private bool Editing;
-
         /// <summary>
         /// AssetManager is called when creating, or editing a asset.
         /// </summary>
@@ -26,93 +14,7 @@ namespace Asset_Management_System.Views
         public AssetManager(MainViewModel main, Asset inputAsset = null)
         {
             InitializeComponent();
-            _main = main;
-            FieldsList = new ObservableCollection<Field>();
-            FieldsControl.ItemsSource = FieldsList = new ObservableCollection<Field>();
-            if (inputAsset != null)
-            {
-                _asset = inputAsset;
-                LoadFields();
-                Editing = true;
-            }
-            else
-            {
-                _asset = new Asset();
-                Editing = false;
-            }
-        }
-
-        /// <summary>
-        /// This function fires when the "Save Asset" button is clicked.
-        /// The function saves or updates the asset in the database.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void BtnSaveNewAsset_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            bool requiredFieldsWritten = true;
-            _asset.Name = TbName.Text;
-            _asset.Description = TbDescription.Text;
-            _asset.FieldsList = new List<Field>();
-            foreach (var field in FieldsList)
-            {
-                if (field.Required && field.Content == string.Empty)
-                {
-                    requiredFieldsWritten = false;
-                }
-                _asset.AddField(field);
-            }
-            Console.WriteLine(requiredFieldsWritten);
-            
-            if (!requiredFieldsWritten)
-            {
-                _main.ChangeMainContent(new AssetManager(_main,_asset));
-                Console.WriteLine("Please fill out the required fields.");
-                return;
-            }
-
-            Department department = _main.CurrentDepartment;
-            if (department != null)
-            {
-                _asset.DepartmentID = department.ID;
-                // Creates a log entry, currently uses for testing.
-                _asset.Notify();
-                AssetRepository rep = new AssetRepository();
-                if (Editing)
-                {
-                    rep.Update(_asset);
-                }
-                else
-                {
-                    rep.Insert(_asset);
-                }
-
-                _main.ChangeMainContent(new Assets(_main));
-            }
-            else
-            {
-                string message = $"ERROR! No department set. Please create a department to attach the asset to.";
-                //Main.ShowNotification(sender, new Events.NotificationEventArgs(message, Brushes.Red));
-            }
-        }
-        
-        /// <summary>
-        /// Runs through the saved fields within the tag, and adds these to the fieldList.
-        /// </summary>
-        /// <returns></returns>
-        private bool LoadFields()
-        {
-            ConsoleWriter.ConsoleWrite("------Field labels | Field content -------");
-            _asset.DeserializeFields();
-            foreach (var field in _asset.FieldsList)
-            {
-                ConsoleWriter.ConsoleWrite(field.Label +" | "+ field.Content);
-                FieldsList.Add(field);
-            }
-            TbName.Text = _asset.Name ;
-            TbDescription.Text = _asset.Description;
-
-            return true;
+            DataContext = new AssetManagerViewModel(main, inputAsset, InputBox);
         }
     }
 }

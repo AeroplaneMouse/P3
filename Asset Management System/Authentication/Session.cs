@@ -22,11 +22,13 @@ namespace Asset_Management_System.Authentication
 
         public bool Authenticated()
         {
+            //TODO: Real implementation of Authenticated()
             return user != null;
         }
 
         public bool IsAdmin()
         {
+            //TODO: Real implementation of IsAdmin()
             return user.IsAdmin;
         }
         

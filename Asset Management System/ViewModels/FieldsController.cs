@@ -7,112 +7,17 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Asset_Management_System.ViewModels.Commands.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
     public abstract class FieldsController : Base.BaseViewModel
     {
-        public ObservableCollection<Field> FieldsList { get; set; }
+        public ObservableCollection<ShownField> FieldsList { get; set; }
         protected bool _editing;
 
 
         public ICommand AddFieldCommand { get; set; }
-
-
-        protected void OnAddField(object sender, RoutedEventArgs e)
-        {
-            List<string> promptResults;
-            switch ((sender as Button)?.Name)
-            {
-                case "AddTextField":
-                    Console.WriteLine("Textfield added");
-                    if ((promptResults = PromptManager("Text box", out bool required)).Count > 0)
-                    {
-                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
-                            required));
-                    }
-                    break;
-                case "AddStringField":
-                    Console.WriteLine("StringField added");
-                    if ((promptResults = PromptManager("String Field", out required)).Count > 0)
-                    {
-                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
-                            required));
-                    }
-                    break;
-                case "AddIntegerField":
-                    Console.WriteLine("IntegerField added");
-                    if ((promptResults = PromptManager("Integer FIeld", out required)).Count > 0)
-                    {
-                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
-                            required));
-                    }
-                    break;
-                case "AddDateField":
-                    Console.WriteLine("Date Field added");
-                    if ((promptResults = PromptManager("Date Field", out required)).Count > 0)
-                    {
-                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
-                            required));
-                    }
-                    break;
-                case "AddBooleanField":
-                    Console.WriteLine("BooleanField added");
-                    if ((promptResults = PromptManager("Boolean Field", out required)).Count > 0)
-                    {
-                        FieldsList.Add(new Field(promptResults[0], promptResults[1], 1, promptResults[1],
-                            required));
-                    }
-                    break;
-                default:
-                    throw new NotSupportedException();
-            }
-
-            Console.WriteLine("List of the current fields after adding the field:");
-            Console.WriteLine("---------------------------------------");
-            Console.WriteLine("ID  |   Field name   |   Content of the field");
-            foreach (var test in FieldsList)
-            {
-                Console.WriteLine(test.ID + " | " + test.Label + " | " + test.Content);
-            }
-
-            Console.WriteLine("---------------------------------------");
-        }
-
-        protected void OnDeleteField(object sender, RoutedEventArgs e)
-        {
-            switch ((sender as Button)?.Name)
-            {
-                case "DeleteTextField":
-                    Console.WriteLine("Textfield removed");
-                    break;
-                case "DeleteStringField":
-                    Console.WriteLine("StringField removed");
-                    break;
-                case "DeleteIntegerField":
-                    Console.WriteLine("IntegerField removed");
-                    break;
-                case "DeleteDateField":
-                    Console.WriteLine("DataField removed");
-                    break;
-                case "DeleteBooleanField":
-                    Console.WriteLine("BooleanField removed");
-                    break;
-                default:
-                    throw new NotSupportedException();
-            }
-
-            FieldsList.Remove((sender as FrameworkElement).DataContext as Field);
-            Console.WriteLine("List of the current fields after removing the field:");
-            Console.WriteLine("---------------------------------------");
-            Console.WriteLine("ID |Field name | Content of the field");
-            foreach (var test in FieldsList)
-            {
-                Console.WriteLine(test.ID + " | " + test.Label + "|" + test.Content);
-            }
-
-            Console.WriteLine("---------------------------------------");
-        }
 
         public void NumberVerification(object sender, TextCompositionEventArgs e)
         {
@@ -142,4 +47,5 @@ namespace Asset_Management_System.ViewModels
 
         protected abstract void LoadFields();
     }
+    
 }
