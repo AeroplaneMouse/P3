@@ -45,7 +45,16 @@
                             Style="{StaticResource RegularTabControl}"
                             Grid.ColumnSpan="2">
                 <TabItem Header="Details" Style="{StaticResource RegularTab}">
-                    <Label Content="Content goes here..." />
+                    <StackPanel MaxWidth="300">
+                        <TextBlock Text="Name" FontWeight="Regular"/>
+                        <TextBlock Text="Red apple" FontWeight="Light" Margin="0 0 0 10"/>
+
+                        <TextBlock Text="Identifier" FontWeight="Regular"/>
+                        <TextBlock Text="1023847" FontWeight="Light" Margin="0 0 0 10"/>
+
+                        <TextBlock Text="Description" FontWeight="Regular"/>
+                        <TextBlock TextWrapping="Wrap" Text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged." FontWeight="Light"/>
+                    </StackPanel>
                 </TabItem>
                 <TabItem Header="Comments" Style="{StaticResource RegularTab}"/>
                 <TabItem Header="Log" Style="{StaticResource RegularTab}"/>

@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using System.Collections.Generic;
 using Asset_Management_System.Resources.DataModels;
+using System.Windows;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -26,6 +27,7 @@ namespace Asset_Management_System.ViewModels
             AddNewCommand = new Base.RelayCommand(AddNew);
             EditCommand = new Base.RelayCommand(Edit);
             RemoveCommand = new Base.RelayCommand(Remove);
+
         }
 
         #endregion
@@ -111,6 +113,11 @@ namespace Asset_Management_System.ViewModels
 
 
         #region Helpers
+
+        public Visibility IsRemoveVisible { get; set; } = Visibility.Hidden;
+
+        public string Title { get; set; }
+
 
         #endregion
     }
