@@ -207,7 +207,6 @@ namespace Asset_Management_System.ViewModels
                 return null;
             }
 
-
             return CommentsList.ElementAtOrDefault(SelectedItemIndex);
         }
 

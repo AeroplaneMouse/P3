@@ -13,6 +13,7 @@ using Asset_Management_System.Events;
 using Asset_Management_System.Database;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Resources.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -215,6 +216,13 @@ namespace Asset_Management_System.ViewModels
                 if (!ExcludedFromSaving(setPage))
                     pages.Add(setPage);
             }
+
+            // Update the list on the page, if there is one
+            if (setPage.DataContext is IListUpdate)
+            {
+                (setPage.DataContext as IListUpdate).UpdateList();
+            }
+
 
             // Setting the content of the given frame, to the newPage object to display the requested page.
             frame.Content = setPage;

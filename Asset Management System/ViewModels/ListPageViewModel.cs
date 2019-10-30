@@ -1,6 +1,7 @@
 ﻿using Asset_Management_System.Helpers;
 using Asset_Management_System.Logging;
 using Asset_Management_System.Resources.DataModels;
+using Asset_Management_System.Resources.Interfaces;
 using Asset_Management_System.Views;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ using System.Windows.Input;
 
 namespace Asset_Management_System.ViewModels
 {
-    public abstract class ListPageViewModel<RepositoryType, T> : Base.BaseViewModel
+    public abstract class ListPageViewModel<RepositoryType, T> : Base.BaseViewModel, IListUpdate
         where RepositoryType : Database.Repositories.ISearchableRepository<T>, new()
         where T : class, new()
     {
@@ -100,15 +101,17 @@ namespace Asset_Management_System.ViewModels
             PrintCommand = new Base.RelayCommand(Print);
             SearchCommand = new Base.RelayCommand(Search);
             ViewCommand = new Base.RelayCommand(View);
-
-            Search();
-
         }
 
         #endregion
 
 
         #region Methods
+
+        public void UpdateList()
+        {
+            Search();
+        }
 
         /// <summary>
         /// Sends a search request to the database, and sets the list of items to the result.

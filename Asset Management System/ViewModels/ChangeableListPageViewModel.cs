@@ -14,8 +14,8 @@ namespace Asset_Management_System.ViewModels
     {
         #region Commands
 
-        public ICommand AddNewCommand { get; set; }
-        public ICommand EditCommand { get; set; }
+        public static ICommand AddNewCommand { get; set; }
+        public static ICommand EditCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
 
         #endregion
@@ -63,11 +63,11 @@ namespace Asset_Management_System.ViewModels
                 switch (PageType)
                 {
                     case ListPageType.Asset:
-                        Main.ChangeMainContent(new Views.AssetManager(Main, selected as Models.Asset));
+                        Main.ChangeMainContent(new Views.AssetManager(Main, selected as Asset));
                         break;
 
                     case ListPageType.Tag:
-                        Main.ChangeMainContent(new Views.TagManager(Main, selected as Models.Tag));
+                        Main.ChangeMainContent(new Views.TagManager(Main, selected as Tag));
                         break;
 
                     default:
@@ -88,12 +88,12 @@ namespace Asset_Management_System.ViewModels
                 {
                     case ListPageType.Asset:
                         Log<Asset>.CreateLog(selected as ILoggable<Asset>, true);
-                        (Rep as Database.Repositories.AssetRepository).Delete(selected as Models.Asset);
+                        (Rep as Database.Repositories.AssetRepository).Delete(selected as Asset);
                         break;
 
                     case ListPageType.Tag:
                         Log<Tag>.CreateLog(selected as ILoggable<Tag>, true);
-                        (Rep as Database.Repositories.TagRepository).Delete(selected as Models.Tag);
+                        (Rep as Database.Repositories.TagRepository).Delete(selected as Tag);
                         break;
 
                     default:
