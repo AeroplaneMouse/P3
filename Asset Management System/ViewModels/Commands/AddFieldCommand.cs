@@ -28,56 +28,43 @@ namespace Asset_Management_System.ViewModels.Commands
         {
             string fieldToAdd = parameter.ToString();
 
-            
+
             // Getting label, default value and is required
             List<string> promptResults = new List<string>();
             int fieldType = 0;
             bool required;
             bool correctPrompt = (promptResults = _viewModel.PromptManager("Text box", out required)).Count > 0;
-            
+
             switch (fieldToAdd)
             {
                 case "Text Field":
                     Console.WriteLine("Textfield added");
-                    if (correctPrompt)
-                    {
-                        fieldType = 1;
-                    }
+                    fieldType = 1;
                     break;
                 case "String Field":
                     Console.WriteLine("StringField added");
-                    if (correctPrompt)
-                    {
-                        fieldType = 2;
-                    }
+                    fieldType = 2;
                     break;
                 case "Integer Field":
                     Console.WriteLine("IntegerField added");
-                    if (correctPrompt)
-                    {
-                        fieldType = 3;
-                    }
+                    fieldType = 3;
                     break;
                 case "Date Field":
                     Console.WriteLine("Date Field added");
-                    if (correctPrompt)
-                    {
-                        fieldType = 4;
-                    }
+                    fieldType = 4;
                     break;
                 case "Boolean Field":
                     Console.WriteLine("BooleanField added");
-                    if (correctPrompt)
-                    {
-                        fieldType = 5;
-                    }
+                    fieldType = 5;
                     break;
                 default:
                     throw new NotSupportedException();
             }
-            if (fieldType != 0)
+
+            if (fieldType != 0 && correctPrompt)
             {
-                ShownField shownField = new ShownField(new Field(promptResults[0], promptResults[1], fieldType, promptResults[1],
+                ShownField shownField = new ShownField(new Field(promptResults[0], promptResults[1], fieldType,
+                    promptResults[1],
                     required));
                 _viewModel.FieldsList.Add(shownField);
             }
