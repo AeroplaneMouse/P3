@@ -27,7 +27,7 @@ namespace Asset_Management_System.ViewModels.ViewModelHelper
         /// <returns></returns>
         public bool ShownFieldToFieldComparator(Field field)
         {
-            return Name.Equals(field.GetHashCode().ToString(), StringComparison.CurrentCultureIgnoreCase);
+            return field.Equals(Field);
         }
     }
 }
