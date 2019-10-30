@@ -13,6 +13,34 @@ namespace Asset_Management_System.Database.Repositories
 {
     public class UserRepository : IUserRepository
     {
+
+        public int GetCount()
+        {
+            DBConnection dbcon = DBConnection.Instance();
+            int count = 0;
+
+            if (dbcon.IsConnect())
+            {
+                try
+                {
+                    const string query = "SELECT COUNT(*) FROM users;";
+                    using var cmd = new MySqlCommand(query, dbcon.Connection);
+                    using var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                        count = reader.GetInt32("COUNT(*)");
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    dbcon.Close();
+                }
+            }
+            return count;
+        }
+
         public bool Insert(User entity)
         {
             DBConnection dbcon = DBConnection.Instance();
