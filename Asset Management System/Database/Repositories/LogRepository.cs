@@ -106,6 +106,7 @@ namespace Asset_Management_System.Database.Repositories
                                 
                                 entries.Add(entry);
                             }
+                            reader.Close();
                         }
                     }
                 }
@@ -165,6 +166,7 @@ namespace Asset_Management_System.Database.Repositories
                                 
                                 entries.Add(entry);
                             }
+                            reader.Close();
                         }
                     }
                 }

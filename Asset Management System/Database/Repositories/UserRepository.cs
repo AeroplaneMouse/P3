@@ -24,10 +24,15 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query = "SELECT COUNT(*) FROM users;";
-                    using var cmd = new MySqlCommand(query, dbcon.Connection);
-                    using var reader = cmd.ExecuteReader();
-                    if (reader.Read())
-                        count = reader.GetInt32("COUNT(*)");
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                count = reader.GetInt32("COUNT(*)");
+                            reader.Close();
+                        }
+                    }
                 }
                 catch (MySqlException e)
                 {
@@ -173,11 +178,13 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = id;
 
-                        using var reader = cmd.ExecuteReader();
-                        
-                        while (reader.Read())
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            user = DBOToModelConvert(reader);
+                            while (reader.Read())
+                            {
+                                user = DBOToModelConvert(reader);
+                            }
+                            reader.Close();
                         }
                     }
                 }
@@ -210,11 +217,13 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters.Add("@username", MySqlDbType.String);
                         cmd.Parameters["@username"].Value = username;
 
-                        using var reader = cmd.ExecuteReader();
-                        
-                        while (reader.Read())
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            user = DBOToModelConvert(reader);
+                            while (reader.Read())
+                            {
+                                user = DBOToModelConvert(reader);
+                            }
+                            reader.Close();
                         }
                     }
                 }

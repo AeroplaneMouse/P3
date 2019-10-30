@@ -23,10 +23,16 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query = "SELECT COUNT(*) FROM tags;";
-                    using var cmd = new MySqlCommand(query, dbcon.Connection);
-                    using var reader = cmd.ExecuteReader();
-                    if (reader.Read())
-                        count = reader.GetInt32("COUNT(*)");
+
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                count = reader.GetInt32("COUNT(*)");
+                            reader.Close();
+                        }
+                    }
                 }
                 catch (MySqlException e)
                 {
@@ -259,6 +265,7 @@ namespace Asset_Management_System.Database.Repositories
                             {
                                 tags.Add(DBOToModelConvert(reader));
                             }
+                            reader.Close();
                         }
                     }
                 }
@@ -341,6 +348,7 @@ namespace Asset_Management_System.Database.Repositories
                             {
                                 tags.Add(DBOToModelConvert(reader));
                             }
+                            reader.Close();
                         }
                     }
                 }
