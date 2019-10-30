@@ -54,15 +54,19 @@ namespace Asset_Management_System.ViewModels.Commands
                 Tag parent = _viewModel.ParentTagsList[_viewModel.SelectedParentIndex];
                 _tag.ParentID = parent.ID;
 
-                // Logging the Tag
-                Log<Tag>.CreateLog(_tag);
-
                 // Save tag
                 TagRepository rep = new TagRepository();
                 if (_editing)
+                {
+                    Log<Tag>.CreateLog(_tag);
                     rep.Update(_tag);
+                }
+                    
                 else
-                    rep.Insert(_tag);
+                {
+                    rep.Insert(_tag, out ulong id);
+                    Log<Tag>.CreateLog(_tag, id);
+                }
                 
                 // Change view to tags
                 _main.ChangeMainContent(new Tags(_main));
