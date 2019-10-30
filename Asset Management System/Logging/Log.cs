@@ -33,21 +33,27 @@ namespace Asset_Management_System.Logging
             Write(newEntry, description, serializedChanges);
             Console.WriteLine("Creating log entry: " + description);
         }
+        /// <summary>
+        /// Overload method that does not need id
+        /// </summary>
+        /// <param name="newEntry"></param>
+        /// <param name="delete"></param>
         public static void CreateLog(ILoggable<T> newEntry, bool delete)
         {
             CreateLog(newEntry, 0, delete);
         }
-        
+
         /// <summary>
         /// Creates an entry and inserts it into the database
         /// </summary>
         /// <param name="subject"></param>
         /// <param name="description"></param>
         /// <param name="options"></param>
-        public static void Write(ILoggable<T> subject, string description, string options="{}")
+        /// <param name="id"></param>
+        public static void Write(ILoggable<T> subject, string description, string options="{}", ulong id = 0)
         {
             Entry entry = new Entry();
-            entry.LogableId = subject.GetId();
+            entry.LogableId = id == 0 ? subject.GetId() : id;
             entry.LogableType = subject.GetType();
             entry.Description = description;
             entry.Options = options;
