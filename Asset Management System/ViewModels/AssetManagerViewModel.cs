@@ -25,8 +25,6 @@ namespace Asset_Management_System.ViewModels
         // The string that the user is searching with
         private string _searchString { get; set; }
 
-
-
         // The id of the parent currently being used
         private ulong _parentID { get; set; } = 0;
 
@@ -40,15 +38,15 @@ namespace Asset_Management_System.ViewModels
         private string _parentString { get; set; }
 
         // A tag repository, for communication with the database
-        private Database.Repositories.TagRepository _tagRep { get; set; }
+        private TagRepository _tagRep { get; set; }
 
         // TODO: Kom uden om mig
         private TextBox _box { get; set; }
 
 
-        private List<Models.Asset> _assetList { get; set; }
+        private List<Asset> _assetList { get; set; }
 
-        private Database.Repositories.AssetRepository _assetRep { get; set; }
+        private AssetRepository _assetRep { get; set; }
 
         #endregion
 
@@ -149,7 +147,7 @@ namespace Asset_Management_System.ViewModels
 
             _tagRep = new TagRepository();
 
-            _assetRep = new Database.Repositories.AssetRepository();
+            _assetRep = new AssetRepository();
 
             // TODO: Kom uden om mig
             _box = box;
