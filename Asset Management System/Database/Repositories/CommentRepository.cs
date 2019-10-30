@@ -158,6 +158,7 @@ namespace Asset_Management_System.Database.Repositories
                             {
                                 comment = DBOToModelConvert(reader);
                             }
+                            reader.Close();
                         }
                     }
                 }
@@ -198,6 +199,7 @@ namespace Asset_Management_System.Database.Repositories
                             {
                                 comments.Add(DBOToModelConvert(reader));
                             }
+                            reader.Close();
                         }
                     }
                 }

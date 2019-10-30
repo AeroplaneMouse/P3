@@ -18,10 +18,15 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query = "SELECT COUNT(*) FROM departments;";
-                    using var cmd = new MySqlCommand(query, dbcon.Connection);
-                    using var reader = cmd.ExecuteReader();
-                    if (reader.Read())
-                        count = reader.GetInt32("COUNT(*)");
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                count = reader.GetInt32("COUNT(*)");
+                            reader.Close();
+                        }
+                    }
                 }
                 catch (MySqlException)
                 {
@@ -166,6 +171,7 @@ namespace Asset_Management_System.Database.Repositories
                             {
                                 department = DBOToModelConvert(reader);
                             }
+                            reader.Close();
                         }
                     }
                 }catch(MySqlException e){ 
@@ -201,6 +207,7 @@ namespace Asset_Management_System.Database.Repositories
                                 Department dep = DBOToModelConvert(reader);
                                 departments.Add(dep);
                             }
+                            reader.Close();
                         }
                     }
                 }catch(MySqlException e){ 

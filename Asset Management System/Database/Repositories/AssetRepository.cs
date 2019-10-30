@@ -205,6 +205,7 @@ namespace Asset_Management_System.Database.Repositories
                             {
                                 asset = DBOToModelConvert(reader);
                             }
+                            reader.Close();
                         }
                     }
                 }
@@ -251,6 +252,7 @@ namespace Asset_Management_System.Database.Repositories
                                 Asset asset = DBOToModelConvert(reader);
                                 assets.Add(asset);
                             }
+                            reader.Close();
                         }
                     }
                 }
@@ -304,6 +306,7 @@ namespace Asset_Management_System.Database.Repositories
                                 Asset asset = DBOToModelConvert(reader);
                                 assets.Add(asset);
                             }
+                            reader.Close();
                         }
                     }
                 }
@@ -349,7 +352,9 @@ namespace Asset_Management_System.Database.Repositories
         public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
         {
             return RemoveTags(asset, tags) && AddTags(asset, tags);
-        }
+        }
+
+
         /// <summary>
         /// Removes the tags on the asset that are not in teh list of tags to be added
         /// </summary>
@@ -359,14 +364,18 @@ namespace Asset_Management_System.Database.Repositories
         private bool RemoveTags(Asset asset, List<Tag> tags)
         {
             DBConnection dbcon = DBConnection.Instance();
-            bool query_success = false;
+            bool query_success = false;
+
             // Makes a list of the ids of the tags to be added to the asset
-            List<ulong> tag_ids = tags.Select(p => p.ID).ToList();
+            List<ulong> tag_ids = tags.Select(p => p.ID).ToList();
+
             // Makes a list of the ids of the tags already on the asset
-            List<ulong> asset_tag_ids = GetAssetTags(asset).Select(p => p.ID).ToList();
+            List<ulong> asset_tag_ids = GetAssetTags(asset).Select(p => p.ID).ToList();
+
             // Removes the ids of the tags that are supposed to stilll be on the asset
             // resulting in a list of ids og tags to be removed from the asset
-            asset_tag_ids = asset_tag_ids.Except(tag_ids).ToList();
+            asset_tag_ids = asset_tag_ids.Except(tag_ids).ToList();
+
             StringBuilder query = new StringBuilder("DELETE FROM asset_tags WHERE asset_id = ");
             List<string> inserts = new List<string>();
 
@@ -399,10 +408,12 @@ namespace Asset_Management_System.Database.Repositories
             finally
             {
                 dbcon.Close();
-            }
+            }
+
             return query_success;
         }
-     
+     
+
         /// <summary>
         /// Adds the tags that are not already on the asset
         /// </summary>
@@ -412,11 +423,14 @@ namespace Asset_Management_System.Database.Repositories
         private bool AddTags(Asset asset, List<Tag> tags)
         {
             DBConnection dbcon = DBConnection.Instance();
-            bool query_success = false;
+            bool query_success = false;
+
             // Makes a list of the ids of the tags to be added to the asset
-            List<ulong> tag_ids = tags.Select(p => p.ID).ToList();
+            List<ulong> tag_ids = tags.Select(p => p.ID).ToList();
+
             // Makes a list of the ids of the tags already on the asset
-            List<ulong> asset_tag_ids = GetAssetTags(asset).Select(p => p.ID).ToList();
+            List<ulong> asset_tag_ids = GetAssetTags(asset).Select(p => p.ID).ToList();
+
             // Removes the ids of the tags that are already on the asset
             // resulting in a list of ids of tags to still to be added to the asset
             tag_ids = tag_ids.Except(asset_tag_ids).ToList();
@@ -429,7 +443,8 @@ namespace Asset_Management_System.Database.Repositories
                 inserts.Add(string.Format("({0},{1})", asset.ID, tag_id));
             }
 
-            query.Append(string.Join(",", inserts));
+            query.Append(string.Join(",", inserts));
+
             try
             {
                 if (dbcon.IsConnect() && tag_ids.Count > 0)
@@ -451,7 +466,8 @@ namespace Asset_Management_System.Database.Repositories
             }
 
             return query_success;
-        }
+        }
+
         /// <summary>
         /// Gets a list of all tags on an asset
         /// </summary>
@@ -483,6 +499,7 @@ namespace Asset_Management_System.Database.Repositories
                             {
                                 tags.Add(tag_rep.DBOToModelConvert(reader));
                             }
+                            reader.Close();
                         }
                     }
                 }
