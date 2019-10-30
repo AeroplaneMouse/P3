@@ -251,6 +251,22 @@
                             <StackPanel />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
+                    <ItemsControl Grid.Row="2" Grid.Column="2"  ItemsSource="{Binding FieldTags}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Border BorderBrush="{Binding Color}" BorderThickness="1">
+                                        <TextBlock Text="{Binding Name}" Padding="5"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </ItemsControl>
             </ScrollViewer>
         </Grid>

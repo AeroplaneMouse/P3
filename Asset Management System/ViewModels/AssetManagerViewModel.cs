@@ -225,12 +225,16 @@ namespace Asset_Management_System.ViewModels
         {
             if (_tagList != null)
             {
-                _searchString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex++);
+                _searchString = _tagList
+                    .Select(p => p.Name)
+                    .ElementAtOrDefault(_tabIndex++);
 
                 if (_searchString == null)
                 {
                     _tabIndex = 0;
-                    _searchString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex);
+                    _searchString = _tagList
+                        .Select(p => p.Name)
+                        .ElementAtOrDefault(_tabIndex);
                 }
 
                 if (_searchString != null)
@@ -247,13 +251,17 @@ namespace Asset_Management_System.ViewModels
             if (_parentID == 0)
             {
                 // Checks if the tag we are "going into" has any children
-                ulong tempID = _tagList.Select(p => p.ID).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+                ulong tempID = _tagList
+                    .Select(p => p.ID)
+                    .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
                 List<Models.Tag> tempList = _tagRep.GetChildTags(tempID) as List<Models.Tag>;
 
                 // If the tag we are "going into" has children, we go into it
-                if (tempList.Count() != 0)
+                if (tempList?.Count != 0)
                 {
-                    _parentString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+                    _parentString = _tagList
+                        .Select(p => p.Name)
+                        .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
                     _searchString = String.Empty;
                     _parentID = tempID;
                     _tagList = tempList;
@@ -325,7 +333,7 @@ namespace Asset_Management_System.ViewModels
 
                     _alreadyExists = false;     
                 }
-                Console.WriteLine("Tagfields: " + tag.FieldsList.Count);
+                Console.WriteLine("Tag fields: " + tag.FieldsList.Count);
 
             }
             Console.WriteLine("_________");
