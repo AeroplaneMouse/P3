@@ -15,6 +15,7 @@ namespace Asset_Management_System.Logging
         /// Logs the changes made to a subject from an old entry
         /// </summary>
         /// <param name="newEntry"></param>
+        /// <param name="id"></param>
         /// <param name="delete"></param>
         public static void CreateLog(ILoggable<T> newEntry, ulong id = 0, bool delete = false)
         {
@@ -30,7 +31,7 @@ namespace Asset_Management_System.Logging
             string serializedChanges = changes.Count == 0 ? "[]" : JsonConvert.SerializeObject(changes, Formatting.Indented);
             
             // Create the log entry
-            Write(newEntry, description, serializedChanges);
+            Write(newEntry, description, serializedChanges, id);
             Console.WriteLine("Creating log entry: " + description);
         }
         /// <summary>
@@ -67,6 +68,7 @@ namespace Asset_Management_System.Logging
         /// Generates a description for the log entry
         /// </summary>
         /// <param name="subject"></param>
+        /// <param name="id"></param>
         /// <param name="delete"></param>
         /// <returns>Description</returns>
         private static string GenerateDescription(ILoggable<T> subject, ulong id, bool delete)
