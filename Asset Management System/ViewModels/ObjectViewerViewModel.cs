@@ -181,8 +181,6 @@ namespace Asset_Management_System.ViewModels
 
                 CommentRep.Insert(newComment, out ulong id);
 
-                Console.WriteLine(id);
-
                 Log<Comment>.CreateLog(newComment, id);
 
                 CommentField = String.Empty;

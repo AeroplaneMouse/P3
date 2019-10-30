@@ -108,15 +108,15 @@ namespace Asset_Management_System.ViewModels
 
         #region Commands
 
-        private ICommand EnterKeyCommand { get; set; }
+        public ICommand EnterKeyCommand { get; set; }
 
-        private ICommand TabKeyCommand { get; set; }
+        public ICommand TabKeyCommand { get; set; }
 
-        private ICommand SpaceKeyCommand { get; set; }
+        public ICommand SpaceKeyCommand { get; set; }
 
-        private ICommand EscapeKeyCommand { get; set; }
+        public ICommand EscapeKeyCommand { get; set; }
 
-        private ICommand BackspaceKeyCommand { get; set; }
+        public ICommand BackspaceKeyCommand { get; set; }
 
         #endregion
 
