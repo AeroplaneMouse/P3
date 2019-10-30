@@ -5,11 +5,11 @@ using System.Linq;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
-using Asset_Management_System.ViewModels.Commands.ViewModelHelper;
 using Asset_Management_System.Views;
 using System.Windows;
 using System.Windows.Controls;
 using Asset_Management_System.Logging;
+using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -53,7 +53,7 @@ namespace Asset_Management_System.ViewModels
 
         #region Commands
 
-        private ICommand AddNewCommentCommand { get; set; }
+        public ICommand AddNewCommentCommand { get; set; }
 
         public ICommand RemoveCommentCommand { get; set; }
 
@@ -106,7 +106,7 @@ namespace Asset_Management_System.ViewModels
                     {
                         foreach (var shownField in FieldsList)
                         {
-                            if (String.Equals(shownField.Name,field.GetHashCode().ToString(),StringComparison.CurrentCultureIgnoreCase))
+                            if (shownField.ShownFieldToFieldComparator(field))
                             {
                                 shownField.FieldTags.Add(parentTag);
                             }
@@ -170,7 +170,7 @@ namespace Asset_Management_System.ViewModels
 
         private void AddNewComment()
         {
-            if (!string.IsNullOrEmpty(CommentField))
+            if (CommentField != null && CommentField != string.Empty)
             {
                 Comment newComment = new Comment()
                 {
@@ -179,9 +179,11 @@ namespace Asset_Management_System.ViewModels
                     AssetID = AssetInput.ID
                 };
 
-                CommentRep.Insert(newComment);
+                CommentRep.Insert(newComment, out ulong id);
 
-                Log<Comment>.CreateLog(newComment);
+                Console.WriteLine(id);
+
+                Log<Comment>.CreateLog(newComment, id);
 
                 CommentField = String.Empty;
 
@@ -226,10 +228,6 @@ namespace Asset_Management_System.ViewModels
         {
             AssetRepository rep = new AssetRepository();
             TagsList = rep.GetAssetTags(AssetInput);
-            foreach (var tag in TagsList)
-            {
-                tag.DeserializeFields();
-            }
 
             Console.WriteLine("Found " + TagsList.Count + " tags");
         }

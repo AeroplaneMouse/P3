@@ -18,9 +18,10 @@ namespace Asset_Management_System.Database.Repositories
             _dbcon = DBConnection.Instance();
         }
 
-        public bool Insert(Comment comment)
+        public bool Insert(Comment comment, out ulong id)
         {
             bool query_success = false;
+            id = 0;
 
             if (_dbcon.IsConnect())
             {
@@ -43,7 +44,7 @@ namespace Asset_Management_System.Database.Repositories
                         query_success = cmd.ExecuteNonQuery() > 0;
 
                         // TODO: Brug det her
-                        // cmd.LastInsertedId;
+                        id = (ulong)cmd.LastInsertedId;
                     }
 
                 }

@@ -24,7 +24,7 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            int fieldId = int.Parse(parameter.ToString());
+            int fieldId = int.Parse(parameter?.ToString() ?? throw new NullReferenceException("Input parameter == null"));
 
             // Find field by ID, then remove it.
             _viewModel.FieldsList.Remove(_viewModel.FieldsList.Single(s=>s.Field.ID == fieldId));

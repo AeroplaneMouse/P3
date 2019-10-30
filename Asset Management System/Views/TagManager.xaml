@@ -6,14 +6,14 @@
       xmlns:views="clr-namespace:Asset_Management_System.Views"
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       xmlns:v="clr-namespace:Asset_Management_System.ViewModels"
-      xmlns:viewModelHelper="clr-namespace:Asset_Management_System.ViewModels.Commands.ViewModelHelper"
+      xmlns:viewModelHelper1="clr-namespace:Asset_Management_System.ViewModels.ViewModelHelper"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
       Title="NewTag">
 
     <Page.Resources>
-        <viewModelHelper:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+        <viewModelHelper1:FieldDesignSelector x:Key="MyFieldDesignSelector" />
         <!--Defining the properties of the fields -->
         <DataTemplate x:Key="TextBoxFieldStyle">
             <Grid>
@@ -30,11 +30,11 @@
                 <Button Grid.Row="1" Grid.Column="0"
                         MaxHeight="40" VerticalAlignment="Top"
                         Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
-                        CommandParameter="{Binding Path=ID}">
+                        CommandParameter="{Binding Path=Field.ID}">
                     X
                 </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Insert a string" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" Height="200" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" Height="200" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="StringFieldStyle">
@@ -52,11 +52,11 @@
                 <Button Grid.Row="1" Grid.Column="0"
                         MaxHeight="40" VerticalAlignment="Top"
                         Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
-                        CommandParameter="{Binding Path=ID}">
+                        CommandParameter="{Binding Path=Field.ID}">
                     X
                 </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Insert an string" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="IntegerFieldStyle">
@@ -74,11 +74,11 @@
                 <Button Grid.Row="1" Grid.Column="0"
                         MaxHeight="40" VerticalAlignment="Top"
                         Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
-                        CommandParameter="{Binding Path=ID}">
+                        CommandParameter="{Binding Path=Field.ID}">
                     X
                 </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Insert an integer" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" />
                 <!-- PreviewTextInput="NumberVerification" removed from the textbox above -->
             </Grid>
         </DataTemplate>
@@ -97,11 +97,11 @@
                 <Button Grid.Row="1" Grid.Column="0"
                         MaxHeight="40" VerticalAlignment="Top"
                         Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
-                        CommandParameter="{Binding Path=ID}">
+                        CommandParameter="{Binding Path=Field.ID}">
                     X
                 </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Insert an integer" />
-                <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Content}" />
+                <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Field.Content}" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="BooleanFieldStyle">
@@ -119,11 +119,11 @@
                 <Button Grid.Row="1" Grid.Column="0"
                         MaxHeight="40" VerticalAlignment="Top"
                         Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
-                        CommandParameter="{Binding Path=ID}">
+                        CommandParameter="{Binding Path=Field.ID}">
                     X
                 </Button>
                 <TextBlock Grid.Row="1" Grid.Column="1" Text="Tick boolean" />
-                <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Content}" Name="CheckBox" />
+                <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Field.Content}" Name="CheckBox" />
             </Grid>
         </DataTemplate>
         <!--End of definition of the properties of the fields -->

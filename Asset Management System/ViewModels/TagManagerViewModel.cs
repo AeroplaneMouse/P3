@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
-using Asset_Management_System.ViewModels.Commands.ViewModelHelper;
+using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -95,11 +95,9 @@ namespace Asset_Management_System.ViewModels
         /// <returns></returns>
         protected override void LoadFields()
         {
-            _tag.DeserializeFields();
             foreach (Field field in _tag.FieldsList)
             {
-                ShownField shownField = new ShownField(field);
-                FieldsList.Add(shownField);
+                FieldsList.Add(new ShownField(field));
             }
 
             //Set Name to the name of the chosen tag
