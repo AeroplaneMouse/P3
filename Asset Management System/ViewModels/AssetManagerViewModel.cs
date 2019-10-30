@@ -299,7 +299,7 @@ namespace Asset_Management_System.ViewModels
             }
 
             // If the search query isn't empty, a letter is simply removed
-            else if (_searchString != String.Empty && _searchString != null)
+            else if (!string.IsNullOrEmpty(_searchString))
             {
                 _searchString = _searchString.Substring(0, _searchString.Length - 1);
 
@@ -318,7 +318,6 @@ namespace Asset_Management_System.ViewModels
             {
                 Console.WriteLine("field: " + fi.Name);
             }
-            Console.WriteLine("_________");
 
             foreach (var tag in CurrentlyAddedTags)
             {
@@ -328,8 +327,6 @@ namespace Asset_Management_System.ViewModels
                     {
                         if (shownField.ShownFieldToFieldComparator(tagField))
                         {
-                            Console.WriteLine("First input: " + tagField.Label+ " " + tagField.CalculateMD5Hash());
-                            Console.WriteLine("Second input"  + shownField.Field.Label+ " " + shownField.Field.CalculateMD5Hash());
                             _alreadyExists = true;
                             Console.WriteLine("exists: " + tagField.Content);
                         }
