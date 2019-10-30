@@ -226,10 +226,6 @@ namespace Asset_Management_System.ViewModels
         {
             AssetRepository rep = new AssetRepository();
             TagsList = rep.GetAssetTags(AssetInput);
-            foreach (var tag in TagsList)
-            {
-                tag.DeserializeFields();
-            }
 
             Console.WriteLine("Found " + TagsList.Count + " tags");
         }
