@@ -93,6 +93,7 @@ namespace Asset_Management_System.Models
             props.Add("Name", Name);
             props.Add("Description", Description);
             props.Add("Department ID", DepartmentID.ToString());
+            SerializeFields();
             props.Add("Options", SerializedFields);
             props.Add("Created at", DateToStringConverter);
             return props;
