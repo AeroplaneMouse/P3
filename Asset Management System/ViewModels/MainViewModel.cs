@@ -66,17 +66,24 @@ namespace Asset_Management_System.ViewModels
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
             AddNotificationTestCommand = new Base.RelayCommand(() => PopupTest());
+            RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
 
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
-            RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
+            EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
+            AddDepartmentCommand = new Base.RelayCommand(() => AddDepartment());
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
         }
 
+        private void AddDepartment()
+        {
+            AddNotification(new Notification("Adding a new department. Note! This feature has not yet been implemented... xD"));
+        }
+
         #endregion
-        
+
         #region Private Members
 
         // The window this view model controls
@@ -321,12 +328,10 @@ namespace Asset_Management_System.ViewModels
 
         #region Commands
 
+        // Window commands
         public ICommand MinimizeCommand { get; set; }
-
         public ICommand MaximizeCommand { get; set; }
-
         public ICommand CloseCommand { get; set; }
-
         public ICommand SystemMenuCommand { get; set; }
 
         public ICommand ShowWindow { get; set; }
@@ -337,17 +342,20 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand ShowTagPageCommand { get; set; }
 
+        // Department commands
         public static ICommand SelectDepartmentCommand { get; set; }
+        public static ICommand RemoveDepartmentCommand { get; set; }
+        public static ICommand EditDepartmentCommand { get; set; }
+        public ICommand AddDepartmentCommand { get; set; }
 
         public ICommand ShowLogPageCommand { get; set; }
 
         public ICommand ReloadSplashCommand { get; set; }
 
+        // Notification commands
         public ICommand AddNotificationTestCommand { get; set; }
-
         public static ICommand RemoveNotificationCommand { get; set; }
 
-        public ICommand RemoveDepartmentCommand { get; set; }
 
         #endregion
 

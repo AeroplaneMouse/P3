@@ -5,9 +5,9 @@
 
     <!-- Menu container -->
     <Style TargetType="{x:Type Menu}" x:Key="MenuContainer" BasedOn="{StaticResource BaseStyle}">
-
         <!-- So it can be clicked -->
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
@@ -15,8 +15,9 @@
     <!-- Menu button -->
     <Style TargetType="MenuItem" x:Key="MenuItemButton">
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
+        <Setter Property="FontWeight" Value="Light"/>
 
         <!-- Content template -->
         <Setter Property="Template">
@@ -31,7 +32,7 @@
                                 RecognizesAccessKey="True"/>
                             <Popup
                                 Placement="Bottom"
-                                VerticalOffset="1"
+                                VerticalOffset="2"
                                 HorizontalOffset="-15"
                                 IsOpen="{TemplateBinding IsSubmenuOpen}"
                                 AllowsTransparency="True"
@@ -55,8 +56,14 @@
     </Style>
 
     <!-- Department content MenuItem button -->
-    <Style TargetType="MenuItem" x:Key="MenuItemButtonDepartmentContent">
+    <Style TargetType="MenuItem" x:Key="Department">
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        <Setter Property="FontWeight" Value="Light"/>
+
+        <Setter Property="Command" Value="{x:Static v:MainViewModel.SelectDepartmentCommand}"/>
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
@@ -64,22 +71,13 @@
                             Background="{TemplateBinding Background}">
                         <Grid>
                             <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="20"/>
-                                <ColumnDefinition Width="20"/>
                             </Grid.ColumnDefinitions>
-                            <Button Style="{StaticResource MenuItemDepartmentContentButton}"
-                                    Command="{TemplateBinding Command}">
-
-                                <ContentPresenter Content="{TemplateBinding Header}"/>
-                            </Button>
-                            
-                            <Button Content="E"
-                                    Grid.Column="1"
-                                    Style="{StaticResource MenuItemDepartmentContentButton}"/>
-                            <Button Content="R"
-                                    Grid.Column="2"
-                                    Style="{StaticResource MenuItemDepartmentContentButton}"/>
+                            <ContentPresenter Content="{TemplateBinding Header}"
+                                              Margin="0 3 40 3"
+                                              Grid.Column="1"
+                                              VerticalAlignment="Center"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -92,62 +90,105 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
-    <!-- Department menu button -->
-    <Style TargetType="MenuItem" x:Key="MenuItemButtonDepartments">
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
-        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
-        
-        <Setter Property="ItemContainerStyle">
+    <Style TargetType="MenuItem" x:Key="DepartmentItem">
+        <Setter Property="Template">
             <Setter.Value>
-                <Style TargetType="MenuItem">
-                    <Setter Property="Command" Value="{x:Static v:MainViewModel.SelectDepartmentCommand}"/>
-                    <Setter Property="CommandParameter" Value="{Binding Path=ID}"/>
-                </Style>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}">
+                        <ContentPresenter Content="{TemplateBinding Header}"
+                                          VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <!-- Department edit item -->
+    <Style TargetType="MenuItem" x:Key="DepartmentEdit" BasedOn="{StaticResource DepartmentItem}">
+        <Setter Property="Command" Value="{x:Static v:MainViewModel.EditDepartmentCommand}"/>
+        <Setter Property="Header" Value="E"/>
+    </Style>
+
+    <!-- Department remove item -->
+    <Style TargetType="MenuItem" x:Key="DepartmentRemove" BasedOn="{StaticResource DepartmentItem}">
+        <Setter Property="Command" Value="{x:Static v:MainViewModel.RemoveDepartmentCommand}"/>
+        <Setter Property="Header" Value="R"/>
+    </Style>
+
+    <Style TargetType="MenuItem" x:Key="DepartmentWithEdit" BasedOn="{StaticResource Department}">
+        <Setter Property="CommandParameter" Value="{Binding Path=ID}"/>
 
         <Setter Property="Template">
             <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="20"/>
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="20"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <ContentPresenter Content="{TemplateBinding Header}"
+                                              Margin="0 3 40 3"
+                                              Grid.Column="1"/>
+                            
+                            <MenuItem Grid.Column="2"
+                                      Command="{x:Static v:MainViewModel.EditDepartmentCommand}"
+                                      CommandParameter="{TemplateBinding CommandParameter}"
+                                      Style="{StaticResource DepartmentEdit}"/>
+                            <MenuItem Grid.Column="4"
+                                      Command="{x:Static v:MainViewModel.RemoveDepartmentCommand}"
+                                      CommandParameter="{TemplateBinding CommandParameter}"
+                                      Style="{StaticResource DepartmentRemove}"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Department menu button -->
+    <Style TargetType="MenuItem" x:Key="MenuItemButtonDepartments">
+        <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
+        <Setter Property="FontWeight" Value="Light"/>
+
+        <!-- Content template -->
+        <Setter Property="Template">
+            <Setter.Value>
                 <ControlTemplate TargetType="{x:Type MenuItem}">
-                    <Border Background="{TemplateBinding Background}" 
-                            BorderThickness="0"
+                    <Border Background="{TemplateBinding Background}"
                             Padding="15, 2, 15, 2">
                         <Grid>
                             <ContentPresenter
                                 Margin="6,4,6,4"
                                 ContentSource="Header"
                                 RecognizesAccessKey="True"/>
-                            <Popup
-                                Placement="Bottom"
-                                VerticalOffset="1"
-                                HorizontalOffset="-15"
-                                IsOpen="{TemplateBinding IsSubmenuOpen}"
-                                AllowsTransparency="True"
-                                PopupAnimation="Fade">
-                                <StackPanel Background="{StaticResource NavigationBackgroundBrush}">
-                                    <!-- All department-->
-                                    <MenuItem Style="{StaticResource MenuItemButtonDepartmentContent}"
-                                              Command="{Binding SelectDepartmentButton}"
-                                              CommandParameter="0"
-                                              Header="All departments"/>
-
-                                    <Separator Margin="5, 0, 5, 5" Foreground="White"/>
-                                    
-                                    <!-- Departments -->
-                                    <StackPanel Name="ItemsContainer"
-                                                IsItemsHost="True"
-                                                KeyboardNavigation.DirectionalNavigation="Cycle">
+                            <Popup Placement="Bottom"
+                                   PopupAnimation="Fade"
+                                   VerticalOffset="2"
+                                   HorizontalOffset="-15"
+                                   IsOpen="{TemplateBinding IsSubmenuOpen}">
+                                <Border Background="{StaticResource NavigationBackgroundBrush}">
+                                    <StackPanel>
+                                        <MenuItem Header="All departments"
+                                                  Style="{StaticResource Department}"
+                                                  CommandParameter="0"/>
+                                        <Rectangle Style="{StaticResource HorizontalSeparator}" Fill="White" />
+                                        <ItemsPresenter />
+                                        <Rectangle Style="{StaticResource HorizontalSeparator}" Fill="White"/>
+                                        <MenuItem Header="Add new"
+                                                  Style="{StaticResource Department}"
+                                                  Command="{Binding AddDepartmentCommand}"/>
                                     </StackPanel>
-
-                                    <Separator Margin="5, 5, 5, 0" Foreground="White"/>
-                                    
-                                    <!-- Add new -->
-                                    <MenuItem Style="{StaticResource MenuItemButtonDepartmentContent}"
-                                              Header="Add new"/>
-                                </StackPanel>
+                                </Border>
                             </Popup>
                         </Grid>
                     </Border>
@@ -161,6 +202,4 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
-    
 </ResourceDictionary>

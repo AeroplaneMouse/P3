@@ -64,29 +64,29 @@
                                                 <MenuItem Header="_Exit"/>
                                             </MenuItem>
                                         </Menu>
-
-                                        <!-- Window buttons -->
+                                        
                                         <StackPanel Grid.Column="2"
                                                     Orientation="Horizontal">
-
+                                            <!-- Departments -->
                                             <Menu Style="{StaticResource MenuContainer}" IsEnabled="{Binding DisplayCurrentDepartment}">
                                                 <MenuItem ItemsSource="{Binding Departments}"
+                                                          ItemContainerStyle="{StaticResource DepartmentWithEdit}"
                                                           Header="{Binding CurrentDepartment}"
                                                           Style="{StaticResource MenuItemButtonDepartments}">
                                                 </MenuItem>
                                             </Menu>
-
+                                            
+                                            <!-- Current user -->
                                             <TextBlock Text="{Binding CurrentUser}"
                                                        Foreground="White"
-                                                       TextBlock.FontSize="{StaticResource FontSizeSmall}"
-                                                       TextBlock.FontFamily="{StaticResource SegoeRegular}"
+                                                       Style="{StaticResource ParagraphStyle}"
                                                        VerticalAlignment="Center"
                                                        Margin="15, 0, 15, 0"/>
-
+                                            
+                                            <!-- Window buttons -->
                                             <Button Content="-" Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}"/>
                                             <Button Content="[ ]" Command="{Binding MaximizeCommand}" Style="{StaticResource WindowControlButton}"/>
                                             <Button Content="X" Command="{Binding CloseCommand}" Style="{StaticResource WindowCloseButton}"/>
-
                                         </StackPanel>
 
                                     </Grid>
@@ -117,7 +117,7 @@
                                         <!-- Notifications -->
                                         <ListView Grid.Column="1" 
                                                   VerticalAlignment="Top"
-                                                  FontSize="{StaticResource FontSizeRegular}"
+                                                  FontSize="{StaticResource FontSizeSmall}"
                                                   Style="{StaticResource NotificationView}"/>
 
                                     </Grid>

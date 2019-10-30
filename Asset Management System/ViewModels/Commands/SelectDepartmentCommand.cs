@@ -22,13 +22,20 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            ulong id = ulong.Parse(parameter.ToString());
-            Models.Department selectedDepartment = new Database.Repositories.DepartmentRepository().GetById(id);
-            if (selectedDepartment == null)
-                selectedDepartment = Models.Department.GetDefault();
+            try
+            {
+                ulong id = ulong.Parse(parameter.ToString());
+                Models.Department selectedDepartment = new Database.Repositories.DepartmentRepository().GetById(id);
+                if (selectedDepartment == null)
+                    selectedDepartment = Models.Department.GetDefault();
 
-            _main.AddNotification(new Models.Notification($"Department: { selectedDepartment.Name } is now the current department.", Models.Notification.APPROVE));
-            _main.CurrentDepartment = selectedDepartment;
+                _main.AddNotification(new Models.Notification($"Department: { selectedDepartment.Name } is now the current department.", Models.Notification.APPROVE));
+                _main.CurrentDepartment = selectedDepartment;
+            }
+            catch(Exception e)
+            {
+                _main.AddNotification(new Models.Notification(e.Message, Models.Notification.ERROR), 5000);
+            }
         }
     }
 }

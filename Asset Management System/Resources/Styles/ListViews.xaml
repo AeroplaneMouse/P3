@@ -32,7 +32,8 @@
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
-                                                <Label Content="{Binding Path=Message}"/>
+                                                <Label Content="{Binding Path=Message}"
+                                                       FontSize="{TemplateBinding FontSize}"/>
                                                 <Button Grid.Column="1"
                                                         Style="{StaticResource RemoveNotificationButton}"
                                                         Command="{x:Static v:MainViewModel.RemoveNotificationCommand}"
