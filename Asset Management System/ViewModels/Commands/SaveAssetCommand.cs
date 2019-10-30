@@ -35,11 +35,17 @@ namespace Asset_Management_System.ViewModels.Commands
         public void Execute(object parameter)
         {
             Console.WriteLine("Testing: " + CanExecute(parameter));
-
+            
             _asset.Name = _viewModel.Name;
             _asset.Description = _viewModel.Description;
 
             _asset.FieldsList = new List<Field>();
+            // Checks if Name or Description is not empty.
+            if (string.IsNullOrEmpty(_asset.Name) || string.IsNullOrEmpty(_asset.Description))
+            {
+                _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
+                return;
+            }
             foreach (var shownField in _viewModel.FieldsList)
             {
                 if (shownField.Field.Required && shownField.Field.Content == string.Empty)

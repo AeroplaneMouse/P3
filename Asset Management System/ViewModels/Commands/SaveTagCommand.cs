@@ -35,15 +35,25 @@ namespace Asset_Management_System.ViewModels.Commands
             _tag.Name = _viewModel.Name;
             _tag.Color = _viewModel.Color;
 
+            // Check if Name and Color is not empty
+            if (string.IsNullOrEmpty(_tag.Name) || string.IsNullOrEmpty(_tag.Color))
+            {
+                _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
+                return;
+            }
+
+
             // Add fields to tag
             _tag.FieldsList = new List<Field>();
             foreach (var shownFields in _viewModel.FieldsList)
             {
                 if (shownFields.Field.Required && shownFields.Field.Content == string.Empty)
                 {
-                    _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
+                    _main.AddNotification(
+                        new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
                     return;
                 }
+
                 _tag.AddField(shownFields.Field);
             }
 
@@ -61,18 +71,20 @@ namespace Asset_Management_System.ViewModels.Commands
                     Log<Tag>.CreateLog(_tag);
                     rep.Update(_tag);
                 }
-                    
+
                 else
                 {
                     rep.Insert(_tag, out ulong id);
                     Log<Tag>.CreateLog(_tag, id);
                 }
-                
+
                 // Change view to tags
                 _main.ChangeMainContent(new Tags(_main));
             }
             else
-                _main.AddNotification(new Notification("ERROR! Department cannot be none or All Departments. Please select a department.", Notification.ERROR));
+                _main.AddNotification(new Notification(
+                    "ERROR! Department cannot be none or All Departments. Please select a department.",
+                    Notification.ERROR));
         }
     }
 }

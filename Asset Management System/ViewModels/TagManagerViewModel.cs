@@ -84,11 +84,7 @@ namespace Asset_Management_System.ViewModels
 
         public bool CanSaveTag()
         {
-            if (string.IsNullOrEmpty(Name) || string.IsNullOrWhiteSpace(Name))
-            {
-                return false;
-            }
-
+            //Todo Figure out the implementation of this one
             return true;
         }
 

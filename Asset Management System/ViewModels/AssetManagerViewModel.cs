@@ -176,16 +176,7 @@ namespace Asset_Management_System.ViewModels
 
         public bool CanSaveAsset()
         {
-            if (string.IsNullOrEmpty(Name) || string.IsNullOrWhiteSpace(Name))
-            {
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(Description) || string.IsNullOrWhiteSpace(Description))
-            {
-                return false;
-            }
-
+            //TODO Figure out the implementation for this one.
             return true;
         }
 
