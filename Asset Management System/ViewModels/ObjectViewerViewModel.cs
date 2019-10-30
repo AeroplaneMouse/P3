@@ -106,7 +106,7 @@ namespace Asset_Management_System.ViewModels
                     {
                         foreach (var shownField in FieldsList)
                         {
-                            if (String.Equals(shownField.Name,field.GetHashCode().ToString(),StringComparison.CurrentCultureIgnoreCase))
+                            if (shownField.ShownFieldToFieldComparator(field))
                             {
                                 shownField.FieldTags.Add(parentTag);
                             }
