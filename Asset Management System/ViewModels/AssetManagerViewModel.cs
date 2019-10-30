@@ -172,6 +172,7 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand SaveAssetCommand { get; set; }
         public static ICommand RemoveFieldCommand { get; set; }
+        public static ICommand UnTagTagCommand { get; set; }
 
 
         public bool CanSaveAsset()
