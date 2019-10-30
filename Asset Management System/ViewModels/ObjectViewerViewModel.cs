@@ -53,7 +53,7 @@ namespace Asset_Management_System.ViewModels
 
         #region Commands
 
-        private ICommand AddNewCommentCommand { get; set; }
+        public ICommand AddNewCommentCommand { get; set; }
 
         public ICommand RemoveCommentCommand { get; set; }
 
@@ -170,7 +170,7 @@ namespace Asset_Management_System.ViewModels
 
         private void AddNewComment()
         {
-            if (!string.IsNullOrEmpty(CommentField))
+            if (CommentField != null && CommentField != string.Empty)
             {
                 Comment newComment = new Comment()
                 {
@@ -179,9 +179,11 @@ namespace Asset_Management_System.ViewModels
                     AssetID = AssetInput.ID
                 };
 
-                CommentRep.Insert(newComment);
+                CommentRep.Insert(newComment, out ulong id);
 
-                Log<Comment>.CreateLog(newComment);
+                Console.WriteLine(id);
+
+                Log<Comment>.CreateLog(newComment, id);
 
                 CommentField = String.Empty;
 

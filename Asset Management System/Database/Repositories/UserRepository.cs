@@ -13,10 +13,12 @@ namespace Asset_Management_System.Database.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        public bool Insert(User entity)
+        public bool Insert(User entity, out ulong id)
         {
             DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
+
+            id = 0;
 
             if (dbcon.IsConnect())
             {
@@ -37,6 +39,8 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
                         
                         query_success = cmd.ExecuteNonQuery() > 0;
+
+                        id = (ulong)cmd.LastInsertedId;
                     }
                 }
                 catch (MySqlException e)

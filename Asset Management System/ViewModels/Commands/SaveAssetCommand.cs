@@ -51,6 +51,7 @@ namespace Asset_Management_System.ViewModels.Commands
             }
 
             Department department = _main.CurrentDepartment;
+
             if (department != null)
             {
                 _asset.DepartmentID = department.ID;
@@ -63,8 +64,8 @@ namespace Asset_Management_System.ViewModels.Commands
                 }
                 else
                 {
-                    rep.Insert(_asset);
-                    Log<Asset>.CreateLog(_asset);
+                    rep.Insert(_asset, out ulong id);
+                    Log<Asset>.CreateLog(_asset, id);
                 }
                 
                 _main.ChangeMainContent(new Assets(_main));

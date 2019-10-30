@@ -45,10 +45,12 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public bool Insert(Tag entity)
+        public bool Insert(Tag entity, out ulong id)
         {
             DBConnection dbcon = DBConnection.Instance();
             bool query_success = false;
+
+            id = 0;
 
             entity.SerializeFields();
 
@@ -77,6 +79,8 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters["@parent_id"].Value = entity.ParentID;
 
                         query_success = cmd.ExecuteNonQuery() > 0;
+
+                        id = (ulong)cmd.LastInsertedId;
                     }
                 }
                 catch (MySqlException e)

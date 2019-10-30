@@ -57,9 +57,11 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="entity">The asset to be inserted</param>
         /// <returns>Rather the insertion was successful or not</returns>
-        public bool Insert(Asset entity)
+        public bool Insert(Asset entity, out ulong id)
         {
             bool query_success = false;
+
+            id = 0;
 
             entity.SerializeFields();
 
@@ -83,6 +85,8 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters["@options"].Value = entity.SerializedFields;
 
                         query_success = cmd.ExecuteNonQuery() > 0;
+
+                        id = (ulong)cmd.LastInsertedId;
                     }
                 }
                 catch (MySqlException e)
