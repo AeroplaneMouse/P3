@@ -32,8 +32,8 @@
                     X
                 </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" MaxHeight="200" MaxWidth="250"
-                         TextWrapping="Wrap" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" Height="200" TextWrapping="Wrap"
+                         AcceptsReturn="True" AcceptsTab="True" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="StringFieldStyle">
@@ -220,7 +220,7 @@
                 </ComboBox>
             </StackPanel>
             <Grid
-                
+
                 Margin="10">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding CurrentlyAddedTags}">
@@ -228,7 +228,7 @@
                             <DataTemplate>
                                 <Grid>
                                     <Border BorderBrush="{Binding Color}" BorderThickness="1">
-                                        <TextBlock Text="{Binding Name}" Padding="5"/>
+                                        <TextBlock Text="{Binding Name}" Padding="5" />
                                     </Border>
                                 </Grid>
                             </DataTemplate>
@@ -249,20 +249,20 @@
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel />
-                        </ItemsPanelTemplate> 
-                    </ItemsControl.ItemsPanel> 
-                </ItemsControl> 
-            </ScrollViewer> 
-        </Grid> 
- 
-        <Button 
-            Content="Save asset" 
-            Grid.Row="1" 
-            Grid.Column="2" 
-            VerticalAlignment="Top" 
-            HorizontalAlignment="Left" 
-            Margin="10" 
-            Style="{StaticResource RegularButton}" 
-            Command="{Binding SaveAssetCommand}" /> 
-    </Grid> 
-</Page> 
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+
+        <Button
+            Content="Save asset"
+            Grid.Row="1"
+            Grid.Column="2"
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Margin="10"
+            Style="{StaticResource RegularButton}"
+            Command="{Binding SaveAssetCommand}" />
+    </Grid>
+</Page>

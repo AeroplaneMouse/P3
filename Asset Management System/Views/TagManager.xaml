@@ -34,7 +34,7 @@
                     X
                 </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="Insert a string" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" Height="200" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" Height="200" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="StringFieldStyle">
