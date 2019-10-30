@@ -14,10 +14,6 @@ namespace Asset_Management_System.Models
 
         public ulong AssetID { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime UpdatedAt { get; set; }
-
         public Comment()
         {
 

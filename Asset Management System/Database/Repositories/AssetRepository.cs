@@ -14,12 +14,6 @@ namespace Asset_Management_System.Database.Repositories
 {
     public class AssetRepository : IAssetRepository
     {
-        private DBConnection dbcon;
-
-        public AssetRepository()
-        {
-            this.dbcon = DBConnection.Instance();
-        }
 
         /// <summary>
         /// Returns the number of assets in the database
@@ -27,17 +21,23 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>Number of assets in database</returns>
         public int GetCount()
         {
+            var dbcon = DBConnection.Instance();
+            
             int count = 0;
             if (dbcon.IsConnect())
             {
                 try
                 {
                     const string query = "SELECT COUNT(*) FROM assets;";
-                    using var cmd = new MySqlCommand(query, dbcon.Connection);
-                    using var reader = cmd.ExecuteReader();
-
-                    if (reader.Read())
-                        count = reader.GetInt32("COUNT(*)");
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                count = reader.GetInt32("COUNT(*)");
+                            reader.Close();
+                        }
+                    }
                 }
                 catch (MySqlException)
                 {
@@ -59,6 +59,7 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>Rather the insertion was successful or not</returns>
         public bool Insert(Asset entity)
         {
+            var dbcon = DBConnection.Instance();
             bool query_success = false;
 
             entity.SerializeFields();
@@ -104,6 +105,7 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>Rather the update was successful or not</returns>
         public bool Update(Asset entity)
         {
+            var dbcon = DBConnection.Instance();
             bool query_success = false;
 
             entity.SerializeFields();
@@ -149,6 +151,7 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>Rather the deletion was successful or not</returns>
         public bool Delete(Asset entity)
         {
+            var dbcon = DBConnection.Instance();
             bool query_success = false;
 
             if (dbcon.IsConnect())
@@ -185,8 +188,9 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>The asset or null, if the asset was not found in the database</returns>
         public Asset GetById(ulong id)
         {
+            var dbcon = DBConnection.Instance();
             Asset asset = null;
-
+            
             if (dbcon.IsConnect())
             {
                 try
@@ -229,6 +233,7 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
         public ObservableCollection<Asset> SearchByTags(List<int> tags_ids)
         {
+            var dbcon = DBConnection.Instance();
             ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
 
             if (dbcon.IsConnect())
@@ -280,6 +285,7 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
         public ObservableCollection<Asset> Search(string keyword)
         {
+            var dbcon = DBConnection.Instance();
             ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
 
             if (dbcon.IsConnect())
@@ -342,7 +348,6 @@ namespace Asset_Management_System.Database.Repositories
                 new object[] { row_id, row_label, row_description, row_department_id, row_options, row_created_at, row_updated_at }, null, null);
         }
         
-        
         /// <summary>
         /// Adds a list of tags to an asset
         /// </summary>
@@ -353,8 +358,7 @@ namespace Asset_Management_System.Database.Repositories
         {
             return RemoveTags(asset, tags) && AddTags(asset, tags);
         }
-
-
+        
         /// <summary>
         /// Removes the tags on the asset that are not in teh list of tags to be added
         /// </summary>

@@ -208,10 +208,13 @@ namespace Asset_Management_System.Database.Repositories
                         cmd.Parameters.Add("@ID", MySqlDbType.Int64);
                         cmd.Parameters["@ID"].Value = id;
 
-                        using var reader = cmd.ExecuteReader();
-                        while (reader.Read())
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            tag = DBOToModelConvert(reader);
+                            while (reader.Read())
+                            {
+                                tag = DBOToModelConvert(reader);
+                            }
+                            reader.Close();
                         }
                     }
                 }
@@ -313,6 +316,7 @@ namespace Asset_Management_System.Database.Repositories
                             {
                                 tags.Add(DBOToModelConvert(reader));
                             }
+                            reader.Close();
                         }
                     }
                 }
