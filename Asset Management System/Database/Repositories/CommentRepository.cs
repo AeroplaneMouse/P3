@@ -43,7 +43,6 @@ namespace Asset_Management_System.Database.Repositories
 
                         query_success = cmd.ExecuteNonQuery() > 0;
 
-                        // TODO: Brug det her
                         id = (ulong)cmd.LastInsertedId;
                     }
 

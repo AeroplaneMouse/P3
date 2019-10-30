@@ -36,7 +36,6 @@ namespace Asset_Management_System.ViewModels
 
         protected void AddNew()
         {
-            Console.WriteLine("Add new");
             switch(PageType)
             {
                 case ListPageType.Asset:
@@ -55,7 +54,6 @@ namespace Asset_Management_System.ViewModels
 
         protected void Edit()
         {
-            Console.WriteLine("Edit");
             T selected = GetSelectedItem();
 
             if (selected != null)
@@ -79,7 +77,6 @@ namespace Asset_Management_System.ViewModels
 
         protected void Remove()
         {
-            Console.WriteLine("Remove");
             T selected = GetSelectedItem();
 
             if (selected != null)

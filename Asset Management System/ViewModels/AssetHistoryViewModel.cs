@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Logging;
 using Asset_Management_System.Models;
+using Asset_Management_System.ViewModels.Base;
 using Asset_Management_System.Views;
 
 namespace Asset_Management_System.ViewModels
@@ -22,13 +23,12 @@ namespace Asset_Management_System.ViewModels
             // Initialize commands
             _window = window;
             
-            ViewCommand = new Base.RelayCommand(() => View());
+            ViewCommand = new Base.RelayCommand(View);
             // Start the search over
-            ExitCommand = new Base.RelayCommand(() => Exit());
+            ExitCommand = new Base.RelayCommand(Exit);
             
             ILogRepository<Entry> rep = new LogRepository();
             History = (List<Entry>) rep.GetLogEntries(asset.ID, asset.GetType());
-
         }
 
         #endregion
