@@ -14,10 +14,6 @@ namespace Asset_Management_System.Models
 
         public ulong AssetID { get; set; }
 
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime UpdatedAt { get; set; }
-
         public Comment()
         {
 
@@ -30,8 +26,8 @@ namespace Asset_Management_System.Models
             Username = username;
             Content = content;
             AssetID = assetId;
-            CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
+            base.CreatedAt = createdAt;
+            base.UpdatedAt = updatedAt;
         }
 
         /// <summary>
