@@ -81,9 +81,19 @@ namespace Asset_Management_System.Logging
             // Determine if subject is being created or updated
             bool created = id == 0 || subject.GetRepository().GetById(subject.GetId()) == null;
             
-            string changeType = delete ? "deleted" : created ? "created" : "updated";
-
-            return $"{type} {name} was {changeType}";
+            // Special case for comments
+            if (subject is Comment)
+            {
+                AssetRepository assetRep = new AssetRepository();
+                string assetName = assetRep.GetById(((Comment) subject).AssetID).Name;
+                string changeType = delete ? "Removed from" : created ? "Added to" : "updated on ";
+                return $"A {type} was {changeType} {assetName}";
+            }
+            else
+            {
+                string changeType = delete ? "deleted" : created ? "created" : "updated";
+                return $"{type} {name} was {changeType}";
+            }
         }
         
         /// <summary>
