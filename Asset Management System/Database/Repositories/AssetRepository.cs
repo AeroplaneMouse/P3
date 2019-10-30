@@ -29,11 +29,15 @@ namespace Asset_Management_System.Database.Repositories
                 try
                 {
                     const string query = "SELECT COUNT(*) FROM assets;";
-                    using var cmd = new MySqlCommand(query, dbcon.Connection);
-                    using var reader = cmd.ExecuteReader();
-
-                    if (reader.Read())
-                        count = reader.GetInt32("COUNT(*)");
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                count = reader.GetInt32("COUNT(*)");
+                            reader.Close();
+                        }
+                    }
                 }
                 catch (MySqlException)
                 {

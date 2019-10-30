@@ -11,25 +11,19 @@ namespace Asset_Management_System.Database.Repositories
 {
     public class CommentRepository : ICommentRepository
     {
-        private DBConnection _dbcon;
-
-        public CommentRepository()
-        {
-            _dbcon = DBConnection.Instance();
-        }
-
         public bool Insert(Comment comment)
         {
+            var dbcon = DBConnection.Instance();
             bool query_success = false;
 
-            if (_dbcon.IsConnect())
+            if (dbcon.IsConnect())
             {
                 try
                 {
                     const string query = "INSERT INTO comments (asset_id, username, content, updated_at) " +
                                          "VALUES (@asset_id, @username, @content, CURRENT_TIMESTAMP())";
 
-                    using (var cmd = new MySqlCommand(query, _dbcon.Connection))
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
                         cmd.Parameters["@asset_id"].Value = comment.AssetID;
@@ -54,7 +48,7 @@ namespace Asset_Management_System.Database.Repositories
 
                 finally
                 {
-                    _dbcon.Close();
+                    dbcon.Close();
                 }
             }
 
@@ -63,15 +57,16 @@ namespace Asset_Management_System.Database.Repositories
 
         public bool Update(Comment comment)
         {
+            var dbcon = DBConnection.Instance();
             bool query_success = false;
 
-            if (_dbcon.IsConnect())
+            if (dbcon.IsConnect())
             {
                 try
                 {
                     const string query = "UPDATE comments SET asset_id=@asset_id, username=@username, content=@content, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
-                    using (var cmd = new MySqlCommand(query, _dbcon.Connection))
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
                         cmd.Parameters["@asset_id"].Value = comment.AssetID;
@@ -96,7 +91,7 @@ namespace Asset_Management_System.Database.Repositories
 
                 finally
                 {
-                    _dbcon.Close();
+                    dbcon.Close();
                 }
             }
 
@@ -105,15 +100,16 @@ namespace Asset_Management_System.Database.Repositories
 
         public bool Delete(Comment comment)
         {
+            var dbcon = DBConnection.Instance();
             bool query_success = false;
 
-            if (_dbcon.IsConnect())
+            if (dbcon.IsConnect())
             {
                 try
                 {
                     const string query = "DELETE FROM comments WHERE id=@id";
 
-                    using (var cmd = new MySqlCommand(query, _dbcon.Connection))
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = comment.ID;
@@ -129,7 +125,7 @@ namespace Asset_Management_System.Database.Repositories
 
                 finally
                 {
-                    _dbcon.Close();
+                    dbcon.Close();
                 }
             }
 
@@ -138,16 +134,17 @@ namespace Asset_Management_System.Database.Repositories
 
         public Comment GetById(ulong id)
         {
+            var dbcon = DBConnection.Instance();
             Comment comment = null;
 
-            if (_dbcon.IsConnect())
+            if (dbcon.IsConnect())
             {
                 try
                 {
                     const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
                                          "FROM comments WHERE id=@id";
 
-                    using (var cmd = new MySqlCommand(query, _dbcon.Connection))
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = id;
@@ -170,7 +167,7 @@ namespace Asset_Management_System.Database.Repositories
 
                 finally
                 {
-                    _dbcon.Close();
+                    dbcon.Close();
                 }
             }
 
@@ -179,16 +176,17 @@ namespace Asset_Management_System.Database.Repositories
 
         public ObservableCollection<Comment> GetByAssetId(ulong assetID)
         {
+            var dbcon = DBConnection.Instance();
             ObservableCollection<Comment> comments = new ObservableCollection<Comment>();
 
-            if (_dbcon.IsConnect())
+            if (dbcon.IsConnect())
             {
                 try
                 {
                     const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
                                          "FROM comments WHERE asset_id=@asset_id";
 
-                    using (var cmd = new MySqlCommand(query, _dbcon.Connection))
+                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
                     {
                         cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
                         cmd.Parameters["@asset_id"].Value = assetID;
@@ -211,7 +209,7 @@ namespace Asset_Management_System.Database.Repositories
 
                 finally
                 {
-                    _dbcon.Close();
+                    dbcon.Close();
                 }
             }
 
