@@ -54,15 +54,19 @@ namespace Asset_Management_System.ViewModels.Commands
             if (department != null)
             {
                 _asset.DepartmentID = department.ID;
-                // Creates a log entry, currently uses for testing.
-                Log<Asset>.CreateLog(_asset);
                 AssetRepository rep = new AssetRepository();
 
                 if (_editing)
+                {
+                    Log<Asset>.CreateLog(_asset);
                     rep.Update(_asset);
+                }
                 else
+                {
                     rep.Insert(_asset);
-
+                    Log<Asset>.CreateLog(_asset);
+                }
+                
                 _main.ChangeMainContent(new Assets(_main));
             }
             else
