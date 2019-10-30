@@ -23,6 +23,12 @@
     <None Remove="Resources\Images\Logos\logo-light.png" />
     <None Remove="Resources\Images\Logos\logo-dark.png" />
     <None Remove="Resources\Images\Logos\Test.svg" />
+    <!-- Trash -->
+    <None Remove="Resources\Images\Logos\Trash\trash_white.png" />
+    <None Remove="Resources\Images\Logos\Trash\trash_black.png" />
+    <!-- Edit -->
+    <None Remove="Resources\Images\Logos\Edit\edit_white.png" />
+    <None Remove="Resources\Images\Logos\Edit\edit_black.png" />
   </ItemGroup>
   
   <ItemGroup>
@@ -40,7 +46,6 @@
 
   <ItemGroup>
     <Folder Include="Resources\Fonts\" />
-    <Folder Include="Resources\Images\Logos\" />
     <Folder Include="Resources\Window\" />
   </ItemGroup>
 
@@ -54,6 +59,12 @@
     <Resource Include="Resources\Images\Logos\logo-light.png" />
     <Resource Include="Resources\Images\Logos\logo-dark.png" />
     <Resource Include="Resources\Images\Logos\Test.svg" />
+    <!-- Trash -->
+    <Resource Include="Resources\Images\Logos\Trash\trash_white.png" />
+    <Resource Include="Resources\Images\Logos\Trash\trash_black.png" />
+    <!-- Edit -->
+    <Resource Include="Resources\Images\Logos\Edit\edit_white.png" />
+    <Resource Include="Resources\Images\Logos\Edit\edit_black.png" />
   </ItemGroup>
 
   <ItemGroup>
