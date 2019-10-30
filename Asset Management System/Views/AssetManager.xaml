@@ -227,9 +227,19 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
                                     <Border BorderBrush="{Binding Color}" BorderThickness="1">
                                         <TextBlock Text="{Binding Name}" Padding="5" />
                                     </Border>
+                                    <Button Grid.Row="1" Grid.Column="0"
+                                            Command="{x:Static v:AssetManagerViewModel.UnTagTagCommand}"
+                                            MaxHeight="40" VerticalAlignment="Top"
+                                            CommandParameter="{Binding Path=ID}">
+                                        X
+                                    </Button>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

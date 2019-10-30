@@ -29,7 +29,7 @@ namespace Asset_Management_System.ViewModels.Commands
 
             foreach (var currentFieldList in _viewModel.FieldsList)
             {
-                currentFieldList.FieldTags.Remove(currentFieldList.FieldTags.Single(s => s.ID == tagId));
+                currentFieldList.FieldTags.Remove(currentFieldList.FieldTags.SingleOrDefault(s => s.ID == tagId));
             }
         }
     }
