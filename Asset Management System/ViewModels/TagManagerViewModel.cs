@@ -95,11 +95,9 @@ namespace Asset_Management_System.ViewModels
         /// <returns></returns>
         protected override void LoadFields()
         {
-            _tag.DeserializeFields();
             foreach (Field field in _tag.FieldsList)
             {
-                ShownField shownField = new ShownField(field);
-                FieldsList.Add(shownField);
+                FieldsList.Add(new ShownField(field));
             }
 
             //Set Name to the name of the chosen tag
