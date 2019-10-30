@@ -79,8 +79,9 @@ namespace Asset_Management_System.Logging
             string name = subject.GetLoggableName();
             
             // Determine if subject is being created or updated
-            bool created = id == 0 || subject.GetRepository().GetById(subject.GetId()) == null;
-            
+            bool created = id == 0 && subject.GetRepository().GetById(subject.GetId()) == null;
+
+            T asset = subject.GetRepository().GetById(subject.GetId());
             // Special case for comments
             if (subject is Comment)
             {
