@@ -25,8 +25,6 @@ namespace Asset_Management_System.ViewModels
         // The string that the user is searching with
         private string _searchString { get; set; }
 
-
-
         // The id of the parent currently being used
         private ulong _parentID { get; set; } = 0;
 
@@ -40,28 +38,25 @@ namespace Asset_Management_System.ViewModels
         private string _parentString { get; set; }
 
         // A tag repository, for communication with the database
-        private Database.Repositories.TagRepository _tagRep { get; set; }
+        private TagRepository _tagRep { get; set; }
 
         // TODO: Kom uden om mig
         private TextBox _box { get; set; }
 
 
-        private List<Models.Asset> _assetList { get; set; }
+        private List<Asset> _assetList { get; set; }
 
-        private Database.Repositories.AssetRepository _assetRep { get; set; }
+        private AssetRepository _assetRep { get; set; }
 
         #endregion
 
 
         #region tag related public Properties
-
-        public string NumberOfAssets { get; set; }
-        public string NumberOfTags { get; set; }
-        public string NumberOfDepartments { get; set; }
+        
         
         public ObservableCollection<Tag> CurrentlyAddedTags { get; set; }
 
-        public List<Models.Asset> AssetList;
+        public List<Asset> AssetList;
 
         // The current parent exposed to the view
         public string ParentID
@@ -96,7 +91,7 @@ namespace Asset_Management_System.ViewModels
         // The string that is being searched for, exposed to the view
         public string TagString
         {
-            get { return _searchString; }
+            get => _searchString;
 
             set
             {
@@ -113,15 +108,15 @@ namespace Asset_Management_System.ViewModels
 
         #region Commands
 
-        public ICommand EnterKeyCommand { get; set; }
+        private ICommand EnterKeyCommand { get; set; }
 
-        public ICommand TabKeyCommand { get; set; }
+        private ICommand TabKeyCommand { get; set; }
 
-        public ICommand SpaceKeyCommand { get; set; }
+        private ICommand SpaceKeyCommand { get; set; }
 
-        public ICommand EscapeKeyCommand { get; set; }
+        private ICommand EscapeKeyCommand { get; set; }
 
-        public ICommand BackspaceKeyCommand { get; set; }
+        private ICommand BackspaceKeyCommand { get; set; }
 
         #endregion
 
@@ -153,7 +148,7 @@ namespace Asset_Management_System.ViewModels
 
             _tagRep = new TagRepository();
 
-            _assetRep = new Database.Repositories.AssetRepository();
+            _assetRep = new AssetRepository();
 
             // TODO: Kom uden om mig
             _box = box;
@@ -296,7 +291,7 @@ namespace Asset_Management_System.ViewModels
             }
 
             // If the search query isn't empty, a letter is simply removed
-            else if (_searchString != String.Empty && _searchString != null)
+            else if (!string.IsNullOrEmpty(_searchString))
             {
                 _searchString = _searchString.Substring(0, _searchString.Length - 1);
 

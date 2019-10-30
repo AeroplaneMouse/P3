@@ -53,7 +53,7 @@ namespace Asset_Management_System.ViewModels
 
         #region Commands
 
-        public ICommand AddNewCommentCommand { get; set; }
+        private ICommand AddNewCommentCommand { get; set; }
 
         public ICommand RemoveCommentCommand { get; set; }
 
@@ -71,7 +71,7 @@ namespace Asset_Management_System.ViewModels
             FieldsList = new ObservableCollection<ShownField>();
             TagsList = new List<Tag>();
             CommentsList = new ObservableCollection<Comment>();
-            
+
             // Initialize commands
             ViewAssetHistoryCommand = new Base.RelayCommand((ViewAssetHistory));
             AddNewCommentCommand = new Base.RelayCommand(AddNewComment);
@@ -99,7 +99,19 @@ namespace Asset_Management_System.ViewModels
 
                 if (TagInput.ParentID != 0)
                 {
-                    //TODO Gør det her
+                    TagRepository tagRepository = new TagRepository();
+                    Tag parentTag = tagRepository.GetById(TagInput.ParentID);
+                    parentTag.DeserializeFields();
+                    foreach (var field in parentTag.FieldsList)
+                    {
+                        foreach (var shownField in FieldsList)
+                        {
+                            if (String.Equals(shownField.Name,field.GetHashCode().ToString(),StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                shownField.FieldTags.Add(parentTag);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -125,7 +137,7 @@ namespace Asset_Management_System.ViewModels
                 LoadTags();
 
                 // Get all the fields coming from the attached tags
-                GetTagFields();  
+                GetTagFields();
             }
         }
 
@@ -158,7 +170,7 @@ namespace Asset_Management_System.ViewModels
 
         private void AddNewComment()
         {
-            if (CommentField != null && CommentField != String.Empty)
+            if (!string.IsNullOrEmpty(CommentField))
             {
                 Comment newComment = new Comment()
                 {
@@ -226,5 +238,4 @@ namespace Asset_Management_System.ViewModels
 
         #endregion
     }
-
 }

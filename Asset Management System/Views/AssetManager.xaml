@@ -249,20 +249,20 @@
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </ScrollViewer>
-        </Grid>
-
-        <Button
-            Content="Save asset"
-            Grid.Row="1"
-            Grid.Column="2"
-            VerticalAlignment="Top"
-            HorizontalAlignment="Left"
-            Margin="10"
-            Style="{StaticResource RegularButton}"
-            Command="{Binding SaveAssetCommand}" />
-    </Grid>
-</Page>
+                        </ItemsPanelTemplate> 
+                    </ItemsControl.ItemsPanel> 
+                </ItemsControl> 
+            </ScrollViewer> 
+        </Grid> 
+ 
+        <Button 
+            Content="Save asset" 
+            Grid.Row="1" 
+            Grid.Column="2" 
+            VerticalAlignment="Top" 
+            HorizontalAlignment="Left" 
+            Margin="10" 
+            Style="{StaticResource RegularButton}" 
+            Command="{Binding SaveAssetCommand}" /> 
+    </Grid> 
+</Page> 
