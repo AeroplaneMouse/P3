@@ -33,40 +33,41 @@ namespace Asset_Management_System.ViewModels.Commands
             List<string> promptResults = new List<string>();
             int fieldType = 0;
             bool required;
+            bool correctPrompt = (promptResults = _viewModel.PromptManager("Text box", out required)).Count > 0;
             
             switch (fieldToAdd)
             {
                 case "Text Field":
                     Console.WriteLine("Textfield added");
-                    if ((promptResults = _viewModel.PromptManager("Text box", out required)).Count > 0)
+                    if (correctPrompt)
                     {
                         fieldType = 1;
                     }
                     break;
                 case "String Field":
                     Console.WriteLine("StringField added");
-                    if ((promptResults = _viewModel.PromptManager("String Field", out required)).Count > 0)
+                    if (correctPrompt)
                     {
                         fieldType = 2;
                     }
                     break;
                 case "Integer Field":
                     Console.WriteLine("IntegerField added");
-                    if ((promptResults = _viewModel.PromptManager("Integer Field", out required)).Count > 0)
+                    if (correctPrompt)
                     {
                         fieldType = 3;
                     }
                     break;
                 case "Date Field":
                     Console.WriteLine("Date Field added");
-                    if ((promptResults = _viewModel.PromptManager("Date Field", out required)).Count > 0)
+                    if (correctPrompt)
                     {
                         fieldType = 4;
                     }
                     break;
                 case "Boolean Field":
                     Console.WriteLine("BooleanField added");
-                    if ((promptResults = _viewModel.PromptManager("Boolean Field", out required)).Count > 0)
+                    if (correctPrompt)
                     {
                         fieldType = 5;
                     }
