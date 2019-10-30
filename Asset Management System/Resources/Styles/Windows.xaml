@@ -8,9 +8,11 @@
     <BitmapImage x:Key="ApplicationIconDark" UriSource="/Resources/Images/Logos/logo-dark.png"/>
     <!-- Trash -->
     <BitmapImage x:Key="Trash_White" UriSource="/Resources/Images/Logos/Trash/trash_white.png"/>
+    <BitmapImage x:Key="Trash_Gray" UriSource="/Resources/Images/Logos/Trash/trash_gray.png"/>
     <BitmapImage x:Key="Trash_Black" UriSource="/Resources/Images/Logos/Trash/trash_black.png"/>
     <!-- Edit -->
     <BitmapImage x:Key="Edit_White" UriSource="/Resources/Images/Logos/Edit/edit_white.png"/>
+    <BitmapImage x:Key="Edit_Gray" UriSource="/Resources/Images/Logos/Edit/edit_gray.png"/>
     <BitmapImage x:Key="Edit_Black" UriSource="/Resources/Images/Logos/Edit/edit_black.png"/>
     
 </ResourceDictionary>

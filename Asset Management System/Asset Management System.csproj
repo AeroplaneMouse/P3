@@ -25,9 +25,11 @@
     <None Remove="Resources\Images\Logos\Test.svg" />
     <!-- Trash -->
     <None Remove="Resources\Images\Logos\Trash\trash_white.png" />
+    <None Remove="Resources\Images\Logos\Trash\trash_gray.png" />
     <None Remove="Resources\Images\Logos\Trash\trash_black.png" />
     <!-- Edit -->
     <None Remove="Resources\Images\Logos\Edit\edit_white.png" />
+    <None Remove="Resources\Images\Logos\Edit\edit_gray.png" />
     <None Remove="Resources\Images\Logos\Edit\edit_black.png" />
   </ItemGroup>
   
@@ -60,9 +62,11 @@
     <Resource Include="Resources\Images\Logos\Test.svg" />
     <!-- Trash -->
     <Resource Include="Resources\Images\Logos\Trash\trash_white.png" />
+    <Resource Include="Resources\Images\Logos\Trash\trash_gray.png" />
     <Resource Include="Resources\Images\Logos\Trash\trash_black.png" />
     <!-- Edit -->
     <Resource Include="Resources\Images\Logos\Edit\edit_white.png" />
+    <Resource Include="Resources\Images\Logos\Edit\edit_gray.png" />
     <Resource Include="Resources\Images\Logos\Edit\edit_black.png" />
   </ItemGroup>
 

@@ -93,14 +93,15 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    
     <Style TargetType="MenuItem" x:Key="DepartmentItem">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
                     <Border Padding="{TemplateBinding Padding}"
                             Background="{TemplateBinding Background}">
-                        <ContentPresenter Content="{TemplateBinding Header}"
-                                          VerticalAlignment="Center"/>
+                        <Image Source="{TemplateBinding Header}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -110,13 +111,23 @@
     <!-- Department edit item -->
     <Style TargetType="MenuItem" x:Key="DepartmentEdit" BasedOn="{StaticResource DepartmentItem}">
         <Setter Property="Command" Value="{x:Static v:MainViewModel.EditDepartmentCommand}"/>
-        <Setter Property="Header" Value="E"/>
+        <Setter Property="Header" Value="{StaticResource Edit_White}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Header" Value="{StaticResource Edit_Gray}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!-- Department remove item -->
     <Style TargetType="MenuItem" x:Key="DepartmentRemove" BasedOn="{StaticResource DepartmentItem}">
         <Setter Property="Command" Value="{x:Static v:MainViewModel.RemoveDepartmentCommand}"/>
-        <Setter Property="Header" Value="R"/>
+        <Setter Property="Header" Value="{StaticResource Trash_White}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Header" Value="{StaticResource Trash_Gray}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
     
     <!-- Department content MenuItem button with edit and remove buttons -->
@@ -128,7 +139,7 @@
                 <ControlTemplate TargetType="MenuItem">
                     <Border Padding="{TemplateBinding Padding}"
                             Background="{TemplateBinding Background}">
-                        <Grid>
+                        <Grid Margin="0 0 10 0">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30"/>
                                 <ColumnDefinition Width="*"/>
