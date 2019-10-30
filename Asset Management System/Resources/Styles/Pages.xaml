@@ -97,4 +97,42 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <!-- Promt page -->
+    <Style TargetType="Page" x:Key="Promt">
+        <Setter Property="Background" Value="White"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Page">
+                    <Grid>
+                        <Canvas Opacity="0.34" Background="Black" Height="{TemplateBinding Height}"/>
+
+                        <Grid Width="300" Height="160">
+                            <Border CornerRadius="10" Background="White">
+                                <Grid>
+                                    <TextBlock Text="{Binding MessageText}"
+                                               HorizontalAlignment="Center"
+                                               Margin="0 20 0 0"
+                                               MaxWidth="270"
+                                               TextWrapping="Wrap"
+                                               Style="{StaticResource HeaderStyle}"/>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                                                Margin="15">
+                                        <Button Style="{StaticResource RegularAcceptButton}"
+                                                Command="{Binding AcceptedCommand}"
+                                                Content="Accept"/>
+                                        <Button Style="{StaticResource RegularCancelButton}"
+                                                Command="{Binding CancelledCommand}"
+                                                Content="Cancel"
+                                                Margin="15 0 0 0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

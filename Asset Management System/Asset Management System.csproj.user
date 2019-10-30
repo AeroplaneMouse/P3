@@ -31,6 +31,9 @@
     <Compile Update="Views\Popup.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Promts\Confirm.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Splash.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -97,6 +100,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Popup.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Promts\Confirm.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Splash.xaml">
