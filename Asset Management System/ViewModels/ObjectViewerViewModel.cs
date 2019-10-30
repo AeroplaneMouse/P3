@@ -163,14 +163,12 @@ namespace Asset_Management_System.ViewModels
                         }
                     }
                 }
-
-                Console.WriteLine("Tags add " + fieldsCount + " fields");
             }
         }
 
         private void AddNewComment()
         {
-            if (CommentField != null && CommentField != string.Empty)
+            if (!string.IsNullOrEmpty(CommentField))
             {
                 Comment newComment = new Comment()
                 {
