@@ -25,6 +25,8 @@ namespace Asset_Management_System.ViewModels
         // The string that the user is searching with
         private string _searchString { get; set; }
 
+
+
         // The id of the parent currently being used
         private ulong _parentID { get; set; } = 0;
 
@@ -38,15 +40,15 @@ namespace Asset_Management_System.ViewModels
         private string _parentString { get; set; }
 
         // A tag repository, for communication with the database
-        private TagRepository _tagRep { get; set; }
+        private Database.Repositories.TagRepository _tagRep { get; set; }
 
         // TODO: Kom uden om mig
         private TextBox _box { get; set; }
 
 
-        private List<Asset> _assetList { get; set; }
+        private List<Models.Asset> _assetList { get; set; }
 
-        private AssetRepository _assetRep { get; set; }
+        private Database.Repositories.AssetRepository _assetRep { get; set; }
 
         #endregion
 
@@ -55,7 +57,7 @@ namespace Asset_Management_System.ViewModels
 
         public ObservableCollection<Tag> CurrentlyAddedTags { get; set; }
 
-        public List<Asset> AssetList;
+        public List<Models.Asset> AssetList;
 
         // The current parent exposed to the view
         public string ParentID
@@ -90,7 +92,7 @@ namespace Asset_Management_System.ViewModels
         // The string that is being searched for, exposed to the view
         public string TagString
         {
-            get => _searchString;
+            get { return _searchString; }
 
             set
             {
@@ -147,7 +149,7 @@ namespace Asset_Management_System.ViewModels
 
             _tagRep = new TagRepository();
 
-            _assetRep = new AssetRepository();
+            _assetRep = new Database.Repositories.AssetRepository();
 
             // TODO: Kom uden om mig
             _box = box;
@@ -225,8 +227,8 @@ namespace Asset_Management_System.ViewModels
             CurrentlyAddedTags.Add(_tagList.Single(p =>
                 String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
             Console.WriteLine("Checking:  " + _tagList.Count);
-            ConnectTags(CurrentlyAddedTags);
-
+            ConnectTags();
+            
             _tabIndex = 0;
         }
 
@@ -297,7 +299,7 @@ namespace Asset_Management_System.ViewModels
             }
 
             // If the search query isn't empty, a letter is simply removed
-            else if (!string.IsNullOrEmpty(_searchString))
+            else if (_searchString != String.Empty && _searchString != null)
             {
                 _searchString = _searchString.Substring(0, _searchString.Length - 1);
 
@@ -308,11 +310,39 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        private void ConnectTags(ObservableCollection<Tag> tags)
+        private void ConnectTags()
         {
-            foreach (var tag in tags)
+            bool _alreadyExists = false;
+
+            foreach (var fi in FieldsList)
             {
+                Console.WriteLine("field: " + fi.Name);
             }
+            Console.WriteLine("_________");
+
+            foreach (var tag in CurrentlyAddedTags)
+            {
+                foreach (var tagField in tag.FieldsList)
+                {
+                    foreach (var shownField in FieldsList)
+                    {
+                        if (shownField.ShownFieldToFieldComparator(tagField))
+                        {
+                            _alreadyExists = true;
+                            Console.WriteLine("exists: " + tagField.Content);
+                        }
+                    }
+                    if (_alreadyExists == false)
+                        FieldsList.Add(new ShownField(tagField));
+
+                    _alreadyExists = false;     
+                }
+                Console.WriteLine("Tagfields: " + tag.FieldsList.Count);
+
+            }
+            Console.WriteLine("_________");
+            foreach (var f in FieldsList)
+                Console.WriteLine("field: " + f.Name);
         }
 
         #endregion
