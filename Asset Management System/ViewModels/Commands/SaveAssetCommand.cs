@@ -34,6 +34,7 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
+            Console.WriteLine("Testing: " + CanExecute(parameter));
 
             _asset.Name = _viewModel.Name;
             _asset.Description = _viewModel.Description;

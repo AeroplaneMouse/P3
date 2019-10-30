@@ -76,7 +76,12 @@
 
                     <TextBox Text="{Binding CommentField, UpdateSourceTrigger=PropertyChanged}"
                              Width="200"
-                             Padding="5"/>
+                             Padding="5">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Return" Command="{Binding AddNewCommentCommand}" />
+                        </TextBox.InputBindings>
+                        
+                    </TextBox>
 
                     <StackPanel>
                         <Button Content="Add new comment"
@@ -95,6 +100,10 @@
                     <ListView ItemsSource="{Binding CommentsList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                               SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
 
+                        <ListView.InputBindings>
+                            <KeyBinding Key="Delete" Command="{Binding RemoveCommentCommand}" />
+                        </ListView.InputBindings>
+                        
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
