@@ -52,8 +52,7 @@ namespace Asset_Management_System.ViewModels
 
 
         #region tag related public Properties
-        
-        
+
         public ObservableCollection<Tag> CurrentlyAddedTags { get; set; }
 
         public List<Asset> AssetList;
@@ -177,15 +176,22 @@ namespace Asset_Management_System.ViewModels
 
         public bool CanSaveAsset()
         {
-            // **** TODO ****
-            // Only return true, if the entered values are valid.
+            if (string.IsNullOrEmpty(Name) || string.IsNullOrWhiteSpace(Name))
+            {
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(Description) || string.IsNullOrWhiteSpace(Description))
+            {
+                return false;
+            }
+
             return true;
         }
 
 
         protected override void LoadFields()
         {
-            _asset.DeserializeFields();
             foreach (var field in _asset.FieldsList)
             {
                 FieldsList.Add(new ShownField(field));
@@ -220,13 +226,13 @@ namespace Asset_Management_System.ViewModels
                 String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
             Console.WriteLine("Checking:  " + _tagList.Count);
             ConnectTags(CurrentlyAddedTags);
-            
+
             _tabIndex = 0;
         }
 
         private void CycleResults()
         {
-            if(_tagList != null)
+            if (_tagList != null)
             {
                 _searchString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex++);
 
@@ -241,7 +247,7 @@ namespace Asset_Management_System.ViewModels
                     // TODO: Kom uden om mig
                     _box.CaretIndex = _searchString.Length;
                 }
-            } 
+            }
         }
 
         private void EnterChildren()
@@ -306,7 +312,6 @@ namespace Asset_Management_System.ViewModels
         {
             foreach (var tag in tags)
             {
-                
             }
         }
 

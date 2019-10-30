@@ -32,6 +32,12 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
+            Console.WriteLine("Testing: " + CanExecute(parameter));
+            if (!CanExecute(parameter))
+            {
+                _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
+                return;
+            }
             _tag.Name = _viewModel.Name;
             _tag.Color = _viewModel.Color;
 

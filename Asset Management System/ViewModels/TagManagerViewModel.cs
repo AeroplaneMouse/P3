@@ -84,8 +84,11 @@ namespace Asset_Management_System.ViewModels
 
         public bool CanSaveTag()
         {
-            // **** TODO ****
-            // Only return true, if the entered values are valid.
+            if (string.IsNullOrEmpty(Name) || string.IsNullOrWhiteSpace(Name))
+            {
+                return false;
+            }
+
             return true;
         }
 
