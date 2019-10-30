@@ -55,7 +55,7 @@
                         </StackPanel>
 
                         <Grid Grid.Row="3" Margin="10">
-                            <ListView ItemsSource="{Binding SearchList}" SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
+                            <ListView ItemsSource="{Binding SearchList, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
 
                                 <ListView.Resources>
 

@@ -54,7 +54,7 @@ namespace Asset_Management_System.Logging
         public static void Write(ILoggable<T> subject, string description, string options="{}", ulong id = 0)
         {
             Entry entry = new Entry();
-            entry.LogableId = id == 0 ? subject.GetId() : id;
+            entry.LogableId = (id == 0) ? subject.GetId() : id;
             entry.LogableType = subject.GetType();
             entry.Description = description;
             entry.Options = options;
