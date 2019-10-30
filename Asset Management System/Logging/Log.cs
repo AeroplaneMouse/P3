@@ -16,10 +16,10 @@ namespace Asset_Management_System.Logging
         /// </summary>
         /// <param name="newEntry"></param>
         /// <param name="delete"></param>
-        public static void CreateLog(ILoggable<T> newEntry, bool delete = false)
+        public static void CreateLog(ILoggable<T> newEntry, ulong id = 0, bool delete = false)
         {
             // Generate description
-            string description = GenerateDescription(newEntry, delete);
+            string description = GenerateDescription(newEntry, id, delete);
             
             // Fetch object with same ID from database to determine changes
             IRepository<T> rep = newEntry.GetRepository();
@@ -32,6 +32,10 @@ namespace Asset_Management_System.Logging
             // Create the log entry
             Write(newEntry, description, serializedChanges);
             Console.WriteLine("Creating log entry: " + description);
+        }
+        public static void CreateLog(ILoggable<T> newEntry, bool delete)
+        {
+            CreateLog(newEntry, 0, delete);
         }
         
         /// <summary>
@@ -52,26 +56,14 @@ namespace Asset_Management_System.Logging
             LogRepository rep = new LogRepository();
             rep.Insert(entry);
         }
-        
-        /// <summary>
-        /// Retrieves existing log entries for a model
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="username"></param>
-        /// <returns>List of entries</returns>
-        public static IEnumerable<Entry> GetEntries(Model model, string username = null)
-        {
-            LogRepository rep = new LogRepository();
-            return rep.GetLogEntries(model.ID, model.GetType(), username);
-        }
-        
+
         /// <summary>
         /// Generates a description for the log entry
         /// </summary>
         /// <param name="subject"></param>
         /// <param name="delete"></param>
         /// <returns>Description</returns>
-        private static string GenerateDescription(ILoggable<T> subject, bool delete)
+        private static string GenerateDescription(ILoggable<T> subject, ulong id, bool delete)
         {
             // Get subject Type
             string type = subject.GetType().Name;
@@ -79,7 +71,7 @@ namespace Asset_Management_System.Logging
             string name = subject.GetLoggableName();
             
             // Determine if subject is being created or updated
-            bool created = subject.GetId() == 0;
+            bool created = id == 0 || subject.GetRepository().GetById(subject.GetId()) == null;
             
             string changeType = delete ? "deleted" : created ? "created" : "updated";
 
@@ -94,7 +86,7 @@ namespace Asset_Management_System.Logging
         /// <param name="oldEntry"></param>
         /// <param name="newEntry"></param>
         /// <returns></returns>
-        public static Dictionary<string, Change> GetChanges(ILoggable<T> oldEntry, ILoggable<T> newEntry)
+        private static Dictionary<string, Change> GetChanges(ILoggable<T> oldEntry, ILoggable<T> newEntry)
         {
             Dictionary<string, Change> changes = new Dictionary<string, Change>();
             
@@ -117,5 +109,23 @@ namespace Asset_Management_System.Logging
 
             return changes;
         }
+
+        /*
+        public static void LogTags(ILoggable<T> oldEntry, ILoggable<T> newEntry)
+        {
+            // return if given subjects are not assets,
+            if (!(oldEntry is Asset && newEntry is Asset))
+                return;
+            
+            AssetRepository rep = new AssetRepository();
+            List<Tag> oldTags = rep.GetAssetTags((Asset) oldEntry);
+            //List<Tag> newTags = ((Asset) newEntry)
+        }
+
+        public static void LogComments(ILoggable<T> oldEntry, ILoggable<T> newEntry)
+        {
+            // Compare comments before and after
+        }
+        */
     }
 }
