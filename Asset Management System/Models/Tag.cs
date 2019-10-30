@@ -24,6 +24,7 @@ namespace Asset_Management_System.Models
             this.SerializedFields = SerializedField;
             CreatedAt = created_at;
             UpdatedAt = updated_at;
+            DeserializeFields();
         }
 
         public string Name { get; set; }
