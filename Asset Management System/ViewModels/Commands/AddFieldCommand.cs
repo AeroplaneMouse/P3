@@ -30,10 +30,9 @@ namespace Asset_Management_System.ViewModels.Commands
 
 
             // Getting label, default value and is required
-            List<string> promptResults = new List<string>();
+            List<string> promptResults = _viewModel.PromptManager("Text box", out var required);
             int fieldType = 0;
-            bool required;
-            bool correctPrompt = (promptResults = _viewModel.PromptManager("Text box", out required)).Count > 0;
+            bool correctPrompt = promptResults.Count > 0;
 
             switch (fieldToAdd)
             {
