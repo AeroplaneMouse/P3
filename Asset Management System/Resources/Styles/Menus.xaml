@@ -52,6 +52,9 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
             </Trigger>
+            <Trigger Property="IsSubmenuOpen" Value="True">
+                <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+            </Trigger>
         </Style.Triggers>
     </Style>
 
@@ -115,7 +118,8 @@
         <Setter Property="Command" Value="{x:Static v:MainViewModel.RemoveDepartmentCommand}"/>
         <Setter Property="Header" Value="R"/>
     </Style>
-
+    
+    <!-- Department content MenuItem button with edit and remove buttons -->
     <Style TargetType="MenuItem" x:Key="DepartmentWithEdit" BasedOn="{StaticResource Department}">
         <Setter Property="CommandParameter" Value="{Binding Path=ID}"/>
 
@@ -198,6 +202,9 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+            </Trigger>
+            <Trigger Property="IsSubmenuOpen" Value="True">
                 <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
             </Trigger>
         </Style.Triggers>
