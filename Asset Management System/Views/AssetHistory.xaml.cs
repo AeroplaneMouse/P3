@@ -41,7 +41,8 @@ namespace Asset_Management_System.Views
             set => Label.Text = value;
         }
 
-        //TODO Figure out how to remove this, and instead bind it to the ViewCommand in the viewModel
+        //TODO Figure out how to remove this, and instead bind it to the ViewCommand in the viewModel.
+        // ^ Don't think it's possible, MouseBinding doesn't work in ListViews
         private void ListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             AssetHistoryViewModel vm = this.DataContext as AssetHistoryViewModel;

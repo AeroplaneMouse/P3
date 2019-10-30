@@ -105,7 +105,6 @@ namespace Asset_Management_System.ViewModels
 
         #endregion
 
-
         #region Methods
 
         public void UpdateList()

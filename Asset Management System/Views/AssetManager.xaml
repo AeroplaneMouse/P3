@@ -145,10 +145,10 @@
             Grid.Column="0"
             Margin="10">
             <Label>Name</Label>
-            <TextBox Padding="10" Text="{Binding Name}" />
+            <TextBox Padding="10" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
 
             <Label>Description</Label>
-            <TextBox Padding="10" Text="{Binding Description}" />
+            <TextBox Padding="10" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
 
             <StackPanel>
 
