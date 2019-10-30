@@ -176,9 +176,7 @@ namespace Asset_Management_System.ViewModels
                 {
                     Username = _main.CurrentUser,
                     Content = CommentField,
-                    AssetID = AssetInput.ID,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = DateTime.Now
+                    AssetID = AssetInput.ID
                 };
 
                 CommentRep.Insert(newComment);

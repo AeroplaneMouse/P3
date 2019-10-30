@@ -99,7 +99,8 @@
                             <GridView>
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="Username" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=CreatedAt}" Header="Created At" />
                             </GridView>
                         </ListView.View>
 
