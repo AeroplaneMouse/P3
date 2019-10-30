@@ -74,6 +74,10 @@
 
                                 </ListView.Resources>
 
+                                <ListView.InputBindings>
+                                    <KeyBinding Key="Delete" Command="{Binding RemoveCommand}" />
+                                </ListView.InputBindings>
+
                                 <ListView.Style>
                                     <Style TargetType="ListView">
                                         <Style.Triggers>

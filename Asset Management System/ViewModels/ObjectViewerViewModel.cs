@@ -207,7 +207,8 @@ namespace Asset_Management_System.ViewModels
                 return null;
             }
 
-            return CommentsList.ElementAt(SelectedItemIndex);
+
+            return CommentsList.ElementAtOrDefault(SelectedItemIndex);
         }
 
         private void ViewAssetHistory()
