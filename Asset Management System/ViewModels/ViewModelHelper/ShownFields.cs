@@ -10,7 +10,7 @@ namespace Asset_Management_System.ViewModels.ViewModelHelper
         {
             FieldTags = new ObservableCollection<Tag>();
 
-            Name = field.GetHashCode().ToString();
+            Name = field.CalculateMD5Hash();
             this.Field = field;
         }
 

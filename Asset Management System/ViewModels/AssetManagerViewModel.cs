@@ -328,6 +328,8 @@ namespace Asset_Management_System.ViewModels
                     {
                         if (shownField.ShownFieldToFieldComparator(tagField))
                         {
+                            Console.WriteLine("First input: " + tagField.Label+ " " + tagField.CalculateMD5Hash());
+                            Console.WriteLine("Second input"  + shownField.Field.Label+ " " + shownField.Field.CalculateMD5Hash());
                             _alreadyExists = true;
                             Console.WriteLine("exists: " + tagField.Content);
                         }

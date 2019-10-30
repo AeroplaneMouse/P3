@@ -80,37 +80,24 @@ namespace Asset_Management_System.Models
             }
 
             Field other = (Field)obj;
-            return (this.GetHashCode() == other.GetHashCode());
+            return (this.CalculateMD5Hash() == other.CalculateMD5Hash());
         }
 
-        public override int GetHashCode()
-        {
-            string hash = "";
 
-            hash += this.Label + this.Required.ToString() + this.FieldType.ToString() + this.DefaultValue;
-
-            hash = this.CalculateMD5Hash(hash);
-
-            int hashCode = 0;
-
-            foreach(char c in hash)
-            {
-                hashCode += (int)c;
-            }
-
-            return hashCode;
-        }
 
         /// <summary>
         /// Calculates a MD5 hash for the input string
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        private string CalculateMD5Hash(string input)
+        public string CalculateMD5Hash()
         {
+            string hashString ="";
+
+            hashString += this.Label + this.Required.ToString() + this.FieldType.ToString() + this.DefaultValue;
             // step 1, calculate MD5 hash from input
             MD5 md5 = MD5.Create();
-            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+            byte[] inputBytes = Encoding.ASCII.GetBytes(hashString);
             byte[] hash = md5.ComputeHash(inputBytes);
             md5.Dispose();
 
