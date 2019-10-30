@@ -21,18 +21,19 @@
     <Style TargetType="{x:Type TextBlock}" x:Key="BaseTextBlockStyle">
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}" />
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontWeight" Value="UltraLight"/>
+    </Style>
+    
+    <Style TargetType="TextBlock" x:Key="TitleStyle" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}"/>
         <Setter Property="FontWeight" Value="Light"/>
     </Style>
-    
-    <Style TargetType="TextBlock" x:Key="TitleStyle">
-        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}"/>
-    </Style>
-    
-    <Style TargetType="TextBlock" x:Key="HeaderStyle">
+
+    <Style TargetType="TextBlock" x:Key="HeaderStyle" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
     </Style>
-    
-    <Style TargetType="TextBlock" x:Key="ParagraphStyle">
+
+    <Style TargetType="TextBlock" x:Key="ParagraphStyle" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
     </Style>
 

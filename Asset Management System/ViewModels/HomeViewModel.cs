@@ -13,21 +13,12 @@ namespace Asset_Management_System.ViewModels
 {
     class HomeViewModel : Base.BaseViewModel
     {
-        #region Private Properties
-
         private MainViewModel _main;
 
-        #endregion
-
-        #region Public Properties
-
-        public string NumberOfAssets { get; set; }
-        public string NumberOfTags { get; set; }
-        public string NumberOfDepartments { get; set; }
-
-        #endregion
-
-        #region Constructor
+        public int NumberOfUsers { get; set; }
+        public int NumberOfAssets { get; set; }
+        public int NumberOfTags { get; set; }
+        public int NumberOfDepartments { get; set; }
 
         /// <summary>
         /// Default contructor
@@ -37,22 +28,16 @@ namespace Asset_Management_System.ViewModels
             _main = main;
 
             // Get the number of stored assets, tags and departments
-            int assets = new AssetRepository().GetCount();
-            int tags = new TagRepository().GetCount();
-            int departments = new DepartmentRepository().GetCount();
-
-            // Generate strings
-            NumberOfAssets = $"You have {assets} assets";
-            NumberOfTags = $"You have {tags} tags";
-            NumberOfDepartments = $"You have {departments} departments";
+            NumberOfUsers = new UserRepository().GetCount();
+            NumberOfAssets = new AssetRepository().GetCount();
+            NumberOfTags = new TagRepository().GetCount();
+            NumberOfDepartments = new DepartmentRepository().GetCount();
 
             // Notify view
+            OnPropertyChanged(nameof(NumberOfUsers));
             OnPropertyChanged(nameof(NumberOfAssets));
             OnPropertyChanged(nameof(NumberOfTags));
             OnPropertyChanged(nameof(NumberOfDepartments));
         }
-
-        #endregion
-
     }
 }
