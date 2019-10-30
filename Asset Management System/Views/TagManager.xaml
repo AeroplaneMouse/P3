@@ -6,14 +6,14 @@
       xmlns:views="clr-namespace:Asset_Management_System.Views"
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       xmlns:v="clr-namespace:Asset_Management_System.ViewModels"
-      xmlns:viewModelHelper="clr-namespace:Asset_Management_System.ViewModels.Commands.ViewModelHelper"
+      xmlns:viewModelHelper1="clr-namespace:Asset_Management_System.ViewModels.ViewModelHelper"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
       Title="NewTag">
 
     <Page.Resources>
-        <viewModelHelper:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+        <viewModelHelper1:FieldDesignSelector x:Key="MyFieldDesignSelector" />
         <!--Defining the properties of the fields -->
         <DataTemplate x:Key="TextBoxFieldStyle">
             <Grid>

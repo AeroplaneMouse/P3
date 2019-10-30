@@ -1,7 +1,7 @@
 using System.Collections.ObjectModel;
 using Asset_Management_System.Models;
 
-namespace Asset_Management_System.ViewModels.Commands.ViewModelHelper
+namespace Asset_Management_System.ViewModels.ViewModelHelper
 {
     public class ShownField
     {

@@ -2,7 +2,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Asset_Management_System.ViewModels.Commands.ViewModelHelper
+namespace Asset_Management_System.ViewModels.ViewModelHelper
 {
     /// <summary>
     /// Class used for selecting a template for the fields.

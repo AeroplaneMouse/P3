@@ -5,11 +5,11 @@ using System.Linq;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
-using Asset_Management_System.ViewModels.Commands.ViewModelHelper;
 using Asset_Management_System.Views;
 using System.Windows;
 using System.Windows.Controls;
 using Asset_Management_System.Logging;
+using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
