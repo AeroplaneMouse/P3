@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.ViewModels.Commands;
 using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
@@ -168,6 +169,8 @@ namespace Asset_Management_System.ViewModels
             BackspaceKeyCommand = new Base.RelayCommand(() => DeleteCharacter());
 
             #endregion
+            
+            UnTagTagCommand = new UntagTagCommand(this);
         }
 
         public ICommand SaveAssetCommand { get; set; }
@@ -343,5 +346,10 @@ namespace Asset_Management_System.ViewModels
         }
 
         #endregion
+
+        private void UntagAsset(Tag inputTag)
+        {
+            
+        }
     }
 }
