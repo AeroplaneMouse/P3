@@ -1,36 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
+﻿using Asset_Management_System.Events;
 
 namespace Asset_Management_System.ViewModels.Promts
 {
-    class ConfirmViewModel : Base.BaseViewModel
+    public class ConfirmViewModel : PromtViewModel
     {
-        private bool result;
-        private Action confirmed;
+        public override event PromtEventHandler PromtElapsed;
+        
+        public ConfirmViewModel(string message)
+            : base(message) { }
 
-        public ICommand AcceptedCommand { get; set; }
-        public ICommand CancelledCommand { get; set; }
-
-        public ConfirmViewModel(Action confirmed, out bool promtResult)
+        protected override void Accept()
         {
-            this.confirmed = confirmed;
-            promtResult = result;
-            AcceptedCommand = new Base.RelayCommand(Accept);
-            CancelledCommand = new Base.RelayCommand(Cancel);
+            PromtElapsed?.Invoke(this, new PromtEventArgs(true));
         }
 
-        private void Accept()
+        protected override void Cancel()
         {
-            result = true;
-            confirmed();
-        }
-
-        private void Cancel()
-        {
-            result = false;
-            confirmed();
+            PromtElapsed?.Invoke(this, new PromtEventArgs(false));
         }
     }
 }

@@ -18,10 +18,10 @@ namespace Asset_Management_System.Views.Promts
     /// </summary>
     public partial class Confirm : Page
     {
-        public Confirm(Action confirmed, out bool promtResult)
+        public Confirm(string message)
         {
             InitializeComponent();
-            DataContext = new ViewModels.Promts.ConfirmViewModel(confirmed, out promtResult);
+            DataContext = new ViewModels.Promts.ConfirmViewModel(message);
         }
     }
 }
