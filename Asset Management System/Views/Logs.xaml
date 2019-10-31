@@ -29,7 +29,8 @@
 
             <Button Style="{StaticResource RegularButton}"
                     Content="Print"
-                    Command="{Binding PrintCommand}" />
+                    Command="{Binding PrintCommand}" 
+                    Visibility="{Binding Visible}"/>
             
             <Button Style="{StaticResource RegularButton}"
                     Content="View"
@@ -37,7 +38,7 @@
 
         </StackPanel>
         
-        <ListView ItemsSource="{Binding SearchList}"
+        <ListView ItemsSource="{Binding SearchList, UpdateSourceTrigger=PropertyChanged}"
                   Grid.Row="2"
                   Margin="0, 10, 0, 0"
                   SelectionMode="Single"

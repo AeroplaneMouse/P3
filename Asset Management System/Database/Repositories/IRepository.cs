@@ -6,7 +6,7 @@ namespace Asset_Management_System.Database.Repositories
     {
         //event EventHandler RepositoryError;
 
-        bool Insert(T entity);
+        bool Insert(T entity, out ulong id);
         bool Update(T entity);
         bool Delete(T entity);
 

@@ -9,7 +9,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.ViewModels.Commands.ViewModelHelper;
+using Asset_Management_System.ViewModels.Commands;
+using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -26,8 +27,6 @@ namespace Asset_Management_System.ViewModels
         // The string that the user is searching with
         private string _searchString { get; set; }
 
-
-
         // The id of the parent currently being used
         private ulong _parentID { get; set; } = 0;
 
@@ -41,25 +40,21 @@ namespace Asset_Management_System.ViewModels
         private string _parentString { get; set; }
 
         // A tag repository, for communication with the database
-        private Database.Repositories.TagRepository _tagRep { get; set; }
+        private TagRepository _tagRep { get; set; }
 
         // TODO: Kom uden om mig
         private TextBox _box { get; set; }
 
 
-        private List<Models.Asset> _assetList { get; set; }
+        private List<Asset> _assetList { get; set; }
 
-        private Database.Repositories.AssetRepository _assetRep { get; set; }
+        private AssetRepository _assetRep { get; set; }
 
         #endregion
 
 
         #region tag related public Properties
 
-        public string NumberOfAssets { get; set; }
-        public string NumberOfTags { get; set; }
-        public string NumberOfDepartments { get; set; }
-        
         public ObservableCollection<Tag> CurrentlyAddedTags { get; set; }
 
         public List<Models.Asset> AssetList;
@@ -147,7 +142,7 @@ namespace Asset_Management_System.ViewModels
 
             // Initialize commands
             SaveAssetCommand = new Commands.SaveAssetCommand(this, _main, _asset, _editing);
-            AddFieldCommand = new Commands.AddFieldCommand(this);
+            AddFieldCommand = new Commands.AddFieldCommand(this, true);
             RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
             CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Assets(main)));
             //AddFieldTestCommand = new Base.RelayCommand(() => AddField());
@@ -157,7 +152,7 @@ namespace Asset_Management_System.ViewModels
 
             _tagRep = new TagRepository();
 
-            _assetRep = new Database.Repositories.AssetRepository();
+            _assetRep = new AssetRepository();
 
             // TODO: Kom uden om mig
             _box = box;
@@ -178,6 +173,8 @@ namespace Asset_Management_System.ViewModels
             BackspaceKeyCommand = new Base.RelayCommand(() => DeleteCharacter());
 
             #endregion
+
+            UnTagTagCommand = new UntagTagCommand(this);
         }
 
         //private void AddField()
@@ -197,12 +194,14 @@ namespace Asset_Management_System.ViewModels
         public ICommand SaveAssetCommand { get; set; }
         public ICommand CancelCommand { get; set; }
         public static ICommand RemoveFieldCommand { get; set; }
+        public static ICommand UnTagTagCommand { get; set; }
 
         public ICommand AddFieldTestCommand { get; set; }
         public ICommand AddFieldTest2Command { get; set; }
 
         public bool CanSaveAsset()
         {
+            //TODO Figure out the implementation for this one.
             // **** TODO ****
             // Only return true, if the entered values are valid.
 
@@ -218,7 +217,6 @@ namespace Asset_Management_System.ViewModels
 
         protected override void LoadFields()
         {
-            _asset.DeserializeFields();
             foreach (var field in _asset.FieldsList)
             {
                 FieldsList.Add(new ShownField(field));
@@ -252,21 +250,25 @@ namespace Asset_Management_System.ViewModels
             CurrentlyAddedTags.Add(_tagList.Single(p =>
                 String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
             Console.WriteLine("Checking:  " + _tagList.Count);
-            ConnectTags(CurrentlyAddedTags);
-            
+            ConnectTags();
+
             _tabIndex = 0;
         }
 
         private void CycleResults()
         {
-            if(_tagList != null)
+            if (_tagList != null)
             {
-                _searchString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex++);
+                _searchString = _tagList
+                    .Select(p => p.Name)
+                    .ElementAtOrDefault(_tabIndex++);
 
                 if (_searchString == null)
                 {
                     _tabIndex = 0;
-                    _searchString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex);
+                    _searchString = _tagList
+                        .Select(p => p.Name)
+                        .ElementAtOrDefault(_tabIndex);
                 }
 
                 if (_searchString != null)
@@ -274,7 +276,7 @@ namespace Asset_Management_System.ViewModels
                     // TODO: Kom uden om mig
                     _box.CaretIndex = _searchString.Length;
                 }
-            } 
+            }
         }
 
         private void EnterChildren()
@@ -283,13 +285,17 @@ namespace Asset_Management_System.ViewModels
             if (_parentID == 0)
             {
                 // Checks if the tag we are "going into" has any children
-                ulong tempID = _tagList.Select(p => p.ID).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+                ulong tempID = _tagList
+                    .Select(p => p.ID)
+                    .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
                 List<Models.Tag> tempList = _tagRep.GetChildTags(tempID) as List<Models.Tag>;
 
                 // If the tag we are "going into" has children, we go into it
-                if (tempList.Count() != 0)
+                if (tempList?.Count != 0)
                 {
-                    _parentString = _tagList.Select(p => p.Name).ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+                    _parentString = _tagList
+                        .Select(p => p.Name)
+                        .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
                     _searchString = String.Empty;
                     _parentID = tempID;
                     _tagList = tempList;
@@ -324,7 +330,7 @@ namespace Asset_Management_System.ViewModels
             }
 
             // If the search query isn't empty, a letter is simply removed
-            else if (_searchString != String.Empty && _searchString != null)
+            else if (!string.IsNullOrEmpty(_searchString))
             {
                 _searchString = _searchString.Substring(0, _searchString.Length - 1);
 
@@ -335,14 +341,62 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        private void ConnectTags(ObservableCollection<Tag> tags)
+        private void ConnectTags()
         {
-            foreach (var tag in tags)
+            bool _alreadyExists = false;
+
+            foreach (var fi in FieldsList)
             {
-                
+                Console.WriteLine("field: " + fi.Name);
             }
+
+            foreach (var tag in CurrentlyAddedTags)
+            {
+                foreach (var tagField in tag.FieldsList)
+                {
+                    foreach (var shownField in FieldsList)
+                    {
+                        if (shownField.ShownFieldToFieldComparator(tagField))
+                        {
+                            _alreadyExists = true;
+
+                            if (!shownField.FieldTags.Contains(tag))
+                            {
+                                shownField.FieldTags.Add(tag);
+                            }
+
+                            Console.WriteLine("\n \n-----------------");
+                            Console.WriteLine("Label : " + shownField.Field.Label);
+                            Console.WriteLine("----------------");
+                            foreach (var currentTag in shownField.FieldTags)
+                            {
+                                Console.WriteLine("Tag name: " + currentTag.Name);
+                            }
+
+                            Console.WriteLine("-------------- \n \n");
+
+                            Console.WriteLine("exists: " + tagField.Content);
+                        }
+                    }
+
+                    if (_alreadyExists == false)
+                        FieldsList.Add(new ShownField(tagField));
+
+                    _alreadyExists = false;
+                }
+
+                Console.WriteLine("Tag fields: " + tag.FieldsList.Count);
+            }
+
+            Console.WriteLine("_________");
+            foreach (var f in FieldsList)
+                Console.WriteLine("field: " + f.Name);
         }
 
         #endregion
+
+        private void UntagAsset(Tag inputTag)
+        {
+        }
     }
 }

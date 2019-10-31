@@ -1,18 +1,21 @@
 ﻿using Asset_Management_System.Helpers;
 using Asset_Management_System.Logging;
 using Asset_Management_System.Resources.DataModels;
+using Asset_Management_System.Resources.Interfaces;
+using Asset_Management_System.Models;
 using Asset_Management_System.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Asset_Management_System.ViewModels
 {
-    public abstract class ListPageViewModel<RepositoryType, T> : Base.BaseViewModel
+    public abstract class ListPageViewModel<RepositoryType, T> : Base.BaseViewModel, IListUpdate
         where RepositoryType : Database.Repositories.ISearchableRepository<T>, new()
         where T : class, new()
     {
@@ -43,6 +46,12 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Public Properties
+
+        public Visibility Visible
+        {
+            get => _main.Visible;
+            private set => Visible = value;
+        }
 
         public string SearchQueryText
         {
@@ -95,7 +104,6 @@ namespace Asset_Management_System.ViewModels
 
             _pageType = pageType;
 
-
             // Initialize commands
             PrintCommand = new Base.RelayCommand(Print);
             SearchCommand = new Base.RelayCommand(Search);
@@ -106,22 +114,19 @@ namespace Asset_Management_System.ViewModels
 
         #endregion
 
-
         #region Methods
+
+        public void UpdateList()
+        {
+            Search();
+        }
 
         /// <summary>
         /// Sends a search request to the database, and sets the list of items to the result.
         /// </summary>
         protected virtual void Search()
         {
-            Console.WriteLine();
-            Console.WriteLine("Searching for: " + SearchQueryText);
-
-            ObservableCollection<T> items = _rep.Search(SearchQueryText);
-
-            Console.WriteLine("Found: " + items.Count.ToString() + " items");
-
-            SearchList = items;
+            SearchList = _rep.Search(SearchQueryText);
         }
 
         /// <summary>
@@ -135,7 +140,33 @@ namespace Asset_Management_System.ViewModels
         /// <summary>
         /// Displays the selected item
         /// </summary>
-        protected abstract void View();
+        protected virtual void View()
+        {
+            T selected = GetSelectedItem();
+
+            if (selected != null)
+            {
+                if (selected is Tag)
+                {
+                    Main.ChangeMainContent(new ObjectViewer(Main, selected as Tag));
+                }
+
+                else if (selected is Asset)
+                {
+                    Main.ChangeMainContent(new ObjectViewer(Main, selected as Asset));
+                }
+
+                else if (selected is Entry)
+                {
+                    new ShowEntry(selected as Entry).ShowDialog();
+                }
+
+                else
+                {
+                    Console.WriteLine("Error when viewing");
+                }
+            }
+        }
 
         #endregion
 
@@ -150,7 +181,7 @@ namespace Asset_Management_System.ViewModels
 
             else
             {
-                return SearchList.ElementAt(SelectedItemIndex);
+                return SearchList.ElementAtOrDefault(SelectedItemIndex);
             }
         }
 

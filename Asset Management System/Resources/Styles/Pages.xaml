@@ -10,7 +10,8 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Page">
-                    <Grid>
+                    <Grid Margin="10">
+
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*" />
@@ -20,18 +21,21 @@
                                     Text="{Binding Title}"
                                     Margin="10 0 0 0"/>
 
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Right"
-                                    Margin="10">
-                            <Button
-                                Style="{StaticResource RegularAcceptButton}"
-                                Command="{Binding AddNewCommand}"
-                                Content="Add new"/>
-                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Bottom" Margin="10">
+                            <Button Style="{StaticResource RegularButton}"
+                                    Content="Add new"
+                                    Command="{Binding AddNewCommand}"
+                                    Visibility="{Binding Visible}" />
 
-                        <Rectangle Style="{StaticResource HorizontalSeparator}"
+                            <Button Style="{StaticResource RegularButton}"
+                                    Content="Export"
+                                    Command="{Binding PrintCommand}"
+                                    Visibility="{Binding Visible}" />
+                                    
+                            <Rectangle Style="{StaticResource HorizontalSeparator}"
                                    VerticalAlignment="Bottom"/>
-
+                        </StackPanel>
+                        
                         <!-- Content of list assets page -->
                         <Border Padding="10"
                                 Grid.Row="1">
@@ -89,6 +93,20 @@
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
                                         </GridView>
                                     </ListView.Resources>
+                                    <ListView.InputBindings>
+                                        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}" />
+                                    </ListView.InputBindings>
+
+                                    <ListView.Style>
+                                        <Style TargetType="ListView">
+                                            <Setter Property="View" Value="{StaticResource TagsTemplate}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ViewType}" Value="1">
+                                                    <Setter Property="View" Value="{StaticResource AssetTemplate}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ListView.Style>
                                 </ListView>
                             </Grid>
                         </Border>
@@ -132,41 +150,6 @@
     <Style TargetType="TextBox" x:Key="PromtInput" BasedOn="{StaticResource BaseTextBoxStyle}">
         <Setter Property="Width" Value="216"/>
         <Setter Property="Margin" Value="0 10 0 0"/>
-    </Style>
-
-    
-    <!-- Promt page -->
-    <!--<Style TargetType="Page" x:Key="Promt">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Page">
-                    <Grid>
-                        <Canvas Style="{StaticResource PromtBackground}"/>
-                        <Grid Style="{StaticResource PromtGrid}">
-                            <Border Style="{StaticResource PromtBorder}">
-                                <Grid>
-                                    <TextBlock Text="{Binding MessageText}"
-                                               HorizontalAlignment="Center"
-                                               Margin="0 20 0 0"
-                                               MaxWidth="270"
-                                               TextWrapping="Wrap"
-                                               Style="{StaticResource HeaderStyle}"/>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center"
-                                                Margin="15">
-                                        <Button Style="{StaticResource RegularAcceptButton}"
-                                                Command="{Binding AcceptedCommand}"
-                                                Content="Accept"/>
-                                        <Button Style="{StaticResource RegularCancelButton}"
-                                                Command="{Binding CancelledCommand}"
-                                                Content="Cancel"
-                                                Margin="15 0 0 0"/>
-                                    </StackPanel>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>-->
+    </Style>                              
+                        
 </ResourceDictionary>

@@ -54,8 +54,13 @@ namespace Asset_Management_System.ViewModels
             // Result is the active session, with the authorized user.
             Session t = e.Result as Session;
             if (t != null)
+            {
                 _main.SystemLoaded(t);
-
+            
+                // Set visibility property. Hides functionality from non admin users
+                _main.Visible = t.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
+            }
+            
             //Dispose the background after use.
             worker.Dispose();
         }

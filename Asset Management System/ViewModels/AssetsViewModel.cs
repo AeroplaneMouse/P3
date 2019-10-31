@@ -33,18 +33,5 @@ namespace Asset_Management_System.ViewModels
 
 
         #endregion
-
-        #region Methods
-
-        protected override void View()
-        {
-            Console.WriteLine("Asset view");
-
-            Asset selected = GetSelectedItem();
-
-            _main.ChangeMainContent(new ObjectViewer(_main, selected));
-        }
-
-        #endregion
     }
 }

@@ -5,11 +5,11 @@ using System.Linq;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
-using Asset_Management_System.ViewModels.Commands.ViewModelHelper;
 using Asset_Management_System.Views;
 using System.Windows;
 using System.Windows.Controls;
 using Asset_Management_System.Logging;
+using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -71,7 +71,7 @@ namespace Asset_Management_System.ViewModels
             FieldsList = new ObservableCollection<ShownField>();
             TagsList = new List<Tag>();
             CommentsList = new ObservableCollection<Comment>();
-            
+
             // Initialize commands
             ViewAssetHistoryCommand = new Base.RelayCommand((ViewAssetHistory));
             AddNewCommentCommand = new Base.RelayCommand(AddNewComment);
@@ -90,8 +90,6 @@ namespace Asset_Management_System.ViewModels
                 ParentTag = TagInput.ParentID;
                 IsTag = true;
 
-                TagInput.DeserializeFields();
-
                 foreach (var field in TagInput.FieldsList)
                 {
                     FieldsList.Add(new ShownField(field));
@@ -99,11 +97,22 @@ namespace Asset_Management_System.ViewModels
 
                 if (TagInput.ParentID != 0)
                 {
-                    //TODO Gør det her
+                    TagRepository tagRepository = new TagRepository();
+                    Tag parentTag = tagRepository.GetById(TagInput.ParentID);
+                    foreach (var field in parentTag.FieldsList)
+                    {
+                        foreach (var shownField in FieldsList)
+                        {
+                            if (shownField.ShownFieldToFieldComparator(field))
+                            {
+                                shownField.FieldTags.Add(parentTag);
+                            }
+                        }
+                    }
                 }
             }
 
-            // If the object being view is an asset
+            // If the object being viewed is an asset
             else if (inputObject is Asset asset)
             {
                 AssetInput = asset;
@@ -111,8 +120,6 @@ namespace Asset_Management_System.ViewModels
                 Name = AssetInput.Name;
                 Description = AssetInput.Description;
                 IsTag = false;
-
-                AssetInput.DeserializeFields();
 
                 CommentsList = CommentRep.GetByAssetId(AssetInput.ID);
 
@@ -125,7 +132,7 @@ namespace Asset_Management_System.ViewModels
                 LoadTags();
 
                 // Get all the fields coming from the attached tags
-                GetTagFields();  
+                GetTagFields();
             }
         }
 
@@ -133,32 +140,35 @@ namespace Asset_Management_System.ViewModels
 
         #region Private Methods
 
+        /// <summary>
+        /// Get the fields related to a tag, and add the relations to the FieldsList.
+        /// </summary>
         private void GetTagFields()
         {
             if (TagsList.Count > 0)
             {
-                int fieldsCount = 0;
                 foreach (var currentTag in TagsList)
                 {
                     foreach (var field in currentTag.FieldsList)
                     {
                         foreach (var shownField in FieldsList)
                         {
-                            if (Equals(field, shownField.Field))
+                            if (shownField.ShownFieldToFieldComparator(field))
                             {
                                 shownField.FieldTags.Add(currentTag);
                             }
                         }
                     }
                 }
-
-                Console.WriteLine("Tags add " + fieldsCount + " fields");
             }
         }
-
+        
+        /// <summary>
+        /// Function to bind comment to a asset.
+        /// </summary>
         private void AddNewComment()
         {
-            if (CommentField != null && CommentField != String.Empty)
+            if (!string.IsNullOrEmpty(CommentField))
             {
                 Comment newComment = new Comment()
                 {
@@ -167,11 +177,11 @@ namespace Asset_Management_System.ViewModels
                     AssetID = AssetInput.ID
                 };
 
-                CommentRep.Insert(newComment);
+                CommentRep.Insert(newComment, out ulong id);
 
-                Log<Comment>.CreateLog(newComment);
+                Log<Comment>.CreateLog(newComment, id);
 
-                CommentField = String.Empty;
+                CommentField = string.Empty;
 
                 CommentsList = CommentRep.GetByAssetId(AssetInput.ID);
             }
@@ -193,12 +203,11 @@ namespace Asset_Management_System.ViewModels
         private Comment GetSelectedItem()
         {
             if (CommentsList.Count == 0)
-                return null;
-
-            else
             {
-                return CommentsList.ElementAt(SelectedItemIndex);
+                return null;
             }
+
+            return CommentsList.ElementAtOrDefault(SelectedItemIndex);
         }
 
         private void ViewAssetHistory()
@@ -214,15 +223,10 @@ namespace Asset_Management_System.ViewModels
         {
             AssetRepository rep = new AssetRepository();
             TagsList = rep.GetAssetTags(AssetInput);
-            foreach (var tag in TagsList)
-            {
-                tag.DeserializeFields();
-            }
 
             Console.WriteLine("Found " + TagsList.Count + " tags");
         }
 
         #endregion
     }
-
 }

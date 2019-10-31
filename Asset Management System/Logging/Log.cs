@@ -15,11 +15,12 @@ namespace Asset_Management_System.Logging
         /// Logs the changes made to a subject from an old entry
         /// </summary>
         /// <param name="newEntry"></param>
+        /// <param name="id"></param>
         /// <param name="delete"></param>
-        public static void CreateLog(ILoggable<T> newEntry, bool delete = false)
+        public static void CreateLog(ILoggable<T> newEntry, ulong id = 0, bool delete = false)
         {
             // Generate description
-            string description = GenerateDescription(newEntry, delete);
+            string description = GenerateDescription(newEntry, id, delete);
             
             // Fetch object with same ID from database to determine changes
             IRepository<T> rep = newEntry.GetRepository();
@@ -30,20 +31,30 @@ namespace Asset_Management_System.Logging
             string serializedChanges = changes.Count == 0 ? "[]" : JsonConvert.SerializeObject(changes, Formatting.Indented);
             
             // Create the log entry
-            Write(newEntry, description, serializedChanges);
+            Write(newEntry, description, serializedChanges, id);
             Console.WriteLine("Creating log entry: " + description);
         }
-        
+        /// <summary>
+        /// Overload method that does not need id
+        /// </summary>
+        /// <param name="newEntry"></param>
+        /// <param name="delete"></param>
+        public static void CreateLog(ILoggable<T> newEntry, bool delete)
+        {
+            CreateLog(newEntry, 0, delete);
+        }
+
         /// <summary>
         /// Creates an entry and inserts it into the database
         /// </summary>
         /// <param name="subject"></param>
         /// <param name="description"></param>
         /// <param name="options"></param>
-        public static void Write(ILoggable<T> subject, string description, string options="{}")
+        /// <param name="id"></param>
+        public static void Write(ILoggable<T> subject, string description, string options="{}", ulong id = 0)
         {
             Entry entry = new Entry();
-            entry.LogableId = subject.GetId();
+            entry.LogableId = (id == 0) ? subject.GetId() : id;
             entry.LogableType = subject.GetType();
             entry.Description = description;
             entry.Options = options;
@@ -52,26 +63,15 @@ namespace Asset_Management_System.Logging
             LogRepository rep = new LogRepository();
             rep.Insert(entry);
         }
-        
-        /// <summary>
-        /// Retrieves existing log entries for a model
-        /// </summary>
-        /// <param name="model"></param>
-        /// <param name="username"></param>
-        /// <returns>List of entries</returns>
-        public static IEnumerable<Entry> GetEntries(Model model, string username = null)
-        {
-            LogRepository rep = new LogRepository();
-            return rep.GetLogEntries(model.ID, model.GetType(), username);
-        }
-        
+
         /// <summary>
         /// Generates a description for the log entry
         /// </summary>
         /// <param name="subject"></param>
+        /// <param name="id"></param>
         /// <param name="delete"></param>
         /// <returns>Description</returns>
-        private static string GenerateDescription(ILoggable<T> subject, bool delete)
+        private static string GenerateDescription(ILoggable<T> subject, ulong id, bool delete)
         {
             // Get subject Type
             string type = subject.GetType().Name;
@@ -79,11 +79,22 @@ namespace Asset_Management_System.Logging
             string name = subject.GetLoggableName();
             
             // Determine if subject is being created or updated
-            bool created = subject.GetId() == 0;
+            bool created = id != 0;
             
-            string changeType = delete ? "deleted" : created ? "created" : "updated";
-
-            return $"{type} {name} was {changeType}";
+            T asset = subject.GetRepository().GetById(subject.GetId());
+            // Special case for comments
+            if (subject is Comment)
+            {
+                AssetRepository assetRep = new AssetRepository();
+                string assetName = assetRep.GetById(((Comment) subject).AssetID).Name;
+                string changeType = delete ? "Removed from" : created ? "Added to" : "updated on ";
+                return $"A {type} was {changeType} {assetName}";
+            }
+            else
+            {
+                string changeType = delete ? "deleted" : created ? "created" : "updated";
+                return $"{type} {name} was {changeType}";
+            }
         }
         
         /// <summary>
@@ -94,7 +105,7 @@ namespace Asset_Management_System.Logging
         /// <param name="oldEntry"></param>
         /// <param name="newEntry"></param>
         /// <returns></returns>
-        public static Dictionary<string, Change> GetChanges(ILoggable<T> oldEntry, ILoggable<T> newEntry)
+        private static Dictionary<string, Change> GetChanges(ILoggable<T> oldEntry, ILoggable<T> newEntry)
         {
             Dictionary<string, Change> changes = new Dictionary<string, Change>();
             
@@ -116,6 +127,36 @@ namespace Asset_Management_System.Logging
             }
 
             return changes;
+        }
+
+        
+        public static void LogTags(ILoggable<T> asset, List<Tag> currentTags)
+        {
+            // return if given subjects are not assets,
+            if (!(asset is Asset))
+                return;
+            
+            AssetRepository rep = new AssetRepository();
+            List<Tag> oldTags = rep.GetAssetTags((Asset) asset);
+            List<Tag> addedTags = new List<Tag>();
+            List<Tag> removedTags = new List<Tag>();
+            Dictionary<string, string> changes = new Dictionary<string, string>();
+            foreach (Tag tag in currentTags)
+            {
+                if (!oldTags.Contains(tag))
+                    changes.Add(tag.Name, "Was added");
+            }
+
+            foreach (Tag tag in oldTags)
+            {
+                if(!currentTags.Contains(tag))
+                    changes.Add(tag.Name, "Was removed");
+            }
+
+            string description = $"Changes to tags on {asset.GetLoggableName()}";
+            string options = JsonConvert.SerializeObject(changes, Formatting.Indented);
+
+            Write(asset, description, options);
         }
     }
 }

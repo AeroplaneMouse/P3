@@ -5,14 +5,47 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:views="clr-namespace:Asset_Management_System.Views"
       xmlns:v="clr-namespace:Asset_Management_System.ViewModels"
-      xmlns:viewModelHelper="clr-namespace:Asset_Management_System.ViewModels.Commands.ViewModelHelper"
+      xmlns:viewModelHelper1="clr-namespace:Asset_Management_System.ViewModels.ViewModelHelper"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
       Title="EditAsset">
 
     <Page.Resources>
-        <viewModelHelper:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+        <viewModelHelper1:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+        
+        <DataTemplate x:Key="FieldTagsTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="Field present in following tags:" />
+                <ItemsControl  Grid.Column="1" Grid.Row="1">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate >
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Border BorderBrush="{Binding Color}" BorderThickness="1">
+                                    <TextBlock Text="{Binding Name}" Padding="5" />
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+        </DataTemplate>
+
         <DataTemplate x:Key="TextBoxFieldStyle">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -24,6 +57,8 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Button Grid.Row="1" Grid.Column="0"
                         Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
@@ -32,8 +67,11 @@
                     X
                 </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" MaxHeight="200" MaxWidth="250"
-                         TextWrapping="Wrap" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" Width="200" TextWrapping="Wrap"
+                         AcceptsReturn="True" AcceptsTab="True" />
+                <ItemsControl Grid.Row="4" Grid.Column="1" ItemTemplate="{StaticResource FieldTagsTemplate}" ItemsSource="{Binding FieldTags}">
+                    <ItemsPanelTemplate />
+                </ItemsControl>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="StringFieldStyle">
@@ -145,10 +183,10 @@
             Grid.Column="0"
             Margin="10">
             <Label>Name</Label>
-            <TextBox Padding="10" Text="{Binding Name}" />
+            <TextBox Padding="10" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
 
             <Label>Description</Label>
-            <TextBox Padding="10" Text="{Binding Description}" />
+            <TextBox Padding="10" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
 
             <StackPanel>
 
@@ -220,16 +258,26 @@
                 </ComboBox>
             </StackPanel>
             <Grid
-                
+
                 Margin="10">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto">
                     <ItemsControl ItemsSource="{Binding CurrentlyAddedTags}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
                                     <Border BorderBrush="{Binding Color}" BorderThickness="1">
-                                        <TextBlock Text="{Binding Name}" Padding="5"/>
+                                        <TextBlock Text="{Binding Name}" Padding="5" />
                                     </Border>
+                                    <Button Grid.Row="1" Grid.Column="0"
+                                            Command="{x:Static v:AssetManagerViewModel.UnTagTagCommand}"
+                                            MaxHeight="40" VerticalAlignment="Top"
+                                            CommandParameter="{Binding Path=ID}">
+                                        X
+                                    </Button>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -246,8 +294,8 @@
             <ScrollViewer HorizontalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding FieldsList}"
                               ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
+                    <ItemsControl.ItemsPanel >
+                        <ItemsPanelTemplate >
                             <StackPanel />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>

@@ -11,10 +11,11 @@ namespace Asset_Management_System.Database.Repositories
 {
     public class CommentRepository : ICommentRepository
     {
-        public bool Insert(Comment comment)
+        public bool Insert(Comment comment, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
             bool query_success = false;
+            id = 0;
 
             try
             {
@@ -34,9 +35,7 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters["@content"].Value = comment.Content;
 
                     query_success = cmd.ExecuteNonQuery() > 0;
-
-                    // TODO: Brug det her
-                    // cmd.LastInsertedId;
+                    id = (ulong)cmd.LastInsertedId;
                 }
             }
             catch (MySqlException e)

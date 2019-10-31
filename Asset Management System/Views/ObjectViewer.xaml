@@ -76,7 +76,12 @@
 
                     <TextBox Text="{Binding CommentField, UpdateSourceTrigger=PropertyChanged}"
                              Width="200"
-                             Padding="5"/>
+                             Padding="5">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Return" Command="{Binding AddNewCommentCommand}" />
+                        </TextBox.InputBindings>
+                        
+                    </TextBox>
 
                     <StackPanel>
                         <Button Content="Add new comment"
@@ -91,15 +96,19 @@
 
                     </StackPanel>
 
-
-                    <ListView ItemsSource="{Binding CommentsList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    <ListView ItemsSource="{Binding CommentsList, UpdateSourceTrigger=PropertyChanged}"
                               SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
+
+                        <ListView.InputBindings>
+                            <KeyBinding Key="Delete" Command="{Binding RemoveCommentCommand}" />
+                        </ListView.InputBindings>
 
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="Username" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content" />
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=CreatedAt}" Header="Created At" />
                             </GridView>
                         </ListView.View>
 
@@ -205,7 +214,6 @@
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
-
                                 </Grid>
                             </Border>
                         </DataTemplate>

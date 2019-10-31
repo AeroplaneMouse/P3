@@ -8,18 +8,20 @@ namespace Asset_Management_System.Models
     [Serializable]
     public class Field
     {
-        private static int _id = 0;
         /// <summary>
         /// Default constructor for initiating a new Field object.
         /// </summary>
         /// <param name="label">The label of the field</param>
         /// <param name="content">The content added to the field</param>
+        /// <param name="isCustom"></param>
         /// <param name="required">A boolean, whether the field is required or not</param>
         /// <param name="fieldType">Selecting the type of the field. 1= TextBox,2 = String,3= Int, 4 = Date, 5 = Boolean</param>
         /// <param name="defaultValue">The default value which should be entered into the field</param>
-        public Field(string label, string content, int fieldType, string defaultValue, bool required = false)
+        public Field(string label, string content, int fieldType, string defaultValue, bool required = false,bool isCustom = false)
         {
-            this.ID = _id++;
+            // Creates unique hash
+            this.HashId = CalculateMd5Hash(true);
+            
             this.Label = label;
             this.Content = content;
             if (fieldType <= 5)
@@ -28,30 +30,43 @@ namespace Asset_Management_System.Models
             }
             else
             {
-                throw new ArgumentOutOfRangeException("fieldType","fieldType is out of range. Must be an integer between 1-5 (both included)");
+                throw new ArgumentOutOfRangeException("fieldType",
+                    "fieldType is out of range. Must be an integer between 1-5 (both included)");
             }
+
             this.DefaultValue = defaultValue;
             this.Required = required;
+            this.Hash = CalculateMd5Hash();
+            this.IsCustom = isCustom;
         }
 
+        public string HashId;
+
+        public bool IsCustom;
         public int ID { get; }
         public string Label { get; set; }
         public string Content { get; set; }
         public bool Required { get; set; }
+        public string Hash { get; }
 
         private int _fieldType;
-        public int FieldType {
-            get { return this._fieldType; }
-            set {
+
+        public int FieldType
+        {
+            get => this._fieldType;
+            set
+            {
                 if (value <= 5 && value > 0)
                 {
                     this._fieldType = value;
                 }
                 else
                 {
-                    throw new ArgumentOutOfRangeException("fieldType", "fieldType is out of range. Must be an integer between 1-5 (both included)");
+                    throw new ArgumentOutOfRangeException("fieldType",
+                        "fieldType is out of range. Must be an integer between 1-5 (both included)");
                 }
-            } }
+            }
+        }
 
         public readonly string DefaultValue;
 
@@ -63,11 +78,11 @@ namespace Asset_Management_System.Models
         {
             Dictionary<string, string> output = new Dictionary<string, string>
             {
-                { "Label", Label },
-                { "Description", Content },
-                { "Required", Required.ToString() },
-                { "FieldType", FieldType.ToString() },
-                { "DefaultValue", DefaultValue }
+                {"Label", Label},
+                {"Description", Content},
+                {"Required", Required.ToString()},
+                {"FieldType", FieldType.ToString()},
+                {"DefaultValue", DefaultValue}
             };
             return output;
         }
@@ -79,38 +94,33 @@ namespace Asset_Management_System.Models
                 return false;
             }
 
-            Field other = (Field)obj;
-            return (this.GetHashCode() == other.GetHashCode());
+            Field other = (Field) obj;
+            return (this.Hash == other.Hash);
         }
 
-        public override int GetHashCode()
-        {
-            string hash = "";
-
-            hash += this.Label + this.Required.ToString() + this.FieldType.ToString() + this.DefaultValue;
-
-            hash = this.CalculateMD5Hash(hash);
-
-            int hashCode = 0;
-
-            foreach(char c in hash)
-            {
-                hashCode += (int)c;
-            }
-
-            return hashCode;
-        }
 
         /// <summary>
         /// Calculates a MD5 hash for the input string
         /// </summary>
         /// <param name="input"></param>
+        /// <param name="uniqueHash"></param>
         /// <returns></returns>
-        private string CalculateMD5Hash(string input)
+        private string CalculateMd5Hash(bool uniqueHash = false)
         {
+            string hashString = "";
+            if (uniqueHash)
+            {
+                hashString += this.Label + this.Required.ToString() + this.FieldType.ToString() + this.DefaultValue +
+                              DateTime.Now;
+            }
+            else
+            {
+                hashString += this.Label + this.Required.ToString() + this.FieldType.ToString() + this.DefaultValue;
+            }
+
             // step 1, calculate MD5 hash from input
             MD5 md5 = MD5.Create();
-            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+            byte[] inputBytes = Encoding.ASCII.GetBytes(hashString);
             byte[] hash = md5.ComputeHash(inputBytes);
             md5.Dispose();
 
