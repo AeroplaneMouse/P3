@@ -98,18 +98,52 @@
         </Setter>
     </Style>
     
-    <!-- Promt page -->
-    <Style TargetType="Page" x:Key="Promt">
+    <!-- *************************** -->
+    <!-- Promt elements-->
+    
+    <!-- Promt background canvas -->
+    <Style TargetType="Canvas" x:Key="PromtBackground">
+        <Setter Property="Opacity" Value="0.34"/>
+        <Setter Property="Background" Value="Black"/>
+    </Style>
+    
+    <!-- Promt Grid -->
+    <Style TargetType="Grid" x:Key="PromtGrid">
+        <Setter Property="Width" Value="300"/>
+        <Setter Property="Height" Value="160"/>
+    </Style>
+    
+    <!-- Promt Border -->
+    <Style TargetType="Border" x:Key="PromtBorder">
+        <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="Background" Value="White"/>
+    </Style>
+    
+    <!-- Display text -->
+    <Style TargetType="TextBlock" x:Key="PromtDisplay" BasedOn="{StaticResource HeaderStyle}">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0 10 0 0"/>
+        <Setter Property="MaxWidth" Value="270"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+    </Style>
+    
+    <!-- Input text -->
+    <Style TargetType="TextBox" x:Key="PromtInput" BasedOn="{StaticResource BaseTextBoxStyle}">
+        <Setter Property="Width" Value="216"/>
+        <Setter Property="Margin" Value="0 10 0 0"/>
+    </Style>
 
+    
+    <!-- Promt page -->
+    <!--<Style TargetType="Page" x:Key="Promt">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Page">
                     <Grid>
-                        <Canvas Opacity="0.34" Background="Black" Height="{TemplateBinding Height}"/>
-
-                        <Grid Width="300" Height="160">
-                            <Border CornerRadius="10" Background="White">
+                        <Canvas Style="{StaticResource PromtBackground}"/>
+                        <Grid Style="{StaticResource PromtGrid}">
+                            <Border Style="{StaticResource PromtBorder}">
                                 <Grid>
                                     <TextBlock Text="{Binding MessageText}"
                                                HorizontalAlignment="Center"
@@ -134,5 +168,5 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
 </ResourceDictionary>

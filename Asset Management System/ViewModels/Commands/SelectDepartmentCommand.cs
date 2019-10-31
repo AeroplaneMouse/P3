@@ -29,7 +29,7 @@ namespace Asset_Management_System.ViewModels.Commands
                 if (selectedDepartment == null)
                     selectedDepartment = Models.Department.GetDefault();
 
-                _main.AddNotification(new Models.Notification($"Department: { selectedDepartment.Name } is now the current department.", Models.Notification.APPROVE));
+                _main.AddNotification(new Models.Notification($"{ selectedDepartment.Name } is now the current department.", Models.Notification.APPROVE));
                 _main.CurrentDepartment = selectedDepartment;
             }
             catch(Exception e)

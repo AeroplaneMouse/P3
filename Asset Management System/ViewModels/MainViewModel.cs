@@ -13,6 +13,7 @@ using Asset_Management_System.Events;
 using Asset_Management_System.Database;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
+using System.Threading;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -65,21 +66,39 @@ namespace Asset_Management_System.ViewModels
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
-            AddNotificationTestCommand = new Base.RelayCommand(() => PopupTest());
             RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
+            
+            //AddNotificationTestCommand = new Base.RelayCommand(DisplayPromt);
 
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
             EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
-            AddDepartmentCommand = new Base.RelayCommand(() => AddDepartment());
+            AddDepartmentCommand = new Base.RelayCommand(() =>
+            {
+                DisplayPromt(new Views.Promts.TextInput("Enter the name of your new department", AddDepartment));
+            });
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
+
+            (splashScreen.DataContext as SplashViewModel).StartWorker();
         }
 
-        private void AddDepartment()
+        private void AddDepartment(object sender, PromtEventArgs e)
         {
-            AddNotification(new Notification("Adding a new department. Note! This feature has not yet been implemented... xD"));
+            if (e.Result)
+            {
+                Department department = new Department();
+                department.Name = e.ResultMessage;
+
+                if (new DepartmentRepository().Insert(department))
+                {
+                    OnPropertyChanged(nameof(Departments));
+                    AddNotification(new Notification($"{ department.Name } has now been add to the system.", Notification.APPROVE));
+                }
+                else
+                    AddNotification(new Notification($"ERROR! An unknown error stopped the department { department.Name } from beeing added.", Notification.ERROR), 3000);
+            }
         }
 
         #endregion
@@ -179,15 +198,18 @@ namespace Asset_Management_System.ViewModels
 
         #region Public Methods
 
-        public double GetWindowHeight()
+        public void DisplayPromt(Page promtPage)
         {
-            return _window.ActualHeight;
+            PopupPage = promtPage;
+            (promtPage.DataContext as Promts.PromtViewModel).PromtElapsed += PromtElapsed;
         }
 
-        public void NotifyOnWindowResize(EventHandler method)
+        private void PromtElapsed(object sender, PromtEventArgs e)
         {
-            _window.StateChanged += method;
+            // Removing popup
+            PopupPage = null;
         }
+
 
         /// <summary>
         /// Changes how many rows or columns a specific frame spans over. 
@@ -297,11 +319,6 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Private Methods
-
-        private void PopupTest()
-        {
-            PopupPage = new Views.Popup(this);
-        }
 
         private bool ExcludedFromSaving(Page page)
         {

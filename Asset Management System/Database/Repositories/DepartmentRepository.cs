@@ -53,6 +53,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 const string query = "INSERT INTO departments (name, updated_at) VALUES (@name, CURRENT_TIMESTAMP())";
 
+                con.Open();
                 using (var cmd = new MySqlCommand(query, con))
                 {
                     cmd.Parameters.Add("@name", MySqlDbType.String);

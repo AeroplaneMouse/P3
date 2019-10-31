@@ -28,10 +28,10 @@
     <Compile Update="Views\Main.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Popup.xaml.cs">
+    <Compile Update="Views\Promts\Confirm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\Promts\Confirm.xaml.cs">
+    <Compile Update="Views\Promts\TextInput.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Splash.xaml.cs">
@@ -99,10 +99,10 @@
     <Page Update="Views\Main.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Popup.xaml">
+    <Page Update="Views\Promts\Confirm.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\Promts\Confirm.xaml">
+    <Page Update="Views\Promts\TextInput.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Splash.xaml">
