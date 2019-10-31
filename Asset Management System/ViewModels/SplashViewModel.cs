@@ -7,6 +7,7 @@ using Asset_Management_System.Events;
 using Asset_Management_System.Database;
 using Asset_Management_System.Authentication;
 using System.ComponentModel;
+using MySql.Data.MySqlClient;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -73,10 +74,9 @@ namespace Asset_Management_System.ViewModels
             BackgroundWorker caller = sender as BackgroundWorker;
 
             // Check database connection
-            DBConnection dbcon = DBConnection.Instance();
             caller.ReportProgress(0, new StatusUpdateEventArgs("Loading...", "Connecting to database."));
 
-            if (dbcon.IsConnect())
+            if (new MySqlHandler().IsAvailable())
             {
                 Session t = new Session();
                 if (t.Authenticated())
@@ -85,7 +85,9 @@ namespace Asset_Management_System.ViewModels
                     caller.ReportProgress(0, new StatusUpdateEventArgs("!!! Access denied !!!", $"User \"{ Session.GetIdentity() }\" is not authorized to access the application."));
             }
             else
+            {
                 caller.ReportProgress(0, new StatusUpdateEventArgs("ERROR!", "Error! Unable to connect to database."));
+            }
         }
 
         public void Reload()

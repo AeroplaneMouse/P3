@@ -273,7 +273,7 @@ namespace Asset_Management_System.ViewModels
             ReloadSplashCommand = null;
 
             // Attaching notification
-            DBConnection.Instance().SqlConnectionFailed += AddNotification;
+            new MySqlHandler().SqlConnectionFailed += AddNotification;
 
             // Remove splash page
             SplashVisibility = Visibility.Hidden;
