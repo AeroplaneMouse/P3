@@ -37,7 +37,7 @@ namespace Asset_Management_System.Database
             }
             catch (Exception e)
             {
-                return true;
+                return false;
             }
         }
 

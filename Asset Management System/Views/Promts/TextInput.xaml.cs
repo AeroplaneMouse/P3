@@ -19,10 +19,13 @@ namespace Asset_Management_System.Views.Promts
     /// </summary>
     public partial class TextInput : Page
     {
-        public TextInput(string message, PromtEventHandler handler )
+        public TextInput(string message, PromtEventHandler handler)
+            : this(message, null, handler) { }
+
+        public TextInput(string message, string startingText, PromtEventHandler handler )
         {
             InitializeComponent();
-            DataContext = new ViewModels.Promts.TextInputViewModel(message, handler);
+            DataContext = new ViewModels.Promts.TextInputViewModel(message, startingText, handler);
         }
     }
 }

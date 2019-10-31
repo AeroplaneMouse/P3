@@ -26,7 +26,7 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            // Get id
+            // Retrieving department ID
             ulong id;
             try
             {
@@ -39,7 +39,7 @@ namespace Asset_Management_System.ViewModels.Commands
                 return;
             }
 
-            // Validate id
+            // Validating id
             DepartmentRepository rep = new DepartmentRepository();
             Department department = rep.GetById(id);
             if (department != null)
@@ -48,6 +48,7 @@ namespace Asset_Management_System.ViewModels.Commands
                 {
                     // TODO: Add check for assets and tags conneced to the department.
 
+                    // Promting user for confirmation
                     departmentToRemove = department;
                     _main.DisplayPromt(new Views.Promts.Confirm($"Are you sure you want to delete { department.Name }?", PromtElapsed));
                 }
@@ -62,6 +63,7 @@ namespace Asset_Management_System.ViewModels.Commands
         {
             if (e.Result)
             {
+                // Removing department
                 if (new DepartmentRepository().Delete(departmentToRemove))
                 {
                     _main.OnPropertyChanged(nameof(_main.Departments));

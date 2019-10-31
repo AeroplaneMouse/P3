@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Events;
+using Asset_Management_System.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
@@ -8,6 +11,8 @@ namespace Asset_Management_System.ViewModels.Commands
     class EditDepartmentCommand : ICommand
     {
         private MainViewModel _main;
+        private Department editingDepartment;
+
         public event EventHandler CanExecuteChanged;
 
         public EditDepartmentCommand(MainViewModel main)
@@ -22,16 +27,42 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
+            // Retrieving department ID
+            ulong id;
             try
             {
-                int id = int.Parse(parameter.ToString());
-
-                _main.AddNotification(new Models.Notification($"Editing department { id }.", Models.Notification.WARNING));
-
+                id = ulong.Parse(parameter.ToString());
             }
             catch (Exception)
             {
-                _main.AddNotification(new Models.Notification("ERROR! Unable to edit department...", Models.Notification.ERROR));
+                _main.AddNotification(new Models.Notification($"ERROR! Unknown error. Unable to edit department with id: { parameter.ToString() }", Models.Notification.ERROR));
+                return;
+            }
+
+            // Validating id
+            DepartmentRepository rep = new DepartmentRepository();
+            Department department = rep.GetById(id);
+            if (department != null)
+            {
+                editingDepartment = department; 
+                _main.DisplayPromt(new Views.Promts.TextInput("Enter new name", department.Name, PromtElapsed));
+            }
+            else
+                _main.AddNotification(new Notification("ERROR! Editing department failed. Department not found!", Notification.ERROR));
+        }
+
+        private void PromtElapsed(object sender, PromtEventArgs e)
+        {
+            if (e.Result && e.ResultMessage != null)
+            {
+                editingDepartment.Name = e.ResultMessage;
+                if (new DepartmentRepository().Update(editingDepartment))
+                {
+                    _main.CurrentDepartment = editingDepartment;
+                    _main.OnPropertyChanged(nameof(_main.CurrentDepartment));
+                    _main.OnPropertyChanged(nameof(_main.Departments));
+                    _main.AddNotification(new Notification("Name change success", Notification.APPROVE));
+                }
             }
         }
     }
