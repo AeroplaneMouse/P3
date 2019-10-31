@@ -75,6 +75,8 @@ namespace Asset_Management_System.ViewModels
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
+
+            (splashScreen.DataContext as SplashViewModel).StartWorker();
         }
 
         private void AddDepartment()
