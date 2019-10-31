@@ -105,7 +105,6 @@
     <Style TargetType="Canvas" x:Key="PromtBackground">
         <Setter Property="Opacity" Value="0.34"/>
         <Setter Property="Background" Value="Black"/>
-        <Setter Property="Height" Value="{Binding PageHeight}"/>
     </Style>
     
     <!-- Promt Grid -->
