@@ -29,7 +29,8 @@
 
             <Button Style="{StaticResource RegularButton}"
                     Content="Print"
-                    Command="{Binding PrintCommand}" />
+                    Command="{Binding PrintCommand}" 
+                    Visibility="{Binding Visible}"/>
             
             <Button Style="{StaticResource RegularButton}"
                     Content="View"

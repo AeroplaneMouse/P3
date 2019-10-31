@@ -8,7 +8,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Page">
                     <Grid Margin="10">
-                        
+
                         <Grid.RowDefinitions>
                             <RowDefinition Height="70" />
                             <RowDefinition Height="70" />
@@ -18,19 +18,21 @@
                         <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Bottom" Margin="10">
                             <Button Style="{StaticResource RegularButton}"
                                     Content="Add new"
-                                    Command="{Binding AddNewCommand}" />
+                                    Command="{Binding AddNewCommand}"
+                                    Visibility="{Binding Visible}" />
 
                             <Button Style="{StaticResource RegularButton}"
                                     Content="Export"
-                                    Command="{Binding PrintCommand}" />
+                                    Command="{Binding PrintCommand}"
+                                    Visibility="{Binding Visible}" />
 
                         </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" 
-                                    Grid.Row="1" 
-                                    VerticalAlignment="Bottom" 
+                        <StackPanel Orientation="Horizontal"
+                                    Grid.Row="1"
+                                    VerticalAlignment="Bottom"
                                     Margin="10">
-                            
+
                             <TextBox Width="300"
                                      TextBlock.FontSize="12px"
                                      Padding="2,3,2,3"
@@ -42,34 +44,41 @@
 
                             <Button Style="{StaticResource RegularButton}"
                                     Content="Edit"
-                                    Command="{Binding EditCommand}" />
+                                    Command="{Binding EditCommand}"
+                                    Visibility="{Binding Visible}" />
 
                             <Button Style="{StaticResource RegularButton}"
                                     Content="Remove"
-                                    Command="{Binding RemoveCommand}" />
+                                    Command="{Binding RemoveCommand}"
+                                    Visibility="{Binding Visible}" />
 
                             <Button Style="{StaticResource RegularButton}"
                                     Content="View"
                                     Command="{Binding ViewCommand}" />
 
+
                         </StackPanel>
 
                         <Grid Grid.Row="3" Margin="10">
-                            <ListView ItemsSource="{Binding SearchList, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
+                            <ListView ItemsSource="{Binding SearchList, UpdateSourceTrigger=PropertyChanged}"
+                                      SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
 
                                 <ListView.Resources>
 
                                     <GridView x:Key="AssetTemplate">
                                         <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
                                         <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description" />
-                                        <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}"
+                                                        Header="Description" />
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}"
+                                                        Header="Created" />
                                     </GridView>
 
                                     <GridView x:Key="TagsTemplate">
                                         <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
                                         <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                                        <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
+                                        <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}"
+                                                        Header="Created" />
                                     </GridView>
 
                                 </ListView.Resources>

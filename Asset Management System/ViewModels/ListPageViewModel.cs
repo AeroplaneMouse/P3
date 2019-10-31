@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -45,6 +46,12 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Public Properties
+
+        public Visibility Visible
+        {
+            get => _main.CurrentSession.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
+            private set => Visible = value;
+        }
 
         public string SearchQueryText
         {
