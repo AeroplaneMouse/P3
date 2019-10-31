@@ -300,11 +300,6 @@ namespace Asset_Management_System.ViewModels
 
         #region Private Methods
 
-        private void PopupTest()
-        {
-            PopupPage = new Views.Popup(this);
-        }
-
         private bool ExcludedFromSaving(Page page)
         {
             foreach (Page excludedPage in excludedPages)
