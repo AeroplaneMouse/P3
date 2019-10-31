@@ -71,7 +71,7 @@ namespace Asset_Management_System.ViewModels
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
             RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
-
+            
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
         }
@@ -166,6 +166,8 @@ namespace Asset_Management_System.ViewModels
         public Session CurrentSession { get; private set; }
 
         public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
+        
+        public Visibility Visible { get; set; }
 
         #endregion
 

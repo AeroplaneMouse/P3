@@ -17,29 +17,13 @@ namespace Asset_Management_System.ViewModels
     {
         #region Constructors
 
-        public TagsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
-        {
-        }
+        public TagsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType) { }
 
         #endregion
 
         #region Public Properties
 
         public int ViewType => 2;
-
-        #endregion
-
-        
-        #region Methods
-
-        protected override void View()
-        {
-            Console.WriteLine("Tag view");
-
-            Tag selected = GetSelectedItem();
-            
-            Main.ChangeMainContent(new ObjectViewer(Main, selected));
-        }
 
         #endregion
     }

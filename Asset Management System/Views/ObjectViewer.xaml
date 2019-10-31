@@ -96,14 +96,13 @@
 
                     </StackPanel>
 
-
-                    <ListView ItemsSource="{Binding CommentsList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                    <ListView ItemsSource="{Binding CommentsList, UpdateSourceTrigger=PropertyChanged}"
                               SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
 
                         <ListView.InputBindings>
                             <KeyBinding Key="Delete" Command="{Binding RemoveCommentCommand}" />
                         </ListView.InputBindings>
-                        
+
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />

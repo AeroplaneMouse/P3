@@ -79,8 +79,8 @@ namespace Asset_Management_System.Logging
             string name = subject.GetLoggableName();
             
             // Determine if subject is being created or updated
-            bool created = id == 0 && subject.GetRepository().GetById(subject.GetId()) == null;
-
+            bool created = id != 0;
+            
             T asset = subject.GetRepository().GetById(subject.GetId());
             // Special case for comments
             if (subject is Comment)
@@ -129,22 +129,34 @@ namespace Asset_Management_System.Logging
             return changes;
         }
 
-        /*
-        public static void LogTags(ILoggable<T> oldEntry, ILoggable<T> newEntry)
+        
+        public static void LogTags(ILoggable<T> asset, List<Tag> currentTags)
         {
             // return if given subjects are not assets,
-            if (!(oldEntry is Asset && newEntry is Asset))
+            if (!(asset is Asset))
                 return;
             
             AssetRepository rep = new AssetRepository();
-            List<Tag> oldTags = rep.GetAssetTags((Asset) oldEntry);
-            //List<Tag> newTags = ((Asset) newEntry)
-        }
+            List<Tag> oldTags = rep.GetAssetTags((Asset) asset);
+            List<Tag> addedTags = new List<Tag>();
+            List<Tag> removedTags = new List<Tag>();
+            Dictionary<string, string> changes = new Dictionary<string, string>();
+            foreach (Tag tag in currentTags)
+            {
+                if (!oldTags.Contains(tag))
+                    changes.Add(tag.Name, "Was added");
+            }
 
-        public static void LogComments(ILoggable<T> oldEntry, ILoggable<T> newEntry)
-        {
-            // Compare comments before and after
+            foreach (Tag tag in oldTags)
+            {
+                if(!currentTags.Contains(tag))
+                    changes.Add(tag.Name, "Was removed");
+            }
+
+            string description = $"Changes to tags on {asset.GetLoggableName()}";
+            string options = JsonConvert.SerializeObject(changes, Formatting.Indented);
+
+            Write(asset, description, options);
         }
-        */
     }
 }

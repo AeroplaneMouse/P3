@@ -32,12 +32,14 @@ namespace Asset_Management_System.Models
             }
             this.DefaultValue = defaultValue;
             this.Required = required;
+            this.Hash = CalculateMD5Hash();
         }
 
         public int ID { get; }
         public string Label { get; set; }
         public string Content { get; set; }
         public bool Required { get; set; }
+        public string Hash { get; }
 
         private int _fieldType;
         public int FieldType {
@@ -80,7 +82,7 @@ namespace Asset_Management_System.Models
             }
 
             Field other = (Field)obj;
-            return (this.CalculateMD5Hash() == other.CalculateMD5Hash());
+            return (this.Hash == other.Hash);
         }
 
 
@@ -90,7 +92,7 @@ namespace Asset_Management_System.Models
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public string CalculateMD5Hash()
+        private string CalculateMD5Hash()
         {
             string hashString ="";
 
