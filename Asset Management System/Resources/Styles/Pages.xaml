@@ -67,7 +67,9 @@
                                     Content="Remove"
                                     Visibility="{Binding IsRemoveVisible}"/>
 
-                                <ListView Style="{StaticResource RegularList}"
+                                
+                                <!--Style="{StaticResource RegularList}"-->
+                                <ListView 
                                       ItemsSource="{Binding SearchList}"
                                       Grid.Row="2"
                                       Margin="0 10 0 0"

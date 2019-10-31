@@ -75,7 +75,6 @@ namespace Asset_Management_System.Database.Repositories
                     query_success = cmd.ExecuteNonQuery() > 0;
 
                     id = (ulong)cmd.LastInsertedId;
-                    }
                 }
             }
             catch (MySqlException e)

@@ -65,7 +65,8 @@ namespace Asset_Management_System.Database.Repositories
                 }
             }
             catch (MySqlException e)
-            { 
+            {
+                id = 0;
                 Console.WriteLine(e);
             }
             finally

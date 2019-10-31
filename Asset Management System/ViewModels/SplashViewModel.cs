@@ -4,6 +4,7 @@ using System.ComponentModel;
 using Asset_Management_System.Events;
 using Asset_Management_System.Database;
 using Asset_Management_System.Authentication;
+using System.Windows;
 
 namespace Asset_Management_System.ViewModels
 {

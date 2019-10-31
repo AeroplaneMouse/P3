@@ -92,8 +92,10 @@ namespace Asset_Management_System.ViewModels
                 Department department = new Department();
                 department.Name = e.ResultMessage;
 
-                if (new DepartmentRepository().Insert(department))
+                ulong id;
+                if (new DepartmentRepository().Insert(department, out id))
                 {
+                    // TODO: Add log of department insert
                     OnPropertyChanged(nameof(Departments));
                     AddNotification(new Notification($"{ department.Name } has now been add to the system.", Notification.APPROVE));
                 }
