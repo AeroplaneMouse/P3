@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Asset_Management_System.Logging;
 using Asset_Management_System.Models;
 using Asset_Management_System.Resources.DataModels;
+using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -14,8 +15,8 @@ namespace Asset_Management_System.ViewModels
     {
         #region Commands
 
-        public static ICommand AddNewCommand { get; set; }
-        public static ICommand EditCommand { get; set; }
+        public ICommand AddNewCommand { get; set; }
+        public ICommand EditCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
 
         #endregion
@@ -58,19 +59,19 @@ namespace Asset_Management_System.ViewModels
 
             if (selected != null)
             {
-                switch (PageType)
+                if (selected is Asset)
                 {
-                    case ListPageType.Asset:
-                        Main.ChangeMainContent(new Views.AssetManager(Main, selected as Asset));
-                        break;
+                    Main.ChangeMainContent(new Views.AssetManager(Main, selected as Asset));
+                }
 
-                    case ListPageType.Tag:
-                        Main.ChangeMainContent(new Views.TagManager(Main, selected as Tag));
-                        break;
+                else if (selected is Tag)
+                {
+                    Main.ChangeMainContent(new Views.TagManager(Main, selected as Tag));
+                }
 
-                    default:
-                        Console.WriteLine("Fejl ved Edit");
-                        break;
+                else
+                {
+                    Console.WriteLine("Fejl ved edit");
                 }
             }
         }
@@ -81,30 +82,26 @@ namespace Asset_Management_System.ViewModels
 
             if (selected != null)
             {
-                switch (PageType)
+                if (selected is Asset)
                 {
-                    case ListPageType.Asset:
-                        Log<Asset>.CreateLog(selected as ILoggable<Asset>, true);
-                        (Rep as Database.Repositories.AssetRepository).Delete(selected as Asset);
-                        break;
+                    Log<Asset>.CreateLog(selected as ILoggable<Asset>, true);
+                    (Rep as AssetRepository).Delete(selected as Asset);
+                }
 
-                    case ListPageType.Tag:
-                        Log<Tag>.CreateLog(selected as ILoggable<Tag>, true);
-                        (Rep as Database.Repositories.TagRepository).Delete(selected as Tag);
-                        break;
+                else if (selected is Tag)
+                {
+                    Log<Tag>.CreateLog(selected as ILoggable<Tag>, true);
+                    (Rep as TagRepository).Delete(selected as Tag);
+                }
 
-                    default:
-                        Console.WriteLine("Fejl ved Remove");
-                        break;
+                else
+                {
+                    Console.WriteLine("Fejl ved Remove");
                 }
             }
 
             Search();
         }
-
-        #endregion
-
-        #region Helpers
 
         #endregion
     }
