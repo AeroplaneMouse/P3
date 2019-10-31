@@ -376,8 +376,6 @@ namespace Asset_Management_System.ViewModels
 
         #endregion
 
-        #region Private Helpers
-
         #region Magic from StackOverflow: https://stackoverflow.com/questions/4226740/how-do-i-get-the-current-mouse-screen-coordinates-in-wpf
 
         [DllImport("user32.dll")]
@@ -398,8 +396,6 @@ namespace Asset_Management_System.ViewModels
             GetCursorPos(ref w32Mouse);
             return new Point(w32Mouse.X, w32Mouse.Y);
         }
-
-        #endregion
 
         #endregion
     }

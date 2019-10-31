@@ -83,7 +83,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "UPDATE departments SET name=@name, updated_at=CURRENT_TIMESTAMP() WHERE id=id";
+                const string query = "UPDATE departments SET name=@name, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
