@@ -141,7 +141,7 @@ namespace Asset_Management_System.ViewModels
 
             // Initialize commands
             SaveAssetCommand = new Commands.SaveAssetCommand(this, _main, _asset, _editing);
-            AddFieldCommand = new Commands.AddFieldCommand(this);
+            AddFieldCommand = new Commands.AddFieldCommand(this, true);
             RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
 
             #region Tag related variables

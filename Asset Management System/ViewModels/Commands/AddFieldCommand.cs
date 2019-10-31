@@ -14,9 +14,12 @@ namespace Asset_Management_System.ViewModels.Commands
         private FieldsController _viewModel;
         public event EventHandler CanExecuteChanged;
 
-        public AddFieldCommand(FieldsController viewModel)
+        private readonly bool _isCustom;
+
+        public AddFieldCommand(FieldsController viewModel, bool isCustom = false)
         {
             _viewModel = viewModel;
+            this._isCustom = isCustom;
         }
 
         public bool CanExecute(object parameter)
@@ -64,7 +67,7 @@ namespace Asset_Management_System.ViewModels.Commands
             {
                 ShownField shownField = new ShownField(new Field(promptResults[0], promptResults[1], fieldType,
                     promptResults[1],
-                    required));
+                    required, _isCustom));
                 _viewModel.FieldsList.Add(shownField);
             }
         }
