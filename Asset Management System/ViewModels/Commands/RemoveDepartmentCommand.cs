@@ -1,4 +1,5 @@
 ﻿using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Events;
 using Asset_Management_System.Models;
 using System;
 using System.Windows.Input;
@@ -43,19 +44,23 @@ namespace Asset_Management_System.ViewModels.Commands
             DepartmentRepository rep = new DepartmentRepository();
             Department department = rep.GetById(id);
             if (department != null)
-                // Promt the user for confirmation
-                // TODO: Add method in main to handle popup promts
-                _main.PopupPage.Content = new Views.Promts.Confirm(RemovalApproved, out promtResult);
+            {
+                departmentToRemove = department;
+                _main.DisplayPromt(new Views.Promts.Confirm($"Are you sure you want to delete { department.Name }?", PromtElapsed));
+            }
             else
                 _main.AddNotification(new Notification("ERROR! Removing department failed. Department not found!", Notification.ERROR));
         }
 
-        public void RemovalApproved()
+        public void PromtElapsed(object sender, PromtEventArgs e)
         {
-            if (new DepartmentRepository().Delete(departmentToRemove))
-                _main.AddNotification(new Notification("Department", Notification.APPROVE));
-            else
-                _main.AddNotification(new Notification("ERROR! An unknown error occurred. Unable to remove department.", Notification.ERROR));
+            if (e.Result)
+            {
+                if (new DepartmentRepository().Delete(departmentToRemove))
+                    _main.AddNotification(new Notification("Department", Notification.APPROVE));
+                else
+                    _main.AddNotification(new Notification("ERROR! An unknown error occurred. Unable to remove department.", Notification.ERROR));
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Asset_Management_System.Events;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,10 +19,10 @@ namespace Asset_Management_System.Views.Promts
     /// </summary>
     public partial class Confirm : Page
     {
-        public Confirm(string message)
+        public Confirm(string message, PromtEventHandler handler)
         {
             InitializeComponent();
-            DataContext = new ViewModels.Promts.ConfirmViewModel(message);
+            DataContext = new ViewModels.Promts.ConfirmViewModel(message, handler);
         }
     }
 }

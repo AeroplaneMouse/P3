@@ -13,6 +13,7 @@ using Asset_Management_System.Events;
 using Asset_Management_System.Database;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
+using System.Threading;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -65,8 +66,9 @@ namespace Asset_Management_System.ViewModels
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
-            AddNotificationTestCommand = new Base.RelayCommand(() => PopupTest());
             RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
+            
+            //AddNotificationTestCommand = new Base.RelayCommand(DisplayPromt);
 
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
@@ -181,15 +183,18 @@ namespace Asset_Management_System.ViewModels
 
         #region Public Methods
 
-        public double GetWindowHeight()
+        public void DisplayPromt(Page promtPage)
         {
-            return _window.ActualHeight;
+            PopupPage = promtPage;
+            (promtPage.DataContext as Promts.PromtViewModel).PromtElapsed += PromtElapsed;
         }
 
-        public void NotifyOnWindowResize(EventHandler method)
+        private void PromtElapsed(object sender, PromtEventArgs e)
         {
-            _window.StateChanged += method;
+            // Removing popup
+            PopupPage = null;
         }
+
 
         /// <summary>
         /// Changes how many rows or columns a specific frame spans over. 

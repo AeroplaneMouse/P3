@@ -121,16 +121,16 @@
                                                   Style="{StaticResource NotificationView}"/>
 
                                     </Grid>
-
+                                    
+                                    <!-- Splash page -->
                                     <Frame Grid.Row="1"
                                            Visibility="{Binding SplashVisibility}"
                                            Background="{StaticResource BackgroundLightBrush}"
                                            NavigationUIVisibility="Hidden"
-                                           Content="{Binding FrameSplash}"
-                                           />
+                                           Content="{Binding FrameSplash}"/>
 
+                                    <!-- PopupPage -->
                                     <Frame Grid.Row="1"
-                                           VerticalAlignment="Top"
                                            NavigationUIVisibility="Hidden"
                                            Content="{Binding PopupPage}"/>
 
