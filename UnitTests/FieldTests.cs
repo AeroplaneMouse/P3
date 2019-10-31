@@ -129,22 +129,10 @@ namespace UnitTests
         {
             //Arrange
             Field field = new Field("Field", "Some content", 2, "Default");
-            int expected = StringToInt("ee42e2903edb29ca88a78f4aa413b8d6".ToUpper());
-
-            int StringToInt(string str)
-            {
-                int hashCode = 0;
-
-                foreach (char c in str)
-                {
-                    hashCode += (int)c;
-                }
-
-                return hashCode;
-            }
+            string expected = "ee42e2903edb29ca88a78f4aa413b8d6".ToUpper();
 
             //Act
-            int result = field.GetHashCode();
+            string result = field.Hash;
 
             //Assert
             Assert.AreEqual(expected, result);

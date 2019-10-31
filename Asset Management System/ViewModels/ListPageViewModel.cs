@@ -49,7 +49,7 @@ namespace Asset_Management_System.ViewModels
 
         public Visibility Visible
         {
-            get => _main.CurrentSession.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
+            get => _main.Visible;
             private set => Visible = value;
         }
 
