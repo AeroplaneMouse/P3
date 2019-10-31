@@ -12,8 +12,8 @@ namespace Asset_Management_System.ViewModels.Promts
 
         public string InputText { get; set; }
 
-        public TextInputViewModel(string message)
-            : base(message) { }
+        public TextInputViewModel(string message, PromtEventHandler handler)
+            : base(message, handler) { }
 
         protected override void Accept()
         {

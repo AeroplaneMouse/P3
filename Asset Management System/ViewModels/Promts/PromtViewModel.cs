@@ -12,9 +12,10 @@ namespace Asset_Management_System.ViewModels.Promts
         public string MessageText { get; set; }
 
 
-        public PromtViewModel(string message)
+        public PromtViewModel(string message, PromtEventHandler handler)
         {
             MessageText = message;
+            PromtElapsed += handler;
 
             // Initializing commands
             AcceptCommand = new Base.RelayCommand(Accept);

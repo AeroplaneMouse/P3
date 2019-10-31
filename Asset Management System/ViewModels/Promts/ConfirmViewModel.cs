@@ -5,9 +5,9 @@ namespace Asset_Management_System.ViewModels.Promts
     public class ConfirmViewModel : PromtViewModel
     {
         public override event PromtEventHandler PromtElapsed;
-        
-        public ConfirmViewModel(string message)
-            : base(message) { }
+
+        public ConfirmViewModel(string message, PromtEventHandler handler)
+            : base(message, handler) { }
 
         protected override void Accept()
         {
