@@ -125,7 +125,7 @@
         <Setter Property="Header" Value="{StaticResource Trash_White}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Header" Value="{StaticResource Trash_Gray}"/>
+                <Setter Property="Header" Value="{StaticResource Trash_Red}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
