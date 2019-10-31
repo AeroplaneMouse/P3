@@ -21,7 +21,7 @@ namespace Asset_Management_System.ViewModels
         private MainViewModel _main;
         public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
-            this._main = main;
+            _main = main;
         }
 
         #endregion
@@ -29,19 +29,6 @@ namespace Asset_Management_System.ViewModels
         #region Public Properties
 
         public int ViewType => 1;
-
-        #endregion
-
-        #region Methods
-
-        protected override void View()
-        {
-            Console.WriteLine("Asset view");
-
-            Asset selected = GetSelectedItem();
-
-            _main.ChangeMainContent(new ObjectViewer(_main, selected));
-        }
 
         #endregion
     }
