@@ -79,7 +79,7 @@ namespace Asset_Management_System.ViewModels
             if (History.Count == 0)
                 return null;
             else
-                return History.ElementAt(SelectedItemIndex);
+                return History.ElementAtOrDefault(SelectedItemIndex);
         }
         
         #endregion
