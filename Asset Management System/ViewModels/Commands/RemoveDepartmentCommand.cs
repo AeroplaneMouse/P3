@@ -31,7 +31,6 @@ namespace Asset_Management_System.ViewModels.Commands
             try
             {
                 id = ulong.Parse(parameter.ToString());
-
             }
             catch (Exception e)
             {
@@ -45,8 +44,15 @@ namespace Asset_Management_System.ViewModels.Commands
             Department department = rep.GetById(id);
             if (department != null)
             {
-                departmentToRemove = department;
-                _main.DisplayPromt(new Views.Promts.Confirm($"Are you sure you want to delete { department.Name }?", PromtElapsed));
+                if (department.ID != _main.CurrentDepartment.ID)
+                {
+                    // TODO: Add check for assets and tags conneced to the department.
+
+                    departmentToRemove = department;
+                    _main.DisplayPromt(new Views.Promts.Confirm($"Are you sure you want to delete { department.Name }?", PromtElapsed));
+                }
+                else
+                    _main.AddNotification(new Notification("ERROR! You cannot remove your current department. Please change your department and then try again.", Notification.ERROR), 3500);            
             }
             else
                 _main.AddNotification(new Notification("ERROR! Removing department failed. Department not found!", Notification.ERROR));
@@ -57,7 +63,10 @@ namespace Asset_Management_System.ViewModels.Commands
             if (e.Result)
             {
                 if (new DepartmentRepository().Delete(departmentToRemove))
-                    _main.AddNotification(new Notification("Department", Notification.APPROVE));
+                {
+                    _main.OnPropertyChanged(nameof(_main.Departments));
+                    _main.AddNotification(new Notification($" {departmentToRemove.Name } has now been removed from the system.", Notification.APPROVE));
+                }
                 else
                     _main.AddNotification(new Notification("ERROR! An unknown error occurred. Unable to remove department.", Notification.ERROR));
             }

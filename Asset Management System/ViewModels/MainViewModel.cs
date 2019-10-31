@@ -73,7 +73,10 @@ namespace Asset_Management_System.ViewModels
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
             EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
-            AddDepartmentCommand = new Base.RelayCommand(() => AddDepartment());
+            AddDepartmentCommand = new Base.RelayCommand(() =>
+            {
+                DisplayPromt(new Views.Promts.TextInput("Enter the name of your new department", AddDepartment));
+            });
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
@@ -81,9 +84,21 @@ namespace Asset_Management_System.ViewModels
             (splashScreen.DataContext as SplashViewModel).StartWorker();
         }
 
-        private void AddDepartment()
+        private void AddDepartment(object sender, PromtEventArgs e)
         {
-            AddNotification(new Notification("Adding a new department. Note! This feature has not yet been implemented... xD"));
+            if (e.Result)
+            {
+                Department department = new Department();
+                department.Name = e.ResultMessage;
+
+                if (new DepartmentRepository().Insert(department))
+                {
+                    OnPropertyChanged(nameof(Departments));
+                    AddNotification(new Notification($"{ department.Name } has now been add to the system.", Notification.APPROVE));
+                }
+                else
+                    AddNotification(new Notification($"ERROR! An unknown error stopped the department { department.Name } from beeing added.", Notification.ERROR), 3000);
+            }
         }
 
         #endregion

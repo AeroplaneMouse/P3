@@ -115,7 +115,7 @@
     
     <!-- Promt Border -->
     <Style TargetType="Border" x:Key="PromtBorder">
-        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="Background" Value="White"/>
     </Style>
     

@@ -6,7 +6,8 @@
       xmlns:local="clr-namespace:Asset_Management_System.Views.Promts"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Confirm">
+      Title="Confirm"
+      FocusManager.FocusedElement="{Binding ElementName=Cancel}">
     <Grid>
         <Canvas Style="{StaticResource PromtBackground}"/>
         <Grid Style="{StaticResource PromtGrid}">
@@ -20,11 +21,14 @@
                                 Margin="15">
                         <Button Style="{StaticResource RegularAcceptButton}"
                                 Command="{Binding AcceptCommand}"
-                                Content="Accept"/>
+                                Content="Accept"
+                                TabIndex="1"/>
                         <Button Style="{StaticResource RegularCancelButton}"
                                 Command="{Binding CancelCommand}"
                                 Content="Cancel"
-                                Margin="15 0 0 0"/>
+                                Margin="15 0 0 0"
+                                TabIndex="2"
+                                Name="Cancel"/>
                     </StackPanel>
                 </Grid>
             </Border>
