@@ -25,11 +25,11 @@ namespace Asset_Management_System.ViewModels.Commands
                 ulong.Parse(parameter?.ToString() ?? throw new NullReferenceException("Input parameter == null"));
 
             // Find field by ID, then remove it.
-            _viewModel.CurrentlyAddedTags.Remove(_viewModel.CurrentlyAddedTags.Single(s => s.ID == tagId));
+            _viewModel.CurrentlyAddedTags.Remove(_viewModel.CurrentlyAddedTags.Single(tag => tag.ID == tagId));
 
             foreach (var currentFieldList in _viewModel.FieldsList)
             {
-                currentFieldList.FieldTags.Remove(currentFieldList.FieldTags.SingleOrDefault(s => s.ID == tagId));
+                currentFieldList.FieldTags.Remove(currentFieldList.FieldTags.SingleOrDefault(tag => tag.ID == tagId));
             }
         }
     }

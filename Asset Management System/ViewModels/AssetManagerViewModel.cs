@@ -169,7 +169,7 @@ namespace Asset_Management_System.ViewModels
             BackspaceKeyCommand = new Base.RelayCommand(() => DeleteCharacter());
 
             #endregion
-            
+
             UnTagTagCommand = new UntagTagCommand(this);
         }
 
@@ -221,7 +221,7 @@ namespace Asset_Management_System.ViewModels
                 String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
             Console.WriteLine("Checking:  " + _tagList.Count);
             ConnectTags();
-            
+
             _tabIndex = 0;
         }
 
@@ -329,17 +329,35 @@ namespace Asset_Management_System.ViewModels
                         if (shownField.ShownFieldToFieldComparator(tagField))
                         {
                             _alreadyExists = true;
+
+                            if (!shownField.FieldTags.Contains(tag))
+                            {
+                                shownField.FieldTags.Add(tag);
+                            }
+
+                            Console.WriteLine("\n \n-----------------");
+                            Console.WriteLine("Label : " + shownField.Field.Label);
+                            Console.WriteLine("----------------");
+                            foreach (var currentTag in shownField.FieldTags)
+                            {
+                                Console.WriteLine("Tag name: " + currentTag.Name);
+                            }
+
+                            Console.WriteLine("-------------- \n \n");
+
                             Console.WriteLine("exists: " + tagField.Content);
                         }
                     }
+
                     if (_alreadyExists == false)
                         FieldsList.Add(new ShownField(tagField));
 
-                    _alreadyExists = false;     
+                    _alreadyExists = false;
                 }
-                Console.WriteLine("Tag fields: " + tag.FieldsList.Count);
 
+                Console.WriteLine("Tag fields: " + tag.FieldsList.Count);
             }
+
             Console.WriteLine("_________");
             foreach (var f in FieldsList)
                 Console.WriteLine("field: " + f.Name);
@@ -349,7 +367,6 @@ namespace Asset_Management_System.ViewModels
 
         private void UntagAsset(Tag inputTag)
         {
-            
         }
     }
 }
