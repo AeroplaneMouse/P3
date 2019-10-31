@@ -48,21 +48,26 @@ namespace Asset_Management_System.ViewModels.Commands
                 _main.DisplayPromt(new Views.Promts.TextInput("Enter new name", department.Name, PromtElapsed));
             }
             else
-                _main.AddNotification(new Notification("ERROR! Editing department failed. Department not found!", Notification.ERROR));
+                _main.AddNotification(new Notification("ERROR! Editing department failed. Department not found!", Notification.ERROR), 3500);
         }
 
         private void PromtElapsed(object sender, PromtEventArgs e)
         {
             if (e.Result && e.ResultMessage != null)
             {
-                editingDepartment.Name = e.ResultMessage;
-                if (new DepartmentRepository().Update(editingDepartment))
+                if (e.ResultMessage != String.Empty)
                 {
-                    _main.CurrentDepartment = editingDepartment;
-                    _main.OnPropertyChanged(nameof(_main.CurrentDepartment));
-                    _main.OnPropertyChanged(nameof(_main.Departments));
-                    _main.AddNotification(new Notification("Name change success", Notification.APPROVE));
+                    editingDepartment.Name = e.ResultMessage;
+                    if (new DepartmentRepository().Update(editingDepartment))
+                    {
+                        _main.CurrentDepartment = editingDepartment;
+                        _main.OnPropertyChanged(nameof(_main.CurrentDepartment));
+                        _main.OnPropertyChanged(nameof(_main.Departments));
+                        _main.AddNotification(new Notification("Name change success", Notification.APPROVE));
+                    }
                 }
+                else
+                    _main.AddNotification(new Notification("ERROR! Department name cannot be empty. Please enter a name.", Notification.ERROR), 3500);
             }
         }
     }
