@@ -15,6 +15,11 @@ namespace Asset_Management_System.Models
             CreatedAt = createdAt;
             UpdatedAt = updated_at;
         }
+
+        public User()
+        {
+
+        }
         
         public string Name { get; set; }
 
@@ -23,5 +28,7 @@ namespace Asset_Management_System.Models
         public bool IsAdmin { get; set; }
 
         public ulong DefaultDepartment { get; set; }
+
+        public string Description { get; set; }
     }
 }
