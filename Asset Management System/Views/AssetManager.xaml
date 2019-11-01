@@ -246,6 +246,13 @@
                             <KeyBinding Key="Backspace" Command="{Binding BackspaceKeyCommand}" />
                         </TextBox.InputBindings>
                     </TextBox>
+                    <ListBox ItemsSource="{Binding TagList, UpdateSourceTrigger=PropertyChanged}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
                     <ListBox ItemsSource="{Binding CurrentlyAddedTags}">
                         <ListBox.ItemsPanel>
