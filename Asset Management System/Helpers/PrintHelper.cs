@@ -15,7 +15,7 @@ namespace Asset_Management_System.Helpers
     {
         public static void Print(IEnumerable<object> items)
         {
-            Type objectType = items.First().GetType();
+            Type objectType = items.FirstOrDefault().GetType();
             
             string reportTitle = objectType.Name + "_report_";
             var dialog = new PromptWithTextInput(reportTitle + DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss").Replace(':', '-') + ".csv", "Report name:");
