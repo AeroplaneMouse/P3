@@ -10,12 +10,10 @@ namespace Asset_Management_System.Authentication
         public readonly User user;
         
         public string Username { get => GetIdentity().Split('\\')[1]; }
-        
         public string Domain { get => GetIdentity().Split('\\')[0]; }
 
         public Session()
         {
-            //Console.WriteLine("Username: "+GetIdentity());
             UserRepository rep = new UserRepository();
             user = rep.GetByUsername(GetIdentity());
         }

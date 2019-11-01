@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Database.Repositories
@@ -9,6 +7,6 @@ namespace Asset_Management_System.Database.Repositories
     {
         User GetByUsername(string username);
 
-        Int32 GetCount();
+        ulong GetCount();
     }
 }
