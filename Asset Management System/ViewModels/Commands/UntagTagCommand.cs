@@ -10,7 +10,7 @@ namespace Asset_Management_System.ViewModels.Commands
     {
         private AssetManagerViewModel _viewModel;
         public event EventHandler CanExecuteChanged;
-        
+
         List<ShownField> removeList = new List<ShownField>();
 
         public UntagTagCommand(AssetManagerViewModel viewModel)
@@ -27,21 +27,22 @@ namespace Asset_Management_System.ViewModels.Commands
         {
             ulong tagId =
                 ulong.Parse(parameter?.ToString() ?? throw new NullReferenceException("Input parameter == null"));
-            
-            
+
 
             // Find Tag by ID, then remove it.
             _viewModel.CurrentlyAddedTags.Remove(_viewModel.CurrentlyAddedTags.Single(tag => tag.ID == tagId));
 
-            
+
             // Removes tags from the fields where it is referenced.
             foreach (var currentShownField in _viewModel.FieldsList)
             {
                 if (!currentShownField.FieldTags.Remove(
-                    currentShownField.FieldTags.SingleOrDefault(tag => tag.ID == tagId))) continue;
-                if (currentShownField.FieldTags.Count == 0 && !currentShownField.Field.IsCustom)
+                    currentShownField.FieldTags.SingleOrDefault(tag => tag.ID == tagId)))
                 {
-                    removeList.Add(currentShownField);
+                    if (currentShownField.FieldTags.Count == 0 && !currentShownField.Field.IsCustom)
+                    {
+                        removeList.Add(currentShownField);
+                    }
                 }
             }
 
@@ -49,7 +50,6 @@ namespace Asset_Management_System.ViewModels.Commands
             {
                 DeleteFields();
             }
-            
         }
 
         private void DeleteFields()
