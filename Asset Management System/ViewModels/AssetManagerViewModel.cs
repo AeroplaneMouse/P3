@@ -19,7 +19,10 @@ namespace Asset_Management_System.ViewModels
         private Asset _asset;
 
         public string Name { get; set; }
+        public string Identifier { get; set; }
         public string Description { get; set; }
+
+        public string Title { get; set; }
 
         #region Tag related private properties
 
@@ -127,6 +130,7 @@ namespace Asset_Management_System.ViewModels
         public AssetManagerViewModel(MainViewModel main, Asset inputAsset, TextBox box)
         {
             _main = main;
+            Title = "Edit asset";
 
             _assetRep = new AssetRepository();
 
@@ -158,6 +162,7 @@ namespace Asset_Management_System.ViewModels
             SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _editing);
             AddFieldCommand = new AddFieldCommand(this, true);
             RemoveFieldCommand = new RemoveFieldCommand(this);
+            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
 
             #region Tag related variables
 
@@ -190,6 +195,8 @@ namespace Asset_Management_System.ViewModels
         public static ICommand RemoveFieldCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
 
+        public ICommand CancelCommand { get; set; }
+
         public bool CanSaveAsset()
         {
             //TODO Figure out the implementation for this one.
@@ -205,6 +212,7 @@ namespace Asset_Management_System.ViewModels
             }
 
             Name = _asset.Name;
+            //Identifier = _asset.Identifier;
             Description = _asset.Description;
 
             // Notify view about changes
