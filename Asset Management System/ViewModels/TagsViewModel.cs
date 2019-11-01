@@ -17,7 +17,9 @@ namespace Asset_Management_System.ViewModels
     {
         #region Constructors
 
-        public TagsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType) { }
+        public TagsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
+        {
+        }
 
         #endregion
 

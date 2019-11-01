@@ -96,11 +96,18 @@ namespace Asset_Management_System.ViewModels
         {
             foreach (Field field in _tag.FieldsList)
             {
-                FieldsList.Add(new ShownField(field));
+                if (field.IsHidden)
+                {
+                    HiddenFields.Add(new ShownField(field));
+                }
+                else
+                {
+                    FieldsList.Add(new ShownField(field));
+                }
             }
 
             ConnectTags();
-            
+
             //Set Name to the name of the chosen tag
             Name = _tag.Name;
 

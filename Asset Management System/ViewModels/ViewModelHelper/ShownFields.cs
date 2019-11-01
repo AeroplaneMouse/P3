@@ -20,7 +20,7 @@ namespace Asset_Management_System.ViewModels.ViewModelHelper
 
         public ObservableCollection<Tag> FieldTags { get; set; }
 
-        
+
         /// <summary>
         /// If a field and a shown field are the same, it returns true.
         /// </summary>

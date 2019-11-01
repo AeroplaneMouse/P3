@@ -64,7 +64,7 @@ namespace Asset_Management_System.ViewModels
             get => _pageType;
             set => _pageType = value;
         }
-        
+
         public int SelectedItemIndex { get; set; }
 
         public ObservableCollection<T> SearchList
@@ -172,7 +172,6 @@ namespace Asset_Management_System.ViewModels
 
 
         #region Helpers
-
 
         protected T GetSelectedItem()
         {

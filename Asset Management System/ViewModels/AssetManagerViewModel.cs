@@ -57,8 +57,6 @@ namespace Asset_Management_System.ViewModels
 
         #region tag related public Properties
 
-        
-
         public List<Models.Asset> AssetList;
 
         // The current parent exposed to the view
@@ -139,7 +137,7 @@ namespace Asset_Management_System.ViewModels
             {
                 _asset = inputAsset;
                 LoadFields();
-                
+
                 CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
                 ConnectTags();
 
@@ -148,7 +146,7 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("id: " + tag.ID);
                 Console.WriteLine("________");
 
-                
+
                 _editing = true;
             }
             else
@@ -208,7 +206,14 @@ namespace Asset_Management_System.ViewModels
         {
             foreach (var field in _asset.FieldsList)
             {
-                FieldsList.Add(new ShownField(field));
+                if (field.IsHidden)
+                {
+                    HiddenFields.Add(new ShownField(field));
+                }
+                else
+                {
+                    FieldsList.Add(new ShownField(field));
+                }
             }
 
             Name = _asset.Name;
@@ -329,8 +334,6 @@ namespace Asset_Management_System.ViewModels
                 _box.CaretIndex = _searchString.Length;
             }
         }
-
-        
 
         #endregion
     }

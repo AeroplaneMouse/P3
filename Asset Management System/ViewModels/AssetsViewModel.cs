@@ -19,6 +19,7 @@ namespace Asset_Management_System.ViewModels
         #region Constructors
 
         private MainViewModel _main;
+
         public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
             _main = main;
@@ -30,7 +31,6 @@ namespace Asset_Management_System.ViewModels
         #region Public Properties
 
         public int ViewType => 1;
-
 
         #endregion
     }

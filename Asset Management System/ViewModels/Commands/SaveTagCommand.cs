@@ -50,6 +50,11 @@ namespace Asset_Management_System.ViewModels.Commands
                 shownFields.Field.DefaultValue = shownFields.Field.Content;
                 _tag.AddField(shownFields.Field);
             }
+            
+            foreach (var shownField in _viewModel.HiddenFields)
+            {
+                _tag.AddField(shownField.Field);
+            }
 
             Department department = _main.CurrentDepartment;
             if (department != null && department.ID != 0)

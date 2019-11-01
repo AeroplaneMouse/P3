@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Linq;
 using Asset_Management_System.Models;
 using Asset_Management_System.ViewModels.ViewModelHelper;
 
@@ -7,11 +8,11 @@ namespace Asset_Management_System.ViewModels
     public abstract class ObjectManagerController : FieldsController
     {
         protected abstract void LoadFields();
-        
+
         public ObservableCollection<Tag> CurrentlyAddedTags { get; set; } = new ObservableCollection<Tag>();
-        
+
         public ObservableCollection<ShownField> HiddenFields { get; set; } = new ObservableCollection<ShownField>();
-        
+
         protected void ConnectTags()
         {
             foreach (var tag in CurrentlyAddedTags)
@@ -35,6 +36,7 @@ namespace Asset_Management_System.ViewModels
                         {
                             shownField.Field.Content = currentTagField.DefaultValue;
                         }
+
                         if (!shownField.FieldTags.Contains(tag))
                         {
                             shownField.FieldTags.Add(tag);
@@ -48,11 +50,22 @@ namespace Asset_Management_System.ViewModels
                             shownField.Field.Label = currentTagField.Label;
                         }
                     }
-                    
                 }
 
                 if (alreadyExists == false)
-                    FieldsList.Add(new ShownField(currentTagField));
+                {
+                    if (currentTagField.IsHidden)
+                    {
+                        HiddenFields.Add(new ShownField(currentTagField));
+                    }
+                    else
+                    {
+                        if (HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) == null)
+                        {
+                            FieldsList.Add(new ShownField(currentTagField));
+                        }
+                    }
+                }
             }
         }
     }

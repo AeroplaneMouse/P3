@@ -162,7 +162,7 @@ namespace Asset_Management_System.ViewModels
                 }
             }
         }
-        
+
         /// <summary>
         /// Function to bind comment to a asset.
         /// </summary>

@@ -7,7 +7,9 @@ namespace Asset_Management_System.ViewModels.Prompts
         public override event PromptEventHandler PromptElapsed;
 
         public ConfirmViewModel(string message, PromptEventHandler handler)
-            : base(message, handler) { }
+            : base(message, handler)
+        {
+        }
 
         protected override void Accept()
         {

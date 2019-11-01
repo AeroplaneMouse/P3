@@ -45,5 +45,4 @@ namespace Asset_Management_System.ViewModels
             return outputList;
         }
     }
-    
 }

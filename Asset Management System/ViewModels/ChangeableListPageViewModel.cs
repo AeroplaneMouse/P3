@@ -30,7 +30,6 @@ namespace Asset_Management_System.ViewModels
             AddNewCommand = new Base.RelayCommand(AddNew);
             EditCommand = new Base.RelayCommand(Edit);
             RemoveCommand = new Base.RelayCommand(Remove);
-
         }
 
         #endregion
@@ -39,7 +38,7 @@ namespace Asset_Management_System.ViewModels
 
         protected void AddNew()
         {
-            switch(PageType)
+            switch (PageType)
             {
                 case ListPageType.Asset:
                     Main.ChangeMainContent(new Views.AssetManager(Main));
@@ -114,7 +113,6 @@ namespace Asset_Management_System.ViewModels
         public Visibility IsRemoveVisible { get; set; } = Visibility.Hidden;
 
         public string Title { get; set; }
-
 
         #endregion
     }

@@ -38,7 +38,7 @@ namespace Asset_Management_System.ViewModels
             OnPropertyChanged(nameof(NumberOfUsers));
             OnPropertyChanged(nameof(NumberOfAssets));
             OnPropertyChanged(nameof(NumberOfTags));
-            OnPropertyChanged(nameof(NumberOfDepartments));   
+            OnPropertyChanged(nameof(NumberOfDepartments));
         }
     }
 }

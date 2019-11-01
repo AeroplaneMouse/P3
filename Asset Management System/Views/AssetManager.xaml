@@ -327,6 +327,19 @@
                         </ItemsControl>
                     </StackPanel>
                     
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Hidden fields"/>
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding HiddenFields}"
+                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
+                    
                 </StackPanel>
 
 

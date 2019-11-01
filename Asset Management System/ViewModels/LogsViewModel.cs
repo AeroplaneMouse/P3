@@ -19,7 +19,9 @@ namespace Asset_Management_System.ViewModels
     {
         #region Constructor
 
-        public LogsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType) { }
+        public LogsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
+        {
+        }
 
         #endregion
     }

@@ -55,7 +55,9 @@ namespace Asset_Management_System.ViewModels
 
             // Initialize commands
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
-            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
+            MaximizeCommand =
+                new Base.RelayCommand(() =>
+                    _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
             CloseCommand = new Base.RelayCommand(() => _window.Close());
 
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
@@ -66,9 +68,10 @@ namespace Asset_Management_System.ViewModels
             ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this)));
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
-            ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
+            ReloadSplashCommand =
+                new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
             RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
-            
+
             //AddNotificationTestCommand = new Base.RelayCommand(DisplayPrompt);
 
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
@@ -97,10 +100,14 @@ namespace Asset_Management_System.ViewModels
                 {
                     // TODO: Add log of department insert
                     OnPropertyChanged(nameof(Departments));
-                    AddNotification(new Notification($"{ department.Name } has now been add to the system.", Notification.APPROVE));
+                    AddNotification(new Notification($"{department.Name} has now been add to the system.",
+                        Notification.APPROVE));
                 }
                 else
-                    AddNotification(new Notification($"ERROR! An unknown error stopped the department { department.Name } from beeing added.", Notification.ERROR), 3000);
+                    AddNotification(
+                        new Notification(
+                            $"ERROR! An unknown error stopped the department {department.Name} from beeing added.",
+                            Notification.ERROR), 3000);
             }
         }
 
@@ -116,7 +123,8 @@ namespace Asset_Management_System.ViewModels
 
         private List<Page> pages = new List<Page>();
 
-        private List<Page> excludedPages = new List<Page> {
+        private List<Page> excludedPages = new List<Page>
+        {
             new Views.AssetManager(null),
             new Views.TagManager(null),
             new Views.ObjectViewer(null, null)
@@ -127,7 +135,7 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Public Propterties
-        
+
         // The smallest size the window can have 
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
@@ -136,13 +144,19 @@ namespace Asset_Management_System.ViewModels
         public int InnerContentPaddingSize { get; set; }
 
         // Padding of the inner content of the main window
-        public Thickness InnerContentPadding { get { return new Thickness(0); } }
+        public Thickness InnerContentPadding
+        {
+            get { return new Thickness(0); }
+        }
 
         // Size of the resize border around the window
         public int ResizeBorder { get; set; }
 
         // The size of the resize border around the window, taking the outer margin into account
-        public Thickness ResizeBorderThickness { get { return new Thickness(ResizeBorder + OuterMarginSize); } }
+        public Thickness ResizeBorderThickness
+        {
+            get { return new Thickness(ResizeBorder + OuterMarginSize); }
+        }
 
         // Margin around the window to allow a drop shadow. Checks if the window is maximised
         public int OuterMarginSize
@@ -153,14 +167,20 @@ namespace Asset_Management_System.ViewModels
         }
 
         // Thickness of the margin around the window to allow a drop shadow.
-        public Thickness OuterMarginThicknessSize { get { return new Thickness(OuterMarginSize); } }
+        public Thickness OuterMarginThicknessSize
+        {
+            get { return new Thickness(OuterMarginSize); }
+        }
 
         // The height of the title bar / caption of the window
         public int TitleHeight { get; set; }
 
         public int NavigationHeight { get; set; }
 
-        public GridLength TitleHeightGridLength { get { return new GridLength(TitleHeight + ResizeBorder); } }
+        public GridLength TitleHeightGridLength
+        {
+            get { return new GridLength(TitleHeight + ResizeBorder); }
+        }
 
         public String CurrentUser { get; set; }
 
@@ -189,14 +209,18 @@ namespace Asset_Management_System.ViewModels
 
         public Visibility SplashVisibility { get; set; } = Visibility.Visible;
 
-        public List<Department> Departments { get => GetDepartments(); }
+        public List<Department> Departments
+        {
+            get => GetDepartments();
+        }
 
         public bool DisplayCurrentDepartment { get; set; } = false;
 
         public Session CurrentSession { get; private set; }
 
-        public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
-        
+        public ObservableCollection<Notification> ActiveNotifications { get; private set; } =
+            new ObservableCollection<Notification>();
+
         public Visibility Visible { get; set; }
 
         #endregion
@@ -273,9 +297,11 @@ namespace Asset_Management_System.ViewModels
             frame.Content = setPage;
         }
 
-        public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background) 
+        public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
             => AddNotification(new Notification(message, foreground, background));
+
         public void AddNotification(Notification n) => AddNotification(n, 2500);
+
         public async void AddNotification(Notification n, int displayTime)
         {
             // Add notification to the list of active notifications
@@ -290,7 +316,9 @@ namespace Asset_Management_System.ViewModels
         }
 
         // Removes an active notification.
-        public void RemoveNotification(int id) => RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
+        public void RemoveNotification(int id) =>
+            RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
+
         public void RemoveNotification(Notification n)
         {
             ActiveNotifications.Remove(n);
@@ -384,7 +412,6 @@ namespace Asset_Management_System.ViewModels
         // Notification commands
         public ICommand AddNotificationTestCommand { get; set; }
         public static ICommand RemoveNotificationCommand { get; set; }
-
 
         #endregion
 

@@ -39,6 +39,7 @@ namespace Asset_Management_System.ViewModels.Base
         {
             return true;
         }
+
         /// <summary>
         /// Executes the Action
         /// </summary>
