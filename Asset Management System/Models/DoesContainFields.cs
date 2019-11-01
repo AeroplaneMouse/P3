@@ -75,32 +75,5 @@ namespace Asset_Management_System.Models
             FieldsList.Add(input);
             return true;
         }
-
-        /// <summary>
-        /// Removes field from list of fields.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public bool RemoveField(int id)
-        {
-            var itemToRemove = FieldsList.SingleOrDefault(r => r.ID == id);
-            if (itemToRemove != null)
-            {
-                FieldsList.Remove(itemToRemove);
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Removes a field from the list
-        /// </summary>
-        /// <param name="field"></param>
-        /// <returns></returns>
-        public bool RemoveField(Field field)
-        {
-            FieldsList.Remove(field);
-            return true;
-        }
     }
 }

@@ -368,8 +368,8 @@ namespace Asset_Management_System.Database.Repositories
             List<ulong> tag_ids = tags.Select(p => p.ID).ToList();
             // Makes a list of the ids of the tags already on the asset
             List<ulong> asset_tag_ids = GetAssetTags(asset).Select(p => p.ID).ToList();
-            // Removes the ids of the tags that are supposed to stilll be on the asset
-            // resulting in a list of ids og tags to be removed from the asset
+            // Removes the ids of the tags that are supposed to still be on the asset
+            // resulting in a list of ids of tags to be removed from the asset
             asset_tag_ids = asset_tag_ids.Except(tag_ids).ToList();
             StringBuilder query = new StringBuilder("DELETE FROM asset_tags WHERE asset_id = ");
             List<string> inserts = new List<string>();

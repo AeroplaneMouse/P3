@@ -47,13 +47,6 @@ namespace Asset_Management_System.ViewModels.Commands
             _tag.FieldsList = new List<Field>();
             foreach (var shownFields in _viewModel.FieldsList)
             {
-                if (shownFields.Field.Required && shownFields.Field.Content == string.Empty)
-                {
-                    _main.AddNotification(
-                        new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
-                    return;
-                }
-
                 _tag.AddField(shownFields.Field);
             }
 
