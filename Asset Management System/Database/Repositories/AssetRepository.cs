@@ -393,6 +393,8 @@ namespace Asset_Management_System.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
                 }
+                else
+                    query_success = true;
             }
             catch (Exception e)
             {

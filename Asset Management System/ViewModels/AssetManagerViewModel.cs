@@ -1,5 +1,4 @@
 ﻿using Asset_Management_System.Models;
-using Asset_Management_System.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,7 +19,10 @@ namespace Asset_Management_System.ViewModels
         private Asset _asset;
 
         public string Name { get; set; }
+        public string Identifier { get; set; }
         public string Description { get; set; }
+
+        public string Title { get; set; }
 
         #region Tag related private properties
 
@@ -125,6 +127,7 @@ namespace Asset_Management_System.ViewModels
         public AssetManagerViewModel(MainViewModel main, Asset inputAsset, TextBox box)
         {
             _main = main;
+            Title = "Edit asset";
 
             _assetRep = new AssetRepository();
 
@@ -149,12 +152,10 @@ namespace Asset_Management_System.ViewModels
             }
 
             // Initialize commands
-            SaveAssetCommand = new Commands.SaveAssetCommand(this, _main, _asset, _editing);
-            AddFieldCommand = new Commands.AddFieldCommand(this, true);
-            RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
-            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Assets(main)));
-            //AddFieldTestCommand = new Base.RelayCommand(() => AddField());
-            //AddFieldTest2Command = new Base.RelayCommand(() => AddField2());
+            SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _editing);
+            AddFieldCommand = new AddFieldCommand(this, true);
+            RemoveFieldCommand = new RemoveFieldCommand(this);
+            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
 
             #region Tag related variables
 
@@ -183,40 +184,15 @@ namespace Asset_Management_System.ViewModels
             UnTagTagCommand = new UntagTagCommand(this);
         }
 
-        //private void AddField()
-        //{
-        //    Field field = new Field("Test field", "", 1, "", false);
-        //    FieldsList.Add(field);
-        //    Console.WriteLine("Field added");
-        //}
-
-        //private void AddField2()
-        //{
-        //    Field field = new Field("Test field 2", "", 2, "", false);
-        //    FieldsList.Add(field);
-        //    Console.WriteLine("Field 2 added");
-        //}
-
         public ICommand SaveAssetCommand { get; set; }
-        public ICommand CancelCommand { get; set; }
         public static ICommand RemoveFieldCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
 
-        public ICommand AddFieldTestCommand { get; set; }
-        public ICommand AddFieldTest2Command { get; set; }
+        public ICommand CancelCommand { get; set; }
 
         public bool CanSaveAsset()
         {
             //TODO Figure out the implementation for this one.
-            // **** TODO ****
-            // Only return true, if the entered values are valid.
-
-            //foreach (Field field in FieldsList)
-            //{
-            //    if (field.Required && field.Content == String.Empty)
-            //        return false;
-            //}
-
             return true;
         }
 
@@ -229,6 +205,7 @@ namespace Asset_Management_System.ViewModels
             }
 
             Name = _asset.Name;
+            //Identifier = _asset.Identifier;
             Description = _asset.Description;
 
             // Notify view about changes
@@ -255,7 +232,6 @@ namespace Asset_Management_System.ViewModels
         {
             CurrentlyAddedTags.Add(_tagList.Single(p =>
                 String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
-            Console.WriteLine("Checking:  " + _tagList.Count);
             ConnectTags();
 
             _tabIndex = 0;
@@ -349,7 +325,6 @@ namespace Asset_Management_System.ViewModels
 
         private void ConnectTags()
         {
-            bool alreadyExists = true;
             foreach (var tag in CurrentlyAddedTags)
             {
                 if (!TagIsOnAsset(tag))
@@ -397,9 +372,5 @@ namespace Asset_Management_System.ViewModels
         }
 
         #endregion
-
-        private void UntagAsset(Tag inputTag)
-        {
-        }
     }
 }
