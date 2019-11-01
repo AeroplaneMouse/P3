@@ -31,7 +31,12 @@
                                     Content="Export"
                                     Command="{Binding PrintCommand}"
                                     Visibility="{Binding Visible}" />
-                                    
+                            
+                            <Button Style="{StaticResource RegularButton}"
+                                    Content="Edit"
+                                    Command="{Binding EditCommand}"
+                                    Visibility="{Binding Visible}" />
+                            
                             <Rectangle Style="{StaticResource HorizontalSeparator}"
                                    VerticalAlignment="Bottom"/>
                         </StackPanel>
@@ -76,7 +81,7 @@
                                       Grid.ColumnSpan="2">
                                     <ListView.Resources>
                                         <GridView x:Key="AssetTemplate">
-                                            <GridViewColumn Width="20" Header="">
+                                            <GridViewColumn>
                                                 <GridViewColumn.CellTemplate>
                                                     <DataTemplate>
                                                         <StackPanel>
@@ -97,6 +102,7 @@
                                     </ListView.Resources>
                                     <ListView.InputBindings>
                                         <KeyBinding Key="Delete" Command="{Binding RemoveCommand}" />
+                                        <MouseBinding Gesture="LeftDoubleClick" Command="{Binding EditCommand}"/>
                                     </ListView.InputBindings>
 
                                     <ListView.Style>
