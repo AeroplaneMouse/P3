@@ -91,7 +91,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "DELETE FROM comments WHERE id=@id";
+                const string query = "UPDATE comments SET deleted_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -118,7 +118,7 @@ namespace Asset_Management_System.Database.Repositories
             try
             {
                 const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
-                                     "FROM comments WHERE id=@id";
+                                     "FROM comments WHERE id=@id AND deleted_at IS NULL";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -152,7 +152,7 @@ namespace Asset_Management_System.Database.Repositories
             try
             {
                 const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
-                                     "FROM comments WHERE asset_id=@asset_id";
+                                     "FROM comments WHERE asset_id=@asset_id AND deleted_at IS NULL";
 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))

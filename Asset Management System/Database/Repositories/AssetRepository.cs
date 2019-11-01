@@ -22,7 +22,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "SELECT COUNT(*) FROM assets";
+                const string query = "SELECT COUNT(*) FROM assets WHERE deleted_at IS NULL";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -153,7 +153,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "DELETE FROM assets WHERE id=@id";
+                const string query = "UPDATE assets SET deleted_at=CURRENT_TIMESTAMP() WHERE id=@id";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -189,7 +189,7 @@ namespace Asset_Management_System.Database.Repositories
             try
             {
                 const string query = "SELECT id, name, description, identifier, department_id, options, created_at, updated_at " +
-                                     "FROM assets WHERE id=@id";
+                                     "FROM assets WHERE id=@id AND deleted_at IS NULL";
             
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -234,7 +234,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 const string query = "SELECT a.* FROM assets AS a " +
                                      "INNER JOIN asset_tags AS atr ON (a.id = atr.asset_id) " +
-                                     "WHERE atr.tag_id IN (@ids) GROUP BY a.id";
+                                     "WHERE atr.tag_id IN (@ids) AND deleted_at IS NULL GROUP BY a.id";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -281,7 +281,7 @@ namespace Asset_Management_System.Database.Repositories
             try
             {
                 const string query = "SELECT id, name, description, identifier, department_id, options, created_at, updated_at " +
-                                     "FROM assets WHERE name LIKE @keyword";
+                                     "FROM assets WHERE (name LIKE @keyword OR identifier LIKE @keyword) AND deleted_at IS NULL";
 
                 if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
                 {
