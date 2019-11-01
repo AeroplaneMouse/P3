@@ -18,7 +18,6 @@ namespace Asset_Management_System.Database.Repositories
         public int GetCount()
         {
             var con = new MySqlHandler().GetConnection();
-            //DBConnection dbcon = DBConnection.Instance();
             int count = 0;
             
             try
@@ -168,8 +167,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query =
-                    "SELECT id, name, username, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
+                const string query = "SELECT id, name, username, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
 
                 using (var cmd = new MySqlCommand(query, con))
                 {
@@ -207,7 +205,7 @@ namespace Asset_Management_System.Database.Repositories
             try
             {
                 const string query = "SELECT id, name, username, admin, default_department, created_at, updated_at " +
-                                     "FROM users WHERE username=@username";
+                                     "FROM users WHERE username=@username AND enabled=1";
 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
