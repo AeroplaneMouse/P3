@@ -127,14 +127,10 @@
         <Setter Property="Background" Value="Black"/>
     </Style>
     
-    <!-- Promt Grid -->
-    <Style TargetType="Grid" x:Key="PromtGrid">
-        <Setter Property="Width" Value="300"/>
-        <Setter Property="Height" Value="160"/>
-    </Style>
-    
     <!-- Promt Border -->
     <Style TargetType="Border" x:Key="PromtBorder">
+        <Setter Property="Width" Value="300"/>
+        <Setter Property="Height" Value="160"/>
         <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="Background" Value="White"/>
     </Style>

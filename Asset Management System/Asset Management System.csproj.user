@@ -31,6 +31,9 @@
     <Compile Update="Views\Promts\Confirm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Promts\CustomField.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Promts\TextInput.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -100,6 +103,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Promts\Confirm.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Promts\CustomField.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Promts\TextInput.xaml">

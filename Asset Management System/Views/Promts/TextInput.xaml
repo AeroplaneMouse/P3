@@ -11,36 +11,34 @@
 
     <Grid>
         <Canvas Style="{StaticResource PromtBackground}"/>
-        <Grid Style="{StaticResource PromtGrid}">
-            <Border Style="{StaticResource PromtBorder}">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
-                    <StackPanel>
-                        <TextBlock Text="{Binding MessageText}"
-                               Style="{StaticResource PromtDisplay}"/>
-                        <TextBox Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}"
-                                 Style="{StaticResource PromtInput}"
-                                 Name="Input"/>
-                    </StackPanel>
+        <Border Style="{StaticResource PromtBorder}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel>
+                    <TextBlock Text="{Binding MessageText}"
+                            Style="{StaticResource PromtDisplay}"/>
+                    <TextBox Text="{Binding InputText, UpdateSourceTrigger=PropertyChanged}"
+                                Style="{StaticResource PromtInput}"
+                                Name="Input"/>
+                </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" 
-                                VerticalAlignment="Bottom" 
-                                HorizontalAlignment="Center"
-                                Margin="15"
-                                Grid.Row="1">
-                        <Button Style="{StaticResource RegularAcceptButton}"
-                                Command="{Binding AcceptCommand}"
-                                Content="Accept"/>
-                        <Button Style="{StaticResource RegularCancelButton}"
-                                Command="{Binding CancelCommand}"
-                                Content="Cancel"
-                                Margin="15 0 0 0"/>
-                    </StackPanel>
-                </Grid>
-            </Border>
-        </Grid>
+                <StackPanel Orientation="Horizontal" 
+                            VerticalAlignment="Bottom" 
+                            HorizontalAlignment="Center"
+                            Margin="15"
+                            Grid.Row="1">
+                    <Button Style="{StaticResource RegularAcceptButton}"
+                            Command="{Binding AcceptCommand}"
+                            Content="Accept"/>
+                    <Button Style="{StaticResource RegularCancelButton}"
+                            Command="{Binding CancelCommand}"
+                            Content="Cancel"
+                            Margin="15 0 0 0"/>
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </Page>

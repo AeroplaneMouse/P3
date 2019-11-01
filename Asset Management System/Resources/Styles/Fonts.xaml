@@ -49,6 +49,10 @@
         <Setter Property="FontWeight" Value="Light"/>
     </Style>
 
+    <Style TargetType="TextBox" x:Key="ParagraphTextBox" BasedOn="{StaticResource BaseTextBoxStyle}">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+    </Style>
+
 
     
     
