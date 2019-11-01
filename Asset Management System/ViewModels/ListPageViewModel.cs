@@ -78,6 +78,7 @@ namespace Asset_Management_System.ViewModels
                 {
                     _list.Add(item);
                 }
+                OnPropertyChanged(nameof(SearchList));
             }
         }
 
