@@ -1,17 +1,17 @@
 ﻿using System.Windows.Controls;
 using Asset_Management_System.Events;
 
-namespace Asset_Management_System.Views.Promts
+namespace Asset_Management_System.Views.Prompts
 {
     /// <summary>
     /// Interaction logic for CustomField.xaml
     /// </summary>
     public partial class CustomField : Page
     {
-        public CustomField(string message, PromtEventHandler handler)
+        public CustomField(string message, PromptEventHandler handler)
         {
             InitializeComponent();
-            DataContext = new ViewModels.Promts.CustomFieldViewModel(message, handler);
+            DataContext = new ViewModels.Prompts.CustomFieldViewModel(message, handler);
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿using System.Windows.Input;
 
-namespace Asset_Management_System.ViewModels.Promts
+namespace Asset_Management_System.ViewModels.Prompts
 {
-    internal interface IPromt
+    internal interface IPrompt
     {
-        public event Events.PromtEventHandler PromtElapsed;
+        public event Events.PromptEventHandler PromptElapsed;
 
         public ICommand AcceptCommand { get; set; }
         public ICommand CancelCommand { get; set; }
