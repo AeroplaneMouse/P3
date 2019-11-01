@@ -16,6 +16,7 @@
 
     <!-- List page -->
     <Style TargetType="Page" x:Key="ListPage">
+        <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=StartElement}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Page">
@@ -56,7 +57,8 @@
                                     <TextBox FontSize="{StaticResource FontSizeSmall}"
                                              Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
                                              VerticalContentAlignment="Center"
-                                             MinWidth="200">
+                                             MinWidth="200"
+                                             Name="StartElement">
                                         <TextBox.InputBindings>
                                             <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                                         </TextBox.InputBindings>
@@ -130,7 +132,7 @@
 
                                     <ListView.InputBindings>
                                         <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
-                                        <KeyBinding Modifiers="Ctrl" Key="R" Command="{Binding RemoveCommand}"/>
+                                        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
                                         <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
                                     </ListView.InputBindings>
 

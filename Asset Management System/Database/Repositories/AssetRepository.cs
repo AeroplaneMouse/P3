@@ -394,7 +394,7 @@ namespace Asset_Management_System.Database.Repositories
                     }
                 }
                 else
-                    query_success = true;
+                    querySuccess = true;
             }
             catch (Exception e)
             {
