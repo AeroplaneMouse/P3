@@ -16,11 +16,12 @@ namespace Asset_Management_System.Models
         public Asset() : base() { }
 
         [JsonConstructor]
-        private Asset(ulong id, string name, string description, ulong department_id, string options, DateTime created_at, DateTime updated_at)
+        private Asset(ulong id, string name, string description, string identifier, ulong department_id, string options, DateTime created_at, DateTime updated_at)
         {
             ID = id;
             Name = name;
             Description = description;
+            Identifier = identifier;
             DepartmentID = department_id;
             CreatedAt = created_at;
             SerializedFields = options;
@@ -30,6 +31,8 @@ namespace Asset_Management_System.Models
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public string Identifier { get; set; }
 
         public ulong DepartmentID { get; set; }
 

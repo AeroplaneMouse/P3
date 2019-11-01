@@ -188,7 +188,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "SELECT id, name, description, department_id, options, created_at, updated_at " +
+                const string query = "SELECT id, name, description, identifier, department_id, options, created_at, updated_at " +
                                      "FROM assets WHERE id=@id";
             
                 con.Open();
@@ -280,7 +280,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "SELECT id, name, description, department_id, options, created_at, updated_at " +
+                const string query = "SELECT id, name, description, identifier, department_id, options, created_at, updated_at " +
                                      "FROM assets WHERE name LIKE @keyword";
 
                 if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
@@ -326,13 +326,14 @@ namespace Asset_Management_System.Database.Repositories
             ulong rowId = reader.GetUInt64("id");
             string rowName = reader.GetString("name");
             string rowDescription = reader.GetString("description");
+            string rowIdentifier = reader.GetString("identifier");
             ulong rowDepartmentId = reader.GetUInt64("department_id");
             string rowOptions = reader.GetString("options");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
             
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { rowId, rowName, rowDescription, rowDepartmentId, rowOptions, rowCreatedAt, rowUpdatedAt }, null, null);
+                new object[] { rowId, rowName, rowDescription, rowIdentifier, rowDepartmentId, rowOptions, rowCreatedAt, rowUpdatedAt }, null, null);
         }
         
         /// <summary>
