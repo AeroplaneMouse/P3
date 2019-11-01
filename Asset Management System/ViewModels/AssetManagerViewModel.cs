@@ -252,7 +252,6 @@ namespace Asset_Management_System.ViewModels
         {
             CurrentlyAddedTags.Add(_tagList.Single(p =>
                 String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
-            Console.WriteLine("Checking:  " + _tagList.Count);
             ConnectTags();
 
             _tabIndex = 0;
@@ -346,7 +345,6 @@ namespace Asset_Management_System.ViewModels
 
         private void ConnectTags()
         {
-            bool alreadyExists = true;
             foreach (var tag in CurrentlyAddedTags)
             {
                 if (!TagIsOnAsset(tag))
@@ -394,6 +392,5 @@ namespace Asset_Management_System.ViewModels
         }
 
         #endregion
-        
     }
 }

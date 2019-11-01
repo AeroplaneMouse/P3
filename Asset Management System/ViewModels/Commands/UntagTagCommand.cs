@@ -37,7 +37,8 @@ namespace Asset_Management_System.ViewModels.Commands
             // Removes tags from the fields where it is referenced.
             foreach (var currentShownField in _viewModel.FieldsList)
             {
-                currentShownField.FieldTags.Remove(currentShownField.FieldTags.SingleOrDefault(tag => tag.ID == tagId));
+                if (!currentShownField.FieldTags.Remove(
+                    currentShownField.FieldTags.SingleOrDefault(tag => tag.ID == tagId))) continue;
                 if (currentShownField.FieldTags.Count == 0 && !currentShownField.Field.IsCustom)
                 {
                     removeList.Add(currentShownField);
