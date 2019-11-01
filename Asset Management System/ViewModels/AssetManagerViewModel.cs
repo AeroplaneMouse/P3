@@ -125,11 +125,19 @@ namespace Asset_Management_System.ViewModels
         {
             _main = main;
 
+            _assetRep = new AssetRepository();
+
             CurrentlyAddedTags = new ObservableCollection<Tag>();
             FieldsList = new ObservableCollection<ShownField>();
             if (inputAsset != null)
             {
                 _asset = inputAsset;
+                CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
+
+                foreach (Tag tag in CurrentlyAddedTags)
+                    Console.WriteLine("id: " + tag.ID);
+                Console.WriteLine("________");
+
                 LoadFields();
                 _editing = true;
             }
@@ -147,8 +155,6 @@ namespace Asset_Management_System.ViewModels
             #region Tag related variables
 
             _tagRep = new TagRepository();
-
-            _assetRep = new AssetRepository();
 
             // TODO: Kom uden om mig
             _box = box;
@@ -313,54 +319,49 @@ namespace Asset_Management_System.ViewModels
 
         private void ConnectTags()
         {
-            bool _alreadyExists = false;
-
-            foreach (var fi in FieldsList)
-            {
-                Console.WriteLine("field: " + fi.Name);
-            }
-
             foreach (var tag in CurrentlyAddedTags)
             {
-                foreach (var tagField in tag.FieldsList)
+                if (!TagIsOnAsset(tag))
                 {
-                    foreach (var shownField in FieldsList)
+                    foreach (var tagField in tag.FieldsList)
                     {
-                        if (shownField.ShownFieldToFieldComparator(tagField))
-                        {
-                            _alreadyExists = true;
-
-                            if (!shownField.FieldTags.Contains(tag))
-                            {
-                                shownField.FieldTags.Add(tag);
-                            }
-
-                            Console.WriteLine("\n \n-----------------");
-                            Console.WriteLine("Label : " + shownField.Field.Label);
-                            Console.WriteLine("----------------");
-                            foreach (var currentTag in shownField.FieldTags)
-                            {
-                                Console.WriteLine("Tag name: " + currentTag.Name);
-                            }
-
-                            Console.WriteLine("-------------- \n \n");
-
-                            Console.WriteLine("exists: " + tagField.Content);
-                        }
+                        ShowIfNewField(tagField, tag);
                     }
-
-                    if (_alreadyExists == false)
-                        FieldsList.Add(new ShownField(tagField));
-
-                    _alreadyExists = false;
+                    Console.WriteLine("Tag fields: " + tag.FieldsList.Count);
                 }
-
-                Console.WriteLine("Tag fields: " + tag.FieldsList.Count);
             }
-
             Console.WriteLine("_________");
             foreach (var f in FieldsList)
-                Console.WriteLine("field: " + f.Name);
+                Console.WriteLine("field content: " + f.Field.Content);
+        }
+
+        private bool TagIsOnAsset(Tag tag)
+        {
+            List<Tag> assetTags = _assetRep.GetAssetTags(_asset);
+
+            foreach (Tag assetTag in assetTags)
+            {
+                if (tag.ID == assetTag.ID)
+                    return true;
+            }
+            return false;
+        }
+
+        private void ShowIfNewField(Field tagField, Tag tag)
+        {
+            bool alreadyExists = false;
+
+            foreach (var shownField in FieldsList)
+            {
+                if (shownField.ShownFieldToFieldComparator(tagField))
+                {
+                    alreadyExists = true;
+                    shownField.FieldTags.Add(tag);
+                    Console.WriteLine("-- exists: " + tagField.Content);
+                }   
+            }
+            if (alreadyExists == false)
+                FieldsList.Add(new ShownField(tagField));
         }
 
         #endregion
