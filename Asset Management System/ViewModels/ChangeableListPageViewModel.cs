@@ -58,6 +58,7 @@ namespace Asset_Management_System.ViewModels
         protected void Edit()
         {
             T selected = GetSelectedItem();
+            Console.WriteLine("Check: " + SelectedItemIndex);
 
             if (selected != null)
             {
