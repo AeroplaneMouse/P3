@@ -202,9 +202,6 @@ namespace Asset_Management_System.ViewModels
         public static ICommand RemoveFieldCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
 
-        public ICommand AddFieldTestCommand { get; set; }
-        public ICommand AddFieldTest2Command { get; set; }
-
         public bool CanSaveAsset()
         {
             //TODO Figure out the implementation for this one.
