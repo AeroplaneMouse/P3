@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Text;
-using System.Threading;
 using System.Windows.Input;
-using System.Collections.Generic;
+using System.ComponentModel;
 using Asset_Management_System.Events;
 using Asset_Management_System.Database;
 using Asset_Management_System.Authentication;
-using System.ComponentModel;
 using System.Windows;
 
 namespace Asset_Management_System.ViewModels
@@ -50,7 +47,7 @@ namespace Asset_Management_System.ViewModels
             worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
 
             // Starting backgroundworker
-            worker.RunWorkerAsync();
+            //worker.RunWorkerAsync();
         }
 
         private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -79,10 +76,9 @@ namespace Asset_Management_System.ViewModels
             BackgroundWorker caller = sender as BackgroundWorker;
 
             // Check database connection
-            DBConnection dbcon = DBConnection.Instance();
             caller.ReportProgress(0, new StatusUpdateEventArgs("Loading...", "Connecting to database."));
 
-            if (dbcon.IsConnect())
+            if (new MySqlHandler().IsAvailable())
             {
                 Session t = new Session();
                 if (t.Authenticated())
@@ -91,7 +87,9 @@ namespace Asset_Management_System.ViewModels
                     caller.ReportProgress(0, new StatusUpdateEventArgs("!!! Access denied !!!", $"User \"{ Session.GetIdentity() }\" is not authorized to access the application."));
             }
             else
+            {
                 caller.ReportProgress(0, new StatusUpdateEventArgs("ERROR!", "Error! Unable to connect to database."));
+            }
         }
 
         public void Reload()
@@ -102,6 +100,8 @@ namespace Asset_Management_System.ViewModels
             
             Authenticate();
         }
+
+        public void StartWorker() => worker.RunWorkerAsync();
 
         /// <summary>
         /// Updates text on the screen with progress and status.

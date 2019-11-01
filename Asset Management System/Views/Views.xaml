@@ -1,0 +1,64 @@
+﻿<Page x:Class="Asset_Management_System.Views.Views"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Asset_Management_System.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Views">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <TextBlock Style="{StaticResource TitleStyle}"
+                   VerticalAlignment="Center"
+                   Margin="10 0 0 0">Viewing %asset%</TextBlock>
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="10">
+            <Button
+                Style="{StaticResource RegularAcceptButton}"
+                Command="{Binding EditAssetCommand}"
+                Content="Edit"/>
+            
+            <Button
+                Style="{StaticResource RegularCancelButton}"
+                Margin="10 0 0 0"
+                Command="{Binding CancelCommand}"
+                Content="Cancel"/>
+        </StackPanel>
+
+        <Rectangle Style="{StaticResource HorizontalSeparator}"
+                   VerticalAlignment="Bottom"/>
+
+        <!-- Content of list assets page -->
+        <Border Padding="10"
+                Grid.Row="1">
+
+
+            <TabControl Grid.Row="2" 
+                            Style="{StaticResource RegularTabControl}"
+                            Grid.ColumnSpan="2">
+                <TabItem Header="Details" Style="{StaticResource RegularTab}">
+                    <StackPanel MaxWidth="300">
+                        <TextBlock Text="Name" FontWeight="Regular"/>
+                        <TextBlock Text="Red apple" FontWeight="Light" Margin="0 0 0 10"/>
+
+                        <TextBlock Text="Identifier" FontWeight="Regular"/>
+                        <TextBlock Text="1023847" FontWeight="Light" Margin="0 0 0 10"/>
+
+                        <TextBlock Text="Description" FontWeight="Regular"/>
+                        <TextBlock TextWrapping="Wrap" Text="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged." FontWeight="Light"/>
+                    </StackPanel>
+                </TabItem>
+                <TabItem Header="Comments" Style="{StaticResource RegularTab}"/>
+                <TabItem Header="Log" Style="{StaticResource RegularTab}"/>
+            </TabControl>
+        </Border>
+    </Grid>
+</Page>

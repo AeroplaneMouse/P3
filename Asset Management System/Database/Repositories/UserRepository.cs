@@ -8,125 +8,153 @@ using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Collections.ObjectModel;
+using System.Data.Common;
 
 namespace Asset_Management_System.Database.Repositories
 {
     public class UserRepository : IUserRepository
     {
+
+        public int GetCount()
+        {
+            var con = new MySqlHandler().GetConnection();
+            int count = 0;
+            
+            try
+            {
+                const string query = "SELECT COUNT(*) FROM users;";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            count = reader.GetInt32("COUNT(*)");
+                        reader.Close();
+                    }
+                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+          
+            return count;
+        }
+
         public bool Insert(User entity, out ulong id)
         {
-            DBConnection dbcon = DBConnection.Instance();
+            var con = new MySqlHandler().GetConnection();
             bool query_success = false;
 
             id = 0;
 
-            if (dbcon.IsConnect())
+            try
             {
-                try
+                const string query = "INSERT INTO users (name, username, admin, updated_at) " +
+                                     "VALUES (@name, @username, @admin, CURRENT_TIMESTAMP())";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query = "INSERT INTO users (name, username, admin, updated_at) " +
-                                         "VALUES (@name, @username, @admin, CURRENT_TIMESTAMP())";
+                    cmd.Parameters.Add("@name", MySqlDbType.String);
+                    cmd.Parameters["@name"].Value = entity.Name;
 
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                    {
-                        cmd.Parameters.Add("@name", MySqlDbType.String);
-                        cmd.Parameters["@name"].Value = entity.Name;
+                    cmd.Parameters.Add("@username", MySqlDbType.String);
+                    cmd.Parameters["@username"].Value = entity.Username;
 
-                        cmd.Parameters.Add("@username", MySqlDbType.String);
-                        cmd.Parameters["@username"].Value = entity.Username;
-
-                        cmd.Parameters.Add("@admin", MySqlDbType.String);
-                        cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
+                    cmd.Parameters.Add("@admin", MySqlDbType.String);
+                    cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
                         
-                        query_success = cmd.ExecuteNonQuery() > 0;
+                    query_success = cmd.ExecuteNonQuery() > 0;
 
-                        id = (ulong)cmd.LastInsertedId;
-                    }
-                }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    dbcon.Close();
+                    id = (ulong)cmd.LastInsertedId;
                 }
             }
-
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
             return query_success;
         }
 
         public bool Update(User entity)
         {
-            DBConnection dbcon = DBConnection.Instance();
+            var con = new MySqlHandler().GetConnection();
             bool query_success = false;
 
-            if (dbcon.IsConnect())
+            try
             {
-                try
+                const string query = "UPDATE users SET name=@name, username=@username, admin=@admin, default_department=@default_department, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
+
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query = "UPDATE users SET name=@name, username=@username, admin=@admin, default_department=@default_department, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
+                    cmd.Parameters.Add("@name", MySqlDbType.String);
+                    cmd.Parameters["@name"].Value = entity.Name;
 
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                    {
-                        cmd.Parameters.Add("@name", MySqlDbType.String);
-                        cmd.Parameters["@name"].Value = entity.Name;
+                    cmd.Parameters.Add("@username", MySqlDbType.String);
+                    cmd.Parameters["@username"].Value = entity.Username;
 
-                        cmd.Parameters.Add("@username", MySqlDbType.String);
-                        cmd.Parameters["@username"].Value = entity.Username;
+                    cmd.Parameters.Add("@admin", MySqlDbType.UInt16);
+                    cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
 
-                        cmd.Parameters.Add("@admin", MySqlDbType.UInt16);
-                        cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
+                    cmd.Parameters.Add("@default_department", MySqlDbType.UInt64);
+                    cmd.Parameters["@default_department"].Value = entity.DefaultDepartment;
+                    
+                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                    cmd.Parameters["@id"].Value = entity.ID;
 
-                        cmd.Parameters.Add("@default_department", MySqlDbType.UInt64);
-                        cmd.Parameters["@default_department"].Value = entity.DefaultDepartment;
-                        
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = entity.ID;
-
-                        query_success = cmd.ExecuteNonQuery() > 0;
-                    }
-                }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    dbcon.Close();
+                    query_success = cmd.ExecuteNonQuery() > 0;
                 }
             }
-
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
             return query_success;
         }
 
         public bool Delete(User entity)
         {
-            DBConnection dbcon = DBConnection.Instance();
+            var con = new MySqlHandler().GetConnection();
             bool query_success = false;
 
-            if (dbcon.IsConnect())
+            try
             {
-                try
-                {
-                    const string query = "DELETE FROM users WHERE id=@id";
+                const string query = "DELETE FROM users WHERE id=@id";
 
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                    {
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = entity.ID;
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                    cmd.Parameters["@id"].Value = entity.ID;
 
-                        query_success = cmd.ExecuteNonQuery() > 0;
-                    }
+                    query_success = cmd.ExecuteNonQuery() > 0;
                 }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    dbcon.Close();
-                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
             }
 
             return query_success;
@@ -134,37 +162,36 @@ namespace Asset_Management_System.Database.Repositories
 
         public User GetById(ulong id)
         {
-            DBConnection dbcon = DBConnection.Instance();
+            var con = new MySqlHandler().GetConnection();
             User user = null;
 
-            if (dbcon.IsConnect())
+            try
             {
-                try
+                const string query = "SELECT id, name, username, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
+
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query =
-                        "SELECT id, name, username, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
-
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                    cmd.Parameters["@id"].Value = id;
+                    
+                    con.Open();
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = id;
-
-                        using var reader = cmd.ExecuteReader();
-                        
                         while (reader.Read())
                         {
                             user = DBOToModelConvert(reader);
                         }
+                        reader.Close();
                     }
                 }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    dbcon.Close();
-                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
             }
 
             return user;
@@ -172,36 +199,37 @@ namespace Asset_Management_System.Database.Repositories
 
         public User GetByUsername(string username)
         {
-            DBConnection dbcon = DBConnection.Instance();
+            var con = new MySqlHandler().GetConnection();
             User user = null;
-
-            if (dbcon.IsConnect())
+            
+            try
             {
-                try
+                const string query = "SELECT id, name, username, admin, default_department, created_at, updated_at " +
+                                     "FROM users WHERE username=@username AND enabled=1";
+
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query = "SELECT id, name, username, admin, default_department, created_at, updated_at FROM users WHERE username=@username";
+                    cmd.Parameters.Add("@username", MySqlDbType.String);
+                    cmd.Parameters["@username"].Value = username;
 
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.Add("@username", MySqlDbType.String);
-                        cmd.Parameters["@username"].Value = username;
-
-                        using var reader = cmd.ExecuteReader();
-                        
                         while (reader.Read())
                         {
                             user = DBOToModelConvert(reader);
                         }
+                        reader.Close();
                     }
                 }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    dbcon.Close();
-                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
             }
 
             return user;

@@ -14,6 +14,7 @@ using Asset_Management_System.Database;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Resources.Interfaces;
+using System.Threading;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -30,7 +31,7 @@ namespace Asset_Management_System.ViewModels
             _window = window;
             _outerMarginSize = 10;
 
-            WindowMinWidth = 1000;
+            WindowMinWidth = 300;
             WindowMinHeight = 400;
 
             ResizeBorder = 4;
@@ -66,18 +67,45 @@ namespace Asset_Management_System.ViewModels
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
-            AddNotificationTestCommand = new Base.RelayCommand(() => AddNotification(new Notification("Test"), 0));
+            RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
+            
+            //AddNotificationTestCommand = new Base.RelayCommand(DisplayPromt);
 
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
-            RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
-            
+            EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
+            AddDepartmentCommand = new Base.RelayCommand(() =>
+            {
+                DisplayPromt(new Views.Promts.TextInput("Enter the name of your new department", AddDepartment));
+            });
+
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
+
+            (splashScreen.DataContext as SplashViewModel).StartWorker();
+        }
+
+        private void AddDepartment(object sender, PromtEventArgs e)
+        {
+            if (e.Result)
+            {
+                Department department = new Department();
+                department.Name = e.ResultMessage;
+
+                ulong id;
+                if (new DepartmentRepository().Insert(department, out id))
+                {
+                    // TODO: Add log of department insert
+                    OnPropertyChanged(nameof(Departments));
+                    AddNotification(new Notification($"{ department.Name } has now been add to the system.", Notification.APPROVE));
+                }
+                else
+                    AddNotification(new Notification($"ERROR! An unknown error stopped the department { department.Name } from beeing added.", Notification.ERROR), 3000);
+            }
         }
 
         #endregion
-        
+
         #region Private Members
 
         // The window this view model controls
@@ -157,6 +185,8 @@ namespace Asset_Management_System.ViewModels
 
         public Frame FrameSplash { get; set; } = new Frame();
 
+        public Page PopupPage { get; set; }
+
         public Visibility SplashVisibility { get; set; } = Visibility.Visible;
 
         public List<Department> Departments { get => GetDepartments(); }
@@ -172,6 +202,19 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Public Methods
+
+        public void DisplayPromt(Page promtPage)
+        {
+            PopupPage = promtPage;
+            (promtPage.DataContext as Promts.PromtViewModel).PromtElapsed += PromtElapsed;
+        }
+
+        private void PromtElapsed(object sender, PromtEventArgs e)
+        {
+            // Removing popup
+            PopupPage = null;
+        }
+
 
         /// <summary>
         /// Changes how many rows or columns a specific frame spans over. 
@@ -264,7 +307,7 @@ namespace Asset_Management_System.ViewModels
             ReloadSplashCommand = null;
 
             // Attaching notification
-            DBConnection.Instance().SqlConnectionFailed += AddNotification;
+            new MySqlHandler().SqlConnectionFailed += AddNotification;
 
             // Remove splash page
             SplashVisibility = Visibility.Hidden;
@@ -314,12 +357,10 @@ namespace Asset_Management_System.ViewModels
 
         #region Commands
 
+        // Window commands
         public ICommand MinimizeCommand { get; set; }
-
         public ICommand MaximizeCommand { get; set; }
-
         public ICommand CloseCommand { get; set; }
-
         public ICommand SystemMenuCommand { get; set; }
 
         public ICommand ShowWindow { get; set; }
@@ -330,21 +371,22 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand ShowTagPageCommand { get; set; }
 
+        // Department commands
         public static ICommand SelectDepartmentCommand { get; set; }
+        public static ICommand RemoveDepartmentCommand { get; set; }
+        public static ICommand EditDepartmentCommand { get; set; }
+        public ICommand AddDepartmentCommand { get; set; }
 
         public ICommand ShowLogPageCommand { get; set; }
 
         public ICommand ReloadSplashCommand { get; set; }
 
+        // Notification commands
         public ICommand AddNotificationTestCommand { get; set; }
-
         public static ICommand RemoveNotificationCommand { get; set; }
 
-        public ICommand RemoveDepartmentCommand { get; set; }
 
         #endregion
-
-        #region Private Helpers
 
         #region Magic from StackOverflow: https://stackoverflow.com/questions/4226740/how-do-i-get-the-current-mouse-screen-coordinates-in-wpf
 
@@ -366,8 +408,6 @@ namespace Asset_Management_System.ViewModels
             GetCursorPos(ref w32Mouse);
             return new Point(w32Mouse.X, w32Mouse.Y);
         }
-
-        #endregion
 
         #endregion
     }

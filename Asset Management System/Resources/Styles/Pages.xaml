@@ -2,6 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Asset_Management_System"
                     xmlns:viewModels="clr-namespace:Asset_Management_System.ViewModels">
+    
+    
+    
     <!-- List page -->
     <Style TargetType="Page" x:Key="ListPage">
         <Setter Property="Template">
@@ -10,10 +13,13 @@
                     <Grid Margin="10">
 
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="70" />
-                            <RowDefinition Height="70" />
+                            <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
+                        <TextBlock Style="{StaticResource TitleStyle}"
+                                    VerticalAlignment="Center"
+                                    Text="{Binding Title}"
+                                    Margin="10 0 0 0"/>
 
                         <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Bottom" Margin="10">
                             <Button Style="{StaticResource RegularButton}"
@@ -25,83 +31,123 @@
                                     Content="Export"
                                     Command="{Binding PrintCommand}"
                                     Visibility="{Binding Visible}" />
-
+                                    
+                            <Rectangle Style="{StaticResource HorizontalSeparator}"
+                                   VerticalAlignment="Bottom"/>
                         </StackPanel>
+                        
+                        <!-- Content of list assets page -->
+                        <Border Padding="10"
+                                Grid.Row="1">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
 
-                        <StackPanel Orientation="Horizontal"
-                                    Grid.Row="1"
-                                    VerticalAlignment="Bottom"
-                                    Margin="10">
+                                <TextBox FontSize="{StaticResource FontSizeSmall}"
+                                         Text="{Binding SearchQueryText}"
+                                         VerticalContentAlignment="Center"
+                                         MinWidth="200"/>
 
-                            <TextBox Width="300"
-                                     TextBlock.FontSize="12px"
-                                     Padding="2,3,2,3"
-                                     Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}" />
-
-                            <Button Style="{StaticResource RegularButton}"
+                                <Button Grid.Column="1"
+                                    HorizontalAlignment="Left"
+                                    Margin="10 0 0 0"
                                     Content="Search"
-                                    Command="{Binding SearchCommand}" />
+                                    Style="{StaticResource RegularButton}"/>
 
-                            <Button Style="{StaticResource RegularButton}"
-                                    Content="Edit"
-                                    Command="{Binding EditCommand}"
-                                    Visibility="{Binding Visible}" />
-
-                            <Button Style="{StaticResource RegularButton}"
+                                <Button Grid.Column="1"
+                                    Style="{StaticResource RegularCancelButton}"
+                                    HorizontalAlignment="Right"
                                     Content="Remove"
-                                    Command="{Binding RemoveCommand}"
-                                    Visibility="{Binding Visible}" />
+                                    Visibility="{Binding IsRemoveVisible}"/>
 
-                            <Button Style="{StaticResource RegularButton}"
-                                    Content="View"
-                                    Command="{Binding ViewCommand}" />
+                                
+                                <!--Style="{StaticResource RegularList}"-->
+                                <ListView 
+                                      ItemsSource="{Binding SearchList}"
+                                      Grid.Row="2"
+                                      Margin="0 10 0 0"
+                                      Grid.ColumnSpan="2">
+                                    <ListView.Resources>
+                                        <GridView x:Key="AssetTemplate">
+                                            <GridViewColumn Width="20" Header="">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel>
+                                                            <CheckBox/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Identifier}" Header="Identifier" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
+                                        </GridView>
 
+                                        <GridView x:Key="TagsTemplate">
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
+                                        </GridView>
+                                    </ListView.Resources>
+                                    <ListView.InputBindings>
+                                        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}" />
+                                    </ListView.InputBindings>
 
-                        </StackPanel>
-
-                        <Grid Grid.Row="3" Margin="10">
-                            <ListView ItemsSource="{Binding SearchList, UpdateSourceTrigger=PropertyChanged}"
-                                      SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}">
-
-                                <ListView.Resources>
-
-                                    <GridView x:Key="AssetTemplate">
-                                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
-                                        <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}"
-                                                        Header="Description" />
-                                        <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}"
-                                                        Header="Created" />
-                                    </GridView>
-
-                                    <GridView x:Key="TagsTemplate">
-                                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
-                                        <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                                        <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}"
-                                                        Header="Created" />
-                                    </GridView>
-
-                                </ListView.Resources>
-
-                                <ListView.InputBindings>
-                                    <KeyBinding Key="Delete" Command="{Binding RemoveCommand}" />
-                                </ListView.InputBindings>
-
-                                <ListView.Style>
-                                    <Style TargetType="ListView">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding ViewType}" Value="1">
-                                                <Setter Property="View" Value="{StaticResource AssetTemplate}" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                        <Setter Property="View" Value="{StaticResource TagsTemplate}" />
-                                    </Style>
-                                </ListView.Style>
-                            </ListView>
-                        </Grid>
+                                    <ListView.Style>
+                                        <Style TargetType="ListView">
+                                            <Setter Property="View" Value="{StaticResource TagsTemplate}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ViewType}" Value="1">
+                                                    <Setter Property="View" Value="{StaticResource AssetTemplate}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ListView.Style>
+                                </ListView>
+                            </Grid>
+                        </Border>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <!-- *************************** -->
+    <!-- Promt elements-->
+    
+    <!-- Promt background canvas -->
+    <Style TargetType="Canvas" x:Key="PromtBackground">
+        <Setter Property="Opacity" Value="0.34"/>
+        <Setter Property="Background" Value="Black"/>
+    </Style>
+    
+    <!-- Promt Border -->
+    <Style TargetType="Border" x:Key="PromtBorder">
+        <Setter Property="Width" Value="300"/>
+        <Setter Property="Height" Value="160"/>
+        <Setter Property="CornerRadius" Value="3"/>
+        <Setter Property="Background" Value="White"/>
+    </Style>
+    
+    <!-- Display text -->
+    <Style TargetType="TextBlock" x:Key="PromtDisplay" BasedOn="{StaticResource HeaderStyle}">
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0 10 0 0"/>
+        <Setter Property="MaxWidth" Value="270"/>
+        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="TextAlignment" Value="Center"/>
+    </Style>
+    
+    <!-- Input text -->
+    <Style TargetType="TextBox" x:Key="PromtInput" BasedOn="{StaticResource BaseTextBoxStyle}">
+        <Setter Property="Width" Value="216"/>
+        <Setter Property="Margin" Value="0 10 0 0"/>
+    </Style>                              
+                        
 </ResourceDictionary>

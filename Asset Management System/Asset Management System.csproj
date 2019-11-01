@@ -22,10 +22,19 @@
     <None Remove="Resources\Images\Logos\kitten.jpg" />
     <None Remove="Resources\Images\Logos\logo-light.png" />
     <None Remove="Resources\Images\Logos\logo-dark.png" />
+    <None Remove="Resources\Images\Logos\Test.svg" />
+    <!-- Trash -->
+    <None Remove="Resources\Images\Logos\Trash\trash_white.png" />
+    <None Remove="Resources\Images\Logos\Trash\trash_gray.png" />
+    <None Remove="Resources\Images\Logos\Trash\trash_black.png" />
+    <None Remove="Resources\Images\Logos\Trash\trash_red.png" />
+    <!-- Edit -->
+    <None Remove="Resources\Images\Logos\Edit\edit_white.png" />
+    <None Remove="Resources\Images\Logos\Edit\edit_gray.png" />
+    <None Remove="Resources\Images\Logos\Edit\edit_black.png" />
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="Expression.Blend.Sdk" Version="1.0.2" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="3.6.0" />
     <PackageReference Include="Fody" Version="6.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -39,7 +48,6 @@
 
   <ItemGroup>
     <Folder Include="Resources\Fonts\" />
-    <Folder Include="Resources\Images\Logos\" />
     <Folder Include="Resources\Window\" />
   </ItemGroup>
 
@@ -52,6 +60,16 @@
     <Resource Include="Resources\Images\Logos\placeholder-beaut.png" />
     <Resource Include="Resources\Images\Logos\logo-light.png" />
     <Resource Include="Resources\Images\Logos\logo-dark.png" />
+    <Resource Include="Resources\Images\Logos\Test.svg" />
+    <!-- Trash -->
+    <Resource Include="Resources\Images\Logos\Trash\trash_white.png" />
+    <Resource Include="Resources\Images\Logos\Trash\trash_gray.png" />
+    <Resource Include="Resources\Images\Logos\Trash\trash_black.png" />
+    <Resource Include="Resources\Images\Logos\Trash\trash_red.png" />
+    <!-- Edit -->
+    <Resource Include="Resources\Images\Logos\Edit\edit_white.png" />
+    <Resource Include="Resources\Images\Logos\Edit\edit_gray.png" />
+    <Resource Include="Resources\Images\Logos\Edit\edit_black.png" />
   </ItemGroup>
 
   <ItemGroup>

@@ -10,28 +10,33 @@ namespace Asset_Management_System.Database.Repositories
     {
         public int GetCount()
         {
-            DBConnection dbcon = DBConnection.Instance();
+            var con = new MySqlHandler().GetConnection();
             int count = 0;
 
-            if (dbcon.IsConnect())
+            try
             {
-                try
+                const string query = "SELECT COUNT(*) FROM departments;";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query = "SELECT COUNT(*) FROM departments;";
-                    using var cmd = new MySqlCommand(query, dbcon.Connection);
-                    using var reader = cmd.ExecuteReader();
-                    if (reader.Read())
-                        count = reader.GetInt32("COUNT(*)");
-                }
-                catch (MySqlException)
-                {
-
-                }
-                finally
-                {
-                    dbcon.Close();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            count = reader.GetInt32("COUNT(*)");
+                        reader.Close();
+                    }
                 }
             }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
             return count;
         }
 
@@ -42,38 +47,33 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>True if entity was successfully inserted.</returns>
         public bool Insert(Department entity, out ulong id)
         {
-            DBConnection dbcon = DBConnection.Instance();
+            var con = new MySqlHandler().GetConnection();
             bool query_success = false;
-
-            id = 0;
-
-            if (dbcon.IsConnect())
+            
+            try
             {
-                try
+                const string query = "INSERT INTO departments (name, updated_at) VALUES (@name, CURRENT_TIMESTAMP())";
+
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query = "INSERT INTO departments (name, updated_at) VALUES (@name, CURRENT_TIMESTAMP())";
-
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                    {
-                        cmd.Parameters.Add("@name", MySqlDbType.String);
-                        cmd.Parameters["@name"].Value = entity.Name;
-                        query_success = cmd.ExecuteNonQuery() > 0;
-
-                        id = (ulong)cmd.LastInsertedId;
-                    }
-                }
-
-                catch (MySqlException e)
-                { 
-                    Console.WriteLine(e);
-                }
-                
-                finally
-                {
-                    dbcon.Close();
+                    cmd.Parameters.Add("@name", MySqlDbType.String);
+                    cmd.Parameters["@name"].Value = entity.Name;
+                    query_success = cmd.ExecuteNonQuery() > 0;
+                    
+                    id = (ulong)cmd.LastInsertedId;
                 }
             }
-
+            catch (MySqlException e)
+            {
+                id = 0;
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
             return query_success;
         }
 
@@ -84,36 +84,33 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public bool Update(Department entity)
         {
-            DBConnection dbcon = DBConnection.Instance();
+            var con = new MySqlHandler().GetConnection();
             bool query_success = false;
 
-            if (dbcon.IsConnect())
+            try
             {
-                try
+                const string query = "UPDATE departments SET name=@name, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query = "UPDATE departments SET name=@name, updated_at=CURRENT_TIMESTAMP() WHERE id=id";
+                    cmd.Parameters.Add("@name", MySqlDbType.String);
+                    cmd.Parameters["@name"].Value = entity.Name;
+                    cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                    cmd.Parameters["@id"].Value = entity.ID;
 
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                    {
-                        cmd.Parameters.Add("@name", MySqlDbType.String);
-                        cmd.Parameters["@name"].Value = entity.Name;
-                        cmd.Parameters.Add("@id", MySqlDbType.Int64);
-                        cmd.Parameters["@id"].Value = entity.ID;
-
-                        query_success = cmd.ExecuteNonQuery() > 0;
-                    }
-                }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                    //dbcon.SqlConnectionFailed?.Invoke(new Notification("ERROR! Unable to update department", Notification.ERROR));
-                }
-                finally
-                {
-                    dbcon.Close();
+                    query_success = cmd.ExecuteNonQuery() > 0;
                 }
             }
-
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
             return query_success;
         }
 
@@ -124,28 +121,26 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public bool Delete(Department entity)
         {
-            DBConnection dbcon = DBConnection.Instance();
+            var con = new MySqlHandler().GetConnection();
             bool query_success = false;
 
-            if (dbcon.IsConnect())
+            try
             {
-                try
+                const string query = "DELETE FROM departments WHERE id=@id";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query = "DELETE FROM departments WHERE id=@id";
-
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                    {
-                        cmd.Parameters.AddWithValue  ("@id", MySqlDbType.Int64);
-                        cmd.Parameters["@id"].Value = entity.ID;
-                        query_success = cmd.ExecuteNonQuery() > 0;
-                    }
-                }catch(MySqlException e){ 
-                    Console.WriteLine(e);
-                }finally{
-                    dbcon.Close();
+                    cmd.Parameters.AddWithValue  ("@id", MySqlDbType.Int64);
+                    cmd.Parameters["@id"].Value = entity.ID;
+                    query_success = cmd.ExecuteNonQuery() > 0;
                 }
+            }catch(MySqlException e){ 
+                Console.WriteLine(e);
+            }finally{
+                con.Close();
             }
-
+            
             return query_success;
         }
 
@@ -156,34 +151,34 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public Department GetById(ulong id)
         {
-            DBConnection dbcon = DBConnection.Instance();
+            var con = new MySqlHandler().GetConnection();
             Department department = null;
 
-            if (dbcon.IsConnect())
-            {
-                try{
-                    const string query = "SELECT id, name, created_at, updated_at FROM departments WHERE id=@id";
+            try{
+                const string query = "SELECT id, name, created_at, updated_at " +
+                                     "FROM departments WHERE id=@id";
 
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                    cmd.Parameters["@id"].Value = id;
+
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = id;
-
-                        using (var reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                department = DBOToModelConvert(reader);
-                            }
+                            department = DBOToModelConvert(reader);
                         }
+                        reader.Close();
                     }
-                }catch(MySqlException e){ 
-                    Console.WriteLine(e);
-                }finally{
-                    dbcon.Close();
                 }
+            }catch(MySqlException e){ 
+                Console.WriteLine(e);
+            }finally{
+                con.Close();
             }
-
+            
             return department;
         }
 
@@ -193,32 +188,32 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public IEnumerable<Department> GetAll()
         {
-            DBConnection dbcon = DBConnection.Instance();
+            var con = new MySqlHandler().GetConnection();
             List<Department> departments = new List<Department>();
 
-            if (dbcon.IsConnect())
-            {
-                try{
-                    const string query = "SELECT id, name, created_at, updated_at FROM departments ORDER BY name ASC";
-
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+            try{
+                const string query = "SELECT id, name, created_at, updated_at " +
+                                     "FROM departments ORDER BY name ASC";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        using (var reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                Department dep = DBOToModelConvert(reader);
-                                departments.Add(dep);
-                            }
+                            Department dep = DBOToModelConvert(reader);
+                            departments.Add(dep);
                         }
+                        reader.Close();
                     }
-                }catch(MySqlException e){ 
-                    Console.WriteLine(e);
-                }finally{
-                    dbcon.Close();
                 }
+            }catch(MySqlException e){ 
+                Console.WriteLine(e);
+            }finally{
+                con.Close();
             }
-
+            
             return departments;
         }
 

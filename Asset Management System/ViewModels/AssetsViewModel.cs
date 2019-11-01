@@ -22,6 +22,7 @@ namespace Asset_Management_System.ViewModels
         public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
             _main = main;
+            Title = "Assets";
         }
 
         #endregion
@@ -29,6 +30,7 @@ namespace Asset_Management_System.ViewModels
         #region Public Properties
 
         public int ViewType => 1;
+
 
         #endregion
     }

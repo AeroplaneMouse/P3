@@ -14,12 +14,6 @@ namespace Asset_Management_System.Database.Repositories
 {
     public class AssetRepository : IAssetRepository
     {
-        private DBConnection dbcon;
-
-        public AssetRepository()
-        {
-            this.dbcon = DBConnection.Instance();
-        }
 
         /// <summary>
         /// Returns the number of assets in the database
@@ -27,27 +21,33 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>Number of assets in database</returns>
         public int GetCount()
         {
+            var con = new MySqlHandler().GetConnection();
             int count = 0;
-            if (dbcon.IsConnect())
+
+            try
             {
-                try
+                const string query = "SELECT COUNT(*) FROM assets";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query = "SELECT COUNT(*) FROM assets;";
-                    using var cmd = new MySqlCommand(query, dbcon.Connection);
-                    using var reader = cmd.ExecuteReader();
-
-                    if (reader.Read())
-                        count = reader.GetInt32("COUNT(*)");
-                }
-                catch (MySqlException)
-                {
-
-                }
-                finally
-                {
-                    dbcon.Close();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                            count = reader.GetInt32("COUNT(*)");
+                        reader.Close();
+                    }
                 }
             }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
             return count;
         }
 
@@ -59,46 +59,45 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>Rather the insertion was successful or not</returns>
         public bool Insert(Asset entity, out ulong id)
         {
+            var con = new MySqlHandler().GetConnection();
             bool query_success = false;
 
             id = 0;
 
             entity.SerializeFields();
 
-            if (dbcon.IsConnect())
-            {
-                try{
-                    const string query = "INSERT INTO assets (name, description, department_id, options, updated_at) "+ 
-                		                 "VALUES (@name, @description, @department, @options, CURRENT_TIMESTAMP())";
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                    {
-                        cmd.Parameters.Add("@name", MySqlDbType.String);
-                        cmd.Parameters["@name"].Value = entity.Name;
-
-                        cmd.Parameters.Add("@description", MySqlDbType.String);
-                        cmd.Parameters["@description"].Value = entity.Description;
-
-                        cmd.Parameters.Add("@department", MySqlDbType.UInt64);
-                        cmd.Parameters["@department"].Value = entity.DepartmentID;
-
-                        cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                        cmd.Parameters["@options"].Value = entity.SerializedFields;
-
-                        query_success = cmd.ExecuteNonQuery() > 0;
-
-                        id = (ulong)cmd.LastInsertedId;
-                    }
-                }
-                catch (MySqlException e)
+            try{
+                const string query = "INSERT INTO assets (name, description, department_id, options, updated_at) "+ 
+                		             "VALUES (@name, @description, @department, @options, CURRENT_TIMESTAMP())";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    dbcon.Close();
+                    cmd.Parameters.Add("@name", MySqlDbType.String);
+                    cmd.Parameters["@name"].Value = entity.Name;
+
+                    cmd.Parameters.Add("@description", MySqlDbType.String);
+                    cmd.Parameters["@description"].Value = entity.Description;
+
+                    cmd.Parameters.Add("@department", MySqlDbType.UInt64);
+                    cmd.Parameters["@department"].Value = entity.DepartmentID;
+
+                    cmd.Parameters.Add("@options", MySqlDbType.JSON);
+                    cmd.Parameters["@options"].Value = entity.SerializedFields;
+
+                    query_success = cmd.ExecuteNonQuery() > 0;
+                    id = (ulong)cmd.LastInsertedId;
                 }
             }
-
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
             return query_success;
         }
         /// <summary>
@@ -108,41 +107,40 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>Rather the update was successful or not</returns>
         public bool Update(Asset entity)
         {
+            var con = new MySqlHandler().GetConnection();
             bool query_success = false;
 
             entity.SerializeFields();
 
-            if (dbcon.IsConnect())
+            try
             {
-                try
+                const string query = "UPDATE assets SET name=@name, description=@description, options=@options, updated_at=CURRENT_TIMESTAMP() " +
+                                     "WHERE id=@id";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query =
-                        "UPDATE assets SET name=@name, description=@description, options=@options, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
+                    cmd.Parameters.Add("@name", MySqlDbType.String);
+                    cmd.Parameters["@name"].Value = entity.Name;
 
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                    {
-                        cmd.Parameters.Add("@name", MySqlDbType.String);
-                        cmd.Parameters["@name"].Value = entity.Name;
+                    cmd.Parameters.Add("@description", MySqlDbType.String);
+                    cmd.Parameters["@description"].Value = entity.Description;
 
-                        cmd.Parameters.Add("@description", MySqlDbType.String);
-                        cmd.Parameters["@description"].Value = entity.Description;
+                    cmd.Parameters.Add("@options", MySqlDbType.JSON);
+                    cmd.Parameters["@options"].Value = entity.SerializedFields;
 
-                        cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                        cmd.Parameters["@options"].Value = entity.SerializedFields;
+                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                    cmd.Parameters["@id"].Value = entity.ID;
 
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = entity.ID;
-
-                        query_success = cmd.ExecuteNonQuery() > 0;
-                    }
-                }
-                catch(MySqlException e){ 
-                    Console.WriteLine(e);
-                }finally{
-                    dbcon.Close();
+                    query_success = cmd.ExecuteNonQuery() > 0;
                 }
             }
-
+            catch(MySqlException e){ 
+                Console.WriteLine(e);
+            }finally{
+                con.Close();
+            }
+            
             return query_success;
         }
 
@@ -153,32 +151,31 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>Rather the deletion was successful or not</returns>
         public bool Delete(Asset entity)
         {
+            var con = new MySqlHandler().GetConnection();
             bool query_success = false;
 
-            if (dbcon.IsConnect())
+            try
             {
-                try
+                const string query = "DELETE FROM assets WHERE id=@id";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query = "DELETE FROM assets WHERE id=@id";
+                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                    cmd.Parameters["@id"].Value = entity.ID;
 
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                    {
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = entity.ID;
-
-                        query_success = cmd.ExecuteNonQuery() > 0;
-                    }
-                }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    dbcon.Close();
+                    query_success = cmd.ExecuteNonQuery() > 0;
                 }
             }
-
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
             return query_success;
         }
 
@@ -189,39 +186,39 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>The asset or null, if the asset was not found in the database</returns>
         public Asset GetById(ulong id)
         {
+            var con = new MySqlHandler().GetConnection();
             Asset asset = null;
 
-            if (dbcon.IsConnect())
+            try
             {
-                try
+                const string query = "SELECT id, name, description, department_id, options, created_at, updated_at " +
+                                     "FROM assets WHERE id=@id";
+            
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query =
-                        "SELECT id, name, description, department_id, options, created_at, updated_at FROM assets WHERE id=@id";
+                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                    cmd.Parameters["@id"].Value = id;
 
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = id;
-
-                        using (var reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                asset = DBOToModelConvert(reader);
-                            }
+                            asset = DBOToModelConvert(reader);
                         }
+                        reader.Close();
                     }
                 }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    dbcon.Close();
-                }
             }
-
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
             return asset;
         }
 
@@ -232,42 +229,41 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
         public ObservableCollection<Asset> SearchByTags(List<int> tags_ids)
         {
+            var con = new MySqlHandler().GetConnection();
             ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
-
-            if (dbcon.IsConnect())
+            
+            //"WHERE atr.tag_id IN (@ids) GROUP BY a.id";
+            try
             {
-                //"WHERE atr.tag_id IN (@ids) GROUP BY a.id";
-                try
+                const string query = "SELECT a.* FROM assets AS a " +
+                                     "INNER JOIN asset_tags AS atr ON (a.id = atr.asset_id) " +
+                                     "WHERE atr.tag_id IN (@ids) GROUP BY a.id";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    const string query = "SELECT a.* FROM assets AS a " +
-                                         "INNER JOIN asset_tags AS atr ON (a.id = atr.asset_id) " +
-                                         "WHERE atr.tag_id IN (@ids) GROUP BY a.id";
+                    cmd.Parameters.Add("@ids", MySqlDbType.String);
+                    cmd.Parameters["@ids"].Value = string.Join(",", tags_ids);
 
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.Add("@ids", MySqlDbType.String);
-                        cmd.Parameters["@ids"].Value = string.Join(",", tags_ids);
-
-                        using (var reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                Asset asset = DBOToModelConvert(reader);
-                                assets.Add(asset);
-                            }
+                            assets.Add(DBOToModelConvert(reader));
                         }
+                        reader.Close();
                     }
                 }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    dbcon.Close();
-                }
             }
-
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
             return assets;
         }
 
@@ -282,43 +278,42 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
         public ObservableCollection<Asset> Search(string keyword)
         {
+            var con = new MySqlHandler().GetConnection();
             ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
 
-            if (dbcon.IsConnect())
+            try
             {
-                try
+                const string query = "SELECT id, name, description, department_id, options, created_at, updated_at " +
+                                     "FROM assets WHERE name LIKE @keyword";
+
+                if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
                 {
-                    const string query =
-                        "SELECT id, name, description, department_id, options, created_at, updated_at FROM assets WHERE name LIKE @keyword";
+                    keyword = "%" + keyword + "%";
+                }
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    cmd.Parameters.Add("@keyword", MySqlDbType.String);
+                    cmd.Parameters["@keyword"].Value = keyword;
 
-                    if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        keyword = "%" + keyword + "%";
-                    }
-
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
-                    {
-                        cmd.Parameters.Add("@keyword", MySqlDbType.String);
-                        cmd.Parameters["@keyword"].Value = keyword;
-
-                        using (var reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                Asset asset = DBOToModelConvert(reader);
-                                assets.Add(asset);
-                            }
+                            assets.Add(DBOToModelConvert(reader));
                         }
+                        reader.Close();
                     }
                 }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    dbcon.Close();
-                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
             }
 
             return assets;
@@ -343,7 +338,6 @@ namespace Asset_Management_System.Database.Repositories
                 new object[] { row_id, row_label, row_description, row_department_id, row_options, row_created_at, row_updated_at }, null, null);
         }
         
-        
         /// <summary>
         /// Adds a list of tags to an asset
         /// </summary>
@@ -353,7 +347,8 @@ namespace Asset_Management_System.Database.Repositories
         public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
         {
             return RemoveTags(asset, tags) && AddTags(asset, tags);
-        }
+        }
+        
         /// <summary>
         /// Removes the tags on the asset that are not in teh list of tags to be added
         /// </summary>
@@ -362,15 +357,19 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         private bool RemoveTags(Asset asset, List<Tag> tags)
         {
-            DBConnection dbcon = DBConnection.Instance();
-            bool query_success = false;
+            var con = new MySqlHandler().GetConnection();
+            bool query_success = false;
+
             // Makes a list of the ids of the tags to be added to the asset
-            List<ulong> tag_ids = tags.Select(p => p.ID).ToList();
+            List<ulong> tag_ids = tags.Select(p => p.ID).ToList();
+
             // Makes a list of the ids of the tags already on the asset
-            List<ulong> asset_tag_ids = GetAssetTags(asset).Select(p => p.ID).ToList();
-            // Removes the ids of the tags that are supposed to still be on the asset
-            // resulting in a list of ids of tags to be removed from the asset
-            asset_tag_ids = asset_tag_ids.Except(tag_ids).ToList();
+            List<ulong> asset_tag_ids = GetAssetTags(asset).Select(p => p.ID).ToList();
+
+            // Removes the ids of the tags that are supposed to stilll be on the asset
+            // resulting in a list of ids og tags to be removed from the asset
+            asset_tag_ids = asset_tag_ids.Except(tag_ids).ToList();
+
             StringBuilder query = new StringBuilder("DELETE FROM asset_tags WHERE asset_id = ");
             List<string> inserts = new List<string>();
 
@@ -387,9 +386,10 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                if (dbcon.IsConnect() && asset_tag_ids.Count > 0)
+                if (asset_tag_ids.Count > 0)
                 {
-                    using (var cmd = new MySqlCommand(query.ToString(), dbcon.Connection))
+                    con.Open();
+                    using (var cmd = new MySqlCommand(query.ToString(), con))
                     {
                         Console.WriteLine(cmd.CommandText);
                         query_success = cmd.ExecuteNonQuery() > 0;
@@ -402,11 +402,12 @@ namespace Asset_Management_System.Database.Repositories
             }
             finally
             {
-                dbcon.Close();
-            }
+                con.Close();
+            }
+
             return query_success;
         }
-     
+        
         /// <summary>
         /// Adds the tags that are not already on the asset
         /// </summary>
@@ -415,12 +416,15 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         private bool AddTags(Asset asset, List<Tag> tags)
         {
-            DBConnection dbcon = DBConnection.Instance();
-            bool query_success = false;
+            var con = new MySqlHandler().GetConnection();
+            bool query_success = false;
+
             // Makes a list of the ids of the tags to be added to the asset
-            List<ulong> tag_ids = tags.Select(p => p.ID).ToList();
+            List<ulong> tag_ids = tags.Select(p => p.ID).ToList();
+
             // Makes a list of the ids of the tags already on the asset
-            List<ulong> asset_tag_ids = GetAssetTags(asset).Select(p => p.ID).ToList();
+            List<ulong> asset_tag_ids = GetAssetTags(asset).Select(p => p.ID).ToList();
+
             // Removes the ids of the tags that are already on the asset
             // resulting in a list of ids of tags to still to be added to the asset
             tag_ids = tag_ids.Except(asset_tag_ids).ToList();
@@ -433,12 +437,14 @@ namespace Asset_Management_System.Database.Repositories
                 inserts.Add(string.Format("({0},{1})", asset.ID, tag_id));
             }
 
-            query.Append(string.Join(",", inserts));
+            query.Append(string.Join(",", inserts));
+
             try
             {
-                if (dbcon.IsConnect() && tag_ids.Count > 0)
+                if (tag_ids.Count > 0)
                 {
-                    using (var cmd = new MySqlCommand(query.ToString(), dbcon.Connection))
+                    con.Open();
+                    using (var cmd = new MySqlCommand(query.ToString(), con))
                     {
                         Console.WriteLine(cmd.CommandText);
                         query_success = cmd.ExecuteNonQuery() > 0;
@@ -451,11 +457,12 @@ namespace Asset_Management_System.Database.Repositories
             }
             finally
             {
-                dbcon.Close();
+                con.Close();
             }
 
             return query_success;
-        }
+        }
+
         /// <summary>
         /// Gets a list of all tags on an asset
         /// </summary>
@@ -463,42 +470,41 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public List<Tag> GetAssetTags(Asset asset)
         {
-            DBConnection dbcon = DBConnection.Instance();
+            var con = new MySqlHandler().GetConnection();
             List<Tag> tags = new List<Tag>();
-
             TagRepository tag_rep = new TagRepository();
 
-            if (dbcon.IsConnect())
+            try
             {
-                try
+                string query = "SELECT * FROM tags AS t " +
+                               "INNER JOIN asset_tags ON tag_id = t.id " +
+                               "WHERE asset_id = @asset_id";
+
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
                 {
-                    string query = "SELECT * FROM tags AS t " +
-                                   "INNER JOIN asset_tags ON tag_id = t.id " +
-                                   "WHERE asset_id = @asset_id";
+                    cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
+                    cmd.Parameters["@asset_id"].Value = asset.ID;
 
-                    using (var cmd = new MySqlCommand(query, dbcon.Connection))
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@asset_id"].Value = asset.ID;
-
-                        using (var reader = cmd.ExecuteReader())
+                        while (reader.Read())
                         {
-                            while (reader.Read())
-                            {
-                                tags.Add(tag_rep.DBOToModelConvert(reader));
-                            }
+                            tags.Add(tag_rep.DBOToModelConvert(reader));
                         }
+                        reader.Close();
                     }
                 }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    dbcon.Close();
-                }
             }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
             return tags;
         }
     }

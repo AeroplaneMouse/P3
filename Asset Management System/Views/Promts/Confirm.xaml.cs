@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Asset_Management_System.Events;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -11,16 +12,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Asset_Management_System.Views
+namespace Asset_Management_System.Views.Promts
 {
     /// <summary>
-    /// Interaction logic for Popup.xaml
+    /// Interaction logic for Confirm.xaml
     /// </summary>
-    public partial class Popup : Page
+    public partial class Confirm : Page
     {
-        public Popup()
+        public Confirm(string message, PromtEventHandler handler)
         {
             InitializeComponent();
+            DataContext = new ViewModels.Promts.ConfirmViewModel(message, handler);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Asset_Management_System.Models;
+using Asset_Management_System.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -148,9 +149,12 @@ namespace Asset_Management_System.ViewModels
             }
 
             // Initialize commands
-            SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _editing);
-            AddFieldCommand = new AddFieldCommand(this, true);
-            RemoveFieldCommand = new RemoveFieldCommand(this);
+            SaveAssetCommand = new Commands.SaveAssetCommand(this, _main, _asset, _editing);
+            AddFieldCommand = new Commands.AddFieldCommand(this, true);
+            RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
+            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Assets(main)));
+            //AddFieldTestCommand = new Base.RelayCommand(() => AddField());
+            //AddFieldTest2Command = new Base.RelayCommand(() => AddField2());
 
             #region Tag related variables
 
@@ -179,14 +183,40 @@ namespace Asset_Management_System.ViewModels
             UnTagTagCommand = new UntagTagCommand(this);
         }
 
+        //private void AddField()
+        //{
+        //    Field field = new Field("Test field", "", 1, "", false);
+        //    FieldsList.Add(field);
+        //    Console.WriteLine("Field added");
+        //}
+
+        //private void AddField2()
+        //{
+        //    Field field = new Field("Test field 2", "", 2, "", false);
+        //    FieldsList.Add(field);
+        //    Console.WriteLine("Field 2 added");
+        //}
+
         public ICommand SaveAssetCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
         public static ICommand RemoveFieldCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
 
+        public ICommand AddFieldTestCommand { get; set; }
+        public ICommand AddFieldTest2Command { get; set; }
 
         public bool CanSaveAsset()
         {
             //TODO Figure out the implementation for this one.
+            // **** TODO ****
+            // Only return true, if the entered values are valid.
+
+            //foreach (Field field in FieldsList)
+            //{
+            //    if (field.Required && field.Content == String.Empty)
+            //        return false;
+            //}
+
             return true;
         }
 

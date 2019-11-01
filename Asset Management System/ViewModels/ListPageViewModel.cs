@@ -64,7 +64,7 @@ namespace Asset_Management_System.ViewModels
             get => _pageType;
             set => _pageType = value;
         }
-
+        
         public int SelectedItemIndex { get; set; }
 
         public ObservableCollection<T> SearchList
@@ -108,6 +108,8 @@ namespace Asset_Management_System.ViewModels
             PrintCommand = new Base.RelayCommand(Print);
             SearchCommand = new Base.RelayCommand(Search);
             ViewCommand = new Base.RelayCommand(View);
+
+            Search();
         }
 
         #endregion

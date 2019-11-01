@@ -75,7 +75,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                    <Border Padding="{TemplateBinding Padding}" 
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="3">
                         <TextBlock VerticalAlignment="Center" 
                                    HorizontalAlignment="Center" 
                                    Text="{TemplateBinding Content}" 
@@ -101,9 +103,10 @@
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
 
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="9" />
+        <Setter Property="Padding" Value="8" />
         <Setter Property="Foreground" Value="{StaticResource BackgroundDarkBrush}" />
-
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        
         <!-- Stretches the buttons so they are bigger. Remove when changing to icon! -->
         <Setter Property="LayoutTransform">
             <Setter.Value>
@@ -114,7 +117,7 @@
         <!-- Makes the content of the button a textblock. Should be icon! -->
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
+                <ControlTemplate TargetType="{x:Type Button}" x:Name="TestSaasd">
                     <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
                         <TextBlock VerticalAlignment="Center" 
                                    HorizontalAlignment="Center" 
@@ -148,10 +151,68 @@
     </Style>
     
     <!-- Regular button -->
-    <Style TargetType="{x:Type Button}" x:Key="RegularButton" BasedOn="{StaticResource NavigationButton}">
+    <Style TargetType="{x:Type Button}" x:Key="RegularButton">
+        <!-- So it can be clicked -->
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        
         <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+        <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Width" Value="100"/>
-        <Setter Property="Padding" Value="5"></Setter>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        <Setter Property="Padding" Value="6"/>
+        <Setter Property="BorderBrush" Value="Black"/>
+        <Setter Property="BorderThickness" Value="0"/>
+
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+
+        <!-- Makes the content of the button a textblock -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Padding="{TemplateBinding Padding}" 
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="3">
+                        <TextBlock VerticalAlignment="Center" 
+                                   HorizontalAlignment="Center" 
+                                   Text="{TemplateBinding Content}" 
+                                   Foreground="{TemplateBinding Foreground}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Adds the hover effect -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+            </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderThickness" Value="1"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Regular cancel button -->
+    <Style TargetType="Button" x:Key="RegularCancelButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
+        
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource CancelRedHighlightBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Regular accept button -->
+    <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource AcceptGreenHightlightBrush}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="ButtonFocusVisual">
@@ -169,40 +230,65 @@
         </Setter>
     </Style>
     
-    <!-- Department menu item button -->
-    <Style TargetType="Button" x:Key="MenuItemDepartmentButton">
+    <!-- Department content menu item button -->
+    <Style TargetType="Button" x:Key="DepartmentButton">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Padding" Value="0, 5, 0, 5"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
-        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
 
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border TextBlock.Foreground="{TemplateBinding Foreground}"
-                            x:Name="Border"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Background="{TemplateBinding Background}"
+                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
                             Padding="{TemplateBinding Padding}">
                         <ContentPresenter
-                            HorizontalAlignment="Left"
                             VerticalAlignment="Center"
-                            Margin="35, 0, 0, 0"
+                            Content="{TemplateBinding Content}"
                             RecognizesAccessKey="True"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
 
+    <!--<Style TargetType="Button" x:Key="DepartmentButtonEdit" BasedOn="{StaticResource DepartmentButton}">
+        <Setter Property="Content">
+            <Setter.Value>
+                <Image Source="{StaticResource Edit_White}"/>
+            </Setter.Value>
+        </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
+                <Setter Property="Content">
+                    <Setter.Value>
+                        <Image Source="{StaticResource Edit_Black}"/>
+                    </Setter.Value>
+                </Setter>
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
+    <Style TargetType="Button" x:Key="DepartmentButtonRemove" BasedOn="{StaticResource DepartmentButton}">
+        <Setter Property="Content">
+            <Setter.Value>
+                <Image Source="{StaticResource Trash_White}"/>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Content">
+                    <Setter.Value>
+                        <Image Source="{StaticResource Trash_Black}"/>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+    </Style>-->
+
+
     <!-- Remove notification button -->
     <Style TargetType="Button" x:Key="RemoveNotificationButton">
         <Setter Property="Background" Value="Transparent"/>
@@ -235,6 +321,19 @@
     <Style TargetType="Button" x:Key="AddFieldButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Command" Value="{Binding AddFieldCommand}"/>
         
+    </Style>
+    
+    <!-- Delete field button -->
+    <Style TargetType="Button" x:Key="DeleteFieldButton" BasedOn="{StaticResource RegularCancelButton}">
+        <Setter Property="Content" Value="X"/>
+        <Setter Property="Grid.Row" Value="0"/>
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
+        <Setter Property="Command" Value="{Binding DeleteFieldCommand}"/>
+        <Setter Property="CommandParameter" Value="{Binding Path=ID}"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
     </Style>
     
 </ResourceDictionary>

@@ -6,6 +6,7 @@ using Asset_Management_System.Logging;
 using Asset_Management_System.Models;
 using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Database.Repositories;
+using System.Windows;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -29,6 +30,7 @@ namespace Asset_Management_System.ViewModels
             AddNewCommand = new Base.RelayCommand(AddNew);
             EditCommand = new Base.RelayCommand(Edit);
             RemoveCommand = new Base.RelayCommand(Remove);
+
         }
 
         #endregion
@@ -102,6 +104,16 @@ namespace Asset_Management_System.ViewModels
 
             Search();
         }
+
+        #endregion
+
+
+        #region Helpers
+
+        public Visibility IsRemoveVisible { get; set; } = Visibility.Hidden;
+
+        public string Title { get; set; }
+
 
         #endregion
     }

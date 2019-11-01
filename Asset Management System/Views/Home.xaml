@@ -12,30 +12,84 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock VerticalAlignment="Center"
+        <Border Padding="0 20 0 20"
+                Margin="10 0 10 0"
+                BorderBrush="Gray"
+                BorderThickness="0 0 0 1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                
+                <!-- Dashboard headers -->
+                <TextBlock Grid.Column="0"
+                           Text="Users"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource HeaderStyle}"/>
+
+                <TextBlock Grid.Column="1"
+                           HorizontalAlignment="Center"
+                           Text="Assets"
+                           Style="{StaticResource HeaderStyle}"/>
+
+                <TextBlock Grid.Column="2"
+                           HorizontalAlignment="Center"
+                           Text="Tags"
+                           Style="{StaticResource HeaderStyle}"/>
+
+                <TextBlock Grid.Column="3"
+                           HorizontalAlignment="Center"
+                           Text="Departments"
+                           Style="{StaticResource HeaderStyle}"/>
+                
+                <!-- Dashboard info -->
+                <TextBlock Grid.Row="1"
+                           Grid.Column="0"
+                           HorizontalAlignment="Center"
+                           Text="{Binding NumberOfUsers}"
+                           Style="{StaticResource TitleStyle}"/>
+                <TextBlock Grid.Row="1"
+                           Grid.Column="1"
+                           HorizontalAlignment="Center"
+                           Text="{Binding NumberOfAssets}"
+                           Style="{StaticResource TitleStyle}"/>
+                <TextBlock Grid.Row="1"
+                           Grid.Column="2"
+                           HorizontalAlignment="Center"
+                           Text="{Binding NumberOfTags}"
+                           Style="{StaticResource TitleStyle}"/>
+                <TextBlock Grid.Row="1"
+                           Grid.Column="3"
+                           HorizontalAlignment="Center"
+                           Text="{Binding NumberOfDepartments}"
+                           Style="{StaticResource TitleStyle}"/>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+                <TextBlock VerticalAlignment="Center"
                    HorizontalAlignment="Center"
-                   FontFamily="{StaticResource SegoeRegular}"
+                   Style="{StaticResource TitleStyle}"
                    FontSize="{StaticResource FontSizeXLarge}"
                    Text="Welcome to your Asset Management System"/>
-
-        <StackPanel Orientation="Vertical"
-                    Grid.Row="1"
-                    Margin="0, 20, 0, 0"
-                    HorizontalAlignment="Center">
-            <TextBlock FontFamily="{StaticResource SegoeRegular}"
-                       FontSize="{StaticResource FontSizeLarge}"
-                       Text="{Binding NumberOfAssets}"/>
-            <TextBlock Text="{Binding NumberOfTags}"
-                       FontSize="{StaticResource FontSizeLarge}"
-                       FontFamily="{StaticResource SegoeRegular}"/>
-            <TextBlock Text="{Binding NumberOfDepartments}"
-                       FontSize="{StaticResource FontSizeLarge}"
-                       FontFamily="{StaticResource SegoeRegular}"/>
-
-        </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </Page>
