@@ -16,6 +16,7 @@ namespace Asset_Management_System.ViewModels.Commands
 
         private readonly bool _isCustom;
 
+        
         public AddFieldCommand(FieldsController viewModel, bool isCustom = false)
         {
             _viewModel = viewModel;
@@ -65,9 +66,20 @@ namespace Asset_Management_System.ViewModels.Commands
 
             if (fieldType != 0 && correctPrompt)
             {
-                ShownField shownField = new ShownField(new Field(promptResults[0], promptResults[1], fieldType,
-                    promptResults[1],
-                    required, _isCustom));
+                string defaultValue="";
+                string content="";
+                if (_isCustom)
+                {
+                    defaultValue = promptResults[1];
+                    content = promptResults[1];
+                }
+                else
+                {
+                    defaultValue = promptResults[1];
+                }
+                ShownField shownField = new ShownField(new Field(promptResults[0], content, fieldType,
+                    defaultValue,
+                    required,_isCustom));
                 _viewModel.FieldsList.Add(shownField);
             }
         }

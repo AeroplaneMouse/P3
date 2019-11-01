@@ -13,7 +13,7 @@ using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class AssetManagerViewModel : FieldsController
+    public class AssetManagerViewModel : ObjectManagerController
     {
         private MainViewModel _main;
         private Asset _asset;
@@ -54,7 +54,7 @@ namespace Asset_Management_System.ViewModels
 
         #region tag related public Properties
 
-        public ObservableCollection<Tag> CurrentlyAddedTags { get; set; }
+        
 
         public List<Models.Asset> AssetList;
 
@@ -85,7 +85,10 @@ namespace Asset_Management_System.ViewModels
                 return _tagList.Take(10).ToList();
             }
 
-            set { }
+            set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(value));
+            }
         }
 
         // The string that is being searched for, exposed to the view
@@ -127,22 +130,26 @@ namespace Asset_Management_System.ViewModels
 
             _assetRep = new AssetRepository();
 
-            CurrentlyAddedTags = new ObservableCollection<Tag>();
             FieldsList = new ObservableCollection<ShownField>();
             if (inputAsset != null)
             {
                 _asset = inputAsset;
+                LoadFields();
+                
                 CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
+                ConnectTags();
+
 
                 foreach (Tag tag in CurrentlyAddedTags)
                     Console.WriteLine("id: " + tag.ID);
                 Console.WriteLine("________");
 
-                LoadFields();
+                
                 _editing = true;
             }
             else
             {
+                CurrentlyAddedTags = new ObservableCollection<Tag>();
                 _asset = new Asset();
                 _editing = false;
             }
@@ -315,53 +322,7 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        private void ConnectTags()
-        {
-            foreach (var tag in CurrentlyAddedTags)
-            {
-                if (!TagIsOnAsset(tag))
-                {
-                    foreach (var tagField in tag.FieldsList)
-                    {
-                        ShowIfNewField(tagField, tag);
-                    }
-                }
-            }
-        }
-
-
-        private bool TagIsOnAsset(Tag tag)
-        {
-            List<Tag> assetTags = _assetRep.GetAssetTags(_asset);
-
-            foreach (Tag assetTag in assetTags)
-            {
-                if (tag.ID == assetTag.ID)
-                    return true;
-            }
-
-            return false;
-        }
-
-        private void ShowIfNewField(Field tagField, Tag tag)
-        {
-            bool alreadyExists = false;
-
-            foreach (var shownField in FieldsList)
-            {
-                if (shownField.ShownFieldToFieldComparator(tagField))
-                {
-                    alreadyExists = true;
-                    if (!shownField.FieldTags.Contains(tag))
-                    {
-                        shownField.FieldTags.Add(tag);
-                    }
-                }
-            }
-
-            if (alreadyExists == false)
-                FieldsList.Add(new ShownField(tagField));
-        }
+        
 
         #endregion
     }

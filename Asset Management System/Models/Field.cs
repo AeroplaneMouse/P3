@@ -68,7 +68,7 @@ namespace Asset_Management_System.Models
             }
         }
 
-        public readonly string DefaultValue;
+        public string DefaultValue;
 
         /// <summary>
         /// Returns the object information as a dictionary.

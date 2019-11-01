@@ -47,6 +47,7 @@ namespace Asset_Management_System.ViewModels.Commands
             _tag.FieldsList = new List<Field>();
             foreach (var shownFields in _viewModel.FieldsList)
             {
+                shownFields.Field.DefaultValue = shownFields.Field.Content;
                 _tag.AddField(shownFields.Field);
             }
 

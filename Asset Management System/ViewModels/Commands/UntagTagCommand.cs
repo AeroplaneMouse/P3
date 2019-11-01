@@ -56,8 +56,15 @@ namespace Asset_Management_System.ViewModels.Commands
         {
             foreach (var currentShownField in removeList)
             {
+                if (!currentShownField.Field.IsCustom)
+                {
+                    _viewModel.HiddenFields.Add(currentShownField);
+                }
+
                 _viewModel.FieldsList.Remove(currentShownField);
             }
         }
     }
+}
+
 }

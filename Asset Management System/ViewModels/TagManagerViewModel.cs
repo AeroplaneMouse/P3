@@ -9,7 +9,7 @@ using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class TagManagerViewModel : FieldsController
+    public class TagManagerViewModel : ObjectManagerController
     {
         private MainViewModel _main;
         private Tag _tag;
@@ -99,6 +99,8 @@ namespace Asset_Management_System.ViewModels
                 FieldsList.Add(new ShownField(field));
             }
 
+            ConnectTags();
+            
             //Set Name to the name of the chosen tag
             Name = _tag.Name;
 
