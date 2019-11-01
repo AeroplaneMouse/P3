@@ -63,8 +63,8 @@ namespace Asset_Management_System.Database.Repositories
             entity.SerializeFields();
 
             try{
-                const string query = "INSERT INTO assets (name, description, department_id, options, updated_at) "+ 
-                		             "VALUES (@name, @description, @department, @options, CURRENT_TIMESTAMP())";
+                const string query = "INSERT INTO assets (name, identifier, description, department_id, options, updated_at) "+ 
+                		             "VALUES (@name, @identifier, @description, @department, @options, CURRENT_TIMESTAMP())";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -74,6 +74,9 @@ namespace Asset_Management_System.Database.Repositories
 
                     cmd.Parameters.Add("@description", MySqlDbType.String);
                     cmd.Parameters["@description"].Value = entity.Description;
+
+                    cmd.Parameters.Add("@identifier", MySqlDbType.String);
+                    cmd.Parameters["@identifier"].Value = entity.Identifier;
 
                     cmd.Parameters.Add("@department", MySqlDbType.UInt64);
                     cmd.Parameters["@department"].Value = entity.DepartmentID;
@@ -111,7 +114,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "UPDATE assets SET name=@name, description=@description, options=@options, updated_at=CURRENT_TIMESTAMP() " +
+                const string query = "UPDATE assets SET name=@name, identifier=@identifier, description=@description, options=@options, updated_at=CURRENT_TIMESTAMP() " +
                                      "WHERE id=@id";
                 
                 con.Open();
@@ -122,6 +125,9 @@ namespace Asset_Management_System.Database.Repositories
 
                     cmd.Parameters.Add("@description", MySqlDbType.String);
                     cmd.Parameters["@description"].Value = entity.Description;
+
+                    cmd.Parameters.Add("@identifier", MySqlDbType.String);
+                    cmd.Parameters["@identifier"].Value = entity.Identifier;
 
                     cmd.Parameters.Add("@options", MySqlDbType.JSON);
                     cmd.Parameters["@options"].Value = entity.SerializedFields;
