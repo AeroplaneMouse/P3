@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using Asset_Management_System.Models;
-using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Collections.ObjectModel;
@@ -13,10 +9,10 @@ namespace Asset_Management_System.Database.Repositories
 {
     public class TagRepository : ITagRepository
     {
-        public int GetCount()
+        public ulong GetCount()
         {
             var con = new MySqlHandler().GetConnection();
-            int count = 0;
+            ulong count = 0;
 
             try
             {
@@ -28,8 +24,7 @@ namespace Asset_Management_System.Database.Repositories
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
-                            count = reader.GetInt32("COUNT(*)");
-                        
+                            count = reader.GetUInt64("COUNT(*)");
                         reader.Close();
                     }
                 }
@@ -50,11 +45,12 @@ namespace Asset_Management_System.Database.Repositories
         /// 
         /// </summary>
         /// <param name="entity"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         public bool Insert(Tag entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            bool querySuccess = false;
 
             id = 0;
 
@@ -83,7 +79,7 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
                     cmd.Parameters["@parent_id"].Value = entity.ParentID;
 
-                    query_success = cmd.ExecuteNonQuery() > 0;
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
 
                     id = (ulong)cmd.LastInsertedId;
                 }
@@ -97,7 +93,7 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
             
-            return query_success;
+            return querySuccess;
         }
 
         /// <summary>
@@ -108,7 +104,7 @@ namespace Asset_Management_System.Database.Repositories
         public bool Update(Tag entity)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            bool querySuccess = false;
 
             entity.SerializeFields();
 
@@ -134,7 +130,7 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                     cmd.Parameters["@id"].Value = entity.ID;
 
-                    query_success = cmd.ExecuteNonQuery() > 0;
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
                 }
             }
             catch (MySqlException e)
@@ -146,7 +142,7 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
   
-            return query_success;
+            return querySuccess;
         }
 
         /// <summary>
@@ -157,7 +153,7 @@ namespace Asset_Management_System.Database.Repositories
         public bool Delete(Tag entity)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            bool querySuccess = false;
 
             try
             {
@@ -169,7 +165,7 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                     cmd.Parameters["@id"].Value = entity.ID;
 
-                    query_success = cmd.ExecuteNonQuery() > 0;
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
                 }
             }
             catch (MySqlException e)
@@ -181,7 +177,7 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
             
-            return query_success;
+            return querySuccess;
         }
 
         /// <summary>
@@ -239,9 +235,9 @@ namespace Asset_Management_System.Database.Repositories
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="parent_id"></param>
+        /// <param name="parentId"></param>
         /// <returns></returns>
-        public IEnumerable<Tag> GetChildTags(ulong parent_id)
+        public IEnumerable<Tag> GetChildTags(ulong parentId)
         {
             var con = new MySqlHandler().GetConnection();
             List<Tag> tags = new List<Tag>();
@@ -255,7 +251,7 @@ namespace Asset_Management_System.Database.Repositories
                 using (var cmd = new MySqlCommand(query, con))
                 {
                     cmd.Parameters.Add("@id", MySqlDbType.Int64);
-                    cmd.Parameters["@id"].Value = parent_id;
+                    cmd.Parameters["@id"].Value = parentId;
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -367,18 +363,18 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public Tag DBOToModelConvert(MySqlDataReader reader)
         {
-            ulong row_id = reader.GetUInt64("id");
-            String row_label = reader.GetString("label");
-            ulong row_parent_id = reader.GetUInt64("parent_id");
-            ulong row_department_id = reader.GetUInt64("department_id");
-            string row_color = reader.GetString("color");
-            DateTime row_created_at = reader.GetDateTime("created_at");
-            DateTime row_updated_at = reader.GetDateTime("updated_at");
-            string row_options = reader.GetString("options");
+            ulong rowId = reader.GetUInt64("id");
+            String rowLabel = reader.GetString("label");
+            ulong rowParentId = reader.GetUInt64("parent_id");
+            ulong rowDepartmentId = reader.GetUInt64("department_id");
+            string rowColor = reader.GetString("color");
+            DateTime rowCreatedAt = reader.GetDateTime("created_at");
+            DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
+            string rowOptions = reader.GetString("options");
 
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] {row_id, row_label, row_department_id, row_parent_id, row_color, row_created_at, row_updated_at,row_options}, null,
+                new object[] { rowId, rowLabel, rowDepartmentId, rowParentId, rowColor, rowCreatedAt, rowUpdatedAt, rowOptions }, null,
                 null);
         }
     }
