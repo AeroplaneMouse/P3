@@ -12,20 +12,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Asset_Management_System.Views.Promts
+namespace Asset_Management_System.Views.Prompts
 {
     /// <summary>
-    /// Interaction logic for TextInput.xaml
+    /// Interaction logic for Confirm.xaml
     /// </summary>
-    public partial class TextInput : Page
+    public partial class Confirm : Page
     {
-        public TextInput(string message, PromtEventHandler handler)
-            : this(message, null, handler) { }
-
-        public TextInput(string message, string startingText, PromtEventHandler handler )
+        public Confirm(string message, PromptEventHandler handler)
         {
             InitializeComponent();
-            DataContext = new ViewModels.Promts.TextInputViewModel(message, startingText, handler);
+            DataContext = new ViewModels.Prompts.ConfirmViewModel(message, handler);
         }
     }
 }

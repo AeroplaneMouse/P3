@@ -69,14 +69,14 @@ namespace Asset_Management_System.ViewModels
             ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
             RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
             
-            //AddNotificationTestCommand = new Base.RelayCommand(DisplayPromt);
+            //AddNotificationTestCommand = new Base.RelayCommand(DisplayPrompt);
 
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
             EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
             AddDepartmentCommand = new Base.RelayCommand(() =>
             {
-                DisplayPromt(new Views.Promts.TextInput("Enter the name of your new department", AddDepartment));
+                DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment));
             });
 
             // Fixes window sizing issues at maximized
@@ -85,7 +85,7 @@ namespace Asset_Management_System.ViewModels
             (splashScreen.DataContext as SplashViewModel).StartWorker();
         }
 
-        private void AddDepartment(object sender, PromtEventArgs e)
+        private void AddDepartment(object sender, PromptEventArgs e)
         {
             if (e.Result)
             {
@@ -203,13 +203,13 @@ namespace Asset_Management_System.ViewModels
 
         #region Public Methods
 
-        public void DisplayPromt(Page promtPage)
+        public void DisplayPrompt(Page promptPage)
         {
-            PopupPage = promtPage;
-            (promtPage.DataContext as Promts.PromtViewModel).PromtElapsed += PromtElapsed;
+            PopupPage = promptPage;
+            (promptPage.DataContext as Prompts.PromptViewModel).PromptElapsed += PromptElapsed;
         }
 
-        private void PromtElapsed(object sender, PromtEventArgs e)
+        private void PromptElapsed(object sender, PromptEventArgs e)
         {
             // Removing popup
             PopupPage = null;

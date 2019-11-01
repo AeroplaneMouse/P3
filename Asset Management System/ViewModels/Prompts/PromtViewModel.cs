@@ -1,21 +1,21 @@
 ﻿using System.Windows.Input;
 using Asset_Management_System.Events;
 
-namespace Asset_Management_System.ViewModels.Promts
+namespace Asset_Management_System.ViewModels.Prompts
 {
-    public abstract class PromtViewModel : Base.BaseViewModel, IPromt
+    public abstract class PromptViewModel : Base.BaseViewModel, IPrompt
     {
-        public abstract event PromtEventHandler PromtElapsed;
+        public abstract event PromptEventHandler PromptElapsed;
         public ICommand AcceptCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
         public string MessageText { get; set; }
 
 
-        public PromtViewModel(string message, PromtEventHandler handler)
+        public PromptViewModel(string message, PromptEventHandler handler)
         {
             MessageText = message;
-            PromtElapsed += handler;
+            PromptElapsed += handler;
 
             // Initializing commands
             AcceptCommand = new Base.RelayCommand(Accept);

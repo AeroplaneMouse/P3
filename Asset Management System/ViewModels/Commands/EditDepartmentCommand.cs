@@ -45,13 +45,13 @@ namespace Asset_Management_System.ViewModels.Commands
             if (department != null)
             {
                 editingDepartment = department; 
-                _main.DisplayPromt(new Views.Promts.TextInput("Enter new name", department.Name, PromtElapsed));
+                _main.DisplayPrompt(new Views.Prompts.TextInput("Enter new name", department.Name, PromptElapsed));
             }
             else
                 _main.AddNotification(new Notification("ERROR! Editing department failed. Department not found!", Notification.ERROR), 3500);
         }
 
-        private void PromtElapsed(object sender, PromtEventArgs e)
+        private void PromptElapsed(object sender, PromptEventArgs e)
         {
             if (e.Result && e.ResultMessage != null)
             {

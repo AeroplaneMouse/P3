@@ -125,16 +125,16 @@
     </Style>
     
     <!-- *************************** -->
-    <!-- Promt elements-->
+    <!-- Prompt elements-->
     
-    <!-- Promt background canvas -->
-    <Style TargetType="Canvas" x:Key="PromtBackground">
+    <!-- Prompt background canvas -->
+    <Style TargetType="Canvas" x:Key="PromptBackground">
         <Setter Property="Opacity" Value="0.34"/>
         <Setter Property="Background" Value="Black"/>
     </Style>
     
-    <!-- Promt Border -->
-    <Style TargetType="Border" x:Key="PromtBorder">
+    <!-- Prompt Border -->
+    <Style TargetType="Border" x:Key="PromptBorder">
         <Setter Property="Width" Value="300"/>
         <Setter Property="Height" Value="160"/>
         <Setter Property="CornerRadius" Value="3"/>
@@ -142,7 +142,7 @@
     </Style>
     
     <!-- Display text -->
-    <Style TargetType="TextBlock" x:Key="PromtDisplay" BasedOn="{StaticResource HeaderStyle}">
+    <Style TargetType="TextBlock" x:Key="PromptDisplay" BasedOn="{StaticResource HeaderStyle}">
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Margin" Value="0 10 0 0"/>
         <Setter Property="MaxWidth" Value="270"/>
@@ -151,7 +151,7 @@
     </Style>
     
     <!-- Input text -->
-    <Style TargetType="TextBox" x:Key="PromtInput" BasedOn="{StaticResource BaseTextBoxStyle}">
+    <Style TargetType="TextBox" x:Key="PromptInput" BasedOn="{StaticResource BaseTextBoxStyle}">
         <Setter Property="Width" Value="216"/>
         <Setter Property="Margin" Value="0 10 0 0"/>
     </Style>                              

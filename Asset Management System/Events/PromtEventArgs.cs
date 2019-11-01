@@ -4,18 +4,18 @@ using System.Text;
 
 namespace Asset_Management_System.Events
 {
-    public delegate void PromtEventHandler(object sender, PromtEventArgs e);
+    public delegate void PromptEventHandler(object sender, PromptEventArgs e);
 
-    public class PromtEventArgs
+    public class PromptEventArgs
     {
         public bool Result;
         public string ResultMessage;
 
 
-        public PromtEventArgs(bool result)
+        public PromptEventArgs(bool result)
             : this(result, null) { }
 
-        public PromtEventArgs(bool result, string resultMessage)
+        public PromptEventArgs(bool result, string resultMessage)
         {
             Result = result;
             ResultMessage = resultMessage;

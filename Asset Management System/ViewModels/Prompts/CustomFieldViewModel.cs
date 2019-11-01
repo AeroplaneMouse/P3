@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Asset_Management_System.ViewModels.Promts
+namespace Asset_Management_System.ViewModels.Prompts
 {
-    public class CustomFieldViewModel : PromtViewModel
+    public class CustomFieldViewModel : PromptViewModel
     {
-        public override event PromtEventHandler PromtElapsed;
+        public override event PromptEventHandler PromptElapsed;
 
 
-        public CustomFieldViewModel(string message, PromtEventHandler handler)
+        public CustomFieldViewModel(string message, PromptEventHandler handler)
             : base(message, handler)
         {
 

@@ -10,7 +10,7 @@ namespace Asset_Management_System.ViewModels.Commands
     {
         private MainViewModel _main;
         private Department departmentToRemove;
-        private bool promtResult;
+        private bool promptResult;
 
         public event EventHandler CanExecuteChanged;
 
@@ -48,9 +48,9 @@ namespace Asset_Management_System.ViewModels.Commands
                 {
                     // TODO: Add check for assets and tags conneced to the department.
 
-                    // Promting user for confirmation
+                    // Prompting user for confirmation
                     departmentToRemove = department;
-                    _main.DisplayPromt(new Views.Promts.Confirm($"Are you sure you want to delete { department.Name }?", PromtElapsed));
+                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete { department.Name }?", PromptElapsed));
                 }
                 else
                     _main.AddNotification(new Notification("ERROR! You cannot remove your current department. Please change your department and then try again.", Notification.ERROR), 3500);            
@@ -59,7 +59,7 @@ namespace Asset_Management_System.ViewModels.Commands
                 _main.AddNotification(new Notification("ERROR! Removing department failed. Department not found!", Notification.ERROR));
         }
 
-        public void PromtElapsed(object sender, PromtEventArgs e)
+        public void PromptElapsed(object sender, PromptEventArgs e)
         {
             if (e.Result)
             {
