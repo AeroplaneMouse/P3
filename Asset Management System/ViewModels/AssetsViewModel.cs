@@ -16,22 +16,13 @@ namespace Asset_Management_System.ViewModels
 {
     public class AssetsViewModel : ChangeableListPageViewModel<AssetRepository, Asset>
     {
-        #region Constructors
-
         private MainViewModel _main;
+        public int ViewType => 1;
+
         public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
             _main = main;
             Title = "Assets";
         }
-
-        #endregion
-
-        #region Public Properties
-
-        public int ViewType => 1;
-
-
-        #endregion
     }
 }

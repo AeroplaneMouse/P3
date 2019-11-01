@@ -15,16 +15,13 @@ namespace Asset_Management_System.ViewModels
 {
     public class TagsViewModel : ChangeableListPageViewModel<TagRepository, Tag>
     {
-        #region Constructors
-
-        public TagsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType) { }
-
-        #endregion
-
-        #region Public Properties
-
         public int ViewType => 2;
 
-        #endregion
+        public TagsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType) 
+        {
+            Title = "Tags";
+        }
+
+
     }
 }
