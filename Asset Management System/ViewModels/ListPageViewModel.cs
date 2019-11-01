@@ -21,7 +21,7 @@ namespace Asset_Management_System.ViewModels
     {
         #region Private Members
 
-        private MainViewModel _main;
+        protected MainViewModel _main;
 
         private ObservableCollection<T> _list { get; set; }
 
