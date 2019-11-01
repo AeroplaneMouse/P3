@@ -37,8 +37,11 @@ namespace Asset_Management_System.ViewModels.Commands
             Console.WriteLine("Testing: " + CanExecute(parameter));
             
             _asset.Name = _viewModel.Name;
-            _asset.Identifier = _viewModel.Identifier;
             _asset.Description = _viewModel.Description;
+
+            _asset.Identifier = _viewModel.Identifier;
+            if (_asset.Identifier == null)
+                _asset.Identifier = "";
 
             _asset.FieldsList = new List<Field>();
             // Checks if Name or Description is not empty.
