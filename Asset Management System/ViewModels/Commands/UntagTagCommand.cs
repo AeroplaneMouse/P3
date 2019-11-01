@@ -46,12 +46,12 @@ namespace Asset_Management_System.ViewModels.Commands
 
             if (removeList.Count > 0)
             {
-                DeleteAssets();
+                DeleteFields();
             }
             
         }
 
-        private void DeleteAssets()
+        private void DeleteFields()
         {
             foreach (var currentShownField in removeList)
             {
