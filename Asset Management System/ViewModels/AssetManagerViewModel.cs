@@ -319,56 +319,19 @@ namespace Asset_Management_System.ViewModels
 
         private void ConnectTags()
         {
+            bool alreadyExists = true;
             foreach (var tag in CurrentlyAddedTags)
             {
-                foreach (var tagField in tag.FieldsList)
-                {
-                    foreach (var shownField in FieldsList)
-                    {
-                        if (shownField.ShownFieldToFieldComparator(tagField))
-                        {
-                            _alreadyExists = true;
-
-                            if (!shownField.FieldTags.Contains(tag))
-                            {
-                                shownField.FieldTags.Add(tag);
-                            }
-
-                            Console.WriteLine("\n \n-----------------");
-                            Console.WriteLine("Label : " + shownField.Field.Label);
-                            Console.WriteLine("----------------");
-                            foreach (var currentTag in shownField.FieldTags)
-                            {
-                                Console.WriteLine("    Tag name: " + currentTag.Name);
-                            }
-
-                            Console.WriteLine("-------------- \n \n");
-
-                            Console.WriteLine("exists: " + tagField.Content);
-                        }
-                    }
-
-                    if (_alreadyExists == false)
-                        FieldsList.Add(new ShownField(tagField));
-
-                    _alreadyExists = false;
                 if (!TagIsOnAsset(tag))
                 {
                     foreach (var tagField in tag.FieldsList)
                     {
                         ShowIfNewField(tagField, tag);
-						if (!shownField.FieldTags.Contains(tag))
-                        {
-                            shownField.FieldTags.Add(tag);
-                        }
                     }
-                    Console.WriteLine("Tag fields: " + tag.FieldsList.Count);
                 }
             }
-            Console.WriteLine("_________");
-            foreach (var f in FieldsList)
-                Console.WriteLine("field content: " + f.Field.Content);
         }
+
 
         private bool TagIsOnAsset(Tag tag)
         {
@@ -379,6 +342,7 @@ namespace Asset_Management_System.ViewModels
                 if (tag.ID == assetTag.ID)
                     return true;
             }
+
             return false;
         }
 
@@ -391,10 +355,13 @@ namespace Asset_Management_System.ViewModels
                 if (shownField.ShownFieldToFieldComparator(tagField))
                 {
                     alreadyExists = true;
-                    shownField.FieldTags.Add(tag);
-                    Console.WriteLine("-- exists: " + tagField.Content);
-                }   
+                    if (!shownField.FieldTags.Contains(tag))
+                    {
+                        shownField.FieldTags.Add(tag);
+                    }
+                }
             }
+
             if (alreadyExists == false)
                 FieldsList.Add(new ShownField(tagField));
         }
