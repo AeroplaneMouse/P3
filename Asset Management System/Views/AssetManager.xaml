@@ -27,7 +27,7 @@
                 </Grid.RowDefinitions>
 
                 <TextBlock Grid.Column="1" Grid.Row="0" Text="Field present in following tags:" />
-                <ItemsControl  Grid.Column="1" Grid.Row="1">
+                <ItemsControl  Grid.Column="1" Grid.Row="1" ItemsSource="{Binding FieldTags}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate >
                             <StackPanel Orientation="Horizontal" />
@@ -36,8 +36,8 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid>
-                                <Border BorderBrush="{Binding Color}" BorderThickness="1">
-                                    <TextBlock Text="{Binding Name}" Padding="5" />
+                                <Border BorderBrush="{Binding Tag.Color}" BorderThickness="1">
+                                    <TextBlock Text="{Binding Tag.Name}" Padding="5" />
                                 </Border>
                             </Grid>
                         </DataTemplate>
@@ -63,13 +63,13 @@
                 <Button Grid.Row="1" Grid.Column="0"
                         Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
                         MaxHeight="40" VerticalAlignment="Top"
-                        CommandParameter="{Binding Path=Field.ID}">
+                        CommandParameter="{Binding Path=Field.HashId}">
                     X
                 </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
                 <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" Width="200" TextWrapping="Wrap"
                          AcceptsReturn="True" AcceptsTab="True" />
-                <ItemsControl Grid.Row="4" Grid.Column="1" ItemTemplate="{StaticResource FieldTagsTemplate}" ItemsSource="{Binding FieldTags}">
+                <ItemsControl Grid.Row="4" Grid.Column="1" ItemTemplate="{StaticResource FieldTagsTemplate}">
                     <ItemsPanelTemplate />
                 </ItemsControl>
             </Grid>
@@ -89,7 +89,7 @@
                 <Button Grid.Row="1" Grid.Column="0"
                         Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
                         MaxHeight="40" VerticalAlignment="Top"
-                        CommandParameter="{Binding Path=Field.ID}">
+                        CommandParameter="{Binding Path=Field.HashId}">
                     X
                 </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
@@ -111,7 +111,7 @@
                 <Button Grid.Row="1" Grid.Column="0"
                         Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
                         MaxHeight="40" VerticalAlignment="Top"
-                        CommandParameter="{Binding Path=Field.ID}">
+                        CommandParameter="{Binding Path=Field.HashId}">
                     X
                 </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
@@ -134,7 +134,7 @@
                 <Button Grid.Row="1" Grid.Column="0"
                         Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
                         MaxHeight="40" VerticalAlignment="Top"
-                        CommandParameter="{Binding Path=Field.ID}">
+                        CommandParameter="{Binding Path=Field.HashId}">
                     X
                 </Button>
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
@@ -156,7 +156,7 @@
                 <Button Grid.Row="1" Grid.Column="0"
                         Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
                         MaxHeight="40" VerticalAlignment="Top"
-                        CommandParameter="{Binding Path=Field.ID}">
+                        CommandParameter="{Binding Path=Field.HashId}">
                     X
                 </Button>
                 <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Field.Name}" />

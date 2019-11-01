@@ -40,10 +40,10 @@ namespace Asset_Management_System.Models
             this.IsCustom = isCustom;
         }
 
-        public string HashId;
+        public string HashId { get; set; }
 
         public bool IsCustom;
-        public int ID { get; }
+        
         public string Label { get; set; }
         public string Content { get; set; }
         public bool Required { get; set; }

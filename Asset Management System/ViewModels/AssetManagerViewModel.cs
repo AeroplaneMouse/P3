@@ -140,9 +140,9 @@ namespace Asset_Management_System.ViewModels
             }
 
             // Initialize commands
-            SaveAssetCommand = new Commands.SaveAssetCommand(this, _main, _asset, _editing);
-            AddFieldCommand = new Commands.AddFieldCommand(this, true);
-            RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
+            SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _editing);
+            AddFieldCommand = new AddFieldCommand(this, true);
+            RemoveFieldCommand = new RemoveFieldCommand(this);
 
             #region Tag related variables
 
@@ -340,7 +340,7 @@ namespace Asset_Management_System.ViewModels
                             Console.WriteLine("----------------");
                             foreach (var currentTag in shownField.FieldTags)
                             {
-                                Console.WriteLine("Tag name: " + currentTag.Name);
+                                Console.WriteLine("    Tag name: " + currentTag.Name);
                             }
 
                             Console.WriteLine("-------------- \n \n");
