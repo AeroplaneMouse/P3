@@ -397,9 +397,6 @@ namespace Asset_Management_System.ViewModels
         }
 
         #endregion
-
-        private void UntagAsset(Tag inputTag)
-        {
-        }
+        
     }
 }
