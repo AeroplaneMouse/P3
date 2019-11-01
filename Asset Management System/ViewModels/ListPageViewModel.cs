@@ -179,11 +179,8 @@ namespace Asset_Management_System.ViewModels
         {
             if (SearchList.Count == 0)
                 return null;
-
             else
-            {
                 return SearchList.ElementAtOrDefault(SelectedItemIndex);
-            }
         }
 
         #endregion
