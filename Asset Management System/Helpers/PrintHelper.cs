@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Windows.Controls;
 using Asset_Management_System.Models;
 using Asset_Management_System.Views;
@@ -25,13 +26,21 @@ namespace Asset_Management_System.Helpers
                 {
                     string pathToFile = dialog.InputText;
 
+                    //Adds the ".csv" extension, if the name does not contain it
                     if (!pathToFile.EndsWith(".csv"))
                     {
                         pathToFile = pathToFile + ".csv";
                     }
 
+                    //Sets the path to the desktop
+                    //TODO: Change this to enable custom location for exported files
                     pathToFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + pathToFile;
-                    
+
+                    //Creates the directory of the file, if it does not already exist. ELse it is ignored.
+                    string newDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + new FileInfo(pathToFile).Directory.Name;
+                    Directory.CreateDirectory(newDirectory);
+
+                    //Writes the information to the file
                     using (StreamWriter file = new StreamWriter(pathToFile, false))
                     {
                         string fileHeader = "";
