@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         WindowStyle="ToolWindow"
-        Title="Import Users" Height="450" Width="800">
+        Title="Import Users" Height="800" Width="1000">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -24,33 +24,61 @@
             <ListView ItemsSource="{Binding ExistingUsersList, UpdateSourceTrigger=PropertyChanged}"
                       SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                       Grid.Column="0">
+
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=UserName}" Header="Username" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartment}" Header="Department" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" Header="Admin" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" 
+                                        Header="ID" 
+                                        Width="20" />
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
+                                        Header="Username"
+                                        Width="100"/>
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" 
+                                        Header="Description"
+                                        Width="150"/>
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartment}" 
+                                        Header="Department"
+                                        Width="150"/>
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
+                                        Header="Admin"
+                                        Width="Auto"/>
                     </GridView>
                 </ListView.View>
+
             </ListView>
-
-
 
             <ListView ItemsSource="{Binding NewUsersList, UpdateSourceTrigger=PropertyChanged}"
                       SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                       Grid.Column="1">
+
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=UserName}" Header="Username" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartment}" Header="Department" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" Header="Admin" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" 
+                                        Header="ID" 
+                                        Width="20" />
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
+                                        Header="Username"
+                                        Width="100"/>
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" 
+                                        Header="Description"
+                                        Width="150"/>
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartment}" 
+                                        Header="Department"
+                                        Width="150"/>
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
+                                        Header="Admin"
+                                        Width="Auto"/>
                     </GridView>
                 </ListView.View>
+                
             </ListView>
         </Grid>
         
@@ -64,16 +92,31 @@
             <ListView ItemsSource="{Binding FinalUsersList, UpdateSourceTrigger=PropertyChanged}"
                       SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                       Grid.Column="1">
+
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=UserName}" Header="Username" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Description" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartment}" Header="Department" />
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" Header="Admin" />
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" 
+                                        Header="ID" 
+                                        Width="20" />
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
+                                        Header="Username"
+                                        Width="100"/>
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" 
+                                        Header="Description"
+                                        Width="150"/>
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartment}" 
+                                        Header="Department"
+                                        Width="150"/>
+
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
+                                        Header="Admin"
+                                        Width="Auto"/>
                     </GridView>
                 </ListView.View>
+                
             </ListView>
 
         </Grid>

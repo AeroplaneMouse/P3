@@ -85,6 +85,9 @@ namespace Asset_Management_System.ViewModels
             _newUsersList = _importer.Import();
 
             _finalUsersList = new List<User>();
+
+            _finalUsersList.AddRange(_existingUsersList);
+            _finalUsersList.AddRange(_newUsersList);
         }
 
         #endregion
