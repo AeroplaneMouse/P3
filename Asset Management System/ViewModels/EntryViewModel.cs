@@ -12,15 +12,13 @@ namespace Asset_Management_System.ViewModels
 {
     public class EntryViewModel
     {
-        
         #region Constructor
-        
+
         /// <summary>
         /// Default contructor
         /// </summary>
         public EntryViewModel(Window window, Entry entry)
         {
-
             // Initialize commands
             ExitCommand = new Base.RelayCommand(() => Exit());
 
@@ -43,21 +41,21 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Public Properties
-        
+
         public string LabelText { get; set; }
 
         public string DescriptionText { get; set; }
 
         public string UserText { get; set; }
-        
+
         public string OptionsText { get; set; }
-        
+
         public string TimeText { get; set; }
-        
+
         #endregion
-        
+
         #region Methods
-        
+
         /// <summary>
         /// Removes characters that make the options text less readable
         /// </summary>
@@ -86,7 +84,7 @@ namespace Asset_Management_System.ViewModels
         #region Commands
 
         public ICommand ExitCommand { get; set; }
-        
+
         #endregion
     }
 }

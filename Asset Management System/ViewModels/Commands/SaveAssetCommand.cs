@@ -35,7 +35,7 @@ namespace Asset_Management_System.ViewModels.Commands
         public void Execute(object parameter)
         {
             Console.WriteLine("Testing: " + CanExecute(parameter));
-            
+
             _asset.Name = _viewModel.Name;
             _asset.Description = _viewModel.Description;
 
@@ -50,14 +50,22 @@ namespace Asset_Management_System.ViewModels.Commands
                 _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
                 return;
             }
+
             foreach (var shownField in _viewModel.FieldsList)
             {
                 if (shownField.Field.Required && shownField.Field.Content == string.Empty)
                 {
-                    _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
+                    _main.AddNotification(
+                        new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
                     return;
                     //requiredFieldsWritten = false;
                 }
+
+                _asset.AddField(shownField.Field);
+            }
+            
+            foreach (var shownField in _viewModel.HiddenFields)
+            {
                 _asset.AddField(shownField.Field);
             }
 

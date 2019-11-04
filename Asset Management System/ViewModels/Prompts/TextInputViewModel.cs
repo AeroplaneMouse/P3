@@ -13,10 +13,12 @@ namespace Asset_Management_System.ViewModels.Prompts
         public string InputText { get; set; }
 
         public TextInputViewModel(string message, PromptEventHandler handler)
-            : this(message, null, handler) { }
+            : this(message, null, handler)
+        {
+        }
 
         public TextInputViewModel(string message, string startingText, PromptEventHandler handler)
-            : base(message, handler) 
+            : base(message, handler)
         {
             InputText = startingText;
         }

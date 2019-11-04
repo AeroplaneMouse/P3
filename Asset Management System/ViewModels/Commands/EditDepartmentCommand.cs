@@ -35,7 +35,9 @@ namespace Asset_Management_System.ViewModels.Commands
             }
             catch (Exception)
             {
-                _main.AddNotification(new Models.Notification($"ERROR! Unknown error. Unable to edit department with id: { parameter.ToString() }", Models.Notification.ERROR));
+                _main.AddNotification(new Models.Notification(
+                    $"ERROR! Unknown error. Unable to edit department with id: {parameter.ToString()}",
+                    Models.Notification.ERROR));
                 return;
             }
 
@@ -44,11 +46,13 @@ namespace Asset_Management_System.ViewModels.Commands
             Department department = rep.GetById(id);
             if (department != null)
             {
-                editingDepartment = department; 
+                editingDepartment = department;
                 _main.DisplayPrompt(new Views.Prompts.TextInput("Enter new name", department.Name, PromptElapsed));
             }
             else
-                _main.AddNotification(new Notification("ERROR! Editing department failed. Department not found!", Notification.ERROR), 3500);
+                _main.AddNotification(
+                    new Notification("ERROR! Editing department failed. Department not found!", Notification.ERROR),
+                    3500);
         }
 
         private void PromptElapsed(object sender, PromptEventArgs e)
@@ -67,7 +71,9 @@ namespace Asset_Management_System.ViewModels.Commands
                     }
                 }
                 else
-                    _main.AddNotification(new Notification("ERROR! Department name cannot be empty. Please enter a name.", Notification.ERROR), 3500);
+                    _main.AddNotification(
+                        new Notification("ERROR! Department name cannot be empty. Please enter a name.",
+                            Notification.ERROR), 3500);
             }
         }
     }

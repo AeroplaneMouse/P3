@@ -44,8 +44,5 @@ namespace Asset_Management_System.ViewModels
 
             return outputList;
         }
-
-        protected abstract void LoadFields();
     }
-    
 }

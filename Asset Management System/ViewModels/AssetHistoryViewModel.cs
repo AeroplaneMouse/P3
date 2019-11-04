@@ -14,7 +14,7 @@ namespace Asset_Management_System.ViewModels
     public class AssetHistoryViewModel : Base.BaseViewModel
     {
         #region Constructor
-        
+
         /// <summary>
         /// Default contructor
         /// </summary>
@@ -22,11 +22,11 @@ namespace Asset_Management_System.ViewModels
         {
             // Initialize commands
             _window = window;
-            
+
             ViewCommand = new Base.RelayCommand(View);
             // Start the search over
             ExitCommand = new Base.RelayCommand(Exit);
-            
+
             ILogRepository<Entry> rep = new LogRepository();
             History = (List<Entry>) rep.GetLogEntries(asset.ID, asset.GetType());
         }
@@ -40,15 +40,15 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Public Properties
-        
+
         public int SelectedItemIndex { get; set; }
-        
+
         public List<Entry> History { get; set; }
 
         #endregion
-        
+
         #region Methods
-        
+
         /// <summary>
         /// Displays the selected LogEntry
         /// </summary>
@@ -69,7 +69,7 @@ namespace Asset_Management_System.ViewModels
         {
             _window.DialogResult = true;
         }
-        
+
         /// <summary>
         /// Finds and returns the currently selected item in the listview
         /// </summary>
@@ -81,15 +81,15 @@ namespace Asset_Management_System.ViewModels
             else
                 return History.ElementAtOrDefault(SelectedItemIndex);
         }
-        
+
         #endregion
 
         #region Commands
-        
+
         public ICommand ViewCommand { get; set; }
 
         public ICommand ExitCommand { get; set; }
-        
+
         #endregion
     }
 }

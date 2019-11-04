@@ -13,7 +13,7 @@ using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class AssetManagerViewModel : FieldsController
+    public class AssetManagerViewModel : ObjectManagerController
     {
         private MainViewModel _main;
         private Asset _asset;
@@ -57,8 +57,6 @@ namespace Asset_Management_System.ViewModels
 
         #region tag related public Properties
 
-        public ObservableCollection<Tag> CurrentlyAddedTags { get; set; }
-
         public List<Models.Asset> AssetList;
 
         // The current parent exposed to the view
@@ -88,7 +86,10 @@ namespace Asset_Management_System.ViewModels
                 return _tagList.Take(10).ToList();
             }
 
-            set { }
+            set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(value));
+            }
         }
 
         // The string that is being searched for, exposed to the view
@@ -131,22 +132,26 @@ namespace Asset_Management_System.ViewModels
 
             _assetRep = new AssetRepository();
 
-            CurrentlyAddedTags = new ObservableCollection<Tag>();
             FieldsList = new ObservableCollection<ShownField>();
             if (inputAsset != null)
             {
                 _asset = inputAsset;
+                LoadFields();
+
                 CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
+                ConnectTags();
+
 
                 foreach (Tag tag in CurrentlyAddedTags)
                     Console.WriteLine("id: " + tag.ID);
                 Console.WriteLine("________");
 
-                LoadFields();
+
                 _editing = true;
             }
             else
             {
+                CurrentlyAddedTags = new ObservableCollection<Tag>();
                 _asset = new Asset();
                 _editing = false;
             }
@@ -190,6 +195,11 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand CancelCommand { get; set; }
 
+
+        /// <summary>
+        /// Verification of the asset, before saving.
+        /// </summary>
+        /// <returns></returns>
         public bool CanSaveAsset()
         {
             //TODO Figure out the implementation for this one.
@@ -197,11 +207,21 @@ namespace Asset_Management_System.ViewModels
         }
 
 
+        /// <summary>
+        /// This function loads the fields from the asset, and into the viewmodel.
+        /// </summary>
         protected override void LoadFields()
         {
             foreach (var field in _asset.FieldsList)
             {
-                FieldsList.Add(new ShownField(field));
+                if (field.IsHidden)
+                {
+                    HiddenFields.Add(new ShownField(field));
+                }
+                else
+                {
+                    FieldsList.Add(new ShownField(field));
+                }
             }
 
             Name = _asset.Name;
@@ -228,15 +248,29 @@ namespace Asset_Management_System.ViewModels
                 .ToList();
         }
 
+        /// <summary>
+        /// This function runs uppon selecting a Tag with Enter.
+        /// </summary>
         private void Apply()
         {
             CurrentlyAddedTags.Add(_tagList.Single(p =>
                 String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
             ConnectTags();
+            foreach (var field in FieldsList)
+            {
+                Console.WriteLine(field.Field.Label);
+                foreach (var tag in field.FieldTags)
+                {
+                    Console.WriteLine("    " + tag.Name);
+                }
+            }
 
             _tabIndex = 0;
         }
 
+        /// <summary>
+        /// This function cycles the results within the dropdown of tags.
+        /// </summary>
         private void CycleResults()
         {
             if (_tagList != null)
@@ -261,6 +295,9 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
+        /// <summary>
+        /// This function is used to navigate into 
+        /// </summary>
         private void EnterChildren()
         {
             // Can only go in, if the parent tag is at the highest level
@@ -287,6 +324,10 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
+
+        /// <summary>
+        /// This function clears the searched list, as well as clears the input field.
+        /// </summary>
         private void ResetSearch()
         {
             _searchString = String.Empty;
@@ -295,6 +336,9 @@ namespace Asset_Management_System.ViewModels
             _tabIndex = 0;
         }
 
+        /// <summary>
+        /// Deletes characters, or goes up a level in tags. (Goes to tags, where tag.parentID = 0;
+        /// </summary>
         private void DeleteCharacter()
         {
             // If the search query is empty, the search goes up a level (to the highest level of tags)
@@ -321,54 +365,6 @@ namespace Asset_Management_System.ViewModels
                 // TODO: Kom uden om mig
                 _box.CaretIndex = _searchString.Length;
             }
-        }
-
-        private void ConnectTags()
-        {
-            foreach (var tag in CurrentlyAddedTags)
-            {
-                if (!TagIsOnAsset(tag))
-                {
-                    foreach (var tagField in tag.FieldsList)
-                    {
-                        ShowIfNewField(tagField, tag);
-                    }
-                }
-            }
-        }
-
-
-        private bool TagIsOnAsset(Tag tag)
-        {
-            List<Tag> assetTags = _assetRep.GetAssetTags(_asset);
-
-            foreach (Tag assetTag in assetTags)
-            {
-                if (tag.ID == assetTag.ID)
-                    return true;
-            }
-
-            return false;
-        }
-
-        private void ShowIfNewField(Field tagField, Tag tag)
-        {
-            bool alreadyExists = false;
-
-            foreach (var shownField in FieldsList)
-            {
-                if (shownField.ShownFieldToFieldComparator(tagField))
-                {
-                    alreadyExists = true;
-                    if (!shownField.FieldTags.Contains(tag))
-                    {
-                        shownField.FieldTags.Add(tag);
-                    }
-                }
-            }
-
-            if (alreadyExists == false)
-                FieldsList.Add(new ShownField(tagField));
         }
 
         #endregion

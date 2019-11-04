@@ -57,11 +57,11 @@ namespace Asset_Management_System.ViewModels
             if (t != null)
             {
                 _main.SystemLoaded(t);
-            
+
                 // Set visibility property. Hides functionality from non admin users
                 _main.Visible = t.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
             }
-            
+
             //Dispose the background after use.
             worker.Dispose();
         }
@@ -84,7 +84,9 @@ namespace Asset_Management_System.ViewModels
                 if (t.Authenticated())
                     e.Result = t;
                 else
-                    caller.ReportProgress(0, new StatusUpdateEventArgs("!!! Access denied !!!", $"User \"{ Session.GetIdentity() }\" is not authorized to access the application."));
+                    caller.ReportProgress(0,
+                        new StatusUpdateEventArgs("!!! Access denied !!!",
+                            $"User \"{Session.GetIdentity()}\" is not authorized to access the application."));
             }
             else
             {
@@ -97,7 +99,7 @@ namespace Asset_Management_System.ViewModels
             // Showing the splash page again
             _main.SplashVisibility = System.Windows.Visibility.Visible;
             _main.OnPropertyChanged(nameof(_main.SplashVisibility));
-            
+
             Authenticate();
         }
 
@@ -114,6 +116,5 @@ namespace Asset_Management_System.ViewModels
             OnPropertyChanged(nameof(LoadingText));
             OnPropertyChanged(nameof(StatusText));
         }
-
     }
 }
