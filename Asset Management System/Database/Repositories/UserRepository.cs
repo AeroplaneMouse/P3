@@ -2,12 +2,12 @@
 using Asset_Management_System.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Asset_Management_System.Database.Repositories
 {
     public class UserRepository : IUserRepository
     {
-
         public ulong GetCount()
         {
             var con = new MySqlHandler().GetConnection();
@@ -119,6 +119,9 @@ namespace Asset_Management_System.Database.Repositories
 
                     cmd.Parameters.Add("@default_department", MySqlDbType.UInt64);
                     cmd.Parameters["@default_department"].Value = entity.DefaultDepartment;
+
+                    cmd.Parameters.Add("@admin", MySqlDbType.String);
+                    cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
 
                     querySuccess = cmd.ExecuteNonQuery() > 0;
                 }
@@ -280,15 +283,16 @@ namespace Asset_Management_System.Database.Repositories
             ulong rowId = reader.GetUInt64("id");
             String rowName = reader.GetString("name");
             String rowUsername = reader.GetString("username");
-            bool rowAdmin = reader.GetBoolean("admin");
+            String rowDescription = reader.GetString("description");
+            bool rowEnabled = reader.GetBoolean("enabled");
             ulong rowDefaultDepartment = reader.GetUInt64("default_department");
+            bool rowAdmin = reader.GetBoolean("admin");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
 
             return (User) Activator.CreateInstance(typeof(User),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowName, rowUsername, rowAdmin, rowDefaultDepartment, rowCreatedAt, rowUpdatedAt }, null,
-                null);
+                new object[] { rowId, rowName, rowUsername, rowDescription, rowEnabled, rowDefaultDepartment, rowAdmin, rowCreatedAt, rowUpdatedAt }, null, null);
         }
     }
 }
