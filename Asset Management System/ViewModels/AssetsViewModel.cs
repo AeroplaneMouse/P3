@@ -24,9 +24,6 @@ namespace Asset_Management_System.ViewModels
             Title = "Assets";
         }
 
-
-        #endregion
-
         #region Public Properties
 
         public int ViewType => 1;
