@@ -88,29 +88,6 @@ namespace Asset_Management_System.ViewModels
             (splashScreen.DataContext as SplashViewModel).StartWorker();
         }
 
-        private void AddDepartment(object sender, PromptEventArgs e)
-        {
-            if (e.Result)
-            {
-                Department department = new Department();
-                department.Name = e.ResultMessage;
-
-                ulong id;
-                if (new DepartmentRepository().Insert(department, out id))
-                {
-                    // TODO: Add log of department insert
-                    OnPropertyChanged(nameof(Departments));
-                    AddNotification(new Notification($"{department.Name} has now been add to the system.",
-                        Notification.APPROVE));
-                }
-                else
-                    AddNotification(
-                        new Notification(
-                            $"ERROR! An unknown error stopped the department {department.Name} from beeing added.",
-                            Notification.ERROR), 3000);
-            }
-        }
-
         #endregion
 
         #region Private Members
@@ -379,6 +356,29 @@ namespace Asset_Management_System.ViewModels
                 return (List<Department>) new DepartmentRepository().GetAll();
             else
                 return new List<Department>();
+        }
+
+        private void AddDepartment(object sender, PromptEventArgs e)
+        {
+            if (e.Result)
+            {
+                Department department = new Department();
+                department.Name = e.ResultMessage;
+
+                ulong id;
+                if (new DepartmentRepository().Insert(department, out id))
+                {
+                    // TODO: Add log of department insert
+                    OnPropertyChanged(nameof(Departments));
+                    AddNotification(new Notification($"{department.Name} has now been add to the system.",
+                        Notification.APPROVE));
+                }
+                else
+                    AddNotification(
+                        new Notification(
+                            $"ERROR! An unknown error stopped the department {department.Name} from beeing added.",
+                            Notification.ERROR), 3000);
+            }
         }
 
         #endregion
