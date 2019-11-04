@@ -43,6 +43,9 @@
     <Compile Update="Views\Tags.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\UserImporterView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Views.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
