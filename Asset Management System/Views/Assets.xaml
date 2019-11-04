@@ -42,6 +42,15 @@
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Left">
+                    <Border Background="LightGray"
+                            BorderThickness="0"
+                            Padding="5 0 5 0"
+                            Visibility="{Binding IsCurrentGroupVisible}">
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="{Binding CurrentGroup}"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    
                     <TextBox FontSize="{StaticResource FontSizeSmall}"
                              Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
                              VerticalContentAlignment="Center"
@@ -49,6 +58,7 @@
                              Name="StartElement">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                            <KeyBinding Key="Esc" Command="{Binding DeleteCommand}"/>
                         </TextBox.InputBindings>
                     </TextBox>
 
@@ -76,6 +86,10 @@
                             Width="Auto"
                             Command="{Binding PrintCommand}"/>
                 </StackPanel>
+                
+                <!-- Current tags -->
+                
+                
 
                 <!--Style="{StaticResource RegularList}"-->
                 <ListView ItemsSource="{Binding SearchList}"
