@@ -255,16 +255,8 @@ namespace Asset_Management_System.ViewModels
         {
             CurrentlyAddedTags.Add(_tagList.Single(p =>
                 String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
+            
             ConnectTags();
-            foreach (var field in FieldsList)
-            {
-                Console.WriteLine(field.Field.Label);
-                foreach (var tag in field.FieldTags)
-                {
-                    Console.WriteLine("    " + tag.Name);
-                }
-            }
-
             _tabIndex = 0;
         }
 
