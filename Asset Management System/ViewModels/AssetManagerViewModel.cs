@@ -261,6 +261,7 @@ namespace Asset_Management_System.ViewModels
                         String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
                     ConnectTags();
                 }
+
                 foreach (var field in FieldsList)
                 {
                     Console.WriteLine(field.Field.Label);
@@ -277,107 +278,108 @@ namespace Asset_Management_System.ViewModels
                 Console.WriteLine(e);
                 // Handle this error
             }
-            
 
-        /// <summary>
-        /// This function cycles the results within the dropdown of tags.
-        /// </summary>
-        private void CycleResults()
-        {
-            if (_tagList != null)
+        }
+
+             /// <summary>
+            /// This function cycles the results within the dropdown of tags.
+            /// </summary>
+            private void CycleResults()
             {
-                _searchString = _tagList
-                    .Select(p => p.Name)
-                    .ElementAtOrDefault(_tabIndex++);
-
-                if (_searchString == null)
+                if (_tagList != null)
                 {
-                    _tabIndex = 0;
                     _searchString = _tagList
                         .Select(p => p.Name)
-                        .ElementAtOrDefault(_tabIndex);
+                        .ElementAtOrDefault(_tabIndex++);
+
+                    if (_searchString == null)
+                    {
+                        _tabIndex = 0;
+                        _searchString = _tagList
+                            .Select(p => p.Name)
+                            .ElementAtOrDefault(_tabIndex);
+                    }
+
+                    if (_searchString != null)
+                    {
+                        // TODO: Kom uden om mig
+                        _box.CaretIndex = _searchString.Length;
+                    }
+                }
+            }
+
+            /// <summary>
+            /// This function is used to navigate into 
+            /// </summary>
+            private void EnterChildren()
+            {
+                // Can only go in, if the parent tag is at the highest level
+                if (_parentID == 0)
+                {
+                    // Checks if the tag we are "going into" has any children
+                    ulong tempID = _tagList
+                        .Select(p => p.ID)
+                        .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+                    List<Models.Tag> tempList = _tagRep.GetChildTags(tempID) as List<Models.Tag>;
+
+                    // If the tag we are "going into" has children, we go into it
+                    if (tempList?.Count != 0)
+                    {
+                        _parentString = _tagList
+                            .Select(p => p.Name)
+                            .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+                        _searchString = String.Empty;
+                        _parentID = tempID;
+                        _tagList = tempList;
+
+                        _tabIndex = 0;
+                    }
+                }
+            }
+
+
+            /// <summary>
+            /// This function clears the searched list, as well as clears the input field.
+            /// </summary>
+            private void ResetSearch()
+            {
+                _searchString = String.Empty;
+                _parentID = 0;
+                _tagList = _tagRep.GetChildTags(0) as List<Models.Tag>;
+                _tabIndex = 0;
+            }
+
+            /// <summary>
+            /// Deletes characters, or goes up a level in tags. (Goes to tags, where tag.parentID = 0;
+            /// </summary>
+            private void DeleteCharacter()
+            {
+                // If the search query is empty, the search goes up a level (to the highest level of tags)
+                if (_searchString == String.Empty && _parentID != 0)
+                {
+                    _parentID = 0;
+                    _tagList = _tagRep.GetChildTags(_parentID) as List<Models.Tag>;
+
+                    _searchString = _parentString;
+                    SearchAndSortTagList(_searchString);
+
+                    // TODO: Kom uden om mig
+                    _box.CaretIndex = _searchString.Length;
+                    return;
                 }
 
-                if (_searchString != null)
+                // If the search query isn't empty, a letter is simply removed
+                else if (!string.IsNullOrEmpty(_searchString))
                 {
+                    _searchString = _searchString.Substring(0, _searchString.Length - 1);
+
+                    SearchAndSortTagList(_searchString);
+
                     // TODO: Kom uden om mig
                     _box.CaretIndex = _searchString.Length;
                 }
             }
+
+            #endregion
         }
-
-        /// <summary>
-        /// This function is used to navigate into 
-        /// </summary>
-        private void EnterChildren()
-        {
-            // Can only go in, if the parent tag is at the highest level
-            if (_parentID == 0)
-            {
-                // Checks if the tag we are "going into" has any children
-                ulong tempID = _tagList
-                    .Select(p => p.ID)
-                    .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                List<Models.Tag> tempList = _tagRep.GetChildTags(tempID) as List<Models.Tag>;
-
-                // If the tag we are "going into" has children, we go into it
-                if (tempList?.Count != 0)
-                {
-                    _parentString = _tagList
-                        .Select(p => p.Name)
-                        .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                    _searchString = String.Empty;
-                    _parentID = tempID;
-                    _tagList = tempList;
-
-                    _tabIndex = 0;
-                }
-            }
-        }
-
-
-        /// <summary>
-        /// This function clears the searched list, as well as clears the input field.
-        /// </summary>
-        private void ResetSearch()
-        {
-            _searchString = String.Empty;
-            _parentID = 0;
-            _tagList = _tagRep.GetChildTags(0) as List<Models.Tag>;
-            _tabIndex = 0;
-        }
-
-        /// <summary>
-        /// Deletes characters, or goes up a level in tags. (Goes to tags, where tag.parentID = 0;
-        /// </summary>
-        private void DeleteCharacter()
-        {
-            // If the search query is empty, the search goes up a level (to the highest level of tags)
-            if (_searchString == String.Empty && _parentID != 0)
-            {
-                _parentID = 0;
-                _tagList = _tagRep.GetChildTags(_parentID) as List<Models.Tag>;
-
-                _searchString = _parentString;
-                SearchAndSortTagList(_searchString);
-
-                // TODO: Kom uden om mig
-                _box.CaretIndex = _searchString.Length;
-                return;
-            }
-
-            // If the search query isn't empty, a letter is simply removed
-            else if (!string.IsNullOrEmpty(_searchString))
-            {
-                _searchString = _searchString.Substring(0, _searchString.Length - 1);
-
-                SearchAndSortTagList(_searchString);
-
-                // TODO: Kom uden om mig
-                _box.CaretIndex = _searchString.Length;
-            }
-        }
-
-        #endregion
     }
-}
