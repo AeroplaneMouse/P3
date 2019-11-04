@@ -24,5 +24,10 @@ namespace Asset_Management_System.ViewModels
             _main = main;
             Title = "Assets";
         }
+
+        protected override void Search()
+        {
+            base.Search();
+        }
     }
 }

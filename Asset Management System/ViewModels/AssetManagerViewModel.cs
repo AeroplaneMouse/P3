@@ -183,27 +183,10 @@ namespace Asset_Management_System.ViewModels
             UnTagTagCommand = new UntagTagCommand(this);
         }
 
-        //private void AddField()
-        //{
-        //    Field field = new Field("Test field", "", 1, "", false);
-        //    FieldsList.Add(field);
-        //    Console.WriteLine("Field added");
-        //}
-
-        //private void AddField2()
-        //{
-        //    Field field = new Field("Test field 2", "", 2, "", false);
-        //    FieldsList.Add(field);
-        //    Console.WriteLine("Field 2 added");
-        //}
-
         public ICommand SaveAssetCommand { get; set; }
         public ICommand CancelCommand { get; set; }
         public static ICommand RemoveFieldCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
-
-        public ICommand AddFieldTestCommand { get; set; }
-        public ICommand AddFieldTest2Command { get; set; }
 
         public bool CanSaveAsset()
         {
