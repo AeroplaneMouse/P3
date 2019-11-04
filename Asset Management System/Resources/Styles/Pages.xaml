@@ -136,6 +136,7 @@
                                         <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
                                         <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
                                         <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
+                                        <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
                                     </ListView.InputBindings>
 
                                     <ListView.Style>
