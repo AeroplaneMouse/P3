@@ -195,13 +195,22 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand CancelCommand { get; set; }
 
+        
+        /// <summary>
+        /// Verification of the asset, before saving.
+        /// </summary>
+        /// <returns></returns>
         public bool CanSaveAsset()
         {
             //TODO Figure out the implementation for this one.
             return true;
         }
 
-
+        
+        
+        /// <summary>
+        /// This function loads the fields from the asset, and into the viewmodel.
+        /// </summary>
         protected override void LoadFields()
         {
             foreach (var field in _asset.FieldsList)
@@ -239,7 +248,10 @@ namespace Asset_Management_System.ViewModels
                 .OrderByDescending(p => p.Name.ToLower().StartsWith(value.ToLower()))
                 .ToList();
         }
-
+        
+        /// <summary>
+        /// This function runs uppon selecting a Tag with Enter.
+        /// </summary>
         private void Apply()
         {
             CurrentlyAddedTags.Add(_tagList.Single(p =>
@@ -249,6 +261,9 @@ namespace Asset_Management_System.ViewModels
             _tabIndex = 0;
         }
 
+        /// <summary>
+        /// This function cycles the results within the dropdown of tags.
+        /// </summary>
         private void CycleResults()
         {
             if (_tagList != null)
@@ -273,6 +288,9 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
+        /// <summary>
+        /// This function is used to navigate into 
+        /// </summary>
         private void EnterChildren()
         {
             // Can only go in, if the parent tag is at the highest level
@@ -298,7 +316,11 @@ namespace Asset_Management_System.ViewModels
                 }
             }
         }
+        
 
+        /// <summary>
+        /// This function clears the searched list, as well as clears the input field.
+        /// </summary>
         private void ResetSearch()
         {
             _searchString = String.Empty;
@@ -307,6 +329,9 @@ namespace Asset_Management_System.ViewModels
             _tabIndex = 0;
         }
 
+        /// <summary>
+        /// Deletes characters, or goes up a level in tags. (Goes to tags, where tag.parentID = 0;
+        /// </summary>
         private void DeleteCharacter()
         {
             // If the search query is empty, the search goes up a level (to the highest level of tags)

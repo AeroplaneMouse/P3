@@ -53,18 +53,16 @@ namespace Asset_Management_System.ViewModels
                     }
                 }
 
-                if (alreadyExists == false)
+                if (alreadyExists) continue;
+                if (currentTagField.IsHidden)
                 {
-                    if (currentTagField.IsHidden)
+                    HiddenFields.Add(new ShownField(currentTagField));
+                }
+                else
+                {
+                    if (HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) == null)
                     {
-                        HiddenFields.Add(new ShownField(currentTagField));
-                    }
-                    else
-                    {
-                        if (HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) == null)
-                        {
-                            FieldsList.Add(new ShownField(currentTagField));
-                        }
+                        FieldsList.Add(new ShownField(currentTagField));
                     }
                 }
             }
