@@ -21,6 +21,7 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
+        
         private void ShowIfNewField(Tag tag)
         {
             foreach (var currentTagField in tag.FieldsList)
