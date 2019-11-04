@@ -11,6 +11,7 @@ namespace Asset_Management_System.ViewModels
 {
     public class TagManagerViewModel : ObjectManagerController
     {
+        // TODO: Edit style for fields to use dynamic binding, such fields on tags can be removed once added.
         private MainViewModel _main;
         private Tag _tag;
         private string _randomColor;
@@ -18,6 +19,10 @@ namespace Asset_Management_System.ViewModels
         public string Name { get; set; }
         public string Color { get; set; }
         public int SelectedParentIndex { get; set; }
+
+        public string Title { get; set; }
+
+        public ICommand CancelCommand { get; set; }
 
         public List<Tag> ParentTagsList
         {
@@ -54,17 +59,20 @@ namespace Asset_Management_System.ViewModels
                 _tag = inputTag;
                 _editing = true;
                 LoadFields();
+                Title = "Edit tag";
             }
             else
             {
                 _tag = new Tag();
                 _editing = false;
+                Title = "Add tag";
             }
 
             // Initialize commands
             SaveTagCommand = new Commands.SaveTagCommand(this, _main, _tag, _editing);
             AddFieldCommand = new Commands.AddFieldCommand(this);
             RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
+            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Tags(_main)));
         }
 
         public ICommand SaveTagCommand { get; set; }
