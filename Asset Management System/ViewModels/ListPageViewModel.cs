@@ -86,8 +86,8 @@ namespace Asset_Management_System.ViewModels
 
         #region Commands
 
-        public ICommand SearchCommand { get; set; }
         public ICommand PrintCommand { get; set; }
+        public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
 
         #endregion
@@ -106,7 +106,7 @@ namespace Asset_Management_System.ViewModels
             _pageType = pageType;
 
             // Initialize commands
-            PrintCommand = new Base.RelayCommand(Print);
+            PrintCommand = new Commands.PrintSelectedItemsCommand();
             SearchCommand = new Base.RelayCommand(Search);
             ViewCommand = new Base.RelayCommand(View);
 
