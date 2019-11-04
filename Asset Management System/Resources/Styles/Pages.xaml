@@ -114,7 +114,6 @@
                                                 </GridViewColumn.CellTemplate>
                                             </GridViewColumn>
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Label" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=ParentID}" Header="Parent Tag ID" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=DepartmentID}" Header="Department ID" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Color}" Header="Color" />
