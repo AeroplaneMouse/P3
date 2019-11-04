@@ -287,7 +287,8 @@ namespace Asset_Management_System.Database.Repositories
             try
             {
                 const string query = "SELECT id, name, description, identifier, department_id, options, created_at, updated_at " +
-                                     "FROM assets WHERE (name LIKE @keyword OR identifier LIKE @keyword) AND deleted_at IS NULL";
+                                     "FROM assets WHERE (name LIKE @keyword OR identifier LIKE @keyword OR JSON_EXTRACT(options, '$[*].Content') LIKE @keyword) " +
+                                     "AND deleted_at IS NULL";
 
                 if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
                 {
