@@ -278,7 +278,6 @@ namespace Asset_Management_System.ViewModels
                 // Handle this error
             }
             
-        }
 
         /// <summary>
         /// This function cycles the results within the dropdown of tags.
