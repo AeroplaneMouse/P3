@@ -328,7 +328,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at,options " +
+                const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at, options " +
                                      "FROM tags";
                 
                 con.Open();

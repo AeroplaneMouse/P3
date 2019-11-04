@@ -21,7 +21,7 @@ namespace Asset_Management_System.ViewModels
 
         public LogsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType) 
         {
-            Title = "Logs";
+            Title = "Log";
         }
     }
 }
