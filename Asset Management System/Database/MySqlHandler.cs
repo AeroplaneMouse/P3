@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
-using System.Text;
-using System.Windows.Media;
 using Asset_Management_System.Events;
 using MySql.Data.MySqlClient;
 
@@ -11,14 +6,12 @@ namespace Asset_Management_System.Database
 {
     public class MySqlHandler
     {
-        private string _connectionString;
-        private MySqlConnection _connection;
+        private readonly MySqlConnection _connection;
         public event NotificationEventHandler SqlConnectionFailed;
         
         public MySqlHandler()
         {
-            _connectionString = "Server=192.38.49.9; database=ds303e19; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5";
-            _connection = new MySqlConnection(_connectionString);
+            _connection = new MySqlConnection("Server=192.38.49.9; database=ds303e19; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5");
         }
 
         public MySqlConnection GetConnection()
@@ -35,21 +28,21 @@ namespace Asset_Management_System.Database
                 con.Close();
                 return true;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return false;
             }
         }
 
-        public bool RawQuery(string raw_query, MySqlParameterCollection par = null)
+        public bool RawQuery(string rawQuery, MySqlParameterCollection par = null)
         {
             var con = GetConnection();
-            bool result = false;
+            var result = false;
 
             try
             {
                 con.Open();
-                using (var cmd = new MySqlCommand(raw_query, con))
+                using (var cmd = new MySqlCommand(rawQuery, con))
                 {
                     if (par != null)
                     {

@@ -16,8 +16,6 @@ namespace Asset_Management_System.ViewModels
 {
     public class AssetsViewModel : ChangeableListPageViewModel<AssetRepository, Asset>
     {
-        #region Constructors
-
         private MainViewModel _main;
 
         public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
@@ -25,6 +23,7 @@ namespace Asset_Management_System.ViewModels
             _main = main;
             Title = "Assets";
         }
+
 
         #endregion
 

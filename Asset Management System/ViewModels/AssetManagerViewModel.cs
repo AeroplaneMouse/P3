@@ -226,7 +226,7 @@ namespace Asset_Management_System.ViewModels
             }
 
             Name = _asset.Name;
-            //Identifier = _asset.Identifier;
+            Identifier = _asset.Identifier;
             Description = _asset.Description;
 
             // Notify view about changes

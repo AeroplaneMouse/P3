@@ -39,6 +39,10 @@ namespace Asset_Management_System.ViewModels.Commands
             _asset.Name = _viewModel.Name;
             _asset.Description = _viewModel.Description;
 
+            _asset.Identifier = _viewModel.Identifier;
+            if (_asset.Identifier == null)
+                _asset.Identifier = "";
+
             _asset.FieldsList = new List<Field>();
             // Checks if Name or Description is not empty.
             if (string.IsNullOrEmpty(_asset.Name) || string.IsNullOrEmpty(_asset.Description))

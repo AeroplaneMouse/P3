@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Asset_Management_System.Models;
 using Asset_Management_System.ViewModels.Base;
+using Asset_Management_System.Resources;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -16,10 +17,10 @@ namespace Asset_Management_System.ViewModels
     {
         private MainViewModel _main;
 
-        public int NumberOfUsers { get; set; }
-        public int NumberOfAssets { get; set; }
-        public int NumberOfTags { get; set; }
-        public int NumberOfDepartments { get; set; }
+        public ulong NumberOfUsers { get; set; }
+        public ulong NumberOfAssets { get; set; }
+        public ulong NumberOfTags { get; set; }
+        public ulong NumberOfDepartments { get; set; }
 
         /// <summary>
         /// Default contructor

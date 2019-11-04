@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Database;
 using MySql.Data.MySqlClient;
 using Asset_Management_System.Logging;
 using System.Collections.ObjectModel;
@@ -14,7 +12,7 @@ namespace Asset_Management_System.Database.Repositories
         public bool Insert(Entry entity)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            bool querySuccess = false;
             
             try
             {
@@ -39,7 +37,7 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters.Add("@logable_type", MySqlDbType.String);
                     cmd.Parameters["@logable_type"].Value = entity.LogableType.ToString();
 
-                    query_success = cmd.ExecuteNonQuery() > 0;
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
                 }
             }
             catch (MySqlException e)
@@ -51,15 +49,15 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
             
-            return query_success;
+            return querySuccess;
         }
 
-        public IEnumerable<Entry> GetLogEntries(ulong logable_id, Type logable_type)
+        public IEnumerable<Entry> GetLogEntries(ulong logableId, Type logableType)
         {
-            return GetLogEntries(logable_id, logable_type, null);
+            return GetLogEntries(logableId, logableType, null);
         }
 
-        public IEnumerable<Entry> GetLogEntries(ulong logable_id, Type logable_type, string username)
+        public IEnumerable<Entry> GetLogEntries(ulong logableId, Type logableType, string username)
         {
             var con = new MySqlHandler().GetConnection();
             List<Entry> entries = new List<Entry>();
@@ -74,10 +72,10 @@ namespace Asset_Management_System.Database.Repositories
                 using (var cmd = new MySqlCommand(query, con))
                 {
                     cmd.Parameters.Add("@logable_id", MySqlDbType.UInt64);
-                    cmd.Parameters["@logable_id"].Value = logable_id;
+                    cmd.Parameters["@logable_id"].Value = logableId;
                     
                     cmd.Parameters.Add("@logable_type", MySqlDbType.String);
-                    cmd.Parameters["@logable_type"].Value = logable_type.ToString();
+                    cmd.Parameters["@logable_type"].Value = logableType.ToString();
                     
                     if (username != null)
                     {
@@ -89,20 +87,7 @@ namespace Asset_Management_System.Database.Repositories
                     {
                         while (reader.Read())
                         {
-                            ulong row_id = reader.GetUInt64("id");
-                            ulong row_logable_id = reader.GetUInt64("logable_id");
-                            Type row_logable_type = Type.GetType(reader.GetString("logable_type"));
-                            string row_username = reader.GetString("username");
-                            string row_description = reader.GetString("description");
-                            string row_options = reader.GetString("options");
-                            DateTime row_created_at = reader.GetDateTime("created_at");
-                                              
-                            Entry entry = (Entry)Activator.CreateInstance(typeof(Entry), 
-                                BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                                new object[] { row_id, row_logable_id, row_logable_type, row_description, row_username, row_options, row_created_at }, 
-                                null, null);
-                            
-                            entries.Add(entry);
+                            entries.Add(DBOToModelConvert(reader));
                         }
                         reader.Close();
                     }
@@ -147,20 +132,7 @@ namespace Asset_Management_System.Database.Repositories
                     {
                         while (reader.Read())
                         {
-                            ulong row_id = reader.GetUInt64("id");
-                            ulong row_logable_id = reader.GetUInt64("logable_id");
-                            Type row_logable_type = Type.GetType(reader.GetString("logable_type"));
-                            string row_username = reader.GetString("username");
-                            string row_description = reader.GetString("description");
-                            string row_options = reader.GetString("options");
-                            DateTime row_created_at = reader.GetDateTime("created_at");
-
-                            Entry entry = (Entry)Activator.CreateInstance(typeof(Entry), 
-                                BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                                new object[] { row_id, row_logable_id, row_logable_type, row_description, row_username, row_options, row_created_at }, 
-                                null, null);
-                            
-                            entries.Add(entry);
+                            entries.Add(DBOToModelConvert(reader));
                         }
                         reader.Close();
                     }
@@ -176,6 +148,27 @@ namespace Asset_Management_System.Database.Repositories
             }
             
             return entries;
+        }
+        
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public Entry DBOToModelConvert(MySqlDataReader reader)
+        {
+            ulong rowId = reader.GetUInt64("id");
+            ulong rowLogableId = reader.GetUInt64("logable_id");
+            Type rowLogableType = Type.GetType(reader.GetString("logable_type"));
+            string rowUsername = reader.GetString("username");
+            string rowDescription = reader.GetString("description");
+            string rowOptions = reader.GetString("options");
+            DateTime rowCreatedAt = reader.GetDateTime("created_at");
+
+            return (Entry) Activator.CreateInstance(typeof(Entry), 
+                BindingFlags.Instance | BindingFlags.NonPublic, null, 
+                new object[] { rowId, rowLogableId, rowLogableType, rowDescription, rowUsername, rowOptions, rowCreatedAt }, 
+                null, null);
         }
     }
 }

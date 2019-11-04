@@ -15,14 +15,13 @@ using Asset_Management_System.Resources.DataModels;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class LogsViewModel : ListPageViewModel<LogRepository, Entry>
+    public class LogsViewModel : ChangeableListPageViewModel<LogRepository, Entry>
     {
-        #region Constructor
+        public int ViewType => 3;
 
-        public LogsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
+        public LogsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType) 
         {
+            Title = "Logs";
         }
-
-        #endregion
     }
 }

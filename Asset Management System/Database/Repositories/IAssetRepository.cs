@@ -7,9 +7,9 @@ namespace Asset_Management_System.Database.Repositories
 {
     interface IAssetRepository : IMysqlRepository<Asset>, ISearchableRepository<Asset>
     {
-        ObservableCollection<Asset> SearchByTags(List<int> tags_ids);
+        ObservableCollection<Asset> SearchByTags(List<int> tagsIds);
         bool AttachTagsToAsset(Asset asset, List<Tag> tags);
         List<Tag> GetAssetTags(Asset asset);
-        Int32 GetCount();
+        ulong GetCount();
     }
 }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
@@ -14,7 +11,7 @@ namespace Asset_Management_System.Database.Repositories
         public bool Insert(Comment comment, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            var querySuccess = false;
             id = 0;
 
             try
@@ -34,7 +31,7 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters.Add("@content", MySqlDbType.String);
                     cmd.Parameters["@content"].Value = comment.Content;
 
-                    query_success = cmd.ExecuteNonQuery() > 0;
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
                     id = (ulong)cmd.LastInsertedId;
                 }
             }
@@ -48,13 +45,13 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
             
-            return query_success;
+            return querySuccess;
         }
 
         public bool Update(Comment comment)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            bool querySuccess = false;
 
             try
             {
@@ -76,7 +73,7 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                     cmd.Parameters["@id"].Value = comment.ID;
 
-                    query_success = cmd.ExecuteNonQuery() > 0;
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
                 }
             }catch (MySqlException e){
                 Console.WriteLine(e);
@@ -84,17 +81,17 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
             
-            return query_success;
+            return querySuccess;
         }
 
         public bool Delete(Comment comment)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            bool querySuccess = false;
 
             try
             {
-                const string query = "DELETE FROM comments WHERE id=@id";
+                const string query = "UPDATE comments SET deleted_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -102,7 +99,7 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                     cmd.Parameters["@id"].Value = comment.ID;
 
-                    query_success = cmd.ExecuteNonQuery() > 0;
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
                 }
             }catch (MySqlException e){
                 Console.WriteLine(e);
@@ -110,7 +107,7 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
             
-            return query_success;
+            return querySuccess;
         }
 
         public Comment GetById(ulong id)
@@ -121,7 +118,7 @@ namespace Asset_Management_System.Database.Repositories
             try
             {
                 const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
-                                     "FROM comments WHERE id=@id";
+                                     "FROM comments WHERE id=@id AND deleted_at IS NULL";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -147,7 +144,7 @@ namespace Asset_Management_System.Database.Repositories
             return comment;
         }
 
-        public ObservableCollection<Comment> GetByAssetId(ulong assetID)
+        public ObservableCollection<Comment> GetByAssetId(ulong assetId)
         {
             var con = new MySqlHandler().GetConnection();
             ObservableCollection<Comment> comments = new ObservableCollection<Comment>();
@@ -155,13 +152,13 @@ namespace Asset_Management_System.Database.Repositories
             try
             {
                 const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
-                                     "FROM comments WHERE asset_id=@asset_id";
+                                     "FROM comments WHERE asset_id=@asset_id AND deleted_at IS NULL";
 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
                 {
                     cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
-                    cmd.Parameters["@asset_id"].Value = assetID;
+                    cmd.Parameters["@asset_id"].Value = assetId;
 
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -183,16 +180,16 @@ namespace Asset_Management_System.Database.Repositories
 
         public Comment DBOToModelConvert(MySqlDataReader reader)
         {
-            ulong row_id = reader.GetUInt64("id");
-            ulong row_asset_id = reader.GetUInt64("asset_id");
-            String row_username = reader.GetString("username");
-            String row_content = reader.GetString("content");
-            DateTime row_created_at = reader.GetDateTime("created_at");
-            DateTime row_updated_at = reader.GetDateTime("updated_at");
+            ulong rowId = reader.GetUInt64("id");
+            ulong rowAssetId = reader.GetUInt64("asset_id");
+            String rowUsername = reader.GetString("username");
+            String rowContent = reader.GetString("content");
+            DateTime rowCreatedAt = reader.GetDateTime("created_at");
+            DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
 
             return (Comment)Activator.CreateInstance(typeof(Comment), 
                 BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { row_id, row_username, row_content, row_asset_id, row_created_at, row_updated_at }, null, null);
+                new object[] { rowId, rowUsername, rowContent, rowAssetId, rowCreatedAt, rowUpdatedAt }, null, null);
         }
     }
 }

@@ -1,0 +1,22 @@
+Name	Type	Description
+MEKR-PC	Computer	
+ZD-GRAFIKER	Computer	Grafiker - Sussi
+ZN-HEJ	Computer	
+ZN-MSME	Computer	Formidler - Morten Smetana
+ZN-NFA	Computer	Presse og events - Nels F. Alrøe
+ZN-RAAL	Computer	Salgsansvarlig - Lotte Raal
+ZN-SOLSKOV	Computer	
+ZN-TEMP2016	Computer	Pia Mai Thorshauge
+ZNHEJ	Computer	
+Bjarne Bækgaard	User	
+Helle Justesen	User	Kommunikationskonsulent
+Helle Skov	User	
+Jonathan Linnemann	User	
+Kasper Randorf	User	
+Kimmie Jørgensen	User	
+Mette Krebs	User	Formidler
+Mikkel Spliid	User	Praktikant
+Natacha Bering Kristensen	User	
+Nels Fjelsted Alrøe	User	Events
+Pia Mai Thorshauge	User	Formidler og koordinator
+Susanne Solskov	User	Marketingsansvarlig
