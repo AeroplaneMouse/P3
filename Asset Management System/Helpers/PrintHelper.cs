@@ -18,7 +18,7 @@ namespace Asset_Management_System.Helpers
             Type objectType = items.FirstOrDefault().GetType();
             
             string reportTitle = objectType.Name + "_report_";
-            var dialog = new PromptWithTextInput(reportTitle + DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss").Replace(':', '-') + ".csv", "Report name:");
+            var dialog = new PromptWithTextInput(reportTitle + DateTime.Now.ToString("MM/dd/yy HH:mm:ss").Replace(":", "").Replace("/", "").Replace(" ", "-") + ".csv", "Report name:");
             if (dialog.ShowDialog() == true)
             {
                 if (dialog.DialogResult == true)
