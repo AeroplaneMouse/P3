@@ -27,10 +27,10 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
 
-                <Label Grid.Row="0" Grid.Column="1" Padding="10" >Name</Label>
+                <Label Grid.Row="0" Grid.Column="1" Padding="10">Name</Label>
                 <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Name}" Padding="10" TextWrapping="Wrap" />
 
-                <Label Grid.Row="1" Grid.Column="1" Padding="10" >Description</Label>
+                <Label Grid.Row="1" Grid.Column="1" Padding="10">Description</Label>
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Description}" Padding="10" TextWrapping="Wrap" />
 
                 <Button Grid.Row="2" Grid.Column="1" Content="Asset history" Style="{StaticResource RegularButton}"
@@ -80,14 +80,14 @@
                         <TextBox.InputBindings>
                             <KeyBinding Key="Return" Command="{Binding AddNewCommentCommand}" />
                         </TextBox.InputBindings>
-                        
+
                     </TextBox>
 
                     <StackPanel>
                         <Button Content="Add new comment"
                                 Padding="0 5"
                                 Width="200"
-                                Command="{Binding AddNewCommentCommand}"/>
+                                Command="{Binding AddNewCommentCommand}" />
 
                         <Button Content="Remove comment"
                                 Padding="0 5"
@@ -107,7 +107,7 @@
                             <GridView>
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="Username" />
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Content}" Header="Content" />
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=CreatedAt}" Header="Created At" />
                             </GridView>
                         </ListView.View>
@@ -118,12 +118,10 @@
 
             </Border>
         </DataTemplate>
-        
+
         <!-- Empty template -->
-        <DataTemplate x:Key="EmptyTemplate">
-            
-        </DataTemplate>
-        
+        <DataTemplate x:Key="EmptyTemplate" />
+
     </Page.Resources>
 
 
@@ -139,7 +137,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <StackPanel
@@ -198,7 +196,7 @@
                                                MaxWidth="250"
                                                HorizontalAlignment="Left" TextWrapping="Wrap" />
                                     <TextBlock Grid.Row="2" Grid.Column="1" Text="Field comes from: " />
-                                    <ItemsControl Grid.Row="2" Grid.Column="2"  ItemsSource="{Binding FieldTags}">
+                                    <ItemsControl Grid.Row="2" Grid.Column="2" ItemsSource="{Binding FieldTags}">
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <StackPanel Orientation="Horizontal" />
@@ -208,7 +206,7 @@
                                             <DataTemplate>
                                                 <Grid>
                                                     <Border BorderBrush="{Binding Color}" BorderThickness="1">
-                                                    <TextBlock Text="{Binding Name}" Padding="5"/>
+                                                        <TextBlock Text="{Binding Name}" Padding="5" />
                                                     </Border>
                                                 </Grid>
                                             </DataTemplate>
@@ -258,12 +256,12 @@
 
                             <DataTrigger Binding="{Binding IsTag}" Value="False">
                                 <Setter Property="ContentControl.ContentTemplate"
-                                    Value="{StaticResource CommentTemplate}" />
+                                        Value="{StaticResource CommentTemplate}" />
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding IsTag}" Value="True">
                                 <Setter Property="ContentControl.ContentTemplate"
-                                    Value="{StaticResource EmptyTemplate}" />
+                                        Value="{StaticResource EmptyTemplate}" />
 
                             </DataTrigger>
 
@@ -272,10 +270,9 @@
                 </ContentControl.Style>
 
             </ContentControl>
-            
+
         </StackPanel>
 
-        
 
     </Grid>
 </Page>

@@ -195,7 +195,7 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand CancelCommand { get; set; }
 
-        
+
         /// <summary>
         /// Verification of the asset, before saving.
         /// </summary>
@@ -206,8 +206,7 @@ namespace Asset_Management_System.ViewModels
             return true;
         }
 
-        
-        
+
         /// <summary>
         /// This function loads the fields from the asset, and into the viewmodel.
         /// </summary>
@@ -248,7 +247,7 @@ namespace Asset_Management_System.ViewModels
                 .OrderByDescending(p => p.Name.ToLower().StartsWith(value.ToLower()))
                 .ToList();
         }
-        
+
         /// <summary>
         /// This function runs uppon selecting a Tag with Enter.
         /// </summary>
@@ -257,6 +256,14 @@ namespace Asset_Management_System.ViewModels
             CurrentlyAddedTags.Add(_tagList.Single(p =>
                 String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
             ConnectTags();
+            foreach (var field in FieldsList)
+            {
+                Console.WriteLine(field.Field.Label);
+                foreach (var tag in field.FieldTags)
+                {
+                    Console.WriteLine("    " + tag.Name);
+                }
+            }
 
             _tabIndex = 0;
         }
@@ -316,7 +323,7 @@ namespace Asset_Management_System.ViewModels
                 }
             }
         }
-        
+
 
         /// <summary>
         /// This function clears the searched list, as well as clears the input field.
