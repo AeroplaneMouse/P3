@@ -253,19 +253,28 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void Apply()
         {
-            CurrentlyAddedTags.Add(_tagList.Single(p =>
-                String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
-            ConnectTags();
-            foreach (var field in FieldsList)
+            try
             {
-                Console.WriteLine(field.Field.Label);
-                foreach (var tag in field.FieldTags)
+                CurrentlyAddedTags.Add(_tagList.Single(p =>
+                    String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
+                ConnectTags();
+                foreach (var field in FieldsList)
                 {
-                    Console.WriteLine("    " + tag.Name);
+                    Console.WriteLine(field.Field.Label);
+                    foreach (var tag in field.FieldTags)
+                    {
+                        Console.WriteLine("    " + tag.Name);
+                    }
                 }
-            }
 
-            _tabIndex = 0;
+                _tabIndex = 0;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                // Handle this error
+            }
+            
         }
 
         /// <summary>

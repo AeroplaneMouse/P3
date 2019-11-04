@@ -208,7 +208,10 @@
 
                 </StackPanel>
             </Grid>
-
+            
         </ScrollViewer>
     </Grid>
+    <Page.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
+    </Page.InputBindings>
 </Page>
