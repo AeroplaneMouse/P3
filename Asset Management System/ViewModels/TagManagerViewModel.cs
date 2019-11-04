@@ -11,6 +11,7 @@ namespace Asset_Management_System.ViewModels
 {
     public class TagManagerViewModel : ObjectManagerController
     {
+        // TODO: Edit style for fields to use dynamic binding, such fields on tags can be removed once added.
         private MainViewModel _main;
         private Tag _tag;
         private string _randomColor;
