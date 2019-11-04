@@ -38,7 +38,10 @@ namespace Asset_Management_System.Helpers
 
                     //Creates the directory of the file, if it does not already exist. ELse it is ignored.
                     string newDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + new FileInfo(pathToFile).Directory.Name;
-                    Directory.CreateDirectory(newDirectory);
+                    if (!newDirectory.EndsWith("Desktop"))
+                    {
+                        Directory.CreateDirectory(newDirectory);
+                    }
 
                     //Writes the information to the file
                     using (StreamWriter file = new StreamWriter(pathToFile, false))
