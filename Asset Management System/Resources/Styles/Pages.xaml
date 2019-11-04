@@ -102,14 +102,14 @@
                                           BorderThickness="0">
                                     <ListView.Resources>
                                         <GridView x:Key="AssetTemplate">
-                                            <GridViewColumn CellTemplate="{StaticResource SingleCheckBoxElement}" HeaderTemplate="{StaticResource HeaderCheckBoxElement}"/>
+                                            <!-- <GridViewColumn CellTemplate="{StaticResource SingleCheckBoxElement}" HeaderTemplate="{StaticResource HeaderCheckBoxElement}"/> -->
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Identifier}" Header="Identifier" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
                                         </GridView>
 
                                         <GridView x:Key="TagsTemplate">
-                                            <GridViewColumn CellTemplate="{StaticResource SingleCheckBoxElement}" HeaderTemplate="{StaticResource HeaderCheckBoxElement}"/>
+                                            <!-- <GridViewColumn CellTemplate="{StaticResource SingleCheckBoxElement}" HeaderTemplate="{StaticResource HeaderCheckBoxElement}"/> -->
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Label" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=ParentID}" Header="Parent Tag ID" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=DepartmentID}" Header="Department ID" />
