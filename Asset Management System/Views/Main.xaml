@@ -106,7 +106,7 @@
                                                 <Button Content="Assets" Command="{Binding ShowAssetsPageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Tags" Command="{Binding ShowTagPageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Logs" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding Visible}"/>
-                                                <Button Content="Random" Command="{Binding AddNotificationTestCommand}" Style="{StaticResource NavigationButton}"/>
+                                                <!--<Button Content="Random" Command="{Binding AddNotificationTestCommand}" Style="{StaticResource NavigationButton}"/>-->
                                             </StackPanel>
                                         </Border>
 

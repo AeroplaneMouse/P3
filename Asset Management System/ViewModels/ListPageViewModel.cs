@@ -21,7 +21,7 @@ namespace Asset_Management_System.ViewModels
     {
         #region Private Members
 
-        private MainViewModel _main;
+        protected MainViewModel _main;
 
         private ObservableCollection<T> _list { get; set; }
 
@@ -78,6 +78,7 @@ namespace Asset_Management_System.ViewModels
                 {
                     _list.Add(item);
                 }
+                OnPropertyChanged(nameof(SearchList));
             }
         }
 
@@ -178,11 +179,8 @@ namespace Asset_Management_System.ViewModels
         {
             if (SearchList.Count == 0)
                 return null;
-
             else
-            {
                 return SearchList.ElementAtOrDefault(SelectedItemIndex);
-            }
         }
 
         #endregion

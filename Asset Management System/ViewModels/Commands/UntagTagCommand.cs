@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
@@ -8,6 +10,8 @@ namespace Asset_Management_System.ViewModels.Commands
     {
         private AssetManagerViewModel _viewModel;
         public event EventHandler CanExecuteChanged;
+
+        List<ShownField> removeList = new List<ShownField>();
 
         public UntagTagCommand(AssetManagerViewModel viewModel)
         {
@@ -24,12 +28,35 @@ namespace Asset_Management_System.ViewModels.Commands
             ulong tagId =
                 ulong.Parse(parameter?.ToString() ?? throw new NullReferenceException("Input parameter == null"));
 
-            // Find field by ID, then remove it.
+
+            // Find Tag by ID, then remove it.
             _viewModel.CurrentlyAddedTags.Remove(_viewModel.CurrentlyAddedTags.Single(tag => tag.ID == tagId));
 
-            foreach (var currentFieldList in _viewModel.FieldsList)
+
+            // Removes tags from the fields where it is referenced.
+            foreach (var currentShownField in _viewModel.FieldsList)
             {
-                currentFieldList.FieldTags.Remove(currentFieldList.FieldTags.SingleOrDefault(tag => tag.ID == tagId));
+                if (!currentShownField.FieldTags.Remove(
+                    currentShownField.FieldTags.SingleOrDefault(tag => tag.ID == tagId)))
+                {
+                    if (currentShownField.FieldTags.Count == 0 && !currentShownField.Field.IsCustom)
+                    {
+                        removeList.Add(currentShownField);
+                    }
+                }
+            }
+
+            if (removeList.Count > 0)
+            {
+                DeleteFields();
+            }
+        }
+
+        private void DeleteFields()
+        {
+            foreach (var currentShownField in removeList)
+            {
+                _viewModel.FieldsList.Remove(currentShownField);
             }
         }
     }

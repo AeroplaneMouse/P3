@@ -1,22 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
 using Asset_Management_System.Models;
-using MySql.Data;
 using MySql.Data.MySqlClient;
 using System.Reflection;
-using System.Collections.Generic;
 
 namespace Asset_Management_System.Database.Repositories
 {
     public class UserRepository : IUserRepository
     {
+
         public ulong GetCount()
         {
             var con = new MySqlHandler().GetConnection();
-            int count = 0;
+            ulong count = 0;
             
             try
             {
@@ -28,7 +23,7 @@ namespace Asset_Management_System.Database.Repositories
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
-                            count = reader.GetInt32("COUNT(*)");
+                            count = reader.GetUInt64("COUNT(*)");
                         reader.Close();
                     }
                 }
@@ -48,7 +43,7 @@ namespace Asset_Management_System.Database.Repositories
         public bool Insert(User entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            bool querySuccess = false;
 
             id = 0;
 
@@ -78,7 +73,7 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters.Add("@admin", MySqlDbType.String);
                     cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
                         
-                    query_success = cmd.ExecuteNonQuery() > 0;
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
 
                     id = (ulong)cmd.LastInsertedId;
                 }
@@ -92,13 +87,13 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
             
-            return query_success;
+            return querySuccess;
         }
 
         public bool Update(User entity)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            bool querySuccess = false;
 
             try
             {
@@ -125,9 +120,6 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters.Add("@default_department", MySqlDbType.UInt64);
                     cmd.Parameters["@default_department"].Value = entity.DefaultDepartment;
 
-                    cmd.Parameters.Add("@admin", MySqlDbType.String);
-                    cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
-
                     querySuccess = cmd.ExecuteNonQuery() > 0;
                 }
             }
@@ -140,13 +132,13 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
             
-            return query_success;
+            return querySuccess;
         }
 
         public bool Delete(User entity)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            bool querySuccess = false;
 
             try
             {
@@ -158,7 +150,7 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                     cmd.Parameters["@id"].Value = entity.ID;
 
-                    query_success = cmd.ExecuteNonQuery() > 0;
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
                 }
             }
             catch (MySqlException e)
@@ -170,7 +162,7 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
 
-            return query_success;
+            return querySuccess;
         }
 
         public User GetById(ulong id)
@@ -288,16 +280,15 @@ namespace Asset_Management_System.Database.Repositories
             ulong rowId = reader.GetUInt64("id");
             String rowName = reader.GetString("name");
             String rowUsername = reader.GetString("username");
-            String rowDescription = reader.GetString("description");
-            bool rowEnabled = reader.GetBoolean("enabled");
-            ulong rowDefaultDepartment = reader.GetUInt64("default_department");
             bool rowAdmin = reader.GetBoolean("admin");
+            ulong rowDefaultDepartment = reader.GetUInt64("default_department");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
 
             return (User) Activator.CreateInstance(typeof(User),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowName, rowUsername, rowDescription, rowEnabled, rowDefaultDepartment, rowAdmin, rowCreatedAt, rowUpdatedAt }, null, null);
+                new object[] { rowId, rowName, rowUsername, rowAdmin, rowDefaultDepartment, rowCreatedAt, rowUpdatedAt }, null,
+                null);
         }
     }
 }

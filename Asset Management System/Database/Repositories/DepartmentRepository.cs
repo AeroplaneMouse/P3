@@ -8,10 +8,10 @@ namespace Asset_Management_System.Database.Repositories
 {
     public class DepartmentRepository : IDepartmentRepository
     {
-        public int GetCount()
+        public ulong GetCount()
         {
             var con = new MySqlHandler().GetConnection();
-            int count = 0;
+            ulong count = 0;
 
             try
             {
@@ -23,7 +23,7 @@ namespace Asset_Management_System.Database.Repositories
                     using (var reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
-                            count = reader.GetInt32("COUNT(*)");
+                            count = reader.GetUInt64("COUNT(*)");
                         reader.Close();
                     }
                 }
@@ -44,11 +44,12 @@ namespace Asset_Management_System.Database.Repositories
         /// 
         /// </summary>
         /// <param name="entity"></param>
+        /// <param name="id"></param>
         /// <returns>True if entity was successfully inserted.</returns>
         public bool Insert(Department entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            bool querySuccess = false;
             
             try
             {
@@ -59,7 +60,7 @@ namespace Asset_Management_System.Database.Repositories
                 {
                     cmd.Parameters.Add("@name", MySqlDbType.String);
                     cmd.Parameters["@name"].Value = entity.Name;
-                    query_success = cmd.ExecuteNonQuery() > 0;
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
                     
                     id = (ulong)cmd.LastInsertedId;
                 }
@@ -74,7 +75,7 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
             
-            return query_success;
+            return querySuccess;
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace Asset_Management_System.Database.Repositories
         public bool Update(Department entity)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            bool querySuccess = false;
 
             try
             {
@@ -99,7 +100,7 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters.Add("@id", MySqlDbType.Int64);
                     cmd.Parameters["@id"].Value = entity.ID;
 
-                    query_success = cmd.ExecuteNonQuery() > 0;
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
                 }
             }
             catch (MySqlException e)
@@ -111,7 +112,7 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
             
-            return query_success;
+            return querySuccess;
         }
 
         /// <summary>
@@ -122,7 +123,7 @@ namespace Asset_Management_System.Database.Repositories
         public bool Delete(Department entity)
         {
             var con = new MySqlHandler().GetConnection();
-            bool query_success = false;
+            bool querySuccess = false;
 
             try
             {
@@ -133,7 +134,7 @@ namespace Asset_Management_System.Database.Repositories
                 {
                     cmd.Parameters.AddWithValue  ("@id", MySqlDbType.Int64);
                     cmd.Parameters["@id"].Value = entity.ID;
-                    query_success = cmd.ExecuteNonQuery() > 0;
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
                 }
             }catch(MySqlException e){ 
                 Console.WriteLine(e);
@@ -141,7 +142,7 @@ namespace Asset_Management_System.Database.Repositories
                 con.Close();
             }
             
-            return query_success;
+            return querySuccess;
         }
 
         /// <summary>
@@ -224,14 +225,14 @@ namespace Asset_Management_System.Database.Repositories
         /// <returns></returns>
         public Department DBOToModelConvert(MySqlDataReader reader)
         {
-            ulong row_id = reader.GetUInt64("id");
-            string row_name = reader.GetString("name");
-            DateTime row_created_at = reader.GetDateTime("created_at");
-            DateTime row_updated_at = reader.GetDateTime("updated_at");
+            ulong rowId = reader.GetUInt64("id");
+            string rowName = reader.GetString("name");
+            DateTime rowCreatedAt = reader.GetDateTime("created_at");
+            DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
 
             return (Department)Activator.CreateInstance(typeof(Department), 
                 BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { row_id, row_name, row_created_at, row_updated_at }, null, null);
+                new object[] { rowId, rowName, rowCreatedAt, rowUpdatedAt }, null, null);
         }
     }
 }

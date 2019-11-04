@@ -7,6 +7,7 @@ using Asset_Management_System.Models;
 using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Database.Repositories;
 using System.Windows;
+using Asset_Management_System.Events;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -58,6 +59,7 @@ namespace Asset_Management_System.ViewModels
         protected void Edit()
         {
             T selected = GetSelectedItem();
+            Console.WriteLine("Check: " + SelectedItemIndex);
 
             if (selected != null)
             {
@@ -78,22 +80,27 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
+        private Asset RemoveAsset;
+        private Tag RemoveTag;
+
         protected void Remove()
         {
             T selected = GetSelectedItem();
 
             if (selected != null)
             {
-                if (selected is Asset)
+                if (selected is Asset asset)
                 {
-                    Log<Asset>.CreateLog(selected as ILoggable<Asset>, true);
-                    (Rep as AssetRepository).Delete(selected as Asset);
+                    RemoveAsset = asset;
+                    RemoveTag = null;
+                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete asset { asset.Name }?", RemovePromptElapsed));
                 }
 
-                else if (selected is Tag)
+                else if (selected is Tag tag)
                 {
-                    Log<Tag>.CreateLog(selected as ILoggable<Tag>, true);
-                    (Rep as TagRepository).Delete(selected as Tag);
+                    RemoveAsset = null;
+                    RemoveTag = tag;
+                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete tag { tag.Name }?", RemovePromptElapsed));
                 }
 
                 else
@@ -101,8 +108,24 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Fejl ved Remove");
                 }
             }
+        }
 
-            Search();
+        private void RemovePromptElapsed(object sender, PromptEventArgs e)
+        {
+            if (e.Result)
+            {
+                if (RemoveAsset != null)
+                {
+                    Log<Asset>.CreateLog(RemoveAsset, true);
+                    (Rep as AssetRepository).Delete(RemoveAsset as Asset);
+                }
+                else if(RemoveTag != null)
+                {
+                    Log<Tag>.CreateLog(RemoveTag, true);
+                    (Rep as TagRepository).Delete(RemoveTag as Tag);
+                }
+                Search();
+            }
         }
 
         #endregion

@@ -155,13 +155,13 @@
         <!-- So it can be clicked -->
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
         
-        <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+        <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Width" Value="100"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         <Setter Property="Padding" Value="6"/>
-        <Setter Property="BorderBrush" Value="Black"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderBrush" Value="{StaticResource NavigationSelectedBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
 
         <Setter Property="OverridesDefaultStyle" Value="True"/>
 
@@ -186,7 +186,8 @@
         <!-- Adds the hover effect -->
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
+                <Setter Property="Foreground" Value="White"/>
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
                 <Setter Property="BorderThickness" Value="1"/>
@@ -197,7 +198,8 @@
     <!-- Regular cancel button -->
     <Style TargetType="Button" x:Key="RegularCancelButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
-        
+        <Setter Property="BorderThickness" Value="0"/>
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource CancelRedHighlightBrush}"/>
@@ -208,6 +210,8 @@
     <!-- Regular accept button -->
     <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource AcceptGreenHightlightBrush}"/>
