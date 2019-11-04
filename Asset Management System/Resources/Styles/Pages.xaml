@@ -103,7 +103,8 @@
                                           BorderThickness="0">
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
-                                            <i:InvokeCommandAction Command="{Binding ViewCommand}" CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}"/>
+                                            <!--ViewCommand-->
+                                            <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}"/>
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
 
