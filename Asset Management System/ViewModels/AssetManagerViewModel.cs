@@ -255,9 +255,12 @@ namespace Asset_Management_System.ViewModels
         {
             try
             {
-                CurrentlyAddedTags.Add(_tagList.Single(p =>
-                    String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
-                ConnectTags();
+                if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
+                {
+                    CurrentlyAddedTags.Add(_tagList.Single(p =>
+                        String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
+                    ConnectTags();
+                }
                 foreach (var field in FieldsList)
                 {
                     Console.WriteLine(field.Field.Label);
