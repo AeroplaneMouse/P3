@@ -30,6 +30,7 @@ namespace Asset_Management_System.Resources.Users
 
                     u.Name = p[0];
                     u.Username = p[0];
+                    u.IsEnabled = true;
                     u.IsAdmin = false;
                     u.Description = (p[2] != null) ? p[2] : String.Empty;
 
