@@ -60,22 +60,19 @@ namespace Asset_Management_System.ViewModels
                     }
                 }
 
-                if (alreadyExists == false)
+                // If it already exists, jump to next iteration.
+                if (alreadyExists) continue;
+                if (currentTagField.IsHidden)
                 {
-                    if (currentTagField.IsHidden)
+                    HiddenFields.Add(new ShownField(currentTagField));
+                }
+                else
+                {
+                    if (HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) != null) continue;
+                    if (FieldsList.SingleOrDefault(field => field.Field.HashId == currentTagField.HashId) ==
+                        null)
                     {
-                        HiddenFields.Add(new ShownField(currentTagField));
-                    }
-                    else
-                    {
-                        if (HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) == null)
-                        {
-                            if (FieldsList.SingleOrDefault(field => field.Field.HashId == currentTagField.HashId) ==
-                                null)
-                            {
-                                FieldsList.Add(new ShownField(currentTagField));
-                            }
-                        }
+                        FieldsList.Add(new ShownField(currentTagField));
                     }
                 }
             }
