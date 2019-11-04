@@ -57,6 +57,7 @@
                                                 <MenuItem Header="_Save"/>
                                                 <MenuItem Header="_Load"/>
                                                 <MenuItem Header="_Clear"/>
+                                                <MenuItem Header="_Import users" Command="{Binding ImportUsersCommand}" />
                                             </MenuItem>
                                             <MenuItem Header="_Help" Style="{StaticResource MenuItemButton}">
                                                 <MenuItem Header="_About"/>

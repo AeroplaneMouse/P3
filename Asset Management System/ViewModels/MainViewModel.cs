@@ -15,6 +15,7 @@ using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Resources.Interfaces;
 using System.Threading;
+using Asset_Management_System.Resources.Users;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -74,6 +75,8 @@ namespace Asset_Management_System.ViewModels
 
             //AddNotificationTestCommand = new Base.RelayCommand(DisplayPrompt);
 
+            ImportUsersCommand = new Base.RelayCommand(ImportUsers);
+
             SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
             EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
@@ -87,6 +90,8 @@ namespace Asset_Management_System.ViewModels
 
             (splashScreen.DataContext as SplashViewModel).StartWorker();
         }
+
+        
 
         #endregion
 
@@ -337,6 +342,13 @@ namespace Asset_Management_System.ViewModels
 
         #region Private Methods
 
+        private void ImportUsers()
+        {
+            var dialog = new Views.UserImporterView();
+
+            dialog.ShowDialog();
+        }
+
         private bool ExcludedFromSaving(Page page)
         {
             foreach (Page excludedPage in excludedPages)
@@ -412,6 +424,10 @@ namespace Asset_Management_System.ViewModels
         // Notification commands
         public ICommand AddNotificationTestCommand { get; set; }
         public static ICommand RemoveNotificationCommand { get; set; }
+
+
+        public ICommand ImportUsersCommand { get; set; }
+
 
         #endregion
 

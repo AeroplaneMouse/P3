@@ -10,6 +10,7 @@ using System.Windows.Input;
 using Asset_Management_System.Models;
 using Asset_Management_System.ViewModels.Base;
 using Asset_Management_System.Resources;
+using Asset_Management_System.Resources.Users;
 
 namespace Asset_Management_System.ViewModels
 {
