@@ -22,7 +22,8 @@
             </Grid.ColumnDefinitions>
 
             <ListView ItemsSource="{Binding ExistingUsersList, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                          Margin="10 0"
                       Grid.Column="0">
 
                 <ListView.View>
@@ -39,7 +40,7 @@
                                         Header="Description"
                                         Width="150"/>
 
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartment}" 
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
                                         Header="Department"
                                         Width="150"/>
 
@@ -51,8 +52,10 @@
 
             </ListView>
 
+
             <ListView ItemsSource="{Binding NewUsersList, UpdateSourceTrigger=PropertyChanged}"
-                      SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                          Margin="10 0"
                       Grid.Column="1">
 
                 <ListView.View>
@@ -69,7 +72,7 @@
                                         Header="Description"
                                         Width="150"/>
 
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartment}" 
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
                                         Header="Department"
                                         Width="150"/>
 
@@ -78,8 +81,10 @@
                                         Width="Auto"/>
                     </GridView>
                 </ListView.View>
-                
+
             </ListView>
+
+
         </Grid>
         
         <Grid Grid.Row="1">
@@ -97,7 +102,7 @@
                     <GridView>
                         <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" 
                                         Header="ID" 
-                                        Width="20" />
+                                        Width="20"/>
 
                         <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
                                         Header="Username"
@@ -107,7 +112,7 @@
                                         Header="Description"
                                         Width="150"/>
 
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartment}" 
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}"
                                         Header="Department"
                                         Width="150"/>
 
@@ -116,8 +121,10 @@
                                         Width="Auto"/>
                     </GridView>
                 </ListView.View>
-                
+
             </ListView>
+
+
 
         </Grid>
     </Grid>

@@ -22,6 +22,8 @@ namespace Asset_Management_System.ViewModels
 
         private List<User> _finalUsersList { get; set; }
 
+        private List<Department> _departments { get; set; }
+
         #endregion
 
         #region Public Properties
@@ -70,6 +72,8 @@ namespace Asset_Management_System.ViewModels
             set => _finalUsersList = value;
         }
 
+        public List<Department> DepartmentList { get; set; }
+
         #endregion
 
         #region Constructor
@@ -88,6 +92,8 @@ namespace Asset_Management_System.ViewModels
 
             _finalUsersList.AddRange(_existingUsersList);
             _finalUsersList.AddRange(_newUsersList);
+
+            DepartmentList = new DepartmentRepository().GetAll().ToList();
         }
 
         #endregion

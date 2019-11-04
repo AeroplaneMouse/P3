@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Asset_Management_System.Database.Repositories;
+using System;
 
 namespace Asset_Management_System.Models
 {
@@ -30,6 +31,21 @@ namespace Asset_Management_System.Models
         public bool IsAdmin { get; set; }
 
         public ulong DefaultDepartment { get; set; }
+
+        public string DefaultDepartmentName
+        {
+            get
+            {
+                if (DefaultDepartment == 0)
+                {
+                    return "All Departments";
+                }
+
+                var department = new DepartmentRepository().GetById(DefaultDepartment);
+
+                return department == null ? String.Empty : department.Name;
+            }
+        }
 
         public string Description { get; set; }
 
