@@ -30,6 +30,7 @@ namespace Asset_Management_System.ViewModels
 
         private List<User> _finalUsersList { get; set; }
 
+        private List<User> _conflictingUsersList { get; set; }
         #endregion
 
         #region Public Properties
@@ -50,6 +51,12 @@ namespace Asset_Management_System.ViewModels
         {
             get => _finalUsersList;
             set => _finalUsersList = value;
+        }
+
+        public List<User> ConflictingUsersList
+        {
+            get => _conflictingUsersList;
+            set => _conflictingUsersList = value;
         }
 
         public string Title { get; set; } = "Import Users";
@@ -76,8 +83,9 @@ namespace Asset_Management_System.ViewModels
 
             _session = new Session();
 
-
             _domain = _session.Domain;
+
+
 
             // Get all existing users 
             _existingUsersList = _rep.GetAll().ToList();
@@ -88,13 +96,19 @@ namespace Asset_Management_System.ViewModels
             // Initialize the final list of users
             _finalUsersList = new List<User>();
 
+            _conflictingUsersList = CheckForDuplicates();
 
-            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
+
+
 
 
 
             _finalUsersList.AddRange(_existingUsersList != null ? _existingUsersList.Where(p => p.IsEnabled).ToList() : new List<User>());
             _finalUsersList.AddRange(_newUsersList != null ? _newUsersList : new List<User>());
+
+            // Initialize commands 
+            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
+            ApplyCommand = new Base.RelayCommand(Apply);
         }
 
         #endregion
@@ -106,6 +120,26 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Private Methods
+
+        private List<User> CheckForDuplicates()
+        {
+            var conflictingUsers = new List<User>();
+
+            conflictingUsers = _existingUsersList
+                .Where(u => u.IsEnabled == false)
+                .Where(e => _newUsersList.Where(n => e.Username.CompareTo(n.Username) == 0).Count() > 0)
+                .ToList();
+
+            return conflictingUsers;
+        }
+
+        private void Apply()
+        {
+            foreach (User user in _finalUsersList)
+            {
+                _rep.Insert(user, out ulong id);
+            }
+        }
 
         #endregion
     }

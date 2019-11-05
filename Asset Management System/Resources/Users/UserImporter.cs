@@ -38,12 +38,15 @@ namespace Asset_Management_System.Resources.Users
 
             if (!String.IsNullOrEmpty(filePath))
             {
-                return Encoding.Default.GetString(File.ReadAllBytes(filePath))
-                .Split("\r\n")                // Splits file into lines, by newlines
-                .ToList()
-                .Select(p => p.Split('\t')) // Splits lines into sections, by tabs
-                .Where(p => p.Count() > 1)  // Only gets lines with something in them
-                .Where(p => p[0].CompareTo("Name") != 0 && p[1].CompareTo("Type") != 0 && p[2].CompareTo("Description") != 0)
+                var e = Encoding.GetEncoding(1252);
+
+                return e.GetString(File.ReadAllBytes(filePath))
+                .Split("\r\n")                  // Splits file into lines, by newlines
+                .Select(p => p.Split('\t'))     // Splits lines into sections, by tabs
+                .Where(p => p.Count() > 1)      // Only gets lines with something in them
+                .Where(p => p[0].CompareTo("Name") != 0 && 
+                            p[1].CompareTo("Type") != 0 && 
+                            p[2].CompareTo("Description") != 0) // Don't use the first line of the file
                 .Select(p =>
                 {
                     User u = new User();

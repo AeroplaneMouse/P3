@@ -185,59 +185,19 @@
                         <ListView.View>
                             <GridView>
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
-                                                Header="Username" >
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Border BorderThickness="2" BorderBrush="Black">
-                                                <TextBlock Text="{Binding}" Foreground="Red"/>
-                                            </Border>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                                Header="Username" />
 
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Domain}"
-                                                Header="Domain">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Border BorderThickness="2" BorderBrush="Black">
-                                                <TextBlock Text="{Binding}" />
-                                            </Border>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                                Header="Domain" />
 
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" 
-                                                Header="Description">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Border BorderThickness="2" BorderBrush="Black">
-                                                <TextBlock Text="{Binding}" />
-                                            </Border>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                                Header="Description" />
 
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
-                                                Header="Department">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Border BorderThickness="2" BorderBrush="Black">
-                                                <TextBlock Text="{Binding}" />
-                                            </Border>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                                Header="Department"/>
 
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
-                                                Header="Admin">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Border BorderThickness="2" BorderBrush="Black">
-                                                <TextBlock Text="{Binding}" />
-                                            </Border>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
+                                                Header="Admin"/>
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -246,8 +206,44 @@
                 
                 <!-- Conflicts -->
                 <Grid Grid.Row="1" Margin="10 5 10 5">
-                    <TextBlock Text="Conflicts"
-                               Style="{StaticResource HeaderStyle}"/>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Style="{StaticResource HeaderStyle}"
+                               Text="Conflicts"
+                               Grid.Row="0"/>
+
+                    <ListView ItemsSource="{Binding ConflictingUsersList, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                              Grid.Row="1">
+
+                        <ListView.Resources>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="Padding" Value="20 5" />
+                            </Style>
+                        </ListView.Resources>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
+                                                Header="Username" />
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Domain}"
+                                                Header="Domain" />
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" 
+                                                Header="Description" />
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
+                                                Header="Department"/>
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
+                                                Header="Admin"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
                 </Grid>
 
             </Grid>
