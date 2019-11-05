@@ -141,11 +141,7 @@ namespace Asset_Management_System.ViewModels
 
                 CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
                 ConnectTags();
-
-
-                foreach (Tag tag in CurrentlyAddedTags)
-                    Console.WriteLine("id: " + tag.ID);
-                Console.WriteLine("________");
+                
 
 
                 _editing = true;
@@ -160,7 +156,6 @@ namespace Asset_Management_System.ViewModels
             // Initialize commands
             SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _editing);
             AddFieldCommand = new AddFieldCommand(this, true);
-            RemoveFieldCommand = new RemoveFieldCommand(this);
             CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
 
             #region Tag related variables
@@ -191,7 +186,6 @@ namespace Asset_Management_System.ViewModels
         }
 
         public ICommand SaveAssetCommand { get; set; }
-        public static ICommand RemoveFieldCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
 
         public ICommand CancelCommand { get; set; }
