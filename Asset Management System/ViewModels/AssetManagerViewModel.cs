@@ -130,6 +130,7 @@ namespace Asset_Management_System.ViewModels
             _main = main;
             Title = "Edit asset";
 
+            // TODO: Consider if this should be given via Dependency Injection
             _assetRep = new AssetRepository();
 
             FieldsList = new ObservableCollection<ShownField>();
@@ -140,11 +141,7 @@ namespace Asset_Management_System.ViewModels
 
                 CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
                 ConnectTags();
-
-
-                foreach (Tag tag in CurrentlyAddedTags)
-                    Console.WriteLine("id: " + tag.ID);
-                Console.WriteLine("________");
+                
 
 
                 _editing = true;
@@ -159,7 +156,6 @@ namespace Asset_Management_System.ViewModels
             // Initialize commands
             SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _editing);
             AddFieldCommand = new AddFieldCommand(this, true);
-            RemoveFieldCommand = new RemoveFieldCommand(this);
             CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
 
             #region Tag related variables
@@ -181,7 +177,7 @@ namespace Asset_Management_System.ViewModels
             // Start the search over
             EscapeKeyCommand = new Base.RelayCommand(() => ResetSearch());
 
-            // Deletes charaters from the search query, and if the query is empty, go up a tag level
+            // Deletes characters from the search query, and if the query is empty, go up a tag level
             BackspaceKeyCommand = new Base.RelayCommand(() => DeleteCharacter());
 
             #endregion
@@ -190,7 +186,6 @@ namespace Asset_Management_System.ViewModels
         }
 
         public ICommand SaveAssetCommand { get; set; }
-        public static ICommand RemoveFieldCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
 
         public ICommand CancelCommand { get; set; }
@@ -320,7 +315,7 @@ namespace Asset_Management_System.ViewModels
                     ulong tempID = _tagList
                         .Select(p => p.ID)
                         .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                    List<Models.Tag> tempList = _tagRep.GetChildTags(tempID) as List<Models.Tag>;
+                    List<Tag> tempList = _tagRep.GetChildTags(tempID) as List<Models.Tag>;
 
                     // If the tag we are "going into" has children, we go into it
                     if (tempList?.Count != 0)

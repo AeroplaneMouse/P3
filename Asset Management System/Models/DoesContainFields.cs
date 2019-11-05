@@ -16,7 +16,7 @@ namespace Asset_Management_System.Models
         [JsonIgnore] public List<Field> FieldsList { get; set; }
         
         //Used for formatting the DateTimeOutput when showing the elements within a database.
-        public string DateToStringConverter => CreatedAt.ToString("MM/dd/yyyy HH:mm:ss");
+        public string DateToStringConverter => CreatedAt.ToString("MM/dd/yyyy HH:mm");
 
         public DoesContainFields()
         {

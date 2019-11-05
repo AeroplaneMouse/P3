@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using Asset_Management_System.Models;
+using Asset_Management_System.ViewModels.Commands;
 using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
@@ -12,6 +14,14 @@ namespace Asset_Management_System.ViewModels
         public ObservableCollection<Tag> CurrentlyAddedTags { get; set; } = new ObservableCollection<Tag>();
 
         public ObservableCollection<ShownField> HiddenFields { get; set; } = new ObservableCollection<ShownField>();
+        
+        public static ICommand RemoveFieldCommand { get; set; }
+
+        public ObjectManagerController()
+        {
+            RemoveFieldCommand = new RemoveFieldCommand(this);
+        }
+        
 
         protected void ConnectTags()
         {

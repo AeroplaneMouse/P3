@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Asset_Management_System.Views"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
         x:Name="AppWindow"
         WindowStyle="None"
         AllowsTransparency="True"

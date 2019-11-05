@@ -371,7 +371,7 @@ namespace Asset_Management_System.Database.Repositories
             // Makes a list of the ids of the tags already on the asset
             List<ulong> assetTagIds = GetAssetTags(asset).Select(p => p.ID).ToList();
 
-            // Removes the ids of the tags that are supposed to stilll be on the asset
+            // Removes the ids of the tags that are supposed to still be on the asset
             // resulting in a list of ids og tags to be removed from the asset
             assetTagIds = assetTagIds.Except(tagIds).ToList();
 
