@@ -6,7 +6,7 @@ using Google.Protobuf.WellKnownTypes;
 
 namespace Asset_Management_System.Models
 {
-    public class Tag : DoesContainFields, ILoggable<Tag>
+    public class Tag : DoesContainFields, ILoggable<Tag>, ITagable
     {
         public Tag()
         {
@@ -71,5 +71,20 @@ namespace Asset_Management_System.Models
         /// </summary>
         /// <returns></returns>
         public IRepository<Tag> GetRepository() => new TagRepository();
+
+        public ulong TagId()
+        {
+            return ID;
+        }
+
+        public string TagType()
+        {
+            return this.GetType().ToString();
+        }
+
+        public string TagLabel()
+        {
+            return Name;
+        }
     }
 }

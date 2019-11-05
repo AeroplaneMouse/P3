@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using Asset_Management_System.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
@@ -7,6 +9,80 @@ namespace Asset_Management_System.Database.Repositories
 {
     public class UserRepository : IUserRepository
     {
+        public IEnumerable<User> GetAll()
+        {
+            var con = new MySqlHandler().GetConnection();
+            List<User> users = new List<User>();
+
+            try
+            {
+                const string query = "SELECT id, name, username, admin, default_department, created_at, updated_at " +
+                                     "FROM users";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            users.Add(DBOToModelConvert(reader));
+                        }
+                        reader.Close();
+                    }
+                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+                
+            return users;
+        }
+
+        public IEnumerable<User> GetUsersForAsset(ulong id)
+        {
+            var con = new MySqlHandler().GetConnection();
+            List<User> users = new List<User>();
+
+            try
+            {
+                const string query = "SELECT u.id, u.name, u.username, u.admin, u.default_department, u.created_at, u.updated_at " +
+                                     "FROM users AS u " +
+                                     "INNER JOIN asset_users AS au ON au.user_id = u.id " +
+                                     "WHERE au.asset_id = @id";
+
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+   
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            users.Add(DBOToModelConvert(reader));
+                        }
+                        
+                        reader.Close();
+                    }
+                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return users;
+        }
 
         public ulong GetCount()
         {

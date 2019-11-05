@@ -11,7 +11,7 @@ namespace Asset_Management_System.Database
         
         public MySqlHandler()
         {
-            _connection = new MySqlConnection("Server=192.38.49.9; database=ds303e19; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5");
+            _connection = new MySqlConnection("Server=192.38.49.9; database=ds303e19_dev; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5");
         }
 
         public MySqlConnection GetConnection()

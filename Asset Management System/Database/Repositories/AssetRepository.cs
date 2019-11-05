@@ -7,6 +7,7 @@ using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Collections.ObjectModel;
 using Asset_Management_System.Views;
+using Org.BouncyCastle.Asn1.Cms;
 
 namespace Asset_Management_System.Database.Repositories
 {
@@ -353,6 +354,107 @@ namespace Asset_Management_System.Database.Repositories
             }
 
             return assets;
+        }
+
+        public void AttachTags(Asset asset, List<ITagable> tagged)
+        {
+            List<User> users = tagged.OfType<User>().ToList();
+            List<Tag> tags = tagged.OfType<Tag>().ToList();
+
+            ClearTags(asset);
+            
+            var con = new MySqlHandler().GetConnection();
+            bool querySuccess = false;
+
+            try{
+                StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users VALUES ");
+                int counter = users.Count;
+                
+                for (int i = 0; i < counter; i++)
+                {
+                    userQuery.AppendFormat("({0},{1})", asset.ID, users[i].ID);
+                    
+                    if (i != counter-1)
+                    {
+                        userQuery.Append(",");
+                    }
+                }
+                
+                StringBuilder tagQuery = new StringBuilder("INSERT INTO asset_tags VALUES ");
+                counter = tags.Count;
+                
+                for (int i = 0; i < counter; i++)
+                {
+                    tagQuery.AppendFormat("({0},{1})", asset.ID, tags[i].ID);
+                    
+                    if (i != counter-1)
+                    {
+                        tagQuery.Append(",");
+                    }
+                }
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(userQuery.ToString(), con))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                
+                using (var cmd = new MySqlCommand(tagQuery.ToString(), con))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
+        public IEnumerable<ITagable> GetTags(Asset asset)
+        {
+            var taggedWith = new List<ITagable>();
+            var tagRepository = new TagRepository();
+            var userRepository = new UserRepository();
+            
+            taggedWith.AddRange(tagRepository.GetTagsForAsset(asset.ID));
+            taggedWith.AddRange(userRepository.GetUsersForAsset(asset.ID));
+
+            return taggedWith;
+        }
+
+        private bool ClearTags(Asset asset)
+        {
+            var con = new MySqlHandler().GetConnection();
+            bool querySuccess = false;
+
+            try
+            {
+                const string query = "DELETE FROM asset_tags WHERE asset_id = @id; " +
+                                     "DELETE FROM asset_users WHERE asset_id = @id;";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                    cmd.Parameters["@id"].Value = asset.ID;
+
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
+                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
+            return querySuccess;
         }
 
         /// <summary>

@@ -223,6 +223,46 @@ namespace Asset_Management_System.Database.Repositories
             return tag;
         }
 
+        public IEnumerable<Tag> GetTagsForAsset(ulong id)
+        {
+            var con = new MySqlHandler().GetConnection();
+            List<Tag> tags = new List<Tag>();
+
+            try
+            {
+                const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at " +
+                                     "FROM tags AS t " +
+                                     "INNER JOIN asset_tags AS at ON at.tag_id = t.id " +
+                                     "WHERE at.asset_id = @id";
+
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+   
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            tags.Add(DBOToModelConvert(reader));
+                        }
+                        
+                        reader.Close();
+                    }
+                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return tags;
+        }
+
         /// <summary>
         /// 
         /// </summary>

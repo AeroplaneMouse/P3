@@ -9,7 +9,7 @@ namespace Asset_Management_System.Database
     public class QueryGenerator : IDisposable
     {
         public List<string> Columns;
-        public List<string> Values;
+        public List<List<string>> Values;
         public List<Table> Tables;
         public List<Statement> WhereStatements;
         private Dictionary<string, string> _orderBys;
@@ -19,7 +19,7 @@ namespace Asset_Management_System.Database
         public QueryGenerator()
         {
             Columns = new List<string>();
-            Values = new List<string>();
+            Values = new List<List<string>>{new List<string>()};
             Tables = new List<Table>();
             WhereStatements = new List<Statement>();
             _orderBys = new Dictionary<string, string>();
@@ -116,18 +116,17 @@ namespace Asset_Management_System.Database
             if (Tables.Count > 0 && Columns.Count == Values.Count)
             {
                 _query.Append("INSERT INTO " + Tables[0].Name);
-                _query.Append(" ( " + GetColumns() + " )");
-                string values;
-                int length = Values.Count;
+                _query.Append(" ( " + GetColumns() + " ) VALUES ");
 
-                values = (int.TryParse(Values[0], out int returnedInt) || bool.TryParse(Values[0], out bool returnedBool) ? Values[0] : $"'{Values[0]}'");
+                List<String> objects = new List<string>();
 
-                for (int i = 1; i < length; i++)
+                foreach (var item in Values)
                 {
-                    values += $", {(int.TryParse(Values[i], out returnedInt) || bool.TryParse(Values[i], out returnedBool) ? Values[i] : $"'{Values[i]}'")}";
+                    objects.Add("(" + string.Join(", ", item) + ")");
                 }
 
-                _query.Append($" VALUES ( {values} )");
+                _query.Append(string.Join(",", objects));
+                
                 return _query.ToString();
             }
 
@@ -140,22 +139,19 @@ namespace Asset_Management_System.Database
         /// <returns>Update query</returns>
         public string PrepareUpdate()
         {
+            /*
             _query.Clear();
             //Checks if there is added any tables and if the number of columns and values are the same, to ensure success
             if (Tables.Count > 0 && Columns.Count == Values.Count)
             {
                 //Create the query string
-                _query.Append("UPDATE " + Tables[0].Name);
+                _query.Append("UPDATE " + Tables[0].Name+ " SET ");
+                int counter = Tables.Count;
+                
 
-                string columnValuePairs;
-                int length = Columns.Count;
-
-                columnValuePairs = (new Statement(Columns[0], Values[0])).Render();
-
-                for (int i = 1; i < length; i++)
-                {
-                    columnValuePairs += $", {(new Statement(Columns[i], Values[i])).Render()}";
-                }
+                    _query.Append(string.Join(", ", Values.ForEach() new Statement(Columns[i], Values[i]).Render());
+                     columnValuePairs += $", {(new Statement(Columns[i], Values[i])).Render()}";
+                
 
                 _query.Append(" SET " + columnValuePairs);
                 
@@ -168,8 +164,10 @@ namespace Asset_Management_System.Database
             }
 
             return "";
+            */
+            return null;
         }
-
+        
         /// <summary>
         /// Creates a query to delete an element in the table of the query
         /// </summary>
@@ -195,11 +193,22 @@ namespace Asset_Management_System.Database
         {
         }
 
+        private string prepareValue(string value)
+        {
+            if (int.TryParse(value, out int returnedInt))
+            {
+                return value;
+            }
+
+            return "'" + value + "'";
+        }
+
         public void Reset()
         {
             WhereStatements.Clear();
             Tables.Clear();
             Columns.Clear();
+            Values.Clear();
         }
     }
 }
