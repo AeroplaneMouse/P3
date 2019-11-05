@@ -50,7 +50,7 @@ namespace Asset_Management_System.ViewModels.Commands
 
             _asset.FieldsList = new List<Field>();
             // Checks if Name or Description is not empty.
-            if (string.IsNullOrEmpty(_asset.Name) || string.IsNullOrEmpty(_asset.Description))
+            if (string.IsNullOrEmpty(_asset.Name))
             {
                 _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
                 return;
