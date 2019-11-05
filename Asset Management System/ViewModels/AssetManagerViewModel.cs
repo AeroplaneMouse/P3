@@ -276,7 +276,7 @@ namespace Asset_Management_System.ViewModels
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                // Handle this error
+                //TODO Handle this error
             }
 
         }
