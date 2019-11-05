@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Windows.Controls;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Functions;
@@ -46,7 +47,7 @@ namespace Asset_Management_System.Views
             Tag tag = tagRepository.GetById(1); // User group
             
             tagger.Parent(tag); // Switch to user search
-            List<ITagable> result = tagger.Suggest("Jo");
+            List<ITagable> result = tagger.Suggest("jo");
             
             foreach (var item in result)
             {
@@ -55,7 +56,7 @@ namespace Asset_Management_System.Views
             
             tagger.Parent(null); // Switch to user search
             result = tagger.Suggest("sw");
-            
+
             foreach (var item in result)
             {
                 Console.WriteLine(item.TagLabel());
@@ -63,7 +64,7 @@ namespace Asset_Management_System.Views
 
             Tag placering = tagRepository.GetById(2);
             tagger.Parent(placering); // Switch to placering
-            result = tagger.Suggest("");
+            result = tagger.Suggest("Løve");
             
             foreach (var item in result)
             {

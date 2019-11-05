@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
@@ -41,11 +42,11 @@ namespace Asset_Management_System.Functions
             
             if (_parent != null && _parent.ID == 1)
             {
-                result.AddRange(_users.Where(u => u.Username.StartsWith(input)).ToList());
+                result.AddRange(_users.Where(u => u.Username.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)).ToList());
             }
             else
             {
-                result.AddRange(_suggestedTags.Where(t => t.Name.StartsWith(input)).ToList());
+                result.AddRange(_suggestedTags.Where(t => t.Name.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)).ToList());
             }
 
             return result;
