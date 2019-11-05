@@ -12,6 +12,7 @@ namespace Asset_Management_System.Resources.Users
     // TODO: Lav et vindue der bruger det her til at importere brugere, hvor man kan vælge om de er admins eller ej, og hvor man kan vælge filen der skal bruges
     // TODO: Lav et vindue der viser alle brugere, hvor man kan redigere brugere (promote, demote)
     // TODO: Lav logik der sætter enabled på brugeren i databasen til false, hvis de ikke er i listen af importerede brugere
+    // TODO: Lav en liste af brugere der bliver "fjernet" og en liste af brugere der bliver tilføjet. Rød, grøn. Lidt ligeglad med hvem der er der nu, og hvem der kommer, skal bare bruge differensen
     public class UserImporter
     {
         private string _filePath { get; set; }
@@ -38,9 +39,8 @@ namespace Asset_Management_System.Resources.Users
 
             if (!String.IsNullOrEmpty(filePath))
             {
-                var e = Encoding.GetEncoding(1252);
-
-                return e.GetString(File.ReadAllBytes(filePath))
+                // TODO: Check encoding af filen før den bliver read, så der kan bruges andre end ANSI (1252)
+                return Encoding.GetEncoding(1252).GetString(File.ReadAllBytes(filePath))
                 .Split("\r\n")                  // Splits file into lines, by newlines
                 .Select(p => p.Split('\t'))     // Splits lines into sections, by tabs
                 .Where(p => p.Count() > 1)      // Only gets lines with something in them
