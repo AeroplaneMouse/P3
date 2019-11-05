@@ -95,7 +95,7 @@ namespace Asset_Management_System.ViewModels
                     }
                     else
                     {
-                        if (!currentTagField.IsCustom)
+                        if (!currentTagField.IsHidden)
                         {
                             if (FieldsList.SingleOrDefault(field => Equals(field.Field, currentTagField)) ==
                                 null)
