@@ -14,14 +14,14 @@ namespace Asset_Management_System.ViewModels
         public ObservableCollection<Tag> CurrentlyAddedTags { get; set; } = new ObservableCollection<Tag>();
 
         public ObservableCollection<ShownField> HiddenFields { get; set; } = new ObservableCollection<ShownField>();
-        
+
         public static ICommand RemoveFieldCommand { get; set; }
 
         public ObjectManagerController()
         {
             RemoveFieldCommand = new RemoveFieldCommand(this);
         }
-        
+
 
         protected void ConnectTags()
         {
@@ -54,7 +54,10 @@ namespace Asset_Management_System.ViewModels
                         {
                             shownField.Field.Content = currentTagField.DefaultValue;
                         }
+                    }
 
+                    if (tag.FieldsList.Contains(shownField.Field))
+                    {
                         if (!shownField.FieldTags.Contains(tag))
                         {
                             shownField.FieldTags.Add(tag);
@@ -72,17 +75,21 @@ namespace Asset_Management_System.ViewModels
 
                 // If it already exists, jump to next iteration.
                 if (alreadyExists) continue;
-                if (currentTagField.IsHidden)
+
+                if (currentTagField.IsHidden &&
+                    HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) == null)
                 {
                     HiddenFields.Add(new ShownField(currentTagField));
                 }
                 else
                 {
-                    if (HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) != null) continue;
-                    if (FieldsList.SingleOrDefault(field => field.Field.HashId == currentTagField.HashId) ==
-                        null)
+                    if (!currentTagField.IsCustom)
                     {
-                        FieldsList.Add(new ShownField(currentTagField));
+                        if (FieldsList.SingleOrDefault(field => field.Field.HashId == currentTagField.HashId) ==
+                            null)
+                        {
+                            FieldsList.Add(new ShownField(currentTagField));
+                        }
                     }
                 }
             }
