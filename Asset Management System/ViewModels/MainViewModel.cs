@@ -51,26 +51,23 @@ namespace Asset_Management_System.ViewModels
             };
 
             // Setting up frames
-            Views.Splash splashScreen = new Views.Splash(this);
-            FrameSplash.Content = splashScreen;
+            SplashPage = new Views.Splash(this);
 
             // Initialize commands
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
-            MaximizeCommand =
-                new Base.RelayCommand(() =>
-                    _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
+            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
             CloseCommand = new Base.RelayCommand(() => _window.Close());
 
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
-
-            ShowWindow = new Base.RelayCommand(() => MessageBox.Show("Hey!"));
 
             ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this)));
             ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this)));
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
-            ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
+
             RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
+
+            ReloadCommand = new Base.RelayCommand(Reload);
 
             AddFieldTestCommand = new Base.RelayCommand(TestField);
 
@@ -86,8 +83,6 @@ namespace Asset_Management_System.ViewModels
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
-
-            (splashScreen.DataContext as SplashViewModel).StartWorker();
         }
 
         private void TestField()
@@ -109,8 +104,6 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-
-
         #endregion
 
         #region Private Members
@@ -123,12 +116,7 @@ namespace Asset_Management_System.ViewModels
 
         private List<Page> pages = new List<Page>();
 
-        private List<Page> excludedPages = new List<Page>
-        {
-            new Views.AssetManager(null),
-            new Views.TagManager(null),
-            new Views.ObjectViewer(null, null)
-        };
+        private List<Page> excludedPages = new List<Page>();
 
         private Department _currentDepartment;
 
@@ -203,11 +191,11 @@ namespace Asset_Management_System.ViewModels
 
         public Frame FrameMainContent { get; set; } = new Frame();
 
-        public Frame FrameSplash { get; set; } = new Frame();
+        public Page SplashPage { get; set; }
 
         public Page PopupPage { get; set; }
 
-        public Visibility SplashVisibility { get; set; } = Visibility.Visible;
+        //public Visibility SplashVisibility { get; set; } = Visibility.Visible;
 
         public List<Department> Departments
         {
@@ -292,7 +280,6 @@ namespace Asset_Management_System.ViewModels
                 (setPage.DataContext as IListUpdate).UpdateList();
             }
 
-
             // Setting the content of the given frame, to the newPage object to display the requested page.
             frame.Content = setPage;
         }
@@ -329,17 +316,16 @@ namespace Asset_Management_System.ViewModels
         /// Used when the application has connected to the database and other external services,
         /// to remove the splash page and show the navigation menu's and homepage.
         /// </summary>
+        //public void SystemLoaded(object _session, EventArgs e)
         public void SystemLoaded(Session session)
         {
-            // Remove reload splash screen menuitem
-            ReloadSplashCommand = null;
+            //Session session;
 
             // Attaching notification
             new MySqlHandler().SqlConnectionFailed += AddNotification;
 
             // Remove splash page
-            SplashVisibility = Visibility.Hidden;
-            OnPropertyChanged(nameof(SplashVisibility));
+            SplashPage = null;
 
             // Show department and username
             DisplayCurrentDepartment = true;
@@ -352,8 +338,13 @@ namespace Asset_Management_System.ViewModels
             if (CurrentDepartment == null)
                 CurrentDepartment = Department.GetDefault();
 
+            // Add excluded pages
+            //excludedPages.Add(new Views.AssetManager(null));
+            //excludedPages.Add(new Views.TagManager(null));
+            //excludedPages.Add(new Views.ObjectViewer(null, null));
+
             // Load homepage
-            ChangeMainContent(new Views.Home(this));
+            //ChangeMainContent(new Views.Home(this));
         }
 
         #endregion
@@ -365,6 +356,23 @@ namespace Asset_Management_System.ViewModels
             var dialog = new Views.UserImporterView();
 
             dialog.ShowDialog();
+        }
+
+        // Used to reload the application
+        private void Reload()
+        {
+            Console.WriteLine("Reloading...");
+
+            // Clearing memory
+            pages.Clear();
+            new MySqlHandler().SqlConnectionFailed -= AddNotification;
+            DisplayCurrentDepartment = false;
+            CurrentUser = null;
+            CurrentDepartment = null;
+            OnPropertyChanged(nameof(CurrentUser));
+
+            // Load splash screen
+            SplashPage = new Views.Splash(this);
         }
 
         private bool ExcludedFromSaving(Page page)
@@ -421,8 +429,6 @@ namespace Asset_Management_System.ViewModels
         public ICommand CloseCommand { get; set; }
         public ICommand SystemMenuCommand { get; set; }
 
-        public ICommand ShowWindow { get; set; }
-
         public ICommand ShowHomePageCommand { get; set; }
 
         public ICommand ShowAssetsPageCommand { get; set; }
@@ -437,7 +443,7 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand ShowLogPageCommand { get; set; }
 
-        public ICommand ReloadSplashCommand { get; set; }
+        public ICommand ReloadCommand { get; set; }
 
         // Notification commands
         public ICommand AddFieldTestCommand { get; set; }

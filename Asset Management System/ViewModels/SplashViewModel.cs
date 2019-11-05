@@ -1,17 +1,20 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Input;
-using System.ComponentModel;
+using System.Threading.Tasks;
 using Asset_Management_System.Events;
 using Asset_Management_System.Database;
 using Asset_Management_System.Authentication;
-using System.Windows;
+using System.Windows.Threading;
 
 namespace Asset_Management_System.ViewModels
 {
     public class SplashViewModel : Base.BaseViewModel
     {
         private MainViewModel _main;
-        private BackgroundWorker worker;
+        private const int _delay = 800;
+
+        //public delegate void UserAuthenticated;
         public string LoadingText { get; set; }
         public string StatusText { get; set; }
 
@@ -20,90 +23,53 @@ namespace Asset_Management_System.ViewModels
 
         public SplashViewModel(MainViewModel main)
         {
+            Console.WriteLine("Showing splash screen");
             _main = main;
 
             // Initializing commands
             LoadConfigCommand = new Base.RelayCommand(() => LoadConfig());
 
-            Console.WriteLine("Showing splash screen");
-            Authenticate();
+            Setup();
         }
 
-        private void LoadConfig()
+        private async void Setup()
         {
-            throw new NotImplementedException();
+            UpdateStatusText(new StatusUpdateEventArgs("Loading...", "Initializing background worker..."));
+            await Task.Run(Authenticate);
         }
 
         private void Authenticate()
         {
-            UpdateStatusText(new StatusUpdateEventArgs("Loading...", "Starting background worker..."));
-
-            // Initializing backgroundworker
-            worker = new BackgroundWorker();
-            worker.WorkerReportsProgress = true;
-            worker.WorkerSupportsCancellation = false;
-            worker.DoWork += Worker_DoWork;
-            worker.ProgressChanged += Worker_ProgressChanged;
-            worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
-
-            // Starting backgroundworker
-            //worker.RunWorkerAsync();
-        }
-
-        private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            // Result is the active session, with the authorized user.
-            Session t = e.Result as Session;
-            if (t != null)
-            {
-                _main.SystemLoaded(t);
-
-                // Set visibility property. Hides functionality from non admin users
-                _main.Visible = t.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
-            }
-
-            //Dispose the background after use.
-            worker.Dispose();
-        }
-
-        private void Worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            UpdateStatusText(e.UserState as StatusUpdateEventArgs);
-        }
-
-        private void Worker_DoWork(object sender, DoWorkEventArgs e)
-        {
-            BackgroundWorker caller = sender as BackgroundWorker;
-
-            // Check database connection
-            caller.ReportProgress(0, new StatusUpdateEventArgs("Loading...", "Connecting to database."));
+            UpdateStatusText(new StatusUpdateEventArgs("Establishing connection...", "An excellent connection to the database is being established..."));
+            Thread.Sleep(_delay + 2000);
 
             if (new MySqlHandler().IsAvailable())
             {
+                UpdateStatusText(new StatusUpdateEventArgs("Connection established...", "The excellent connection to the database was succesfully established..."));
+                Thread.Sleep(_delay);
+
                 Session t = new Session();
                 if (t.Authenticated())
-                    e.Result = t;
+                {
+                    UpdateStatusText(new StatusUpdateEventArgs("User authenticated", "Unlocking the Asset Management System..."));
+                    Thread.Sleep(_delay);
+
+
+                    //Dispatcher.CurrentDispatcher.BeginInvoke(UserAuthenticated, DispatcherPriority.Normal, t);
+
+                    //UserAuthenticated?.Invoke(t, null);
+
+                    _main.SystemLoaded(t);
+                }
                 else
-                    caller.ReportProgress(0,
-                        new StatusUpdateEventArgs("!!! Access denied !!!",
-                            $"User \"{Session.GetIdentity()}\" is not authorized to access the application."));
+                    UpdateStatusText(new StatusUpdateEventArgs(
+                        "!!! Access denied !!!",
+                        $"User \"{Session.GetIdentity()}\" is not authorized to access the application.")
+                    );
             }
             else
-            {
-                caller.ReportProgress(0, new StatusUpdateEventArgs("ERROR!", "Error! Unable to connect to database."));
-            }
+                UpdateStatusText(new StatusUpdateEventArgs("Error!", "Unfortunately the excellent connection to the database was not established..."));
         }
-
-        public void Reload()
-        {
-            // Showing the splash page again
-            _main.SplashVisibility = System.Windows.Visibility.Visible;
-            _main.OnPropertyChanged(nameof(_main.SplashVisibility));
-
-            Authenticate();
-        }
-
-        public void StartWorker() => worker.RunWorkerAsync();
 
         /// <summary>
         /// Updates text on the screen with progress and status.
@@ -115,6 +81,11 @@ namespace Asset_Management_System.ViewModels
             StatusText = e.Message;
             OnPropertyChanged(nameof(LoadingText));
             OnPropertyChanged(nameof(StatusText));
+        }
+
+        private void LoadConfig()
+        {
+            throw new NotImplementedException();
         }
     }
 }
