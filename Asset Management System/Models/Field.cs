@@ -8,6 +8,18 @@ namespace Asset_Management_System.Models
     [Serializable]
     public class Field
     {
+        public enum FieldType { Textarea, Textbox, Integer, Date, Boolean};
+
+        public static IEnumerable<FieldType> GetTypes()
+        {
+            return new List<FieldType>() {
+                FieldType.Textarea,
+                FieldType.Textbox,
+                FieldType.Integer,
+                FieldType.Date,
+                FieldType.Boolean
+            };
+        }
         /// <summary>
         /// Default constructor for initiating a new Field object.
         /// </summary>
@@ -17,22 +29,23 @@ namespace Asset_Management_System.Models
         /// <param name="required">A boolean, whether the field is required or not</param>
         /// <param name="fieldType">Selecting the type of the field. 1= TextBox,2 = String,3= Int, 4 = Date, 5 = Boolean</param>
         /// <param name="defaultValue">The default value which should be entered into the field</param>
-        public Field(string label, string content, int fieldType, string defaultValue, bool required = false,bool isCustom = false)
+        public Field(string label, string content, FieldType type, string defaultValue, bool required = false,bool isCustom = false)
         {
             // Creates unique hash
             this.HashId = CalculateMd5Hash(true);
             
             this.Label = label;
             this.Content = content;
-            if (fieldType <= 5)
-            {
-                this.FieldType = fieldType;
-            }
-            else
-            {
-                throw new ArgumentOutOfRangeException("fieldType",
-                    "fieldType is out of range. Must be an integer between 1-5 (both included)");
-            }
+            Type = type;
+            //if (type <= 5)
+            //{
+            //    this.FieldType = fieldType;
+            //}
+            //else
+            //{
+            //    throw new ArgumentOutOfRangeException("fieldType",
+            //        "fieldType is out of range. Must be an integer between 1-5 (both included)");
+            //}
 
             this.DefaultValue = defaultValue;
             this.Required = required;
@@ -50,24 +63,24 @@ namespace Asset_Management_System.Models
         public bool Required { get; set; }
         public string Hash { get; }
 
-        private int _fieldType;
+        //private int _fieldType;
 
-        public int FieldType
-        {
-            get => this._fieldType;
-            set
-            {
-                if (value <= 5 && value > 0)
-                {
-                    this._fieldType = value;
-                }
-                else
-                {
-                    throw new ArgumentOutOfRangeException("fieldType",
-                        "fieldType is out of range. Must be an integer between 1-5 (both included)");
-                }
-            }
-        }
+        public FieldType Type { get; set; }
+        //{
+        //    get => this._fieldType;
+        //    set
+        //    {
+        //        if (value <= 5 && value > 0)
+        //        {
+        //            this._fieldType = value;
+        //        }
+        //        else
+        //        {
+        //            throw new ArgumentOutOfRangeException("fieldType",
+        //                "fieldType is out of range. Must be an integer between 1-5 (both included)");
+        //        }
+        //    }
+        //}
 
         public string DefaultValue;
 
@@ -82,7 +95,7 @@ namespace Asset_Management_System.Models
                 {"Label", Label},
                 {"Description", Content},
                 {"Required", Required.ToString()},
-                {"FieldType", FieldType.ToString()},
+                {"FieldType", Type.ToString()},
                 {"DefaultValue", DefaultValue}
             };
             return output;
@@ -111,12 +124,12 @@ namespace Asset_Management_System.Models
             string hashString = "";
             if (uniqueHash)
             {
-                hashString += this.Label + this.Required.ToString() + this.FieldType.ToString() + this.DefaultValue +
+                hashString += this.Label + this.Required.ToString() + Type.ToString() + this.DefaultValue +
                               DateTime.Now;
             }
             else
             {
-                hashString += this.Label + this.Required.ToString() + this.FieldType.ToString() + this.DefaultValue;
+                hashString += this.Label + this.Required.ToString() + Type.ToString() + this.DefaultValue;
             }
 
             // step 1, calculate MD5 hash from input
@@ -133,6 +146,11 @@ namespace Asset_Management_System.Models
             }
 
             return sb.ToString();
+        }
+
+        public override string ToString()
+        {
+            return $"{ Label } : { Content } : { DefaultValue } : { Type } : { Required } : { IsHidden }";
         }
     }
 }
