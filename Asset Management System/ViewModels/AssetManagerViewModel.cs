@@ -320,7 +320,7 @@ namespace Asset_Management_System.ViewModels
                     ulong tempID = _tagList
                         .Select(p => p.ID)
                         .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                    List<Models.Tag> tempList = _tagRep.GetChildTags(tempID) as List<Models.Tag>;
+                    List<Tag> tempList = _tagRep.GetChildTags(tempID) as List<Models.Tag>;
 
                     // If the tag we are "going into" has children, we go into it
                     if (tempList?.Count != 0)
