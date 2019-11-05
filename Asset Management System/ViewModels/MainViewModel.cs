@@ -39,7 +39,7 @@ namespace Asset_Management_System.ViewModels
             TitleHeight = 25;
             InnerContentPaddingSize = 6;
 
-            // Listen out for the window resizeing
+            // Listen out for the window resizing
             _window.StateChanged += (sender, e) =>
             {
                 // Fire off events for all properties that are affected by a resize

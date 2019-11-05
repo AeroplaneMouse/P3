@@ -130,6 +130,7 @@ namespace Asset_Management_System.ViewModels
             _main = main;
             Title = "Edit asset";
 
+            // TODO: Consider if this should be given via Dependency Injection
             _assetRep = new AssetRepository();
 
             FieldsList = new ObservableCollection<ShownField>();
@@ -181,7 +182,7 @@ namespace Asset_Management_System.ViewModels
             // Start the search over
             EscapeKeyCommand = new Base.RelayCommand(() => ResetSearch());
 
-            // Deletes charaters from the search query, and if the query is empty, go up a tag level
+            // Deletes characters from the search query, and if the query is empty, go up a tag level
             BackspaceKeyCommand = new Base.RelayCommand(() => DeleteCharacter());
 
             #endregion

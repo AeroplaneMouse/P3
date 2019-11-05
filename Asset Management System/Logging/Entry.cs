@@ -11,9 +11,13 @@ namespace Asset_Management_System.Logging
         /// <summary>
         /// Default constructor for initiating a new Log object.
         /// </summary>
-        /// <param name="assetId"></param>
-        /// <param name="doneBy"></param>
+        /// <param name="id"></param>
+        /// <param name="logable_id"></param>
+        /// <param name="logable_type"></param>
         /// <param name="description"></param>
+        /// <param name="username"></param>
+        /// <param name="options"></param>
+        /// <param name="created_at"></param>
         private Entry(ulong id, ulong logable_id, Type logable_type, string description, string username, string options, DateTime created_at)
         {
             Id = id;
