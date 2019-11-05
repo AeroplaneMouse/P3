@@ -22,57 +22,27 @@ namespace Asset_Management_System.ViewModels
 
         private List<User> _finalUsersList { get; set; }
 
-        private List<Department> _departments { get; set; }
-
         #endregion
 
         #region Public Properties
 
         public List<User> ExistingUsersList
         {
-            get
-            {
-                //if (_existingUsersList == null)
-                //{
-                //    _existingUsersList = _rep.GetAll().ToList();
-                //}
-
-                return _existingUsersList;
-            }
+            get => _existingUsersList;
             set => _existingUsersList = value;
         }
 
         public List<User> NewUsersList
         {
-            get
-            {
-                //if (_newUsersList == null)
-                //{
-                //    _newUsersList = _importer.Import();
-                //}
-
-                return _newUsersList;
-            }
-
+            get => _newUsersList;
             set => _newUsersList = value;
         }
 
         public List<User> FinalUsersList
         {
-            get
-            {
-                //if (_finalUsersList == null)
-                //{
-                //    _finalUsersList = new List<User>();
-                //}
-
-                return _finalUsersList;
-            }
-
+            get => _finalUsersList;
             set => _finalUsersList = value;
         }
-
-        public List<Department> DepartmentList { get; set; }
 
         #endregion
 
@@ -90,10 +60,8 @@ namespace Asset_Management_System.ViewModels
 
             _finalUsersList = new List<User>();
 
-            _finalUsersList.AddRange(_existingUsersList);
-            _finalUsersList.AddRange(_newUsersList);
-
-            DepartmentList = new DepartmentRepository().GetAll().ToList();
+            _finalUsersList.AddRange(_existingUsersList != null ? _existingUsersList : new List<User>());
+            _finalUsersList.AddRange(_newUsersList != null ? _newUsersList : new List<User>());
         }
 
         #endregion
