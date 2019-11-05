@@ -17,63 +17,56 @@ namespace Asset_Management_System.Helpers
         public static void Print(IEnumerable<object> items)
         {
             Type objectType = items.FirstOrDefault().GetType();
-            
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
             string reportTitle = objectType.Name + "_report_";
-            var dialog = new PromptWithTextInput(reportTitle + DateTime.Now.ToString("MM/dd/yy HH:mm:ss").Replace(":", "").Replace("/", "").Replace(" ", "-") + ".csv", "Report name:");
-            if (dialog.ShowDialog() == true)
+            dlg.FileName = reportTitle + DateTime.Now.ToString("MM/dd/yy HH:mm:ss").Replace(":", "").Replace("/", "").Replace(" ", "-"); // Default file name
+            dlg.DefaultExt = ".csv"; // Default file extension
+            dlg.Filter = "CSV Files (*.csv)|*.csv"; // Filter files by extension
+
+            // Show save file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
             {
-                if (dialog.DialogResult == true)
+                string pathToFile = dlg.FileName;
+
+                //Adds the ".csv" extension, if the name does not contain it
+                if (!pathToFile.EndsWith(".csv"))
                 {
-                    string pathToFile = dialog.InputText;
+                    pathToFile = pathToFile + ".csv";
+                }
 
-                    //Adds the ".csv" extension, if the name does not contain it
-                    if (!pathToFile.EndsWith(".csv"))
+                //Writes the information to the file
+                using (StreamWriter file = new StreamWriter(pathToFile, false))
+                {
+                    string fileHeader = "";
+                    foreach (PropertyInfo prop in objectType.GetProperties())
                     {
-                        pathToFile = pathToFile + ".csv";
+                        // This condition applies only to assets, so the list of fields is not added to the file.
+                        if (!prop.Name.Equals("FieldsList"))
+                            if (prop.Name.Equals("DateToStringConverter"))
+                                fileHeader += "Time,";
+                            else
+                                fileHeader += prop.Name + ",";
                     }
+                    file.WriteLine(fileHeader);
 
-                    //Sets the path to the desktop
-                    //TODO: Change this to enable custom location for exported files
-                    pathToFile = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + pathToFile;
-
-                    //Creates the directory of the file, if it does not already exist. ELse it is ignored.
-                    string newDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\" + new FileInfo(pathToFile).Directory.Name;
-                    if (!newDirectory.EndsWith("Desktop"))
+                    foreach (var item in items)
                     {
-                        Directory.CreateDirectory(newDirectory);
-                    }
+                        PropertyInfo[] props = objectType.GetProperties();
+                        string fileEntry = "";
 
-                    //Writes the information to the file
-                    using (StreamWriter file = new StreamWriter(pathToFile, false))
-                    {
-                        string fileHeader = "";
-                        foreach (PropertyInfo prop in objectType.GetProperties())
+                        foreach (PropertyInfo prop in props)
                         {
-                            // This condition applies only to assets, so the list of fields is not added to the file.
-                            if(!prop.Name.Equals("FieldsList"))
-                                if (prop.Name.Equals("DateToStringConverter"))
-                                    fileHeader += "Time,";
-                                else
-                                    fileHeader += prop.Name + ",";
-                        }
-                        file.WriteLine(fileHeader);
-                        
-                        foreach (var item in items)
-                        {
-                            PropertyInfo[] props = objectType.GetProperties();
-                            string fileEntry = "";
-                            
-                            foreach (PropertyInfo prop in props)
+                            string key = prop.Name;
+                            // Condition to exclude the property fieldslist, as it requires special formatting, and all the data is already contained in serializedFields
+                            if (!prop.Name.Equals("FieldsList"))
                             {
-                                string key = prop.Name;
-                                // Condition to exclude the property fieldslist, as it requires special formatting, and all the data is already contained in serializedFields
-                                if (!prop.Name.Equals("FieldsList"))
-                                {
-                                    fileEntry += objectType.GetProperty(key)?.GetValue(item, null)?.ToString().Split('.').Last().Replace(',', ' ') + ", ";
-                                }
+                                fileEntry += objectType.GetProperty(key)?.GetValue(item, null)?.ToString().Split('.').Last().Replace(',', ' ') + ", ";
                             }
-                            file.WriteLine(fileEntry);
                         }
+                        file.WriteLine(fileEntry);
                     }
                 }
             }
