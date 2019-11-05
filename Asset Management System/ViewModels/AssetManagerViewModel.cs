@@ -57,7 +57,7 @@ namespace Asset_Management_System.ViewModels
 
         #region tag related public Properties
 
-        public List<Models.Asset> AssetList;
+        public List<Asset> AssetList;
 
         // The current parent exposed to the view
         public string ParentID
@@ -80,7 +80,7 @@ namespace Asset_Management_System.ViewModels
             {
                 if (_tagList == null)
                 {
-                    _tagList = _tagRep.GetChildTags(_parentID) as List<Models.Tag>;
+                    _tagList = _tagRep.GetChildTags(_parentID) as List<Tag>;
                 }
 
                 return _tagList.Take(10).ToList();
@@ -187,7 +187,6 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand SaveAssetCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
-
         public ICommand CancelCommand { get; set; }
 
 
@@ -320,7 +319,7 @@ namespace Asset_Management_System.ViewModels
                     ulong tempID = _tagList
                         .Select(p => p.ID)
                         .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                    List<Tag> tempList = _tagRep.GetChildTags(tempID) as List<Models.Tag>;
+                    List<Tag> tempList = _tagRep.GetChildTags(tempID) as List<Tag>;
 
                     // If the tag we are "going into" has children, we go into it
                     if (tempList?.Count != 0)
@@ -345,7 +344,7 @@ namespace Asset_Management_System.ViewModels
             {
                 _searchString = String.Empty;
                 _parentID = 0;
-                _tagList = _tagRep.GetChildTags(0) as List<Models.Tag>;
+                _tagList = _tagRep.GetChildTags(0) as List<Tag>;
                 _tabIndex = 0;
             }
 
@@ -358,7 +357,7 @@ namespace Asset_Management_System.ViewModels
                 if (_searchString == String.Empty && _parentID != 0)
                 {
                     _parentID = 0;
-                    _tagList = _tagRep.GetChildTags(_parentID) as List<Models.Tag>;
+                    _tagList = _tagRep.GetChildTags(_parentID) as List<Tag>;
 
                     _searchString = _parentString;
                     SearchAndSortTagList(_searchString);

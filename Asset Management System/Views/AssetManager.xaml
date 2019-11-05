@@ -128,10 +128,7 @@
                                             CommandParameter="{Binding Path=ID}">
                                         X
                                     </Button>
-                                    <Border Grid.Column="1" BorderBrush="{Binding Color}"
-                                            BorderThickness="1">
-                                        <TextBlock Text="{Binding Name}" Padding="5" />
-                                    </Border>
+                                    <Label Style="{StaticResource Tag}" Content="{Binding Name}" Padding="5" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

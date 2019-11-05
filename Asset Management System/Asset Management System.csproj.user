@@ -75,6 +75,9 @@
     <Page Update="Resources\Styles\Tabs.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Resources\Styles\Tag.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Resources\Styles\Texts.xaml">
       <SubType>Designer</SubType>
     </Page>
