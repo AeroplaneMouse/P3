@@ -78,6 +78,7 @@ namespace Asset_Management_System.ViewModels
                 {
                     _list.Add(item);
                 }
+
                 OnPropertyChanged(nameof(SearchList));
             }
         }
@@ -89,7 +90,8 @@ namespace Asset_Management_System.ViewModels
         public ICommand PrintCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
-
+        public ICommand HeaderClickCommand { get; set; }
+        
         #endregion
 
         #region Constructor
@@ -109,6 +111,7 @@ namespace Asset_Management_System.ViewModels
             PrintCommand = new Commands.PrintSelectedItemsCommand();
             SearchCommand = new Base.RelayCommand(Search);
             ViewCommand = new Base.RelayCommand(View);
+            HeaderClickCommand = new Base.RelayCommand<object>(HeaderClick);
 
             Search();
         }
@@ -154,7 +157,28 @@ namespace Asset_Management_System.ViewModels
                 else if (selected is Entry)
                     new ShowEntry(selected as Entry).ShowDialog();
                 else
-                    _main.AddNotification(new Notification("ERROR! Unknown error occured when trying to view.", Notification.ERROR), 3000);
+                    _main.AddNotification(
+                        new Notification("ERROR! Unknown error occured when trying to view.", Notification.ERROR),
+                        3000);
+            }
+        }
+
+        protected void HeaderClick(object header)
+        {
+            GridViewColumnHeader clickedHeader = header as GridViewColumnHeader;
+            var str = "You Clicked Header: ";
+            Console.WriteLine(str + clickedHeader?.Content);
+            if (SearchList[0] is Asset)
+            {
+                Console.WriteLine("Sorting");
+                if (clickedHeader?.Content.ToString() == "Name")
+                    SearchList = new ObservableCollection<T>(SearchList.Cast<Asset>().OrderBy(i => i.Name).Cast<T>());
+                else if(clickedHeader?.Content.ToString() == "ID")
+                    SearchList = new ObservableCollection<T>(SearchList.Cast<Asset>().OrderBy(i => i.ID).Cast<T>());
+                else if(clickedHeader?.Content.ToString() == "Identifier")
+                    SearchList = new ObservableCollection<T>(SearchList.Cast<Asset>().OrderBy(i => i.Identifier).Cast<T>());
+                else if(clickedHeader?.Content.ToString() == "Created")
+                    SearchList = new ObservableCollection<T>(SearchList.Cast<Asset>().OrderBy(i => i.CreatedAt).Cast<T>());
             }
         }
 
