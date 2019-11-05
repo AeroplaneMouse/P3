@@ -1,133 +1,261 @@
-﻿<Window x:Class="Asset_Management_System.Views.UserImporterView"
+﻿<Page x:Class="Asset_Management_System.Views.UserImporterView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Asset_Management_System.Views"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterOwner"
-        WindowStyle="ToolWindow"
-        Title="Import Users" Height="800" Width="1000">
+        d:DesignHeight="450" d:DesignWidth="800"
+        Title="Import Users" >
 
+    <Page.Resources>
+        <DataTemplate x:Key="TextColumn">
+            <TextBlock Text="{Binding}" Margin="5 0 0 5"/>
+        </DataTemplate>
+    </Page.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+            <TextBlock Style="{StaticResource TitleStyle}"
+                   VerticalAlignment="Center"
+                   Margin="10 0 0 0"
+                   Text="{Binding Title}" />
 
-            <ListView ItemsSource="{Binding ExistingUsersList, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
-                          Margin="10 0"
-                      Grid.Column="0">
+            <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="10">
 
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" 
-                                        Header="ID" 
-                                        Width="20" />
+                <Button Style="{StaticResource RegularAcceptButton}"
+                    Command="{Binding ApplyCommand}"
+                    Content="Apply" />
 
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
-                                        Header="Username"
-                                        Width="100"/>
+                <Button Style="{StaticResource RegularCancelButton}"
+                    Command="{Binding CancelCommand}"
+                    Margin="10 0 0 0"
+                    Content="Cancel" />
+            </StackPanel>
 
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" 
-                                        Header="Description"
-                                        Width="150"/>
-
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
-                                        Header="Department"
-                                        Width="150"/>
-
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
-                                        Header="Admin"
-                                        Width="Auto"/>
-                    </GridView>
-                </ListView.View>
-
-            </ListView>
-
-
-            <ListView ItemsSource="{Binding NewUsersList, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
-                          Margin="10 0"
-                      Grid.Column="1">
-
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" 
-                                        Header="ID" 
-                                        Width="20" />
-
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
-                                        Header="Username"
-                                        Width="100"/>
-
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" 
-                                        Header="Description"
-                                        Width="150"/>
-
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
-                                        Header="Department"
-                                        Width="150"/>
-
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
-                                        Header="Admin"
-                                        Width="Auto"/>
-                    </GridView>
-                </ListView.View>
-
-            </ListView>
-
+            <Rectangle Style="{StaticResource HorizontalSeparator}"
+                   VerticalAlignment="Bottom" />
 
         </Grid>
-        
+
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <ListView ItemsSource="{Binding FinalUsersList, UpdateSourceTrigger=PropertyChanged}"
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+
+                <!-- Existing users -->
+                <Grid Grid.Row="0" Margin="10 5 0 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Style="{StaticResource HeaderStyle}"
+                               Text="Existing Users"
+                               Grid.Row="0"/>
+
+                    <ListView ItemsSource="{Binding ExistingUsersList, UpdateSourceTrigger=PropertyChanged}"
                       SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
-                      Grid.Column="1">
+                      Margin="0 0 2 0"
+                      Grid.Row="1">
 
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" 
-                                        Header="ID" 
-                                        Width="20"/>
+                        <ListView.Resources>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="Padding" Value="20 5" />
+                            </Style>
+                        </ListView.Resources>
 
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
-                                        Header="Username"
-                                        Width="100"/>
+                        <ListView.View>
+                            <GridView>
 
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" 
-                                        Header="Description"
-                                        Width="150"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
+                                        Header="Username" />
 
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}"
-                                        Header="Department"
-                                        Width="150"/>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Domain}"
+                                        Header="Domain" />
 
-                        <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
-                                        Header="Admin"
-                                        Width="Auto"/>
-                    </GridView>
-                </ListView.View>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" 
+                                        Header="Description" />
 
-            </ListView>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
+                                        Header="Department" />
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
+                                        Header="Admin" />
+                            </GridView>
+                        </ListView.View>
+
+                    </ListView>
+
+                </Grid>
+
+                <!-- Imported users -->
+                <Grid Grid.Row="1" Margin="10 5 0 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Style="{StaticResource HeaderStyle}"
+                               Text="Imported Users"
+                               Grid.Row="0"/>
+
+                    <ListView ItemsSource="{Binding NewUsersList, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                          Margin="0 0 2 0"
+                          Grid.Row="1">
+
+                        <ListView.Resources>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="Padding" Value="20 5" />
+                            </Style>
+                        </ListView.Resources>
+
+                        <ListView.View>
+                            <GridView>
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
+                                        Header="Username" />
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Domain}"
+                                        Header="Domain" />
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" 
+                                        Header="Description" />
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
+                                        Header="Department" />
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
+                                        Header="Admin" />
+                            </GridView>
+                        </ListView.View>
+
+                    </ListView>
+
+                </Grid>
+
+            </Grid>
 
 
+            <Grid Grid.Column="1">
 
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Final user list -->
+                <Grid Grid.Row="0" Margin="10 5 10 5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Style="{StaticResource HeaderStyle}"
+                               Text="Final users"
+                               Grid.Row="0"/>
+                    
+                    <ListView ItemsSource="{Binding FinalUsersList, UpdateSourceTrigger=PropertyChanged}"
+                              SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                              Grid.Row="1">
+
+                        <ListView.Resources>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="Padding" Value="20 5" />
+                            </Style>
+                        </ListView.Resources>
+
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
+                                                Header="Username" >
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border BorderThickness="2" BorderBrush="Black">
+                                                <TextBlock Text="{Binding}" Foreground="Red"/>
+                                            </Border>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Domain}"
+                                                Header="Domain">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border BorderThickness="2" BorderBrush="Black">
+                                                <TextBlock Text="{Binding}" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" 
+                                                Header="Description">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border BorderThickness="2" BorderBrush="Black">
+                                                <TextBlock Text="{Binding}" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
+                                                Header="Department">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border BorderThickness="2" BorderBrush="Black">
+                                                <TextBlock Text="{Binding}" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
+                                                Header="Admin">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Border BorderThickness="2" BorderBrush="Black">
+                                                <TextBlock Text="{Binding}" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+                
+                
+                <!-- Conflicts -->
+                <Grid Grid.Row="1" Margin="10 5 10 5">
+                    <TextBlock Text="Conflicts"
+                               Style="{StaticResource HeaderStyle}"/>
+                </Grid>
+
+            </Grid>
         </Grid>
+
     </Grid>
+
     
     
-</Window>
+    
+</Page>

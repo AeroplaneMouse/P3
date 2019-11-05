@@ -344,9 +344,7 @@ namespace Asset_Management_System.ViewModels
 
         private void ImportUsers()
         {
-            var dialog = new Views.UserImporterView();
-
-            dialog.ShowDialog();
+            ChangeMainContent(new Views.UserImporterView(this));
         }
 
         private bool ExcludedFromSaving(Page page)
