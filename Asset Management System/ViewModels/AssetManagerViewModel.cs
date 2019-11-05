@@ -250,6 +250,9 @@ namespace Asset_Management_System.ViewModels
         {
             try
             {
+                _searchString = _tagList
+                        .Select(p => p.Name)
+                        .ElementAtOrDefault(0);
                 if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
                 {
                     CurrentlyAddedTags.Add(_tagList.Single(p =>
@@ -265,6 +268,8 @@ namespace Asset_Management_System.ViewModels
                         Console.WriteLine("    " + tag.Name);
                     }
                 }
+
+                ResetSearch();
 
                 _tabIndex = 0;
             }
