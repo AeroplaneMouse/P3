@@ -3,9 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:views="clr-namespace:Asset_Management_System.Views"
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-      xmlns:v="clr-namespace:Asset_Management_System.ViewModels"
       xmlns:viewModelHelper1="clr-namespace:Asset_Management_System.ViewModels.ViewModelHelper"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -104,19 +102,19 @@
                     <StackPanel Margin="0 0 0 10">
                         <ComboBox>
                             <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Text Field">Add TextField</Button>
+                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Text Field">Add Textarea</Button>
                             </ComboBoxItem>
                             <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="String Field">Add StringField</Button>
+                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="String Field">Add TextBox</Button>
                             </ComboBoxItem>
                             <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Integer Field">Add IntegerField</Button>
+                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Integer Field">Add Number field</Button>
                             </ComboBoxItem>
                             <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Date Field">Add DateField</Button>
+                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Date Field">Add Date</Button>
                             </ComboBoxItem>
                             <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Boolean Field">Add BooleanField</Button>
+                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Boolean Field">Add checkbox</Button>
                             </ComboBoxItem>
                         </ComboBox>
                     </StackPanel>
