@@ -7,12 +7,43 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="CustomField">
+    <Page.Resources>
+        <DataTemplate x:Key="Area">
+            <TextBox Style="{StaticResource ParagraphTextBox}"
+                AcceptsReturn="True"
+                AcceptsTab="True"
+                MinHeight="70"
+                Text="{Binding DefaultValue, UpdateSourceTrigger=PropertyChanged}"/>
+        </DataTemplate>
+
+        <DataTemplate x:Key="Box">
+            <TextBox Style="{StaticResource ParagraphTextBox}"
+                Text="{Binding DefaultValue, UpdateSourceTrigger=PropertyChanged}"/>
+        </DataTemplate>
+        
+        <Style TargetType="ContentPresenter" x:Key="DefaultValueStyle">
+            <Setter Property="Margin" Value="0 0 0 10"/>
+            <Setter Property="ContentTemplate" Value="{StaticResource Area}"/>
+            
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding DefaultViewStyle}" Value="0">
+                    <Setter Property="ContentTemplate" Value="{StaticResource Area}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding DefaultViewStyle, UpdateSourceTrigger=PropertyChanged}" Value="1">
+                    <Setter Property="ContentTemplate" Value="{StaticResource Box}"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding DefaultViewStyle, NotifyOnSourceUpdated=True}" Value="2">
+                    <Setter Property="ContentTemplate" Value="{StaticResource Box}"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
 
     <Grid>
         <Canvas Style="{StaticResource PromptBackground}"/>
         <Border Style="{StaticResource PromptBorder}"
-                Width="300"
-                Height="280">
+                Width="400"
+                Height="400">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -48,26 +79,46 @@
                     <StackPanel>
                         <TextBlock Style="{StaticResource ParagraphStyle}"
                                    Text="Field type:"/>
-                        <ComboBox Margin="0 0 0 10">
-                            
+                        <ComboBox Margin="0 0 0 10"
+                                  Name="FieldTypeSelector"
+                                  ItemsSource="{Binding FieldTypes}"
+                                  SelectedItem="{Binding SelectedFieldType, UpdateSourceTrigger=PropertyChanged}">
                         </ComboBox>
 
                         <TextBlock Style="{StaticResource ParagraphStyle}"
                                    Text="Field name:"/>
                         <TextBox Style="{StaticResource ParagraphTextBox}"
-                                 Margin="0 0 0 10"/>
+                                 Margin="0 0 0 10"
+                                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
 
                         <TextBlock Text="Default Value:"
                                    Style="{StaticResource ParagraphStyle}"/>
-                        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                 Style="{StaticResource ParagraphTextBox}"
-                                 Margin="0 0 0 10"    
-                                Name="Input"/>
+
+                        <ContentPresenter>
+                            <ContentPresenter.Style>
+                                <Style TargetType="ContentPresenter">
+                                    <Setter Property="Margin" Value="0 0 0 10"/>
+                                    <Setter Property="ContentTemplate" Value="{StaticResource Box}"/>
+
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DefaultViewStyle}" Value="0">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource Area}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding DefaultViewStyle, UpdateSourceTrigger=PropertyChanged}" Value="1">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource Box}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding DefaultViewStyle, NotifyOnSourceUpdated=True}" Value="2">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource Box}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ContentPresenter.Style>
+                        </ContentPresenter>
 
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="Required: "
                                        Style="{StaticResource ParagraphStyle}"/>
-                            <CheckBox/>
+                            <CheckBox IsChecked="{Binding IsRequired, UpdateSourceTrigger=PropertyChanged}"/>
                         </StackPanel>
                     </StackPanel>
 

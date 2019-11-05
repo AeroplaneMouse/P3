@@ -69,11 +69,10 @@ namespace Asset_Management_System.ViewModels
             ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this)));
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
-            ReloadSplashCommand =
-                new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
+            ReloadSplashCommand = new Base.RelayCommand(() => (splashScreen.DataContext as ViewModels.SplashViewModel).Reload());
             RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
 
-            //AddNotificationTestCommand = new Base.RelayCommand(DisplayPrompt);
+            AddFieldTestCommand = new Base.RelayCommand(TestField);
 
             ImportUsersCommand = new Base.RelayCommand(ImportUsers);
 
@@ -91,7 +90,26 @@ namespace Asset_Management_System.ViewModels
             (splashScreen.DataContext as SplashViewModel).StartWorker();
         }
 
-        
+        private void TestField()
+        {
+            DisplayPrompt(new Views.Prompts.CustomField("Testing", testingResults));
+        }
+
+        private void testingResults(object sender, PromptEventArgs e)
+        {
+            if (e.Result)
+            {
+                Field newField = e.ResultObject as Field;
+
+                if (newField != null)
+                {
+                    Console.WriteLine(newField.ToString());
+                }
+
+            }
+        }
+
+
 
         #endregion
 
@@ -422,7 +440,7 @@ namespace Asset_Management_System.ViewModels
         public ICommand ReloadSplashCommand { get; set; }
 
         // Notification commands
-        public ICommand AddNotificationTestCommand { get; set; }
+        public ICommand AddFieldTestCommand { get; set; }
         public static ICommand RemoveNotificationCommand { get; set; }
 
 
