@@ -20,6 +20,7 @@ namespace Asset_Management_System.Models
                 FieldType.Boolean
             };
         }
+
         /// <summary>
         /// Default constructor for initiating a new Field object.
         /// </summary>

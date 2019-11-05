@@ -37,7 +37,6 @@ namespace Asset_Management_System.ViewModels.Commands
 
 
 
-            Console.WriteLine("Not implemented. maybe old method ");
             //string fieldToAdd = parameter.ToString();
 
 
