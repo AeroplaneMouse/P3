@@ -110,7 +110,6 @@
                                 <WrapPanel
                                     Orientation="Horizontal"
                                     ItemHeight="40"
-                                    ItemWidth="140"
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="Left" />
                             </ItemsPanelTemplate>
@@ -118,17 +117,14 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="20" />
-                                        <ColumnDefinition Width="100" />
-                                    </Grid.ColumnDefinitions>
-                                    <Button Grid.Column="0"
+                                    <Button Style="{StaticResource TagButton}"
+                                            Grid.Column="0"
                                             Command="{x:Static v:AssetManagerViewModel.UnTagTagCommand}"
-                                            MaxHeight="40" VerticalAlignment="Top"
-                                            CommandParameter="{Binding Path=ID}">
-                                        X
+                                            MaxHeight="35" VerticalAlignment="Top"
+                                            CommandParameter="{Binding Path=ID}"
+                                            Background="{Binding Color}">
+                                        <Label Content="{Binding Name}" Foreground="{Binding IdealTextColor}"></Label>
                                     </Button>
-                                    <Label Style="{StaticResource Tag}" Content="{Binding Name}" Padding="5" />
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
