@@ -49,17 +49,17 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "INSERT INTO users (name, username, description, enabled, default_department, admin, updated_at) " +
-                                     "VALUES (@name, @username, @description, @enabled, @default_department, @admin, CURRENT_TIMESTAMP())";
+                const string query = "INSERT INTO users (username, domain, description, enabled, default_department, admin, updated_at) " +
+                                     "VALUES (@username, @domain, @description, @enabled, @default_department, @admin, CURRENT_TIMESTAMP())";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
                 {
-                    cmd.Parameters.Add("@name", MySqlDbType.String);
-                    cmd.Parameters["@name"].Value = entity.Name;
-
                     cmd.Parameters.Add("@username", MySqlDbType.String);
                     cmd.Parameters["@username"].Value = entity.Username;
+
+                    cmd.Parameters.Add("@domain", MySqlDbType.String);
+                    cmd.Parameters["@domain"].Value = entity.Domain;
 
                     cmd.Parameters.Add("@description", MySqlDbType.String);
                     cmd.Parameters["@description"].Value = entity.Description;
@@ -97,7 +97,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "UPDATE users SET name=@name, username=@username, description=@description, enabled=@enabled, admin=@admin, default_department=@default_department, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
+                const string query = "UPDATE users SET username=@username, domain=@domain, description=@description, enabled=@enabled, admin=@admin, default_department=@default_department, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -105,11 +105,11 @@ namespace Asset_Management_System.Database.Repositories
                     cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                     cmd.Parameters["@id"].Value = entity.ID;
 
-                    cmd.Parameters.Add("@name", MySqlDbType.String);
-                    cmd.Parameters["@name"].Value = entity.Name;
-
                     cmd.Parameters.Add("@username", MySqlDbType.String);
                     cmd.Parameters["@username"].Value = entity.Username;
+
+                    cmd.Parameters.Add("@domain", MySqlDbType.String);
+                    cmd.Parameters["@domain"].Value = entity.Domain;
 
                     cmd.Parameters.Add("@description", MySqlDbType.String);
                     cmd.Parameters["@description"].Value = entity.Description;
@@ -281,8 +281,8 @@ namespace Asset_Management_System.Database.Repositories
         public User DBOToModelConvert(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
-            String rowName = reader.GetString("name");
             String rowUsername = reader.GetString("username");
+            String rowDomain = reader.GetString("domain");
             String rowDescription = reader.GetString("description");
             bool rowEnabled = reader.GetBoolean("enabled");
             ulong rowDefaultDepartment = reader.GetUInt64("default_department");
@@ -292,7 +292,7 @@ namespace Asset_Management_System.Database.Repositories
 
             return (User) Activator.CreateInstance(typeof(User),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowName, rowUsername, rowDescription, rowEnabled, rowDefaultDepartment, rowAdmin, rowCreatedAt, rowUpdatedAt }, null, null);
+                new object[] { rowId, rowUsername, rowDomain, rowDescription, rowEnabled, rowDefaultDepartment, rowAdmin, rowCreatedAt, rowUpdatedAt }, null, null);
         }
     }
 }

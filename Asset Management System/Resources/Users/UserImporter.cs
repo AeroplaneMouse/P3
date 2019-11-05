@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
 
@@ -23,6 +24,8 @@ namespace Asset_Management_System.Resources.Users
         public List<User> Import()
         {
             var n = new Microsoft.Win32.OpenFileDialog();
+
+            var session = new Session();
 
             Nullable<bool> result = n.ShowDialog();
 
@@ -45,8 +48,8 @@ namespace Asset_Management_System.Resources.Users
                 {
                     User u = new User();
 
-                    u.Name = p[0];
                     u.Username = p[0];
+                    u.Domain = session.Domain;
                     u.IsEnabled = true;
                     u.IsAdmin = false;
                     u.Description = (p[2] != null) ? p[2] : String.Empty;

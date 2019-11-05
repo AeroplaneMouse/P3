@@ -6,25 +6,24 @@ namespace Asset_Management_System.Models
     public class User : Model
     {
         /* Constructor used by DB */
-        private User(ulong id, string name, string username, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
+        private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
         {
             ID = id;
-            Name = name;
             Username = username;
+            Domain = domain;
             Description = description;
             IsEnabled = is_enabled;
             DefaultDepartment = defaultDepartment;
             IsAdmin = is_admin;
             CreatedAt = createdAt;
             UpdatedAt = updated_at;
+            
         }
 
         public User()
         {
 
         }
-        
-        public string Name { get; set; }
 
         public string Username { get; set; }
 
@@ -50,5 +49,7 @@ namespace Asset_Management_System.Models
         public string Description { get; set; }
 
         public bool IsEnabled { get; set; }
+
+        public string Domain { get; set; }
     }
 }
