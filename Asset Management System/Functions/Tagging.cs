@@ -9,7 +9,7 @@ namespace Asset_Management_System.Functions
     public class Tagging
     {
         private Tag _parent = null;
-        private List<Tag> suggestedTags;
+        private List<Tag> _suggestedTags;
         
         private List<Tag> _tags;
         private List<User> _users;
@@ -45,7 +45,7 @@ namespace Asset_Management_System.Functions
             }
             else
             {
-                result.AddRange(suggestedTags.Where(t => t.Name.StartsWith(input)).ToList());
+                result.AddRange(_suggestedTags.Where(t => t.Name.StartsWith(input)).ToList());
             }
 
             return result;
@@ -63,15 +63,7 @@ namespace Asset_Management_System.Functions
 
         public void Parent(Tag tag=null)
         {
-            if (tag != null)
-            {
-                suggestedTags = _tags.Where(a => a.ParentID == tag.ID).ToList();
-            }
-            else
-            {
-                suggestedTags = _tags.Where(a => a.ParentID == 0).ToList();
-            }
-
+            _suggestedTags = tag != null ? _tags.Where(a => a.ParentID == tag.ID).ToList() : _tags.Where(a => a.ParentID == 0).ToList();
             _parent = tag;
         }
 
