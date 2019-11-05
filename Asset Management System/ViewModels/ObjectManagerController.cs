@@ -53,10 +53,16 @@ namespace Asset_Management_System.ViewModels
                         if (!shownField.Field.IsCustom && string.IsNullOrEmpty(shownField.Field.Content))
                         {
                             shownField.Field.Content = currentTagField.DefaultValue;
+                            
+                            if (!shownField.FieldTags.Contains(tag))
+                            {
+                                shownField.FieldTags.Add(tag);
+                            }
                         }
                     }
 
-                    if (tag.FieldsList.Contains(shownField.Field))
+                    //Adds relation between tag and field.
+                    if (tag.FieldsList.FirstOrDefault(field => field.Hash == currentTagField.Hash) == null)
                     {
                         if (!shownField.FieldTags.Contains(tag))
                         {
@@ -74,21 +80,28 @@ namespace Asset_Management_System.ViewModels
                 }
 
                 // If it already exists, jump to next iteration.
-                if (alreadyExists) continue;
-
-                if (currentTagField.IsHidden &&
-                    HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) == null)
+                if (!alreadyExists)
                 {
-                    HiddenFields.Add(new ShownField(currentTagField));
-                }
-                else
-                {
-                    if (!currentTagField.IsCustom)
+                    ShownField newField = new ShownField(currentTagField);
+                    if (!newField.FieldTags.Contains(tag))
                     {
-                        if (FieldsList.SingleOrDefault(field => field.Field.HashId == currentTagField.HashId) ==
-                            null)
+                        newField.FieldTags.Add(tag);
+                    }
+                    
+                    if (currentTagField.IsHidden &&
+                        HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) == null)
+                    {
+                        HiddenFields.Add(newField);
+                    }
+                    else
+                    {
+                        if (!currentTagField.IsCustom)
                         {
-                            FieldsList.Add(new ShownField(currentTagField));
+                            if (FieldsList.SingleOrDefault(field => Equals(field.Field, currentTagField)) ==
+                                null)
+                            {
+                                FieldsList.Add(newField);
+                            }
                         }
                     }
                 }
