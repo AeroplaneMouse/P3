@@ -6,19 +6,22 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Asset_Management_System.ViewModels.ViewModelHelper;
+using Asset_Management_System.Events;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
     class AddFieldCommand : ICommand
     {
         private FieldsController _viewModel;
+        private MainViewModel _main;
         public event EventHandler CanExecuteChanged;
 
         private readonly bool _isCustom;
 
 
-        public AddFieldCommand(FieldsController viewModel, bool isCustom = false)
+        public AddFieldCommand(MainViewModel main, FieldsController viewModel, bool isCustom = false)
         {
+            _main = main;
             _viewModel = viewModel;
             this._isCustom = isCustom;
         }
@@ -30,6 +33,10 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
+            _main.DisplayPrompt(new Views.Prompts.CustomField(null, AddNewFieldConfirmed));
+
+
+
             Console.WriteLine("Not implemented. maybe old method ");
             //string fieldToAdd = parameter.ToString();
 
@@ -84,6 +91,20 @@ namespace Asset_Management_System.ViewModels.Commands
             //        required, _isCustom));
             //    _viewModel.FieldsList.Add(shownField);
             //}
+        }
+
+        private void AddNewFieldConfirmed(object sender, PromptEventArgs e)
+        {
+            if (e.Result)
+            {
+                if (e.ResultObject is Field newField)
+                {
+                    ShownField shownField = new ShownField(newField);
+                    _viewModel.FieldsList.Add(shownField);
+                }
+                else
+                    _main.AddNotification(new Notification("ERROR! Adding field failed. Received object is not a field.", Notification.ERROR), 5000);
+            }
         }
     }
 }
