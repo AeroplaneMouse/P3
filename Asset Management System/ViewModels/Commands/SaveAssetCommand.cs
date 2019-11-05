@@ -36,6 +36,11 @@ namespace Asset_Management_System.ViewModels.Commands
         {
             Console.WriteLine("Testing: " + CanExecute(parameter));
 
+            if (_main.CurrentDepartment.ID == 0)
+            {
+                _main.AddNotification(new Notification("Please select a department.", Notification.ERROR));
+                return;
+            }
             _asset.Name = _viewModel.Name;
             _asset.Description = _viewModel.Description;
 
