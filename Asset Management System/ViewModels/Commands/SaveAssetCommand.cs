@@ -35,7 +35,12 @@ namespace Asset_Management_System.ViewModels.Commands
         public void Execute(object parameter)
         {
             Console.WriteLine("Testing: " + CanExecute(parameter));
-            
+
+            if (_main.CurrentDepartment.ID == 0)
+            {
+                _main.AddNotification(new Notification("Please select a department.", Notification.ERROR));
+                return;
+            }
             _asset.Name = _viewModel.Name;
             _asset.Description = _viewModel.Description;
 
@@ -45,19 +50,27 @@ namespace Asset_Management_System.ViewModels.Commands
 
             _asset.FieldsList = new List<Field>();
             // Checks if Name or Description is not empty.
-            if (string.IsNullOrEmpty(_asset.Name) || string.IsNullOrEmpty(_asset.Description))
+            if (string.IsNullOrEmpty(_asset.Name))
             {
                 _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
                 return;
             }
+
             foreach (var shownField in _viewModel.FieldsList)
             {
                 if (shownField.Field.Required && shownField.Field.Content == string.Empty)
                 {
-                    _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
+                    _main.AddNotification(
+                        new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
                     return;
                     //requiredFieldsWritten = false;
                 }
+
+                _asset.AddField(shownField.Field);
+            }
+
+            foreach (var shownField in _viewModel.HiddenFields)
+            {
                 _asset.AddField(shownField.Field);
             }
 
@@ -72,13 +85,19 @@ namespace Asset_Management_System.ViewModels.Commands
                 {
                     Log<Asset>.CreateLog(_asset);
                     rep.Update(_asset);
-                    rep.AttachTagsToAsset(_asset, new List<Tag>(_viewModel.CurrentlyAddedTags));
+                    if (_viewModel.CurrentlyAddedTags.Count > 0)
+                    {
+                        rep.AttachTagsToAsset(_asset, new List<Tag>(_viewModel.CurrentlyAddedTags));
+                    }
                 }
                 else
                 {
                     rep.Insert(_asset, out ulong id);
                     Log<Asset>.CreateLog(_asset, id);
-                    rep.AttachTagsToAsset(rep.GetById(id), new List<Tag>(_viewModel.CurrentlyAddedTags));
+                    if (_viewModel.CurrentlyAddedTags.Count > 0)
+                    {
+                        rep.AttachTagsToAsset(rep.GetById(id), new List<Tag>(_viewModel.CurrentlyAddedTags));
+                    }
                 }
 
                 _main.ChangeMainContent(new Assets(_main));

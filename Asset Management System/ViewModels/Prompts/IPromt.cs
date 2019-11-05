@@ -8,9 +8,5 @@ namespace Asset_Management_System.ViewModels.Prompts
 
         public ICommand AcceptCommand { get; set; }
         public ICommand CancelCommand { get; set; }
-
-
-
-
     }
 }

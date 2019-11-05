@@ -33,7 +33,9 @@ namespace Asset_Management_System.Resources.Users
                 filePath = n.FileName;
             }
 
-            return Encoding.Default.GetString(File.ReadAllBytes(filePath))
+            if (!String.IsNullOrEmpty(filePath))
+            {
+                return Encoding.Default.GetString(File.ReadAllBytes(filePath))
                 .Split("\r\n")                // Splits file into lines, by newlines
                 .ToList()
                 .Select(p => p.Split('\t')) // Splits lines into sections, by tabs
@@ -52,6 +54,13 @@ namespace Asset_Management_System.Resources.Users
                     return u;
                 })                          // Converts each string[] into a user
                 .ToList();
+            }
+
+            else
+            {
+                return null;
+            }
+            
         }
     }
 }

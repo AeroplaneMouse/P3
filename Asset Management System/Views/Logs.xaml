@@ -3,59 +3,106 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:local="clr-namespace:Asset_Management_System.Views"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
-      Title="Logs"
-      Style="{StaticResource ListPage}">
+      Title="Log">
 
-    <Grid Margin="10">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="50" />
-            <RowDefinition Height="70" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource TitleStyle}"
+            VerticalAlignment="Center"
+            Margin="10"
+            Text="Logs"/>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="1" VerticalAlignment="Bottom">
-            <TextBox
-                Width="300"
-                TextBlock.FontSize="12px"
-                Padding="2,3,2,3"
-                Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}" />
-
-            <Button Style="{StaticResource RegularButton}"
-                    Content="Search"
-                    Command="{Binding SearchCommand}"/>
-
-            <Button Style="{StaticResource RegularButton}"
-                    Content="Print"
-                    Command="{Binding PrintCommand}" 
-                    Visibility="{Binding Visible}"/>
-            
-            <Button Style="{StaticResource RegularButton}"
-                    Content="View"
-                    Command="{Binding ViewCommand}" />
+        <StackPanel Orientation="Horizontal"
+            HorizontalAlignment="Right"
+            Margin="10">
 
         </StackPanel>
-        
-        <ListView ItemsSource="{Binding SearchList, UpdateSourceTrigger=PropertyChanged}"
-                  Grid.Row="2"
-                  Margin="0, 10, 0, 0"
-                  SelectionMode="Single"
-                  SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
-                  MouseDoubleClick="ListView_MouseDoubleClick">
-            <ListView.InputBindings>
-                <KeyBinding Key="Enter" Command="{Binding ViewCommand}" />
-            </ListView.InputBindings>
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="ID" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Event" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="User" />
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
-                </GridView>
-            </ListView.View>
-        </ListView>
+
+        <Rectangle Style="{StaticResource HorizontalSeparator}"
+            VerticalAlignment="Bottom"/>
+
+        <!-- Content of list assets page -->
+        <Border Padding="10"
+            Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Left">
+                    <TextBox FontSize="{StaticResource FontSizeSmall}"
+                        Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
+                        VerticalContentAlignment="Center"
+                        MinWidth="200"
+                        Name="StartElement">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                        </TextBox.InputBindings>
+                    </TextBox>
+
+                    <Button Style="{StaticResource RegularButton}"
+                        Margin="10 0 0 0"
+                        Command="{Binding SearchCommand}"
+                        Content="Search"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                    <Button Style="{StaticResource RegularCancelButton}"
+                        Command="{Binding RemoveCommand}"
+                        Content="Remove"
+                        Visibility="{Binding IsRemoveVisible}"/>
+
+                    <Button Style="{StaticResource RegularButton}"
+                        Margin="10 0 0 0 "
+                        Content="Export selected items"
+                        Width="Auto"
+                        Command="{Binding PrintCommand}"
+                        CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItems}"/>
+                </StackPanel>
+
+                <!--Style="{StaticResource RegularList}"-->
+                <ListView x:Name="listViewWithItems"
+                        SelectionMode="Extended"
+                        ItemsSource="{Binding SearchList}"
+                        SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                        Grid.Row="2"
+                        Margin="0 10 0 0"
+                        BorderThickness="0">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <!--ViewCommand-->
+                            <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="ID" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Date" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Event" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="User" />
+                        </GridView>
+                    </ListView.View>
+
+                    <ListView.InputBindings>
+                        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
+                        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
+                        <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
+                    </ListView.InputBindings>
+                </ListView>
+            </Grid>
+        </Border>
     </Grid>
 </Page>

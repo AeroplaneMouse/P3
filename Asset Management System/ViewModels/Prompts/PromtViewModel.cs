@@ -25,6 +25,5 @@ namespace Asset_Management_System.ViewModels.Prompts
         protected abstract void Accept();
 
         protected abstract void Cancel();
-
     }
 }

@@ -9,7 +9,7 @@ namespace Asset_Management_System.ViewModels.Commands
     {
         private MainViewModel _main;
         public event EventHandler CanExecuteChanged;
-        
+
         public RemoveNotificationCommand(MainViewModel main)
         {
             _main = main;

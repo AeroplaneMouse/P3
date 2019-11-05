@@ -13,7 +13,6 @@ namespace Asset_Management_System.ViewModels.Prompts
         public CustomFieldViewModel(string message, PromptEventHandler handler)
             : base(message, handler)
         {
-
         }
 
 

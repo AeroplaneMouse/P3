@@ -64,7 +64,7 @@ namespace Asset_Management_System.ViewModels
             get => _pageType;
             set => _pageType = value;
         }
-        
+
         public int SelectedItemIndex { get; set; }
 
         public ObservableCollection<T> SearchList
@@ -86,8 +86,8 @@ namespace Asset_Management_System.ViewModels
 
         #region Commands
 
-        public ICommand SearchCommand { get; set; }
         public ICommand PrintCommand { get; set; }
+        public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
 
         #endregion
@@ -106,7 +106,7 @@ namespace Asset_Management_System.ViewModels
             _pageType = pageType;
 
             // Initialize commands
-            PrintCommand = new Base.RelayCommand(Print);
+            PrintCommand = new Commands.PrintSelectedItemsCommand();
             SearchCommand = new Base.RelayCommand(Search);
             ViewCommand = new Base.RelayCommand(View);
 
@@ -148,24 +148,13 @@ namespace Asset_Management_System.ViewModels
             if (selected != null)
             {
                 if (selected is Tag)
-                {
                     Main.ChangeMainContent(new ObjectViewer(Main, selected as Tag));
-                }
-
                 else if (selected is Asset)
-                {
                     Main.ChangeMainContent(new ObjectViewer(Main, selected as Asset));
-                }
-
                 else if (selected is Entry)
-                {
                     new ShowEntry(selected as Entry).ShowDialog();
-                }
-
                 else
-                {
-                    Console.WriteLine("Error when viewing");
-                }
+                    _main.AddNotification(new Notification("ERROR! Unknown error occured when trying to view.", Notification.ERROR), 3000);
             }
         }
 
@@ -173,7 +162,6 @@ namespace Asset_Management_System.ViewModels
 
 
         #region Helpers
-
 
         protected T GetSelectedItem()
         {
