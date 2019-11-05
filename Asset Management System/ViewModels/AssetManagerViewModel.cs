@@ -250,9 +250,13 @@ namespace Asset_Management_System.ViewModels
         {
             try
             {
-                _searchString = _tagList
+                if(_tagList.SingleOrDefault(p => p.Name == _searchString) == null)
+                {
+                    _searchString = _tagList
                         .Select(p => p.Name)
                         .ElementAtOrDefault(0);
+                }
+
                 if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
                 {
                     CurrentlyAddedTags.Add(_tagList.Single(p =>
