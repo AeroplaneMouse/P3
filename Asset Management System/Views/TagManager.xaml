@@ -104,19 +104,19 @@
                     <StackPanel Margin="0 0 0 10">
                         <ComboBox>
                             <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Text Field">Add TextField</Button>
+                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Text Field">Add Textarea</Button>
                             </ComboBoxItem>
                             <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="String Field">Add StringField</Button>
+                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="String Field">Add TextBox</Button>
                             </ComboBoxItem>
                             <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Integer Field">Add IntegerField</Button>
+                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Integer Field">Add Number field</Button>
                             </ComboBoxItem>
                             <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Date Field">Add DateField</Button>
+                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Date Field">Add Date</Button>
                             </ComboBoxItem>
                             <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Boolean Field">Add BooleanField</Button>
+                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Boolean Field">Add checkbox</Button>
                             </ComboBoxItem>
                         </ComboBox>
                     </StackPanel>
