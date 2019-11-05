@@ -20,12 +20,6 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            /*IEnumerable<object> objects = (IEnumerable<object>)parameter;
-
-            foreach (object item in objects)
-            {
-                Console.WriteLine(item.ToString());
-            }*/
             PrintHelper.Print(parameter as IEnumerable<object>);
         }
     }

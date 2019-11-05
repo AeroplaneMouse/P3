@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows.Input;
 using Asset_Management_System.Models;
+using Asset_Management_System.ViewModels.Commands;
 using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
@@ -12,6 +14,14 @@ namespace Asset_Management_System.ViewModels
         public ObservableCollection<Tag> CurrentlyAddedTags { get; set; } = new ObservableCollection<Tag>();
 
         public ObservableCollection<ShownField> HiddenFields { get; set; } = new ObservableCollection<ShownField>();
+
+        public static ICommand RemoveFieldCommand { get; set; }
+
+        public ObjectManagerController()
+        {
+            RemoveFieldCommand = new RemoveFieldCommand(this);
+        }
+
 
         protected void ConnectTags()
         {
@@ -43,8 +53,17 @@ namespace Asset_Management_System.ViewModels
                         if (!shownField.Field.IsCustom && string.IsNullOrEmpty(shownField.Field.Content))
                         {
                             shownField.Field.Content = currentTagField.DefaultValue;
+                            
+                            if (!shownField.FieldTags.Contains(tag))
+                            {
+                                shownField.FieldTags.Add(tag);
+                            }
                         }
+                    }
 
+                    //Adds relation between tag and field.
+                    if (tag.FieldsList.FirstOrDefault(field => field.Hash == currentTagField.Hash) == null)
+                    {
                         if (!shownField.FieldTags.Contains(tag))
                         {
                             shownField.FieldTags.Add(tag);
@@ -61,18 +80,29 @@ namespace Asset_Management_System.ViewModels
                 }
 
                 // If it already exists, jump to next iteration.
-                if (alreadyExists) continue;
-                if (currentTagField.IsHidden)
+                if (!alreadyExists)
                 {
-                    HiddenFields.Add(new ShownField(currentTagField));
-                }
-                else
-                {
-                    if (HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) != null) continue;
-                    if (FieldsList.SingleOrDefault(field => field.Field.HashId == currentTagField.HashId) ==
-                        null)
+                    ShownField newField = new ShownField(currentTagField);
+                    if (!newField.FieldTags.Contains(tag))
                     {
-                        FieldsList.Add(new ShownField(currentTagField));
+                        newField.FieldTags.Add(tag);
+                    }
+                    
+                    if (currentTagField.IsHidden &&
+                        HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) == null)
+                    {
+                        HiddenFields.Add(newField);
+                    }
+                    else
+                    {
+                        if (!currentTagField.IsHidden)
+                        {
+                            if (FieldsList.SingleOrDefault(field => Equals(field.Field, currentTagField)) ==
+                                null)
+                            {
+                                FieldsList.Add(newField);
+                            }
+                        }
                     }
                 }
             }
