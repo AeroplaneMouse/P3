@@ -114,8 +114,6 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </StackPanel>
-                
-                
             </Grid>
         </ScrollViewer>
         
