@@ -24,40 +24,21 @@ namespace Asset_Management_System.ViewModels
 
         private string _domain { get; set; }
 
-        private List<User> _existingUsersList { get; set; }
-
-        private List<User> _newUsersList { get; set; }
-
-        private List<User> _finalUsersList { get; set; }
-
-        private List<User> _conflictingUsersList { get; set; }
         #endregion
 
         #region Public Properties
 
-        public List<User> ExistingUsersList
-        {
-            get => _existingUsersList;
-            set => _existingUsersList = value;
-        }
+        public List<User> ExistingUsersList { get; set; }
 
-        public List<User> NewUsersList
-        {
-            get => _newUsersList;
-            set => _newUsersList = value;
-        }
+        public List<User> FinalUsersList { get; set; }
 
-        public List<User> FinalUsersList
-        {
-            get => _finalUsersList;
-            set => _finalUsersList = value;
-        }
+        public List<User> ConflictingUsersList { get; set; }
 
-        public List<User> ConflictingUsersList
-        {
-            get => _conflictingUsersList;
-            set => _conflictingUsersList = value;
-        }
+        public List<User> RemovedUsersList { get; set; }
+
+        public List<User> AddedUsersList { get; set; }
+
+        public List<User> ImportedUsersList { get; set; }
 
         public string Title { get; set; } = "Import Users";
 
@@ -88,23 +69,32 @@ namespace Asset_Management_System.ViewModels
 
 
             // Get all existing users 
-            _existingUsersList = _rep.GetAll().ToList();
+            ExistingUsersList = _rep.GetAll().ToList();
 
             // Get the new users from a .txt file
-            _newUsersList = _importer.Import();
+            ImportedUsersList = _importer.Import();
 
             // Initialize the final list of users
-            _finalUsersList = new List<User>();
+            FinalUsersList = new List<User>();
 
-            _conflictingUsersList = CheckForDuplicates();
+            ConflictingUsersList = CheckForDuplicates();
 
+            RemovedUsersList = ExistingUsersList
+                .Where(u => u.IsEnabled == true)
+                .Where(e => ImportedUsersList.Where(n => e.Username.CompareTo(n.Username) == 0).Count() == 0)
+                .ToList();
 
+            AddedUsersList = ImportedUsersList
+                .Where(i => ExistingUsersList.Where(e => i.Username.CompareTo(e.Username) == 0).Count() == 0)
+                .ToList();
+             
+            FinalUsersList = ExistingUsersList.Where(u => u.IsEnabled == true).ToList();
 
+            FinalUsersList.RemoveAll(p => RemovedUsersList.Where(r => p.Username.CompareTo(r.Username) == 0).Count() > 0);
+            FinalUsersList.AddRange(AddedUsersList);
 
-
-
-            _finalUsersList.AddRange(_existingUsersList != null ? _existingUsersList.Where(p => p.IsEnabled).ToList() : new List<User>());
-            _finalUsersList.AddRange(_newUsersList != null ? _newUsersList : new List<User>());
+            //_finalUsersList.AddRange(_existingUsersList != null ? _existingUsersList.Where(p => p.IsEnabled).ToList() : new List<User>());
+            //_finalUsersList.AddRange(_newUsersList != null ? _newUsersList : new List<User>());
 
             // Initialize commands 
             CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
@@ -125,9 +115,9 @@ namespace Asset_Management_System.ViewModels
         {
             var conflictingUsers = new List<User>();
 
-            conflictingUsers = _existingUsersList
+            conflictingUsers = ExistingUsersList
                 .Where(u => u.IsEnabled == false)
-                .Where(e => _newUsersList.Where(n => e.Username.CompareTo(n.Username) == 0).Count() > 0)
+                .Where(e => ImportedUsersList.Where(n => e.Username.CompareTo(n.Username) == 0).Count() > 0)
                 .ToList();
 
             return conflictingUsers;
@@ -135,7 +125,7 @@ namespace Asset_Management_System.ViewModels
 
         private void Apply()
         {
-            foreach (User user in _finalUsersList)
+            foreach (User user in FinalUsersList)
             {
                 _rep.Insert(user, out ulong id);
             }

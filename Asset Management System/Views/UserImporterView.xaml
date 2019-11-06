@@ -59,7 +59,7 @@
                 </Grid.RowDefinitions>
 
 
-                <!-- Existing users -->
+                <!-- Added users -->
                 <Grid Grid.Row="0" Margin="10 5 0 5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -67,10 +67,10 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Style="{StaticResource HeaderStyle}"
-                               Text="Existing Users"
+                               Text="Added Users"
                                Grid.Row="0"/>
 
-                    <ListView ItemsSource="{Binding ExistingUsersList, UpdateSourceTrigger=PropertyChanged}"
+                    <ListView ItemsSource="{Binding AddedUsersList, UpdateSourceTrigger=PropertyChanged}"
                       SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                       Margin="0 0 2 0"
                       Grid.Row="1">
@@ -98,6 +98,9 @@
 
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
                                         Header="Admin" />
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=IsEnabled}"
+                                                Header="Enabled" />
                             </GridView>
                         </ListView.View>
 
@@ -105,7 +108,7 @@
 
                 </Grid>
 
-                <!-- Imported users -->
+                <!-- Removed users -->
                 <Grid Grid.Row="1" Margin="10 5 0 5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -113,10 +116,10 @@
                     </Grid.RowDefinitions>
 
                     <TextBlock Style="{StaticResource HeaderStyle}"
-                               Text="Imported Users"
+                               Text="Removed Users"
                                Grid.Row="0"/>
 
-                    <ListView ItemsSource="{Binding NewUsersList, UpdateSourceTrigger=PropertyChanged}"
+                    <ListView ItemsSource="{Binding RemovedUsersList, UpdateSourceTrigger=PropertyChanged}"
                           SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                           Margin="0 0 2 0"
                           Grid.Row="1">
@@ -144,6 +147,9 @@
 
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
                                         Header="Admin" />
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=IsEnabled}"
+                                                Header="Enabled" />
                             </GridView>
                         </ListView.View>
 
@@ -198,6 +204,9 @@
 
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
                                                 Header="Admin"/>
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=IsEnabled}"
+                                                Header="Enabled" />
                             </GridView>
                         </ListView.View>
                     </ListView>
@@ -241,6 +250,9 @@
 
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
                                                 Header="Admin"/>
+
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=IsEnabled}"
+                                                Header="Enabled" />
                             </GridView>
                         </ListView.View>
                     </ListView>
