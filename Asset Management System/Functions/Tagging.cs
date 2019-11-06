@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
@@ -15,19 +16,19 @@ namespace Asset_Management_System.Functions
         private List<Tag> _tags;
         private List<User> _users;
         
-        public List<ITagable> TaggedWith;
+        public ObservableCollection<ITagable> TaggedWith { get; set; }
         private TagRepository _tagRep;
         private UserRepository _userRep;
 
-        public Tagging(List<ITagable> tags=null)
+        public Tagging(ObservableCollection<ITagable> tags=null)
         {
             _tagRep = new TagRepository();
             _userRep = new UserRepository();
-            _parent = null;
-            
-            TaggedWith = tags ?? new List<ITagable>();
+
+            TaggedWith = tags ?? new ObservableCollection<ITagable>();
 
             Reload();
+            Parent(null);
         }
 
         public void Reload()
@@ -69,6 +70,8 @@ namespace Asset_Management_System.Functions
             _suggestedTags = tag != null ? _tags.Where(a => a.ParentID == tag.ID).ToList() : _tags.Where(a => a.ParentID == 0).ToList();
             _parent = tag;
         }
+
+        public bool IsParentSet() => _parent != null;
 
         public List<Tag> Tags()
         {

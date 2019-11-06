@@ -22,11 +22,14 @@ namespace Asset_Management_System.ViewModels
         private string _currentGroup = String.Empty;
         private string _searchQueryText = String.Empty;
         private bool IsTagMode = false;
-        public Tagging TheTagger;
 
         public int ViewType => 1;
         public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Hidden;
         public ICommand DeleteCommand { get; set; }
+        public ICommand DownCommand { get; set; }
+        public Tagging TheTagger { get; }
+
+        public List<ITagable> Suggestions { get; set; } = new List<ITagable>();
 
         public string CurrentGroup
         {
@@ -52,15 +55,25 @@ namespace Asset_Management_System.ViewModels
                     _searchQueryText = "";
                     CurrentGroup = "#";
                     IsTagMode = true;
+                    Suggestions = TheTagger.Suggest(_searchQueryText);
+                }
+                else if (IsTagMode)
+                {
+                    Suggestions = TheTagger.Suggest(_searchQueryText);
                 }
             }
         }
 
-
         public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
             DeleteCommand = new Base.RelayCommand(Delete);
+            DownCommand = new Base.RelayCommand(FocusFirstSelection);
             TheTagger = new Tagging();
+        }
+
+        private void FocusFirstSelection()
+        {
+            
         }
 
         private void Delete()
@@ -70,10 +83,16 @@ namespace Asset_Management_System.ViewModels
                 if (CurrentGroup == "#")
                 {
                     CurrentGroup = String.Empty;
+                    Suggestions = null;
                     IsTagMode = false;
                 }
                 else
+                {
                     CurrentGroup = "#";
+                    SearchQueryText = "";
+                    TheTagger.Parent(null);
+                    Suggestions = TheTagger.Suggest(_searchQueryText);
+                }
             }
         }
 
@@ -85,7 +104,27 @@ namespace Asset_Management_System.ViewModels
 
         protected override void Search()
         {
-            base.Search();
+            if (!IsTagMode)
+                base.Search();
+            else
+            {
+                Tag tag = (Tag)Suggestions.First();
+                if (TheTagger.IsParentSet())
+                {
+                    TheTagger.AddToQuery(tag);
+                    OnPropertyChanged(nameof(TheTagger.TaggedWith));
+                }
+                else
+                {
+                    TheTagger.Parent(tag);
+                    CurrentGroup = tag.Name;
+                }
+                SearchQueryText = "";
+
+
+                //TheTagger.AddToQuery(Suggestions.First());
+                //Tag tag = Suggestions.Find(t => t.TagLabel == SearchQueryText)
+            }
         }
         
     }

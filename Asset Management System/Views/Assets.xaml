@@ -1,4 +1,4 @@
-﻿<Page x:Class="Asset_Management_System.Views.Assets"
+<Page x:Class="Asset_Management_System.Views.Assets"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -50,7 +50,7 @@
                                    Text="{Binding CurrentGroup}"
                                    VerticalAlignment="Center"/>
                     </Border>
-                    
+
                     <TextBox FontSize="{StaticResource FontSizeSmall}"
                              Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
                              VerticalContentAlignment="Center"
@@ -59,6 +59,7 @@
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                             <KeyBinding Key="Esc" Command="{Binding DeleteCommand}"/>
+                            <KeyBinding Key="Tab" FocusManager.FocusedElement="{Binding ElementName=SuggestionsList}"/>
                         </TextBox.InputBindings>
                     </TextBox>
 
@@ -67,7 +68,7 @@
                             Command="{Binding SearchCommand}"
                             Content="Search"/>
                 </StackPanel>
-
+                
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right">
                     <Button Style="{StaticResource RegularCancelButton}"
@@ -86,25 +87,17 @@
                             Width="Auto"
                             Command="{Binding PrintCommand}"/>
                 </StackPanel>
-                
+
                 <!-- Current tags -->
-                <ItemsControl Grid.Row="1">
-                    <WrapPanel Margin="0 10 0 0"
-                               HorizontalAlignment="Left">
-                        <TextBlock Text="test" Margin="10"/>
-                        <TextBlock Text="test" Margin="10"/>
-                        <TextBlock Text="test" Margin="10"/>
-                        <TextBlock Text="test" Margin="10"/>
-                        <TextBlock Text="test" Margin="10"/>
-                        <TextBlock Text="test" Margin="10"/>
-                        <TextBlock Text="test" Margin="10"/>
-                        <TextBlock Text="test" Margin="10"/>
-                        <TextBlock Text="test" Margin="10"/>
-                        <TextBlock Text="test" Margin="10"/>
-                    </WrapPanel>
-                    
-                </ItemsControl>
-                
+                <ListView ItemsSource="{Binding Path=TheTagger.TaggedWith}"
+                          Grid.Row="1"
+                          Margin="0 10 0 0">
+                    <ListView.Template>
+                        <ControlTemplate>
+                            <WrapPanel IsItemsHost="True"/>
+                        </ControlTemplate>
+                    </ListView.Template>
+                </ListView>
 
                 <!--Style="{StaticResource RegularList}"-->
                 <ListView ItemsSource="{Binding SearchList}"
@@ -129,5 +122,17 @@
                 </ListView>
             </Grid>
         </Border>
+
+        <!-- Suggestion dropdown -->
+        <ListView Width="230"
+                  Background="LightGray"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Top"
+                  Margin="10 40 0 0"
+                  Name="SuggestionsList"
+                  Grid.Row="1"
+                  BorderThickness="0"
+                  ItemsSource="{Binding Suggestions}">
+        </ListView>
     </Grid>
 </Page>

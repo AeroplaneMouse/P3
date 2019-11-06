@@ -46,7 +46,12 @@ namespace Asset_Management_System.Models
         {
             return Username;
         }
-        
+
+        public override string ToString()
+        {
+            return Username;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj == null) 
