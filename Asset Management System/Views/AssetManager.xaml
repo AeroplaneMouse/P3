@@ -92,8 +92,8 @@
                             <KeyBinding Key="Return" Command="{Binding EnterKeyCommand}" />
                             <KeyBinding Key="Tab" Command="{Binding TabKeyCommand}" />
                             <KeyBinding Key="Space" Command="{Binding SpaceKeyCommand}" />
-                            <KeyBinding Key="Esc" Command="{Binding EscapeKeyCommand}" />
-                            <KeyBinding Key="Backspace" Command="{Binding BackspaceKeyCommand}" />
+                            <KeyBinding Key="Escape" Command="{Binding EscapeKeyCommand}" />
+                            <KeyBinding Key="Back" Command="{Binding BackspaceKeyCommand}" />
                         </TextBox.InputBindings>
                     </TextBox>
                     <ListBox ItemsSource="{Binding TagList, UpdateSourceTrigger=PropertyChanged}">
