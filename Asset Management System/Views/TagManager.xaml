@@ -92,31 +92,16 @@
 
                 <!-- Fields -->
                 <StackPanel Grid.Column="2">
-                    <TextBlock Style="{StaticResource HeaderStyle}"
-                               Margin="0 0 0 10"
-                               Text="Fields"/>
-                    
-                    <!-- Add new field -->
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
-                               Text="Add field"/>
-                    <StackPanel Margin="0 0 0 10">
-                        <ComboBox>
-                            <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Text Field">Add Textarea</Button>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="String Field">Add TextBox</Button>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Integer Field">Add Number field</Button>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Date Field">Add Date</Button>
-                            </ComboBoxItem>
-                            <ComboBoxItem>
-                                <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Boolean Field">Add checkbox</Button>
-                            </ComboBoxItem>
-                        </ComboBox>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 0 0 10">
+                        <TextBlock Style="{StaticResource HeaderStyle}"
+                                   Margin="0 0 10 0"
+                                   Text="Fields"/>
+                        <Button Style="{StaticResource RegularButton}"
+                                Command="{Binding AddFieldCommand}"
+                                Content="+"
+                                Width="Auto"
+                                Height="20"/>
                     </StackPanel>
                     
                     <!-- The list of added fields -->

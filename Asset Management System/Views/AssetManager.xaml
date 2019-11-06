@@ -159,36 +159,6 @@
                                 Height="20"/>
                     </StackPanel>
 
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
-                               Text="Add custom field" />
-
-                    <ComboBox Margin="0 0 0 10">
-                        <ComboBoxItem>
-                            <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Text Field">Add Textarea</Button>
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <Button Style="{StaticResource AddFieldButton}" Width="Auto"
-                                    CommandParameter="String Field">
-                                Add Textbox
-                            </Button>
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <Button Style="{StaticResource AddFieldButton}" Width="Auto"
-                                    CommandParameter="Integer Field">
-                                Add Number Field
-                            </Button>
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Date Field">Add Date</Button>
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <Button Style="{StaticResource AddFieldButton}" Width="Auto"
-                                    CommandParameter="Boolean Field">
-                                Add Checkbox
-                            </Button>
-                        </ComboBoxItem>
-                    </ComboBox>
-
                     <!-- FieldList -->
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding FieldsList}"
@@ -203,7 +173,7 @@
 
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Hidden fields"
-                               Margin="10 20 10 0" />
+                               Margin="0 20 10 0" />
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding HiddenFields}"
                                       ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
