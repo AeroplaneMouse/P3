@@ -15,7 +15,7 @@ namespace Asset_Management_System.Authentication
         public Session()
         {
             UserRepository rep = new UserRepository();
-            user = rep.GetByUsername(GetIdentity());
+            user = rep.GetByIdentity(GetIdentity());
         }
 
         public bool Authenticated()

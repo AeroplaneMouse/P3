@@ -17,7 +17,7 @@ namespace Asset_Management_System.Views
         public Home(MainViewModel main)
         {
             InitializeComponent();
-            DataContext = new ViewModels.HomeViewModel(main);
+            DataContext = new HomeViewModel(main);
 
             AssetRepository assetRepository = new AssetRepository();
             TagRepository tagRepository = new TagRepository();

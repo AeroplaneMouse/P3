@@ -266,22 +266,27 @@ namespace Asset_Management_System.Database.Repositories
             return user;
         }
 
-        public User GetByUsername(string username)
+        public User GetByIdentity(string identity)
         {
             var con = new MySqlHandler().GetConnection();
             User user = null;
+
+            var parts = identity.Split('\\');
             
             try
             {
-                const string query = "SELECT id, name, username, admin, default_department, created_at, updated_at " +
-                                     "FROM users WHERE username=@username AND enabled=1";
+                const string query = "SELECT id, name, domain, username, admin, default_department, created_at, updated_at " +
+                                     "FROM users WHERE username=@username AND domain=@domain AND enabled=1";
 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
                 {
+                    cmd.Parameters.Add("@domain", MySqlDbType.String);
+                    cmd.Parameters["@domain"].Value = parts[0];
+                    
                     cmd.Parameters.Add("@username", MySqlDbType.String);
-                    cmd.Parameters["@username"].Value = username;
-
+                    cmd.Parameters["@username"].Value = parts[1];
+                    
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())

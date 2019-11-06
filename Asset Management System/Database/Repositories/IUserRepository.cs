@@ -6,7 +6,7 @@ namespace Asset_Management_System.Database.Repositories
 {
     interface IUserRepository : IMysqlRepository<User>
     {
-        User GetByUsername(string username);
+        User GetByIdentity(string identity);
         
         IEnumerable<User> GetAll();
 
