@@ -120,26 +120,17 @@ namespace Asset_Management_System.ViewModels
 
         #region Methods
 
-        public void UpdateList()
-        {
-            Search();
-        }
+        public void UpdateList() => Search();
 
         /// <summary>
         /// Sends a search request to the database, and sets the list of items to the result.
         /// </summary>
-        protected virtual void Search()
-        {
-            SearchList = _rep.Search(SearchQueryText);
-        }
+        protected virtual void Search() => SearchList = _rep.Search(SearchQueryText);
 
         /// <summary>
         /// Creates a csv file containing all the items
         /// </summary>
-        protected void Print()
-        {
-            PrintHelper.Print(SearchList as IEnumerable<object>);
-        }
+        protected void Print() => PrintHelper.Print(SearchList as IEnumerable<object>);
 
         /// <summary>
         /// Displays the selected item
@@ -163,6 +154,10 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
+        /// <summary>
+        /// Sorts the SearchList when a GridViewColumnHeader is clicked
+        /// </summary>
+        /// <param name="header"></param>
         protected void HeaderClick(object header)
         {
             GridViewColumnHeader clickedHeader = header as GridViewColumnHeader;
@@ -173,8 +168,12 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Sorting Assets");
                     SearchList = clickedHeader?.Content.ToString() switch
                     {
-                        "Name" => new ObservableCollection<T>(SearchList.Cast<Asset>().OrderBy(i => i.Name).Cast<T>()),
-                        "ID" => new ObservableCollection<T>(SearchList.Cast<Asset>().OrderBy(i => i.ID).Cast<T>()),
+                        "Name" => new ObservableCollection<T>(SearchList.Cast<Asset>()
+                            .OrderBy(i => i.Name)
+                            .Cast<T>()),
+                        "ID" => new ObservableCollection<T>(SearchList.Cast<Asset>()
+                            .OrderBy(i => i.ID)
+                            .Cast<T>()),
                         "Identifier" => new ObservableCollection<T>(SearchList.Cast<Asset>()
                             .OrderBy(i => i.Identifier)
                             .Cast<T>()),
@@ -190,15 +189,21 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Sorting Tags");
                     SearchList = clickedHeader?.Content.ToString() switch
                     {
-                        "Label" => new ObservableCollection<T>(SearchList.Cast<Tag>().OrderBy(i => i.Name).Cast<T>()),
-                        "ID" => new ObservableCollection<T>(SearchList.Cast<Tag>().OrderBy(i => i.ID).Cast<T>()),
+                        "Label" => new ObservableCollection<T>(SearchList.Cast<Tag>()
+                            .OrderBy(i => i.Name)
+                            .Cast<T>()),
+                        "ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
+                            .OrderBy(i => i.ID)
+                            .Cast<T>()),
                         "Parent Tag ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
                             .OrderBy(i => i.ParentID)
                             .Cast<T>()),
                         "Department ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
                             .OrderBy(i => i.DepartmentID)
                             .Cast<T>()),
-                        "Color" => new ObservableCollection<T>(SearchList.Cast<Tag>().OrderBy(i => i.Color).Cast<T>()),
+                        "Color" => new ObservableCollection<T>(SearchList.Cast<Tag>()
+                            .OrderBy(i => i.Color)
+                            .Cast<T>()),
                         "Created" => new ObservableCollection<T>(SearchList.Cast<Tag>()
                             .OrderBy(i => i.CreatedAt)
                             .Cast<T>()),
@@ -214,7 +219,9 @@ namespace Asset_Management_System.ViewModels
                         "Date" => new ObservableCollection<T>(SearchList.Cast<Entry>()
                             .OrderBy(i => i.CreatedAt)
                             .Cast<T>()),
-                        "ID" => new ObservableCollection<T>(SearchList.Cast<Entry>().OrderBy(i => i.Id).Cast<T>()),
+                        "ID" => new ObservableCollection<T>(SearchList.Cast<Entry>()
+                            .OrderBy(i => i.Id)
+                            .Cast<T>()),
                         "Event" => new ObservableCollection<T>(SearchList.Cast<Entry>()
                             .OrderBy(i => i.Description)
                             .Cast<T>()),

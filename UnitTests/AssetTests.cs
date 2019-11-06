@@ -15,8 +15,8 @@ namespace UnitTests
             asset.Name = "AssetTests_Asset";
             asset.Description = "Desription";
             asset.DepartmentID = 1;
-            asset.AddField(new Field("Label of first field", "content of first field", 2, "Default value of first field"));
-            asset.AddField(new Field("Label of second field", "content of second field", 4, "Default value of second field"));
+            asset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.Textbox, "Default value of first field"));
+            asset.AddField(new Field("Label of second field", "content of second field", Field.FieldType.Boolean, "Default value of second field"));
         }
 
         [TestMethod]
@@ -40,8 +40,8 @@ namespace UnitTests
             otherAsset.Name = "AssetTests_Asset";
             otherAsset.Description = "Desription";
             otherAsset.DepartmentID = 1;
-            otherAsset.AddField(new Field("Label of first field", "content of first field", 2, "Default value of first field"));
-            otherAsset.AddField(new Field("Label of second field", "content of second field", 4, "Default value of second field"));
+            otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.Textbox, "Default value of first field"));
+            otherAsset.AddField(new Field("Label of second field", "content of second field", Field.FieldType.Boolean, "Default value of second field"));
 
             //Act
             bool result = asset.Equals(otherAsset);
@@ -58,7 +58,7 @@ namespace UnitTests
             otherAsset.Name = "AssetTests_Asset";
             otherAsset.Description = "Desription";
             otherAsset.DepartmentID = 4;
-            otherAsset.AddField(new Field("Label of first field", "content of first field", 2, "Default value of first field"));
+            otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.Textbox, "Default value of first field"));
 
             //Act
             bool result = asset.Equals(otherAsset);

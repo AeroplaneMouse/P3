@@ -92,8 +92,8 @@
                             <KeyBinding Key="Return" Command="{Binding EnterKeyCommand}" />
                             <KeyBinding Key="Tab" Command="{Binding TabKeyCommand}" />
                             <KeyBinding Key="Space" Command="{Binding SpaceKeyCommand}" />
-                            <KeyBinding Key="Esc" Command="{Binding EscapeKeyCommand}" />
-                            <KeyBinding Key="Backspace" Command="{Binding BackspaceKeyCommand}" />
+                            <KeyBinding Key="Escape" Command="{Binding EscapeKeyCommand}" />
+                            <KeyBinding Key="Back" Command="{Binding BackspaceKeyCommand}" />
                         </TextBox.InputBindings>
                     </TextBox>
                     <ListBox ItemsSource="{Binding TagList, UpdateSourceTrigger=PropertyChanged}">
@@ -110,7 +110,6 @@
                                 <WrapPanel
                                     Orientation="Horizontal"
                                     ItemHeight="40"
-                                    ItemWidth="140"
                                     VerticalAlignment="Top"
                                     HorizontalAlignment="Left" />
                             </ItemsPanelTemplate>
@@ -118,26 +117,11 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="20" />
-                                        <ColumnDefinition Width="100" />
-                                    </Grid.ColumnDefinitions>
-                                    <Button Grid.Column="0"
-                                            Command="{x:Static v:AssetManagerViewModel.UnTagTagCommand}"
-                                            MaxHeight="40" VerticalAlignment="Top"
-                                            CommandParameter="{Binding Path=ID}">
-                                        X
-                                    </Button>
-                                    <Border Grid.Column="1" BorderBrush="{Binding Color}"
-                                            BorderThickness="1">
-                                        <TextBlock Text="{Binding Name}" Padding="5" />
-                                    </Border>
+                                    <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelWithDelete}"></Label>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-
-
                 </StackPanel>
 
                 <Rectangle Style="{StaticResource VerticalSeparator}"
