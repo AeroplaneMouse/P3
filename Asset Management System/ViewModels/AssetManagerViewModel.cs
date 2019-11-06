@@ -139,7 +139,6 @@ namespace Asset_Management_System.ViewModels
 
                 CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
                 ConnectTags();
-                
 
 
                 _editing = true;
@@ -248,142 +247,137 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void Apply()
         {
-            try
+            if (_tagList.SingleOrDefault(p => p.Name == _searchString) == null)
             {
-                if(_tagList.SingleOrDefault(p => p.Name == _searchString) == null)
-                {
-                    _searchString = _tagList
-                        .Select(p => p.Name)
-                        .ElementAtOrDefault(0);
-                }
-
-                if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
-                {
-                    CurrentlyAddedTags.Add(_tagList.Single(p =>
-                        String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
-                    ConnectTags();
-                }
-
-                foreach (var field in FieldsList)
-                {
-                    Console.WriteLine(field.Field.Label);
-                    foreach (var tag in field.FieldTags)
-                    {
-                        Console.WriteLine("    " + tag.Name);
-                    }
-                }
-
-                ResetSearch();
-
-                _tabIndex = 0;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                //TODO Handle this error
+                _searchString = _tagList
+                    .Select(p => p.Name)
+                    .ElementAtOrDefault(0);
             }
 
+            if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
+            {
+                Tag tag = _tagList.SingleOrDefault(p =>
+                    String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase));
+                if (tag != null)
+                    CurrentlyAddedTags.Add(tag);
+                else
+                    _main.AddNotification(new Notification("No matching tags found", Notification.WARNING));
+                ConnectTags();
+            }
+
+            foreach (var field in FieldsList)
+            {
+                Console.WriteLine(field.Field.Label);
+                foreach (var tag in field.FieldTags)
+                {
+                    Console.WriteLine("    " + tag.Name);
+                }
+            }
+
+            ResetSearch();
+
+            _tabIndex = 0;
         }
 
-             /// <summary>
-            /// This function cycles the results within the dropdown of tags.
-            /// </summary>
-            private void CycleResults()
+        /// <summary>
+        /// This function cycles the results within the dropdown of tags.
+        /// </summary>
+        private void CycleResults()
+        {
+            if (_tagList != null)
             {
-                if (_tagList != null)
+                _searchString = _tagList
+                    .Select(p => p.Name)
+                    .ElementAtOrDefault(_tabIndex++);
+
+                if (_searchString == null)
                 {
+                    _tabIndex = 0;
                     _searchString = _tagList
                         .Select(p => p.Name)
-                        .ElementAtOrDefault(_tabIndex++);
+                        .ElementAtOrDefault(_tabIndex);
+                }
 
-                    if (_searchString == null)
-                    {
-                        _tabIndex = 0;
-                        _searchString = _tagList
-                            .Select(p => p.Name)
-                            .ElementAtOrDefault(_tabIndex);
-                    }
-
-                    if (_searchString != null)
-                    {
-                        // TODO: Kom uden om mig
-                        _box.CaretIndex = _searchString.Length;
-                    }
+                if (_searchString != null)
+                {
+                    // TODO: Kom uden om mig
+                    _box.CaretIndex = _searchString.Length;
                 }
             }
+        }
 
-            /// <summary>
-            /// This function is used to navigate into 
-            /// </summary>
-            private void EnterChildren()
+        /// <summary>
+        /// This function is used to navigate into 
+        /// </summary>
+        private void EnterChildren()
+        {
+            // Can only go in, if the parent tag is at the highest level
+            if (_parentID == 0)
             {
-                // Can only go in, if the parent tag is at the highest level
-                if (_parentID == 0)
+                // Checks if the tag we are "going into" has any children
+                ulong tempID = _tagList
+                    .Select(p => p.ID)
+                    .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+                List<Tag> tempList = _tagRep.GetChildTags(tempID) as List<Models.Tag>;
+
+                // If the tag we are "going into" has children, we go into it
+                if (tempList?.Count != 0)
                 {
-                    // Checks if the tag we are "going into" has any children
-                    ulong tempID = _tagList
-                        .Select(p => p.ID)
+                    _parentString = _tagList
+                        .Select(p => p.Name)
                         .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                    List<Tag> tempList = _tagRep.GetChildTags(tempID) as List<Models.Tag>;
+                    _searchString = String.Empty;
+                    _parentID = tempID;
+                    _tagList = tempList;
 
-                    // If the tag we are "going into" has children, we go into it
-                    if (tempList?.Count != 0)
-                    {
-                        _parentString = _tagList
-                            .Select(p => p.Name)
-                            .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                        _searchString = String.Empty;
-                        _parentID = tempID;
-                        _tagList = tempList;
-
-                        _tabIndex = 0;
-                    }
+                    _tabIndex = 0;
                 }
             }
-
-
-            /// <summary>
-            /// This function clears the searched list, as well as clears the input field.
-            /// </summary>
-            private void ResetSearch()
-            {
-                _searchString = String.Empty;
-                _parentID = 0;
-                _tagList = _tagRep.GetChildTags(0) as List<Models.Tag>;
-                _tabIndex = 0;
-            }
-
-            /// <summary>
-            /// Deletes characters, or goes up a level in tags. (Goes to tags, where tag.parentID = 0;
-            /// </summary>
-            private void DeleteCharacter()
-            {
-                // If the search query is empty, the search goes up a level (to the highest level of tags)
-                if (_searchString == String.Empty && _parentID != 0)
-                {
-                    _parentID = 0;
-                    _tagList = _tagRep.GetChildTags(_parentID) as List<Models.Tag>;
-
-                    _searchString = _parentString;
-                    SearchAndSortTagList(_searchString);
-
-                    // TODO: Kom uden om mig
-                    _box.CaretIndex = _searchString.Length;
-                    return;
-                }
-
-                // If the search query isn't empty, a letter is simply removed
-                else if (!string.IsNullOrEmpty(_searchString))
-                {
-                    _searchString = _searchString.Substring(0, _searchString.Length - 1);
-
-                    SearchAndSortTagList(_searchString);
-
-                    // TODO: Kom uden om mig
-                    _box.CaretIndex = _searchString.Length;
-                }
-            }
-
-            #endregion
         }
+
+
+        /// <summary>
+        /// This function clears the searched list, as well as clears the input field.
+        /// </summary>
+        private void ResetSearch()
+        {
+            _searchString = String.Empty;
+            _parentID = 0;
+            _tagList = _tagRep.GetChildTags(0) as List<Models.Tag>;
+            _tabIndex = 0;
+        }
+
+        /// <summary>
+        /// Deletes characters, or goes up a level in tags. (Goes to tags, where tag.parentID = 0;
+        /// </summary>
+        private void DeleteCharacter()
+        {
+            // If the search query is empty, the search goes up a level (to the highest level of tags)
+            if (_searchString == String.Empty && _parentID != 0)
+            {
+                _parentID = 0;
+                _tagList = _tagRep.GetChildTags(_parentID) as List<Models.Tag>;
+
+                _searchString = _parentString;
+                SearchAndSortTagList(_searchString);
+
+                // TODO: Kom uden om mig
+                _box.CaretIndex = _searchString.Length;
+                return;
+            }
+
+            // If the search query isn't empty, a letter is simply removed
+            else if (!string.IsNullOrEmpty(_searchString))
+            {
+                _searchString = _searchString.Substring(0, _searchString.Length - 1);
+
+                SearchAndSortTagList(_searchString);
+
+                // TODO: Kom uden om mig
+                _box.CaretIndex = _searchString.Length;
+            }
+        }
+
+        #endregion
     }
+}

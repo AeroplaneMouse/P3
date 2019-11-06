@@ -44,8 +44,7 @@ namespace Asset_Management_System.ViewModels
             foreach (var currentTagField in tag.FieldsList)
             {
                 bool alreadyExists = false;
-                
-                
+
                 foreach (var shownField in listOffFields)
                 {
                     if (shownField.Field.IsHidden == hidden)
