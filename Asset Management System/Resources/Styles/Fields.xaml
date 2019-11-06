@@ -22,15 +22,6 @@
         <Setter Property="Margin" Value="0 0 0 10" />
         <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}" />
     </Style>
-    
-    <Style TargetType="TextBlock" x:Key="Tag">
-        <Setter Property="Margin" Value="0 1 0 1" />
-        <Setter Property="FontSize" Value="11" />
-        <Setter Property="MaxWidth" Value="100" />
-        <Setter Property="MinWidth" Value="10" />
-        <Setter Property="Padding" Value="5" />
-        <Setter Property="TextAlignment" Value="Left" />
-    </Style>
 
     <Style TargetType="Button" x:Key="RemoveFieldButton">
         <!-- Setting default properties -->
@@ -103,9 +94,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid MaxWidth="100" HorizontalAlignment="Left">
-                            <Border BorderBrush="{Binding Color}" BorderThickness="1" Margin="0, 0, 0, 10">
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource Tag}" />
-                            </Border>
+                            <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -145,9 +134,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid MaxWidth="100" HorizontalAlignment="Left">
-                            <Border BorderBrush="{Binding Color}" BorderThickness="1" Margin="0, 0, 0, 10">
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource Tag}" />
-                            </Border>
+                            <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -188,9 +175,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid MaxWidth="100" HorizontalAlignment="Left">
-                            <Border BorderBrush="{Binding Color}" BorderThickness="1" Margin="0, 0, 0, 10">
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource Tag}" />
-                            </Border>
+                            <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -230,9 +215,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid MaxWidth="100" HorizontalAlignment="Left">
-                            <Border BorderBrush="{Binding Color}" BorderThickness="1" Margin="0, 0, 0, 10">
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource Tag}" />
-                            </Border>
+                            <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -272,9 +255,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid MaxWidth="100" HorizontalAlignment="Left">
-                            <Border BorderBrush="{Binding Color}" BorderThickness="1" Margin="0, 0, 0, 10">
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource Tag}" />
-                            </Border>
+                            <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
