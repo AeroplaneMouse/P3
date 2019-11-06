@@ -141,11 +141,7 @@ namespace Asset_Management_System.ViewModels
 
                 CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
                 ConnectTags();
-
-
-                foreach (Tag tag in CurrentlyAddedTags)
-                    Console.WriteLine("id: " + tag.ID);
-                Console.WriteLine("________");
+                
 
 
                 _editing = true;
@@ -161,6 +157,7 @@ namespace Asset_Management_System.ViewModels
             SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _editing);
             AddFieldCommand = new AddFieldCommand(_main, this, true);
             RemoveFieldCommand = new RemoveFieldCommand(this);
+
             CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
 
             #region Tag related variables
@@ -191,7 +188,6 @@ namespace Asset_Management_System.ViewModels
         }
 
         public ICommand SaveAssetCommand { get; set; }
-        public static ICommand RemoveFieldCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
 
         public ICommand CancelCommand { get; set; }
@@ -256,6 +252,13 @@ namespace Asset_Management_System.ViewModels
         {
             try
             {
+                if(_tagList.SingleOrDefault(p => p.Name == _searchString) == null)
+                {
+                    _searchString = _tagList
+                        .Select(p => p.Name)
+                        .ElementAtOrDefault(0);
+                }
+
                 if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
                 {
                     CurrentlyAddedTags.Add(_tagList.Single(p =>
@@ -272,12 +275,14 @@ namespace Asset_Management_System.ViewModels
                     }
                 }
 
+                ResetSearch();
+
                 _tabIndex = 0;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                // Handle this error
+                //TODO Handle this error
             }
 
         }

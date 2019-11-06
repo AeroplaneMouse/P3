@@ -26,7 +26,7 @@ namespace Asset_Management_System.Views
 
         public bool Required
         {
-            get { return FieldRequired.IsEnabled; }
+            get { return  (bool) FieldRequired.IsChecked; }
         }
 
         public string FieldName

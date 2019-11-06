@@ -335,9 +335,14 @@ namespace Asset_Management_System.Database.Repositories
             string rowDescription = reader.GetString("description");
             string rowIdentifier = reader.GetString("identifier");
             ulong rowDepartmentId = reader.GetUInt64("department_id");
-            string rowOptions = reader.GetString("options");
+            string rowOptions = Encoding.Unicode.GetString(                
+                Encoding.Convert(
+                    Encoding.UTF8,
+                    Encoding.Unicode,
+                    Encoding.UTF8.GetBytes(reader.GetString("options"))));
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
+            
             
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
                 new object[] { rowId, rowName, rowDescription, rowIdentifier, rowDepartmentId, rowOptions, rowCreatedAt, rowUpdatedAt }, null, null);
@@ -371,7 +376,7 @@ namespace Asset_Management_System.Database.Repositories
             // Makes a list of the ids of the tags already on the asset
             List<ulong> assetTagIds = GetAssetTags(asset).Select(p => p.ID).ToList();
 
-            // Removes the ids of the tags that are supposed to stilll be on the asset
+            // Removes the ids of the tags that are supposed to still be on the asset
             // resulting in a list of ids og tags to be removed from the asset
             assetTagIds = assetTagIds.Except(tagIds).ToList();
 

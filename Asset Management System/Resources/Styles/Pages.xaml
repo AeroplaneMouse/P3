@@ -2,12 +2,13 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Asset_Management_System"
                     xmlns:viewModels="clr-namespace:Asset_Management_System.ViewModels"
-                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity">
+                    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions">
 
     <DataTemplate x:Key="SingleCheckBoxElement">
-        <CheckBox Name="box" 
-                  Command="{Binding }" 
-                  CommandParameter="{Binding ElementName=box}"/>
+        <CheckBox Name="box"
+                  Command="{Binding }"
+                  CommandParameter="{Binding ElementName=box}" />
     </DataTemplate>
 
     <DataTemplate x:Key="HeaderCheckBoxElement">
@@ -17,7 +18,7 @@
 
     <!-- List page -->
     <Style TargetType="Page" x:Key="ListPage">
-        <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=StartElement}"/>
+        <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=StartElement}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Page">
@@ -29,7 +30,7 @@
                         <TextBlock Style="{StaticResource TitleStyle}"
                                    VerticalAlignment="Center"
                                    Margin="10 0 0 0"
-                                   Text="{Binding Title}"/>
+                                   Text="{Binding Title}" />
 
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Right"
@@ -37,20 +38,20 @@
 
                             <Button Style="{StaticResource RegularAcceptButton}"
                                     Command="{Binding AddNewCommand}"
-                                    Content="Add"/>
+                                    Content="Add" />
                         </StackPanel>
 
                         <Rectangle Style="{StaticResource HorizontalSeparator}"
-                                   VerticalAlignment="Bottom"/>
+                                   VerticalAlignment="Bottom" />
 
                         <!-- Content of list assets page -->
                         <Border Padding="10"
                                 Grid.Row="1">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
                                 <StackPanel Orientation="Horizontal"
@@ -61,14 +62,14 @@
                                              MinWidth="200"
                                              Name="StartElement">
                                         <TextBox.InputBindings>
-                                            <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                                            <KeyBinding Key="Enter" Command="{Binding SearchCommand}" />
                                         </TextBox.InputBindings>
                                     </TextBox>
 
                                     <Button Style="{StaticResource RegularButton}"
                                             Margin="10 0 0 0"
                                             Command="{Binding SearchCommand}"
-                                            Content="Search"/>
+                                            Content="Search" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal"
@@ -76,23 +77,22 @@
                                     <Button Style="{StaticResource RegularCancelButton}"
                                             Command="{Binding RemoveCommand}"
                                             Content="Remove"
-                                            Visibility="{Binding IsRemoveVisible}"/>
+                                            Visibility="{Binding IsRemoveVisible}" />
 
                                     <Button Style="{StaticResource RegularButton}"
                                             Command="{Binding EditCommand}"
                                             Margin="10 0 0 0 "
-                                            Content="Edit"/>
+                                            Content="Edit" />
 
                                     <Button Style="{StaticResource RegularButton}"
                                             Margin="10 0 0 0 "
                                             Content="Export selected items"
                                             Width="Auto"
                                             Command="{Binding PrintCommand}"
-                                            CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItems}"/>
+                                            CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItems}" />
                                 </StackPanel>
 
 
-                                
                                 <!--Style="{StaticResource RegularList}"-->
                                 <ListView x:Name="listViewWithItems"
                                           SelectionMode="Extended"
@@ -104,41 +104,56 @@
                                     <i:Interaction.Triggers>
                                         <i:EventTrigger EventName="MouseDoubleClick">
                                             <!--ViewCommand-->
-                                            <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}"/>
+                                            <i:InvokeCommandAction Command="{Binding EditCommand}"
+                                                                   CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}" />
                                         </i:EventTrigger>
                                     </i:Interaction.Triggers>
 
                                     <ListView.Resources>
+                                        <Style TargetType="GridViewColumnHeader">
+                                            <Setter Property="Command" Value="{Binding HeaderClickCommand}" />
+                                            <Setter Property="CommandParameter"
+                                                    Value="{Binding RelativeSource={RelativeSource Self}}" />
+                                        </Style>
                                         <GridView x:Key="AssetTemplate">
                                             <!-- <GridViewColumn CellTemplate="{StaticResource SingleCheckBoxElement}" HeaderTemplate="{StaticResource HeaderCheckBoxElement}"/> -->
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Identifier}" Header="Identifier" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Identifier}"
+                                                            Header="Identifier" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}"
+                                                            Header="Created" />
                                         </GridView>
 
                                         <GridView x:Key="TagsTemplate">
                                             <!-- <GridViewColumn CellTemplate="{StaticResource SingleCheckBoxElement}" HeaderTemplate="{StaticResource HeaderCheckBoxElement}"/> -->
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Label" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=ParentID}" Header="Parent Tag ID" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DepartmentID}" Header="Department ID" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=ParentID}"
+                                                            Header="Parent Tag ID" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DepartmentID}"
+                                                            Header="Department ID" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Color}" Header="Color" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}"
+                                                            Header="Created" />
                                         </GridView>
 
                                         <GridView x:Key="LogTemplate">
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Date" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Event" />
-                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="User" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="ID" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}"
+                                                            Header="Date" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Description}"
+                                                            Header="Event" />
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Username}"
+                                                            Header="User" />
                                         </GridView>
                                     </ListView.Resources>
 
                                     <ListView.InputBindings>
-                                        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
-                                        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
-                                        <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
-                                        <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
+                                        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}" />
+                                        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}" />
+                                        <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}" />
+                                        <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}" />
                                     </ListView.InputBindings>
 
                                     <ListView.Style>
@@ -152,7 +167,7 @@
                                                     </ControlTemplate>
                                                 </Setter.Value>
                                             </Setter>-->
-                                            
+
                                             <Style.Triggers>
                                                 <DataTrigger Binding="{Binding ViewType}" Value="2">
                                                     <Setter Property="View" Value="{StaticResource TagsTemplate}" />
@@ -171,37 +186,37 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <!-- *************************** -->
     <!-- Prompt elements-->
-    
+
     <!-- Prompt background canvas -->
     <Style TargetType="Canvas" x:Key="PromptBackground">
-        <Setter Property="Opacity" Value="0.34"/>
-        <Setter Property="Background" Value="Black"/>
+        <Setter Property="Opacity" Value="0.34" />
+        <Setter Property="Background" Value="Black" />
     </Style>
-    
+
     <!-- Prompt Border -->
     <Style TargetType="Border" x:Key="PromptBorder">
-        <Setter Property="Width" Value="300"/>
-        <Setter Property="Height" Value="160"/>
-        <Setter Property="CornerRadius" Value="3"/>
-        <Setter Property="Background" Value="White"/>
+        <Setter Property="Width" Value="300" />
+        <Setter Property="Height" Value="160" />
+        <Setter Property="CornerRadius" Value="3" />
+        <Setter Property="Background" Value="White" />
     </Style>
-    
+
     <!-- Display text -->
     <Style TargetType="TextBlock" x:Key="PromptDisplay" BasedOn="{StaticResource HeaderStyle}">
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0 10 0 0"/>
-        <Setter Property="MaxWidth" Value="270"/>
-        <Setter Property="TextWrapping" Value="Wrap"/>
-        <Setter Property="TextAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="0 10 0 0" />
+        <Setter Property="MaxWidth" Value="270" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="TextAlignment" Value="Center" />
     </Style>
-    
+
     <!-- Input text -->
     <Style TargetType="TextBox" x:Key="PromptInput" BasedOn="{StaticResource BaseTextBoxStyle}">
-        <Setter Property="Width" Value="216"/>
-        <Setter Property="Margin" Value="0 10 0 0"/>
-    </Style>                              
-                        
+        <Setter Property="Width" Value="216" />
+        <Setter Property="Margin" Value="0 10 0 0" />
+    </Style>
+
 </ResourceDictionary>

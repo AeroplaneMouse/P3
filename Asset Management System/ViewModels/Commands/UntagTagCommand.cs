@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Asset_Management_System.Models;
 using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels.Commands
@@ -32,30 +34,10 @@ namespace Asset_Management_System.ViewModels.Commands
             // Find Tag by ID, then remove it.
             _viewModel.CurrentlyAddedTags.Remove(_viewModel.CurrentlyAddedTags.Single(tag => tag.ID == tagId));
             
-            // Removes tags from the fields where it is referenced.
-            foreach (var currentShownField in _viewModel.FieldsList)
-            {
-                if (currentShownField.FieldTags.Remove(
-                    currentShownField.FieldTags.SingleOrDefault(tag => tag.ID == tagId)))
-                {
-                    if (currentShownField.FieldTags.Count == 0)
-                    {
-                        removeList.Add(currentShownField);
-                    }
-                }
-            }
-            foreach (var currentShownField in _viewModel.HiddenFields)
-            {
-                if (currentShownField.FieldTags.Remove(
-                    currentShownField.FieldTags.SingleOrDefault(tag => tag.ID == tagId)))
-                {
-                    if (currentShownField.FieldTags.Count == 0)
-                    {
-                        removeList.Add(currentShownField);
-                    }
-                }
-            }
 
+            FindTagReferences(_viewModel.FieldsList,tagId,false);
+            FindTagReferences(_viewModel.HiddenFields,tagId,true);
+            
             if (removeList.Count > 0)
             {
                 DeleteFields();
@@ -79,6 +61,27 @@ namespace Asset_Management_System.ViewModels.Commands
                     _viewModel.HiddenFields.Remove(_viewModel.HiddenFields.SingleOrDefault(shownField =>
                         shownField.Field.Equals(currentShownField.Field)));
                 }
+            }
+            removeList = new List<ShownField>();
+        }
+
+        private void FindTagReferences(ObservableCollection<ShownField> inputList,ulong tagId, bool hidden)
+        {
+            //Remove references from a field, to the input tag.
+            foreach (var currentShownField in inputList)
+            {
+                if (currentShownField.Field.IsHidden == hidden)
+                {
+                    if (currentShownField.FieldTags.Remove(
+                        currentShownField.FieldTags.SingleOrDefault(tag => tag.ID == tagId)))
+                    {
+                        if (currentShownField.FieldTags.Count == 0)
+                        {
+                            removeList.Add(currentShownField);
+                        }
+                    }
+                }
+                
             }
         }
     }
