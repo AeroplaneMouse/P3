@@ -35,6 +35,7 @@ namespace Asset_Management_System.ViewModels.Prompts
 
         protected override void Accept()
         {
+            
             if (SelectedFieldType == Field.FieldType.Boolean)
                 DefaultValue = DefaultBool ? "1" : "0";
 
