@@ -139,6 +139,7 @@
                                         </GridView>
 
                                         <GridView x:Key="LogTemplate">
+                                            <GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="ID" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}"
                                                             Header="Date" />
                                             <GridViewColumn DisplayMemberBinding="{Binding Path=Description}"
