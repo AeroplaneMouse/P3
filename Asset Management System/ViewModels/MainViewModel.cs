@@ -310,14 +310,15 @@ namespace Asset_Management_System.ViewModels
 
         /// <summary>
         /// Used when the application has connected to the database and other external services,
-        /// to remove the splash page and show the navigation menu's and homepage.
+        /// to remove the splash page and shows the navigation menu's and homepage.
         /// </summary>
         //public void SystemLoaded(object _session, EventArgs e)
-        public void SystemLoaded(Session session)
+        public void LoadSystem(Session session)
         {
             // Attaching notification
             new MySqlHandler().SqlConnectionFailed += AddNotification;
 
+            // Loads homepage and other stuff from the UI-thread.
             SplashPage.Dispatcher.Invoke(Load);
             
             // Remove splash page

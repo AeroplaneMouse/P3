@@ -31,6 +31,10 @@ namespace Asset_Management_System.ViewModels
             Setup();
         }
 
+        /// <summary>
+        /// Establishing a connection to the database and authorizing the user. This function runs asynchronous
+        /// meaning that it does not halt the UI-thread while doing this.
+        /// </summary>
         private async void Setup()
         {
             UpdateStatusText(new StatusUpdateEventArgs("Loading...", "Initializing background worker..."));
@@ -52,10 +56,11 @@ namespace Asset_Management_System.ViewModels
                 Session t = new Session();
                 if (t.Authenticated())
                 {
+                    // Runs the systemLoaded method to remove splashpage, and 
                     UpdateStatusText(new StatusUpdateEventArgs("User authenticated", "Unlocking the Asset Management System..."));
                     Thread.Sleep(_delay);
 
-                    _main.SystemLoaded(t);
+                    _main.LoadSystem(t);
                 }
                 else
                     UpdateStatusText(new StatusUpdateEventArgs(
