@@ -340,4 +340,17 @@
         <Setter Property="HorizontalAlignment" Value="Right"/>
     </Style>
     
+    <!-- Tag -->
+    <Style TargetType="Button" x:Key="TagButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border CornerRadius="15, 15, 15, 15" BorderThickness="0" Background="{TemplateBinding Background}">
+                        <Label Content="{TemplateBinding Content}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
 </ResourceDictionary>
