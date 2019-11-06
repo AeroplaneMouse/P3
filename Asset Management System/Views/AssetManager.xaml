@@ -35,7 +35,8 @@
             
             <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding SaveMultipleAssetsCommand}"
-                    Content="Save multiple" />
+                    Content="Save multiple"
+                    Margin="5,0,0,0"/>
 
             <Button Style="{StaticResource RegularCancelButton}"
                     Command="{Binding CancelCommand}"
