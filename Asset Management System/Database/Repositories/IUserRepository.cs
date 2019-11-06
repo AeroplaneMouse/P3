@@ -8,7 +8,7 @@ namespace Asset_Management_System.Database.Repositories
     {
         User GetByIdentity(string identity);
         
-        IEnumerable<User> GetAll();
+        IEnumerable<User> GetAll(bool includeDisabled=false);
 
         IEnumerable<User> GetUsersForAsset(ulong id);
 
