@@ -9,7 +9,7 @@ namespace Asset_Management_System.Functions
 {
     public class Tagging
     {
-        private Tag _parent = null;
+        private Tag _parent;
         private List<Tag> _suggestedTags;
         
         private List<Tag> _tags;
@@ -23,10 +23,10 @@ namespace Asset_Management_System.Functions
         {
             _tagRep = new TagRepository();
             _userRep = new UserRepository();
+            _parent = null;
             
             TaggedWith = tags ?? new List<ITagable>();
-            _parent = _tagRep.GetById(1);
-            
+
             Reload();
         }
 
