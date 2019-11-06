@@ -247,14 +247,12 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void Apply()
         {
-            if (_tagList.SingleOrDefault(p => p.Name == _searchString) == null)
+            if (_tagList.SingleOrDefault(tag => tag.Name == _searchString) == null)
             {
-                if(_tagList.SingleOrDefault(tag => tag.Name == _searchString) == null)
-                {
-                    _searchString = _tagList
-                        .Select(tag => tag.Name)
-                        .ElementAtOrDefault(0);
-                }
+                _searchString = _tagList
+                    .Select(tag => tag.Name)
+                    .ElementAtOrDefault(0);
+            }
 
             if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
             {
@@ -379,6 +377,7 @@ namespace Asset_Management_System.ViewModels
                 _box.CaretIndex = _searchString.Length;
             }
         }
+
         #endregion
     }
 }
