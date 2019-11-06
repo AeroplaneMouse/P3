@@ -19,6 +19,7 @@
         <Setter Property="Visibility" Value="Visible" />
         <Setter Property="Foreground" Value="Red" />
         <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="FontWeight" Value="ExtraBold" />
         <Style.Triggers>
             <DataTrigger Binding="{Binding Field.Required}" Value="False">
                 <Setter Property="Visibility" Value="Hidden" />
