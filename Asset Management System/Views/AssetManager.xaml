@@ -35,7 +35,9 @@
             
             <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding SaveMultipleAssetsCommand}"
-                    Content="Save multiple" />
+                    Margin="10, 0, 0, 0"
+                    Content="Save copy" 
+                    ToolTip="Saves the asset, but stays on the page"/>
 
             <Button Style="{StaticResource RegularCancelButton}"
                     Command="{Binding CancelCommand}"

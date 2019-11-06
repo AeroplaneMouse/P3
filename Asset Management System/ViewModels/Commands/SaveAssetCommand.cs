@@ -36,8 +36,6 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            Console.WriteLine("Testing: " + CanExecute(parameter));
-
             if (_main.CurrentDepartment.ID == 0)
             {
                 _main.AddNotification(new Notification("Please select a department.", Notification.ERROR));
@@ -103,7 +101,7 @@ namespace Asset_Management_System.ViewModels.Commands
                 if (_multipleSave)
                 {
                     _main.AddNotification(new Notification("Asset saved to database",Notification.APPROVE));
-                    _main.ChangeMainContent(new AssetManager(_main,_asset,true));
+                    _main.ChangeMainContent(new AssetManager(_main, _asset, true));
                 }
                 else
                 {

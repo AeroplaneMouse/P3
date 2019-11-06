@@ -156,7 +156,7 @@ namespace Asset_Management_System.ViewModels
 
             // Initialize commands
             SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _editing);
-            SaveMultipleAssetsCommand = new SaveAssetCommand(this,_main,_asset,false,true);
+            SaveMultipleAssetsCommand = new SaveAssetCommand(this, _main, _asset, false, true);
             AddFieldCommand = new AddFieldCommand(_main, this, true);
             RemoveFieldCommand = new RemoveFieldCommand(this);
 
@@ -190,7 +190,6 @@ namespace Asset_Management_System.ViewModels
         }
 
         public ICommand SaveAssetCommand { get; set; }
-        
         public ICommand SaveMultipleAssetsCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
         public ICommand CancelCommand { get; set; }
