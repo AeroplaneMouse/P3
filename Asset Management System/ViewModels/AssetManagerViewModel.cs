@@ -124,7 +124,7 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
 
-        public AssetManagerViewModel(MainViewModel main, Asset inputAsset, TextBox box)
+        public AssetManagerViewModel(MainViewModel main, Asset inputAsset, TextBox box, bool addMultiple = false)
         {
             _main = main;
             Title = "Edit asset";
@@ -139,11 +139,13 @@ namespace Asset_Management_System.ViewModels
                 LoadFields();
 
                 CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
+
                 ConnectTags();
+                if (!addMultiple)
+                {
+                    _editing = true;
+                }
                 
-
-
-                _editing = true;
             }
             else
             {
@@ -154,6 +156,7 @@ namespace Asset_Management_System.ViewModels
 
             // Initialize commands
             SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _editing);
+            SaveMultipleAssetsCommand = new SaveAssetCommand(this,_main,_asset,false,true);
             AddFieldCommand = new AddFieldCommand(_main, this, true);
             RemoveFieldCommand = new RemoveFieldCommand(this);
 
@@ -187,6 +190,8 @@ namespace Asset_Management_System.ViewModels
         }
 
         public ICommand SaveAssetCommand { get; set; }
+        
+        public ICommand SaveMultipleAssetsCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
@@ -248,41 +253,36 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void Apply()
         {
-            try
+            if (_tagList.SingleOrDefault(tag => tag.Name == _searchString) == null)
             {
-                if(_tagList.SingleOrDefault(tag => tag.Name == _searchString) == null)
-                {
-                    _searchString = _tagList
-                        .Select(tag => tag.Name)
-                        .ElementAtOrDefault(0);
-                }
-
-                if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
-                {
-                    CurrentlyAddedTags.Add(_tagList.Single(p =>
-                        String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
-                    ConnectTags();
-                }
-
-                foreach (var field in FieldsList)
-                {
-                    Console.WriteLine(field.Field.Label);
-                    foreach (var tag in field.FieldTags)
-                    {
-                        Console.WriteLine("    " + tag.Name);
-                    }
-                }
-
-                ResetSearch();
-
-                _tabIndex = 0;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                //TODO Handle this error
+                _searchString = _tagList
+                    .Select(tag => tag.Name)
+                    .ElementAtOrDefault(0);
             }
 
+            if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
+            {
+                Tag tag = _tagList.SingleOrDefault(p =>
+                    String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase));
+                if (tag != null)
+                    CurrentlyAddedTags.Add(tag);
+                else
+                    _main.AddNotification(new Notification("No matching tags found", Notification.WARNING));
+                ConnectTags();
+            }
+
+            foreach (var field in FieldsList)
+            {
+                Console.WriteLine(field.Field.Label);
+                foreach (var tag in field.FieldTags)
+                {
+                    Console.WriteLine("    " + tag.Name);
+                }
+            }
+
+            ResetSearch();
+
+            _tabIndex = 0;
         }
 
         /// <summary>
@@ -313,7 +313,7 @@ namespace Asset_Management_System.ViewModels
         }
 
         /// <summary>
-        /// This function is used to navigate into 
+        /// This function is used to navigate into
         /// </summary>
         private void EnterChildren()
         {
@@ -383,6 +383,7 @@ namespace Asset_Management_System.ViewModels
                 _box.CaretIndex = _searchString.Length;
             }
         }
+
         #endregion
     }
 }

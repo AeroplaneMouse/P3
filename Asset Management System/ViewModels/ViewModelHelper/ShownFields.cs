@@ -9,6 +9,8 @@ namespace Asset_Management_System.ViewModels.ViewModelHelper
         public string Name { get; set; }
         public Field Field { get; set; }
         public ObservableCollection<Tag> FieldTags { get; set; }
+        
+        public string RequiredNotation { get => "*"; }
 
         public ShownField(Field field)
         {

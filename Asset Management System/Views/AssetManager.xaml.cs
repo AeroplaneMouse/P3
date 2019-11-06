@@ -11,10 +11,11 @@ namespace Asset_Management_System.Views
         /// </summary>
         /// <param name="main"></param>
         /// <param name="inputAsset">Optional input, only used when editing a asset.</param>
-        public AssetManager(MainViewModel main, Asset inputAsset = null)
+        /// <param name="addMultiple"></param>
+        public AssetManager(MainViewModel main, Asset inputAsset = null,bool addMultiple = false)
         {
             InitializeComponent();
-            DataContext = new AssetManagerViewModel(main, inputAsset, InputBox);
+            DataContext = new AssetManagerViewModel(main, inputAsset, InputBox,addMultiple);
         }
     }
 }
