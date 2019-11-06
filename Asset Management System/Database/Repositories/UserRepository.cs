@@ -18,7 +18,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "SELECT id, name, username, admin, default_department, created_at, updated_at " +
+                const string query = "SELECT id, name, description, domain, username, enabled, admin, default_department, created_at, updated_at " +
                                      "FROM users";
                 
                 con.Open();
@@ -53,7 +53,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "SELECT u.id, u.name, u.username, u.admin, u.default_department, u.created_at, u.updated_at " +
+                const string query = "SELECT u.id, u.name, u.username, u.domain, u.description, u.enabled, u.admin, u.default_department, u.created_at, u.updated_at " +
                                      "FROM users AS u " +
                                      "INNER JOIN asset_users AS au ON au.user_id = u.id " +
                                      "WHERE au.asset_id = @id";
@@ -253,7 +253,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "SELECT * FROM users WHERE id=@id";
+                const string query = "SELECT id, name, username, domain, description, enabled, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
 
                 using (var cmd = new MySqlCommand(query, con))
                 {
@@ -292,7 +292,7 @@ namespace Asset_Management_System.Database.Repositories
             
             try
             {
-                const string query = "SELECT id, name, domain, username, admin, default_department, created_at, updated_at " +
+                const string query = "SELECT id, name, domain, description, enabled, username, admin, default_department, created_at, updated_at " +
                                      "FROM users WHERE username=@username AND domain=@domain AND enabled=1";
 
                 con.Open();
@@ -324,41 +324,6 @@ namespace Asset_Management_System.Database.Repositories
             }
 
             return user;
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            var con = new MySqlHandler().GetConnection();
-            List<User> users = new List<User>();
-
-            try
-            {
-                const string query = "SELECT * " +
-                                     "FROM users";
-
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
-                {
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            users.Add(DBOToModelConvert(reader));
-                        }
-                        reader.Close();
-                    }
-                }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
-            }
-
-            return users;
         }
 
         public User DBOToModelConvert(MySqlDataReader reader)

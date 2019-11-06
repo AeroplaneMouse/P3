@@ -6,8 +6,6 @@ using Asset_Management_System.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Collections.ObjectModel;
-using Asset_Management_System.Views;
-using Org.BouncyCastle.Asn1.Cms;
 
 namespace Asset_Management_System.Database.Repositories
 {

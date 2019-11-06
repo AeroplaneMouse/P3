@@ -79,11 +79,6 @@ namespace Asset_Management_System.ViewModels
         {
             base.Search();
         }
-
-        #region Public Properties
-
-        public int ViewType => 1;
-
-        #endregion
+        
     }
 }
