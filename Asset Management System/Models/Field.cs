@@ -28,7 +28,7 @@ namespace Asset_Management_System.Models
         /// <param name="content">The content added to the field</param>
         /// <param name="isCustom"></param>
         /// <param name="required">A boolean, whether the field is required or not</param>
-        /// <param name="fieldType">Selecting the type of the field. 1= TextBox,2 = String,3= Int, 4 = Date, 5 = Boolean</param>
+        /// <param name="type">Selecting the type of the field. 1= TextBox,2 = String,3= Int, 4 = Date, 5 = Boolean</param>
         /// <param name="defaultValue">The default value which should be entered into the field</param>
         public Field(string label, string content, FieldType type, string defaultValue, bool required = false,bool isCustom = false)
         {
@@ -38,15 +38,6 @@ namespace Asset_Management_System.Models
             this.Label = label;
             this.Content = content;
             Type = type;
-            //if (type <= 5)
-            //{
-            //    this.FieldType = fieldType;
-            //}
-            //else
-            //{
-            //    throw new ArgumentOutOfRangeException("fieldType",
-            //        "fieldType is out of range. Must be an integer between 1-5 (both included)");
-            //}
 
             this.DefaultValue = defaultValue;
             this.Required = required;
@@ -67,21 +58,6 @@ namespace Asset_Management_System.Models
         //private int _fieldType;
 
         public FieldType Type { get; set; }
-        //{
-        //    get => this._fieldType;
-        //    set
-        //    {
-        //        if (value <= 5 && value > 0)
-        //        {
-        //            this._fieldType = value;
-        //        }
-        //        else
-        //        {
-        //            throw new ArgumentOutOfRangeException("fieldType",
-        //                "fieldType is out of range. Must be an integer between 1-5 (both included)");
-        //        }
-        //    }
-        //}
 
         public string DefaultValue;
 
@@ -105,9 +81,7 @@ namespace Asset_Management_System.Models
         public override bool Equals(object obj)
         {
             if (obj is Field == false)
-            {
                 return false;
-            }
 
             Field other = (Field) obj;
             return (this.Hash == other.Hash);
@@ -124,14 +98,9 @@ namespace Asset_Management_System.Models
         {
             string hashString = "";
             if (uniqueHash)
-            {
-                hashString += this.Label + this.Required.ToString() + Type.ToString() + this.DefaultValue +
-                              DateTime.Now;
-            }
+                hashString += this.Label + this.Required.ToString() + Type.ToString() + this.DefaultValue + DateTime.Now;
             else
-            {
                 hashString += this.Label + this.Required.ToString() + Type.ToString() + this.DefaultValue;
-            }
 
             // step 1, calculate MD5 hash from input
             MD5 md5 = MD5.Create();
@@ -142,9 +111,7 @@ namespace Asset_Management_System.Models
             // step 2, convert byte array to hex string
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < hash.Length; i++)
-            {
                 sb.Append(hash[i].ToString("X2"));
-            }
 
             return sb.ToString();
         }
