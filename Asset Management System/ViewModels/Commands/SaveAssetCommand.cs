@@ -58,11 +58,10 @@ namespace Asset_Management_System.ViewModels.Commands
 
             foreach (var shownField in _viewModel.FieldsList)
             {
-                if (shownField.Field.Required && shownField.Field.Content == string.Empty)
+                if (shownField.Field.Required && shownField.Field.Content == string.Empty && !shownField.Field.IsHidden)
                 {
                     _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
                     return;
-                    //requiredFieldsWritten = false;
                 }
 
                 _asset.AddField(shownField.Field);

@@ -45,7 +45,6 @@ namespace Asset_Management_System.ViewModels
             {
                 bool alreadyExists = false;
                 
-                
                 foreach (var shownField in listOffFields)
                 {
                     if (shownField.Field.IsHidden == hidden)
@@ -57,11 +56,11 @@ namespace Asset_Management_System.ViewModels
                             if (!shownField.Field.IsCustom && string.IsNullOrEmpty(shownField.Field.Content))
                             {
                                 shownField.Field.Content = currentTagField.DefaultValue;
-
-                                if (!shownField.FieldTags.Contains(tag))
-                                {
-                                    shownField.FieldTags.Add(tag);
-                                }
+                            }
+                            
+                            if (!shownField.FieldTags.Contains(tag))
+                            {
+                                shownField.FieldTags.Add(tag);
                             }
                         }
                         
@@ -99,7 +98,8 @@ namespace Asset_Management_System.ViewModels
                     }
                     else
                     {
-                        if (!currentTagField.IsHidden)
+                        if (HiddenFields.SingleOrDefault(field => Equals(field.Field, currentTagField)) ==
+                            null)
                         {
                             if (FieldsList.SingleOrDefault(field => Equals(field.Field, currentTagField)) ==
                                 null)
