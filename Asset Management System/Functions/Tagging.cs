@@ -43,12 +43,12 @@ namespace Asset_Management_System.Functions
             if (_parent != null && _parent.ID == 1)
             {
                 result.AddRange(_users.Where(u => u.Username.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
-                                         && !_tagged.Contains(u)).ToList());
+                                                  && !_tagged.Contains(u)).ToList());
             }
             else
             {
                 result.AddRange(_suggestedTags.Where(t => t.Name.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)
-                                         && !_tagged.Contains(t)).ToList());
+                                                  && (!_tagged.Contains(t))).ToList());
             }
 
             return result;

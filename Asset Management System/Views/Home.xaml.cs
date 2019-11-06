@@ -18,31 +18,10 @@ namespace Asset_Management_System.Views
         {
             InitializeComponent();
             DataContext = new ViewModels.HomeViewModel(main);
-            
-            
+
             AssetRepository assetRepository = new AssetRepository();
             TagRepository tagRepository = new TagRepository();
-            /*
-            UserRepository userRepository = new UserRepository();
-            
-            Asset asset = assetRepository.GetById(4);
-            
-            List<ITagable> tags = (List<ITagable>) assetRepository.GetTags(asset);
 
-            foreach (var tag in tags)
-            {
-                Console.WriteLine(tag.TagLabel());
-            }
-
-            Tag tag1 = tagRepository.GetById(14);
-            Tag tag2 = tagRepository.GetById(15);
-            User user1 = userRepository.GetById(1);
-
-            List<ITagable> listOfTags = new List<ITagable> {tag1, tag2, user1};
-
-            assetRepository.AttachTags(asset, listOfTags);
-            */
-            
             Tagging tagger = new Tagging();
             Tag tag = tagRepository.GetById(1); // User group
             
