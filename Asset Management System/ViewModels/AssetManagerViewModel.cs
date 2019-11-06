@@ -139,7 +139,7 @@ namespace Asset_Management_System.ViewModels
                 LoadFields();
 
                 CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
-                
+
                 ConnectTags();
 
                 _editing = true;
@@ -247,41 +247,36 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void Apply()
         {
-            try
+            if (_tagList.SingleOrDefault(tag => tag.Name == _searchString) == null)
             {
-                if(_tagList.SingleOrDefault(tag => tag.Name == _searchString) == null)
-                {
-                    _searchString = _tagList
-                        .Select(tag => tag.Name)
-                        .ElementAtOrDefault(0);
-                }
-
-                if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
-                {
-                    CurrentlyAddedTags.Add(_tagList.Single(p =>
-                        String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase)));
-                    ConnectTags();
-                }
-
-                foreach (var field in FieldsList)
-                {
-                    Console.WriteLine(field.Field.Label);
-                    foreach (var tag in field.FieldTags)
-                    {
-                        Console.WriteLine("    " + tag.Name);
-                    }
-                }
-
-                ResetSearch();
-
-                _tabIndex = 0;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                //TODO Handle this error
+                _searchString = _tagList
+                    .Select(tag => tag.Name)
+                    .ElementAtOrDefault(0);
             }
 
+            if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
+            {
+                Tag tag = _tagList.SingleOrDefault(p =>
+                    String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase));
+                if (tag != null)
+                    CurrentlyAddedTags.Add(tag);
+                else
+                    _main.AddNotification(new Notification("No matching tags found", Notification.WARNING));
+                ConnectTags();
+            }
+
+            foreach (var field in FieldsList)
+            {
+                Console.WriteLine(field.Field.Label);
+                foreach (var tag in field.FieldTags)
+                {
+                    Console.WriteLine("    " + tag.Name);
+                }
+            }
+
+            ResetSearch();
+
+            _tabIndex = 0;
         }
 
         /// <summary>
@@ -312,7 +307,7 @@ namespace Asset_Management_System.ViewModels
         }
 
         /// <summary>
-        /// This function is used to navigate into 
+        /// This function is used to navigate into
         /// </summary>
         private void EnterChildren()
         {
@@ -382,6 +377,7 @@ namespace Asset_Management_System.ViewModels
                 _box.CaretIndex = _searchString.Length;
             }
         }
+
         #endregion
     }
 }

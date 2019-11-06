@@ -74,10 +74,7 @@ namespace Asset_Management_System.ViewModels
         /// <summary>
         /// Closes the entry window
         /// </summary>
-        private void Exit()
-        {
-            _window.DialogResult = true;
-        }
+        private void Exit() => _window.DialogResult = true;
 
         #endregion
 

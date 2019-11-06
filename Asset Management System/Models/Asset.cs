@@ -70,10 +70,7 @@ namespace Asset_Management_System.Models
         /// Creates hash code based on Name, Description, and DepartmentID
         /// </summary>
         /// <returns>The calculated hash code</returns>
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Name, Description, DepartmentID);
-        }
+        public override int GetHashCode() => HashCode.Combine(Name, Description, DepartmentID);
 
         /// <summary>
         /// Returns the name of the asset
