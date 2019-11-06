@@ -12,7 +12,7 @@ namespace Asset_Management_System.ViewModels
     public class SplashViewModel : Base.BaseViewModel
     {
         private MainViewModel _main;
-        private const int _delay = 800;
+        private const int _delay = 300;
 
         public string LoadingText { get; set; }
         public string StatusText { get; set; }
