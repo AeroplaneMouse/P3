@@ -91,7 +91,7 @@ namespace Asset_Management_System.ViewModels
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
         public ICommand HeaderClickCommand { get; set; }
-        
+
         #endregion
 
         #region Constructor
@@ -166,19 +166,65 @@ namespace Asset_Management_System.ViewModels
         protected void HeaderClick(object header)
         {
             GridViewColumnHeader clickedHeader = header as GridViewColumnHeader;
-            var str = "You Clicked Header: ";
-            Console.WriteLine(str + clickedHeader?.Content);
-            if (SearchList[0] is Asset)
+            switch (SearchList[0])
             {
-                Console.WriteLine("Sorting");
-                if (clickedHeader?.Content.ToString() == "Name")
-                    SearchList = new ObservableCollection<T>(SearchList.Cast<Asset>().OrderBy(i => i.Name).Cast<T>());
-                else if(clickedHeader?.Content.ToString() == "ID")
-                    SearchList = new ObservableCollection<T>(SearchList.Cast<Asset>().OrderBy(i => i.ID).Cast<T>());
-                else if(clickedHeader?.Content.ToString() == "Identifier")
-                    SearchList = new ObservableCollection<T>(SearchList.Cast<Asset>().OrderBy(i => i.Identifier).Cast<T>());
-                else if(clickedHeader?.Content.ToString() == "Created")
-                    SearchList = new ObservableCollection<T>(SearchList.Cast<Asset>().OrderBy(i => i.CreatedAt).Cast<T>());
+                case Asset _:
+                {
+                    Console.WriteLine("Sorting Assets");
+                    SearchList = clickedHeader?.Content.ToString() switch
+                    {
+                        "Name" => new ObservableCollection<T>(SearchList.Cast<Asset>().OrderBy(i => i.Name).Cast<T>()),
+                        "ID" => new ObservableCollection<T>(SearchList.Cast<Asset>().OrderBy(i => i.ID).Cast<T>()),
+                        "Identifier" => new ObservableCollection<T>(SearchList.Cast<Asset>()
+                            .OrderBy(i => i.Identifier)
+                            .Cast<T>()),
+                        "Created" => new ObservableCollection<T>(SearchList.Cast<Asset>()
+                            .OrderBy(i => i.CreatedAt)
+                            .Cast<T>()),
+                        _ => SearchList
+                    };
+                    break;
+                }
+                case Tag _:
+                {
+                    Console.WriteLine("Sorting Tags");
+                    SearchList = clickedHeader?.Content.ToString() switch
+                    {
+                        "Label" => new ObservableCollection<T>(SearchList.Cast<Tag>().OrderBy(i => i.Name).Cast<T>()),
+                        "ID" => new ObservableCollection<T>(SearchList.Cast<Tag>().OrderBy(i => i.ID).Cast<T>()),
+                        "Parent Tag ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
+                            .OrderBy(i => i.ParentID)
+                            .Cast<T>()),
+                        "Department ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
+                            .OrderBy(i => i.DepartmentID)
+                            .Cast<T>()),
+                        "Color" => new ObservableCollection<T>(SearchList.Cast<Tag>().OrderBy(i => i.Color).Cast<T>()),
+                        "Created" => new ObservableCollection<T>(SearchList.Cast<Tag>()
+                            .OrderBy(i => i.CreatedAt)
+                            .Cast<T>()),
+                        _ => SearchList
+                    };
+                    break;
+                }
+                case Entry _:
+                {
+                    Console.WriteLine("Sorting Log");
+                    SearchList = clickedHeader?.Content.ToString() switch
+                    {
+                        "Date" => new ObservableCollection<T>(SearchList.Cast<Entry>()
+                            .OrderBy(i => i.CreatedAt)
+                            .Cast<T>()),
+                        "ID" => new ObservableCollection<T>(SearchList.Cast<Entry>().OrderBy(i => i.Id).Cast<T>()),
+                        "Event" => new ObservableCollection<T>(SearchList.Cast<Entry>()
+                            .OrderBy(i => i.Description)
+                            .Cast<T>()),
+                        "User" => new ObservableCollection<T>(SearchList.Cast<Entry>()
+                            .OrderBy(i => i.Username)
+                            .Cast<T>()),
+                        _ => SearchList
+                    };
+                    break;
+                }
             }
         }
 
