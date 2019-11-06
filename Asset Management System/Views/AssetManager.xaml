@@ -135,39 +135,18 @@
 
                 <!-- Fields -->
                 <StackPanel Grid.Column="2">
-                    <TextBlock Style="{StaticResource HeaderStyle}"
-                               Text="Fields"
-                               Margin="0 0 0 10" />
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 0 0 10">
+                        <TextBlock Style="{StaticResource HeaderStyle}"
+                                   Margin="0 0 10 0"
+                                   Text="Fields"/>
 
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
-                               Text="Add custom field" />
-
-                    <ComboBox Margin="0 0 0 10">
-                        <ComboBoxItem>
-                            <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Text Field">Add Textarea</Button>
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <Button Style="{StaticResource AddFieldButton}" Width="Auto"
-                                    CommandParameter="String Field">
-                                Add Textbox
-                            </Button>
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <Button Style="{StaticResource AddFieldButton}" Width="Auto"
-                                    CommandParameter="Integer Field">
-                                Add Number Field
-                            </Button>
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Date Field">Add Date</Button>
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            <Button Style="{StaticResource AddFieldButton}" Width="Auto"
-                                    CommandParameter="Boolean Field">
-                                Add Checkbox
-                            </Button>
-                        </ComboBoxItem>
-                    </ComboBox>
+                        <Button Style="{StaticResource RegularButton}"
+                                Command="{Binding AddFieldCommand}"
+                                Content="+"
+                                Width="Auto"
+                                Height="20"/>
+                    </StackPanel>
 
                     <!-- FieldList -->
                     <StackPanel>
