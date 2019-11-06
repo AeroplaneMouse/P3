@@ -14,7 +14,6 @@ namespace Asset_Management_System.ViewModels
         private MainViewModel _main;
         private const int _delay = 800;
 
-        //public delegate void UserAuthenticated;
         public string LoadingText { get; set; }
         public string StatusText { get; set; }
 
@@ -40,11 +39,13 @@ namespace Asset_Management_System.ViewModels
 
         private void Authenticate()
         {
+            // Connecting to database
             UpdateStatusText(new StatusUpdateEventArgs("Establishing connection...", "An excellent connection to the database is being established..."));
-            Thread.Sleep(_delay + 2000);
+            Thread.Sleep(_delay);
 
             if (new MySqlHandler().IsAvailable())
             {
+                // Authorizing user
                 UpdateStatusText(new StatusUpdateEventArgs("Connection established...", "The excellent connection to the database was succesfully established..."));
                 Thread.Sleep(_delay);
 
@@ -53,11 +54,6 @@ namespace Asset_Management_System.ViewModels
                 {
                     UpdateStatusText(new StatusUpdateEventArgs("User authenticated", "Unlocking the Asset Management System..."));
                     Thread.Sleep(_delay);
-
-
-                    //Dispatcher.CurrentDispatcher.BeginInvoke(UserAuthenticated, DispatcherPriority.Normal, t);
-
-                    //UserAuthenticated?.Invoke(t, null);
 
                     _main.SystemLoaded(t);
                 }

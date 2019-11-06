@@ -52,6 +52,8 @@ namespace Asset_Management_System.ViewModels
 
             // Setting up frames
             SplashPage = new Views.Splash(this);
+            //SplashPage.Dispatcher.
+
 
             // Initialize commands
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
@@ -259,16 +261,12 @@ namespace Asset_Management_System.ViewModels
             foreach (Page page in pages)
             {
                 if (page.GetType() == newPage.GetType())
-                {
-                    Console.WriteLine("Found new page in pages.");
                     setPage = page;
-                }
             }
 
             // If the new page wasn't found in the list, the given newPage object is used and added to the list of pages.
             if (setPage == null)
             {
-                Console.WriteLine("Unable to find new page in pages. Creating new page.");
                 setPage = newPage;
                 if (!ExcludedFromSaving(setPage))
                     pages.Add(setPage);
@@ -276,9 +274,7 @@ namespace Asset_Management_System.ViewModels
 
             // Update the list on the page, if there is one
             if (setPage.DataContext is IListUpdate)
-            {
                 (setPage.DataContext as IListUpdate).UpdateList();
-            }
 
             // Setting the content of the given frame, to the newPage object to display the requested page.
             frame.Content = setPage;
@@ -319,11 +315,11 @@ namespace Asset_Management_System.ViewModels
         //public void SystemLoaded(object _session, EventArgs e)
         public void SystemLoaded(Session session)
         {
-            //Session session;
-
             // Attaching notification
             new MySqlHandler().SqlConnectionFailed += AddNotification;
 
+            SplashPage.Dispatcher.Invoke(Load);
+            
             // Remove splash page
             SplashPage = null;
 
@@ -337,14 +333,18 @@ namespace Asset_Management_System.ViewModels
             CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);
             if (CurrentDepartment == null)
                 CurrentDepartment = Department.GetDefault();
+        }
 
+        // Loads excluded pages and sets homepage.
+        private void Load()
+        {
             // Add excluded pages
-            //excludedPages.Add(new Views.AssetManager(null));
-            //excludedPages.Add(new Views.TagManager(null));
-            //excludedPages.Add(new Views.ObjectViewer(null, null));
+            excludedPages.Add(new Views.AssetManager(null));
+            excludedPages.Add(new Views.TagManager(null));
+            excludedPages.Add(new Views.ObjectViewer(null, null));
 
             // Load homepage
-            //ChangeMainContent(new Views.Home(this));
+            ChangeMainContent(new Views.Home(this));
         }
 
         #endregion
