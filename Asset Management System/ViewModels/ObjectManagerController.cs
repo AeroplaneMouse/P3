@@ -50,10 +50,11 @@ namespace Asset_Management_System.ViewModels
                     if (shownField.ShownFieldToFieldComparator(currentTagField))
                     {
                         alreadyExists = true;
+
                         if (!shownField.Field.IsCustom && string.IsNullOrEmpty(shownField.Field.Content))
                         {
                             shownField.Field.Content = currentTagField.DefaultValue;
-                            
+
                             if (!shownField.FieldTags.Contains(tag))
                             {
                                 shownField.FieldTags.Add(tag);
@@ -62,12 +63,10 @@ namespace Asset_Management_System.ViewModels
                     }
 
                     //Adds relation between tag and field.
-                    if (tag.FieldsList.FirstOrDefault(field => field.Hash == currentTagField.Hash) == null)
+                    if (tag.FieldsList.FirstOrDefault(field => field.Equals(currentTagField)) == null
+                        && !shownField.FieldTags.Contains(tag))
                     {
-                        if (!shownField.FieldTags.Contains(tag))
-                        {
-                            shownField.FieldTags.Add(tag);
-                        }
+                        shownField.FieldTags.Add(tag);
                     }
 
                     if (shownField.Field.HashId == currentTagField.HashId)
@@ -78,8 +77,8 @@ namespace Asset_Management_System.ViewModels
                         }
                     }
                 }
-
-                // If it already exists, jump to next iteration.
+                
+                
                 if (!alreadyExists)
                 {
                     ShownField newField = new ShownField(currentTagField);
@@ -87,7 +86,7 @@ namespace Asset_Management_System.ViewModels
                     {
                         newField.FieldTags.Add(tag);
                     }
-                    
+
                     if (currentTagField.IsHidden &&
                         HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) == null)
                     {
