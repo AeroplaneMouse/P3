@@ -60,8 +60,7 @@ namespace Asset_Management_System.ViewModels.Commands
             {
                 if (shownField.Field.Required && shownField.Field.Content == string.Empty)
                 {
-                    _main.AddNotification(
-                        new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
+                    _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
                     return;
                     //requiredFieldsWritten = false;
                 }
