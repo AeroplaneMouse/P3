@@ -1,3 +1,4 @@
+using Asset_Management_System.Models;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,17 +21,17 @@ namespace Asset_Management_System.ViewModels.ViewModelHelper
         {
             FrameworkElement element = container as FrameworkElement;
             ShownField field = item as ShownField;
-            switch (field?.Field.FieldType)
+            switch (field?.Field.Type)
             {
-                case 1: // Textbox
+                case Field.FieldType.Textarea: // Textbox
                     return element?.FindResource("TextBoxFieldStyle") as DataTemplate;
-                case 2: // String
+                case Field.FieldType.Textbox: // String
                     return element?.FindResource("StringFieldStyle") as DataTemplate;
-                case 3: // Integer
+                case Field.FieldType.Integer: // Integer
                     return element?.FindResource("IntegerFieldStyle") as DataTemplate;
-                case 4: // Date
+                case Field.FieldType.Date: // Date
                     return element?.FindResource("DateFieldStyle") as DataTemplate;
-                case 5: // Boolean
+                case Field.FieldType.Boolean: // Boolean
                     return element?.FindResource("BooleanFieldStyle") as DataTemplate;
                 default:
                     throw new NotSupportedException("Wrong formatting syntax.");

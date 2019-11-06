@@ -35,8 +35,8 @@ namespace Asset_Management_System.ViewModels.Commands
             _viewModel.CurrentlyAddedTags.Remove(_viewModel.CurrentlyAddedTags.Single(tag => tag.ID == tagId));
             
 
-            RemoveFromTagList(_viewModel.FieldsList,tagId);
-            RemoveFromTagList(_viewModel.HiddenFields,tagId);
+            FindTagReferences(_viewModel.FieldsList,tagId,false);
+            FindTagReferences(_viewModel.HiddenFields,tagId,true);
             
             if (removeList.Count > 0)
             {
@@ -62,21 +62,26 @@ namespace Asset_Management_System.ViewModels.Commands
                         shownField.Field.Equals(currentShownField.Field)));
                 }
             }
+            removeList = new List<ShownField>();
         }
 
-        private void RemoveFromTagList(ObservableCollection<ShownField> inputList,ulong tagId)
+        private void FindTagReferences(ObservableCollection<ShownField> inputList,ulong tagId, bool hidden)
         {
             //Remove references from a field, to the input tag.
             foreach (var currentShownField in inputList)
             {
-                if (currentShownField.FieldTags.Remove(
-                    currentShownField.FieldTags.SingleOrDefault(tag => tag.ID == tagId)))
+                if (currentShownField.Field.IsHidden == hidden)
                 {
-                    if (currentShownField.FieldTags.Count == 0)
+                    if (currentShownField.FieldTags.Remove(
+                        currentShownField.FieldTags.SingleOrDefault(tag => tag.ID == tagId)))
                     {
-                        removeList.Add(currentShownField);
+                        if (currentShownField.FieldTags.Count == 0)
+                        {
+                            removeList.Add(currentShownField);
+                        }
                     }
                 }
+                
             }
         }
     }

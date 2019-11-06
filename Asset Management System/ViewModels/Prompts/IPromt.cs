@@ -4,9 +4,9 @@ namespace Asset_Management_System.ViewModels.Prompts
 {
     internal interface IPrompt
     {
-        public event Events.PromptEventHandler PromptElapsed;
+        event Events.PromptEventHandler PromptElapsed;
 
-        public ICommand AcceptCommand { get; set; }
-        public ICommand CancelCommand { get; set; }
+        ICommand AcceptCommand { get; set; }
+        ICommand CancelCommand { get; set; }
     }
 }

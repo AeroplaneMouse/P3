@@ -60,22 +60,18 @@ namespace Asset_Management_System.ViewModels
             T selected = GetSelectedItem();
             Console.WriteLine("Check: " + SelectedItemIndex);
 
-            if (selected != null)
+            if (selected == null) return;
+            switch (selected)
             {
-                if (selected is Asset)
-                {
-                    Main.ChangeMainContent(new Views.AssetManager(Main, selected as Asset));
-                }
-
-                else if (selected is Tag)
-                {
-                    Main.ChangeMainContent(new Views.TagManager(Main, selected as Tag));
-                }
-
-                else
-                {
+                case Asset asset:
+                    Main.ChangeMainContent(new Views.AssetManager(Main, asset));
+                    break;
+                case Tag tag:
+                    Main.ChangeMainContent(new Views.TagManager(Main, tag));
+                    break;
+                default:
                     Console.WriteLine("Fejl ved edit");
-                }
+                    break;
             }
         }
 
@@ -86,26 +82,22 @@ namespace Asset_Management_System.ViewModels
         {
             T selected = GetSelectedItem();
 
-            if (selected != null)
+            if (selected == null) return;
+            switch (selected)
             {
-                if (selected is Asset asset)
-                {
+                case Asset asset:
                     RemoveAsset = asset;
                     RemoveTag = null;
                     _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete asset { asset.Name }?", RemovePromptElapsed));
-                }
-
-                else if (selected is Tag tag)
-                {
+                    break;
+                case Tag tag:
                     RemoveAsset = null;
                     RemoveTag = tag;
                     _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete tag { tag.Name }?", RemovePromptElapsed));
-                }
-
-                else
-                {
+                    break;
+                default:
                     Console.WriteLine("Fejl ved Remove");
-                }
+                    break;
             }
         }
 

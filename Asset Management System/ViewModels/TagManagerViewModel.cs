@@ -70,7 +70,9 @@ namespace Asset_Management_System.ViewModels
 
             // Initialize commands
             SaveTagCommand = new Commands.SaveTagCommand(this, _main, _tag, _editing);
-            AddFieldCommand = new Commands.AddFieldCommand(this);
+            AddFieldCommand = new Commands.AddFieldCommand(_main, this);
+            RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
+
             CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Tags(_main)));
         }
 
