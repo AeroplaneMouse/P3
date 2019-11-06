@@ -34,46 +34,51 @@ namespace Asset_Management_System.ViewModels
 
         private void ShowIfNewField(Tag tag)
         {
-            FieldTagsPopulator(tag, FieldsList);
-            FieldTagsPopulator(tag, HiddenFields);
+            FieldTagsPopulator(tag, FieldsList,false);
+            FieldTagsPopulator(tag, HiddenFields,true);
         }
 
         private void FieldTagsPopulator(Tag tag,
-            ObservableCollection<ShownField> listOffFields)
+            ObservableCollection<ShownField> listOffFields, bool hidden)
         {
             foreach (var currentTagField in tag.FieldsList)
             {
                 bool alreadyExists = false;
-
+                
+                
                 foreach (var shownField in listOffFields)
                 {
-                    if (shownField.ShownFieldToFieldComparator(currentTagField))
+                    if (shownField.Field.IsHidden == hidden)
                     {
-                        alreadyExists = true;
-
-                        if (!shownField.Field.IsCustom && string.IsNullOrEmpty(shownField.Field.Content))
+                        if (shownField.ShownFieldToFieldComparator(currentTagField))
                         {
-                            shownField.Field.Content = currentTagField.DefaultValue;
+                            alreadyExists = true;
 
-                            if (!shownField.FieldTags.Contains(tag))
+                            if (!shownField.Field.IsCustom && string.IsNullOrEmpty(shownField.Field.Content))
                             {
-                                shownField.FieldTags.Add(tag);
+                                shownField.Field.Content = currentTagField.DefaultValue;
+
+                                if (!shownField.FieldTags.Contains(tag))
+                                {
+                                    shownField.FieldTags.Add(tag);
+                                }
                             }
                         }
-                    }
-
-                    //Adds relation between tag and field.
-                    if (tag.FieldsList.FirstOrDefault(field => field.Equals(currentTagField)) == null
-                        && !shownField.FieldTags.Contains(tag))
-                    {
-                        shownField.FieldTags.Add(tag);
-                    }
-
-                    if (shownField.Field.HashId == currentTagField.HashId)
-                    {
-                        if (shownField.Field.Label != currentTagField.Label && !shownField.Field.IsCustom)
+                        
+                        
+                        //Adds relation between tag and field.
+                        if (tag.FieldsList.FirstOrDefault(field => field.Equals(currentTagField)) == null
+                            && !shownField.FieldTags.Contains(tag))
                         {
-                            shownField.Field.Label = currentTagField.Label;
+                            shownField.FieldTags.Add(tag);
+                        }
+
+                        if (shownField.Field.HashId == currentTagField.HashId)
+                        {
+                            if (shownField.Field.Label != currentTagField.Label && !shownField.Field.IsCustom)
+                            {
+                                shownField.Field.Label = currentTagField.Label;
+                            }
                         }
                     }
                 }
