@@ -15,15 +15,17 @@ namespace Asset_Management_System.ViewModels.Commands
         private MainViewModel _main;
         private Asset _asset;
         private bool _editing;
+        private bool _multipleSave;
 
         public event EventHandler CanExecuteChanged;
 
-        public SaveAssetCommand(AssetManagerViewModel viewModel, MainViewModel main, Asset asset, bool editing)
+        public SaveAssetCommand(AssetManagerViewModel viewModel, MainViewModel main, Asset asset, bool editing,bool multipleSave = false)
         {
             _viewModel = viewModel;
             _main = main;
             _asset = asset;
             _editing = editing;
+            _multipleSave = multipleSave;
         }
 
 
@@ -98,7 +100,16 @@ namespace Asset_Management_System.ViewModels.Commands
                     }
                 }
 
-                _main.ChangeMainContent(new Assets(_main));
+                if (_multipleSave)
+                {
+                    _main.AddNotification(new Notification("Asset saved to database",Notification.APPROVE));
+                    _main.ChangeMainContent(new AssetManager(_main,_asset,true));
+                }
+                else
+                {
+                    _main.ChangeMainContent(new Assets(_main));
+                }
+                
             }
             else
             {

@@ -124,7 +124,7 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
 
-        public AssetManagerViewModel(MainViewModel main, Asset inputAsset, TextBox box)
+        public AssetManagerViewModel(MainViewModel main, Asset inputAsset, TextBox box, bool addMultiple = false)
         {
             _main = main;
             Title = "Edit asset";
@@ -141,8 +141,11 @@ namespace Asset_Management_System.ViewModels
                 CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
 
                 ConnectTags();
-
-                _editing = true;
+                if (!addMultiple)
+                {
+                    _editing = true;
+                }
+                
             }
             else
             {
@@ -153,6 +156,7 @@ namespace Asset_Management_System.ViewModels
 
             // Initialize commands
             SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _editing);
+            SaveMultipleAssetsCommand = new SaveAssetCommand(this,_main,_asset,false,true);
             AddFieldCommand = new AddFieldCommand(_main, this, true);
             RemoveFieldCommand = new RemoveFieldCommand(this);
 
@@ -186,6 +190,8 @@ namespace Asset_Management_System.ViewModels
         }
 
         public ICommand SaveAssetCommand { get; set; }
+        
+        public ICommand SaveMultipleAssetsCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
