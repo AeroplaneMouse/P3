@@ -139,8 +139,8 @@ namespace Asset_Management_System.ViewModels
                 LoadFields();
 
                 CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
-                ConnectTags();
 
+                ConnectTags();
 
                 _editing = true;
             }
