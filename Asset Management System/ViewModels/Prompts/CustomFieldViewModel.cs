@@ -30,6 +30,7 @@ namespace Asset_Management_System.ViewModels.Prompts
             : base(message, handler)
         {
             _isCustom = isCustom;
+            SelectedFieldType = Field.FieldType.Textbox;
         }
 
 
@@ -73,7 +74,7 @@ namespace Asset_Management_System.ViewModels.Prompts
                 {
                     Field.FieldType.Textarea => element?.FindResource("Area") as DataTemplate,
                     Field.FieldType.Textbox => element?.FindResource("Box") as DataTemplate,
-                    Field.FieldType.Integer => element?.FindResource("Box") as DataTemplate,
+                    Field.FieldType.Integer => element?.FindResource("NumberField") as DataTemplate,
                     Field.FieldType.Date => element?.FindResource("Date") as DataTemplate,
                     Field.FieldType.Boolean => element?.FindResource("Boolean") as DataTemplate,
                     _ => element?.FindResource("Box") as DataTemplate
