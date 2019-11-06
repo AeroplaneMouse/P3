@@ -42,6 +42,8 @@ namespace Asset_Management_System.ViewModels
 
         public string Title { get; set; } = "Import Users";
 
+        public List<UserWithStatus> ShownUsersList { get; set; }
+
         #endregion
 
         #region Commands
@@ -79,6 +81,9 @@ namespace Asset_Management_System.ViewModels
 
             ConflictingUsersList = CheckForDuplicates();
 
+            FinalUsersList = ExistingUsersList;
+
+
             RemovedUsersList = ExistingUsersList
                 .Where(u => u.IsEnabled == true)
                 .Where(e => ImportedUsersList.Where(n => e.Username.CompareTo(n.Username) == 0).Count() == 0)
@@ -87,11 +92,23 @@ namespace Asset_Management_System.ViewModels
             AddedUsersList = ImportedUsersList
                 .Where(i => ExistingUsersList.Where(e => i.Username.CompareTo(e.Username) == 0).Count() == 0)
                 .ToList();
-             
-            FinalUsersList = ExistingUsersList.Where(u => u.IsEnabled == true).ToList();
 
-            FinalUsersList.RemoveAll(p => RemovedUsersList.Where(r => p.Username.CompareTo(r.Username) == 0).Count() > 0);
             FinalUsersList.AddRange(AddedUsersList);
+
+            ShownUsersList = FinalUsersList.Select(u =>
+            {
+                UserWithStatus user = new UserWithStatus(u);
+                user.Status = RemovedUsersList.Contains(u) == true ? "Removed" : AddedUsersList.Contains(u) == true ? "Added" : ConflictingUsersList.Contains(u) == true ? "Conflict" : "";
+                return user;
+
+            }).ToList();
+
+            ShownUsersList.OrderBy(p => p.IsEnabled);
+             
+            //FinalUsersList = ExistingUsersList.Where(u => u.IsEnabled == true).ToList();
+
+            //FinalUsersList.RemoveAll(p => RemovedUsersList.Where(r => p.Username.CompareTo(r.Username) == 0).Count() > 0);
+            //FinalUsersList.AddRange(AddedUsersList);
 
             //_finalUsersList.AddRange(_existingUsersList != null ? _existingUsersList.Where(p => p.IsEnabled).ToList() : new List<User>());
             //_finalUsersList.AddRange(_newUsersList != null ? _newUsersList : new List<User>());

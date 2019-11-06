@@ -69,4 +69,24 @@ namespace Asset_Management_System.Resources.Users
             
         }
     }
+
+    public class UserWithStatus : User
+    {
+        public UserWithStatus(User user) : base()
+        {
+            this.ID = user.ID;
+            this.Username = user.Username;
+            this.Domain = user.Domain;
+            this.Description = user.Description;
+            this.IsEnabled = user.IsEnabled;
+            this.DefaultDepartment = user.DefaultDepartment;
+            this.IsAdmin = user.IsAdmin;
+            this.CreatedAt = user.CreatedAt;
+            this.UpdatedAt = user.UpdatedAt;
+        }
+
+        public string Status { get; set; }
+
+        public string StatusImage { get; set; }
+    }
 }
