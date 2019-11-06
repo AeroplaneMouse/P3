@@ -17,6 +17,7 @@ namespace Asset_Management_System.ViewModels
 {
     public class AssetsViewModel : ChangeableListPageViewModel<AssetRepository, Asset>
     {
+
         private string _currentGroup = String.Empty;
         private string _searchQueryText = String.Empty;
         private bool IsTagMode = false;
@@ -53,7 +54,7 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-
+        private MainViewModel _main;
 
         public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
@@ -78,5 +79,11 @@ namespace Asset_Management_System.ViewModels
         {
             base.Search();
         }
+
+        #region Public Properties
+
+        public int ViewType => 1;
+
+        #endregion
     }
 }

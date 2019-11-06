@@ -13,304 +13,168 @@
 
     <Page.Resources>
         <viewModelHelper1:FieldDesignSelector x:Key="MyFieldDesignSelector" />
-        
-        <DataTemplate x:Key="FieldTagsTemplate">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-
-                <TextBlock Grid.Column="1" Grid.Row="0" Text="Field present in following tags:" />
-                <ItemsControl  Grid.Column="1" Grid.Row="1" ItemsSource="{Binding FieldTags}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate >
-                            <StackPanel Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Border BorderBrush="{Binding Tag.Color}" BorderThickness="1">
-                                    <TextBlock Text="{Binding Tag.Name}" Padding="5" />
-                                </Border>
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </Grid>
-        </DataTemplate>
-
-        <DataTemplate x:Key="TextBoxFieldStyle">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0"
-                        Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
-                        MaxHeight="40" VerticalAlignment="Top"
-                        CommandParameter="{Binding Path=Field.HashId}">
-                    X
-                </Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" Width="200" TextWrapping="Wrap"
-                         AcceptsReturn="True" AcceptsTab="True" />
-                <ItemsControl Grid.Row="4" Grid.Column="1" ItemTemplate="{StaticResource FieldTagsTemplate}">
-                    <ItemsPanelTemplate />
-                </ItemsControl>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="StringFieldStyle">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0"
-                        Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
-                        MaxHeight="40" VerticalAlignment="Top"
-                        CommandParameter="{Binding Path=Field.HashId}">
-                    X
-                </Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" />
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="IntegerFieldStyle">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0"
-                        Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
-                        MaxHeight="40" VerticalAlignment="Top"
-                        CommandParameter="{Binding Path=Field.HashId}">
-                    X
-                </Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" />
-                <!--PreviewTextInput="NumberVerification" removed from the textbox above -->
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="DateFieldStyle">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0"
-                        Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
-                        MaxHeight="40" VerticalAlignment="Top"
-                        CommandParameter="{Binding Path=Field.HashId}">
-                    X
-                </Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
-                <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Field.Content}" />
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="BooleanFieldStyle">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0"
-                        Command="{x:Static v:AssetManagerViewModel.RemoveFieldCommand}"
-                        MaxHeight="40" VerticalAlignment="Top"
-                        CommandParameter="{Binding Path=Field.HashId}">
-                    X
-                </Button>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Field.Name}" />
-                <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Field.Content}" Name="CheckBox" />
-            </Grid>
-        </DataTemplate>
     </Page.Resources>
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="500" />
-            <RowDefinition />
         </Grid.RowDefinitions>
-        <Label Grid.ColumnSpan="2" TextBlock.FontSize="20" Margin="10">Create new asset</Label>
+        <TextBlock Style="{StaticResource TitleStyle}"
+                   VerticalAlignment="Center"
+                   Margin="10 0 0 0"
+                   Text="{Binding Title}" />
 
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="0"
-            Margin="10">
-            <Label>Name</Label>
-            <TextBox Padding="10" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="10">
 
-            <Label>Description</Label>
-            <TextBox Padding="10" Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Style="{StaticResource RegularAcceptButton}"
+                    Command="{Binding SaveAssetCommand}"
+                    Content="Save" />
 
-            <StackPanel>
-
-                <!-- Tag input -->
-                <TextBox Width="100"
-                         x:Name="InputBox"
-                         Padding="5"
-                         Margin="5"
-                         Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}">
-
-                    <TextBox.InputBindings>
-
-                        <KeyBinding Key="Return" Command="{Binding EnterKeyCommand}" />
-                        <KeyBinding Key="Tab" Command="{Binding TabKeyCommand}" />
-                        <KeyBinding Key="Space" Command="{Binding SpaceKeyCommand}" />
-                        <KeyBinding Key="Esc" Command="{Binding EscapeKeyCommand}" />
-                        <KeyBinding Key="Backspace" Command="{Binding BackspaceKeyCommand}" />
-
-                    </TextBox.InputBindings>
-
-                </TextBox>
-
-                <!-- Group -->
-                <TextBlock Width="Auto"
-                           MinWidth="50"
-                           Padding="5"
-                           Margin="5"
-                           Text="{Binding ParentID, UpdateSourceTrigger=PropertyChanged}" />
-
-                <!-- List of tags -->
-                <ListBox Width="200"
-                         Name="ListBoxTags"
-                         MinHeight="30"
-                         MaxHeight="150"
-                         Padding="5"
-                         Margin="5"
-                         Foreground="Black"
-                         ItemsSource="{Binding TagList, UpdateSourceTrigger=PropertyChanged}">
-
-                    <ListBox.ItemTemplate>
-
-                        <DataTemplate>
-
-                            <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-
-                        </DataTemplate>
-
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </StackPanel>
-            <Label>Add new field</Label>
-            <StackPanel>
-                <ComboBox>
-                    <ComboBoxItem>
-                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Text Field">Add TextField</Button>
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="String Field">Add StringField</Button>
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Integer Field">Add IntegerField</Button>
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Date Field">Add DateField</Button>
-                    </ComboBoxItem>
-                    <ComboBoxItem>
-                        <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Boolean Field">Add BooleanField</Button>
-                    </ComboBoxItem>
-                </ComboBox>
-            </StackPanel>
-            <Grid
-
-                Margin="10">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                    <ItemsControl ItemsSource="{Binding CurrentlyAddedTags}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition />
-                                        <RowDefinition />
-                                    </Grid.RowDefinitions>
-                                    <Border BorderBrush="{Binding Color}" BorderThickness="1">
-                                        <TextBlock Text="{Binding Name}" Padding="5" />
-                                    </Border>
-                                    <Button Grid.Row="1" Grid.Column="0"
-                                            Command="{x:Static v:AssetManagerViewModel.UnTagTagCommand}"
-                                            MaxHeight="40" VerticalAlignment="Top"
-                                            CommandParameter="{Binding Path=ID}">
-                                        X
-                                    </Button>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Grid>
+            <Button Style="{StaticResource RegularCancelButton}"
+                    Command="{Binding CancelCommand}"
+                    Margin="10 0 0 0"
+                    Content="Cancel" />
         </StackPanel>
 
+        <Rectangle Style="{StaticResource HorizontalSeparator}"
+                   VerticalAlignment="Bottom" />
 
-        <Grid
-            Grid.Row="1"
-            Grid.Column="1"
-            Margin="10">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                <ItemsControl ItemsSource="{Binding FieldsList}"
-                              ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
-                    <ItemsControl.ItemsPanel >
-                        <ItemsPanelTemplate >
-                            <StackPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </ScrollViewer>
-        </Grid>
+        <!-- Page content -->
+        <ScrollViewer Grid.Row="1"
+                      Margin="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="400" />
+                </Grid.ColumnDefinitions>
 
-        <Button
-            Content="Save asset"
-            Grid.Row="1"
-            Grid.Column="2"
-            VerticalAlignment="Top"
-            HorizontalAlignment="Left"
-            Margin="10"
-            Style="{StaticResource RegularButton}"
-            Command="{Binding SaveAssetCommand}" />
+                <!-- Details -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock Style="{StaticResource HeaderStyle}"
+                               Margin="0 0 0 10"
+                               Text="Details" />
+                    <!-- Name -->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Name" />
+                    <TextBox Style="{StaticResource ParagraphTextBox}"
+                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0 0 0 10" />
+
+                    <!-- Identifier -->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Identifier" />
+                    <TextBox Style="{StaticResource ParagraphTextBox}"
+                             Text="{Binding Identifier, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0 0 0 10" />
+
+                    <!-- Description-->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Description" />
+                    <TextBox Style="{StaticResource ParagraphTextBox}"
+                             Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             AcceptsTab="True"
+                             MinHeight="80"
+                             Margin="0 0 0 10" />
+
+                    <!-- Tags -->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Tags" />
+                    <TextBox Style="{StaticResource ParagraphTextBox}"
+                             x:Name="InputBox"
+                             Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Return" Command="{Binding EnterKeyCommand}" />
+                            <KeyBinding Key="Tab" Command="{Binding TabKeyCommand}" />
+                            <KeyBinding Key="Space" Command="{Binding SpaceKeyCommand}" />
+                            <KeyBinding Key="Escape" Command="{Binding EscapeKeyCommand}" />
+                            <KeyBinding Key="Back" Command="{Binding BackspaceKeyCommand}" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+                    <ListBox ItemsSource="{Binding TagList, UpdateSourceTrigger=PropertyChanged}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+
+                    <ListBox ItemsSource="{Binding CurrentlyAddedTags}">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel
+                                    Orientation="Horizontal"
+                                    ItemHeight="40"
+                                    VerticalAlignment="Top"
+                                    HorizontalAlignment="Left" />
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelWithDelete}"></Label>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+
+                <Rectangle Style="{StaticResource VerticalSeparator}"
+                           Margin="10 0 10 0"
+                           Grid.Column="1" />
+
+                <!-- Fields -->
+                <StackPanel Grid.Column="2">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 0 0 10">
+                        <TextBlock Style="{StaticResource HeaderStyle}"
+                                   Margin="0 0 10 0"
+                                   Text="Fields"/>
+
+                        <Button Style="{StaticResource RegularButton}"
+                                Command="{Binding AddFieldCommand}"
+                                Content="+"
+                                Width="Auto"
+                                Height="20"/>
+                    </StackPanel>
+
+                    <!-- FieldList -->
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding FieldsList}"
+                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Hidden fields"
+                               Margin="0 20 10 0" />
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding HiddenFields}"
+                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+            
+        </ScrollViewer>
     </Grid>
+    <Page.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
+    </Page.InputBindings>
 </Page>

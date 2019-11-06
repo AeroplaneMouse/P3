@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup />
+  <PropertyGroup>
+    <ShowAllFiles>false</ShowAllFiles>
+  </PropertyGroup>
   <ItemGroup>
     <ApplicationDefinition Update="App.xaml">
       <SubType>Designer</SubType>
@@ -16,9 +18,6 @@
     <Compile Update="Views\Logs.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="Views\PromptWithTextInput.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="Views\EditDepartment.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -28,10 +27,22 @@
     <Compile Update="Views\Main.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\Prompts\Confirm.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Prompts\CustomField.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Prompts\TextInput.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Splash.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Tags.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\UserImporterView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="Views\Views.xaml.cs">
@@ -43,6 +54,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resources\Styles\Colors.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Resources\Styles\Tag.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Resources\Styles\Fields.xaml">
@@ -81,9 +95,6 @@
     <Page Update="Views\Logs.xaml">
       <SubType>Designer</SubType>
     </Page>
-    <Page Update="Views\PromptWithTextInput.xaml">
-      <SubType>Designer</SubType>
-    </Page>
     <Page Update="Views\EditDepartment.xaml">
       <SubType>Designer</SubType>
     </Page>
@@ -91,6 +102,15 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Main.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Prompts\Confirm.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Prompts\CustomField.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Prompts\TextInput.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Splash.xaml">

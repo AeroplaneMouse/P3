@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:Asset_Management_System.Views"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        WindowState="Normal"
         x:Name="AppWindow"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -57,10 +58,11 @@
                                                 <MenuItem Header="_Save"/>
                                                 <MenuItem Header="_Load"/>
                                                 <MenuItem Header="_Clear"/>
+                                                <MenuItem Header="_Import users" Command="{Binding ImportUsersCommand}" />
                                             </MenuItem>
                                             <MenuItem Header="_Help" Style="{StaticResource MenuItemButton}">
                                                 <MenuItem Header="_About"/>
-                                                <MenuItem Header="_Reload" Command="{Binding ReloadSplashCommand}"/>
+                                                <MenuItem Header="_Reload" Command="{Binding ReloadCommand}"/>
                                                 <MenuItem Header="_Exit"/>
                                             </MenuItem>
                                         </Menu>
@@ -105,6 +107,7 @@
                                                 <Button Content="Assets" Command="{Binding ShowAssetsPageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Tags" Command="{Binding ShowTagPageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Log" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding Visible}"/>
+                                                <Button Content="Test" Command="{Binding AddFieldTestCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <!--<Button Content="Random" Command="{Binding AddNotificationTestCommand}" Style="{StaticResource NavigationButton}"/>-->
                                             </StackPanel>
                                         </Border>
@@ -124,10 +127,8 @@
                                     
                                     <!-- Splash page -->
                                     <Frame Grid.Row="1"
-                                           Visibility="{Binding SplashVisibility}"
-                                           Background="{StaticResource BackgroundLightBrush}"
                                            NavigationUIVisibility="Hidden"
-                                           Content="{Binding FrameSplash}"/>
+                                           Content="{Binding SplashPage}"/>
 
                                     <!-- PopupPage -->
                                     <Frame Grid.Row="1"

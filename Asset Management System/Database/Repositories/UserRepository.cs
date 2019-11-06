@@ -4,11 +4,13 @@ using System.Net.NetworkInformation;
 using Asset_Management_System.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
+using System.Collections.Generic;
 
 namespace Asset_Management_System.Database.Repositories
 {
     public class UserRepository : IUserRepository
     {
+
         public IEnumerable<User> GetAll()
         {
             var con = new MySqlHandler().GetConnection();
@@ -125,8 +127,8 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "INSERT INTO users (name, username, admin, updated_at) " +
-                                     "VALUES (@name, @username, @admin, CURRENT_TIMESTAMP())";
+                const string query = "INSERT INTO users (name, username, description, enabled, default_department, admin, updated_at) " +
+                                     "VALUES (@name, @username, @description, @enabled, @default_department, @admin, CURRENT_TIMESTAMP())";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -136,6 +138,15 @@ namespace Asset_Management_System.Database.Repositories
 
                     cmd.Parameters.Add("@username", MySqlDbType.String);
                     cmd.Parameters["@username"].Value = entity.Username;
+
+                    cmd.Parameters.Add("@description", MySqlDbType.String);
+                    cmd.Parameters["@description"].Value = entity.Description;
+
+                    cmd.Parameters.Add("@enabled", MySqlDbType.String);
+                    cmd.Parameters["@enabled"].Value = entity.IsEnabled ? 1 : 0;
+
+                    cmd.Parameters.Add("@default_department", MySqlDbType.UInt64);
+                    cmd.Parameters["@default_department"].Value = entity.DefaultDepartment;
 
                     cmd.Parameters.Add("@admin", MySqlDbType.String);
                     cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
@@ -164,25 +175,31 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "UPDATE users SET name=@name, username=@username, admin=@admin, default_department=@default_department, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
+                const string query = "UPDATE users SET name=@name, username=@username, description=@description, enabled=@enabled, admin=@admin, default_department=@default_department, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
                 {
+                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                    cmd.Parameters["@id"].Value = entity.ID;
+
                     cmd.Parameters.Add("@name", MySqlDbType.String);
                     cmd.Parameters["@name"].Value = entity.Name;
 
                     cmd.Parameters.Add("@username", MySqlDbType.String);
                     cmd.Parameters["@username"].Value = entity.Username;
 
-                    cmd.Parameters.Add("@admin", MySqlDbType.UInt16);
-                    cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
+                    cmd.Parameters.Add("@description", MySqlDbType.String);
+                    cmd.Parameters["@description"].Value = entity.Description;
+
+                    cmd.Parameters.Add("@enabled", MySqlDbType.String);
+                    cmd.Parameters["@enabled"].Value = entity.IsEnabled ? 1 : 0;
 
                     cmd.Parameters.Add("@default_department", MySqlDbType.UInt64);
                     cmd.Parameters["@default_department"].Value = entity.DefaultDepartment;
-                    
-                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                    cmd.Parameters["@id"].Value = entity.ID;
+
+                    cmd.Parameters.Add("@admin", MySqlDbType.String);
+                    cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
 
                     querySuccess = cmd.ExecuteNonQuery() > 0;
                 }
@@ -236,7 +253,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "SELECT id, name, username, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
+                const string query = "SELECT * FROM users WHERE id=@id";
 
                 using (var cmd = new MySqlCommand(query, con))
                 {
@@ -308,21 +325,57 @@ namespace Asset_Management_System.Database.Repositories
 
             return user;
         }
-        
+
+        public IEnumerable<User> GetAll()
+        {
+            var con = new MySqlHandler().GetConnection();
+            List<User> users = new List<User>();
+
+            try
+            {
+                const string query = "SELECT * " +
+                                     "FROM users";
+
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            users.Add(DBOToModelConvert(reader));
+                        }
+                        reader.Close();
+                    }
+                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return users;
+        }
+
         public User DBOToModelConvert(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
             String rowName = reader.GetString("name");
             String rowUsername = reader.GetString("username");
-            bool rowAdmin = reader.GetBoolean("admin");
+            String rowDescription = reader.GetString("description");
+            bool rowEnabled = reader.GetBoolean("enabled");
             ulong rowDefaultDepartment = reader.GetUInt64("default_department");
+            bool rowAdmin = reader.GetBoolean("admin");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
 
             return (User) Activator.CreateInstance(typeof(User),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowName, rowUsername, rowAdmin, rowDefaultDepartment, rowCreatedAt, rowUpdatedAt }, null,
-                null);
+                new object[] { rowId, rowName, rowUsername, rowDescription, rowEnabled, rowDefaultDepartment, rowAdmin, rowCreatedAt, rowUpdatedAt }, null, null);
         }
     }
 }

@@ -27,6 +27,18 @@ namespace Asset_Management_System.Models
             DeserializeFields();
         }
 
+        private string _fontColor;
+
+        public string FontColor {
+            get {
+                if (_fontColor == null)
+                {
+                    _fontColor = IdealTextColor((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(this.Color));
+                }
+                return _fontColor;
+            }
+        }
+
         public string Name { get; set; }
 
         public string Color { get; set; }
@@ -52,6 +64,22 @@ namespace Asset_Management_System.Models
             props.Add("Options", SerializedFields);
             props.Add("Created at", DateToStringConverter);
             return props;
+        }
+
+        /// <summary>
+        /// Taken from https://www.codeproject.com/Articles/16565/Determining-Ideal-Text-Color-Based-on-Specified-Ba by #realJSOP
+        /// </summary>
+        /// <param name="bg">Background color to find ideal text color for</param>
+        /// <returns>The ideal text color for the given background</returns>
+        public string IdealTextColor(System.Windows.Media.Color bg)
+        {
+            int nThreshold = 105;
+            int bgDelta = Convert.ToInt32((bg.R * 0.299) + (bg.G * 0.587) +
+                                          (bg.B * 0.114));
+
+            System.Windows.Media.Color foreColor = (255 - bgDelta < nThreshold) ? (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FF000000") : (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FFFFFFFF");
+            string idealColor = foreColor.ToString();
+            return idealColor;
         }
 
         /// <summary>

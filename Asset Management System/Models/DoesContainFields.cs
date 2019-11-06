@@ -16,7 +16,7 @@ namespace Asset_Management_System.Models
         [JsonIgnore] public List<Field> FieldsList { get; set; }
         
         //Used for formatting the DateTimeOutput when showing the elements within a database.
-        public string DateToStringConverter => CreatedAt.ToString("MM/dd/yyyy HH:mm:ss");
+        public string DateToStringConverter => CreatedAt.ToString("MM/dd/yyyy HH:mm");
 
         public DoesContainFields()
         {
@@ -54,14 +54,14 @@ namespace Asset_Management_System.Models
         /// Adds a field to the list of fields. And Serializes the current state of fields.
         /// </summary>
         /// <param name="name"></param>
-        /// <param name="fieldType"></param>
+        /// <param name="type"></param>
         /// <param name="content"></param>
         /// <param name="defaultValue"></param>
         /// <param name="required"></param>
         /// <returns></returns>
-        public bool AddField(string name, int fieldType, string content, string defaultValue, bool required = false)
+        public bool AddField(string name, Field.FieldType type, string content, string defaultValue, bool required = false)
         {
-            Field currentField = new Field(name, content, fieldType, defaultValue, required);
+            Field currentField = new Field(name, content, type, defaultValue, required);
 
             FieldsList.Add(currentField);
             return true;

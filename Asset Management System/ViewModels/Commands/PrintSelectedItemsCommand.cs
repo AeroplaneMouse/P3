@@ -1,19 +1,17 @@
-﻿using System;
+﻿using Asset_Management_System.Models;
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using Asset_Management_System.Helpers;
+using System.Windows.Controls;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
-    class RemoveNotificationCommand : ICommand
+    class PrintSelectedItemsCommand : ICommand
     {
-        private MainViewModel _main;
         public event EventHandler CanExecuteChanged;
-
-        public RemoveNotificationCommand(MainViewModel main)
-        {
-            _main = main;
-        }
 
         public bool CanExecute(object parameter)
         {
@@ -22,8 +20,7 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            int id = int.Parse(parameter.ToString());
-            _main.RemoveNotification(id);
+            PrintHelper.Print(parameter as IEnumerable<object>);
         }
     }
 }

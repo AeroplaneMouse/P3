@@ -64,7 +64,7 @@ namespace Asset_Management_System.ViewModels
             get => _pageType;
             set => _pageType = value;
         }
-        
+
         public int SelectedItemIndex { get; set; }
 
         public ObservableCollection<T> SearchList
@@ -78,6 +78,7 @@ namespace Asset_Management_System.ViewModels
                 {
                     _list.Add(item);
                 }
+
                 OnPropertyChanged(nameof(SearchList));
             }
         }
@@ -86,9 +87,10 @@ namespace Asset_Management_System.ViewModels
 
         #region Commands
 
-        public ICommand SearchCommand { get; set; }
         public ICommand PrintCommand { get; set; }
+        public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
+        public ICommand HeaderClickCommand { get; set; }
 
         #endregion
 
@@ -106,9 +108,10 @@ namespace Asset_Management_System.ViewModels
             _pageType = pageType;
 
             // Initialize commands
-            PrintCommand = new Base.RelayCommand(Print);
+            PrintCommand = new Commands.PrintSelectedItemsCommand();
             SearchCommand = new Base.RelayCommand(Search);
             ViewCommand = new Base.RelayCommand(View);
+            HeaderClickCommand = new Base.RelayCommand<object>(HeaderClick);
 
             Search();
         }
@@ -117,26 +120,17 @@ namespace Asset_Management_System.ViewModels
 
         #region Methods
 
-        public void UpdateList()
-        {
-            Search();
-        }
+        public void UpdateList() => Search();
 
         /// <summary>
         /// Sends a search request to the database, and sets the list of items to the result.
         /// </summary>
-        protected virtual void Search()
-        {
-            SearchList = _rep.Search(SearchQueryText);
-        }
+        protected virtual void Search() => SearchList = _rep.Search(SearchQueryText);
 
         /// <summary>
         /// Creates a csv file containing all the items
         /// </summary>
-        protected void Print()
-        {
-            PrintHelper.Print(SearchList as IEnumerable<object>);
-        }
+        protected void Print() => PrintHelper.Print(SearchList as IEnumerable<object>);
 
         /// <summary>
         /// Displays the selected item
@@ -148,23 +142,95 @@ namespace Asset_Management_System.ViewModels
             if (selected != null)
             {
                 if (selected is Tag)
-                {
                     Main.ChangeMainContent(new ObjectViewer(Main, selected as Tag));
-                }
-
                 else if (selected is Asset)
-                {
                     Main.ChangeMainContent(new ObjectViewer(Main, selected as Asset));
-                }
-
                 else if (selected is Entry)
-                {
                     new ShowEntry(selected as Entry).ShowDialog();
-                }
-
                 else
+                    _main.AddNotification(
+                        new Notification("ERROR! Unknown error occured when trying to view.", Notification.ERROR),
+                        3000);
+            }
+        }
+
+        /// <summary>
+        /// Sorts the SearchList when a GridViewColumnHeader is clicked
+        /// </summary>
+        /// <param name="header"></param>
+        protected void HeaderClick(object header)
+        {
+            GridViewColumnHeader clickedHeader = header as GridViewColumnHeader;
+            switch (SearchList[0])
+            {
+                case Asset _:
                 {
-                    Console.WriteLine("Error when viewing");
+                    Console.WriteLine("Sorting Assets");
+                    SearchList = clickedHeader?.Content.ToString() switch
+                    {
+                        "Name" => new ObservableCollection<T>(SearchList.Cast<Asset>()
+                            .OrderBy(i => i.Name)
+                            .Cast<T>()),
+                        "ID" => new ObservableCollection<T>(SearchList.Cast<Asset>()
+                            .OrderBy(i => i.ID)
+                            .Cast<T>()),
+                        "Identifier" => new ObservableCollection<T>(SearchList.Cast<Asset>()
+                            .OrderBy(i => i.Identifier)
+                            .Cast<T>()),
+                        "Created" => new ObservableCollection<T>(SearchList.Cast<Asset>()
+                            .OrderBy(i => i.CreatedAt)
+                            .Cast<T>()),
+                        _ => SearchList
+                    };
+                    break;
+                }
+                case Tag _:
+                {
+                    Console.WriteLine("Sorting Tags");
+                    SearchList = clickedHeader?.Content.ToString() switch
+                    {
+                        "Label" => new ObservableCollection<T>(SearchList.Cast<Tag>()
+                            .OrderBy(i => i.Name)
+                            .Cast<T>()),
+                        "ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
+                            .OrderBy(i => i.ID)
+                            .Cast<T>()),
+                        "Parent Tag ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
+                            .OrderBy(i => i.ParentID)
+                            .Cast<T>()),
+                        "Department ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
+                            .OrderBy(i => i.DepartmentID)
+                            .Cast<T>()),
+                        "Color" => new ObservableCollection<T>(SearchList.Cast<Tag>()
+                            .OrderBy(i => i.Color)
+                            .Cast<T>()),
+                        "Created" => new ObservableCollection<T>(SearchList.Cast<Tag>()
+                            .OrderBy(i => i.CreatedAt)
+                            .Cast<T>()),
+                        _ => SearchList
+                    };
+                    break;
+                }
+                case Entry _:
+                {
+                    Console.WriteLine("Sorting Log");
+                    SearchList = clickedHeader?.Content.ToString() switch
+                    {
+                        "Date" => new ObservableCollection<T>(SearchList.Cast<Entry>()
+                            .OrderBy(i => i.CreatedAt)
+                            .Cast<T>()),
+                        "ID" => new ObservableCollection<T>(SearchList.Cast<Entry>()
+                            .OrderBy(i => i.Id)
+                            .Cast<T>()),
+                        "Event" => new ObservableCollection<T>(SearchList.Cast<Entry>()
+                            .OrderBy(i => i.Description)
+                            .Cast<T>()),
+                        "User" => new ObservableCollection<T>(SearchList.Cast<Entry>()
+                            .OrderBy(i => i.Username)
+                            .Cast<T>()),
+                        _ => SearchList
+                    };
+                    break;
                 }
             }
         }
@@ -173,7 +239,6 @@ namespace Asset_Management_System.ViewModels
 
 
         #region Helpers
-
 
         protected T GetSelectedItem()
         {

@@ -9,6 +9,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Asset_Management_System.Models;
 using Asset_Management_System.ViewModels.Base;
+using Asset_Management_System.Resources;
+using Asset_Management_System.Resources.Users;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -38,7 +40,7 @@ namespace Asset_Management_System.ViewModels
             OnPropertyChanged(nameof(NumberOfUsers));
             OnPropertyChanged(nameof(NumberOfAssets));
             OnPropertyChanged(nameof(NumberOfTags));
-            OnPropertyChanged(nameof(NumberOfDepartments));   
+            OnPropertyChanged(nameof(NumberOfDepartments));
         }
     }
 }

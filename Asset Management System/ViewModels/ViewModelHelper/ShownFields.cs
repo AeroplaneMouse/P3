@@ -6,6 +6,10 @@ namespace Asset_Management_System.ViewModels.ViewModelHelper
 {
     public class ShownField
     {
+        public string Name { get; set; }
+        public Field Field { get; set; }
+        public ObservableCollection<Tag> FieldTags { get; set; }
+
         public ShownField(Field field)
         {
             FieldTags = new ObservableCollection<Tag>();
@@ -14,13 +18,6 @@ namespace Asset_Management_System.ViewModels.ViewModelHelper
             this.Field = field;
         }
 
-        public string Name { get; set; }
-
-        public Field Field { get; set; }
-
-        public ObservableCollection<Tag> FieldTags { get; set; }
-
-        
         /// <summary>
         /// If a field and a shown field are the same, it returns true.
         /// </summary>

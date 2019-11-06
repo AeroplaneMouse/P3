@@ -3,9 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:views="clr-namespace:Asset_Management_System.Views"
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-      xmlns:v="clr-namespace:Asset_Management_System.ViewModels"
       xmlns:viewModelHelper1="clr-namespace:Asset_Management_System.ViewModels.ViewModelHelper"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
@@ -14,138 +12,124 @@
 
     <Page.Resources>
         <viewModelHelper1:FieldDesignSelector x:Key="MyFieldDesignSelector" />
-        <!--Defining the properties of the fields -->
-        <DataTemplate x:Key="TextBoxFieldStyle">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0"
-                        MaxHeight="40" VerticalAlignment="Top"
-                        Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
-                        CommandParameter="{Binding Path=Field.HashId}">
-                    X
-                </Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" Height="200" TextWrapping="Wrap" AcceptsReturn="True" AcceptsTab="True"/>
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="StringFieldStyle">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0"
-                        MaxHeight="40" VerticalAlignment="Top"
-                        Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
-                        CommandParameter="{Binding Path=Field.HashId}">
-                    X
-                </Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" />
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="IntegerFieldStyle">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0"
-                        MaxHeight="40" VerticalAlignment="Top"
-                        Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
-                        CommandParameter="{Binding Path=Field.HashId}">
-                    X
-                </Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" />
-                <!-- PreviewTextInput="NumberVerification" removed from the textbox above -->
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="DateFieldStyle">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0"
-                        MaxHeight="40" VerticalAlignment="Top"
-                        Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
-                        CommandParameter="{Binding Path=Field.HashId}">
-                    X
-                </Button>
-                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
-                <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Field.Content}" />
-            </Grid>
-        </DataTemplate>
-        <DataTemplate x:Key="BooleanFieldStyle">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                <Button Grid.Row="1" Grid.Column="0"
-                        MaxHeight="40" VerticalAlignment="Top"
-                        Command="{x:Static v:TagManagerViewModel.RemoveFieldCommand}"
-                        CommandParameter="{Binding Path=Field.HashId}">
-                    X
-                </Button>
-                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Field.Label}" />
-                <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Field.Content}" Name="CheckBox" />
-            </Grid>
-        </DataTemplate>
-        <!--End of definition of the properties of the fields -->
     </Page.Resources>
 
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+        <!-- Header -->
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="500" />
-            <RowDefinition />
         </Grid.RowDefinitions>
-        <Label Grid.ColumnSpan="2" TextBlock.FontSize="20" Margin="10">Create new asset</Label>
+        <TextBlock Style="{StaticResource TitleStyle}"
+                   VerticalAlignment="Center"
+                   Margin="10 0 0 0"
+                   Text="{Binding Title}" />
 
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="10">
+
+            <Button Style="{StaticResource RegularAcceptButton}"
+                    Command="{Binding SaveTagCommand}"
+                    Content="Save" />
+
+            <Button Style="{StaticResource RegularCancelButton}"
+                    Command="{Binding CancelCommand}"
+                    Margin="10 0 0 0"
+                    Content="Cancel" />
+        </StackPanel>
+
+        <Rectangle Style="{StaticResource HorizontalSeparator}"
+                   VerticalAlignment="Bottom" />
+        
+        <!-- Content of the page -->
+        <ScrollViewer Grid.Row="1"
+                      Margin="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="400" />
+                </Grid.ColumnDefinitions>
+                
+                <!-- Details -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock Style="{StaticResource HeaderStyle}"
+                               Text="Details"
+                               Margin="0 0 0 10"/>
+                    <!-- Label -->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Label" />
+                    <TextBox Style="{StaticResource ParagraphTextBox}"
+                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0 0 0 10" />
+                    
+                    <!-- Parent tag id -->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Parent tag ID"/>
+                    <ComboBox ItemsSource="{Binding ParentTagsList}" 
+                              SelectedIndex="{Binding SelectedParentIndex}"
+                              SelectionChanged="ParentTag_SelectionChanged"
+                              Margin="0 0 0 10">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    
+                    <!-- Color -->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Color"/>
+                    <xctk:ColorPicker SelectedColor="{Binding Color}" Name="ColorPicker" />
+
+                </StackPanel>
+                
+                <!-- Separator -->
+                <Rectangle Style="{StaticResource VerticalSeparator}"
+                           Grid.Column="1"
+                           Margin="10 0 10 0"/>
+
+                <!-- Fields -->
+                <StackPanel Grid.Column="2">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 0 0 10">
+                        <TextBlock Style="{StaticResource HeaderStyle}"
+                                   Margin="0 0 10 0"
+                                   Text="Fields"/>
+                        <Button Style="{StaticResource RegularButton}"
+                                Command="{Binding AddFieldCommand}"
+                                Content="+"
+                                Width="Auto"
+                                Height="20"/>
+                    </StackPanel>
+                    
+                    <!-- The list of added fields -->
+                    <ItemsControl ItemsSource="{Binding FieldsList}"
+                                  ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+        
+        
+        
+        
+        <!--
+        
+        
+        
         <StackPanel
             Grid.Row="1"
             Grid.Column="0"
             Margin="10">
+        
+        
             <Label>Name</Label>
             <TextBox Text="{Binding Name}" Padding="10" />
 
@@ -211,6 +195,6 @@
             VerticalAlignment="Top"
             HorizontalAlignment="Left"
             Margin="10"
-            Command="{Binding SaveTagCommand}" />
+            Command="{Binding SaveTagCommand}" />-->
     </Grid>
 </Page>

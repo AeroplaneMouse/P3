@@ -72,8 +72,8 @@ namespace Asset_Management_System.Database.Repositories
             entity.SerializeFields();
 
             try{
-                const string query = "INSERT INTO assets (name, description, department_id, options, updated_at) "+ 
-                		             "VALUES (@name, @description, @department, @options, CURRENT_TIMESTAMP())";
+                const string query = "INSERT INTO assets (name, identifier, description, department_id, options, updated_at) "+ 
+                		             "VALUES (@name, @identifier, @description, @department, @options, CURRENT_TIMESTAMP())";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -83,6 +83,9 @@ namespace Asset_Management_System.Database.Repositories
 
                     cmd.Parameters.Add("@description", MySqlDbType.String);
                     cmd.Parameters["@description"].Value = entity.Description;
+
+                    cmd.Parameters.Add("@identifier", MySqlDbType.String);
+                    cmd.Parameters["@identifier"].Value = entity.Identifier;
 
                     cmd.Parameters.Add("@department", MySqlDbType.UInt64);
                     cmd.Parameters["@department"].Value = entity.DepartmentID;
@@ -120,7 +123,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "UPDATE assets SET name=@name, description=@description, options=@options, updated_at=CURRENT_TIMESTAMP() " +
+                const string query = "UPDATE assets SET name=@name, identifier=@identifier, description=@description, options=@options, updated_at=CURRENT_TIMESTAMP() " +
                                      "WHERE id=@id";
                 
                 con.Open();
@@ -131,6 +134,9 @@ namespace Asset_Management_System.Database.Repositories
 
                     cmd.Parameters.Add("@description", MySqlDbType.String);
                     cmd.Parameters["@description"].Value = entity.Description;
+
+                    cmd.Parameters.Add("@identifier", MySqlDbType.String);
+                    cmd.Parameters["@identifier"].Value = entity.Identifier;
 
                     cmd.Parameters.Add("@options", MySqlDbType.JSON);
                     cmd.Parameters["@options"].Value = entity.SerializedFields;
@@ -469,9 +475,14 @@ namespace Asset_Management_System.Database.Repositories
             string rowDescription = reader.GetString("description");
             string rowIdentifier = reader.GetString("identifier");
             ulong rowDepartmentId = reader.GetUInt64("department_id");
-            string rowOptions = reader.GetString("options");
+            string rowOptions = Encoding.Unicode.GetString(                
+                Encoding.Convert(
+                    Encoding.UTF8,
+                    Encoding.Unicode,
+                    Encoding.UTF8.GetBytes(reader.GetString("options"))));
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
+            
             
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
                 new object[] { rowId, rowName, rowDescription, rowIdentifier, rowDepartmentId, rowOptions, rowCreatedAt, rowUpdatedAt }, null, null);
@@ -505,7 +516,7 @@ namespace Asset_Management_System.Database.Repositories
             // Makes a list of the ids of the tags already on the asset
             List<ulong> assetTagIds = GetAssetTags(asset).Select(p => p.ID).ToList();
 
-            // Removes the ids of the tags that are supposed to stilll be on the asset
+            // Removes the ids of the tags that are supposed to still be on the asset
             // resulting in a list of ids og tags to be removed from the asset
             assetTagIds = assetTagIds.Except(tagIds).ToList();
 
@@ -534,6 +545,8 @@ namespace Asset_Management_System.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
                 }
+                else
+                    querySuccess = true;
             }
             catch (Exception e)
             {

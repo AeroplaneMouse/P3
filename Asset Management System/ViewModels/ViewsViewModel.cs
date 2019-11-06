@@ -19,9 +19,5 @@ namespace Asset_Management_System.ViewModels
 
 
         public ICommand CancelCommand { get; set; }
-
-
-
-
     }
 }

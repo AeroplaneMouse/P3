@@ -10,7 +10,7 @@ namespace Asset_Management_System.Events
     {
         public bool Result;
         public string ResultMessage;
-
+        public object ResultObject;
 
         public PromptEventArgs(bool result)
             : this(result, null) { }
@@ -19,6 +19,12 @@ namespace Asset_Management_System.Events
         {
             Result = result;
             ResultMessage = resultMessage;
+        }
+
+        public PromptEventArgs(bool result, object resultObject)
+        {
+            Result = result;
+            ResultObject = resultObject;
         }
     }
 }
