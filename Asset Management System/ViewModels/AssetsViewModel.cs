@@ -12,15 +12,17 @@ using Asset_Management_System.Helpers;
 using Asset_Management_System.Logging;
 using Asset_Management_System.Resources.DataModels;
 using System.Windows;
+using Asset_Management_System.Functions;
 
 namespace Asset_Management_System.ViewModels
 {
     public class AssetsViewModel : ChangeableListPageViewModel<AssetRepository, Asset>
     {
-
+        private MainViewModel _main;
         private string _currentGroup = String.Empty;
         private string _searchQueryText = String.Empty;
         private bool IsTagMode = false;
+        public Tagging TheTagger;
 
         public int ViewType => 1;
         public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Hidden;
@@ -54,11 +56,11 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        private MainViewModel _main;
 
         public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
             DeleteCommand = new Base.RelayCommand(Delete);
+            TheTagger = new Tagging();
         }
 
         private void Delete()
@@ -73,6 +75,12 @@ namespace Asset_Management_System.ViewModels
                 else
                     CurrentGroup = "#";
             }
+        }
+
+        public override void PageFocus()
+        {
+            Search();
+            TheTagger.Reload();
         }
 
         protected override void Search()

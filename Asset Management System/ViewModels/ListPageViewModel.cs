@@ -118,7 +118,10 @@ namespace Asset_Management_System.ViewModels
 
         #region Methods
 
-        public void UpdateList() => Search();
+        public virtual void PageFocus() 
+        {
+            Search();
+        }
 
         /// <summary>
         /// Sends a search request to the database, and sets the list of items to the result.
