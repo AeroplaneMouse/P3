@@ -117,20 +117,11 @@
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Button Style="{StaticResource TagButton}"
-                                            Grid.Column="0"
-                                            Command="{x:Static v:AssetManagerViewModel.UnTagTagCommand}"
-                                            MaxHeight="35" VerticalAlignment="Top"
-                                            CommandParameter="{Binding Path=ID}"
-                                            Background="{Binding Color}">
-                                        <Label Content="{Binding Name}" Foreground="{Binding IdealTextColor}"></Label>
-                                    </Button>
+                                    <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelWithDelete}"></Label>
                                 </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-
-
                 </StackPanel>
 
                 <Rectangle Style="{StaticResource VerticalSeparator}"

@@ -250,9 +250,12 @@ namespace Asset_Management_System.ViewModels
         {
             try
             {
-                _searchString = _tagList
+                if(_tagList.SingleOrDefault(t => t.Name == _searchString) == null)
+                {
+                    _searchString = _tagList
                         .Select(p => p.Name)
                         .ElementAtOrDefault(0);
+                }
                 if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
                 {
                     CurrentlyAddedTags.Add(_tagList.Single(p =>
@@ -378,16 +381,6 @@ namespace Asset_Management_System.ViewModels
                 // TODO: Kom uden om mig
                 _box.CaretIndex = _searchString.Length;
             }
-        }
-
-        public Color IdealTextColor(Color bg)
-        {
-            int nThreshold = 105;
-            int bgDelta = Convert.ToInt32((bg.R * 0.299) + (bg.G * 0.587) +
-                                          (bg.B * 0.114));
-
-            Color foreColor = (255 - bgDelta < nThreshold) ? Color.Black : Color.White;
-            return foreColor;
         }
         #endregion
     }

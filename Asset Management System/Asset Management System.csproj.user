@@ -56,6 +56,9 @@
     <Page Update="Resources\Styles\Colors.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="Resources\Styles\Tag.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Resources\Styles\Fields.xaml">
       <SubType>Designer</SubType>
     </Page>
