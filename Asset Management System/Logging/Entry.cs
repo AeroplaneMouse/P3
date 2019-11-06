@@ -30,7 +30,7 @@ namespace Asset_Management_System.Logging
         }
 
         //Used for formatting the DateTimeOutput when showing the elements within a database.
-        public string DateToStringConverter => CreatedAt.ToString("MM/dd/yyyy HH:mm");
+        public string DateToStringConverter => CreatedAt.ToString("dd/MM/yyyy HH:mm");
         
         public ulong Id { get; protected set; }
 
