@@ -92,8 +92,8 @@
                             <KeyBinding Key="Return" Command="{Binding EnterKeyCommand}" />
                             <KeyBinding Key="Tab" Command="{Binding TabKeyCommand}" />
                             <KeyBinding Key="Space" Command="{Binding SpaceKeyCommand}" />
-                            <KeyBinding Key="Escape" Command="{Binding EscapeKeyCommand}" />
-                            <KeyBinding Key="Back" Command="{Binding BackspaceKeyCommand}" />
+                            <KeyBinding Key="Esc" Command="{Binding EscapeKeyCommand}" />
+                            <KeyBinding Key="Backspace" Command="{Binding BackspaceKeyCommand}" />
                         </TextBox.InputBindings>
                     </TextBox>
                     <ListBox ItemsSource="{Binding TagList, UpdateSourceTrigger=PropertyChanged}">
@@ -104,24 +104,25 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <ListBox ItemsSource="{Binding CurrentlyAddedTags}">
-                        <ListBox.ItemsPanel>
+                    <ListView ItemsSource="{Binding CurrentlyAddedTags}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ListViewWithTags}">
+                        <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel
                                     Orientation="Horizontal"
                                     ItemHeight="40"
                                     VerticalAlignment="Top"
-                                    HorizontalAlignment="Left" />
+                                    HorizontalAlignment="Left"
+                                    OverridesDefaultStyle="True"/>
                             </ItemsPanelTemplate>
-                        </ListBox.ItemsPanel>
-                        <ListBox.ItemTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
                                     <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelWithDelete}"></Label>
                                 </Grid>
                             </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </StackPanel>
 
                 <Rectangle Style="{StaticResource VerticalSeparator}"
@@ -130,18 +131,39 @@
 
                 <!-- Fields -->
                 <StackPanel Grid.Column="2">
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0 0 0 10">
-                        <TextBlock Style="{StaticResource HeaderStyle}"
-                                   Margin="0 0 10 0"
-                                   Text="Fields"/>
+                    <TextBlock Style="{StaticResource HeaderStyle}"
+                               Text="Fields"
+                               Margin="0 0 0 10" />
 
-                        <Button Style="{StaticResource RegularButton}"
-                                Command="{Binding AddFieldCommand}"
-                                Content="+"
-                                Width="Auto"
-                                Height="20"/>
-                    </StackPanel>
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Add custom field" />
+
+                    <ComboBox Margin="0 0 0 10">
+                        <ComboBoxItem>
+                            <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Text Field">Add Textarea</Button>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <Button Style="{StaticResource AddFieldButton}" Width="Auto"
+                                    CommandParameter="String Field">
+                                Add Textbox
+                            </Button>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <Button Style="{StaticResource AddFieldButton}" Width="Auto"
+                                    CommandParameter="Integer Field">
+                                Add Number Field
+                            </Button>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <Button Style="{StaticResource AddFieldButton}" Width="Auto" CommandParameter="Date Field">Add Date</Button>
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            <Button Style="{StaticResource AddFieldButton}" Width="Auto"
+                                    CommandParameter="Boolean Field">
+                                Add Checkbox
+                            </Button>
+                        </ComboBoxItem>
+                    </ComboBox>
 
                     <!-- FieldList -->
                     <StackPanel>
@@ -157,7 +179,7 @@
 
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Hidden fields"
-                               Margin="0 20 10 0" />
+                               Margin="10 20 10 0" />
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding HiddenFields}"
                                       ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
