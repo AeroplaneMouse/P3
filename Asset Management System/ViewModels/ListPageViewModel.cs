@@ -112,8 +112,6 @@ namespace Asset_Management_System.ViewModels
             SearchCommand = new Base.RelayCommand(Search);
             ViewCommand = new Base.RelayCommand(View);
             HeaderClickCommand = new Base.RelayCommand<object>(HeaderClick);
-
-            Search();
         }
 
         #endregion
