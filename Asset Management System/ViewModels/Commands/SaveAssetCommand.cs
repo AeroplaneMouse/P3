@@ -101,7 +101,6 @@ namespace Asset_Management_System.ViewModels.Commands
                 if (_multipleSave)
                 {
                     _main.AddNotification(new Notification("Asset saved to database",Notification.APPROVE));
-                    _main.ChangeMainContent(new AssetManager(_main, _asset, true));
                 }
                 else
                 {
