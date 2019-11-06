@@ -38,5 +38,23 @@ namespace Asset_Management_System.Models
         {
             return Username;
         }
+        
+        public override bool Equals(object obj)
+        {
+            if (obj == null) 
+                return false;
+            
+            ITagable objAsPart = obj as ITagable;
+            
+            if (objAsPart == null) 
+                return false;
+            
+            return ID.Equals(objAsPart.TagId());
+        }
+
+        public bool Equals(Tag other)
+        {
+            return other != null && ID.Equals(other.ID);
+        }
     }
 }

@@ -63,7 +63,10 @@ namespace Asset_Management_System.Views
             }
 
             Tag placering = tagRepository.GetById(2);
+            Tag lovehuset = tagRepository.GetById(4);
             tagger.Parent(placering); // Switch to placering
+            tagger.AddToQuery(lovehuset);
+            //tagger.RemoveFromQuery(lovehuset);
             result = tagger.Suggest("Løve");
             
             foreach (var item in result)
