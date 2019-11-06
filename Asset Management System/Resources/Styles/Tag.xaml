@@ -1,7 +1,6 @@
 ﻿<!-- Taken from https://stackoverflow.com/questions/15167809/how-can-i-create-a-tagging-control-similar-to-evernote-in-wpf by Mike Fuchs -->
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Asset_Management_System.Resources.Styles"
                     xmlns:v="clr-namespace:Asset_Management_System.ViewModels">
     
     <!-- Tag style for tags where they can be removed -->

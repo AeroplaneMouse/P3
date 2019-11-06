@@ -11,15 +11,15 @@ namespace Asset_Management_System.Database.Repositories
     public class UserRepository : IUserRepository
     {
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<User> GetAll(bool includeDisabled=false)
         {
             var con = new MySqlHandler().GetConnection();
             List<User> users = new List<User>();
 
             try
             {
-                const string query = "SELECT id, name, description, domain, username, enabled, admin, default_department, created_at, updated_at " +
-                                     "FROM users";
+                string query = "SELECT id, name, description, domain, username, enabled, admin, default_department, created_at, updated_at " +
+                                     "FROM users "+(!includeDisabled ? "AND enabled = 1" : "");
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
