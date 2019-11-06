@@ -15,7 +15,7 @@ namespace Asset_Management_System.Functions
         private List<Tag> _tags;
         private List<User> _users;
         
-        private List<ITagable> _tagged;
+        public List<ITagable> TaggedWith;
         private TagRepository _tagRep;
         private UserRepository _userRep;
 
@@ -24,7 +24,7 @@ namespace Asset_Management_System.Functions
             _tagRep = new TagRepository();
             _userRep = new UserRepository();
             
-            _tagged = tags ?? new List<ITagable>();
+            TaggedWith = tags ?? new List<ITagable>();
             _parent = _tagRep.GetById(1);
             
             Reload();
@@ -43,12 +43,12 @@ namespace Asset_Management_System.Functions
             if (_parent != null && _parent.ID == 1)
             {
                 result.AddRange(_users.Where(u => u.Username.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
-                                                  && !_tagged.Contains(u)).ToList());
+                                                  && !TaggedWith.Contains(u)).ToList());
             }
             else
             {
                 result.AddRange(_suggestedTags.Where(t => t.Name.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)
-                                                  && (!_tagged.Contains(t))).ToList());
+                                                  && (!TaggedWith.Contains(t))).ToList());
             }
 
             return result;
@@ -56,12 +56,12 @@ namespace Asset_Management_System.Functions
 
         public void AddToQuery(ITagable tag)
         { 
-            _tagged.Add(tag);
+            TaggedWith.Add(tag);
         }
 
         public void RemoveFromQuery(ITagable tag)
         {
-            _tagged.Remove(tag);
+            TaggedWith.Remove(tag);
         }
 
         public void Parent(Tag tag=null)
