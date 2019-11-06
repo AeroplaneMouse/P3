@@ -14,14 +14,15 @@ namespace UnitTests
         {
             //Arrange
             string label = "Label", content = "Content", defaultValue = "Default Value";
-            int fieldType = 20;
+            //int fieldType = 20;
 
+            //TODO Delete or remove this test
             string expectedMessage = "fieldType is out of range. Must be an integer between 1-5 (both included) (Parameter 'fieldType')";
 
             //Act
             try
             {
-                Field field = new Field(label, content, fieldType, defaultValue);
+                //Field field = new Field(label, content, fieldType, defaultValue);
                 //Assert
                 Assert.Fail();
             }
@@ -37,14 +38,14 @@ namespace UnitTests
         {
             //Arrange
             string label = "Label", content = "Content", defaultValue = "Default Value";
-            int fieldType = 0;
-
+            //int fieldType = 0;
+            //TODO Delete or remove this test
             string expectedMessage = "fieldType is out of range. Must be an integer between 1-5 (both included) (Parameter 'fieldType')";
 
             //Act
             try
             {
-                Field field = new Field(label, content, fieldType, defaultValue);
+                //Field field = new Field(label, content, fieldType, defaultValue);
                 //Assert
                 Assert.Fail();
             }
@@ -60,10 +61,10 @@ namespace UnitTests
         {
             //Arrange
             string label = "Label", content = "Content", defaultValue = "Default Value";
-            int fieldType = 1;
+            
+            //TODO Edit or remove test
 
-
-            Field field = new Field(label, content, fieldType, defaultValue);
+           Field field = new Field(label, content, Field.FieldType.Textarea, defaultValue);
             Dictionary<string, string> expected = new Dictionary<string, string>
             {
                 { "Label", label },
@@ -92,10 +93,10 @@ namespace UnitTests
         {
             //Arrange
             string name = "Label", content = "Content", defaultValue = "Default Value";
-            int fieldType = 1;
+            //int fieldType = 1;
 
 
-            Field field = new Field(name, content, fieldType, defaultValue);
+            Field field = new Field(name, content, Field.FieldType.Textarea, defaultValue);
             string expected = "Content";
 
             //Act
@@ -113,7 +114,7 @@ namespace UnitTests
             int fieldType = 1;
 
 
-            Field field = new Field(name, content, fieldType, defaultValue);
+            Field field = new Field(name, content, Field.FieldType.Textarea, defaultValue);
             string expected = "New content";
 
             //Act
@@ -128,7 +129,7 @@ namespace UnitTests
         public void GetHashCode_ReturnsCorrectChecksumForField()
         {
             //Arrange
-            Field field = new Field("Field", "Some content", 2, "Default");
+            Field field = new Field("Field", "Some content", Field.FieldType.Textbox, "Default");
             string expected = "ee42e2903edb29ca88a78f4aa413b8d6".ToUpper();
 
             //Act
@@ -142,8 +143,8 @@ namespace UnitTests
         public void Equals_ReceivesAnEqualField_ReturnsTrue()
         {
             //Arrange
-            Field field = new Field("Field", "Some content", 2, "Default");
-            Field otherField = new Field("Field", "Some content", 2, "Default");
+            Field field = new Field("Field", "Some content", Field.FieldType.Textbox, "Default");
+            Field otherField = new Field("Field", "Some content", Field.FieldType.Textbox, "Default");
 
             //Act
             bool result = field.Equals(otherField);
@@ -156,7 +157,7 @@ namespace UnitTests
         public void Equals_ReceivesAnAsset_ReturnsFalse()
         {
             //Arrange
-            Field field = new Field("Field", "Some content", 2, "Default");
+            Field field = new Field("Field", "Some content", Field.FieldType.Textbox, "Default");
             Asset asset = new Asset();
 
             //Act
@@ -170,8 +171,8 @@ namespace UnitTests
         public void Equals_ReceivesADifferentField_ReturnsFalse()
         {
             //Arrange
-            Field field = new Field("Field", "Some content", 2, "Default");
-            Field otherField = new Field("Different field", "Some different content", 2, "Different default");
+            Field field = new Field("Field", "Some content", Field.FieldType.Textbox, "Default");
+            Field otherField = new Field("Different field", "Some different content", Field.FieldType.Textbox, "Different default");
 
             //Act
             bool result = field.Equals(otherField);
