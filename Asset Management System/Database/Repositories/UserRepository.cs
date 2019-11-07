@@ -5,6 +5,7 @@ using Asset_Management_System.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Collections.Generic;
+using Org.BouncyCastle.Asn1.Cms;
 
 namespace Asset_Management_System.Database.Repositories
 {
@@ -19,11 +20,13 @@ namespace Asset_Management_System.Database.Repositories
             try
             {
                 string query = "SELECT id, name, description, domain, username, enabled, admin, default_department, created_at, updated_at " +
-                                     "FROM users "+(!includeDisabled ? "AND enabled = 1" : "");
+                                     "FROM users "+(!includeDisabled ? "WHERE enabled = 1" : "");
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
                 {
+                    Console.WriteLine(cmd.CommandText);
+                    
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
