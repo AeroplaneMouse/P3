@@ -122,7 +122,7 @@ namespace Asset_Management_System.ViewModels
             {
                 if (SearchQueryText == String.Empty && TheTagger.IsParentSet())
                     TheTagger.AddToQuery(TheTagger.GetParent());
-                else
+                else if (Suggestions.Count > 0)
                     SelectTag(Suggestions.First());
             }
             Search();
