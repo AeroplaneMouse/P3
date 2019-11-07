@@ -28,6 +28,7 @@ namespace Asset_Management_System.ViewModels
         public int SelectedSuggestedIndex { get; set; }
         public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Visible;
         public ICommand DeleteCommand { get; set; }
+        public ICommand EnterCommand { get; set; }
         public ICommand SelectTagCommand { get; set; }
         public bool IsStrict { get => _isStrict; set { _isStrict = value; Search(); } }
 
@@ -72,6 +73,7 @@ namespace Asset_Management_System.ViewModels
         {
             DeleteCommand = new Base.RelayCommand(Delete);
             SelectTagCommand = new Base.RelayCommand(SelectSuggestedTag);
+            EnterCommand = new Base.RelayCommand(Enter);
             TheTagger = new Tagging();
         }
 
@@ -82,7 +84,7 @@ namespace Asset_Management_System.ViewModels
                 SelectedSuggestedIndex = 0;
 
             SelectTag(Suggestions[SelectedSuggestedIndex]);
-
+            Search();
             // TODO: Set focus to searchbar
         }
 
@@ -114,8 +116,7 @@ namespace Asset_Management_System.ViewModels
             TheTagger.Reload();
         }
 
-        // Search assets
-        protected override void Search()
+        private void Enter()
         {
             if (IsTagMode)
             {
@@ -124,7 +125,12 @@ namespace Asset_Management_System.ViewModels
                 else
                     SelectTag(Suggestions.First());
             }
+            Search();
+        }
 
+        // Search assets
+        protected override void Search()
+        {
             SearchList = new AssetRepository().Search(SearchQueryText, 
                 TheTagger.TaggedWith.OfType<Tag>().Select(t => t.ID).ToList(),
                 TheTagger.TaggedWith.OfType<User>().Select(u => u.ID).ToList(),
