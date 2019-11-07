@@ -81,7 +81,7 @@ namespace Asset_Management_System.ViewModels
 
                 OnPropertyChanged(nameof(SearchList));
             }
-        }
+        }   
 
         #endregion
 

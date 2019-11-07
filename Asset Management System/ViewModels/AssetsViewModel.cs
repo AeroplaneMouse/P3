@@ -39,10 +39,10 @@ namespace Asset_Management_System.ViewModels
             set
             {
                 _currentGroup = value;
-                if (value == String.Empty)
-                    IsCurrentGroupVisible = Visibility.Visible;
-                else
-                    IsCurrentGroupVisible = Visibility.Visible;
+                //if (value == String.Empty)
+                //    IsCurrentGroupVisible = Visibility.Visible;
+                //else
+                //    IsCurrentGroupVisible = Visibility.Visible;
             }
         }
 
@@ -79,7 +79,9 @@ namespace Asset_Management_System.ViewModels
             if (SelectedSuggestedIndex == -1 && Suggestions.Count > 0)
                 SelectedSuggestedIndex = 0;
 
-            SelectTag((Tag)Suggestions[SelectedSuggestedIndex]);
+            SelectTag(Suggestions[SelectedSuggestedIndex]);
+
+            // TODO: Set focus to searchbar
         }
 
         // Exit parent tag or tagmode
@@ -120,23 +122,21 @@ namespace Asset_Management_System.ViewModels
                 if (SearchQueryText == String.Empty && TheTagger.IsParentSet())
                     TheTagger.AddToQuery(TheTagger.GetParent());
                 else
-                {
-                    Tag tag = (Tag)Suggestions.First();
-                    SelectTag(tag);
-                }
+                    SelectTag(Suggestions.First());
             }
         }
 
         // Add the given tag to the search query
-        private void SelectTag(Tag tag)
+        private void SelectTag(ITagable t)
         {
             if (TheTagger.IsParentSet())
             {
-                TheTagger.AddToQuery(tag);
+                TheTagger.AddToQuery(t);
                 OnPropertyChanged(nameof(TheTagger.TaggedWith));
             }
             else
             {
+                Tag tag = (Tag)t;
                 TheTagger.Parent(tag);
                 CurrentGroup = tag.Name;
             }

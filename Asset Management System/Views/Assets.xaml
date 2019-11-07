@@ -138,7 +138,8 @@
                   MinWidth="209"
                   TabIndex="1">
             <ListView.InputBindings>
-                <KeyBinding Key="Enter" Command="{Binding SelectTagCommand}"/>
+                <KeyBinding Key="Enter" 
+                            Command="{Binding SelectTagCommand}"/>
             </ListView.InputBindings>
         </ListView>
     </Grid>
