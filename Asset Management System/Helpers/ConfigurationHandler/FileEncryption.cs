@@ -17,14 +17,14 @@ namespace Asset_Management_System.Helpers.ConfigurationHandler
         /// <summary>
         /// Decrypt the Userdata file so it is readable by the program
         /// </summary>
-        /// <param name="password">The user's password</param>
+        /// <param name="encryptionKey">The user's password</param>
         /// <param name="path">Where the Userdata file is stored</param>
         /// <returns></returns>
-        public static string[] UserDataDecrypt(string password, string path){
+        public static string UserDataDecrypt(string encryptionKey, string path){
             //Setup to read the salt from the start of the file
-            byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+            byte[] passwordBytes = Encoding.UTF8.GetBytes(encryptionKey);
             byte[] salt = new byte[64];
-            string[] output = null;
+            string output = null;
 
             //Reading through the file
             using (FileStream fsCrypt =
@@ -47,7 +47,7 @@ namespace Asset_Management_System.Helpers.ConfigurationHandler
                 aes.Padding = PaddingMode.PKCS7;
 
                 //Cipher mode is a way to mask potential patterns within the encrypted text, to make it harder to decrypt.
-                aes.Mode = CipherMode.CFB;
+                aes.Mode = CipherMode.CBC;
 
                 //Runs through the encrypted files, and decrypts it using AES.
                 using (CryptoStream cs = new CryptoStream(fsCrypt, aes.CreateDecryptor(), CryptoStreamMode.Read)){
@@ -62,10 +62,7 @@ namespace Asset_Management_System.Helpers.ConfigurationHandler
                             }
 
                             var result = Encoding.UTF8.GetString(fileRead.ToArray());
-                            Console.WriteLine("Complete result:" + result);
-                            output = result.Split('\n');
-                            Console.WriteLine("UUID Check: "+ output[1]);
-                            Console.WriteLine("KeyLog Check: "+ output[0]);
+                            output = result;
                         }
                         catch (Exception e){
                             Console.WriteLine(e);
@@ -85,10 +82,10 @@ namespace Asset_Management_System.Helpers.ConfigurationHandler
         /// <summary>
         /// Encrypts the userdata
         /// </summary>
-        /// <param name="password">User password</param>
+        /// <param name="encryptionKey">User password</param>
         /// <param name="fileInformation">Is the data in the userfile</param>
         /// <param name="path">Path to where the userdata is located</param>
-        public static void UserDataEncrypt(string password, string fileInformation, string path){
+        public static void UserDataEncrypt(string encryptionKey, string fileInformation, string path){
             //Uses the GetSalt function to create the salt for the encryption.
             var salt = GetSalt();
 
@@ -96,7 +93,7 @@ namespace Asset_Management_System.Helpers.ConfigurationHandler
             //The encrypted output file.
             using (FileStream fsCrypt = new FileStream(path, FileMode.Create)){
                 //Converts password into bytes
-                byte[] passwordBytes = Encoding.UTF8.GetBytes(password);
+                byte[] passwordBytes = Encoding.UTF8.GetBytes(encryptionKey);
 
                 //Set up AES for encryption
                 RijndaelManaged aes = new RijndaelManaged{KeySize = 256, BlockSize = 128, Padding = PaddingMode.PKCS7};
@@ -108,7 +105,7 @@ namespace Asset_Management_System.Helpers.ConfigurationHandler
                 aes.IV = key.GetBytes(aes.BlockSize / 8);
 
                 //Ciphermode helps mask potential patterns within the encrypted text.
-                aes.Mode = CipherMode.CFB;
+                aes.Mode = CipherMode.CBC;
 
                 //Adds the random salt to the start of the output file.
                 fsCrypt.Write(salt, 0, salt.Length);
