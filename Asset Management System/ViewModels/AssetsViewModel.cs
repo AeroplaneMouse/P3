@@ -22,13 +22,14 @@ namespace Asset_Management_System.ViewModels
         private string _currentGroup = String.Empty;
         private string _searchQueryText = String.Empty;
         private bool IsTagMode = false;
+        private bool _isStrict = false;
 
         public int ViewType => 1;
         public int SelectedSuggestedIndex { get; set; }
         public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Visible;
         public ICommand DeleteCommand { get; set; }
         public ICommand SelectTagCommand { get; set; }
-        public bool IsStrict { get; set; }
+        public bool IsStrict { get => _isStrict; set { _isStrict = value; Search(); } }
 
         public Tagging TheTagger { get; }
 
@@ -116,15 +117,18 @@ namespace Asset_Management_System.ViewModels
         // Search assets
         protected override void Search()
         {
-            if (!IsTagMode)
-                base.Search();
-            else
+            if (IsTagMode)
             {
                 if (SearchQueryText == String.Empty && TheTagger.IsParentSet())
                     TheTagger.AddToQuery(TheTagger.GetParent());
                 else
                     SelectTag(Suggestions.First());
             }
+
+            SearchList = new AssetRepository().Search(SearchQueryText, 
+                TheTagger.TaggedWith.OfType<Tag>().Select(t => t.ID).ToList(),
+                TheTagger.TaggedWith.OfType<User>().Select(u => u.ID).ToList(),
+                IsStrict);
         }
 
         // Add the given tag to the search query
