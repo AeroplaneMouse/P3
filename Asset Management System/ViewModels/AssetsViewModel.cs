@@ -73,6 +73,7 @@ namespace Asset_Management_System.ViewModels
             TheTagger = new Tagging();
         }
 
+        // Add the currently selected tag from suggestions
         private void SelectSuggestedTag()
         {
             if (SelectedSuggestedIndex == -1 && Suggestions.Count > 0)
@@ -81,6 +82,7 @@ namespace Asset_Management_System.ViewModels
             SelectTag((Tag)Suggestions[SelectedSuggestedIndex]);
         }
 
+        // Exit parent tag or tagmode
         private void Delete()
         {
             if (CurrentGroup != String.Empty)
@@ -101,12 +103,14 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
+        // Called when the page retrieves focus again.
         public override void PageFocus()
         {
             Search();
             TheTagger.Reload();
         }
 
+        // Search assets
         protected override void Search()
         {
             if (!IsTagMode)
@@ -123,6 +127,7 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
+        // Add the given tag to the search query
         private void SelectTag(Tag tag)
         {
             if (TheTagger.IsParentSet())
