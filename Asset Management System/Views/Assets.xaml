@@ -66,9 +66,18 @@
                     </TextBox>
 
                     <Button Style="{StaticResource RegularButton}"
-                            Margin="10 0 0 0"
+                            Margin="10 0 10 0"
                             Command="{Binding SearchCommand}"
                             Content="Search"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                ToolTip="Enables strict searching. Assets MUST have all the applied tags.">
+                        <CheckBox VerticalAlignment="Center"
+                                  IsChecked="{Binding IsStrict, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text=" Strict"
+                                   VerticalAlignment="Center"/>
+                    </StackPanel>
                 </StackPanel>
                 
                 <StackPanel Orientation="Horizontal"
@@ -99,6 +108,13 @@
                             <WrapPanel IsItemsHost="True"/>
                         </ControlTemplate>
                     </ListView.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid MaxWidth="100" HorizontalAlignment="Left">
+                                <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ListView>
 
                 <!--Style="{StaticResource RegularList}"-->

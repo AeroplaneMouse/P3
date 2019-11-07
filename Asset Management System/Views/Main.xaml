@@ -111,6 +111,13 @@
                                                 <!--<Button Content="Random" Command="{Binding AddNotificationTestCommand}" Style="{StaticResource NavigationButton}"/>-->
                                             </StackPanel>
                                         </Border>
+                                        <Border HorizontalAlignment="Left"
+                                                VerticalAlignment="Bottom"
+                                                Background="Transparent"
+                                                Width="20"
+                                                Height="20"
+                                                ToolTip="Bacon er godt xD">
+                                        </Border>
 
                                         <!-- Main content -->
                                         <Frame Grid.Column="1"

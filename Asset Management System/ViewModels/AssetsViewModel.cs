@@ -28,6 +28,7 @@ namespace Asset_Management_System.ViewModels
         public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Visible;
         public ICommand DeleteCommand { get; set; }
         public ICommand SelectTagCommand { get; set; }
+        public bool IsStrict { get; set; }
 
         public Tagging TheTagger { get; }
 
