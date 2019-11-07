@@ -28,3 +28,27 @@ TRUNCATE TABLE ds303e19_test.tags;
 TRUNCATE TABLE ds303e19_test.asset_tags;
 TRUNCATE TABLE ds303e19_test.departments;
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+/* HAVE TO CONTAIN ALL TAGS AND USERS */
+SELECT a.id, a.name
+FROM assets AS a
+INNER JOIN asset_tags AS at
+    ON at.asset_id = a.id
+INNER JOIN asset_users AS au
+    ON au.asset_id = a.id
+WHERE at.tag_id IN (12,14) AND au.user_id IN (1)
+GROUP BY a.id
+HAVING count(DISTINCT at.tag_id) = 2
+   AND count(DISTINCT au.user_id) = 1;
+
+
+/* DOES NOT HAVE TO CONTAIN BUT JUST HAVE ONE OR MORE TAGS AND USERS*/
+SELECT a.id, a.name
+FROM assets AS a
+INNER JOIN asset_tags AS at
+    ON at.asset_id = a.id
+INNER JOIN asset_users AS au
+    ON au.asset_id = a.id
+WHERE at.tag_id IN (12,14) AND au.user_id IN (1)
+GROUP BY a.id;
