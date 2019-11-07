@@ -44,6 +44,8 @@ namespace Asset_Management_System.ViewModels
 
         public List<UserWithStatus> ShownUsersList { get; set; }
 
+        public List<User> KeptUsersList { get; set; }
+
         #endregion
 
         #region Commands
@@ -69,49 +71,58 @@ namespace Asset_Management_System.ViewModels
             _domain = _session.Domain;
 
 
-
             // Get all existing users 
             ExistingUsersList = _rep.GetAll().ToList();
 
             // Get the new users from a .txt file
             ImportedUsersList = _importer.Import();
 
+            if (ImportedUsersList == null)
+            {
+                return;
+            }
+
+
+            // TODO: Kombiner listerne ét sted, så det er nemt at splitte dem ad senere
+
+
+
+
+
+
+
             // Initialize the final list of users
             FinalUsersList = new List<User>();
 
+            // Finds the users that are already in the database and disabled
             ConflictingUsersList = CheckForDuplicates();
 
-            FinalUsersList = ExistingUsersList;
-
-
+            // Finds users that are not on the imported list, and are on the database. These need to be removed
             RemovedUsersList = ExistingUsersList
                 .Where(u => u.IsEnabled == true)
                 .Where(e => ImportedUsersList.Where(n => e.Username.CompareTo(n.Username) == 0).Count() == 0)
                 .ToList();
 
+            KeptUsersList = ExistingUsersList
+                .Where(u => u.IsEnabled)
+                .Where(e => !RemovedUsersList.Contains(e)).ToList();
+
+            // Finds users who are on the imported list, and are not on the databse. These need to be added
             AddedUsersList = ImportedUsersList
                 .Where(i => ExistingUsersList.Where(e => i.Username.CompareTo(e.Username) == 0).Count() == 0)
                 .ToList();
 
+            // Initialize final users list with the existing users in the database
+            FinalUsersList.AddRange(ExistingUsersList);
+
+            // Add the users that are being added to the database, to the final user list
             FinalUsersList.AddRange(AddedUsersList);
 
-            ShownUsersList = FinalUsersList.Select(u =>
-            {
-                UserWithStatus user = new UserWithStatus(u);
-                user.Status = RemovedUsersList.Contains(u) == true ? "Removed" : AddedUsersList.Contains(u) == true ? "Added" : ConflictingUsersList.Contains(u) == true ? "Conflict" : "";
-                return user;
+            // Add the users that are in conflict so that the Admin can manage the conflicts
+            FinalUsersList.AddRange(ImportedUsersList.Where(p => ConflictingUsersList.Where(c => p.Username.CompareTo(c.Username) == 0).Count() > 0).ToList());
 
-            }).ToList();
-
-            ShownUsersList.OrderBy(p => p.IsEnabled);
-             
-            //FinalUsersList = ExistingUsersList.Where(u => u.IsEnabled == true).ToList();
-
-            //FinalUsersList.RemoveAll(p => RemovedUsersList.Where(r => p.Username.CompareTo(r.Username) == 0).Count() > 0);
-            //FinalUsersList.AddRange(AddedUsersList);
-
-            //_finalUsersList.AddRange(_existingUsersList != null ? _existingUsersList.Where(p => p.IsEnabled).ToList() : new List<User>());
-            //_finalUsersList.AddRange(_newUsersList != null ? _newUsersList : new List<User>());
+            // Convert the final user list, to a list that also shows the status of each user
+            UpdateShownUsersList("All");
 
             // Initialize commands 
             CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
@@ -128,24 +139,56 @@ namespace Asset_Management_System.ViewModels
 
         #region Private Methods
 
+        private void UpdateShownUsersList(string predicate)
+        {
+            ShownUsersList = new List<UserWithStatus>();
+
+            if (predicate.CompareTo("All") == 0)
+            {
+                ShownUsersList = FinalUsersList
+                .Select(u =>
+                {
+                    UserWithStatus user = new UserWithStatus(u);
+                    user.Status = RemovedUsersList.Contains(u) == true ? "Removed" :
+                                  AddedUsersList.Contains(u) == true ? "Added" :
+                                  ConflictingUsersList.Contains(u) == true ? "Conflict" : "";
+                    return user;
+
+                })
+                // Sort the list in the descending order: Conflicts -> Removed -> Added -> IsEnabled == false
+                .OrderBy(p => p.IsEnabled)
+                .OrderBy(p => p.Username)
+                .OrderByDescending(p => p.Status.CompareTo("Added") == 0)
+                .OrderByDescending(p => p.Status.CompareTo("Removed") == 0)
+                .OrderByDescending(p => p.Status.CompareTo("Conflict") == 0)
+                .ToList();
+            }
+        }
+
         private List<User> CheckForDuplicates()
         {
-            var conflictingUsers = new List<User>();
-
-            conflictingUsers = ExistingUsersList
+            // Find existing users that are in conflict with the imported users
+            var conflictingUsers = ExistingUsersList
                 .Where(u => u.IsEnabled == false)
                 .Where(e => ImportedUsersList.Where(n => e.Username.CompareTo(n.Username) == 0).Count() > 0)
                 .ToList();
+
+            // Find the imported users that are in conflict
+            var importedConflictingUsers = ImportedUsersList
+                .Where(p => conflictingUsers.Where(c => p.Username.CompareTo(c.Username) == 0).Count() > 0)
+                .ToList();
+
+            conflictingUsers.AddRange(importedConflictingUsers);
 
             return conflictingUsers;
         }
 
         private void Apply()
         {
-            foreach (User user in FinalUsersList)
-            {
-                _rep.Insert(user, out ulong id);
-            }
+            //foreach (User user in FinalUsersList)
+            //{
+            //    _rep.Insert(user, out ulong id);
+            //}
         }
 
         #endregion

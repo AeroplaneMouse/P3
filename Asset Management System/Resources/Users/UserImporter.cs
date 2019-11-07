@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,6 @@ namespace Asset_Management_System.Resources.Users
     // TODO: Lav et vindue der bruger det her til at importere brugere, hvor man kan vælge om de er admins eller ej, og hvor man kan vælge filen der skal bruges
     // TODO: Lav et vindue der viser alle brugere, hvor man kan redigere brugere (promote, demote)
     // TODO: Lav logik der sætter enabled på brugeren i databasen til false, hvis de ikke er i listen af importerede brugere
-    // TODO: Lav en liste af brugere der bliver "fjernet" og en liste af brugere der bliver tilføjet. Rød, grøn. Lidt ligeglad med hvem der er der nu, og hvem der kommer, skal bare bruge differensen
     public class UserImporter
     {
         private string _filePath { get; set; }
@@ -87,6 +87,35 @@ namespace Asset_Management_System.Resources.Users
 
         public string Status { get; set; }
 
-        public string StatusImage { get; set; }
+        public string StatusColor
+        {
+            get
+            {
+                if (Status.CompareTo("Added") == 0)
+                {
+                    return "#00B600";
+                }
+
+                else if (Status.CompareTo("Removed") == 0)
+                {
+                    return "#E30000";
+                }
+
+                else if (Status.CompareTo("Conflict") == 0)
+                {
+                    return "#FFCC1A";
+                }
+
+                else if (IsEnabled == false)
+                {
+                    return "#C0C0C0";
+                }
+
+                else
+                {
+                    return "#ffffff";
+                }
+            }
+        }
     }
 }

@@ -72,15 +72,23 @@
                             <Style TargetType="GridViewColumnHeader">
                                 <Setter Property="Padding" Value="20 5" />
                             </Style>
+
+                            <CompositeCollection x:Key="AddedUsers"/>
                         </ListView.Resources>
 
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Status}"
-                                                Header="Status">
+                                <GridViewColumn Header="Status" Width="30">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Image Source="{Binding Path=StatusImage}" />
+                                            <Border Background="{Binding Path=StatusColor}"
+                                                    HorizontalAlignment="Center"
+                                                    CornerRadius="50"
+                                                    BorderThickness="0.4"
+                                                    BorderBrush="Black"
+                                                    Height="15">
+                                                <TextBlock Width="14"/>
+                                            </Border>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -97,11 +105,13 @@
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
                                                 Header="Department" />
 
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=IsAdmin}" 
-                                                Header="Admin" />
-
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=IsEnabled}"
-                                                Header="Enabled" />
+                                <GridViewColumn Header="Admin">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <CheckBox IsChecked="{Binding Path=IsAdmin, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
                             </GridView>
                         </ListView.View>
 
