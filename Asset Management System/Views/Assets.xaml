@@ -7,7 +7,8 @@
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
-      Title="Assets">
+      Title="Assets"
+      FocusManager.FocusedElement="{Binding ElementName=SearchElement}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -55,7 +56,8 @@
                              Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
                              VerticalContentAlignment="Center"
                              MinWidth="200"
-                             Name="StartElement">
+                             Name="SearchElement"
+                             TabIndex="0">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                             <KeyBinding Key="Esc" Command="{Binding DeleteCommand}"/>
@@ -124,7 +126,7 @@
         </Border>
 
         <!-- Suggestion dropdown -->
-        <ListView Width="230"
+        <ListView SelectedIndex="{Binding SelectedSuggestedIndex}"
                   Background="LightGray"
                   HorizontalAlignment="Left"
                   VerticalAlignment="Top"
@@ -132,7 +134,12 @@
                   Name="SuggestionsList"
                   Grid.Row="1"
                   BorderThickness="0"
-                  ItemsSource="{Binding Suggestions}">
+                  ItemsSource="{Binding Suggestions}"
+                  MinWidth="209"
+                  TabIndex="1">
+            <ListView.InputBindings>
+                <KeyBinding Key="Enter" Command="{Binding SelectTagCommand}"/>
+            </ListView.InputBindings>
         </ListView>
     </Grid>
 </Page>

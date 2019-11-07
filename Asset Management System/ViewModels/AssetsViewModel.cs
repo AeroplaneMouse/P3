@@ -24,9 +24,11 @@ namespace Asset_Management_System.ViewModels
         private bool IsTagMode = false;
 
         public int ViewType => 1;
-        public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Hidden;
+        public int SelectedSuggestedIndex { get; set; }
+        public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Visible;
         public ICommand DeleteCommand { get; set; }
-        public ICommand DownCommand { get; set; }
+        public ICommand SelectTagCommand { get; set; }
+
         public Tagging TheTagger { get; }
 
         public List<ITagable> Suggestions { get; set; } = new List<ITagable>();
@@ -38,7 +40,7 @@ namespace Asset_Management_System.ViewModels
             {
                 _currentGroup = value;
                 if (value == String.Empty)
-                    IsCurrentGroupVisible = Visibility.Hidden;
+                    IsCurrentGroupVisible = Visibility.Visible;
                 else
                     IsCurrentGroupVisible = Visibility.Visible;
             }
@@ -67,13 +69,16 @@ namespace Asset_Management_System.ViewModels
         public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
             DeleteCommand = new Base.RelayCommand(Delete);
-            DownCommand = new Base.RelayCommand(FocusFirstSelection);
+            SelectTagCommand = new Base.RelayCommand(SelectSuggestedTag);
             TheTagger = new Tagging();
         }
 
-        private void FocusFirstSelection()
+        private void SelectSuggestedTag()
         {
-            
+            if (SelectedSuggestedIndex == -1 && Suggestions.Count > 0)
+                SelectedSuggestedIndex = 0;
+
+            SelectTag((Tag)Suggestions[SelectedSuggestedIndex]);
         }
 
         private void Delete()
@@ -108,24 +113,33 @@ namespace Asset_Management_System.ViewModels
                 base.Search();
             else
             {
-                Tag tag = (Tag)Suggestions.First();
-                if (TheTagger.IsParentSet())
-                {
-                    TheTagger.AddToQuery(tag);
-                    OnPropertyChanged(nameof(TheTagger.TaggedWith));
-                }
+                if (SearchQueryText == String.Empty && TheTagger.IsParentSet())
+                    TheTagger.AddToQuery(TheTagger.GetParent());
                 else
                 {
-                    TheTagger.Parent(tag);
-                    CurrentGroup = tag.Name;
+                    Tag tag = (Tag)Suggestions.First();
+                    SelectTag(tag);
                 }
-                SearchQueryText = "";
-
-
-                //TheTagger.AddToQuery(Suggestions.First());
-                //Tag tag = Suggestions.Find(t => t.TagLabel == SearchQueryText)
             }
         }
-        
+
+        private void SelectTag(Tag tag)
+        {
+            if (TheTagger.IsParentSet())
+            {
+                TheTagger.AddToQuery(tag);
+                OnPropertyChanged(nameof(TheTagger.TaggedWith));
+            }
+            else
+            {
+                TheTagger.Parent(tag);
+                CurrentGroup = tag.Name;
+            }
+
+            if (SearchQueryText == String.Empty)
+                Suggestions = TheTagger.Suggest(SearchQueryText);
+            else    
+                SearchQueryText = "";
+        }
     }
 }

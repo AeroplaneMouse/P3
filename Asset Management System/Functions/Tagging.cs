@@ -73,6 +73,8 @@ namespace Asset_Management_System.Functions
 
         public bool IsParentSet() => _parent != null;
 
+        public Tag GetParent() => _parent;
+
         public List<Tag> Tags()
         {
             return null;
