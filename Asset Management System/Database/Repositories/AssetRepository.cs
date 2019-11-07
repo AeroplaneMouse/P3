@@ -323,11 +323,11 @@ namespace Asset_Management_System.Database.Repositories
 
                 if (tags != null && tags.Count > 0)
                 {
-                    //var pivot = new Table("asset_tags AS at", "LEFT JOIN");
-                    //pivot.AddConnection("at.asset_id", "a.id");
-                    //_query.Tables.Add(pivot);
+                    var pivot = new Table("asset_tags AS at", "LEFT JOIN");
+                    pivot.AddConnection("at.asset_id", "a.id");
+                    _query.Tables.Add(pivot);
                     
-                    //_query.Where("at.tag_id", "("+string.Join(",", tags)+")", "IN");
+                    _query.Where("at.tag_id", "("+string.Join(",", tags)+")", "IN");
                 }
 
                 con.Open();

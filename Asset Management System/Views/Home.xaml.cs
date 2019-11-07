@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Controls;
 using Asset_Management_System.Database.Repositories;
@@ -51,6 +52,14 @@ namespace Asset_Management_System.Views
             foreach (var item in result)
             {
                 Console.WriteLine(item.TagLabel());
+            }
+
+            Tag switch_tag = tagRepository.GetById(12);
+            ObservableCollection<Asset> assets = assetRepository.Search("", new List<ulong>() {12});
+
+            foreach (var asset in assets)
+            {
+                Console.WriteLine(asset.Name);
             }
         }
     }
