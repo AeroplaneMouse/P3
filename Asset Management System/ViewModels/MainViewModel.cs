@@ -52,8 +52,6 @@ namespace Asset_Management_System.ViewModels
 
             // Setting up frames
             SplashPage = new Views.Splash(this);
-            //SplashPage.Dispatcher.
-
 
             // Initialize commands
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
@@ -71,7 +69,7 @@ namespace Asset_Management_System.ViewModels
 
             ReloadCommand = new Base.RelayCommand(Reload);
 
-            AddFieldTestCommand = new Base.RelayCommand(TestField);
+            //AddFieldTestCommand = new Base.RelayCommand();
 
             ImportUsersCommand = new Base.RelayCommand(ImportUsers);
 
@@ -85,25 +83,6 @@ namespace Asset_Management_System.ViewModels
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
-        }
-
-        private void TestField()
-        {
-            DisplayPrompt(new Views.Prompts.CustomField("Testing", testingResults));
-        }
-
-        private void testingResults(object sender, PromptEventArgs e)
-        {
-            if (e.Result)
-            {
-                Field newField = e.ResultObject as Field;
-
-                if (newField != null)
-                {
-                    Console.WriteLine(newField.ToString());
-                }
-
-            }
         }
 
         #endregion
