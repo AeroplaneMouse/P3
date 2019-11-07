@@ -45,7 +45,9 @@ namespace Asset_Management_System.ViewModels.Commands
                     _viewModel.FieldsList.Add(shownField);
                 }
                 else
-                    _main.AddNotification(new Notification("ERROR! Adding field failed. Received object is not a field.", Notification.ERROR), 5000);
+                    _main.AddNotification(
+                        new Notification("ERROR! Adding field failed. Received object is not a field.",
+                            Notification.ERROR), 5000);
             }
         }
     }

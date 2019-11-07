@@ -39,10 +39,7 @@ namespace Asset_Management_System.Logging
         /// </summary>
         /// <param name="newEntry"></param>
         /// <param name="delete"></param>
-        public static void CreateLog(ILoggable<T> newEntry, bool delete)
-        {
-            CreateLog(newEntry, 0, delete);
-        }
+        public static void CreateLog(ILoggable<T> newEntry, bool delete) => CreateLog(newEntry, 0, delete);
 
         /// <summary>
         /// Creates an entry and inserts it into the database
@@ -121,15 +118,16 @@ namespace Asset_Management_System.Logging
                 string newValue = newValues[prop.Key];
                 
                 if (newValue != oldValue)
-                {
                     changes.Add(prop.Key, new Change(oldValue, newValue));
-                }
             }
-
             return changes;
         }
-
         
+        /// <summary>
+        /// Logs the changes made to an assets tags
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <param name="currentTags"></param>
         public static void LogTags(ILoggable<T> asset, List<Tag> currentTags)
         {
             // return if given subjects are not assets,
@@ -142,16 +140,12 @@ namespace Asset_Management_System.Logging
             List<Tag> removedTags = new List<Tag>();
             Dictionary<string, string> changes = new Dictionary<string, string>();
             foreach (Tag tag in currentTags)
-            {
                 if (!oldTags.Contains(tag))
                     changes.Add(tag.Name, "Was added");
-            }
 
             foreach (Tag tag in oldTags)
-            {
                 if(!currentTags.Contains(tag))
                     changes.Add(tag.Name, "Was removed");
-            }
 
             string description = $"Changes to tags on {asset.GetLoggableName()}";
             string options = JsonConvert.SerializeObject(changes, Formatting.Indented);

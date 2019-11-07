@@ -15,15 +15,17 @@ namespace Asset_Management_System.ViewModels.Commands
         private MainViewModel _main;
         private Asset _asset;
         private bool _editing;
+        private bool _multipleSave;
 
         public event EventHandler CanExecuteChanged;
 
-        public SaveAssetCommand(AssetManagerViewModel viewModel, MainViewModel main, Asset asset, bool editing)
+        public SaveAssetCommand(AssetManagerViewModel viewModel, MainViewModel main, Asset asset, bool editing,bool multipleSave = false)
         {
             _viewModel = viewModel;
             _main = main;
             _asset = asset;
             _editing = editing;
+            _multipleSave = multipleSave;
         }
 
 
@@ -34,8 +36,6 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            Console.WriteLine("Testing: " + CanExecute(parameter));
-
             if (_main.CurrentDepartment.ID == 0)
             {
                 _main.AddNotification(new Notification("Please select a department.", Notification.ERROR));
@@ -58,11 +58,10 @@ namespace Asset_Management_System.ViewModels.Commands
 
             foreach (var shownField in _viewModel.FieldsList)
             {
-                if (shownField.Field.Required && shownField.Field.Content == string.Empty)
+                if (shownField.Field.Required && shownField.Field.Content == string.Empty && !shownField.Field.IsHidden)
                 {
                     _main.AddNotification(new Notification("ERROR! A required field wasn't filled.", Notification.ERROR));
                     return;
-                    //requiredFieldsWritten = false;
                 }
 
                 _asset.AddField(shownField.Field);
@@ -99,7 +98,15 @@ namespace Asset_Management_System.ViewModels.Commands
                     }
                 }
 
-                _main.ChangeMainContent(new Assets(_main));
+                if (_multipleSave)
+                {
+                    _main.AddNotification(new Notification("Asset saved to database",Notification.APPROVE));
+                }
+                else
+                {
+                    _main.ChangeMainContent(new Assets(_main));
+                }
+                
             }
             else
             {

@@ -14,6 +14,20 @@
         <Setter Property="Text" Value="{Binding Label}" />
     </Style>
 
+    <Style TargetType="{x:Type TextBlock}" x:Key="RequiredNotation">
+        <Setter Property="Text" Value="*" />
+        <Setter Property="Visibility" Value="Visible" />
+        <Setter Property="Foreground" Value="Red" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="FontWeight" Value="ExtraBold" />
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding Field.Required}" Value="False">
+                <Setter Property="Visibility" Value="Hidden" />
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+
     <Style TargetType="TextBox" x:Key="BoxFieldStyle">
         <Setter Property="Margin" Value="0, 0, 0, 10" />
     </Style>
@@ -21,15 +35,6 @@
     <Style TargetType="ComboBox" x:Key="FieldComboBox">
         <Setter Property="Margin" Value="0 0 0 10" />
         <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}" />
-    </Style>
-    
-    <Style TargetType="TextBlock" x:Key="Tag">
-        <Setter Property="Margin" Value="0 1 0 1" />
-        <Setter Property="FontSize" Value="11" />
-        <Setter Property="MaxWidth" Value="100" />
-        <Setter Property="MinWidth" Value="10" />
-        <Setter Property="Padding" Value="5" />
-        <Setter Property="TextAlignment" Value="Left" />
     </Style>
 
     <Style TargetType="Button" x:Key="RemoveFieldButton">
@@ -66,7 +71,6 @@
     </Style>
 
 
-    
     <DataTemplate x:Key="TextBoxFieldStyle">
         <Grid>
             <Grid.ColumnDefinitions>
@@ -89,12 +93,14 @@
                 X
             </Button>
             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource RequiredNotation}" />
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" Width="200" TextWrapping="Wrap"
                      AcceptsReturn="True" AcceptsTab="True" />
 
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="This contains" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Tag references in:" />
 
-            <ItemsControl Grid.Row="3" Grid.Column="1" ItemsSource="{Binding FieldTags, UpdateSourceTrigger=PropertyChanged}">
+            <ItemsControl Grid.Row="3" Grid.Column="1"
+                          ItemsSource="{Binding FieldTags, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />
@@ -103,9 +109,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid MaxWidth="100" HorizontalAlignment="Left">
-                            <Border BorderBrush="{Binding Color}" BorderThickness="1" Margin="0, 0, 0, 10">
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource Tag}" />
-                            </Border>
+                            <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -132,11 +136,13 @@
                 X
             </Button>
             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource RequiredNotation}" />
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" />
 
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="This contains" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Tag references in:" />
 
-            <ItemsControl Grid.Row="3" Grid.Column="1" ItemsSource="{Binding FieldTags, UpdateSourceTrigger=PropertyChanged}">
+            <ItemsControl Grid.Row="3" Grid.Column="1"
+                          ItemsSource="{Binding FieldTags, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />
@@ -145,9 +151,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid MaxWidth="100" HorizontalAlignment="Left">
-                            <Border BorderBrush="{Binding Color}" BorderThickness="1" Margin="0, 0, 0, 10">
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource Tag}" />
-                            </Border>
+                            <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -173,13 +177,16 @@
                     CommandParameter="{Binding Path=Field.HashId}">
                 X
             </Button>
+
             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource RequiredNotation}" />
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" />
             <!--PreviewTextInput="NumberVerification" removed from the textbox above -->
 
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="This contains" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Tag references in:" />
 
-            <ItemsControl Grid.Row="3" Grid.Column="1" ItemsSource="{Binding FieldTags, UpdateSourceTrigger=PropertyChanged}">
+            <ItemsControl Grid.Row="3" Grid.Column="1"
+                          ItemsSource="{Binding FieldTags, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />
@@ -188,9 +195,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid MaxWidth="100" HorizontalAlignment="Left">
-                            <Border BorderBrush="{Binding Color}" BorderThickness="1" Margin="0, 0, 0, 10">
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource Tag}" />
-                            </Border>
+                            <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -217,11 +222,13 @@
                 X
             </Button>
             <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Field.Label}" />
+            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource RequiredNotation}" />
             <DatePicker Grid.Row="1" Grid.Column="1" SelectedDate="{Binding Field.Content}" />
 
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="This contains" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Tag references in:" />
 
-            <ItemsControl Grid.Row="3" Grid.Column="1" ItemsSource="{Binding FieldTags, UpdateSourceTrigger=PropertyChanged}">
+            <ItemsControl Grid.Row="3" Grid.Column="1"
+                          ItemsSource="{Binding FieldTags, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />
@@ -230,9 +237,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid MaxWidth="100" HorizontalAlignment="Left">
-                            <Border BorderBrush="{Binding Color}" BorderThickness="1" Margin="0, 0, 0, 10">
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource Tag}" />
-                            </Border>
+                            <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -258,12 +263,14 @@
                     CommandParameter="{Binding Path=Field.HashId}">
                 X
             </Button>
-            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Field.Name}" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Style="{StaticResource ContentField}"/>
+            <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource RequiredNotation}" />
             <CheckBox Grid.Row="0" Grid.Column="1" IsChecked="{Binding Field.Content}" Name="CheckBox" />
 
-            <TextBlock Grid.Row="2" Grid.Column="1" Text="This contains" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="Tag references in:" />
 
-            <ItemsControl Grid.Row="3" Grid.Column="1" ItemsSource="{Binding FieldTags, UpdateSourceTrigger=PropertyChanged}">
+            <ItemsControl Grid.Row="3" Grid.Column="1"
+                          ItemsSource="{Binding FieldTags, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel />
@@ -272,9 +279,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid MaxWidth="100" HorizontalAlignment="Left">
-                            <Border BorderBrush="{Binding Color}" BorderThickness="1" Margin="0, 0, 0, 10">
-                                <TextBlock Text="{Binding Name}" Style="{StaticResource Tag}" />
-                            </Border>
+                            <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

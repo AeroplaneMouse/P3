@@ -1,12 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Logging;
-using Google.Protobuf.WellKnownTypes;
 using Newtonsoft.Json;
-using Type = System.Type;
 
 namespace Asset_Management_System.Models
 {
@@ -74,10 +70,7 @@ namespace Asset_Management_System.Models
         /// Creates hash code based on Name, Description, and DepartmentID
         /// </summary>
         /// <returns>The calculated hash code</returns>
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Name, Description, DepartmentID);
-        }
+        public override int GetHashCode() => HashCode.Combine(Name, Description, DepartmentID);
 
         /// <summary>
         /// Returns the name of the asset
