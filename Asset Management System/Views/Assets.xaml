@@ -71,7 +71,7 @@
                             Content="Search"/>
 
                     <StackPanel Orientation="Horizontal"
-                                ToolTip="Enables strict searching">
+                                ToolTip="Enables strict searching. Assets MUST have all the applied tags.">
                         <CheckBox VerticalAlignment="Center"
                                   IsChecked="{Binding IsStrict, UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Style="{StaticResource ParagraphStyle}"
