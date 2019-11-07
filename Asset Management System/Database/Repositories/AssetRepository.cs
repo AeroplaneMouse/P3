@@ -293,7 +293,7 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="keyword">The search query to search by</param>
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
-        public ObservableCollection<Asset> Search(string keyword, List<ulong> tags=null)
+        public ObservableCollection<Asset> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
         {
             var con = new MySqlHandler().GetConnection();
             ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
@@ -323,13 +323,32 @@ namespace Asset_Management_System.Database.Repositories
 
                 if (tags != null && tags.Count > 0)
                 {
-                    var pivot = new Table("asset_tags AS at", "LEFT JOIN");
+                    var pivot = new Table("asset_tags AS at", "INNER JOIN");
                     pivot.AddConnection("at.asset_id", "a.id");
                     _query.Tables.Add(pivot);
-                    
                     _query.Where("at.tag_id", "("+string.Join(",", tags)+")", "IN");
+                    
+                    if (strict)
+                    {
+                        _query.HavingStatements.Add(new Statement("COUNT(DISTINCT at.tag_id)", tags.Count.ToString()));
+                    }
+                }
+                
+                if (users != null && users.Count > 0)
+                {
+                    var pivot = new Table("asset_users AS au", "INNER JOIN");
+                    pivot.AddConnection("au.asset_id", "a.id");
+                    _query.Tables.Add(pivot);
+                    _query.Where("au.user_id", "("+string.Join(",", users)+")", "IN");
+                    
+                    if (strict)
+                    {
+                        _query.HavingStatements.Add(new Statement("COUNT(DISTINCT au.user_id)", users.Count.ToString()));
+                    }
                 }
 
+                _query.GroupBy = "a.id"; 
+                
                 con.Open();
                 using (var cmd = new MySqlCommand(_query.PrepareSelect(), con))
                 {

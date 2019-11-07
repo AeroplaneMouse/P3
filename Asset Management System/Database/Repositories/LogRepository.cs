@@ -105,7 +105,7 @@ namespace Asset_Management_System.Database.Repositories
             return entries;
         }
 
-        public ObservableCollection<Entry> Search(string keyword, List<ulong> tags_list=null)
+        public ObservableCollection<Entry> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
         {
             var con = new MySqlHandler().GetConnection();
             ObservableCollection<Entry> entries = new ObservableCollection<Entry>();

@@ -55,7 +55,7 @@ namespace Asset_Management_System.Views
             }
 
             Tag switch_tag = tagRepository.GetById(12);
-            ObservableCollection<Asset> assets = assetRepository.Search("", new List<ulong>() {12});
+            ObservableCollection<Asset> assets = assetRepository.Search("", new List<ulong>() {12, 14, 3}, null, false);
 
             foreach (var asset in assets)
             {

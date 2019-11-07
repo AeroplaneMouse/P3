@@ -5,6 +5,6 @@ namespace Asset_Management_System.Database.Repositories
 {
     public interface ISearchableRepository<T>
     {
-        ObservableCollection<T> Search(string keyword, List<ulong> tags=null);
+        ObservableCollection<T> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false);
     }
 }

@@ -12,8 +12,9 @@ namespace Asset_Management_System.Database
         public List<List<string>> Values;
         public List<Table> Tables;
         public List<Statement> WhereStatements;
+        public List<Statement> HavingStatements;
         private Dictionary<string, string> _orderBys;
-        private string _groupBy;
+        public string GroupBy { get; set; }
         private StringBuilder _query;
 
         public QueryGenerator()
@@ -22,6 +23,7 @@ namespace Asset_Management_System.Database
             Values = new List<List<string>>{new List<string>()};
             Tables = new List<Table>();
             WhereStatements = new List<Statement>();
+            HavingStatements = new List<Statement>();
             _orderBys = new Dictionary<string, string>();
             _query = new StringBuilder();
         }
@@ -103,6 +105,17 @@ namespace Asset_Management_System.Database
                     _query.Append($", {keyValuePair.Key} {keyValuePair.Value}");
                 }
             }
+
+            if (!string.IsNullOrEmpty(GroupBy))
+            {
+                _query.Append(" GROUP BY " + GroupBy);
+            }
+
+            if (HavingStatements.Count > 0)
+            {
+                _query.Append(" HAVING " + string.Join(" AND ", from item in HavingStatements select item.Render()));
+            }
+            
             return _query.ToString();
         }
 
@@ -206,6 +219,7 @@ namespace Asset_Management_System.Database
         public void Reset()
         {
             WhereStatements.Clear();
+            HavingStatements.Clear();
             Tables.Clear();
             Columns.Clear();
             Values.Clear();

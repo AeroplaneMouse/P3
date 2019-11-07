@@ -320,7 +320,7 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public ObservableCollection<Tag> Search(string keyword, List<ulong> tags_list=null)
+        public ObservableCollection<Tag> Search(string keyword,List<ulong> tag_list=null, List<ulong> users=null, bool strict=false)
         {
             var con = new MySqlHandler().GetConnection();
             ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
