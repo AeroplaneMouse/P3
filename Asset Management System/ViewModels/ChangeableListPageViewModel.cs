@@ -125,12 +125,14 @@ namespace Asset_Management_System.ViewModels
             {
                 foreach (var var in SelectedItems)
                 {
+                    Rep.Delete(var as T);
+                    /*
                     if (RemoveAsset != null)
                         ((AssetRepository) Rep).Delete(var as Asset);
                     
                     else if(RemoveTag != null)
                         ((TagRepository) Rep).Delete(var as Tag);
-                    
+                    */
                     Search();
                 }
             }

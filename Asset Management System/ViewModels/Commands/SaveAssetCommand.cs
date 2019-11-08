@@ -22,7 +22,7 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public event EventHandler CanExecuteChanged;
 
-        public SaveAssetCommand(AssetManagerViewModel viewModel, MainViewModel main, Asset asset, IAssetService service, bool editing,bool multipleSave = false)
+        public SaveAssetCommand(AssetManagerViewModel viewModel, MainViewModel main, Asset asset, IAssetService service, bool editing, bool multipleSave = false)
         {
             _viewModel = viewModel;
             _main = main;

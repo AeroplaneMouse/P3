@@ -149,8 +149,8 @@ namespace Asset_Management_System.Logging
 
             string description = $"Changes to tags on {asset.GetLoggableName()}";
             string options = JsonConvert.SerializeObject(changes, Formatting.Indented);
-
-            Write(asset, description, options);
+            if(changes.Count > 0)
+                Write(asset, description, options);
         }
     }
 }
