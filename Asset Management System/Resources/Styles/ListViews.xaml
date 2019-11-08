@@ -3,14 +3,11 @@
                     xmlns:local="clr-namespace:Asset_Management_System"
                     xmlns:v="clr-namespace:Asset_Management_System.ViewModels"
                     xmlns:views="clr-namespace:Asset_Management_System.Views">
-
     
     <!-- Regular list -->
     <Style TargetType="ListView" x:Key="RegularList">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
-        
-        
     </Style>
     
     <!-- Notification container -->
@@ -50,7 +47,6 @@
             </Setter.Value>
         </Setter>
     </Style>
-
     
     <!-- Field Listview -->
     <Style TargetType="ListView" x:Key="FieldContainer">
@@ -59,5 +55,11 @@
         <Setter Property="ItemsSource" Value="{Binding FieldsList}"/>
         <Setter Property="ItemTemplateSelector" Value="{StaticResource MyFieldDesignSelector}"/>
         <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
+    </Style>
+    
+    <!-- Left aligned all table headers -->
+    <Style TargetType="{x:Type GridViewColumnHeader}">
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="Padding" Value="6 3 0 1" />
     </Style>
 </ResourceDictionary>
