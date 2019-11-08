@@ -42,6 +42,12 @@
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
     </Style>
 
+    <Style x:Key="BaseLabelStyle" TargetType="Label">
+        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}" />
+        <Setter Property="FontWeight" Value="UltraLight"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+    </Style>
+
     <!-- TextBox styles -->
     <Style TargetType="{x:Type TextBox}" x:Key="BaseTextBoxStyle">
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>

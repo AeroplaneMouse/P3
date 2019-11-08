@@ -43,7 +43,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
                     <Button OverridesDefaultStyle="True" x:Name="PART_TagButton"
-                            Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}">
+                            Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" VerticalAlignment="Center" Padding="{TemplateBinding Padding}">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" BorderBrush="{Binding Color}" BorderThickness="2" CornerRadius="10"
@@ -60,7 +60,7 @@
                                             <Button.Template>
                                                 <ControlTemplate>
                                                     <Grid Height="10" Width="10" Background="Transparent" >
-                                                        <TextBlock Foreground="{Binding FontColor}" FontFamily="{StaticResource SegoeBold}" Text=" X" Margin="-2"></TextBlock>
+                                                        <TextBlock Foreground="{Binding FontColor}" FontFamily="{StaticResource SegoeBold}" VerticalAlignment="Center" Text=" x" Margin="-2, -2, 0, 0"></TextBlock>
                                                     </Grid>
                                                 </ControlTemplate>
                                             </Button.Template>
