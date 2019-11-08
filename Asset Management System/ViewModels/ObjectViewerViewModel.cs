@@ -9,6 +9,7 @@ using Asset_Management_System.Views;
 using System.Windows;
 using System.Windows.Controls;
 using Asset_Management_System.Logging;
+using Asset_Management_System.Services.Interfaces;
 using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
@@ -18,6 +19,8 @@ namespace Asset_Management_System.ViewModels
         #region Private Properties
 
         private MainViewModel _main;
+        private ICommentService _commentService;
+        private ICommentRepository _commentRep;
 
         private Tag TagInput;
 
@@ -26,8 +29,6 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
         #region Public Properties
-
-        public CommentRepository CommentRep { get; set; }
 
         public ObservableCollection<ShownField> FieldsList { get; set; }
 
@@ -63,10 +64,12 @@ namespace Asset_Management_System.ViewModels
 
         #region Constructor
 
-        public ObjectViewerViewModel(MainViewModel main, DoesContainFields inputObject)
+        public ObjectViewerViewModel(MainViewModel main, ICommentService commentService, DoesContainFields inputObject)
         {
             // Reference to main view model
             _main = main;
+            _commentService = commentService;
+            _commentRep = _commentService.GetRepository() as ICommentRepository;
 
             FieldsList = new ObservableCollection<ShownField>();
             TagsList = new List<Tag>();
@@ -76,8 +79,6 @@ namespace Asset_Management_System.ViewModels
             ViewAssetHistoryCommand = new Base.RelayCommand((ViewAssetHistory));
             AddNewCommentCommand = new Base.RelayCommand(AddNewComment);
             RemoveCommentCommand = new Base.RelayCommand(RemoveComment);
-
-            CommentRep = new CommentRepository();
 
 
             // If the object being viewed is a tag
@@ -121,7 +122,7 @@ namespace Asset_Management_System.ViewModels
                 Description = AssetInput.Description;
                 IsTag = false;
 
-                CommentsList = CommentRep.GetByAssetId(AssetInput.ID);
+                CommentsList = _commentRep.GetByAssetId(AssetInput.ID);
 
                 foreach (var field in AssetInput.FieldsList)
                 {
@@ -177,13 +178,13 @@ namespace Asset_Management_System.ViewModels
                     AssetID = AssetInput.ID
                 };
 
-                CommentRep.Insert(newComment, out ulong id);
+                _commentRep.Insert(newComment, out ulong id);
 
                 Log<Comment>.CreateLog(newComment, id);
 
                 CommentField = string.Empty;
 
-                CommentsList = CommentRep.GetByAssetId(AssetInput.ID);
+                CommentsList = _commentRep.GetByAssetId(AssetInput.ID);
             }
         }
 
@@ -194,10 +195,10 @@ namespace Asset_Management_System.ViewModels
             if (selected != null)
             {
                 Log<Comment>.CreateLog(selected, true);
-                CommentRep.Delete(selected);
+                _commentRep.Delete(selected);
             }
 
-            CommentsList = CommentRep.GetByAssetId(AssetInput.ID);
+            CommentsList = _commentRep.GetByAssetId(AssetInput.ID);
         }
 
         private Comment GetSelectedItem()
@@ -212,8 +213,7 @@ namespace Asset_Management_System.ViewModels
 
         private void ViewAssetHistory()
         {
-            var assetHistory = new AssetHistory(AssetInput);
-            assetHistory.ShowDialog();
+            new AssetHistory(AssetInput).ShowDialog();
         }
 
         /// <summary>
@@ -221,9 +221,8 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void LoadTags()
         {
-            AssetRepository rep = new AssetRepository();
-            TagsList = rep.GetAssetTags(AssetInput);
-
+            //TODO: Avoid doing this
+            TagsList = ((IAssetRepository) AssetInput.GetRepository()).GetAssetTags(AssetInput);
             Console.WriteLine("Found " + TagsList.Count + " tags");
         }
 

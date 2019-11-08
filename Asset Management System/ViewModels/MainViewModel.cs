@@ -28,6 +28,7 @@ namespace Asset_Management_System.ViewModels
         private ITagService _tagService;
         private IEntryService _entryService;
         private IUserService _userService;
+        private ICommentService _commentService;
         
         /// <summary>
         /// Default constructor
@@ -71,6 +72,7 @@ namespace Asset_Management_System.ViewModels
             _tagService = new TagService(new TagRepository());
             _entryService = new EntryService(new LogRepository());
             _userService = new UserService(new UserRepository());
+            _commentService = new CommentService(new CommentRepository());
             
             ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this)));
             ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
@@ -333,7 +335,7 @@ namespace Asset_Management_System.ViewModels
             // Add excluded pages
             excludedPages.Add(new Views.AssetManager(null, _assetService));
             excludedPages.Add(new Views.TagManager(null, _tagService));
-            excludedPages.Add(new Views.ObjectViewer(null, null));
+            excludedPages.Add(new Views.ObjectViewer(null, _commentService,null));
 
             // Load homepage
             ChangeMainContent(new Views.Home(this));

@@ -24,6 +24,9 @@ namespace Asset_Management_System.ViewModels
         private string _searchQueryText = String.Empty;
         private bool IsTagMode = false;
         private bool _isStrict = false;
+        private IAssetService _service;
+        private IAssetRepository _rep;
+        
 
         public int ViewType => 1;
         public int SelectedSuggestedIndex { get; set; }
@@ -76,6 +79,8 @@ namespace Asset_Management_System.ViewModels
             SelectTagCommand = new Base.RelayCommand(SelectSuggestedTag);
             EnterCommand = new Base.RelayCommand(Enter);
             TheTagger = new Tagging();
+            _service = assetService;
+            _rep = _service.GetSearchableRepository() as IAssetRepository;
         }
 
         // Add the currently selected tag from suggestions
@@ -132,7 +137,7 @@ namespace Asset_Management_System.ViewModels
         // Search assets
         protected override void Search()
         {
-            SearchList = new AssetRepository().Search(SearchQueryText,
+            SearchList = _rep.Search(SearchQueryText,
                 TheTagger.TaggedWith.OfType<Tag>().Select(t => t.ID).ToList(),
                 TheTagger.TaggedWith.OfType<User>().Select(u => u.ID).ToList(),
                 IsStrict);

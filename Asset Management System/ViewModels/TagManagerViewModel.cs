@@ -17,6 +17,7 @@ namespace Asset_Management_System.ViewModels
         private Tag _tag;
         private string _randomColor;
         private ITagService _service;
+        private ITagRepository _rep;
 
         public string Name { get; set; }
         public string Color { get; set; }
@@ -30,7 +31,6 @@ namespace Asset_Management_System.ViewModels
         {
             get
             {
-                TagRepository tagRepository = new TagRepository();
                 List<Tag> parentTagsList = new List<Tag>()
                 {
                     new Tag()
@@ -40,7 +40,7 @@ namespace Asset_Management_System.ViewModels
                         Color = _randomColor
                     }
                 };
-                foreach (Tag parentTag in (List<Tag>) tagRepository.GetParentTags())
+                foreach (Tag parentTag in (List<Tag>) _rep.GetParentTags())
                 {
                     parentTagsList.Add(parentTag);
                 }
@@ -54,6 +54,7 @@ namespace Asset_Management_System.ViewModels
             _main = main;
             _randomColor = CreateRandomColor();
             _service = service;
+            _rep = service.GetSearchableRepository() as ITagRepository;
 
             FieldsList = new ObservableCollection<ShownField>();
 

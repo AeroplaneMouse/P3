@@ -23,12 +23,12 @@ namespace Asset_Management_System.ViewModels
         #region Private Members
 
         protected MainViewModel _main;
+        private IDisplayableService<T> _service;
+        private ICommentService _commentService;
 
         private ObservableCollection<T> _list { get; set; }
 
         private string _searchQueryText { get; set; }
-
-        private ListPageType _pageType { get; set; }
 
         protected MainViewModel Main
         {
@@ -53,14 +53,6 @@ namespace Asset_Management_System.ViewModels
             get => _searchQueryText;
             set => _searchQueryText = value;
         }
-
-        /*
-        public ListPageType PageType
-        {
-            get => _pageType;
-            set => _pageType = value;
-        }
-        */
 
         public int SelectedItemIndex { get; set; }
 
@@ -93,10 +85,12 @@ namespace Asset_Management_System.ViewModels
 
         #region Constructor
 
-        public ListPageViewModel(MainViewModel main, IDisplayableService<T> service)
+        public ListPageViewModel(MainViewModel main, IDisplayableService<T> service, ICommentService commentService = default)
         {
-            Rep = service.GetSearchableRepository();
-
+            _service = service;
+            _commentService = commentService;
+            Rep = _service.GetSearchableRepository();
+            
             _main = main;
 
             _searchQueryText = String.Empty;
@@ -145,7 +139,7 @@ namespace Asset_Management_System.ViewModels
                     new ShowEntry(entry).ShowDialog();
                     break;
                 case DoesContainFields fields:
-                    Main.ChangeMainContent(new ObjectViewer(Main, fields));
+                    Main.ChangeMainContent(new ObjectViewer(Main, _commentService, fields));
                     break;
                 default:
                     _main.AddNotification(

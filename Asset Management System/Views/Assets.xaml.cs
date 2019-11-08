@@ -26,7 +26,7 @@ namespace Asset_Management_System.Views
         {
             InitializeComponent();
 
-            DataContext = new ViewModels.AssetsViewModel(main, assetService);
+            DataContext = new AssetsViewModel(main, assetService);
         }
     }
 }
