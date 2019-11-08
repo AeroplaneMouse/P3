@@ -24,17 +24,22 @@ namespace Asset_Management_System.Views
             IAssetRepository assetRepository = assetService.GetSearchableRepository() as IAssetRepository;
             ITagRepository tagRepository = tagService.GetSearchableRepository() as ITagRepository;
 
+            /*
+             *TEST AREA DO NOT REMOVE (TGL)
+             */
+            /*
+
             Tagging tagger = new Tagging();
             Tag tag = tagRepository.GetById(1); // User group
-            
+
             tagger.Parent(tag); // Switch to user search
             List<ITagable> result = tagger.Suggest("jo");
-            
+
             foreach (var item in result)
             {
                 Console.WriteLine(item.TagLabel());
             }
-            
+
             tagger.Parent(null); // Switch to user search
             result = tagger.Suggest("sw");
 
@@ -49,7 +54,7 @@ namespace Asset_Management_System.Views
             tagger.AddToQuery(lovehuset);
             //tagger.RemoveFromQuery(lovehuset);
             result = tagger.Suggest("Løve");
-            
+
             foreach (var item in result)
             {
                 Console.WriteLine(item.TagLabel());
@@ -62,6 +67,7 @@ namespace Asset_Management_System.Views
             {
                 Console.WriteLine(asset.Name);
             }
+            */
         }
     }
 }

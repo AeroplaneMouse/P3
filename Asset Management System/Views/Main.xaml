@@ -66,7 +66,16 @@
                                                 <MenuItem Header="_Exit"/>
                                             </MenuItem>
                                         </Menu>
-                                        
+
+                                        <Border HorizontalAlignment="Center"
+                                                Background="Transparent"
+                                                WindowChrome.IsHitTestVisibleInChrome="True"
+                                                Grid.ColumnSpan="3"
+                                                Width="20"
+                                                Height="20"
+                                                ToolTip="This application has been developed by group ds303e19 on Aalborg University">
+                                        </Border>
+
                                         <StackPanel Grid.Column="2"
                                                     Orientation="Horizontal">
                                             <!-- Departments -->

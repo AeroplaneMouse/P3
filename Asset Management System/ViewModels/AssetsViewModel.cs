@@ -1,15 +1,9 @@
 ﻿using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
-using Asset_Management_System.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Collections.ObjectModel;
-using System.IO;
 using System.Windows.Input;
-using System.Windows.Media;
-using Asset_Management_System.Helpers;
-using Asset_Management_System.Logging;
 using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Services.Interfaces;
 using System.Windows;
@@ -19,7 +13,6 @@ namespace Asset_Management_System.ViewModels
 {
     public class AssetsViewModel : ChangeableListPageViewModel<Asset>
     {
-        private MainViewModel _main;
         private string _currentGroup = String.Empty;
         private string _searchQueryText = String.Empty;
         private bool IsTagMode = false;
@@ -30,7 +23,7 @@ namespace Asset_Management_System.ViewModels
 
         public int ViewType => 1;
         public int SelectedSuggestedIndex { get; set; }
-        public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Visible;
+        public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Hidden;
         public ICommand DeleteCommand { get; set; }
         public ICommand EnterCommand { get; set; }
         public ICommand SelectTagCommand { get; set; }
@@ -46,10 +39,7 @@ namespace Asset_Management_System.ViewModels
             set
             {
                 _currentGroup = value;
-                //if (value == String.Empty)
-                //    IsCurrentGroupVisible = Visibility.Visible;
-                //else
-                //    IsCurrentGroupVisible = Visibility.Visible;
+                IsCurrentGroupVisible = (value == string.Empty ? Visibility.Hidden : Visibility.Visible);
             }
         }
 
