@@ -6,7 +6,11 @@ namespace Asset_Management_System.Database.Repositories
 {
     public interface IUserRepository : IMysqlRepository<User>
     {
-        User GetByUsername(string username);
+        User GetByIdentity(string identity);
+        
+        IEnumerable<User> GetAll(bool includeDisabled=false);
+
+        IEnumerable<User> GetUsersForAsset(ulong id);
 
         ulong GetCount();
 
