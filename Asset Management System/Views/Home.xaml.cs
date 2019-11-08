@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Functions;
 using Asset_Management_System.Models;
+using Asset_Management_System.Services.Interfaces;
 using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
@@ -15,13 +16,13 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Home : Page
     {
-        public Home(MainViewModel main)
+        public Home(MainViewModel main, IAssetService assetService, ITagService tagService)
         {
             InitializeComponent();
             DataContext = new HomeViewModel(main);
 
-            AssetRepository assetRepository = new AssetRepository();
-            TagRepository tagRepository = new TagRepository();
+            IAssetRepository assetRepository = assetService.GetSearchableRepository() as IAssetRepository;
+            ITagRepository tagRepository = tagService.GetSearchableRepository() as ITagRepository;
 
             Tagging tagger = new Tagging();
             Tag tag = tagRepository.GetById(1); // User group

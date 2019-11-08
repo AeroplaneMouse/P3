@@ -213,7 +213,7 @@ namespace Asset_Management_System.ViewModels
 
         private void ViewAssetHistory()
         {
-            new AssetHistory(AssetInput).ShowDialog();
+            new AssetHistory(AssetInput, _main.EntryService).ShowDialog();
         }
 
         /// <summary>

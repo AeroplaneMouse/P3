@@ -16,6 +16,7 @@ namespace Asset_Management_System.ViewModels.Commands
         private MainViewModel _main;
         private Asset _asset;
         private IAssetService _service;
+        private IAssetRepository _rep;
         private bool _editing;
         private bool _multipleSave;
 
@@ -27,6 +28,7 @@ namespace Asset_Management_System.ViewModels.Commands
             _main = main;
             _asset = asset;
             _service = service;
+            _rep = _service.GetSearchableRepository() as IAssetRepository;
             _editing = editing;
             _multipleSave = multipleSave;
         }
@@ -80,24 +82,23 @@ namespace Asset_Management_System.ViewModels.Commands
             if (department != null)
             {
                 _asset.DepartmentID = department.ID;
-                AssetRepository rep = new AssetRepository();
 
                 if (_editing)
                 {
                     Log<Asset>.CreateLog(_asset);
-                    rep.Update(_asset);
+                    _rep.Update(_asset);
                     if (_viewModel.CurrentlyAddedTags.Count > 0)
                     {
-                        rep.AttachTagsToAsset(_asset, new List<Tag>(_viewModel.CurrentlyAddedTags));
+                        _rep.AttachTagsToAsset(_asset, new List<Tag>(_viewModel.CurrentlyAddedTags));
                     }
                 }
                 else
                 {
-                    rep.Insert(_asset, out ulong id);
+                    _rep.Insert(_asset, out ulong id);
                     Log<Asset>.CreateLog(_asset, id);
                     if (_viewModel.CurrentlyAddedTags.Count > 0)
                     {
-                        rep.AttachTagsToAsset(rep.GetById(id), new List<Tag>(_viewModel.CurrentlyAddedTags));
+                        _rep.AttachTagsToAsset(_rep.GetById(id), new List<Tag>(_viewModel.CurrentlyAddedTags));
                     }
                 }
 

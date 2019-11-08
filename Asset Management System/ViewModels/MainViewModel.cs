@@ -29,6 +29,12 @@ namespace Asset_Management_System.ViewModels
         private IEntryService _entryService;
         private IUserService _userService;
         private ICommentService _commentService;
+
+        // Accessed in that get main as parameter, dont know if its bad practice.
+        public IEntryService EntryService
+        {
+            get => _entryService;
+        }
         
         /// <summary>
         /// Default constructor
@@ -74,7 +80,7 @@ namespace Asset_Management_System.ViewModels
             _userService = new UserService(new UserRepository());
             _commentService = new CommentService(new CommentRepository());
             
-            ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this)));
+            ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this, _assetService, _tagService)));
             ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
             ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this, _tagService)));
             ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this, _entryService)));
@@ -335,10 +341,10 @@ namespace Asset_Management_System.ViewModels
             // Add excluded pages
             excludedPages.Add(new Views.AssetManager(null, _assetService));
             excludedPages.Add(new Views.TagManager(null, _tagService));
-            excludedPages.Add(new Views.ObjectViewer(null, _commentService,null));
+            excludedPages.Add(new Views.ObjectViewer(null, _commentService, null));
 
             // Load homepage
-            ChangeMainContent(new Views.Home(this));
+            ChangeMainContent(new Views.Home(this, _assetService, _tagService));
         }
 
         #endregion
