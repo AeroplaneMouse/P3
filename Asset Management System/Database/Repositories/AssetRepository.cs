@@ -11,6 +11,13 @@ namespace Asset_Management_System.Database.Repositories
 {
     public class AssetRepository : IAssetRepository
     {
+        private QueryGenerator _query;
+
+        public AssetRepository()
+        {
+            _query = new QueryGenerator();
+        }
+
         /// <summary>
         /// Returns the number of assets in the database
         /// </summary>
@@ -270,6 +277,13 @@ namespace Asset_Management_System.Database.Repositories
             return assets;
         }
 
+        public ObservableCollection<Asset> Search(string keyword)
+        {
+            List<ulong> tags = new List<ulong>();
+            tags.Add(9);
+            return Search(keyword, tags);
+        }
+
         /// <summary>
         /// Searches for assets in the database based on the keyword.
         /// If the keyword starts or ends with '%', they will be used in the query.
@@ -279,28 +293,70 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="keyword">The search query to search by</param>
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
-        public ObservableCollection<Asset> Search(string keyword)
+        public ObservableCollection<Asset> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
         {
             var con = new MySqlHandler().GetConnection();
             ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
-
+            
+            _query.Reset();
+            _query.AddTable("assets AS a");
+            _query.Columns.AddRange(new []{"a.id", "a.name", "description", "a.identifier", "a.department_id", "a.options", "a.created_at", "a.updated_at"});
+            
             try
             {
-                const string query = "SELECT id, name, description, identifier, department_id, options, created_at, updated_at " +
-                                     "FROM assets WHERE (name LIKE @keyword OR identifier LIKE @keyword OR JSON_EXTRACT(options, '$[*].Content') LIKE @keyword) " +
-                                     "AND deleted_at IS NULL";
-
-                if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
+                _query.Where("a.department_id", "1");                      
+                _query.Where("a.deleted_at", "IS NULL", "");
+                
+                if (keyword.Length > 0)
                 {
-                    keyword = "%" + keyword + "%";
+                    if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
+                    {
+                        keyword = "%" + keyword + "%";
+                    }
+                    
+                    Statement statement = new Statement();
+                    statement.AddOrStatement("a.name", keyword, "LIKE");
+                    statement.AddOrStatement("a.identifier", keyword, "LIKE");
+                    statement.AddOrStatement("JSON_EXTRACT(a.options, '$[*].Content')", keyword, "LIKE");
+                    _query.Where(statement);
+                }
+
+                if (tags != null && tags.Count > 0)
+                {
+                    var pivot = new Table("asset_tags AS at", "INNER JOIN");
+                    pivot.AddConnection("at.asset_id", "a.id");
+                    _query.Tables.Add(pivot);
+                    _query.Where("at.tag_id", "("+string.Join(",", tags)+")", "IN");
+                    
+                    if (strict)
+                    {
+                        _query.HavingStatements.Add(new Statement("COUNT(DISTINCT at.tag_id)", tags.Count.ToString()));
+                    }
                 }
                 
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                if (users != null && users.Count > 0)
                 {
-                    cmd.Parameters.Add("@keyword", MySqlDbType.String);
-                    cmd.Parameters["@keyword"].Value = keyword;
+                    var pivot = new Table("asset_users AS au", "INNER JOIN");
+                    pivot.AddConnection("au.asset_id", "a.id");
+                    _query.Tables.Add(pivot);
+                    _query.Where("au.user_id", "("+string.Join(",", users)+")", "IN");
+                    
+                    if (strict)
+                    {
+                        _query.HavingStatements.Add(new Statement("COUNT(DISTINCT au.user_id)", users.Count.ToString()));
+                    }
+                }
 
+                _query.GroupBy = "a.id"; 
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(_query.PrepareSelect(), con))
+                {
+                    //cmd.Parameters.Add("@keyword", MySqlDbType.String);
+                    //cmd.Parameters["@keyword"].Value = keyword;
+                    
+                    Console.WriteLine(cmd.CommandText);
+                    
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -321,6 +377,107 @@ namespace Asset_Management_System.Database.Repositories
             }
 
             return assets;
+        }
+
+        public void AttachTags(Asset asset, List<ITagable> tagged)
+        {
+            List<User> users = tagged.OfType<User>().ToList();
+            List<Tag> tags = tagged.OfType<Tag>().ToList();
+
+            ClearTags(asset);
+            
+            var con = new MySqlHandler().GetConnection();
+            bool querySuccess = false;
+
+            try{
+                StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users VALUES ");
+                int counter = users.Count;
+                
+                for (int i = 0; i < counter; i++)
+                {
+                    userQuery.AppendFormat("({0},{1})", asset.ID, users[i].ID);
+                    
+                    if (i != counter-1)
+                    {
+                        userQuery.Append(",");
+                    }
+                }
+                
+                StringBuilder tagQuery = new StringBuilder("INSERT INTO asset_tags VALUES ");
+                counter = tags.Count;
+                
+                for (int i = 0; i < counter; i++)
+                {
+                    tagQuery.AppendFormat("({0},{1})", asset.ID, tags[i].ID);
+                    
+                    if (i != counter-1)
+                    {
+                        tagQuery.Append(",");
+                    }
+                }
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(userQuery.ToString(), con))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+                
+                using (var cmd = new MySqlCommand(tagQuery.ToString(), con))
+                {
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+        }
+
+        public IEnumerable<ITagable> GetTags(Asset asset)
+        {
+            var taggedWith = new List<ITagable>();
+            var tagRepository = new TagRepository();
+            var userRepository = new UserRepository();
+            
+            taggedWith.AddRange(tagRepository.GetTagsForAsset(asset.ID));
+            taggedWith.AddRange(userRepository.GetUsersForAsset(asset.ID));
+
+            return taggedWith;
+        }
+
+        private bool ClearTags(Asset asset)
+        {
+            var con = new MySqlHandler().GetConnection();
+            bool querySuccess = false;
+
+            try
+            {
+                const string query = "DELETE FROM asset_tags WHERE asset_id = @id; " +
+                                     "DELETE FROM asset_users WHERE asset_id = @id;";
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                    cmd.Parameters["@id"].Value = asset.ID;
+
+                    querySuccess = cmd.ExecuteNonQuery() > 0;
+                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+            
+            return querySuccess;
         }
 
         /// <summary>

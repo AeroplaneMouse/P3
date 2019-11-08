@@ -1,13 +1,94 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using Asset_Management_System.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Collections.Generic;
+using Org.BouncyCastle.Asn1.Cms;
 
 namespace Asset_Management_System.Database.Repositories
 {
     public class UserRepository : IUserRepository
     {
+
+        public IEnumerable<User> GetAll(bool includeDisabled=false)
+        {
+            var con = new MySqlHandler().GetConnection();
+            List<User> users = new List<User>();
+
+            try
+            {
+                string query = "SELECT id, name, description, domain, username, enabled, admin, default_department, created_at, updated_at " +
+                                     "FROM users "+(!includeDisabled ? "WHERE enabled = 1" : "");
+                
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    Console.WriteLine(cmd.CommandText);
+                    
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            users.Add(DBOToModelConvert(reader));
+                        }
+                        reader.Close();
+                    }
+                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+                
+            return users;
+        }
+
+        public IEnumerable<User> GetUsersForAsset(ulong id)
+        {
+            var con = new MySqlHandler().GetConnection();
+            List<User> users = new List<User>();
+
+            try
+            {
+                const string query = "SELECT u.id, u.name, u.username, u.domain, u.description, u.enabled, u.admin, u.default_department, u.created_at, u.updated_at " +
+                                     "FROM users AS u " +
+                                     "INNER JOIN asset_users AS au ON au.user_id = u.id " +
+                                     "WHERE au.asset_id = @id";
+
+                con.Open();
+                using (var cmd = new MySqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@id", id);
+   
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            users.Add(DBOToModelConvert(reader));
+                        }
+                        
+                        reader.Close();
+                    }
+                }
+            }
+            catch (MySqlException e)
+            {
+                Console.WriteLine(e);
+            }
+            finally
+            {
+                con.Close();
+            }
+
+            return users;
+        }
+
         public ulong GetCount()
         {
             var con = new MySqlHandler().GetConnection();
@@ -15,7 +96,7 @@ namespace Asset_Management_System.Database.Repositories
             
             try
             {
-                const string query = "SELECT COUNT(*) FROM users;";
+                const string query = "SELECT COUNT(*) FROM users WHERE enabled = 1;";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -175,7 +256,7 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "SELECT * FROM users WHERE id=@id";
+                const string query = "SELECT id, name, username, domain, description, enabled, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
 
                 using (var cmd = new MySqlCommand(query, con))
                 {
@@ -205,22 +286,27 @@ namespace Asset_Management_System.Database.Repositories
             return user;
         }
 
-        public User GetByUsername(string username)
+        public User GetByIdentity(string identity)
         {
             var con = new MySqlHandler().GetConnection();
             User user = null;
+
+            var parts = identity.Split('\\');
             
             try
             {
-                const string query = "SELECT * " +
-                                     "FROM users WHERE username=@username AND enabled=1";
+                const string query = "SELECT id, name, domain, description, enabled, username, admin, default_department, created_at, updated_at " +
+                                     "FROM users WHERE username=@username AND domain=@domain AND enabled=1";
 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
                 {
+                    cmd.Parameters.Add("@domain", MySqlDbType.String);
+                    cmd.Parameters["@domain"].Value = parts[0];
+                    
                     cmd.Parameters.Add("@username", MySqlDbType.String);
-                    cmd.Parameters["@username"].Value = username;
-
+                    cmd.Parameters["@username"].Value = parts[1];
+                    
                     using (var reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -241,41 +327,6 @@ namespace Asset_Management_System.Database.Repositories
             }
 
             return user;
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            var con = new MySqlHandler().GetConnection();
-            List<User> users = new List<User>();
-
-            try
-            {
-                const string query = "SELECT * " +
-                                     "FROM users";
-
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
-                {
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            users.Add(DBOToModelConvert(reader));
-                        }
-                        reader.Close();
-                    }
-                }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
-            }
-
-            return users;
         }
 
         public User DBOToModelConvert(MySqlDataReader reader)

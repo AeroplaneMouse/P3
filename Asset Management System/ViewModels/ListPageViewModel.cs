@@ -81,7 +81,7 @@ namespace Asset_Management_System.ViewModels
 
                 OnPropertyChanged(nameof(SearchList));
             }
-        }
+        }   
 
         #endregion
 
@@ -112,15 +112,16 @@ namespace Asset_Management_System.ViewModels
             SearchCommand = new Base.RelayCommand(Search);
             ViewCommand = new Base.RelayCommand(View);
             HeaderClickCommand = new Base.RelayCommand<object>(HeaderClick);
-
-            Search();
         }
 
         #endregion
 
         #region Methods
 
-        public void UpdateList() => Search();
+        public virtual void PageFocus() 
+        {
+            Search();
+        }
 
         /// <summary>
         /// Sends a search request to the database, and sets the list of items to the result.

@@ -18,8 +18,8 @@ namespace Asset_Management_System.ViewModels
         private Asset _asset;
 
         public string Name { get; set; }
-        public string Identifier { get; set; }
-        public string Description { get; set; }
+        public string Identifier { get; set; } = String.Empty;
+        public string Description { get; set; } = String.Empty;
 
         public string Title { get; set; }
 
@@ -194,7 +194,6 @@ namespace Asset_Management_System.ViewModels
         public static ICommand UnTagTagCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
-
         /// <summary>
         /// Verification of the asset, before saving.
         /// </summary>
@@ -204,7 +203,6 @@ namespace Asset_Management_System.ViewModels
             //TODO Figure out the implementation for this one.
             return true;
         }
-
 
         /// <summary>
         /// This function loads the fields from the asset, and into the viewmodel.
