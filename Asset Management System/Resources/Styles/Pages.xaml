@@ -77,8 +77,8 @@
                                     <Button Style="{StaticResource RegularCancelButton}"
                                             Command="{Binding RemoveCommand}"
                                             Content="Remove"
-                                            Visibility="{Binding IsRemoveVisible}" />
-
+                                            Visibility="{Binding MultipleSelected}" />
+                                    
                                     <Button Style="{StaticResource RegularButton}"
                                             Command="{Binding EditCommand}"
                                             Margin="10 0 0 0 "

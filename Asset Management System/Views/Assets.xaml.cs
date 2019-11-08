@@ -27,5 +27,10 @@ namespace Asset_Management_System.Views
 
             DataContext = new ViewModels.AssetsViewModel(main, ListPageType.Asset);
         }
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var viewmodel = (ListPageViewModel<AssetRepository,Asset>) DataContext;
+            viewmodel.SelectedItems = ListView.SelectedItems.Cast<DoesContainFields>().ToList();
+        }
     }
 }

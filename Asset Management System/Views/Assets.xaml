@@ -60,7 +60,7 @@
                              TabIndex="0">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
-                            <KeyBinding Key="Esc" Command="{Binding DeleteCommand}"/>
+                            <KeyBinding Key="Escape" Command="{Binding DeleteCommand}"/>
                             <!--<KeyBinding Key="Tab" FocusManager.FocusedElement="{Binding ElementName=SuggestionsList}"/>-->
                         </TextBox.InputBindings>
                     </TextBox>
@@ -82,10 +82,11 @@
                 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right">
-                    <Button Style="{StaticResource RegularCancelButton}"
+                    
+                    <Button Style="{StaticResource RegularButton}"
                             Command="{Binding RemoveCommand}"
                             Content="Remove"
-                            Visibility="{Binding IsRemoveVisible}"/>
+                            Visibility="{Binding MultipleSelected,UpdateSourceTrigger=PropertyChanged}"/>
 
                     <Button Style="{StaticResource RegularButton}"
                             Command="{Binding EditCommand}"
@@ -120,6 +121,8 @@
                 <!--Style="{StaticResource RegularList}"-->
                 <ListView ItemsSource="{Binding SearchList}"
                         SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                        Name="ListView"
+                        SelectionChanged="ListView_SelectionChanged"
                         Grid.Row="2"
                         Margin="0 10 0 0"
                         BorderThickness="0">
