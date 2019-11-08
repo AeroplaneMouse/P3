@@ -32,7 +32,7 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            _main.DisplayPrompt(new Views.Prompts.CustomField(null, AddNewFieldConfirmed));
+            _main.DisplayPrompt(new Views.Prompts.CustomField(null, AddNewFieldConfirmed,_isCustom));
         }
 
         private void AddNewFieldConfirmed(object sender, PromptEventArgs e)
