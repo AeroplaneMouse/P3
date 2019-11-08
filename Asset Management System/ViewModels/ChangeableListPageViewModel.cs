@@ -93,8 +93,9 @@ namespace Asset_Management_System.ViewModels
             var selected = SelectedItems[0];
 
             if (selected == null) return;
-           // _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete asset { _service.GetName(selected as T) }?", RemovePromptElapsed));
+            _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete asset { _service.GetName(selected as T) }?", RemovePromptElapsed));
             
+           /*
             switch (selected)
             {
                 case Asset asset:
@@ -118,27 +119,18 @@ namespace Asset_Management_System.ViewModels
         {
             //if (!e.Result) return;
             Log<T>.CreateLog((ILoggable<T>)GetSelectedItem(), true); //TODO: Fix so typecast is unnecessary
-            ((IRepository<T>) Rep).Delete(GetSelectedItem());
-            /*
             if (RemoveAsset != null)
-            {
-                Log<Asset>.CreateLog(RemoveAsset, true);
                 Rep.Delete(RemoveAsset as T);
-            }
             else if(RemoveTag != null)
             {
                 foreach (var var in SelectedItems)
                 {
                     if (RemoveAsset != null)
-                    {
-                        Log<Asset>.CreateLog(var as Asset, true);
                         ((AssetRepository) Rep).Delete(var as Asset);
-                    }
+                    
                     else if(RemoveTag != null)
-                    {
-                        Log<Tag>.CreateLog(var as Tag, true);
                         ((TagRepository) Rep).Delete(var as Tag);
-                    }
+                    
                     Search();
                 }
             }
