@@ -14,6 +14,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Services.Interfaces;
+using Asset_Management_System.ViewModels.Base;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -48,6 +49,16 @@ namespace Asset_Management_System.ViewModels
             private set => Visible = value;
         }
 
+        public List<DoesContainFields> SelectedItems { get; set; } = new List<DoesContainFields>();
+
+        public bool MultipleSelected {
+            get
+            {
+               return SelectedItems.Count > 0;
+            }
+            set => MultipleSelected = value;
+        }
+
         public string SearchQueryText
         {
             get => _searchQueryText;
@@ -70,7 +81,7 @@ namespace Asset_Management_System.ViewModels
 
                 OnPropertyChanged(nameof(SearchList));
             }
-        }   
+        }
 
         #endregion
 
@@ -81,6 +92,9 @@ namespace Asset_Management_System.ViewModels
         public ICommand ViewCommand { get; set; }
         public ICommand HeaderClickCommand { get; set; }
 
+        public ICommand RemoveCommand { get; set; }
+
+
         #endregion
 
         #region Constructor
@@ -90,7 +104,7 @@ namespace Asset_Management_System.ViewModels
             _service = service;
             _commentService = commentService;
             Rep = _service.GetSearchableRepository();
-            
+
             _main = main;
 
             _searchQueryText = String.Empty;
@@ -103,17 +117,26 @@ namespace Asset_Management_System.ViewModels
             SearchCommand = new Base.RelayCommand(Search);
             ViewCommand = new Base.RelayCommand(View);
             HeaderClickCommand = new Base.RelayCommand<object>(HeaderClick);
+            RemoveCommand = new RelayCommand(RemoveItems);
         }
 
         #endregion
 
         #region Methods
 
-        public virtual void PageFocus() 
+        public virtual void PageFocus()
         {
             Search();
         }
 
+
+        private void RemoveItems()
+        {
+            foreach (var item in SelectedItems)
+            {
+
+            }
+        }
         /// <summary>
         /// Sends a search request to the database, and sets the list of items to the result.
         /// </summary>

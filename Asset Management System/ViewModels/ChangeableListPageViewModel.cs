@@ -43,7 +43,7 @@ namespace Asset_Management_System.ViewModels
 
         protected void AddNew()
         {
-            Main.ChangeMainContent(_service.GetManagerPage(Main)); 
+            Main.ChangeMainContent(_service.GetManagerPage(Main));
             /*
             switch (PageType)
             {
@@ -90,7 +90,7 @@ namespace Asset_Management_System.ViewModels
 
         protected void Remove()
         {
-            T selected = GetSelectedItem();
+            var selected = SelectedItems[0];
 
             if (selected == null) return;
             _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete asset { _service.GetName(selected) }?", RemovePromptElapsed));
@@ -100,12 +100,12 @@ namespace Asset_Management_System.ViewModels
                 case Asset asset:
                     RemoveAsset = asset;
                     RemoveTag = null;
-                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete asset { asset.Name }?", RemovePromptElapsed));
+                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete { SelectedItems.Count } asset(s)?", RemovePromptElapsed));
                     break;
                 case Tag tag:
                     RemoveAsset = null;
                     RemoveTag = tag;
-                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete tag { tag.Name }?", RemovePromptElapsed));
+                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete { SelectedItems.Count } tag(s) ?", RemovePromptElapsed));
                     break;
                 default:
                     Console.WriteLine("Fejl ved Remove");
@@ -126,8 +126,21 @@ namespace Asset_Management_System.ViewModels
             }
             else if(RemoveTag != null)
             {
-                Log<Tag>.CreateLog(RemoveTag, true);
-                Rep.Delete(RemoveTag as T);
+                foreach (var var in SelectedItems)
+                {
+                    if (RemoveAsset != null)
+                    {
+                        Log<Asset>.CreateLog(var as Asset, true);
+                        (Rep as AssetRepository).Delete(var as Asset);
+                    }
+                    else if(RemoveTag != null)
+                    {
+                        Log<Tag>.CreateLog(var as Tag, true);
+                        (Rep as TagRepository).Delete(var as Tag);
+                    }
+                    Search();
+                }
+
             }
             */
             Search();
