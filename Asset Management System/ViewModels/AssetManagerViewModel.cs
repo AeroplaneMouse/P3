@@ -43,7 +43,7 @@ namespace Asset_Management_System.ViewModels
         private string _parentString { get; set; }
 
         // A tag repository, for communication with the database
-        private TagRepository _tagRep { get; set; }
+        private ITagRepository _tagRep { get; set; }
 
         // TODO: Kom uden om mig
         private TextBox _box { get; set; }

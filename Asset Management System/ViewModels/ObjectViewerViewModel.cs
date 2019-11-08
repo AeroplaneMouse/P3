@@ -98,7 +98,7 @@ namespace Asset_Management_System.ViewModels
 
                 if (TagInput.ParentID != 0)
                 {
-                    TagRepository tagRepository = new TagRepository();
+                    ITagRepository tagRepository = new TagRepository();
                     Tag parentTag = tagRepository.GetById(TagInput.ParentID);
                     foreach (var field in parentTag.FieldsList)
                     {

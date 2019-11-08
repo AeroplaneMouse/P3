@@ -17,6 +17,7 @@ namespace Asset_Management_System.ViewModels.Commands
         private Tag _tag;
         private ITagService _service;
         private bool _editing;
+        private ITagRepository _rep;
         public event EventHandler CanExecuteChanged;
 
         public SaveTagCommand(TagManagerViewModel viewModel, MainViewModel main, Tag tag, ITagService service, bool editing)
@@ -25,6 +26,7 @@ namespace Asset_Management_System.ViewModels.Commands
             _main = main;
             _tag = tag;
             _service = service;
+            _rep = _service.GetSearchableRepository() as ITagRepository;
             _editing = editing;
         }
 
@@ -67,16 +69,15 @@ namespace Asset_Management_System.ViewModels.Commands
                 _tag.ParentID = parent.ID;
 
                 // Save tag
-                TagRepository rep = new TagRepository();
                 if (_editing)
                 {
                     Log<Tag>.CreateLog(_tag);
-                    rep.Update(_tag);
+                    _rep.Update(_tag);
                 }
 
                 else
                 {
-                    rep.Insert(_tag, out ulong id);
+                    _rep.Insert(_tag, out ulong id);
                     Log<Tag>.CreateLog(_tag, id);
                 }
 

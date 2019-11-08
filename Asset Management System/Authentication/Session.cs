@@ -2,6 +2,7 @@
 using System.Security.Principal;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.Authentication
 {
@@ -12,9 +13,9 @@ namespace Asset_Management_System.Authentication
         public string Username { get => GetIdentity().Split('\\')[1]; }
         public static string Domain { get => GetIdentity().Split('\\')[0]; }
 
-        public Session()
+        public Session(IUserService service)
         {
-            UserRepository rep = new UserRepository();
+            IUserRepository rep = (IUserRepository)service.GetRepository();
             user = rep.GetByIdentity(GetIdentity());
         }
 

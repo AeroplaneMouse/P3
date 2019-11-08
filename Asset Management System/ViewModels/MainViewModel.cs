@@ -63,17 +63,7 @@ namespace Asset_Management_System.ViewModels
                 //OnPropertyChanged(nameof(WindowRadius));
                 //OnPropertyChanged(nameof(WindowCornerRadius));
             };
-
-            // Setting up frames
-            SplashPage = new Views.Splash(this);
-
-            // Initialize commands
-            MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
-            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
-            CloseCommand = new Base.RelayCommand(() => _window.Close());
-
-            SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
-
+            
             //TODO: Determine if this is composition root
             _assetService = new AssetService(new AssetRepository());
             _tagService = new TagService(new TagRepository());
@@ -81,6 +71,17 @@ namespace Asset_Management_System.ViewModels
             _userService = new UserService(new UserRepository());
             _commentService = new CommentService(new CommentRepository());
             _departmentService = new DepartmentService(new DepartmentRepository());
+
+            // Setting up frames
+            SplashPage = new Views.Splash(this, _userService);
+
+            // Initialize commands
+            MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
+            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
+            CloseCommand = new Base.RelayCommand(() => _window.Close());
+
+            SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
+            
             
             ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this, _assetService, _tagService)));
             ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
@@ -187,7 +188,7 @@ namespace Asset_Management_System.ViewModels
                 if (_currentDepartment != null)
                 {
                     CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
-                    new UserRepository().Update(CurrentSession.user);
+                    _userService.GetRepository().Update(CurrentSession.user);
                 }
             }
         }
@@ -374,7 +375,7 @@ namespace Asset_Management_System.ViewModels
             OnPropertyChanged(nameof(CurrentUser));
 
             // Load splash screen
-            SplashPage = new Views.Splash(this);
+            SplashPage = new Views.Splash(this, _userService);
         }
 
         private bool ExcludedFromSaving(Page page)

@@ -11,6 +11,9 @@ namespace Asset_Management_System.Logging
 {
     public static class Log<T>
     {
+        //TODO: Get Repository via Dependency Injection
+        private static IAssetRepository _assetRep = new AssetRepository();
+        private static  ILogRepository _logRep = new LogRepository();
         /// <summary>
         /// Logs the changes made to a subject from an old entry
         /// </summary>
@@ -25,7 +28,7 @@ namespace Asset_Management_System.Logging
             // Fetch object with same ID from database to determine changes
             IRepository<T> rep = newEntry.GetRepository();
             ILoggable<T> oldEntry = rep.GetById(newEntry.GetId()) as ILoggable<T>;
-            
+
             // Determine the changes and serialize to json
             Dictionary<string, Change> changes = GetChanges(oldEntry, newEntry);
             string serializedChanges = changes.Count == 0 ? "[]" : JsonConvert.SerializeObject(changes, Formatting.Indented);
@@ -57,8 +60,7 @@ namespace Asset_Management_System.Logging
             entry.Options = options;
             entry.Username = Session.GetIdentity();
             
-            LogRepository rep = new LogRepository();
-            rep.Insert(entry);
+            _logRep.Insert(entry);
         }
 
         /// <summary>
@@ -82,8 +84,7 @@ namespace Asset_Management_System.Logging
             // Special case for comments
             if (subject is Comment)
             {
-                AssetRepository assetRep = new AssetRepository();
-                string assetName = assetRep.GetById(((Comment) subject).AssetID).Name;
+                string assetName = _assetRep.GetById(((Comment) subject).AssetID).Name;
                 string changeType = delete ? "Removed from" : created ? "Added to" : "updated on ";
                 return $"A {type} was {changeType} {assetName}";
             }
@@ -134,8 +135,7 @@ namespace Asset_Management_System.Logging
             if (!(asset is Asset))
                 return;
             
-            AssetRepository rep = new AssetRepository();
-            List<Tag> oldTags = rep.GetAssetTags((Asset) asset);
+            List<Tag> oldTags = _assetRep.GetAssetTags((Asset) asset);
             List<Tag> addedTags = new List<Tag>();
             List<Tag> removedTags = new List<Tag>();
             Dictionary<string, string> changes = new Dictionary<string, string>();
