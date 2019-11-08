@@ -120,7 +120,7 @@
     <DataTemplate x:Key="TextBoxFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
             <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Field.Label}" />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" Width="200" TextWrapping="Wrap"
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" MinHeight="50" TextWrapping="Wrap"
                      BorderThickness="1.5" AcceptsReturn="True" AcceptsTab="True" />
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
