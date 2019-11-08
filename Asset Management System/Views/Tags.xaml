@@ -10,6 +10,5 @@
                         ShowsNavigationUI="False"
                         Title="Tags"
                         Style="{StaticResource ListPage}">
-
-
+    
 </Page>
