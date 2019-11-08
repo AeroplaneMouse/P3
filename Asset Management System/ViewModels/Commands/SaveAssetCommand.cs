@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 using Asset_Management_System.Logging;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
@@ -14,16 +15,18 @@ namespace Asset_Management_System.ViewModels.Commands
         private AssetManagerViewModel _viewModel;
         private MainViewModel _main;
         private Asset _asset;
+        private IAssetService _service;
         private bool _editing;
         private bool _multipleSave;
 
         public event EventHandler CanExecuteChanged;
 
-        public SaveAssetCommand(AssetManagerViewModel viewModel, MainViewModel main, Asset asset, bool editing,bool multipleSave = false)
+        public SaveAssetCommand(AssetManagerViewModel viewModel, MainViewModel main, Asset asset, IAssetService service, bool editing,bool multipleSave = false)
         {
             _viewModel = viewModel;
             _main = main;
             _asset = asset;
+            _service = service;
             _editing = editing;
             _multipleSave = multipleSave;
         }
@@ -104,7 +107,7 @@ namespace Asset_Management_System.ViewModels.Commands
                 }
                 else
                 {
-                    _main.ChangeMainContent(new Assets(_main));
+                    _main.ChangeMainContent(new Assets(_main, _service));
                 }
                 
             }

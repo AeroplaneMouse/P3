@@ -11,14 +11,15 @@ using System.Windows.Media;
 using Asset_Management_System.Helpers;
 using Asset_Management_System.Logging;
 using Asset_Management_System.Resources.DataModels;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class AssetsViewModel : ChangeableListPageViewModel<AssetRepository, Asset>
+    public class AssetsViewModel : ChangeableListPageViewModel<Asset>
     {
         private MainViewModel _main;
 
-        public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
+        public AssetsViewModel(MainViewModel main, IAssetService assetService) : base(main, assetService)
         {
             _main = main;
             Title = "Assets";

@@ -8,11 +8,11 @@ using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Database.Repositories;
 using System.Windows;
 using Asset_Management_System.Events;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
-    public abstract class ChangeableListPageViewModel<RepositoryType, T> : ListPageViewModel<RepositoryType, T>
-        where RepositoryType : Database.Repositories.ISearchableRepository<T>, new()
+    public abstract class ChangeableListPageViewModel<T> : ListPageViewModel<T>
         where T : class, new()
     {
         #region Commands
@@ -23,14 +23,18 @@ namespace Asset_Management_System.ViewModels
 
         #endregion
 
+        private IService<T> _service;
+
         #region Constructor
 
-        public ChangeableListPageViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
+        public ChangeableListPageViewModel(MainViewModel main, IService<T> service) : base(main, service)
         {
             // AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.TagManager(_main)));
             AddNewCommand = new Base.RelayCommand(AddNew);
             EditCommand = new Base.RelayCommand(Edit);
             RemoveCommand = new Base.RelayCommand(Remove);
+
+            _service = service;
         }
 
         #endregion
@@ -39,10 +43,12 @@ namespace Asset_Management_System.ViewModels
 
         protected void AddNew()
         {
+            Main.ChangeMainContent(_service.GetManagerPage(Main)); 
+            /*
             switch (PageType)
             {
                 case ListPageType.Asset:
-                    Main.ChangeMainContent(new Views.AssetManager(Main));
+                    Main.ChangeMainContent(new Views.AssetManager(Main)); // TODO: Get via the service?
                     break;
 
                 case ListPageType.Tag:
@@ -53,6 +59,7 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Error when adding new");
                     break;
             }
+            */
         }
 
         protected void Edit()
@@ -61,6 +68,8 @@ namespace Asset_Management_System.ViewModels
             Console.WriteLine("Check: " + SelectedItemIndex);
 
             if (selected == null) return;
+            Main.ChangeMainContent(_service.GetManagerPage(Main, selected));
+            /*
             switch (selected)
             {
                 case Asset asset:
@@ -73,6 +82,7 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Fejl ved edit");
                     break;
             }
+            */
         }
 
         private Asset RemoveAsset;
@@ -83,6 +93,8 @@ namespace Asset_Management_System.ViewModels
             T selected = GetSelectedItem();
 
             if (selected == null) return;
+            _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete asset { _service.GetName(selected) }?", RemovePromptElapsed));
+            /*
             switch (selected)
             {
                 case Asset asset:
@@ -99,24 +111,26 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Fejl ved Remove");
                     break;
             }
+            /**/
         }
 
         private void RemovePromptElapsed(object sender, PromptEventArgs e)
         {
-            if (e.Result)
+            if (!e.Result) return;
+            Log<T>.CreateLog((ILoggable<T>)GetSelectedItem(), true); //TODO: Fix so typecast is unnecessary
+            /*
+            if (RemoveAsset != null)
             {
-                if (RemoveAsset != null)
-                {
-                    Log<Asset>.CreateLog(RemoveAsset, true);
-                    (Rep as AssetRepository).Delete(RemoveAsset as Asset);
-                }
-                else if(RemoveTag != null)
-                {
-                    Log<Tag>.CreateLog(RemoveTag, true);
-                    (Rep as TagRepository).Delete(RemoveTag as Tag);
-                }
-                Search();
+                Log<Asset>.CreateLog(RemoveAsset, true);
+                Rep.Delete(RemoveAsset as T);
             }
+            else if(RemoveTag != null)
+            {
+                Log<Tag>.CreateLog(RemoveTag, true);
+                Rep.Delete(RemoveTag as T);
+            }
+            */
+            Search();
         }
 
         #endregion

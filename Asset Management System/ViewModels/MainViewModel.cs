@@ -15,6 +15,8 @@ using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Resources.Interfaces;
 using Asset_Management_System.Helpers.ConfigurationHandler;
+using Asset_Management_System.Services;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -22,6 +24,10 @@ namespace Asset_Management_System.ViewModels
     {
         #region Constructor
 
+        private IAssetService _assetService;
+        private ITagService _tagService;
+        private IEntryService _entryService;
+        
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -61,10 +67,15 @@ namespace Asset_Management_System.ViewModels
 
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
 
+            //TODO: Determine if this is composition root
+            _assetService = new AssetService(new AssetRepository());
+            _tagService = new TagService(new TagRepository());
+            _entryService = new EntryService(new LogRepository());
+            
             ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this)));
-            ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this)));
-            ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
-            ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
+            ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
+            ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this, _tagService)));
+            ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this, _entryService)));
 
             RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
 
@@ -339,8 +350,8 @@ namespace Asset_Management_System.ViewModels
         private void Load()
         {
             // Add excluded pages
-            excludedPages.Add(new Views.AssetManager(null));
-            excludedPages.Add(new Views.TagManager(null));
+            excludedPages.Add(new Views.AssetManager(null, _assetService));
+            excludedPages.Add(new Views.TagManager(null, _tagService));
             excludedPages.Add(new Views.ObjectViewer(null, null));
 
             // Load homepage

@@ -2,7 +2,7 @@
 
 namespace Asset_Management_System.Database.Repositories
 {
-    interface ICommentRepository : IMysqlRepository<Comment>
+    public interface ICommentRepository : IMysqlRepository<Comment>
     {
 
     }

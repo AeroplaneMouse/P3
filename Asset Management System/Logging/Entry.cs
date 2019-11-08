@@ -1,8 +1,9 @@
 ﻿using System;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Logging
 {
-    public class Entry
+    public class Entry : Model
     {
         public Entry()
         {
@@ -20,7 +21,7 @@ namespace Asset_Management_System.Logging
         /// <param name="created_at"></param>
         private Entry(ulong id, ulong logable_id, Type logable_type, string description, string username, string options, DateTime created_at)
         {
-            Id = id;
+            ID = id;
             LogableId = logable_id;
             LogableType = logable_type;
             Description = description;
@@ -32,7 +33,7 @@ namespace Asset_Management_System.Logging
         //Used for formatting the DateTimeOutput when showing the elements within a database.
         public string DateToStringConverter => CreatedAt.ToString("MM/dd/yyyy HH:mm");
         
-        public ulong Id { get; protected set; }
+        //public ulong Id { get; protected set; }
 
         public ulong LogableId { get; set; }
 
@@ -41,7 +42,7 @@ namespace Asset_Management_System.Logging
 
         public string Options { get; set; }
 
-        public DateTime CreatedAt { get; set; }
+        //public DateTime CreatedAt { get; set; }
 
         public string Username { get; set; }
     }

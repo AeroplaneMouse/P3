@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 using Asset_Management_System.Logging;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
@@ -14,14 +15,16 @@ namespace Asset_Management_System.ViewModels.Commands
         private TagManagerViewModel _viewModel;
         private MainViewModel _main;
         private Tag _tag;
+        private ITagService _service;
         private bool _editing;
         public event EventHandler CanExecuteChanged;
 
-        public SaveTagCommand(TagManagerViewModel viewModel, MainViewModel main, Tag tag, bool editing)
+        public SaveTagCommand(TagManagerViewModel viewModel, MainViewModel main, Tag tag, ITagService service, bool editing)
         {
             _viewModel = viewModel;
             _main = main;
             _tag = tag;
+            _service = service;
             _editing = editing;
         }
 
@@ -78,7 +81,7 @@ namespace Asset_Management_System.ViewModels.Commands
                 }
 
                 // Change view to tags
-                _main.ChangeMainContent(new Tags(_main));
+                _main.ChangeMainContent(new Tags(_main, _service));
             }
             else
                 _main.AddNotification(new Notification(
