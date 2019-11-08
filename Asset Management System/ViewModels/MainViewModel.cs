@@ -14,8 +14,7 @@ using Asset_Management_System.Database;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Resources.Interfaces;
-using System.Threading;
-using Asset_Management_System.Resources.Users;
+using Asset_Management_System.Helpers.ConfigurationHandler;
 
 namespace Asset_Management_System.ViewModels
 {
