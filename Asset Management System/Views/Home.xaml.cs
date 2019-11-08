@@ -19,7 +19,11 @@ namespace Asset_Management_System.Views
         {
             InitializeComponent();
             DataContext = new HomeViewModel(main);
-
+            
+            /*
+             *TEST AREA DO NOT REMOVE (TGL)
+             */
+            /*
             AssetRepository assetRepository = new AssetRepository();
             TagRepository tagRepository = new TagRepository();
 
@@ -61,6 +65,7 @@ namespace Asset_Management_System.Views
             {
                 Console.WriteLine(asset.Name);
             }
+            */
         }
     }
 }
