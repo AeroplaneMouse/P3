@@ -29,6 +29,7 @@ namespace Asset_Management_System.ViewModels
         private IEntryService _entryService;
         private IUserService _userService;
         private ICommentService _commentService;
+        private DepartmentService _departmentService;
 
         // Accessed in that get main as parameter, dont know if its bad practice.
         public IEntryService EntryService
@@ -79,6 +80,7 @@ namespace Asset_Management_System.ViewModels
             _entryService = new EntryService(new LogRepository());
             _userService = new UserService(new UserRepository());
             _commentService = new CommentService(new CommentRepository());
+            _departmentService = new DepartmentService(new DepartmentRepository());
             
             ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this, _assetService, _tagService)));
             ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
@@ -93,9 +95,9 @@ namespace Asset_Management_System.ViewModels
 
             ImportUsersCommand = new Base.RelayCommand(ImportUsers);
 
-            SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
-            RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
-            EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
+            SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this, _departmentService);
+            RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, _departmentService);
+            EditDepartmentCommand = new Commands.EditDepartmentCommand(this, _departmentService);
             AddDepartmentCommand = new Base.RelayCommand(() =>
             {
                 DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment));
@@ -330,7 +332,7 @@ namespace Asset_Management_System.ViewModels
             OnPropertyChanged(nameof(CurrentUser));
 
             // Setting the current department, from the default department of the current user.
-            CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);
+            CurrentDepartment = _departmentService.GetRepository().GetById(session.user.DefaultDepartment);
             if (CurrentDepartment == null)
                 CurrentDepartment = Department.GetDefault();
         }
@@ -391,7 +393,7 @@ namespace Asset_Management_System.ViewModels
         private List<Department> GetDepartments()
         {
             if (DisplayCurrentDepartment)
-                return (List<Department>) new DepartmentRepository().GetAll();
+                return (List<Department>) ((IDepartmentRepository) _departmentService.GetRepository()).GetAll();
             else
                 return new List<Department>();
         }
@@ -404,7 +406,7 @@ namespace Asset_Management_System.ViewModels
                 department.Name = e.ResultMessage;
 
                 ulong id;
-                if (new DepartmentRepository().Insert(department, out id))
+                if (_departmentService.GetRepository().Insert(department, out id))
                 {
                     // TODO: Add log of department insert
                     OnPropertyChanged(nameof(Departments));

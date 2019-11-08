@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
@@ -12,12 +13,16 @@ namespace Asset_Management_System.ViewModels.Commands
     {
         private MainViewModel _main;
         private Department editingDepartment;
+        private IDepartmentService _service;
+        private IDepartmentRepository _rep;
 
         public event EventHandler CanExecuteChanged;
 
-        public EditDepartmentCommand(MainViewModel main)
+        public EditDepartmentCommand(MainViewModel main, IDepartmentService service)
         {
             _main = main;
+            _service = service;
+            _rep = _service.GetRepository() as IDepartmentRepository;
         }
 
         public bool CanExecute(object parameter)
@@ -42,8 +47,7 @@ namespace Asset_Management_System.ViewModels.Commands
             }
 
             // Validating id
-            DepartmentRepository rep = new DepartmentRepository();
-            Department department = rep.GetById(id);
+            Department department = _rep.GetById(id);
             if (department != null)
             {
                 editingDepartment = department;
@@ -62,7 +66,7 @@ namespace Asset_Management_System.ViewModels.Commands
                 if (e.ResultMessage != String.Empty)
                 {
                     editingDepartment.Name = e.ResultMessage;
-                    if (new DepartmentRepository().Update(editingDepartment))
+                    if (_rep.Update(editingDepartment))
                     {
                         _main.CurrentDepartment = editingDepartment;
                         _main.OnPropertyChanged(nameof(_main.CurrentDepartment));
