@@ -18,7 +18,6 @@ namespace Asset_Management_System.ViewModels
 {
     public class AssetsViewModel : ChangeableListPageViewModel<AssetRepository, Asset>
     {
-        private MainViewModel _main;
         private string _currentGroup = String.Empty;
         private string _searchQueryText = String.Empty;
         private bool IsTagMode = false;
