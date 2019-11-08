@@ -60,7 +60,7 @@
                              TabIndex="0">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
-                            <KeyBinding Key="Esc" Command="{Binding DeleteCommand}"/>
+                            <KeyBinding Key="Escape" Command="{Binding DeleteCommand}"/>
                             <!--<KeyBinding Key="Tab" FocusManager.FocusedElement="{Binding ElementName=SuggestionsList}"/>-->
                         </TextBox.InputBindings>
                     </TextBox>

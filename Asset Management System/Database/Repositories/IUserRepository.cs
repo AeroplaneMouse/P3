@@ -13,7 +13,5 @@ namespace Asset_Management_System.Database.Repositories
         IEnumerable<User> GetUsersForAsset(ulong id);
 
         ulong GetCount();
-
-        IEnumerable<User> GetAll();
     }
 }
