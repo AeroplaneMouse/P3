@@ -17,7 +17,7 @@
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" BorderBrush="{Binding Color}" BorderThickness="2" CornerRadius="10"
-                                        Background="{Binding Color}" FocusVisualStyle="{x:Null}">
+                                        Background="{Binding Color}" FocusVisualStyle="{x:Null}" RenderOptions.EdgeMode="Aliased">
                                     <Grid >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
@@ -47,7 +47,7 @@
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" BorderBrush="{Binding Color}" BorderThickness="2" CornerRadius="10"
-                                        Background="{Binding Color}" FocusVisualStyle="{x:Null}">
+                                        Background="{Binding Color}" FocusVisualStyle="{x:Null}" RenderOptions.EdgeMode="Aliased">
                                     <Grid >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
