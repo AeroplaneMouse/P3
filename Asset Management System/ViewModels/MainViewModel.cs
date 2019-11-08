@@ -27,6 +27,7 @@ namespace Asset_Management_System.ViewModels
         private IAssetService _assetService;
         private ITagService _tagService;
         private IEntryService _entryService;
+        private IUserService _userService;
         
         /// <summary>
         /// Default constructor
@@ -71,6 +72,7 @@ namespace Asset_Management_System.ViewModels
             _assetService = new AssetService(new AssetRepository());
             _tagService = new TagService(new TagRepository());
             _entryService = new EntryService(new LogRepository());
+            _userService = new UserService(new UserRepository());
             
             ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this)));
             ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
@@ -364,7 +366,7 @@ namespace Asset_Management_System.ViewModels
 
         private void ImportUsers()
         {
-            var dialog = new Views.UserImporterView();
+            var dialog = new Views.UserImporterView(_userService);
 
             dialog.ShowDialog();
         }

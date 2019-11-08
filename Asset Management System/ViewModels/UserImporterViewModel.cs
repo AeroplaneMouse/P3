@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -12,7 +13,7 @@ namespace Asset_Management_System.ViewModels
     {
         #region Private Properties
 
-        private UserRepository _rep { get; set; }
+        private IUserRepository _rep { get; set; }
 
         private UserImporter _importer { get; set; }
 
@@ -21,6 +22,8 @@ namespace Asset_Management_System.ViewModels
         private List<User> _newUsersList { get; set; }
 
         private List<User> _finalUsersList { get; set; }
+
+        private IUserService _service;
 
         #endregion
 
@@ -48,9 +51,10 @@ namespace Asset_Management_System.ViewModels
 
         #region Constructor
 
-        public UserImporterViewModel()
+        public UserImporterViewModel(IUserService service)
         {
-            _rep = new UserRepository();
+            _service = service;
+            _rep = service.GetRepository() as IUserRepository;
 
             _importer = new UserImporter();
 

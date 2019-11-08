@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.Views
 {
@@ -17,10 +18,10 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class UserImporterView : Window
     {
-        public UserImporterView()
+        public UserImporterView(IUserService service)
         {
             InitializeComponent();
-            this.DataContext = new ViewModels.UserImporterViewModel();
+            this.DataContext = new ViewModels.UserImporterViewModel(service);
         }
     }
 }

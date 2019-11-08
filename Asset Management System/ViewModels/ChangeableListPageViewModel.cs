@@ -23,11 +23,11 @@ namespace Asset_Management_System.ViewModels
 
         #endregion
 
-        private IService<T> _service;
+        private IDisplayableService<T> _service;
 
         #region Constructor
 
-        public ChangeableListPageViewModel(MainViewModel main, IService<T> service) : base(main, service)
+        public ChangeableListPageViewModel(MainViewModel main, IDisplayableService<T> service) : base(main, service)
         {
             // AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.TagManager(_main)));
             AddNewCommand = new Base.RelayCommand(AddNew);

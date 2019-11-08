@@ -93,7 +93,7 @@ namespace Asset_Management_System.ViewModels
 
         #region Constructor
 
-        public ListPageViewModel(MainViewModel main, IService<T> service)
+        public ListPageViewModel(MainViewModel main, IDisplayableService<T> service)
         {
             Rep = service.GetSearchableRepository();
 
