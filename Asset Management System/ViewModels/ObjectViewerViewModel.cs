@@ -69,7 +69,7 @@ namespace Asset_Management_System.ViewModels
             // Reference to main view model
             _main = main;
             _commentService = commentService;
-            _commentRep = _commentService.GetRepository() as ICommentRepository;
+            _commentRep = commentService == null ? null : _commentService.GetRepository() as ICommentRepository;
 
             FieldsList = new ObservableCollection<ShownField>();
             TagsList = new List<Tag>();
