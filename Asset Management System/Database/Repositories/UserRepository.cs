@@ -96,7 +96,7 @@ namespace Asset_Management_System.Database.Repositories
             
             try
             {
-                const string query = "SELECT COUNT(*) FROM users;";
+                const string query = "SELECT COUNT(*) FROM users WHERE enabled = 1;";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
