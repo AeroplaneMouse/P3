@@ -25,7 +25,7 @@ namespace Asset_Management_System.ViewModels
 
         public int ViewType => 1;
         public int SelectedSuggestedIndex { get; set; }
-        public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Visible;
+        public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Hidden;
         public ICommand DeleteCommand { get; set; }
         public ICommand EnterCommand { get; set; }
         public ICommand SelectTagCommand { get; set; }
@@ -41,10 +41,10 @@ namespace Asset_Management_System.ViewModels
             set
             {
                 _currentGroup = value;
-                //if (value == String.Empty)
-                //    IsCurrentGroupVisible = Visibility.Visible;
-                //else
-                //    IsCurrentGroupVisible = Visibility.Visible;
+                if (value == String.Empty)
+                    IsCurrentGroupVisible = Visibility.Hidden;
+                else
+                    IsCurrentGroupVisible = Visibility.Visible;
             }
         }
 
