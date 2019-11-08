@@ -8,10 +8,10 @@ namespace Asset_Management_System.Views.Prompts
     /// </summary>
     public partial class CustomField : Page
     {
-        public CustomField(string message, PromptEventHandler handler)
+        public CustomField(string message, PromptEventHandler handler,bool isCustom = false)
         {
             InitializeComponent();
-            DataContext = new ViewModels.Prompts.CustomFieldViewModel(message, handler);
+            DataContext = new ViewModels.Prompts.CustomFieldViewModel(message, handler,isCustom);
         }
     }
 }
