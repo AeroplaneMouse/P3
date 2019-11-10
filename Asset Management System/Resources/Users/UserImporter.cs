@@ -39,8 +39,7 @@ namespace Asset_Management_System.Resources.Users
 
             if (!String.IsNullOrEmpty(filePath))
             {
-                // TODO: Check encoding af filen før den bliver read, så der kan bruges andre end ANSI (1252)
-                return Encoding.GetEncoding(1252).GetString(File.ReadAllBytes(filePath))
+                return GetEncoding(filePath).GetString(File.ReadAllBytes(filePath))
                 .Split("\r\n")                  // Splits file into lines, by newlines
                 .Select(p => p.Split('\t'))     // Splits lines into sections, by tabs
                 .Where(p => p.Count() > 1)      // Only gets lines with something in them
@@ -68,54 +67,31 @@ namespace Asset_Management_System.Resources.Users
             }
             
         }
-    }
 
-    public class UserWithStatus : User
-    {
-        public UserWithStatus(User user) : base()
+        private static Encoding GetEncoding(string filename)
         {
-            this.ID = user.ID;
-            this.Username = user.Username;
-            this.Domain = user.Domain;
-            this.Description = user.Description;
-            this.IsEnabled = user.IsEnabled;
-            this.DefaultDepartment = user.DefaultDepartment;
-            this.IsAdmin = user.IsAdmin;
-            this.CreatedAt = user.CreatedAt;
-            this.UpdatedAt = user.UpdatedAt;
-        }
-
-        public string Status { get; set; }
-
-        public string StatusColor
-        {
-            get
+            // Read the BOM
+            var bom = new byte[4];
+            using (var file = new FileStream(filename, FileMode.Open, FileAccess.Read))
             {
-                if (Status.CompareTo("Added") == 0)
-                {
-                    return "#00B600";
-                }
-
-                else if (Status.CompareTo("Removed") == 0)
-                {
-                    return "#E30000";
-                }
-
-                else if (Status.CompareTo("Conflict") == 0)
-                {
-                    return "#FFCC1A";
-                }
-
-                else if (IsEnabled == false)
-                {
-                    return "#C0C0C0";
-                }
-
-                else
-                {
-                    return "#ffffff";
-                }
+                file.Read(bom, 0, 4);
             }
+
+            // Analyze the BOM
+            if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76) 
+                return Encoding.UTF7;
+            if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf) 
+                return Encoding.UTF8;
+            if (bom[0] == 0xff && bom[1] == 0xfe) 
+                return Encoding.Unicode; //UTF-16LE
+            if (bom[0] == 0xfe && bom[1] == 0xff) 
+                return Encoding.BigEndianUnicode; //UTF-16BE
+            if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff) 
+                return Encoding.UTF32;
+
+            return Encoding.GetEncoding(1252);
         }
     }
+
+    
 }
