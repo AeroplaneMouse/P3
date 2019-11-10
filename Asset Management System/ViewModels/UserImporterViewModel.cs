@@ -12,7 +12,7 @@ using System.Windows.Input;
 namespace Asset_Management_System.ViewModels
 {
     
-
+    // Needs notifications
 
     public class UserImporterViewModel : Base.BaseViewModel, IListUpdate
     {
@@ -264,7 +264,7 @@ namespace Asset_Management_System.ViewModels
                     u.IsShown = IsShowingRemoved;
                 });
 
-            // Kept users. Users that are enabled, and are in both lists
+            // Kept users. Users that are enabled, and are in both lists. Remove the copy coming from the imported file
             _finalUsersList
                 .Where(u => u.Status.CompareTo(String.Empty) == 0)
                 .Where(u => IsInList(_existingUsersList.Where(p => p.IsEnabled == true).ToList(), u) && IsInList(_importedUsersList, u))
@@ -337,16 +337,42 @@ namespace Asset_Management_System.ViewModels
         // TODO: Make this go back, instead of going to the assets page
         private void Cancel()
         {
-            _main.ChangeMainContent(new Views.Assets(_main));
+            _main.ChangeMainContent(new Views.Home(_main));
         }
 
         // Applies the changes made to the users to the database
         private void Apply()
         {
-            //foreach (User user in FinalUsersList)
+            // Check if there are any conflicts left
+            //if (_finalUsersList.Where(p => p.Status.CompareTo("Conflict") == 0).Count() > 0)
             //{
-            //    _rep.Insert(user, out ulong id);
+            //    Console.WriteLine("Not all conflicts are solved");
+            //    return;
             //}
+
+            //// Disable the removed users in the database
+            //_finalUsersList
+            //    .Where(p => p.Status.CompareTo("Removed") == 0)
+            //    .ToList()
+            //    .ForEach(p =>
+            //    {
+            //        p.IsEnabled = false;
+            //        _rep.Update(p);
+            //    });
+
+            //// Insert added users to the database
+            //_finalUsersList
+            //    .Where(p => p.Status.CompareTo("Added") == 0)
+            //    .ToList()
+            //    .ForEach(p => _rep.Insert(p, out ulong id));
+
+            //// Update the users that weren't removed, as they may have gotten new descriptions, etc.
+            //_finalUsersList
+            //    .Where(p => p.Status.CompareTo(String.Empty) == 0)
+            //    .ToList()
+            //    .ForEach(p => _rep.Update(p));
+
+            //_main.ChangeMainContent(new Views.Home(_main));
         }
 
         #endregion
