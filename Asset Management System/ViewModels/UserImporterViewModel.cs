@@ -176,7 +176,7 @@ namespace Asset_Management_System.ViewModels
             
 
             // Initialize commands 
-            CancelCommand = new Base.RelayCommand(() => );
+            CancelCommand = new Base.RelayCommand(Cancel);
             ApplyCommand = new Base.RelayCommand(Apply);   
         }
 
