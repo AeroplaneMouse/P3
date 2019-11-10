@@ -20,7 +20,15 @@ namespace Asset_Management_System.ViewModels
 
         private UserImporter _importer { get; set; }
 
+
+        // Checkboxes
         private bool _isShowingAdded { get; set; }
+
+        private bool _isShowingRemoved { get; set; }
+
+        private bool _isShowingConflicting { get; set; }
+
+        private bool _isShowingDisabled { get; set; }
 
         // Lists
         private List<UserWithStatus> _importedUsersList { get; set; }
@@ -41,7 +49,7 @@ namespace Asset_Management_System.ViewModels
             {
                 if (_finalUsersList == null)
                 {
-                    GetAllUsers();
+                    _finalUsersList = new List<UserWithStatus>();
                 }
 
                 return _finalUsersList
@@ -57,6 +65,8 @@ namespace Asset_Management_System.ViewModels
             set => _finalUsersList = value;
         }
 
+        public UserWithStatus SelectedItemIndex { get; set; }
+
         // Checkboxes
         public bool IsShowingAdded
         {
@@ -70,18 +80,74 @@ namespace Asset_Management_System.ViewModels
             {
                 _isShowingAdded = value;
 
-                ShownUsersList
+                (_finalUsersList ?? new List<UserWithStatus>())
                     .Where(p => p.Status.CompareTo("Added") == 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
+
+                OnPropertyChanged(nameof(ShownUsersList));
             }
         }
 
-        public bool IsShowingRemoved { get; set; }
+        public bool IsShowingRemoved
+        {
+            get
+            {
+                return _isShowingRemoved;
+            }
 
-        public bool IsShowingConflicting { get; set; }
+            set
+            {
+                _isShowingRemoved = value;
 
-        public bool IsShowingDisabled { get; set; }
+                (_finalUsersList ?? new List<UserWithStatus>())
+                    .Where(p => p.Status.CompareTo("Removed") == 0)
+                    .ToList()
+                    .ForEach(p => p.IsShown = value);
+
+                OnPropertyChanged(nameof(ShownUsersList));
+            }
+        }
+
+        public bool IsShowingConflicting
+        {
+            get
+            {
+                return _isShowingConflicting;
+            }
+
+            set
+            {
+                _isShowingConflicting = value;
+
+                (_finalUsersList ?? new List<UserWithStatus>())
+                    .Where(p => p.Status.CompareTo("Conflict") == 0)
+                    .ToList()
+                    .ForEach(p => p.IsShown = value);
+
+                OnPropertyChanged(nameof(ShownUsersList));
+            }
+        }
+
+        public bool IsShowingDisabled
+        {
+            get
+            {
+                return _isShowingDisabled;
+            }
+
+            set
+            {
+                _isShowingDisabled = value;
+
+                (_finalUsersList ?? new List<UserWithStatus>())
+                    .Where(p => p.IsEnabled == false && p.Status.CompareTo("Conflict") != 0)
+                    .ToList()
+                    .ForEach(p => p.IsShown = value);
+
+                OnPropertyChanged(nameof(ShownUsersList));
+            }
+        }
 
         #endregion
 
@@ -105,6 +171,27 @@ namespace Asset_Management_System.ViewModels
 
             _main = main;
 
+            GetAllUsers();
+
+            
+
+            // Initialize commands 
+            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
+            ApplyCommand = new Base.RelayCommand(Apply);   
+        }
+
+        #endregion
+
+        #region Public Methods
+
+
+
+        #endregion
+
+        #region Private Methods
+
+        private void GetAllUsers()
+        {
             _rep = new UserRepository();
 
             _importer = new UserImporter();
@@ -126,23 +213,6 @@ namespace Asset_Management_System.ViewModels
                 return;
             }
 
-            // Initialize commands 
-            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
-            ApplyCommand = new Base.RelayCommand(Apply);   
-        }
-
-        #endregion
-
-        #region Public Methods
-
-
-
-        #endregion
-
-        #region Private Methods
-
-        private void GetAllUsers()
-        {
             // List with all users
             _finalUsersList = new List<UserWithStatus>();
             _finalUsersList.AddRange(_existingUsersList.Select(u => new UserWithStatus(u)).ToList());

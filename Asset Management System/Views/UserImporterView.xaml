@@ -64,7 +64,7 @@
                                Text="Users"
                                Grid.Row="0"/>
 
-                    <ListView ItemsSource="{Binding ShownUsersList, UpdateSourceTrigger=PropertyChanged}"
+                    <ListView ItemsSource="{Binding ShownUsersList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                               SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                               Margin="0 0 2 0"
                               Grid.Row="1">
@@ -79,6 +79,8 @@
 
                         <ListView.View>
                             <GridView>
+                                
+                                <!-- User status -->
                                 <GridViewColumn Header="Status" Width="30">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
@@ -94,18 +96,38 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
+                                <!-- Username -->
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
                                                 Header="Username" />
 
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Domain}"
-                                                Header="Domain" />
+                                <!-- Domain -->
+                                <GridViewColumn Header="Domain">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Path=Domain, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                     BorderBrush="Transparent"
+                                                     Background="Transparent"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
 
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" 
-                                                Header="Description" />
+                                <!-- Description-->
+                                <GridViewColumn Header="Description">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBox Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                     BorderBrush="Transparent"
+                                                     Background="Transparent"
+                                                     MinWidth="100"/>
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
 
+                                <!-- Department -->
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
                                                 Header="Department" />
 
+                                <!-- Admin or not -->
                                 <GridViewColumn Header="Admin">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
