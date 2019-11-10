@@ -58,7 +58,7 @@
 
                 <Grid Grid.Row="0" Margin="10 5 0 5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="21"/>
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
@@ -158,25 +158,38 @@
             <!-- Buttons -->
             <Grid Grid.Column="1" Margin="10 5 10 5">
                 <StackPanel Orientation="Vertical">
-                    
+
+                    <TextBlock Style="{StaticResource HeaderStyle}"
+                               Text="Options"
+                               Grid.Row="0"
+                               Margin="0 0 0 2"/>
+
                     <!-- Added users -->
-                    <TextBlock Text="Added users"/>
-                    <CheckBox IsChecked="{Binding IsShowingAdded, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Show added users"
+                               Margin="0 0 0 1"/>
+                    <CheckBox IsChecked="{Binding IsShowingAdded, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="0 0 0 6"/>
                     
                     <!-- Removed users-->
-                    <TextBlock Text="Removed users"/>
-                    <CheckBox IsChecked="{Binding IsShowingRemoved, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Show removed users"
+                               Margin="0 0 0 1"/>
+                    <CheckBox IsChecked="{Binding IsShowingRemoved, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="0 0 0 6"/>
                     
                     <!-- Conflicting users -->
-                    <TextBlock Text="Conflicting users"/>
-                    <CheckBox IsChecked="{Binding IsShowingConflicting, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Show conflicting users"
+                               Margin="0 0 0 1"/>
+                    <CheckBox IsChecked="{Binding IsShowingConflicting, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="0 0 0 6"/>
                     
                     <!-- Disabled users -->
-                    <TextBlock Text="Inactive users"/>
-                    <CheckBox IsChecked="{Binding IsShowingDisabled, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="Show inactive users"
+                               Margin="0 0 0 1"/>
+                    <CheckBox IsChecked="{Binding IsShowingDisabled, UpdateSourceTrigger=PropertyChanged}"
+                              Margin="0 0 0 6"/>
                     
                     <!-- Keep user button -->
-                    <Button Content="Keep User" 
+                    <Button Content="Keep user" 
                             Margin="0 10"
                             Command="{Binding KeepUserCommand}"
                             Style="{StaticResource RegularButton}"

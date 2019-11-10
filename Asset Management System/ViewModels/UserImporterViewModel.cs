@@ -285,9 +285,9 @@ namespace Asset_Management_System.ViewModels
             return users.Where(u => u.Username.CompareTo(user.Username) == 0).Count() > 0;
         }
 
-        // Conflict
         
         
+        // TODO: Ville være virkelig fint hvis den her knap sad på hver bruger i listen, i stedet for én stor
         private void KeepUser()
         {
             // Get the user that is currently selected. This is the user that is kept
@@ -344,11 +344,11 @@ namespace Asset_Management_System.ViewModels
         private void Apply()
         {
             // Check if there are any conflicts left
-            //if (_finalUsersList.Where(p => p.Status.CompareTo("Conflict") == 0).Count() > 0)
-            //{
-            //    Console.WriteLine("Not all conflicts are solved");
-            //    return;
-            //}
+            if (_finalUsersList.Where(p => p.Status.CompareTo("Conflict") == 0).Count() > 0)
+            {
+                Console.WriteLine("Not all conflicts are solved");
+                return;
+            }
 
             //// Disable the removed users in the database
             //_finalUsersList
@@ -372,7 +372,7 @@ namespace Asset_Management_System.ViewModels
             //    .ToList()
             //    .ForEach(p => _rep.Update(p));
 
-            //_main.ChangeMainContent(new Views.Home(_main));
+            _main.ChangeMainContent(new Views.Home(_main));
         }
 
         #endregion
