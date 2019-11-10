@@ -221,11 +221,6 @@ namespace Asset_Management_System.ViewModels
                 .Select(u => new UserWithStatus(u))
                 .ToList();
 
-            if (_importedUsersList == null)
-            {
-                return;
-            }
-
             // List with all users
             _finalUsersList = new List<UserWithStatus>();
             _finalUsersList.AddRange(_existingUsersList);
@@ -285,8 +280,6 @@ namespace Asset_Management_System.ViewModels
             return users.Where(u => u.Username.CompareTo(user.Username) == 0).Count() > 0;
         }
 
-        
-        
         // TODO: Ville være virkelig fint hvis den her knap sad på hver bruger i listen, i stedet for én stor
         private void KeepUser()
         {
