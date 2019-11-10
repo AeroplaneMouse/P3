@@ -176,7 +176,7 @@ namespace Asset_Management_System.ViewModels
             
 
             // Initialize commands 
-            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
+            CancelCommand = new Base.RelayCommand(() => );
             ApplyCommand = new Base.RelayCommand(Apply);   
         }
 
@@ -215,8 +215,8 @@ namespace Asset_Management_System.ViewModels
 
             // List with all users
             _finalUsersList = new List<UserWithStatus>();
-            _finalUsersList.AddRange(_existingUsersList.Select(u => new UserWithStatus(u)).ToList());
-            _finalUsersList.AddRange(_importedUsersList.Select(u => new UserWithStatus(u)).ToList());
+            _finalUsersList.AddRange(_existingUsersList);
+            _finalUsersList.AddRange(_importedUsersList);
 
             // Conflicting users. Users that are not enabled, and are in both lists
             _finalUsersList
@@ -273,6 +273,14 @@ namespace Asset_Management_System.ViewModels
             return users.Where(u => u.Username.CompareTo(user.Username) == 0).Count() > 0;
         }
 
+        // Goes back to the page that the user came from
+        // TODO: Make this go back, instead of going to the assets page
+        private void Cancel()
+        {
+            _main.ChangeMainContent(new Views.Assets(_main));
+        }
+
+        // Applies the changes made to the users to the database
         private void Apply()
         {
             //foreach (User user in FinalUsersList)

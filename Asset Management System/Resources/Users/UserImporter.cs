@@ -57,7 +57,7 @@ namespace Asset_Management_System.Resources.Users
                     u.Description = (p[2] != null) ? p[2] : String.Empty;
 
                     return u;
-                })                          // Converts each string[] into a user
+                })  // Converts each string[] into a user
                 .ToList();
             }
 
@@ -68,6 +68,9 @@ namespace Asset_Management_System.Resources.Users
             
         }
 
+        // Borrowed from https://stackoverflow.com/questions/3825390/effective-way-to-find-any-files-encoding, answer 1
+        // Checks the byte order mark of the file, and return the encoding that it should be read with. 
+        // ANSI is set to code page 1252 by default here
         private static Encoding GetEncoding(string filename)
         {
             // Read the BOM
