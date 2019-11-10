@@ -109,7 +109,8 @@ namespace Asset_Management_System.ViewModels
         {
             new Views.AssetManager(null),
             new Views.TagManager(null),
-            new Views.ObjectViewer(null, null)
+            new Views.ObjectViewer(null, null),
+            new Views.UserImporterView(null)
         };
 
         private Department _currentDepartment;

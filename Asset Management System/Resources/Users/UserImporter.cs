@@ -10,9 +10,6 @@ using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Resources.Users
 {
-    // TODO: Lav et vindue der bruger det her til at importere brugere, hvor man kan vælge om de er admins eller ej, og hvor man kan vælge filen der skal bruges
-    // TODO: Lav et vindue der viser alle brugere, hvor man kan redigere brugere (promote, demote)
-    // TODO: Lav logik der sætter enabled på brugeren i databasen til false, hvis de ikke er i listen af importerede brugere
     public class UserImporter
     {
         private string _filePath { get; set; }
@@ -32,10 +29,12 @@ namespace Asset_Management_System.Resources.Users
 
             string filePath = "";
 
-            if (result == true)
+            if (result == false)
             {
-                filePath = n.FileName;
+                return new List<User>();
             }
+
+            filePath = n.FileName;
 
             if (!String.IsNullOrEmpty(filePath))
             {

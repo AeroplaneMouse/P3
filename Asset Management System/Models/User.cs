@@ -73,8 +73,6 @@ namespace Asset_Management_System.Models
 
         public string Status { get; set; }
 
-        public bool IsShown { get; set; }
-
         public string StatusColor
         {
             get
@@ -105,5 +103,7 @@ namespace Asset_Management_System.Models
                 }
             }
         }
+
+        public bool IsShown { get; set; }
     }
 }

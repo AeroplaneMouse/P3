@@ -12,6 +12,8 @@
         <DataTemplate x:Key="TextColumn">
             <TextBlock Text="{Binding}" Margin="5 0 0 5"/>
         </DataTemplate>
+
+        <local:StatusToVisibilityConverter x:Key="converter"/>
     </Page.Resources>
     
     <Grid>
@@ -135,6 +137,14 @@
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
+
+                                <!--<GridViewColumn Header="Keep">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Command="{Binding KeepUserCommand}" Content="Keep User" Visibility="{Binding Path=Status, Converter={StaticResource converter}}" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>-->
                             </GridView>
                         </ListView.View>
 
@@ -165,6 +175,13 @@
                     <TextBlock Text="Inactive users"/>
                     <CheckBox IsChecked="{Binding IsShowingDisabled, UpdateSourceTrigger=PropertyChanged}"/>
                     
+                    <!-- Keep user button -->
+                    <Button Content="Keep User" 
+                            Margin="0 10"
+                            Command="{Binding KeepUserCommand}"
+                            Style="{StaticResource RegularButton}"
+                            HorizontalAlignment="Left"/>
+
                 </StackPanel>
             </Grid>
 

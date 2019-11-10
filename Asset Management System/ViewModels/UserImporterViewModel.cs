@@ -1,6 +1,7 @@
 ﻿using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
+using Asset_Management_System.Resources.Interfaces;
 using Asset_Management_System.Resources.Users;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,10 @@ using System.Windows.Input;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class UserImporterViewModel : Base.BaseViewModel
+    
+
+
+    public class UserImporterViewModel : Base.BaseViewModel, IListUpdate
     {
         #region Private Properties
 
@@ -37,6 +41,8 @@ namespace Asset_Management_System.ViewModels
 
         private List<UserWithStatus> _finalUsersList { get; set; }
 
+        private int _selectedItemIndex { get; set; }
+
         #endregion
 
         #region Public Properties
@@ -47,17 +53,12 @@ namespace Asset_Management_System.ViewModels
         {
             get
             {
-                if (_finalUsersList == null)
-                {
-                    _finalUsersList = new List<UserWithStatus>();
-                }
-
-                return _finalUsersList
+                return (_finalUsersList ?? new List<UserWithStatus>())
                     .Where(u => u.IsShown == true)
-                    .OrderBy(p => p.IsEnabled)
+                    .OrderByDescending(p => p.IsEnabled)
                     .OrderBy(p => p.Username)
-                    .OrderByDescending(p => p.Status.CompareTo("Added") == 0)
                     .OrderByDescending(p => p.Status.CompareTo("Removed") == 0)
+                    .OrderByDescending(p => p.Status.CompareTo("Added") == 0)
                     .OrderByDescending(p => p.Status.CompareTo("Conflict") == 0)
                     .ToList();
             }
@@ -65,7 +66,11 @@ namespace Asset_Management_System.ViewModels
             set => _finalUsersList = value;
         }
 
-        public UserWithStatus SelectedItemIndex { get; set; }
+        public int SelectedItemIndex
+        {
+            get => _selectedItemIndex;
+            set => _selectedItemIndex = value;
+        }
 
         // Checkboxes
         public bool IsShowingAdded
@@ -157,12 +162,20 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand ApplyCommand { get; set; }
 
+        public ICommand KeepUserCommand { get; set; }
+
         #endregion
 
         #region Constructor
 
         public UserImporterViewModel(MainViewModel main)
         {
+            // Because page needs to be in the excluded pages, because of the GetAllUsers
+            if (main == null)
+            {
+                return;
+            }
+
             // Initialize checkboxes
             IsShowingAdded = true;
             IsShowingRemoved = true;
@@ -171,20 +184,26 @@ namespace Asset_Management_System.ViewModels
 
             _main = main;
 
-            GetAllUsers();
+            _rep = new UserRepository();
 
-            
+            _importer = new UserImporter();
+
+            GetAllUsers();
 
             // Initialize commands 
             CancelCommand = new Base.RelayCommand(Cancel);
-            ApplyCommand = new Base.RelayCommand(Apply);   
+            ApplyCommand = new Base.RelayCommand(Apply);
+            KeepUserCommand = new Base.RelayCommand(KeepUser);
         }
 
         #endregion
 
         #region Public Methods
 
-
+        public void UpdateList()
+        {
+            OnPropertyChanged(nameof(ShownUsersList));
+        }
 
         #endregion
 
@@ -192,19 +211,13 @@ namespace Asset_Management_System.ViewModels
 
         private void GetAllUsers()
         {
-            _rep = new UserRepository();
-
-            _importer = new UserImporter();
-
             // Get the users already in the database
-            _existingUsersList = _rep
-                .GetAll()
+            _existingUsersList = (_rep.GetAll() ?? new List<User>())
                 .Select(u => new UserWithStatus(u))
                 .ToList();
 
             // Import the users from the user file
-            _importedUsersList = _importer
-                .Import()
+            _importedUsersList = (_importer.Import() ?? new List<User>())
                 .Select(u => new UserWithStatus(u))
                 .ToList();
 
@@ -267,10 +280,57 @@ namespace Asset_Management_System.ViewModels
                 .ForEach(u => u.IsShown = IsShowingDisabled);
         }
 
-
         private bool IsInList(List<UserWithStatus> users, UserWithStatus user)
         {
             return users.Where(u => u.Username.CompareTo(user.Username) == 0).Count() > 0;
+        }
+
+        // Conflict
+        
+        
+        private void KeepUser()
+        {
+            // Get the user that is currently selected. This is the user that is kept
+            UserWithStatus keptUser = GetSelectedItem();
+
+            if (keptUser == null || keptUser.Status.CompareTo("Conflict") != 0)
+            {
+                return;
+            }
+
+            // Get the other conflicting user
+            UserWithStatus otherUser = _finalUsersList
+                .Where(p => p.Username.CompareTo(keptUser.Username) == 0 && p.Equals(keptUser) == false)
+                .FirstOrDefault();
+
+            // If the kept user i coming from the imported list: 
+            // Set their status to "Added". 
+            // Set the existing users status to empty, add the current date to their username, and set them to not show
+            if (_importedUsersList.Contains(keptUser))
+            {
+                keptUser.Status = "Added";
+
+                otherUser.Status = String.Empty;
+                otherUser.Username = otherUser.Username + " (" + DateTime.Now.ToString() + ")";
+                otherUser.IsShown = IsShowingDisabled;
+            }
+
+            // Hvis brugeren der beholdes er den eksisterende bruger, skal deres status være String.Empty, IsEnabled skal sættes til true og den importerede bruger bliver fjernet fra listen.
+            else if (_existingUsersList.Contains(keptUser))
+            {
+                keptUser.Status = String.Empty;
+                keptUser.IsEnabled = true;
+                keptUser.IsShown = true;
+
+                _finalUsersList.Remove(otherUser);
+            }
+
+            else
+            {
+                Console.WriteLine("Error. User not found in either list");
+            }
+
+            OnPropertyChanged(nameof(ShownUsersList));
         }
 
         // Goes back to the page that the user came from
@@ -290,5 +350,16 @@ namespace Asset_Management_System.ViewModels
         }
 
         #endregion
+
+
+        private UserWithStatus GetSelectedItem()
+        {
+            if (ShownUsersList.Count == 0)
+                return null;
+            else
+                return ShownUsersList.ElementAtOrDefault(SelectedItemIndex);
+        }
+
+        
     }
 }
