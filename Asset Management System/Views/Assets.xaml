@@ -69,7 +69,8 @@
                              TabIndex="0">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
-                            <KeyBinding Key="Esc" Command="{Binding DeleteCommand}"/>
+                            <KeyBinding Key="Escape" Command="{Binding DeleteCommand}"/>
+                            <!--<KeyBinding Key="Tab" FocusManager.FocusedElement="{Binding ElementName=SuggestionsList}"/>-->
                         </TextBox.InputBindings>
                     </TextBox>
 
@@ -83,12 +84,12 @@
                         <TextBlock Style="{StaticResource ParagraphStyle}" Text="Strict" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Style="{StaticResource RegularCancelButton}"
                             Command="{Binding RemoveCommand}"
                             Content="Remove"
-                            Visibility="{Binding IsRemoveVisible}"/>
+                            Visibility="{Binding MultipleSelected,UpdateSourceTrigger=PropertyChanged}"/>
 
                     <Button Style="{StaticResource RegularButton}"
                             Command="{Binding EditCommand}"
@@ -111,7 +112,7 @@
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
                             <!--ViewCommand-->
-                            <i:InvokeCommandAction Command="{Binding View}" CommandParameter="{Binding ElementName=ListViewWithTags, Path=SelectedItem}"/>
+                            <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     
@@ -132,6 +133,8 @@
                 <!--Style="{StaticResource RegularList}"-->
                 <ListView ItemsSource="{Binding SearchList}"
                         SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                        Name="ListView"
+                        SelectionChanged="ListView_SelectionChanged"
                         Grid.Row="2"
                         Style="{StaticResource RegularList}">
                     <ListView.View>
@@ -171,7 +174,7 @@
                         MinWidth="209"
                         TabIndex="1">
                 <ListView.InputBindings>
-                    <KeyBinding Key="Enter" 
+                    <KeyBinding Key="Enter"
                                 Command="{Binding SelectTagCommand}"/>
                 </ListView.InputBindings>
             </ListView>

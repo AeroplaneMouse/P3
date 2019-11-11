@@ -8,19 +8,24 @@ namespace Asset_Management_System.Helpers.ConfigurationHandler
 {
     public class FileConfigurationHandler : IConFigurationHandler
     {
+        private Session _session;
         private const string Path = "./DBConfig.txt";
 
-
+        // Added constructor to get values from session
+        public FileConfigurationHandler(Session session)
+        {
+            _session = session;
+        }
         public string GetConfigValue()
         {
-            string configuration = FileEncryption.UserDataDecrypt(ComputeSha256Hash(Session.Domain), Path);
+            string configuration = FileEncryption.UserDataDecrypt(ComputeSha256Hash(_session.Domain), Path);
 
             return configuration;
         }
 
         public void SetConfigValue(string newValue)
         {
-            FileEncryption.UserDataEncrypt(ComputeSha256Hash(Session.Domain), newValue, Path);
+            FileEncryption.UserDataEncrypt(ComputeSha256Hash(_session.Domain), newValue, Path);
         }
 
 

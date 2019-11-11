@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Asset_Management_System.Logging;
 
 namespace Asset_Management_System.Database.Repositories
 {
-    interface ILogRepository<T> : ISearchableRepository<T>
+    public interface ILogRepository : ISearchableRepository<Entry>
     {    
-        bool Insert(T entity);
+        bool Insert(Entry entity);
         
-        IEnumerable<T> GetLogEntries(ulong logableId, Type logableType);
-        IEnumerable<T> GetLogEntries(ulong logableId, Type logableType, string username);
+        IEnumerable<Entry> GetLogEntries(ulong logableId, Type logableType);
+        IEnumerable<Entry> GetLogEntries(ulong logableId, Type logableType, string username);
     }
 }

@@ -17,8 +17,8 @@ namespace Asset_Management_System.Functions
         private List<User> _users;
         
         public ObservableCollection<ITagable> TaggedWith { get; set; }
-        private TagRepository _tagRep;
-        private UserRepository _userRep;
+        private ITagRepository _tagRep;
+        private IUserRepository _userRep;
 
         public Tagging(ObservableCollection<ITagable> tags=null)
         {

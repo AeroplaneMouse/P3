@@ -17,25 +17,20 @@ namespace Asset_Management_System.ViewModels
 
         public static ICommand RemoveFieldCommand { get; set; }
 
-        public ObjectManagerController()
-        {
-            RemoveFieldCommand = new RemoveFieldCommand(this);
-        }
+        public ObjectManagerController() => RemoveFieldCommand = new RemoveFieldCommand(this);
 
 
         protected void ConnectTags()
         {
             foreach (var tag in CurrentlyAddedTags)
-            {
                 ShowIfNewField(tag);
-            }
         }
 
 
         private void ShowIfNewField(Tag tag)
         {
-            FieldTagsPopulator(tag, FieldsList,false);
-            FieldTagsPopulator(tag, HiddenFields,true);
+            FieldTagsPopulator(tag, FieldsList, false);
+            FieldTagsPopulator(tag, HiddenFields, true);
         }
 
         private void FieldTagsPopulator(Tag tag,
@@ -53,60 +48,38 @@ namespace Asset_Management_System.ViewModels
                             alreadyExists = true;
 
                             if (!shownField.Field.IsCustom && string.IsNullOrEmpty(shownField.Field.Content))
-                            {
                                 shownField.Field.Content = currentTagField.DefaultValue;
-                            }
-                            
+
                             if (!shownField.FieldTags.Contains(tag))
-                            {
                                 shownField.FieldTags.Add(tag);
-                            }
                         }
-                        
                         
                         //Adds relation between tag and field.
                         if (tag.FieldsList.FirstOrDefault(field => field.Equals(currentTagField)) == null
                             && !shownField.FieldTags.Contains(tag))
-                        {
                             shownField.FieldTags.Add(tag);
-                        }
 
                         if (shownField.Field.HashId == currentTagField.HashId)
-                        {
                             if (shownField.Field.Label != currentTagField.Label && !shownField.Field.IsCustom)
-                            {
                                 shownField.Field.Label = currentTagField.Label;
-                            }
-                        }
                     }
                 }
-                
-                
+
+
                 if (!alreadyExists)
                 {
                     ShownField newField = new ShownField(currentTagField);
                     if (!newField.FieldTags.Contains(tag))
-                    {
                         newField.FieldTags.Add(tag);
-                    }
 
                     if (currentTagField.IsHidden &&
                         HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) == null)
-                    {
                         HiddenFields.Add(newField);
-                    }
-                    else
-                    {
-                        if (HiddenFields.SingleOrDefault(field => Equals(field.Field, currentTagField)) ==
+                    else if (HiddenFields.SingleOrDefault(field => Equals(field.Field, currentTagField)) ==
+                             null)
+                        if (FieldsList.SingleOrDefault(field => Equals(field.Field, currentTagField)) ==
                             null)
-                        {
-                            if (FieldsList.SingleOrDefault(field => Equals(field.Field, currentTagField)) ==
-                                null)
-                            {
-                                FieldsList.Add(newField);
-                            }
-                        }
-                    }
+                            FieldsList.Add(newField);
                 }
             }
         }

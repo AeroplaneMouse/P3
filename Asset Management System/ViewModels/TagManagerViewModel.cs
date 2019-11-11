@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
+using Asset_Management_System.Services.Interfaces;
 using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
@@ -15,6 +16,8 @@ namespace Asset_Management_System.ViewModels
         private MainViewModel _main;
         private Tag _tag;
         private string _randomColor;
+        private ITagService _service;
+        private ITagRepository _rep;
 
         public string Name { get; set; }
         public string Color { get; set; }
@@ -28,7 +31,6 @@ namespace Asset_Management_System.ViewModels
         {
             get
             {
-                TagRepository tagRepository = new TagRepository();
                 List<Tag> parentTagsList = new List<Tag>()
                 {
                     new Tag()
@@ -38,7 +40,7 @@ namespace Asset_Management_System.ViewModels
                         Color = _randomColor
                     }
                 };
-                foreach (Tag parentTag in (List<Tag>) tagRepository.GetParentTags())
+                foreach (Tag parentTag in (List<Tag>) _rep.GetParentTags())
                 {
                     parentTagsList.Add(parentTag);
                 }
@@ -47,10 +49,12 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        public TagManagerViewModel(MainViewModel main, Tag inputTag)
+        public TagManagerViewModel(MainViewModel main, ITagService service, Tag inputTag)
         {
             _main = main;
             _randomColor = CreateRandomColor();
+            _service = service;
+            _rep = service.GetSearchableRepository() as ITagRepository;
 
             FieldsList = new ObservableCollection<ShownField>();
 
@@ -69,11 +73,11 @@ namespace Asset_Management_System.ViewModels
             }
 
             // Initialize commands
-            SaveTagCommand = new Commands.SaveTagCommand(this, _main, _tag, _editing);
+            SaveTagCommand = new Commands.SaveTagCommand(this, _main, _tag, _service, _editing);
             AddFieldCommand = new Commands.AddFieldCommand(_main, this);
             RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
 
-            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Tags(_main)));
+            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Tags(_main, _service)));
         }
 
         public ICommand SaveTagCommand { get; set; }

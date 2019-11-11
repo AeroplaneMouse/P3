@@ -24,7 +24,7 @@ namespace Asset_Management_System.ViewModels
 
             _window = window;
             _entry = entry;
-            this.LabelText = "Log entry: " + entry.Id.ToString();
+            this.LabelText = "Log entry: " + entry.ID.ToString();
             this.DescriptionText = entry.Description;
             this.UserText = "By: " + entry.Username;
             this.TimeText = "At: " + entry.DateToStringConverter;
