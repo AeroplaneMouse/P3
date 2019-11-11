@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Windows;
 using System.Windows.Input;
-using Asset_Management_System.Logging;
+using Asset_Management_System.Events;
 using Asset_Management_System.Models;
+using Asset_Management_System.Logging;
 using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Database.Repositories;
-using System.Windows;
-using Asset_Management_System.Events;
 
 namespace Asset_Management_System.ViewModels
 {

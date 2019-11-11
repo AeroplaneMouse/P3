@@ -1,14 +1,13 @@
-﻿using Asset_Management_System.Models;
-using System;
+﻿using System;
+using System.Linq;
+using System.Windows.Input;
+using System.Windows.Controls;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.ViewModels.Commands;
 using Asset_Management_System.ViewModels.ViewModelHelper;
-using System.Drawing;
 
 namespace Asset_Management_System.ViewModels
 {

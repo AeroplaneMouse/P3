@@ -1,17 +1,16 @@
-﻿using Asset_Management_System.Helpers;
+﻿using System;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Controls;
+using System.Collections.Generic;
+using Asset_Management_System.Views;
+using System.Collections.ObjectModel;
+using Asset_Management_System.Models;
 using Asset_Management_System.Logging;
+using Asset_Management_System.Helpers;
 using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Resources.Interfaces;
-using Asset_Management_System.Models;
-using Asset_Management_System.Views;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace Asset_Management_System.ViewModels
 {
