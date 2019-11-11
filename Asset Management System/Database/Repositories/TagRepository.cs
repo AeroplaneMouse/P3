@@ -366,6 +366,10 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             List<Tag> tags = new List<Tag>();
 
+            // ******
+            if (con == null)
+                return tags;
+
             try
             {
                 const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at, options " +

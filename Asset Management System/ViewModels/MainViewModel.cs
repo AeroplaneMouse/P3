@@ -327,7 +327,7 @@ namespace Asset_Management_System.ViewModels
         public void LoadSystem(Session session)
         {
             // Attaching notification
-            new MySqlHandler().SqlConnectionFailed += SqlConnectionFailed;
+            MySqlHandler.ConnectionFailed += ConnectionFailed;
 
             // Loads homepage and other stuff from the UI-thread.
             SplashPage.Dispatcher.Invoke(Load);
@@ -347,10 +347,20 @@ namespace Asset_Management_System.ViewModels
                 CurrentDepartment = Department.GetDefault();
         }
 
-        private void SqlConnectionFailed(Notification n, bool needReload = false)
+        #endregion
+
+        #region Private Methods
+
+        private async void ConnectionFailed(Notification n, bool reloadRequired)
         {
-            AddNotification(n, 4000);
-            if (needReload)
+            // Display notification if one was given
+            if (n != null)
+                AddNotification(n, 4000);
+
+            await Task.Delay(10000);
+
+            // Reload the application is that is required
+            if (reloadRequired)
                 Reload();
         }
 
@@ -362,15 +372,10 @@ namespace Asset_Management_System.ViewModels
             excludedPages.Add(new Views.TagManager(null, _tagService));
             excludedPages.Add(new Views.ObjectViewer(null, _commentService, null));
             excludedPages.Add(new Views.UserImporterView(null, _userService));
-            
 
             // Load homepage
             ChangeMainContent(new Views.Home(this, _assetService, _tagService));
         }
-
-        #endregion
-
-        #region Private Methods
 
         private void ImportUsers()
         {
@@ -384,7 +389,7 @@ namespace Asset_Management_System.ViewModels
 
             // Clearing memory
             pages.Clear();
-            new MySqlHandler().SqlConnectionFailed -= SqlConnectionFailed;
+            MySqlHandler.ConnectionFailed -= ConnectionFailed;
             DisplayCurrentDepartment = false;
             CurrentUser = null;
             CurrentDepartment = null;

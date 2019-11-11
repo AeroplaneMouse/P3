@@ -297,7 +297,11 @@ namespace Asset_Management_System.Database.Repositories
         {
             var con = new MySqlHandler().GetConnection();
             ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
-            
+
+            // ******
+            if (con == null)
+                return assets;
+
             _query.Reset();
             _query.AddTable("assets AS a");
             _query.Columns.AddRange(new []{"a.id", "a.name", "a.description", "a.identifier", "a.department_id", "a.options", "a.created_at", "a.updated_at"});

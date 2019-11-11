@@ -1,13 +1,14 @@
 ﻿using System;
-using Asset_Management_System.Events;
 using MySql.Data.MySqlClient;
+using Asset_Management_System.Events;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Database
 {
     public class MySqlHandler
     {
         private readonly MySqlConnection _connection;
-        public event NotificationEventHandler SqlConnectionFailed;
+        public static event SqlConnectionEventHandler ConnectionFailed;
         
         public MySqlHandler()
         {
@@ -31,11 +32,18 @@ namespace Asset_Management_System.Database
                 con.Close();
                 return true;
             }
+            catch (MySqlException e)
+            {
+                Console.WriteLine($"SQL error message: { e.Message }");
+                const string message = "ERROR! Unfortunately, the excellent connection to the database has been lost...";
+                ConnectionFailed?.Invoke(new Notification(message, Notification.ERROR), true);
+            }
             catch (Exception)
             {
-                SqlConnectionFailed?.Invoke(new Models.Notification("ERROR! Unfortunately, the excellent connection to the database has been lost...", Models.Notification.ERROR), true);
-                return false;
+                const string message = "ERROR! An unknown error has occured...";
+                ConnectionFailed?.Invoke(new Notification(message, Notification.ERROR), false);
             }
+            return false;
         }
 
         public bool RawQuery(string rawQuery, MySqlParameterCollection par = null)

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Net.NetworkInformation;
-using Asset_Management_System.Models;
-using MySql.Data.MySqlClient;
 using System.Reflection;
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-using Org.BouncyCastle.Asn1.Cms;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Database.Repositories
 {
@@ -16,6 +13,10 @@ namespace Asset_Management_System.Database.Repositories
         {
             var con = new MySqlHandler().GetConnection();
             List<User> users = new List<User>();
+
+            // ****
+            if (con == null)
+                return users;
 
             try
             {
