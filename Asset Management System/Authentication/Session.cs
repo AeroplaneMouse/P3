@@ -11,7 +11,7 @@ namespace Asset_Management_System.Authentication
         public readonly User user;
         
         public string Username { get => GetIdentity().Split('\\')[1]; }
-        public static string Domain { get => GetIdentity().Split('\\')[0]; }
+        public string Domain { get => GetIdentity().Split('\\')[0]; }
 
         public Session(IUserService service)
         {

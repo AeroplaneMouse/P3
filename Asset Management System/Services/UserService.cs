@@ -18,6 +18,6 @@ namespace Asset_Management_System.Services
 
         public IRepository<User> GetRepository() => _rep;
 
-        public string GetName(User user) => user.Name;
+        public string GetName(User user) => user.Username;
     }
 }

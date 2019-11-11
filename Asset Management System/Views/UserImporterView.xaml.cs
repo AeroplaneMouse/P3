@@ -19,10 +19,10 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class UserImporterView : Page
     {
-        public UserImporterView(MainViewModel main)
+        public UserImporterView(MainViewModel main, IUserService userService)
         {
             InitializeComponent();
-            this.DataContext = new UserImporterViewModel(main);
+            this.DataContext = new UserImporterViewModel(main, userService);
         }
     }
 }

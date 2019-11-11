@@ -7,23 +7,25 @@ using System.Text;
 using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Models;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.Resources.Users
 {
     public class UserImporter
     {
+        private IUserService _userService;
         private string _filePath { get; set; }
 
-        public UserImporter()
+        public UserImporter(IUserService userService)
         {
-            
+            _userService = userService;
         }
 
         public List<User> Import()
         {
             var n = new Microsoft.Win32.OpenFileDialog();
 
-            var session = new Session();
+            var session = new Session(_userService);
 
             Nullable<bool> result = n.ShowDialog();
 

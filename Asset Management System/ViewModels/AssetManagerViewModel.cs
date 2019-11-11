@@ -133,8 +133,7 @@ namespace Asset_Management_System.ViewModels
             _main = main;
             Title = "Edit asset";
             _service = service;
-
-            // TODO: Consider if this should be given via Dependency Injection
+            
             _assetRep = _service.GetRepository() as IAssetRepository;
 
             FieldsList = new ObservableCollection<ShownField>();

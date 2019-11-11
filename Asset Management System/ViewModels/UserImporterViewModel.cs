@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -16,13 +17,16 @@ namespace Asset_Management_System.ViewModels
 
     public class UserImporterViewModel : Base.BaseViewModel, IListUpdate
     {
+
         #region Private Properties
 
         private MainViewModel _main { get; set; }
 
-        private UserRepository _rep { get; set; }
+        private IUserRepository _rep { get; set; }
 
         private UserImporter _importer { get; set; }
+        
+        private IUserService _userService;
 
 
         // Checkboxes
@@ -168,7 +172,7 @@ namespace Asset_Management_System.ViewModels
 
         #region Constructor
 
-        public UserImporterViewModel(MainViewModel main)
+        public UserImporterViewModel(MainViewModel main, IUserService userService)
         {
             // Because page needs to be in the excluded pages, because of the GetAllUsers
             if (main == null)
@@ -184,9 +188,10 @@ namespace Asset_Management_System.ViewModels
 
             _main = main;
 
-            _rep = new UserRepository();
+            _userService = userService;
+            _rep = _userService.GetRepository() as IUserRepository;
 
-            _importer = new UserImporter();
+            _importer = new UserImporter(_userService);
 
             GetAllUsers();
 
@@ -200,7 +205,7 @@ namespace Asset_Management_System.ViewModels
 
         #region Public Methods
 
-        public void UpdateList()
+        public void PageFocus()
         {
             OnPropertyChanged(nameof(ShownUsersList));
         }
@@ -327,10 +332,9 @@ namespace Asset_Management_System.ViewModels
         }
 
         // Goes back to the page that the user came from
-        // TODO: Make this go back, instead of going to the assets page
         private void Cancel()
         {
-            _main.ChangeMainContent(new Views.Home(_main));
+            _main.ReturnToPreviousPage();
         }
 
         // Applies the changes made to the users to the database
@@ -365,7 +369,7 @@ namespace Asset_Management_System.ViewModels
                 .ToList()
                 .ForEach(p => _rep.Update(p));
 
-            _main.ChangeMainContent(new Views.Home(_main));
+            _main.ReturnToPreviousPage();
         }
 
         #endregion

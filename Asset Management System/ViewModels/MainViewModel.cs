@@ -120,15 +120,10 @@ namespace Asset_Management_System.ViewModels
 
         private List<Page> pages = new List<Page>();
 
-        private List<Page> excludedPages = new List<Page>
-        {
-            new Views.AssetManager(null),
-            new Views.TagManager(null),
-            new Views.ObjectViewer(null, null),
-            new Views.UserImporterView(null)
-        };
+        private List<Page> excludedPages = new List<Page>();
 
         private Department _currentDepartment;
+        private Stack<Page> _history = new Stack<Page>();
 
         #endregion
 
@@ -286,6 +281,12 @@ namespace Asset_Management_System.ViewModels
 
             // Setting the content of the given frame, to the newPage object to display the requested page.
             frame.Content = setPage;
+            _history.Push(setPage);
+        }
+
+        public void ReturnToPreviousPage()
+        {
+            ChangeMainContent(_history.Pop());
         }
 
         public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
@@ -351,6 +352,8 @@ namespace Asset_Management_System.ViewModels
             excludedPages.Add(new Views.AssetManager(null, _assetService));
             excludedPages.Add(new Views.TagManager(null, _tagService));
             excludedPages.Add(new Views.ObjectViewer(null, _commentService, null));
+            excludedPages.Add(new Views.UserImporterView(null, _userService));
+            
 
             // Load homepage
             ChangeMainContent(new Views.Home(this, _assetService, _tagService));
@@ -362,7 +365,7 @@ namespace Asset_Management_System.ViewModels
 
         private void ImportUsers()
         {
-            ChangeMainContent(new Views.UserImporterView(this));
+            ChangeMainContent(new Views.UserImporterView(this, _userService));
         }
 
         // Used to reload the application
