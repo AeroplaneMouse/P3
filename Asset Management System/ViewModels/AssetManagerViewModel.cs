@@ -11,10 +11,11 @@ using Asset_Management_System.ViewModels.ViewModelHelper;
 using System.Drawing;
 using Asset_Management_System.Services;
 using Asset_Management_System.Services.Interfaces;
+using Asset_Management_System.ViewModels.Controllers;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class AssetManagerViewModel : ObjectManagerController
+    public class AssetManagerViewModel : AssetController
     {
         private MainViewModel _main;
         private Asset _asset;
@@ -128,47 +129,35 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
 
-        public AssetManagerViewModel(MainViewModel main, Asset inputAsset, IAssetService service, TextBox box, bool addMultiple = false)
+        public AssetManagerViewModel(MainViewModel main, Asset inputAsset, IAssetService service, TextBox box, bool addMultiple = false): base(inputAsset, service, addMultiple)
         {
             _main = main;
             Title = "Edit asset";
             _service = service;
-            
             _assetRep = _service.GetRepository() as IAssetRepository;
-
-            FieldsList = new ObservableCollection<ShownField>();
+            
             if (inputAsset != null)
             {
-                _asset = inputAsset;
-                LoadFields();
+                Name = Asset.Name;
+                Identifier = Asset.Identifier;
+                Description = Asset.Description;
 
-                CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
-
-                ConnectTags();
-                if (!addMultiple)
-                {
-                    Editing = true;
-                }
-                
-            }
-            else
-            {
-                CurrentlyAddedTags = new ObservableCollection<Tag>();
-                _asset = new Asset();
-                Editing = false;
+                // Notify view about changes
+                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(Description));
             }
 
             // Initialize commands
-            SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _service, Editing);
-            SaveMultipleAssetsCommand = new SaveAssetCommand(this, _main, _asset, _service, false, true);
+            SaveAssetCommand = new SaveAssetCommand(this, _main, Asset, _service, Editing);
+            SaveMultipleAssetsCommand = new SaveAssetCommand(this, _main, Asset, _service, false, true);
             AddFieldCommand = new AddFieldCommand(_main, this, true);
             RemoveFieldCommand = new RemoveFieldCommand(this);
 
-            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main, _service)));
-
-            //TODO: This whole tag related thing should be a class of its own
+            CancelCommand = new Base.RelayCommand(() => _main.ReturnToPreviousPage());
+            
             #region Tag related variables
 
+            // TODO: get via Dependency Injection
             _tagRep = new TagRepository();
 
             // TODO: Kom uden om mig
@@ -207,32 +196,6 @@ namespace Asset_Management_System.ViewModels
         {
             //TODO Figure out the implementation for this one.
             return true;
-        }
-
-        /// <summary>
-        /// This function loads the fields from the asset, and into the viewmodel.
-        /// </summary>
-        protected override void LoadFields()
-        {
-            foreach (var field in _asset.FieldsList)
-            {
-                if (field.IsHidden)
-                {
-                    HiddenFields.Add(new ShownField(field));
-                }
-                else
-                {
-                    FieldsList.Add(new ShownField(field));
-                }
-            }
-
-            Name = _asset.Name;
-            Identifier = _asset.Identifier;
-            Description = _asset.Description;
-
-            // Notify view about changes
-            OnPropertyChanged(nameof(Name));
-            OnPropertyChanged(nameof(Description));
         }
 
         #region Tag search related methods
