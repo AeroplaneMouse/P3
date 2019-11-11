@@ -16,20 +16,24 @@ namespace Asset_Management_System.Database
 
         public MySqlConnection GetConnection()
         {
-            return _connection;
+            if (IsAvailable())
+                return _connection;
+            else
+                return null;
         }
 
         public bool IsAvailable()
         {
             try
             {
-                var con = GetConnection();
+                var con = _connection;
                 con.Open();
                 con.Close();
                 return true;
             }
             catch (Exception)
             {
+                SqlConnectionFailed?.Invoke(new Models.Notification("ERROR! Unfortunately, the excellent connection to the database has been lost...", Models.Notification.ERROR), true);
                 return false;
             }
         }

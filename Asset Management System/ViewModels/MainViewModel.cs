@@ -327,7 +327,7 @@ namespace Asset_Management_System.ViewModels
         public void LoadSystem(Session session)
         {
             // Attaching notification
-            new MySqlHandler().SqlConnectionFailed += AddNotification;
+            new MySqlHandler().SqlConnectionFailed += SqlConnectionFailed;
 
             // Loads homepage and other stuff from the UI-thread.
             SplashPage.Dispatcher.Invoke(Load);
@@ -345,6 +345,13 @@ namespace Asset_Management_System.ViewModels
             CurrentDepartment = _departmentService.GetRepository().GetById(session.user.DefaultDepartment);
             if (CurrentDepartment == null)
                 CurrentDepartment = Department.GetDefault();
+        }
+
+        private void SqlConnectionFailed(Notification n, bool needReload = false)
+        {
+            AddNotification(n, 4000);
+            if (needReload)
+                Reload();
         }
 
         // Loads excluded pages and sets homepage.
@@ -377,7 +384,7 @@ namespace Asset_Management_System.ViewModels
 
             // Clearing memory
             pages.Clear();
-            new MySqlHandler().SqlConnectionFailed -= AddNotification;
+            new MySqlHandler().SqlConnectionFailed -= SqlConnectionFailed;
             DisplayCurrentDepartment = false;
             CurrentUser = null;
             CurrentDepartment = null;
