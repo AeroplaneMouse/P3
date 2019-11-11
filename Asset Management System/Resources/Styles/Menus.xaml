@@ -186,16 +186,24 @@
                                    PopupAnimation="Fade"
                                    VerticalOffset="2"
                                    HorizontalOffset="-15"
+                                   AllowsTransparency="True"
                                    IsOpen="{TemplateBinding IsSubmenuOpen}">
-                                <Border Background="{StaticResource NavigationBackgroundBrush}">
-                                    <StackPanel>
+                                <Border Background="{StaticResource NavigationBackgroundBrush}"
+                                        x:Name="Border_Popup">
+                                    <StackPanel x:Name="StackPanel_Popup">
                                         <MenuItem Header="All departments"
                                                   Style="{StaticResource Department}"
-                                                  CommandParameter="0"/>
-                                        <Rectangle Style="{StaticResource HorizontalSeparator}" Fill="White" />
-                                        <ItemsPresenter />
-                                        <Rectangle Style="{StaticResource HorizontalSeparator}" Fill="White"/>
+                                                  CommandParameter="0"
+                                                  x:Name="AllDepartments_Popup"/>
+                                        <Rectangle Style="{StaticResource HorizontalSeparator}" Fill="White"
+                                                   x:Name="Separator1_Popup"/>
+
+                                        <ItemsPresenter x:Name="DepartmentsPresenter_Popup"/>
+
+                                        <Rectangle Style="{StaticResource HorizontalSeparator}" Fill="White"
+                                                   x:Name="Separator2_Popup"/>
                                         <MenuItem Header="Add new"
+                                                  x:Name="AddDepartment_Popup"
                                                   Style="{StaticResource Department}"
                                                   Command="{Binding AddDepartmentCommand}"/>
                                     </StackPanel>
@@ -205,10 +213,28 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="IsOpen" TargetName="PART_Popup" Value="True"/>
+                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
                         </Trigger>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="IsOpen" TargetName="PART_Popup" Value="True"/>
+                        <Trigger SourceName="Border_Popup" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
+                        </Trigger>
+                        <Trigger SourceName="StackPanel_Popup" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
+                        </Trigger>
+                        <Trigger SourceName="AllDepartments_Popup" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
+                        </Trigger>
+                        <Trigger SourceName="AddDepartment_Popup" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
+                        </Trigger>
+                        <Trigger SourceName="DepartmentsPresenter_Popup" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
+                        </Trigger>
+                        <Trigger SourceName="Separator1_Popup" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
+                        </Trigger>
+                        <Trigger SourceName="Separator2_Popup" Property="IsMouseOver" Value="True">
+                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
