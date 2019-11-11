@@ -15,15 +15,15 @@ namespace Asset_Management_System.ViewModels
         where RepositoryType : Database.Repositories.ISearchableRepository<T>, new()
         where T : class, new()
     {
-        #region Commands
+        private Asset RemoveAsset;
+        private Tag RemoveTag;
 
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
 
-        #endregion
-
-        #region Constructor
+        public Visibility IsRemoveVisible { get; set; } = Visibility.Hidden;
+        public string Title { get; set; }
 
         public ChangeableListPageViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
@@ -32,10 +32,6 @@ namespace Asset_Management_System.ViewModels
             EditCommand = new Base.RelayCommand(Edit);
             RemoveCommand = new Base.RelayCommand(Remove);
         }
-
-        #endregion
-
-        #region Methods
 
         protected void AddNew()
         {
@@ -74,15 +70,14 @@ namespace Asset_Management_System.ViewModels
                     break;
             }
         }
-
-        private Asset RemoveAsset;
-        private Tag RemoveTag;
+        
 
         protected void Remove()
         {
             T selected = GetSelectedItem();
 
-            if (selected == null) return;
+            if (selected == null) 
+                return;
             switch (selected)
             {
                 case Asset asset:
@@ -118,16 +113,5 @@ namespace Asset_Management_System.ViewModels
                 Search();
             }
         }
-
-        #endregion
-
-
-        #region Helpers
-
-        public Visibility IsRemoveVisible { get; set; } = Visibility.Hidden;
-
-        public string Title { get; set; }
-
-        #endregion
     }
 }
