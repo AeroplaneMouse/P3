@@ -1,9 +1,7 @@
-﻿using Asset_Management_System.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Views
 {

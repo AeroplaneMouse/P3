@@ -1,14 +1,14 @@
-﻿using Asset_Management_System.Authentication;
-using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Models;
-using Asset_Management_System.Resources.Interfaces;
-using Asset_Management_System.Resources.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
 using Asset_Management_System.Services.Interfaces;
+using Asset_Management_System.Authentication;
+using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Models;
+using Asset_Management_System.Resources.Interfaces;
+using Asset_Management_System.Resources.Users;
 
 namespace Asset_Management_System.ViewModels
 {

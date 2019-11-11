@@ -1,10 +1,30 @@
-﻿using Asset_Management_System.Database.Repositories;
-using System;
+﻿using System;
+using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.Models
 {
     public class User : Model, ITagable
     {
+        public string Name { get; set; }
+        public string Username { get; set; }
+        public bool IsAdmin { get; set; }
+        public ulong DefaultDepartment { get; set; }
+        public string Description { get; set; }
+        public bool IsEnabled { get; set; }
+        public string Domain { get; set; }
+        public string DefaultDepartmentName
+        {
+            get
+            {
+                if (DefaultDepartment == 0)
+                    return "All departments";
+
+                var department = new DepartmentRepository().GetById(DefaultDepartment);
+
+                return department == null ? String.Empty : department.Name;
+            }
+        }
+
         /* Constructor used by DB */
         private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
         {
@@ -25,12 +45,6 @@ namespace Asset_Management_System.Models
 
         }
 
-        public string Username { get; set; }
-
-        public bool IsAdmin { get; set; }
-
-        public ulong DefaultDepartment { get; set; }
-
         public ulong TagId()
         {
             return ID;
@@ -46,7 +60,7 @@ namespace Asset_Management_System.Models
             return Username;
         }
 
-        public override string ToString()
+        public override string ToString() 
         {
             return Username;
         }
@@ -69,31 +83,12 @@ namespace Asset_Management_System.Models
             Console.WriteLine("Test");
             return other != null && this.Username.CompareTo(other.Username) == 0 && this.ID.CompareTo(other.ID) == 0;
         }
-
-        public string DefaultDepartmentName
-        {
-            get
-            {
-                if (DefaultDepartment == 0)
-                {
-                    return "All Departments";
-                }
-
-                var department = new DepartmentRepository().GetById(DefaultDepartment);
-
-                return department == null ? String.Empty : department.Name;
-            }
-        }
-
-        public string Description { get; set; }
-
-        public bool IsEnabled { get; set; }
-
-        public string Domain { get; set; }
     }
 
     public class UserWithStatus : User
     {
+		public bool IsShown { get; set; }
+
         public UserWithStatus(User user) : base()
         {
             this.ID = user.ID;
@@ -142,7 +137,5 @@ namespace Asset_Management_System.Models
                 }
             }
         }
-
-        public bool IsShown { get; set; }
     }
 }

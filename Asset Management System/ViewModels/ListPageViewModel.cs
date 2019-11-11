@@ -1,17 +1,16 @@
-﻿using Asset_Management_System.Helpers;
+﻿using System;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Controls;
+using System.Collections.Generic;
+using Asset_Management_System.Views;
+using System.Collections.ObjectModel;
+using Asset_Management_System.Models;
 using Asset_Management_System.Logging;
+using Asset_Management_System.Helpers;
 using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Resources.Interfaces;
-using Asset_Management_System.Models;
-using Asset_Management_System.Views;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Services.Interfaces;
 using Asset_Management_System.ViewModels.Base;
@@ -21,16 +20,13 @@ namespace Asset_Management_System.ViewModels
     public abstract class ListPageViewModel<T> : Base.BaseViewModel, IListUpdate
         where T : class, new()
     {
-        #region Private Members
-
         protected MainViewModel _main;
         private IDisplayableService<T> _service;
         private ICommentService _commentService;
 
         private ObservableCollection<T> _list { get; set; }
-
         private string _searchQueryText { get; set; }
-
+        
         protected MainViewModel Main
         {
             get => _main;
@@ -38,10 +34,6 @@ namespace Asset_Management_System.ViewModels
         }
 
         protected ISearchableRepository<T> Rep { get; private set; }
-
-        #endregion
-
-        #region Public Properties
 
         public Visibility Visible
         {
@@ -83,21 +75,12 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        #endregion
-
-        #region Commands
-
         public ICommand PrintCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
         public ICommand HeaderClickCommand { get; set; }
 
         public ICommand RemoveCommand { get; set; }
-
-
-        #endregion
-
-        #region Constructor
 
         public ListPageViewModel(MainViewModel main, IDisplayableService<T> service, ICommentService commentService = default)
         {
@@ -120,23 +103,27 @@ namespace Asset_Management_System.ViewModels
             RemoveCommand = new RelayCommand(RemoveItems);
         }
 
-        #endregion
-
-        #region Methods
 
         public virtual void PageFocus()
         {
             Search();
         }
 
+        public virtual void PageLostFocus()
+        {
+
+        }
 
         private void RemoveItems()
         {
+            /*
             foreach (var item in SelectedItems)
             {
 
             }
+            */
         }
+
         /// <summary>
         /// Sends a search request to the database, and sets the list of items to the result.
         /// </summary>
@@ -175,10 +162,10 @@ namespace Asset_Management_System.ViewModels
             switch (selected)
             {
                 case Tag tag:
-                    Main.ChangeMainContent(new ObjectViewer(Main, tag));
+                    _main.ChangeMainContent(new ObjectViewer(_main, tag));
                     break;
                 case Asset asset:
-                    Main.ChangeMainContent(new ObjectViewer(Main, asset));
+                    _main.ChangeMainContent(new ObjectViewer(_main, asset));
                     break;
                 case Entry entry:
                     new ShowEntry(entry).ShowDialog();
@@ -259,10 +246,6 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        #endregion
-
-
-        #region Helpers
 
         protected T GetSelectedItem()
         {
@@ -271,7 +254,5 @@ namespace Asset_Management_System.ViewModels
             else
                 return SearchList.ElementAtOrDefault(SelectedItemIndex);
         }
-
-        #endregion
     }
 }

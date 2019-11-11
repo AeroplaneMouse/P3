@@ -13,7 +13,9 @@
         Icon="{StaticResource ApplicationIcon}"
         MinHeight="{Binding WindowMinHeight}"
         MinWidth="{Binding WindowMinWidth}"
-        Title="Asset Management System" Height="600" Width="1200">
+        Title="Asset Management System" 
+        Height="600" 
+        Width="1200">
 
     <Window.Resources>
         <!-- Style of the window -->
@@ -72,15 +74,6 @@
                                             </MenuItem>
                                         </Menu>
 
-                                        <Border HorizontalAlignment="Center"
-                                                Background="Transparent"
-                                                WindowChrome.IsHitTestVisibleInChrome="True"
-                                                Grid.ColumnSpan="3"
-                                                Width="20"
-                                                Height="20"
-                                                ToolTip="This application has been developed by group ds303e19 on Aalborg University">
-                                        </Border>
-
                                         <StackPanel Grid.Column="2"
                                                     Orientation="Horizontal">
                                             <!-- Departments -->
@@ -125,13 +118,6 @@
                                                 <!--<Button Content="Random" Command="{Binding AddNotificationTestCommand}" Style="{StaticResource NavigationButton}"/>-->
                                             </StackPanel>
                                         </Border>
-                                        <Border HorizontalAlignment="Left"
-                                                VerticalAlignment="Bottom"
-                                                Background="Transparent"
-                                                Width="20"
-                                                Height="20"
-                                                ToolTip="Bacon er godt xD">
-                                        </Border>
 
                                         <!-- Main content -->
                                         <Frame Grid.Column="1"
@@ -155,7 +141,6 @@
                                     <Frame Grid.Row="1"
                                            NavigationUIVisibility="Hidden"
                                            Content="{Binding PopupPage}"/>
-
                                 </Grid>
                             </Grid>
                         </Border>

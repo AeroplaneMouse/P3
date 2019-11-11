@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
@@ -18,7 +18,6 @@ namespace Asset_Management_System.ViewModels
 
             CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(main, _service)));
         }
-
 
         public ICommand CancelCommand { get; set; }
     }

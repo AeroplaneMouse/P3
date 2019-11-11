@@ -300,7 +300,7 @@ namespace Asset_Management_System.Database.Repositories
             
             _query.Reset();
             _query.AddTable("assets AS a");
-            _query.Columns.AddRange(new []{"a.id", "a.name", "description", "a.identifier", "a.department_id", "a.options", "a.created_at", "a.updated_at"});
+            _query.Columns.AddRange(new []{"a.id", "a.name", "a.description", "a.identifier", "a.department_id", "a.options", "a.created_at", "a.updated_at"});
             
             try
             {

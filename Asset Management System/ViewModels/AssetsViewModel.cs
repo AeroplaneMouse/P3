@@ -112,6 +112,11 @@ namespace Asset_Management_System.ViewModels
             TheTagger.Reload();
         }
 
+        public override void PageLostFocus()
+        {
+
+        }
+
         private void Enter()
         {
             if (IsTagMode)
