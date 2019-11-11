@@ -108,6 +108,7 @@
 
                 <!-- Current tags -->
                 <ListView ItemsSource="{Binding Path=TheTagger.TaggedWith}"
+                          ItemContainerStyle="{StaticResource ListViewWithTags}"
                           Grid.Row="1"
                           Margin="0 10 0 0">
                     <ListView.Template>

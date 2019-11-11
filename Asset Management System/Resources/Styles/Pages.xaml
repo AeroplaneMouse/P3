@@ -15,6 +15,9 @@
         <CheckBox />
     </DataTemplate>
 
+    <Style TargetType="{x:Type Page}">
+        <Setter Property="TextOptions.TextFormattingMode" Value="Display"></Setter>
+    </Style>
 
     <!-- List page -->
     <Style TargetType="Page" x:Key="ListPage">
