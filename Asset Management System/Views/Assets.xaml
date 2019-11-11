@@ -2,13 +2,13 @@
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Asset_Management_System.Views"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
       Title="Assets"
       FocusManager.FocusedElement="{Binding ElementName=SearchElement}">
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
         <TextBlock Style="{StaticResource TitleStyle}"
                    VerticalAlignment="Center"
-                   Margin="10 0 0 0"
+                   Margin="10, 11, 0, 11"
                    Text="Assets"/>
 
         <StackPanel Orientation="Horizontal"
@@ -77,18 +77,13 @@
                             Command="{Binding SearchCommand}"
                             Content="Search"/>
 
-                    <StackPanel Orientation="Horizontal"
-                                ToolTip="Enables strict searching. Assets MUST have all the applied tags.">
-                        <CheckBox VerticalAlignment="Center"
-                                  IsChecked="{Binding IsStrict, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Style="{StaticResource ParagraphStyle}"
-                                   Text=" Strict"
-                                   VerticalAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" ToolTip="Enables strict searching. Assets MUST have all the applied tags.">
+                        <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsStrict, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Style="{StaticResource ParagraphStyle}" Text="Strict" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
                 
-                <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Right">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Style="{StaticResource RegularCancelButton}"
                             Command="{Binding RemoveCommand}"
                             Content="Remove"
@@ -109,7 +104,7 @@
                 <!-- Current tags -->
                 <ListView ItemsSource="{Binding Path=TheTagger.TaggedWith}"
                           Grid.Row="1"
-                          Margin="0 10 0 0">
+                          Margin="0 0 0 0">
                     <ListView.Template>
                         <ControlTemplate>
                             <WrapPanel IsItemsHost="True"/>
@@ -128,8 +123,7 @@
                 <ListView ItemsSource="{Binding SearchList}"
                         SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                         Grid.Row="2"
-                        Margin="0 10 0 0"
-                        BorderThickness="0">
+                        Style="{StaticResource RegularList}">
                     <ListView.View>
                         <GridView>
                             <GridViewColumn CellTemplate="{StaticResource SingleCheckBoxElement}" HeaderTemplate="{StaticResource HeaderCheckBoxElement}"/>
@@ -154,11 +148,10 @@
             HorizontalAlignment="Left"
             Margin="10 40 0 0"
             Grid.Row="1">
-            <Border Background="LightGray"
+            <Border Background="LightGray" 
                     Opacity="0.7"
                     BorderThickness="0"
-                    BorderBrush="Black"
-                    >
+                    BorderBrush="Black">
             </Border>
             <ListView SelectedIndex="{Binding SelectedSuggestedIndex}"
                         Background="Transparent"
