@@ -1,10 +1,9 @@
-﻿using Asset_Management_System.Database.Repositories;
+﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using Asset_Management_System.Models;
 using Asset_Management_System.Resources.Users;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.ViewModels
 {

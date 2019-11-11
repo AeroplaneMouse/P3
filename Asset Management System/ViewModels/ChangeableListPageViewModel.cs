@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Windows;
 using System.Windows.Input;
-using Asset_Management_System.Logging;
+using Asset_Management_System.Events;
 using Asset_Management_System.Models;
+using Asset_Management_System.Logging;
 using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Database.Repositories;
-using System.Windows;
-using Asset_Management_System.Events;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -15,15 +13,15 @@ namespace Asset_Management_System.ViewModels
         where RepositoryType : Database.Repositories.ISearchableRepository<T>, new()
         where T : class, new()
     {
-        #region Commands
+        private Asset RemoveAsset;
+        private Tag RemoveTag;
 
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
 
-        #endregion
-
-        #region Constructor
+        public Visibility IsRemoveVisible { get; set; } = Visibility.Hidden;
+        public string Title { get; set; }
 
         public ChangeableListPageViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
         {
@@ -33,20 +31,16 @@ namespace Asset_Management_System.ViewModels
             RemoveCommand = new Base.RelayCommand(Remove);
         }
 
-        #endregion
-
-        #region Methods
-
         protected void AddNew()
         {
             switch (PageType)
             {
                 case ListPageType.Asset:
-                    Main.ChangeMainContent(new Views.AssetManager(Main));
+                    _main.ChangeMainContent(new Views.AssetManager(_main));
                     break;
 
                 case ListPageType.Tag:
-                    Main.ChangeMainContent(new Views.TagManager(Main));
+                    _main.ChangeMainContent(new Views.TagManager(_main));
                     break;
 
                 default:
@@ -64,25 +58,24 @@ namespace Asset_Management_System.ViewModels
             switch (selected)
             {
                 case Asset asset:
-                    Main.ChangeMainContent(new Views.AssetManager(Main, asset));
+                    _main.ChangeMainContent(new Views.AssetManager(_main, asset));
                     break;
                 case Tag tag:
-                    Main.ChangeMainContent(new Views.TagManager(Main, tag));
+                    _main.ChangeMainContent(new Views.TagManager(_main, tag));
                     break;
                 default:
                     Console.WriteLine("Fejl ved edit");
                     break;
             }
         }
-
-        private Asset RemoveAsset;
-        private Tag RemoveTag;
+        
 
         protected void Remove()
         {
             T selected = GetSelectedItem();
 
-            if (selected == null) return;
+            if (selected == null) 
+                return;
             switch (selected)
             {
                 case Asset asset:
@@ -118,16 +111,5 @@ namespace Asset_Management_System.ViewModels
                 Search();
             }
         }
-
-        #endregion
-
-
-        #region Helpers
-
-        public Visibility IsRemoveVisible { get; set; } = Visibility.Hidden;
-
-        public string Title { get; set; }
-
-        #endregion
     }
 }

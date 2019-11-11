@@ -1,9 +1,9 @@
-﻿using Asset_Management_System.Events;
-using Asset_Management_System.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Collections.Generic;
+using Asset_Management_System.Events;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.ViewModels.Prompts
 {
@@ -36,7 +36,6 @@ namespace Asset_Management_System.ViewModels.Prompts
 
         protected override void Accept()
         {
-
             if (SelectedFieldType == 0)
                 return;
 
@@ -82,28 +81,6 @@ namespace Asset_Management_System.ViewModels.Prompts
             }
             else
                 throw new NotSupportedException("Wrong formatting syntax.");
-
-            //Field.FieldType type = item as Field.FieldType;
-            //return element?.FindResource()
-
-
-
-                ////ShownField field = item as ShownField;
-                //switch (item as Field.FieldType)
-                //{
-                //    case Field.FieldType.Textarea: // Textbox
-                //        return element?.FindResource("Area") as DataTemplate;
-                //    case Field.FieldType.Textbox: // String
-                //        return element?.FindResource("Box") as DataTemplate;
-                //    case Field.FieldType.Integer: // Integer
-                //        return element?.FindResource("Box") as DataTemplate;
-                //    case Field.FieldType.Date: // Date
-                //        return element?.FindResource("Box") as DataTemplate;
-                //    case Field.FieldType.Boolean: // Boolean
-                //        return element?.FindResource("Box") as DataTemplate;
-                //    default:
-                //        throw new NotSupportedException("Wrong formatting syntax.");
-                //}
         }
     }
 }

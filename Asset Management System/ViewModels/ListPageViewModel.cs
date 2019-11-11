@@ -1,17 +1,16 @@
-﻿using Asset_Management_System.Helpers;
+﻿using System;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
+using System.Windows.Controls;
+using System.Collections.Generic;
+using Asset_Management_System.Views;
+using System.Collections.ObjectModel;
+using Asset_Management_System.Models;
 using Asset_Management_System.Logging;
+using Asset_Management_System.Helpers;
 using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Resources.Interfaces;
-using Asset_Management_System.Models;
-using Asset_Management_System.Views;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -19,33 +18,17 @@ namespace Asset_Management_System.ViewModels
         where RepositoryType : Database.Repositories.ISearchableRepository<T>, new()
         where T : class, new()
     {
-        #region Private Members
-
         protected MainViewModel _main;
-
         private ObservableCollection<T> _list { get; set; }
-
         private string _searchQueryText { get; set; }
-
         private RepositoryType _rep { get; set; }
-
         private ListPageType _pageType { get; set; }
-
-        protected MainViewModel Main
-        {
-            get => _main;
-            set => _main = value;
-        }
 
         protected RepositoryType Rep
         {
             get => _rep;
             set => _rep = value;
         }
-
-        #endregion
-
-        #region Public Properties
 
         public Visibility Visible
         {
@@ -83,24 +66,15 @@ namespace Asset_Management_System.ViewModels
             }
         }   
 
-        #endregion
-
-        #region Commands
-
         public ICommand PrintCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
         public ICommand HeaderClickCommand { get; set; }
 
-        #endregion
-
-        #region Constructor
-
         public ListPageViewModel(MainViewModel main, ListPageType pageType)
         {
-            _rep = new RepositoryType();
-
             _main = main;
+            _rep = new RepositoryType();
 
             _searchQueryText = String.Empty;
             _list = new ObservableCollection<T>();
@@ -114,13 +88,15 @@ namespace Asset_Management_System.ViewModels
             HeaderClickCommand = new Base.RelayCommand<object>(HeaderClick);
         }
 
-        #endregion
-
-        #region Methods
 
         public virtual void PageFocus() 
         {
             Search();
+        }
+
+        public virtual void PageLostFocus()
+        {
+
         }
 
         /// <summary>
@@ -144,10 +120,10 @@ namespace Asset_Management_System.ViewModels
             switch (selected)
             {
                 case Tag tag:
-                    Main.ChangeMainContent(new ObjectViewer(Main, tag));
+                    _main.ChangeMainContent(new ObjectViewer(_main, tag));
                     break;
                 case Asset asset:
-                    Main.ChangeMainContent(new ObjectViewer(Main, asset));
+                    _main.ChangeMainContent(new ObjectViewer(_main, asset));
                     break;
                 case Entry entry:
                     new ShowEntry(entry).ShowDialog();
@@ -241,10 +217,6 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        #endregion
-
-
-        #region Helpers
 
         protected T GetSelectedItem()
         {
@@ -253,7 +225,5 @@ namespace Asset_Management_System.ViewModels
             else
                 return SearchList.ElementAtOrDefault(SelectedItemIndex);
         }
-
-        #endregion
     }
 }
