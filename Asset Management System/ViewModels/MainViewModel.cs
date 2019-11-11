@@ -124,6 +124,7 @@ namespace Asset_Management_System.ViewModels
 
         private Department _currentDepartment;
         private Stack<Page> _history = new Stack<Page>();
+        private Page _currentPage;
 
         #endregion
 
@@ -278,10 +279,11 @@ namespace Asset_Management_System.ViewModels
             // Update the list on the page, if there is one
             if (setPage.DataContext is IListUpdate)
                 (setPage.DataContext as IListUpdate).PageFocus();
-
+            
+            _history.Push(_currentPage);
             // Setting the content of the given frame, to the newPage object to display the requested page.
             frame.Content = setPage;
-            _history.Push(setPage);
+            _currentPage = setPage;
         }
 
         public void ReturnToPreviousPage()
