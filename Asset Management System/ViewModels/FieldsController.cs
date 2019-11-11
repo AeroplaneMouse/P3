@@ -14,7 +14,7 @@ namespace Asset_Management_System.ViewModels
     public abstract class FieldsController : Base.BaseViewModel
     {
         public ObservableCollection<ShownField> FieldsList { get; set; }
-        protected bool _editing;
+        protected bool Editing;
 
 
         public ICommand AddFieldCommand { get; set; }

@@ -19,7 +19,7 @@ namespace Asset_Management_System.ViewModels
 
         public ObjectManagerController() => RemoveFieldCommand = new RemoveFieldCommand(this);
 
-
+        
         protected void ConnectTags()
         {
             foreach (var tag in CurrentlyAddedTags)

@@ -147,7 +147,7 @@ namespace Asset_Management_System.ViewModels
                 ConnectTags();
                 if (!addMultiple)
                 {
-                    _editing = true;
+                    Editing = true;
                 }
                 
             }
@@ -155,11 +155,11 @@ namespace Asset_Management_System.ViewModels
             {
                 CurrentlyAddedTags = new ObservableCollection<Tag>();
                 _asset = new Asset();
-                _editing = false;
+                Editing = false;
             }
 
             // Initialize commands
-            SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _service, _editing);
+            SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _service, Editing);
             SaveMultipleAssetsCommand = new SaveAssetCommand(this, _main, _asset, _service, false, true);
             AddFieldCommand = new AddFieldCommand(_main, this, true);
             RemoveFieldCommand = new RemoveFieldCommand(this);
@@ -251,17 +251,19 @@ namespace Asset_Management_System.ViewModels
         }
 
         /// <summary>
-        /// This function runs uppon selecting a Tag with Enter.
+        /// This function runs upon selecting a Tag with Enter.
         /// </summary>
         private void Apply()
         {
+            // If no tag matching searchString is found in _tagList
             if (_tagList.SingleOrDefault(tag => tag.Name == _searchString) == null)
             {
                 _searchString = _tagList
                     .Select(tag => tag.Name)
                     .ElementAtOrDefault(0);
             }
-
+            
+            // If searchString does not match any in CurrentlyAddedTags
             if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
             {
                 Tag tag = _tagList.SingleOrDefault(p =>
@@ -320,26 +322,25 @@ namespace Asset_Management_System.ViewModels
         private void EnterChildren()
         {
             // Can only go in, if the parent tag is at the highest level
-            if (_parentID == 0)
+            if (_parentID != 0) return;
+            
+            // Checks if the tag we are "going into" has any children
+            ulong tempID = _tagList
+                .Select(p => p.ID)
+                .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+            List<Tag> childList = _tagRep.GetChildTags(tempID).ToList();
+
+            // If the tag we are "going into" has children, we go into it
+            if (childList?.Count != 0)
             {
-                // Checks if the tag we are "going into" has any children
-                ulong tempID = _tagList
-                    .Select(p => p.ID)
+                _parentString = _tagList
+                    .Select(p => p.Name)
                     .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                List<Tag> tempList = _tagRep.GetChildTags(tempID) as List<Tag>;
+                _searchString = String.Empty;
+                _parentID = tempID;
+                _tagList = childList;
 
-                // If the tag we are "going into" has children, we go into it
-                if (tempList?.Count != 0)
-                {
-                    _parentString = _tagList
-                        .Select(p => p.Name)
-                        .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                    _searchString = String.Empty;
-                    _parentID = tempID;
-                    _tagList = tempList;
-
-                    _tabIndex = 0;
-                }
+                _tabIndex = 0;
             }
         }
 
