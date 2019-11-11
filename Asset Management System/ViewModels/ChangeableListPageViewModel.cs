@@ -6,11 +6,11 @@ using Asset_Management_System.Models;
 using Asset_Management_System.Logging;
 using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
-    public abstract class ChangeableListPageViewModel<RepositoryType, T> : ListPageViewModel<RepositoryType, T>
-        where RepositoryType : Database.Repositories.ISearchableRepository<T>, new()
+    public abstract class ChangeableListPageViewModel<T> : ListPageViewModel<T>
         where T : class, new()
     {
         private Asset RemoveAsset;
@@ -20,23 +20,26 @@ namespace Asset_Management_System.ViewModels
         public ICommand EditCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
 
-        public Visibility IsRemoveVisible { get; set; } = Visibility.Hidden;
-        public string Title { get; set; }
-
-        public ChangeableListPageViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
+        private IDisplayableService<T> _service;
+        
+        public ChangeableListPageViewModel(MainViewModel main, IDisplayableService<T> service) : base(main, service)
         {
             // AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.TagManager(_main)));
             AddNewCommand = new Base.RelayCommand(AddNew);
             EditCommand = new Base.RelayCommand(Edit);
             RemoveCommand = new Base.RelayCommand(Remove);
+
+            _service = service;
         }
 
         protected void AddNew()
         {
+            _main.ChangeMainContent(_service.GetManagerPage(_main));
+            /*
             switch (PageType)
             {
                 case ListPageType.Asset:
-                    _main.ChangeMainContent(new Views.AssetManager(_main));
+                	Main.ChangeMainContent(new Views.AssetManager(Main)); // TODO: Get via the service?
                     break;
 
                 case ListPageType.Tag:
@@ -47,6 +50,7 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Error when adding new");
                     break;
             }
+            */
         }
 
         protected void Edit()
@@ -55,6 +59,8 @@ namespace Asset_Management_System.ViewModels
             Console.WriteLine("Check: " + SelectedItemIndex);
 
             if (selected == null) return;
+            Main.ChangeMainContent(_service.GetManagerPage(Main, selected));
+            /*
             switch (selected)
             {
                 case Asset asset:
@@ -67,26 +73,28 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Fejl ved edit");
                     break;
             }
+            */
         }
         
 
         protected void Remove()
         {
-            T selected = GetSelectedItem();
+            var selected = SelectedItems[0];
 
             if (selected == null) 
                 return;
+
             switch (selected)
             {
                 case Asset asset:
                     RemoveAsset = asset;
                     RemoveTag = null;
-                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete asset { asset.Name }?", RemovePromptElapsed));
+                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete { SelectedItems.Count } asset(s)?", RemovePromptElapsed));
                     break;
                 case Tag tag:
                     RemoveAsset = null;
                     RemoveTag = tag;
-                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete tag { tag.Name }?", RemovePromptElapsed));
+                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete { SelectedItems.Count } tag(s) ?", RemovePromptElapsed));
                     break;
                 default:
                     Console.WriteLine("Fejl ved Remove");
@@ -96,20 +104,27 @@ namespace Asset_Management_System.ViewModels
 
         private void RemovePromptElapsed(object sender, PromptEventArgs e)
         {
-            if (e.Result)
+            //if (!e.Result) return;
+            Log<T>.CreateLog((ILoggable<T>)GetSelectedItem(), true); //TODO: Fix so typecast is unnecessary
+            if (RemoveAsset != null)
+                Rep.Delete(RemoveAsset as T);
+            else if(RemoveTag != null)
             {
-                if (RemoveAsset != null)
+                foreach (var var in SelectedItems)
                 {
-                    Log<Asset>.CreateLog(RemoveAsset, true);
-                    (Rep as AssetRepository).Delete(RemoveAsset as Asset);
+                    Rep.Delete(var as T);
+                    /*
+                    if (RemoveAsset != null)
+                        ((AssetRepository) Rep).Delete(var as Asset);
+                    
+                    else if(RemoveTag != null)
+                        ((TagRepository) Rep).Delete(var as Tag);
+                    */
+                    Search();
                 }
-                else if(RemoveTag != null)
-                {
-                    Log<Tag>.CreateLog(RemoveTag, true);
-                    (Rep as TagRepository).Delete(RemoveTag as Tag);
-                }
-                Search();
             }
+            /**/
+            Search();
         }
     }
 }

@@ -6,12 +6,14 @@ using Asset_Management_System.Events;
 using Asset_Management_System.Database;
 using Asset_Management_System.Authentication;
 using System.Windows.Threading;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
     public class SplashViewModel : Base.BaseViewModel
     {
         private MainViewModel _main;
+        private IUserService _userService;
         private const int _delay = 300;
 
         public string LoadingText { get; set; }
@@ -20,10 +22,11 @@ namespace Asset_Management_System.ViewModels
         public ICommand LoadConfigCommand { get; set; }
 
 
-        public SplashViewModel(MainViewModel main)
+        public SplashViewModel(MainViewModel main, IUserService userService)
         {
             Console.WriteLine("Showing splash screen");
             _main = main;
+            _userService = userService;
 
             // Initializing commands
             LoadConfigCommand = new Base.RelayCommand(() => LoadConfig());
@@ -53,7 +56,7 @@ namespace Asset_Management_System.ViewModels
                 UpdateStatusText(new StatusUpdateEventArgs("Connection established...", "The excellent connection to the database was succesfully established..."));
                 Thread.Sleep(_delay);
 
-                Session t = new Session();
+                Session t = new Session(_userService);
                 if (t.Authenticated())
                 {
                     // Runs the systemLoaded method to remove splashpage, and 

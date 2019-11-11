@@ -5,17 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using Asset_Management_System.Resources.DataModels;
+using Asset_Management_System.Services.Interfaces;
 using System.Windows;
 using Asset_Management_System.Functions;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class AssetsViewModel : ChangeableListPageViewModel<AssetRepository, Asset>
+    public class AssetsViewModel : ChangeableListPageViewModel<Asset>
     {
         private string _currentGroup = String.Empty;
         private string _searchQueryText = String.Empty;
         private bool IsTagMode = false;
         private bool _isStrict = false;
+        private IAssetService _service;
+        private IAssetRepository _rep;
+        
 
         public int ViewType => 1;
         public int SelectedSuggestedIndex { get; set; }
@@ -59,12 +63,14 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        public AssetsViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
+        public AssetsViewModel(MainViewModel main, IAssetService assetService) : base(main, assetService)
         {
             DeleteCommand = new Base.RelayCommand(Delete);
             SelectTagCommand = new Base.RelayCommand(SelectSuggestedTag);
             EnterCommand = new Base.RelayCommand(Enter);
             TheTagger = new Tagging();
+            _service = assetService;
+            _rep = _service.GetSearchableRepository() as IAssetRepository;
         }
 
         // Add the currently selected tag from suggestions
@@ -126,7 +132,7 @@ namespace Asset_Management_System.ViewModels
         // Search assets
         protected override void Search()
         {
-            SearchList = new AssetRepository().Search(SearchQueryText, 
+            SearchList = _rep.Search(SearchQueryText,
                 TheTagger.TaggedWith.OfType<Tag>().Select(t => t.ID).ToList(),
                 TheTagger.TaggedWith.OfType<User>().Select(u => u.ID).ToList(),
                 IsStrict);
@@ -149,7 +155,7 @@ namespace Asset_Management_System.ViewModels
 
             if (SearchQueryText == String.Empty)
                 Suggestions = TheTagger.Suggest(SearchQueryText);
-            else    
+            else
                 SearchQueryText = "";
         }
     }

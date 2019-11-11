@@ -1,4 +1,9 @@
-﻿using System.Windows.Controls;
+using System;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
+using Asset_Management_System.Authentication;
+using Asset_Management_System.Services.Interfaces;
 using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
@@ -8,10 +13,10 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Splash : Page
     {
-        public Splash(MainViewModel main)
+        public Splash(MainViewModel main, IUserService userService)
         {
             InitializeComponent();
-            DataContext = new ViewModels.SplashViewModel(main);
+            DataContext = new ViewModels.SplashViewModel(main, userService);
         }
     }
 }

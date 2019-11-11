@@ -7,8 +7,11 @@ using System.Collections.ObjectModel;
 
 namespace Asset_Management_System.Database.Repositories
 {
-    public class LogRepository : ILogRepository<Entry>
+    public class LogRepository : ILogRepository
     {
+        // Used to avoid implementing members from IRepository
+        private ILogRepository _logRepositoryImplementation;
+
         public bool Insert(Entry entity)
         {
             var con = new MySqlHandler().GetConnection();
@@ -169,6 +172,27 @@ namespace Asset_Management_System.Database.Repositories
                 BindingFlags.Instance | BindingFlags.NonPublic, null, 
                 new object[] { rowId, rowLogableId, rowLogableType, rowDescription, rowUsername, rowOptions, rowCreatedAt }, 
                 null, null);
+        }
+
+        // This is just implementation of IRepository and is to avoid an error
+        public bool Insert(Entry entity, out ulong id)
+        {
+            return _logRepositoryImplementation.Insert(entity, out id);
+        }
+
+        public bool Update(Entry entity)
+        {
+            return _logRepositoryImplementation.Update(entity);
+        }
+
+        public bool Delete(Entry entity)
+        {
+            return _logRepositoryImplementation.Delete(entity);
+        }
+
+        public Entry GetById(ulong id)
+        {
+            return _logRepositoryImplementation.GetById(id);
         }
     }
 }

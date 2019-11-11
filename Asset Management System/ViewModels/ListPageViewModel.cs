@@ -11,24 +11,29 @@ using Asset_Management_System.Logging;
 using Asset_Management_System.Helpers;
 using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Resources.Interfaces;
+using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Services.Interfaces;
+using Asset_Management_System.ViewModels.Base;
 
 namespace Asset_Management_System.ViewModels
 {
-    public abstract class ListPageViewModel<RepositoryType, T> : Base.BaseViewModel, IListUpdate
-        where RepositoryType : Database.Repositories.ISearchableRepository<T>, new()
+    public abstract class ListPageViewModel<T> : Base.BaseViewModel, IListUpdate
         where T : class, new()
     {
         protected MainViewModel _main;
+        private IDisplayableService<T> _service;
+        private ICommentService _commentService;
+
         private ObservableCollection<T> _list { get; set; }
         private string _searchQueryText { get; set; }
-        private RepositoryType _rep { get; set; }
-        private ListPageType _pageType { get; set; }
-
-        protected RepositoryType Rep
+        
+        protected MainViewModel Main
         {
-            get => _rep;
-            set => _rep = value;
+            get => _main;
+            set => _main = value;
         }
+
+        protected ISearchableRepository<T> Rep { get; private set; }
 
         public Visibility Visible
         {
@@ -36,16 +41,20 @@ namespace Asset_Management_System.ViewModels
             private set => Visible = value;
         }
 
+        public List<DoesContainFields> SelectedItems { get; set; } = new List<DoesContainFields>();
+
+        public bool MultipleSelected {
+            get
+            {
+               return SelectedItems.Count > 0;
+            }
+            set => MultipleSelected = value;
+        }
+
         public string SearchQueryText
         {
             get => _searchQueryText;
             set => _searchQueryText = value;
-        }
-
-        public ListPageType PageType
-        {
-            get => _pageType;
-            set => _pageType = value;
         }
 
         public int SelectedItemIndex { get; set; }
@@ -64,32 +73,38 @@ namespace Asset_Management_System.ViewModels
 
                 OnPropertyChanged(nameof(SearchList));
             }
-        }   
+        }
 
         public ICommand PrintCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
         public ICommand HeaderClickCommand { get; set; }
 
-        public ListPageViewModel(MainViewModel main, ListPageType pageType)
+        public ICommand RemoveCommand { get; set; }
+
+        public ListPageViewModel(MainViewModel main, IDisplayableService<T> service, ICommentService commentService = default)
         {
+            _service = service;
+            _commentService = commentService;
+            Rep = _service.GetSearchableRepository();
+
             _main = main;
-            _rep = new RepositoryType();
 
             _searchQueryText = String.Empty;
             _list = new ObservableCollection<T>();
 
-            _pageType = pageType;
+            //_pageType = pageType;
 
             // Initialize commands
             PrintCommand = new Commands.PrintSelectedItemsCommand();
             SearchCommand = new Base.RelayCommand(Search);
             ViewCommand = new Base.RelayCommand(View);
             HeaderClickCommand = new Base.RelayCommand<object>(HeaderClick);
+            RemoveCommand = new RelayCommand(RemoveItems);
         }
 
 
-        public virtual void PageFocus() 
+        public virtual void PageFocus()
         {
             Search();
         }
@@ -99,10 +114,20 @@ namespace Asset_Management_System.ViewModels
 
         }
 
+        private void RemoveItems()
+        {
+            /*
+            foreach (var item in SelectedItems)
+            {
+
+            }
+            */
+        }
+
         /// <summary>
         /// Sends a search request to the database, and sets the list of items to the result.
         /// </summary>
-        protected virtual void Search() => SearchList = _rep.Search(SearchQueryText);
+        protected virtual void Search() => SearchList = Rep.Search(SearchQueryText);
 
         /// <summary>
         /// Creates a csv file containing all the items
@@ -116,7 +141,24 @@ namespace Asset_Management_System.ViewModels
         {
             T selected = GetSelectedItem();
 
-            if (selected == null) return;
+            switch (selected)
+            {
+                case null:
+                    return;
+                case Entry entry:
+                    new ShowEntry(entry).ShowDialog();
+                    break;
+                case DoesContainFields fields:
+                    Main.ChangeMainContent(new ObjectViewer(Main, _commentService, fields));
+                    break;
+                default:
+                    _main.AddNotification(
+                        new Notification("ERROR! Unknown error occured when trying to view.", Notification.ERROR),
+                        3000);
+                    break;
+            }
+
+            /*
             switch (selected)
             {
                 case Tag tag:
@@ -134,6 +176,7 @@ namespace Asset_Management_System.ViewModels
                         3000);
                     break;
             }
+            */
         }
 
         /// <summary>
@@ -151,17 +194,13 @@ namespace Asset_Management_System.ViewModels
                     SearchList = clickedHeader?.Content.ToString() switch
                     {
                         "Name" => new ObservableCollection<T>(SearchList.Cast<Asset>()
-                            .OrderBy(i => i.Name)
-                            .Cast<T>()),
+                            .OrderBy(i => i.Name).Cast<T>()),
                         "ID" => new ObservableCollection<T>(SearchList.Cast<Asset>()
-                            .OrderBy(i => i.ID)
-                            .Cast<T>()),
+                            .OrderBy(i => i.ID).Cast<T>()),
                         "Identifier" => new ObservableCollection<T>(SearchList.Cast<Asset>()
-                            .OrderBy(i => i.Identifier)
-                            .Cast<T>()),
+                            .OrderBy(i => i.Identifier).Cast<T>()),
                         "Created" => new ObservableCollection<T>(SearchList.Cast<Asset>()
-                            .OrderBy(i => i.CreatedAt)
-                            .Cast<T>()),
+                            .OrderBy(i => i.CreatedAt).Cast<T>()),
                         _ => SearchList
                     };
                     break;
@@ -172,23 +211,17 @@ namespace Asset_Management_System.ViewModels
                     SearchList = clickedHeader?.Content.ToString() switch
                     {
                         "Label" => new ObservableCollection<T>(SearchList.Cast<Tag>()
-                            .OrderBy(i => i.Name)
-                            .Cast<T>()),
+                            .OrderBy(i => i.Name).Cast<T>()),
                         "ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
-                            .OrderBy(i => i.ID)
-                            .Cast<T>()),
+                            .OrderBy(i => i.ID).Cast<T>()),
                         "Parent Tag ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
-                            .OrderBy(i => i.ParentID)
-                            .Cast<T>()),
+                            .OrderBy(i => i.ParentID).Cast<T>()),
                         "Department ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
-                            .OrderBy(i => i.DepartmentID)
-                            .Cast<T>()),
+                            .OrderBy(i => i.DepartmentID).Cast<T>()),
                         "Color" => new ObservableCollection<T>(SearchList.Cast<Tag>()
-                            .OrderBy(i => i.Color)
-                            .Cast<T>()),
+                            .OrderBy(i => i.Color).Cast<T>()),
                         "Created" => new ObservableCollection<T>(SearchList.Cast<Tag>()
-                            .OrderBy(i => i.CreatedAt)
-                            .Cast<T>()),
+                            .OrderBy(i => i.CreatedAt).Cast<T>()),
                         _ => SearchList
                     };
                     break;
@@ -199,17 +232,13 @@ namespace Asset_Management_System.ViewModels
                     SearchList = clickedHeader?.Content.ToString() switch
                     {
                         "Date" => new ObservableCollection<T>(SearchList.Cast<Entry>()
-                            .OrderBy(i => i.CreatedAt)
-                            .Cast<T>()),
+                            .OrderBy(i => i.CreatedAt).Cast<T>()),
                         "ID" => new ObservableCollection<T>(SearchList.Cast<Entry>()
-                            .OrderBy(i => i.Id)
-                            .Cast<T>()),
+                            .OrderBy(i => i.ID).Cast<T>()),
                         "Event" => new ObservableCollection<T>(SearchList.Cast<Entry>()
-                            .OrderBy(i => i.Description)
-                            .Cast<T>()),
+                            .OrderBy(i => i.Description).Cast<T>()),
                         "User" => new ObservableCollection<T>(SearchList.Cast<Entry>()
-                            .OrderBy(i => i.Username)
-                            .Cast<T>()),
+                            .OrderBy(i => i.Username).Cast<T>()),
                         _ => SearchList
                     };
                     break;

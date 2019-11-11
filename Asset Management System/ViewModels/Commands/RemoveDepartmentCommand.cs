@@ -3,6 +3,8 @@ using Asset_Management_System.Events;
 using Asset_Management_System.Models;
 using System;
 using System.Windows.Input;
+using Asset_Management_System.Services.Interfaces;
+using Newtonsoft.Json.Serialization;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
@@ -11,12 +13,16 @@ namespace Asset_Management_System.ViewModels.Commands
         private MainViewModel _main;
         private Department departmentToRemove;
         private bool promptResult;
+        private IDepartmentService _service;
+        private IDepartmentRepository _rep;
 
         public event EventHandler CanExecuteChanged;
 
-        public RemoveDepartmentCommand(MainViewModel main)
+        public RemoveDepartmentCommand(MainViewModel main, IDepartmentService service)
         {
             _main = main;
+            _service = service;
+            _rep = _service.GetRepository() as IDepartmentRepository;
         }
 
         public bool CanExecute(object parameter)
@@ -41,8 +47,7 @@ namespace Asset_Management_System.ViewModels.Commands
             }
 
             // Validating id
-            DepartmentRepository rep = new DepartmentRepository();
-            Department department = rep.GetById(id);
+            Department department = _rep.GetById(id);
             if (department != null)
             {
                 if (department.ID != _main.CurrentDepartment.ID)
@@ -70,7 +75,7 @@ namespace Asset_Management_System.ViewModels.Commands
             if (e.Result)
             {
                 // Removing department
-                if (new DepartmentRepository().Delete(departmentToRemove))
+                if (_rep.Delete(departmentToRemove))
                 {
                     _main.OnPropertyChanged(nameof(_main.Departments));
                     _main.AddNotification(new Notification(

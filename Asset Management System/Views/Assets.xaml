@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
@@ -68,7 +69,8 @@
                              TabIndex="0">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
-                            <KeyBinding Key="Esc" Command="{Binding DeleteCommand}"/>
+                            <KeyBinding Key="Escape" Command="{Binding DeleteCommand}"/>
+                            <!--<KeyBinding Key="Tab" FocusManager.FocusedElement="{Binding ElementName=SuggestionsList}"/>-->
                         </TextBox.InputBindings>
                     </TextBox>
 
@@ -82,12 +84,12 @@
                         <TextBlock Style="{StaticResource ParagraphStyle}" Text="Strict" VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Style="{StaticResource RegularCancelButton}"
                             Command="{Binding RemoveCommand}"
                             Content="Remove"
-                            Visibility="{Binding IsRemoveVisible}"/>
+                            Visibility="{Binding MultipleSelected,UpdateSourceTrigger=PropertyChanged}"/>
 
                     <Button Style="{StaticResource RegularButton}"
                             Command="{Binding EditCommand}"
@@ -106,6 +108,14 @@
                           ItemContainerStyle="{StaticResource ListViewWithTags}"
                           Grid.Row="1"
                           Margin="0 0 0 0">
+                    
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <!--ViewCommand-->
+                            <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    
                     <ListView.Template>
                         <ControlTemplate>
                             <WrapPanel IsItemsHost="True"/>
@@ -123,6 +133,8 @@
                 <!--Style="{StaticResource RegularList}"-->
                 <ListView ItemsSource="{Binding SearchList}"
                         SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                        Name="ListView"
+                        SelectionChanged="ListView_SelectionChanged"
                         Grid.Row="2"
                         Style="{StaticResource RegularList}">
                     <ListView.View>
@@ -162,7 +174,7 @@
                         MinWidth="209"
                         TabIndex="1">
                 <ListView.InputBindings>
-                    <KeyBinding Key="Enter" 
+                    <KeyBinding Key="Enter"
                                 Command="{Binding SelectTagCommand}"/>
                 </ListView.InputBindings>
             </ListView>

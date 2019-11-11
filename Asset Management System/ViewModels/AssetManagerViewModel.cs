@@ -8,6 +8,9 @@ using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.ViewModels.Commands;
 using Asset_Management_System.ViewModels.ViewModelHelper;
+using System.Drawing;
+using Asset_Management_System.Services;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -40,7 +43,7 @@ namespace Asset_Management_System.ViewModels
         private string _parentString { get; set; }
 
         // A tag repository, for communication with the database
-        private TagRepository _tagRep { get; set; }
+        private ITagRepository _tagRep { get; set; }
 
         // TODO: Kom uden om mig
         private TextBox _box { get; set; }
@@ -48,7 +51,9 @@ namespace Asset_Management_System.ViewModels
 
         private List<Asset> _assetList { get; set; }
 
-        private AssetRepository _assetRep { get; set; }
+        private IAssetRepository _assetRep { get; set; }
+
+        private IAssetService _service;
 
         #endregion
 
@@ -123,13 +128,13 @@ namespace Asset_Management_System.ViewModels
         #endregion
 
 
-        public AssetManagerViewModel(MainViewModel main, Asset inputAsset, TextBox box, bool addMultiple = false)
+        public AssetManagerViewModel(MainViewModel main, Asset inputAsset, IAssetService service, TextBox box, bool addMultiple = false)
         {
             _main = main;
             Title = "Edit asset";
-
-            // TODO: Consider if this should be given via Dependency Injection
-            _assetRep = new AssetRepository();
+            _service = service;
+            
+            _assetRep = _service.GetRepository() as IAssetRepository;
 
             FieldsList = new ObservableCollection<ShownField>();
             if (inputAsset != null)
@@ -154,13 +159,14 @@ namespace Asset_Management_System.ViewModels
             }
 
             // Initialize commands
-            SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _editing);
-            SaveMultipleAssetsCommand = new SaveAssetCommand(this, _main, _asset, false, true);
+            SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _service, _editing);
+            SaveMultipleAssetsCommand = new SaveAssetCommand(this, _main, _asset, _service, false, true);
             AddFieldCommand = new AddFieldCommand(_main, this, true);
             RemoveFieldCommand = new RemoveFieldCommand(this);
 
-            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
+            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main, _service)));
 
+            //TODO: This whole tag related thing should be a class of its own
             #region Tag related variables
 
             _tagRep = new TagRepository();

@@ -11,6 +11,7 @@ namespace Asset_Management_System.Models
         public ulong DefaultDepartment { get; set; }
         public string Description { get; set; }
         public bool IsEnabled { get; set; }
+        public string Domain { get; set; }
         public string DefaultDepartmentName
         {
             get
@@ -25,17 +26,18 @@ namespace Asset_Management_System.Models
         }
 
         /* Constructor used by DB */
-        private User(ulong id, string name, string username, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
+        private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
         {
             ID = id;
-            Name = name;
             Username = username;
+            Domain = domain;
             Description = description;
             IsEnabled = is_enabled;
             DefaultDepartment = defaultDepartment;
             IsAdmin = is_admin;
             CreatedAt = createdAt;
             UpdatedAt = updated_at;
+            
         }
 
         public User()
@@ -65,20 +67,74 @@ namespace Asset_Management_System.Models
 
         public override bool Equals(object obj)
         {
-            if (obj == null) 
+            if (obj == null)
                 return false;
-            
+
+            if (obj is UserWithStatus)
+            {
+                return base.Equals(obj);
+            }
+
             ITagable objAsPart = obj as ITagable;
-            
-            if (objAsPart == null) 
+
+            if (objAsPart == null)
                 return false;
-            
+
             return ID.Equals(objAsPart.TagId());
         }
+    }
 
-        public bool Equals(Tag other)
+    public class UserWithStatus : User
+    {
+		public bool IsShown { get; set; }
+
+        public UserWithStatus(User user) : base()
         {
-            return other != null && ID.Equals(other.ID);
+            this.ID = user.ID;
+            this.Username = user.Username;
+            this.Domain = user.Domain;
+            this.Description = user.Description;
+            this.IsEnabled = user.IsEnabled;
+            this.DefaultDepartment = user.DefaultDepartment;
+            this.IsAdmin = user.IsAdmin;
+            this.CreatedAt = user.CreatedAt;
+            this.UpdatedAt = user.UpdatedAt;
+
+            this.Status = String.Empty;
+            this.IsShown = true;
+        }
+
+        public string Status { get; set; }
+
+        public string StatusColor
+        {
+            get
+            {
+                if (Status.CompareTo("Added") == 0)
+                {
+                    return "#00B600";
+                }
+
+                else if (Status.CompareTo("Removed") == 0)
+                {
+                    return "#E30000";
+                }
+
+                else if (Status.CompareTo("Conflict") == 0)
+                {
+                    return "#FFCC1A";
+                }
+
+                else if (IsEnabled == false)
+                {
+                    return "#C0C0C0";
+                }
+
+                else
+                {
+                    return "#ffffff";
+                }
+            }
         }
     }
 }
