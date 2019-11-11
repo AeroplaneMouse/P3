@@ -36,11 +36,11 @@ namespace Asset_Management_System.ViewModels
             switch (PageType)
             {
                 case ListPageType.Asset:
-                    Main.ChangeMainContent(new Views.AssetManager(Main));
+                    _main.ChangeMainContent(new Views.AssetManager(_main));
                     break;
 
                 case ListPageType.Tag:
-                    Main.ChangeMainContent(new Views.TagManager(Main));
+                    _main.ChangeMainContent(new Views.TagManager(_main));
                     break;
 
                 default:
@@ -58,10 +58,10 @@ namespace Asset_Management_System.ViewModels
             switch (selected)
             {
                 case Asset asset:
-                    Main.ChangeMainContent(new Views.AssetManager(Main, asset));
+                    _main.ChangeMainContent(new Views.AssetManager(_main, asset));
                     break;
                 case Tag tag:
-                    Main.ChangeMainContent(new Views.TagManager(Main, tag));
+                    _main.ChangeMainContent(new Views.TagManager(_main, tag));
                     break;
                 default:
                     Console.WriteLine("Fejl ved edit");
