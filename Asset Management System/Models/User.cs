@@ -67,20 +67,20 @@ namespace Asset_Management_System.Models
 
         public override bool Equals(object obj)
         {
-            if (obj == null) 
+            if (obj == null)
                 return false;
-            
-            ITagable objAsPart = obj as ITagable;
-            
-            if (objAsPart == null) 
-                return false;
-            
-            return ID.Equals(objAsPart.TagId());
-        }
 
-        public bool Equals(Tag other)
-        {
-            return other != null && ID.Equals(other.ID);
+            if (obj is UserWithStatus)
+            {
+                return base.Equals(obj);
+            }
+
+            ITagable objAsPart = obj as ITagable;
+
+            if (objAsPart == null)
+                return false;
+
+            return ID.Equals(objAsPart.TagId());
         }
     }
 
@@ -101,7 +101,7 @@ namespace Asset_Management_System.Models
             this.UpdatedAt = user.UpdatedAt;
 
             this.Status = String.Empty;
-            IsShown = true;
+            this.IsShown = true;
         }
 
         public string Status { get; set; }
