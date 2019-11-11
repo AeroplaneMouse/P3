@@ -217,7 +217,7 @@ namespace Asset_Management_System.ViewModels
         private void GetAllUsers()
         {
             // Get the users already in the database
-            _existingUsersList = (_rep.GetAll() ?? new List<User>())
+            _existingUsersList = (_rep.GetAll(true) ?? new List<User>())
                 .Select(u => new UserWithStatus(u))
                 .ToList();
 

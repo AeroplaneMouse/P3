@@ -64,9 +64,10 @@ namespace Asset_Management_System.Models
             return ID.Equals(objAsPart.TagId());
         }
 
-        public bool Equals(Tag other)
+        public bool Equals(User other)
         {
-            return other != null && ID.Equals(other.ID);
+            Console.WriteLine("Test");
+            return other != null && this.Username.CompareTo(other.Username) == 0 && this.ID.CompareTo(other.ID) == 0;
         }
 
         public string DefaultDepartmentName
