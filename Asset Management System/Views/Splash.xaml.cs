@@ -1,8 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Threading;
-using Asset_Management_System.Authentication;
+﻿using System.Windows.Controls;
 using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views

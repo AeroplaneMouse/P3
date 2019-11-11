@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Logging;
-using Google.Protobuf.WellKnownTypes;
+using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.Models
 {
@@ -32,9 +31,8 @@ namespace Asset_Management_System.Models
         public string FontColor {
             get {
                 if (_fontColor == null)
-                {
                     _fontColor = IdealTextColor((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(this.Color));
-                }
+
                 return _fontColor;
             }
         }

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Text;
-using System.Windows.Controls;
-using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Functions;
-using Asset_Management_System.Models;
+﻿using System.Windows.Controls;
 using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views

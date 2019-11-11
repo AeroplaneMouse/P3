@@ -9,9 +9,7 @@ namespace Asset_Management_System.Models
     public class Comment : Model, ILoggable<Comment>
     {
         public string Username { get; set; }
-
         public string Content { get; set; }
-
         public ulong AssetID { get; set; }
 
         public Comment()
@@ -19,7 +17,7 @@ namespace Asset_Management_System.Models
 
         }
 
-        /*Constructor used by DB*/
+        /* Constructor used by DB */
         private Comment(ulong id, string username, string content, ulong assetId, DateTime createdAt, DateTime updatedAt)
         {
             ID = id;

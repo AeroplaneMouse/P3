@@ -1,9 +1,6 @@
-﻿using System.Windows;
-using System.Windows.Media;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using Asset_Management_System.Models;
 using Asset_Management_System.ViewModels;
-using System;
 
 namespace Asset_Management_System.Views
 {

@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
-using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Logging;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using Asset_Management_System.Logging;
+using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.Models
 {

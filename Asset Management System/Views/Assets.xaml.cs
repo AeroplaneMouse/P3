@@ -1,16 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using Asset_Management_System.Models;
-using Asset_Management_System.Database.Repositories;
-using System.Collections.Generic;
-using System.Windows.Input;
-using System.Windows.Media;
-using Asset_Management_System.Events;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
-using System.Windows.Controls.Primitives;
+﻿using System.Windows.Controls;
 using Asset_Management_System.ViewModels;
 using Asset_Management_System.Resources.DataModels;
 

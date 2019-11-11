@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Windows.Media;
-using System.Collections.Generic;
-using System.Text;
 using System.Collections;
+using System.Windows.Media;
 
 namespace Asset_Management_System.Models
 {
@@ -16,14 +14,12 @@ namespace Asset_Management_System.Models
         public static readonly SolidColorBrush INFO = Brushes.LightGray;
         public static readonly SolidColorBrush APPROVE = Brushes.Green;
 
-
         // Public properties
         public int ID { get; }
         public string Message { get; set; }
         public SolidColorBrush Background { get; set; }
         public SolidColorBrush Foreground { get; set; }
 
-        #region Constructors
         public Notification(string message)
             : this(message, Brushes.Black, RandomColor()) { } 
 
@@ -50,7 +46,6 @@ namespace Asset_Management_System.Models
         {
             return (obj as Notification).ID;
         }
-        #endregion
 
         public static SolidColorBrush RandomColor()
         {
@@ -74,6 +69,5 @@ namespace Asset_Management_System.Models
 
             return backgrounds[r.Next() % backgrounds.Length];
         }
-
     }
 }
