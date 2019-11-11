@@ -11,7 +11,7 @@ namespace Asset_Management_System.ViewModels
 
         public TagsViewModel(MainViewModel main, ITagService tagService) : base(main, tagService) 
         {
-            Title = "Tags";
+            
         }
     }
 }

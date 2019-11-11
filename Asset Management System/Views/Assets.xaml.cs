@@ -2,6 +2,8 @@
 using Asset_Management_System.ViewModels;
 using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Services.Interfaces;
+using Asset_Management_System.Models;
+using System.Linq;
 
 namespace Asset_Management_System.Views
 {

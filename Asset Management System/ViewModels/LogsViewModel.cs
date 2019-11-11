@@ -22,7 +22,7 @@ namespace Asset_Management_System.ViewModels
 
         public LogsViewModel(MainViewModel main, IEntryService entryService) : base(main, entryService) 
         {
-            Title = "Log";
+            
         }
     }
 }
