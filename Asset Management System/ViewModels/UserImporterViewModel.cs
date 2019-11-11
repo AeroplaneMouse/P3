@@ -12,9 +12,6 @@ using Asset_Management_System.Resources.Users;
 
 namespace Asset_Management_System.ViewModels
 {
-    
-    // Needs notifications
-
     public class UserImporterViewModel : Base.BaseViewModel, IListUpdate
     {
 
@@ -325,7 +322,7 @@ namespace Asset_Management_System.ViewModels
 
             else
             {
-                Console.WriteLine("Error. User not found in either list");
+                _main.AddNotification(new Notification("Error. User not found in either list"));
             }
 
             OnPropertyChanged(nameof(ShownUsersList));
@@ -343,7 +340,7 @@ namespace Asset_Management_System.ViewModels
             // Check if there are any conflicts left
             if (_finalUsersList.Where(p => p.Status.CompareTo("Conflict") == 0).Count() > 0)
             {
-                Console.WriteLine("Not all conflicts are solved");
+                _main.AddNotification(new Notification("Not all conflicts are solved"));
                 return;
             }
 
