@@ -31,8 +31,8 @@ namespace Asset_Management_System.ViewModels
             _main = main;
 
             // Get the number of stored assets, tags and departments
+            NumberOfUsers = (ulong)new UserRepository().GetAll().Where(p => p.IsEnabled == true).Count();
             //TODO: fix so it uses Dependency Injection
-            NumberOfUsers = new UserRepository().GetCount();
             NumberOfAssets = new AssetRepository().GetCount();
             NumberOfTags = new TagRepository().GetCount();
             NumberOfDepartments = new DepartmentRepository().GetCount();

@@ -14,7 +14,7 @@
         MinHeight="{Binding WindowMinHeight}"
         MinWidth="{Binding WindowMinWidth}"
         Title="Asset Management System" Height="600" Width="1200">
-    
+
     <Window.Resources>
         <!-- Style of the window -->
         <Style TargetType="{x:Type local:Main}">
@@ -33,16 +33,21 @@
                                 </Border>
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="{Binding TitleHeightGridLength}"/>   <!-- Menu bar -->
-                                        <RowDefinition Height="*"/>                                 <!-- Window content -->
+                                        <RowDefinition Height="{Binding TitleHeightGridLength}"/>
+                                        <!-- Menu bar -->
+                                        <RowDefinition Height="*"/>
+                                        <!-- Window content -->
                                     </Grid.RowDefinitions>
                                     <Grid Grid.Row="0"
                                           Panel.ZIndex="1"
                                           Background="{StaticResource BackgroundDarkBrush}">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/> <!-- Icon -->
-                                            <ColumnDefinition Width="*" /> <!-- Menu -->
-                                            <ColumnDefinition Width="Auto"/> <!-- Window buttons -->
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- Icon -->
+                                            <ColumnDefinition Width="*" />
+                                            <!-- Menu -->
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- Window buttons -->
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Icon button -->
@@ -86,14 +91,14 @@
                                                           Style="{StaticResource MenuItemButtonDepartments}">
                                                 </MenuItem>
                                             </Menu>
-                                            
+
                                             <!-- Current user -->
                                             <TextBlock Text="{Binding CurrentUser}"
                                                        Foreground="White"
                                                        Style="{StaticResource ParagraphStyle}"
                                                        VerticalAlignment="Center"
                                                        Margin="15, 0, 15, 0"/>
-                                            
+
                                             <!-- Window buttons -->
                                             <Button Content="-" Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}"/>
                                             <Button Content="[ ]" Command="{Binding MaximizeCommand}" Style="{StaticResource WindowControlButton}"/>
@@ -140,7 +145,7 @@
                                                   Style="{StaticResource NotificationView}"/>
 
                                     </Grid>
-                                    
+
                                     <!-- Splash page -->
                                     <Frame Grid.Row="1"
                                            NavigationUIVisibility="Hidden"

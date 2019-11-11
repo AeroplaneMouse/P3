@@ -120,7 +120,13 @@ namespace Asset_Management_System.ViewModels
 
         private List<Page> pages = new List<Page>();
 
-        private List<Page> excludedPages = new List<Page>();
+        private List<Page> excludedPages = new List<Page>
+        {
+            new Views.AssetManager(null),
+            new Views.TagManager(null),
+            new Views.ObjectViewer(null, null),
+            new Views.UserImporterView(null)
+        };
 
         private Department _currentDepartment;
 
@@ -356,9 +362,7 @@ namespace Asset_Management_System.ViewModels
 
         private void ImportUsers()
         {
-            var dialog = new Views.UserImporterView(_userService);
-
-            dialog.ShowDialog();
+            ChangeMainContent(new Views.UserImporterView(this));
         }
 
         // Used to reload the application
