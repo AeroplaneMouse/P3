@@ -10,7 +10,6 @@ namespace Asset_Management_System.ViewModels
         {
             _main = main;
 
-
             CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(main)));
         }
 
