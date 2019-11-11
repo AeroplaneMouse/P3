@@ -17,7 +17,7 @@
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" BorderBrush="{Binding Color}" BorderThickness="2" CornerRadius="10"
-                                        Background="{Binding Color}" FocusVisualStyle="{x:Null}">
+                                        Background="{Binding Color}" FocusVisualStyle="{x:Null}" RenderOptions.EdgeMode="Aliased">
                                     <Grid >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
@@ -43,11 +43,13 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
                     <Button OverridesDefaultStyle="True" x:Name="PART_TagButton"
-                            Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}">
+                            Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" VerticalAlignment="Center" Padding="{TemplateBinding Padding}">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" BorderBrush="{Binding Color}" BorderThickness="2" CornerRadius="10"
-                                        Background="{Binding Color}" FocusVisualStyle="{x:Null}">
+                                <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}"
+                                        BorderBrush="{Binding Color}" BorderThickness="2" CornerRadius="10"
+                                        Background="{Binding Color}" FocusVisualStyle="{x:Null}"
+                                        RenderOptions.EdgeMode="Aliased">
                                     <Grid >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
@@ -56,11 +58,64 @@
                                         <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,0,2" />
                                         <Button OverridesDefaultStyle="True" x:Name="PART_DeleteTagButton"
                                                 Grid.Column="1" Margin="3,0" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                                Visibility="Hidden" Command="{x:Static v:AssetManagerViewModel.UnTagTagCommand}" CommandParameter="{Binding Path=ID}">
+                                                Visibility="Hidden" Command="{x:Static v:AssetManagerViewModel.UntagTagCommand}"
+                                                CommandParameter="{Binding Path=ID}">
                                             <Button.Template>
                                                 <ControlTemplate>
                                                     <Grid Height="10" Width="10" Background="Transparent" >
-                                                        <TextBlock Foreground="{Binding FontColor}" FontFamily="{StaticResource SegoeBold}" Text=" X" Margin="-2"></TextBlock>
+                                                        <TextBlock Foreground="{Binding FontColor}" FontFamily="{StaticResource SegoeBold}"
+                                                                   VerticalAlignment="Center" Text=" x" Margin="-2, -2, 0, 0"></TextBlock>
+                                                    </Grid>
+                                                </ControlTemplate>
+                                            </Button.Template>
+                                        </Button>
+                                    </Grid>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="PART_DeleteTagButton" Property="Visibility" Value="Visible" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Tag style for tags added to seach query -->
+    <Style TargetType="{x:Type Label}" x:Key="TagAddedToSearch">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="MinWidth" Value="50" />
+        <Setter Property="Padding" Value="5,2,0,2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Label}">
+                    <Button OverridesDefaultStyle="True" x:Name="PART_TagButton"
+                            Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" VerticalAlignment="Center" Padding="{TemplateBinding Padding}">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}"
+                                        BorderBrush="{Binding Color}" BorderThickness="2" CornerRadius="10"
+                                        Background="{Binding Color}" FocusVisualStyle="{x:Null}"
+                                        RenderOptions.EdgeMode="Aliased">
+                                    <Grid >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,0,2" />
+                                        <!-- set command to delete the tag from the search query -->
+                                        <Button OverridesDefaultStyle="True" x:Name="PART_DeleteTagButton"
+                                                Grid.Column="1" Margin="3,0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                                Visibility="Hidden" Command=""
+                                                CommandParameter="{Binding Path=ID}">
+                                            <Button.Template>
+                                                <ControlTemplate>
+                                                    <Grid Height="10" Width="10" Background="Transparent" >
+                                                        <TextBlock Foreground="{Binding FontColor}" FontFamily="{StaticResource SegoeBold}"
+                                                                   VerticalAlignment="Center" Text=" x" Margin="-2, -2, 0, 0"></TextBlock>
                                                     </Grid>
                                                 </ControlTemplate>
                                             </Button.Template>
@@ -98,8 +153,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
-                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <MultiTrigger>

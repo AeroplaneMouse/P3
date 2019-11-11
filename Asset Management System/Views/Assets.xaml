@@ -114,7 +114,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid MaxWidth="100" HorizontalAlignment="Left">
-                                <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
+                                <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagAddedToSearch}"></Label>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
