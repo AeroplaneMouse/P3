@@ -1,13 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Asset_Management_System">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- Menu button -->
     <Style TargetType="{x:Type Button}" x:Key="MenuButton" BasedOn="{StaticResource BaseStyle}">
 
         <!-- So it can be clicked -->
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
-
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Padding" Value="9" />
         <Setter Property="Foreground" Value="{StaticResource BackgroundDarkBrush}" />
@@ -32,14 +30,12 @@
                 <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}" />
             </Trigger>
         </Style.Triggers>
-
     </Style>
 
     <!-- Hoverless button -->
     <Style TargetType="{x:Type Button}" x:Key="Hoverless">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -77,7 +73,7 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border Padding="{TemplateBinding Padding}" 
                             Background="{TemplateBinding Background}"
-                            CornerRadius="3">
+                            CornerRadius="0">
                         <TextBlock VerticalAlignment="Center" 
                                    HorizontalAlignment="Center" 
                                    Text="{TemplateBinding Content}" 
@@ -135,26 +131,21 @@
                 <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}" />
             </Trigger>
         </Style.Triggers>
-
     </Style>
 
     <!-- Window control close button needs to be red -->
     <Style TargetType="{x:Type Button}" x:Key="WindowCloseButton" BasedOn="{StaticResource WindowControlButton}">
-
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource CloseRedBrush}"/>
-                <!--<Setter Property="Foreground" Value="{StaticResource BackgroundLightBrush}" />-->
             </Trigger>
         </Style.Triggers>
-
     </Style>
     
     <!-- Regular button -->
     <Style TargetType="{x:Type Button}" x:Key="RegularButton">
         <!-- So it can be clicked -->
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
-        
         <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Width" Value="100"/>
@@ -162,9 +153,7 @@
         <Setter Property="Padding" Value="6"/>
         <Setter Property="BorderBrush" Value="{StaticResource NavigationSelectedBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-
         <Setter Property="OverridesDefaultStyle" Value="True"/>
-
         <!-- Makes the content of the button a textblock -->
         <Setter Property="Template">
             <Setter.Value>
@@ -199,7 +188,6 @@
     <Style TargetType="Button" x:Key="RegularCancelButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>
-
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource CancelRedHighlightBrush}"/>
@@ -211,7 +199,6 @@
     <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
         <Setter Property="BorderThickness" Value="0"/>
-        
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource AcceptGreenHightlightBrush}"/>
@@ -224,10 +211,10 @@
             <Setter.Value>
                 <ControlTemplate>
                     <Border>
-                        <Rectangle  Margin="2"
-                                    StrokeThickness="1"
-                                    Stroke="#60000000"
-                                    StrokeDashArray="1 2" />
+                        <Rectangle Margin="2"
+                                   StrokeThickness="1"
+                                   Stroke="#60000000"
+                                   StrokeDashArray="1 2" />
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -241,7 +228,6 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -302,7 +288,6 @@
         <Setter Property="Margin" Value="0, 0, 10, 0"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
-
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -313,7 +298,6 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Foreground" Value="Gray"/>
@@ -324,7 +308,6 @@
     <!-- Add Field button -->
     <Style TargetType="Button" x:Key="AddFieldButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Command" Value="{Binding AddFieldCommand}"/>
-        
     </Style>
     
     <!-- Delete field button -->
@@ -332,7 +315,6 @@
         <Setter Property="Content" Value="X"/>
         <Setter Property="Grid.Row" Value="0"/>
         <Setter Property="Grid.Column" Value="1"/>
-        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="Command" Value="{Binding DeleteFieldCommand}"/>
         <Setter Property="CommandParameter" Value="{Binding Path=ID}"/>

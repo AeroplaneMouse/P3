@@ -5,8 +5,7 @@
                     xmlns:v="clr-namespace:Asset_Management_System.ViewModels">
 
     <helper:FieldDesignSelector x:Key="MyFieldDesignSelector" />
-
-
+    
     <!-- Label of a field -->
     <Style TargetType="TextBlock" x:Key="FieldLabel">
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}" />

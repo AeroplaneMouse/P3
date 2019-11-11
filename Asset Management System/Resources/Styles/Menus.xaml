@@ -1,13 +1,11 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Asset_Management_System"
                     xmlns:v="clr-namespace:Asset_Management_System.ViewModels">
 
     <!-- Menu container -->
     <Style TargetType="{x:Type Menu}" x:Key="MenuContainer" BasedOn="{StaticResource BaseStyle}">
         <!-- So it can be clicked -->
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
-        
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="VerticalAlignment" Value="Center"/>
     </Style>
@@ -64,9 +62,7 @@
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         <Setter Property="FontWeight" Value="Light"/>
-
         <Setter Property="Command" Value="{x:Static v:MainViewModel.SelectDepartmentCommand}"/>
-
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
@@ -93,7 +89,6 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
     
     <Style TargetType="MenuItem" x:Key="DepartmentItem">
         <Setter Property="Template">
