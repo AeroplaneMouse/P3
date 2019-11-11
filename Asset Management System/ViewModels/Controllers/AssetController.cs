@@ -12,9 +12,7 @@ namespace Asset_Management_System.ViewModels.Controllers
         private IAssetRepository _assetRep;
 
         private IAssetService _service;
-        
-        public ObservableCollection<Tag> CurrentlyAddedTags { get; set; } = new ObservableCollection<Tag>();
-        
+
         public Asset Asset { get; set; }
 
         public AssetController(Asset inputAsset, IAssetService service, bool addMultiple = false)
