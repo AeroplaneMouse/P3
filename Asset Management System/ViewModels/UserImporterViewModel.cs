@@ -343,27 +343,27 @@ namespace Asset_Management_System.ViewModels
                 return;
             }
 
-            //// Disable the removed users in the database
-            //_finalUsersList
-            //    .Where(p => p.Status.CompareTo("Removed") == 0)
-            //    .ToList()
-            //    .ForEach(p =>
-            //    {
-            //        p.IsEnabled = false;
-            //        _rep.Update(p);
-            //    });
+            // Disable the removed users in the database
+            _finalUsersList
+                .Where(p => p.Status.CompareTo("Removed") == 0)
+                .ToList()
+                .ForEach(p =>
+                {
+                    p.IsEnabled = false;
+                    _rep.Update(p);
+                });
 
-            //// Insert added users to the database
-            //_finalUsersList
-            //    .Where(p => p.Status.CompareTo("Added") == 0)
-            //    .ToList()
-            //    .ForEach(p => _rep.Insert(p, out ulong id));
+            // Insert added users to the database
+            _finalUsersList
+                .Where(p => p.Status.CompareTo("Added") == 0)
+                .ToList()
+                .ForEach(p => _rep.Insert(p, out ulong id));
 
-            //// Update the users that weren't removed, as they may have gotten new descriptions, etc.
-            //_finalUsersList
-            //    .Where(p => p.Status.CompareTo(String.Empty) == 0)
-            //    .ToList()
-            //    .ForEach(p => _rep.Update(p));
+            // Update the users that weren't removed, as they may have gotten new descriptions, etc.
+            _finalUsersList
+                .Where(p => p.Status.CompareTo(String.Empty) == 0)
+                .ToList()
+                .ForEach(p => _rep.Update(p));
 
             _main.ChangeMainContent(new Views.Home(_main));
         }
@@ -378,7 +378,5 @@ namespace Asset_Management_System.ViewModels
             else
                 return ShownUsersList.ElementAtOrDefault(SelectedItemIndex);
         }
-
-        
     }
 }
