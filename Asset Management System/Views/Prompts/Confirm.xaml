@@ -21,6 +21,7 @@
                     <Button Style="{StaticResource RegularAcceptButton}"
                             Command="{Binding AcceptCommand}"
                             Content="Accept"
+                            Name="Accept"
                             TabIndex="1"/>
                     <Button Style="{StaticResource RegularCancelButton}"
                             Command="{Binding CancelCommand}"
