@@ -55,36 +55,39 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             List<User> users = new List<User>();
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "SELECT u.id, u.name, u.username, u.domain, u.description, u.enabled, u.admin, u.default_department, u.created_at, u.updated_at " +
-                                     "FROM users AS u " +
-                                     "INNER JOIN asset_users AS au ON au.user_id = u.id " +
-                                     "WHERE au.asset_id = @id";
-
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.AddWithValue("@id", id);
-   
-                    using (var reader = cmd.ExecuteReader())
+                    const string query = "SELECT u.id, u.name, u.username, u.domain, u.description, u.enabled, u.admin, u.default_department, u.created_at, u.updated_at " +
+                                         "FROM users AS u " +
+                                         "INNER JOIN asset_users AS au ON au.user_id = u.id " +
+                                         "WHERE au.asset_id = @id";
+
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            users.Add(DBOToModelConvert(reader));
+                            while (reader.Read())
+                            {
+                                users.Add(DBOToModelConvert(reader));
+                            }
+
+                            reader.Close();
                         }
-                        
-                        reader.Close();
                     }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
 
             return users;
@@ -94,29 +97,32 @@ namespace Asset_Management_System.Database.Repositories
         {
             var con = new MySqlHandler().GetConnection();
             ulong count = 0;
-            
-            try
+
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "SELECT COUNT(*) FROM users WHERE enabled = 1;";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    const string query = "SELECT COUNT(*) FROM users WHERE enabled = 1;";
+
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        if (reader.Read())
-                            count = reader.GetUInt64("COUNT(*)");
-                        reader.Close();
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                count = reader.GetUInt64("COUNT(*)");
+                            reader.Close();
+                        }
                     }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
           
             return count;
@@ -126,47 +132,49 @@ namespace Asset_Management_System.Database.Repositories
         {
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
-
             id = 0;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "INSERT INTO users (username, domain, description, enabled, default_department, admin, updated_at) " +
-                                     "VALUES (@username, @domain, @description, @enabled, @default_department, @admin, CURRENT_TIMESTAMP())";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@username", MySqlDbType.String);
-                    cmd.Parameters["@username"].Value = entity.Username;
+                    const string query = "INSERT INTO users (username, domain, description, enabled, default_department, admin, updated_at) " +
+                                         "VALUES (@username, @domain, @description, @enabled, @default_department, @admin, CURRENT_TIMESTAMP())";
 
-                    cmd.Parameters.Add("@domain", MySqlDbType.String);
-                    cmd.Parameters["@domain"].Value = entity.Domain;
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@username", MySqlDbType.String);
+                        cmd.Parameters["@username"].Value = entity.Username;
 
-                    cmd.Parameters.Add("@description", MySqlDbType.String);
-                    cmd.Parameters["@description"].Value = entity.Description;
+                        cmd.Parameters.Add("@domain", MySqlDbType.String);
+                        cmd.Parameters["@domain"].Value = entity.Domain;
 
-                    cmd.Parameters.Add("@enabled", MySqlDbType.String);
-                    cmd.Parameters["@enabled"].Value = entity.IsEnabled ? 1 : 0;
+                        cmd.Parameters.Add("@description", MySqlDbType.String);
+                        cmd.Parameters["@description"].Value = entity.Description;
 
-                    cmd.Parameters.Add("@default_department", MySqlDbType.UInt64);
-                    cmd.Parameters["@default_department"].Value = entity.DefaultDepartment;
+                        cmd.Parameters.Add("@enabled", MySqlDbType.String);
+                        cmd.Parameters["@enabled"].Value = entity.IsEnabled ? 1 : 0;
 
-                    cmd.Parameters.Add("@admin", MySqlDbType.String);
-                    cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
-                        
-                    querySuccess = cmd.ExecuteNonQuery() > 0;
+                        cmd.Parameters.Add("@default_department", MySqlDbType.UInt64);
+                        cmd.Parameters["@default_department"].Value = entity.DefaultDepartment;
 
-                    id = (ulong)cmd.LastInsertedId;
+                        cmd.Parameters.Add("@admin", MySqlDbType.String);
+                        cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
+
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+
+                        id = (ulong)cmd.LastInsertedId;
+                    }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
             
             return querySuccess;
@@ -177,46 +185,49 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "UPDATE users SET username=@username, domain=@domain, description=@description, enabled=@enabled, admin=@admin, default_department=@default_department, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
-
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                    cmd.Parameters["@id"].Value = entity.ID;
+                    const string query = "UPDATE users SET username=@username, domain=@domain, description=@description, enabled=@enabled, admin=@admin, default_department=@default_department, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
-                    cmd.Parameters.Add("@username", MySqlDbType.String);
-                    cmd.Parameters["@username"].Value = entity.Username;
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = entity.ID;
 
-                    cmd.Parameters.Add("@domain", MySqlDbType.String);
-                    cmd.Parameters["@domain"].Value = entity.Domain;
+                        cmd.Parameters.Add("@username", MySqlDbType.String);
+                        cmd.Parameters["@username"].Value = entity.Username;
 
-                    cmd.Parameters.Add("@description", MySqlDbType.String);
-                    cmd.Parameters["@description"].Value = entity.Description;
+                        cmd.Parameters.Add("@domain", MySqlDbType.String);
+                        cmd.Parameters["@domain"].Value = entity.Domain;
 
-                    cmd.Parameters.Add("@enabled", MySqlDbType.String);
-                    cmd.Parameters["@enabled"].Value = entity.IsEnabled ? 1 : 0;
+                        cmd.Parameters.Add("@description", MySqlDbType.String);
+                        cmd.Parameters["@description"].Value = entity.Description;
 
-                    cmd.Parameters.Add("@default_department", MySqlDbType.UInt64);
-                    cmd.Parameters["@default_department"].Value = entity.DefaultDepartment;
+                        cmd.Parameters.Add("@enabled", MySqlDbType.String);
+                        cmd.Parameters["@enabled"].Value = entity.IsEnabled ? 1 : 0;
 
-                    cmd.Parameters.Add("@admin", MySqlDbType.String);
-                    cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
+                        cmd.Parameters.Add("@default_department", MySqlDbType.UInt64);
+                        cmd.Parameters["@default_department"].Value = entity.DefaultDepartment;
 
-                    querySuccess = cmd.ExecuteNonQuery() > 0;
+                        cmd.Parameters.Add("@admin", MySqlDbType.String);
+                        cmd.Parameters["@admin"].Value = entity.IsAdmin ? 1 : 0;
+
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
                 }
             }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
-            }
-            
+
             return querySuccess;
         }
 
@@ -225,26 +236,29 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "DELETE FROM users WHERE id=@id";
-
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                    cmd.Parameters["@id"].Value = entity.ID;
+                    const string query = "DELETE FROM users WHERE id=@id";
 
-                    querySuccess = cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = entity.ID;
+
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                    }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
 
             return querySuccess;
@@ -255,33 +269,36 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             User user = null;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "SELECT id, name, username, domain, description, enabled, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
-
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                    cmd.Parameters["@id"].Value = id;
-                    
-                    con.Open();
-                    using (var reader = cmd.ExecuteReader())
+                    const string query = "SELECT id, name, username, domain, description, enabled, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
+
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = id;
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            user = DBOToModelConvert(reader);
+                            while (reader.Read())
+                            {
+                                user = DBOToModelConvert(reader);
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
 
             return user;
@@ -293,38 +310,41 @@ namespace Asset_Management_System.Database.Repositories
             User user = null;
 
             var parts = identity.Split('\\');
-            
-            try
-            {
-                const string query = "SELECT id, name, domain, description, enabled, username, admin, default_department, created_at, updated_at " +
-                                     "FROM users WHERE username=@username AND domain=@domain AND enabled=1";
 
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
+            {
+                try
                 {
-                    cmd.Parameters.Add("@domain", MySqlDbType.String);
-                    cmd.Parameters["@domain"].Value = parts[0];
-                    
-                    cmd.Parameters.Add("@username", MySqlDbType.String);
-                    cmd.Parameters["@username"].Value = parts[1];
-                    
-                    using (var reader = cmd.ExecuteReader())
+                    const string query = "SELECT id, name, domain, description, enabled, username, admin, default_department, created_at, updated_at " +
+                                            "FROM users WHERE username=@username AND domain=@domain AND enabled=1";
+
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.Add("@domain", MySqlDbType.String);
+                        cmd.Parameters["@domain"].Value = parts[0];
+
+                        cmd.Parameters.Add("@username", MySqlDbType.String);
+                        cmd.Parameters["@username"].Value = parts[1];
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            user = DBOToModelConvert(reader);
+                            while (reader.Read())
+                            {
+                                user = DBOToModelConvert(reader);
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
 
             return user;
