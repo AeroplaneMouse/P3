@@ -109,7 +109,7 @@
                                         <!-- set command to delete the tag from the search query -->
                                         <Button OverridesDefaultStyle="True" x:Name="PART_DeleteTagButton"
                                                 Grid.Column="1" Margin="3,0" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                                Visibility="Hidden" Command=""
+                                                Visibility="Hidden" Command="{x:Static v:AssetsViewModel.RemoveTagCommand}"
                                                 CommandParameter="{Binding Path=ID}">
                                             <Button.Template>
                                                 <ControlTemplate>
