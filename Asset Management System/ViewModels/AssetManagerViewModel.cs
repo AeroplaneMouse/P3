@@ -267,9 +267,13 @@ namespace Asset_Management_System.ViewModels
                 Tag tag = _tagList.SingleOrDefault(p =>
                     String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase));
                 if (tag != null)
+                {
                     CurrentlyAddedTags.Add(tag);
+                }
                 else
+                {
                     _main.AddNotification(new Notification("No matching tags found", Notification.WARNING));
+                }
                 ConnectTags();
             }
 
