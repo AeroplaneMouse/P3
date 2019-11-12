@@ -505,6 +505,7 @@ namespace Asset_Management_System.Database.Repositories
                 new object[] { rowId, rowName, rowDescription, rowIdentifier, rowDepartmentId, rowOptions, rowCreatedAt, rowUpdatedAt }, null, null);
         }
         
+        /*
         /// <summary>
         /// Adds a list of tags to an asset
         /// </summary>
@@ -676,5 +677,6 @@ namespace Asset_Management_System.Database.Repositories
             
             return tags;
         }
+        */
     }
 }

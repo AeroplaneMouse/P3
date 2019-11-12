@@ -11,7 +11,7 @@ namespace Asset_Management_System.ViewModels
     {
         protected abstract void LoadFields();
 
-        public ObservableCollection<Tag> CurrentlyAddedTags { get; set; } = new ObservableCollection<Tag>();
+        public ObservableCollection<ITagable> CurrentlyAddedTags { get; set; } = new ObservableCollection<ITagable>();
 
         public ObservableCollection<ShownField> HiddenFields { get; set; } = new ObservableCollection<ShownField>();
 
@@ -27,10 +27,11 @@ namespace Asset_Management_System.ViewModels
         }
 
 
-        private void ShowIfNewField(Tag tag)
+        private void ShowIfNewField(ITagable tag)
         {
-            FieldTagsPopulator(tag, FieldsList, false);
-            FieldTagsPopulator(tag, HiddenFields, true);
+            if (tag.GetType() == typeof(User)) return;
+            FieldTagsPopulator((Tag)tag, FieldsList, false);
+            FieldTagsPopulator((Tag)tag, HiddenFields, true);
         }
 
         private void FieldTagsPopulator(Tag tag,

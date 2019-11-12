@@ -129,7 +129,7 @@ namespace Asset_Management_System.ViewModels
                 _asset = inputAsset;
                 LoadFields();
 
-                CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
+                CurrentlyAddedTags = new ObservableCollection<ITagable>(_assetRep.GetTags(_asset));
 
                 ConnectTags();
                 if (!addMultiple)
@@ -140,7 +140,7 @@ namespace Asset_Management_System.ViewModels
             }
             else
             {
-                CurrentlyAddedTags = new ObservableCollection<Tag>();
+                CurrentlyAddedTags = new ObservableCollection<ITagable>();
                 _asset = new Asset();
                 _editing = false;
             }
@@ -249,7 +249,7 @@ namespace Asset_Management_System.ViewModels
                     .ElementAtOrDefault(0);
             }
 
-            if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
+            if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.TagLabel, _searchString)) == null)
             {
                 Tag tag = _tagList.SingleOrDefault(p =>
                     String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase));

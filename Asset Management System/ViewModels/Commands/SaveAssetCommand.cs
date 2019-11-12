@@ -89,7 +89,7 @@ namespace Asset_Management_System.ViewModels.Commands
                     _rep.Update(_asset);
                     if (_viewModel.CurrentlyAddedTags.Count > 0)
                     {
-                        _rep.AttachTagsToAsset(_asset, new List<Tag>(_viewModel.CurrentlyAddedTags));
+                        _rep.AttachTags(_asset, new List<ITagable>(_viewModel.CurrentlyAddedTags));
                     }
                 }
                 else
@@ -98,7 +98,7 @@ namespace Asset_Management_System.ViewModels.Commands
                     Log<Asset>.CreateLog(_asset, id);
                     if (_viewModel.CurrentlyAddedTags.Count > 0)
                     {
-                        _rep.AttachTagsToAsset(_rep.GetById(id), new List<Tag>(_viewModel.CurrentlyAddedTags));
+                        _rep.AttachTags(_rep.GetById(id), new List<ITagable>(_viewModel.CurrentlyAddedTags));
                     }
                 }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Authentication;
 using System.Text;
 using Asset_Management_System.Authentication;
@@ -135,7 +136,7 @@ namespace Asset_Management_System.Logging
             if (!(asset is Asset))
                 return;
             
-            List<Tag> oldTags = _assetRep.GetAssetTags((Asset) asset);
+            List<ITagable> oldTags = _assetRep.GetTags((Asset) asset).ToList();
             List<Tag> addedTags = new List<Tag>();
             List<Tag> removedTags = new List<Tag>();
             Dictionary<string, string> changes = new Dictionary<string, string>();
