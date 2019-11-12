@@ -105,27 +105,30 @@ namespace Asset_Management_System.ViewModels
 
         private void RemovePromptElapsed(object sender, PromptEventArgs e)
         {
-            //if (!e.Result) return;
-            Log<T>.CreateLog((ILoggable<T>)GetSelectedItem(), true); //TODO: Fix so typecast is unnecessary
-            if (RemoveAsset != null)
-                Rep.Delete(RemoveAsset as T);
-            else if(RemoveTag != null)
+            // Check if the pressed button was accept
+            if (e.Result)
             {
-                foreach (var var in SelectedItems)
+                Log<T>.CreateLog((ILoggable<T>)GetSelectedItem(), true); //TODO: Fix so typecast is unnecessary
+                if (RemoveAsset != null)
+                    Rep.Delete(RemoveAsset as T);
+                else if (RemoveTag != null)
                 {
-                    Rep.Delete(var as T);
-                    /*
-                    if (RemoveAsset != null)
-                        ((AssetRepository) Rep).Delete(var as Asset);
-                    
-                    else if(RemoveTag != null)
-                        ((TagRepository) Rep).Delete(var as Tag);
-                    */
-                    Search();
+                    foreach (var var in SelectedItems)
+                    {
+                        Rep.Delete(var as T);
+                        /*
+                        if (RemoveAsset != null)
+                            ((AssetRepository) Rep).Delete(var as Asset);
+
+                        else if(RemoveTag != null)
+                            ((TagRepository) Rep).Delete(var as Tag);
+                        */
+                        Search();
+                    }
                 }
+                /**/
+                Search();
             }
-            /**/
-            Search();
         }
     }
 }
