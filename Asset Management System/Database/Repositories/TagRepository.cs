@@ -204,7 +204,7 @@ namespace Asset_Management_System.Database.Repositories
             if (MySqlHandler.Open(ref con))
             {
                 try
-
+                {
                     const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
                                      "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
                                      "FROM tags AS t WHERE t.id=@id";
@@ -304,6 +304,7 @@ namespace Asset_Management_System.Database.Repositories
             if (MySqlHandler.Open(ref con))
             {
                 try
+                { 
                     const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
                                      "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
                                      "FROM tags AS t WHERE t.parent_id=@id";
@@ -349,7 +350,8 @@ namespace Asset_Management_System.Database.Repositories
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
-                try
+                try 
+                {
                     const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
                                      "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
                                      "FROM tags AS t WHERE t.label LIKE @keyword";
@@ -395,6 +397,7 @@ namespace Asset_Management_System.Database.Repositories
             {
                 // Sending sql query
                 try
+                {
                     const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, t.options, " +
                                      "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
                                      "FROM tags AS t";

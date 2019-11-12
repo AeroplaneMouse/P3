@@ -26,8 +26,8 @@ namespace Asset_Management_System.ViewModels.Commands
 
         public void Execute(object parameter)
         {
-            if (parameter != null)
-                PrintHelper.Print(parameter as IEnumerable<object>);
+            if (parameter != null && parameter is IEnumerable<object> par)
+                PrintHelper.Print(par);
             else
                 _main.AddNotification(new Notification("Error! Cannot export nothing...", Notification.ERROR), 3000);
         }
