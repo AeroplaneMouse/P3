@@ -280,7 +280,7 @@ namespace Asset_Management_System.ViewModels
 
             // Update the list on the page, if there is one
             if (setPage.DataContext is IListUpdate)
-                (setPage.DataContext as IListUpdate).PageFocus();
+                (setPage.DataContext as IListUpdate).PageGotFocus();
             
             _history.Push(_currentPage);
             // Setting the content of the given frame, to the newPage object to display the requested page.

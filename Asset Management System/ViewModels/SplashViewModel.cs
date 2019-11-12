@@ -15,6 +15,7 @@ namespace Asset_Management_System.ViewModels
         private MainViewModel _main;
         private IUserService _userService;
         private const int _delay = 300;
+        private const int _reconnectWaitingTime = 5;
 
         public string LoadingText { get; set; }
         public string CurrentActionText { get; set; }
@@ -95,32 +96,12 @@ namespace Asset_Management_System.ViewModels
         private void Reconnect()
         {
             const string baseText = "Reconnecting in";
-            for(int i = 5; i > 0; i--)
+            for(int i = _reconnectWaitingTime; i > 0; i--)
             {
                 AdditionalText = $"{ baseText } { i }...";
                 Thread.Sleep(1000);
             }
             AdditionalText = "";
-        }
-
-        /// <summary>
-        /// Updates text on the screen with progress and status.
-        /// </summary>
-        /// <param name="e"></param>
-        public void UpdateStatusText(string title, string currentAction, string aditionalText)
-        {
-            if (title != null)
-                LoadingText = title;
-
-            if (currentAction != null)
-                CurrentActionText = currentAction;
-            
-            if (aditionalText != null)
-                Console.WriteLine("");
-
-
-            //OnPropertyChanged(nameof(LoadingText));
-            //OnPropertyChanged(nameof(StatusText));
         }
 
         private void LoadConfig()

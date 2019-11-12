@@ -203,9 +203,14 @@ namespace Asset_Management_System.ViewModels
 
         #region Public Methods
 
-        public void PageFocus()
+        public void PageGotFocus()
         {
             OnPropertyChanged(nameof(ShownUsersList));
+        }
+
+        public void PageLostFocus()
+        {
+
         }
 
         #endregion

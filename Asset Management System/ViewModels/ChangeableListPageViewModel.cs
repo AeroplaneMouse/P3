@@ -58,8 +58,9 @@ namespace Asset_Management_System.ViewModels
             T selected = GetSelectedItem();
             Console.WriteLine("Check: " + SelectedItemIndex);
 
-            if (selected == null) return;
-            Main.ChangeMainContent(_service.GetManagerPage(Main, selected));
+            if (selected == null) 
+                return;
+            _main.ChangeMainContent(_service.GetManagerPage(_main, selected));
             /*
             switch (selected)
             {
