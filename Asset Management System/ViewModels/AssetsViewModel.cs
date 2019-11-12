@@ -20,7 +20,6 @@ namespace Asset_Management_System.ViewModels
         private IAssetService _service;
         private IAssetRepository _rep;
         
-
         public int ViewType => 1;
         public int SelectedSuggestedIndex { get; set; }
         public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Hidden;

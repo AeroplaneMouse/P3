@@ -13,7 +13,7 @@ namespace Asset_Management_System.Views
         public Tags(MainViewModel main, ITagService tagService)
         {
             InitializeComponent();
-            DataContext = new ViewModels.TagsViewModel(main, tagService);
+            DataContext = new TagsViewModel(main, tagService);
         }
     }
 }
