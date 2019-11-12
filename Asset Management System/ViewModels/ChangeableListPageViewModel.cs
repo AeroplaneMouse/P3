@@ -85,22 +85,29 @@ namespace Asset_Management_System.ViewModels
             if (selected == null) 
                 return;
 
+            string message = $"Are you sure you want to delete { SelectedItems.Count } ";
             switch (selected)
             {
                 case Asset asset:
                     RemoveAsset = asset;
                     RemoveTag = null;
-                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete { SelectedItems.Count } asset(s)?", RemovePromptElapsed));
+                    message += "asset";
                     break;
                 case Tag tag:
                     RemoveAsset = null;
                     RemoveTag = tag;
-                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete { SelectedItems.Count } tag(s) ?", RemovePromptElapsed));
+                    message += "tag";
+                    
                     break;
                 default:
+                    _main.AddNotification(new Notification("Error! An unknown error occured...", Notification.ERROR));
                     Console.WriteLine("Fejl ved Remove");
-                    break;
+                    return;
             }
+
+            // Showing prompt
+            message += SelectedItems.Count > 1 ? "s?" : "?";
+            _main.DisplayPrompt(new Views.Prompts.Confirm(message, RemovePromptElapsed));
         }
 
         private void RemovePromptElapsed(object sender, PromptEventArgs e)
