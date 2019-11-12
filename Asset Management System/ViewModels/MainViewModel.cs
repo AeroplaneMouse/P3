@@ -210,7 +210,7 @@ namespace Asset_Management_System.ViewModels
             get => GetDepartments();
         }
 
-        public bool DisplayCurrentDepartment { get; set; } = false;
+        public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
 
         public Session CurrentSession { get; private set; }
 
@@ -341,7 +341,7 @@ namespace Asset_Management_System.ViewModels
             HasConnectionFailedBeenRaised = false;
 
             // Show department and username
-            DisplayCurrentDepartment = true;
+            CurrentDepartmentVisibility = Visibility.Visible;
             CurrentSession = session;
             CurrentUser = CurrentSession.Username;
             OnPropertyChanged(nameof(CurrentUser));
@@ -397,7 +397,7 @@ namespace Asset_Management_System.ViewModels
             // Clearing memory
             pages.Clear();
             MySqlHandler.ConnectionFailed -= Reload;
-            DisplayCurrentDepartment = false;
+            CurrentDepartmentVisibility = Visibility.Hidden;
             CurrentUser = null;
             CurrentDepartment = null;
             OnPropertyChanged(nameof(CurrentUser));
@@ -421,7 +421,7 @@ namespace Asset_Management_System.ViewModels
 
         private List<Department> GetDepartments()
         {
-            if (DisplayCurrentDepartment)
+            if (CurrentDepartmentVisibility == Visibility.Visible)
                 return (List<Department>) ((IDepartmentRepository) _departmentService.GetRepository()).GetAll();
             else
                 return new List<Department>();
