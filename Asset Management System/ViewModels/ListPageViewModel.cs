@@ -96,7 +96,7 @@ namespace Asset_Management_System.ViewModels
             //_pageType = pageType;
 
             // Initialize commands
-            PrintCommand = new Commands.PrintSelectedItemsCommand();
+            PrintCommand = new Commands.PrintSelectedItemsCommand(_main);
             SearchCommand = new Base.RelayCommand(Search);
             ViewCommand = new Base.RelayCommand(View);
             HeaderClickCommand = new Base.RelayCommand<object>(HeaderClick);
@@ -132,7 +132,14 @@ namespace Asset_Management_System.ViewModels
         /// <summary>
         /// Creates a csv file containing all the items
         /// </summary>
-        protected void Print() => PrintHelper.Print(SearchList as IEnumerable<object>);
+        protected void Print()
+        {
+            if (SearchList != null && SearchList.Count > 0)
+                PrintHelper.Print(SearchList as IEnumerable<object>);
+            else
+                _main.AddNotification(new Notification("Error! Cannot export an empty list.", Notification.ERROR));
+        }
+
 
         /// <summary>
         /// Displays the selected item
