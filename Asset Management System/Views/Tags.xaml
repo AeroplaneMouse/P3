@@ -137,6 +137,9 @@
                             <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
+                    <ListView.Resources>
+                        <Style TargetType="ListViewItem" BaseOn="{StaticResource RegularListViewItem}"/>
+                    </ListView.Resources>
                 </ListView>
                 -->
             </Grid>
