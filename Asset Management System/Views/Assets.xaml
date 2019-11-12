@@ -104,7 +104,7 @@
                 </StackPanel>
 
                 <!-- Current tags -->
-                <ListView ItemsSource="{Binding Path=TheTagger.TaggedWith}"
+                <ListView ItemsSource="{Binding Path=Tags.AppliedTags}"
                           ItemContainerStyle="{StaticResource ListViewWithTags}"
                           Grid.Row="1"
                           Margin="0 0 0 0">
@@ -124,7 +124,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid MaxWidth="100" HorizontalAlignment="Left">
-                                <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
+                                <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagAddedToSearch}"></Label>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
