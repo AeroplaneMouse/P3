@@ -192,8 +192,9 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at " +
-                                     "FROM tags WHERE id=@id";
+                const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at " +
+                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                     "FROM tags AS t WHERE t.id=@id";
 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -231,6 +232,7 @@ namespace Asset_Management_System.Database.Repositories
             try
             {
                 const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at " +
+                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
                                      "FROM tags AS t " +
                                      "INNER JOIN asset_tags AS at ON at.tag_id = t.id " +
                                      "WHERE at.asset_id = @id";
@@ -284,8 +286,9 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at " +
-                                     "FROM tags WHERE parent_id=@id";
+                const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at " +
+                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                     "FROM tags AS t WHERE t.parent_id=@id";
 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -327,8 +330,9 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query =
-                    "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at FROM tags WHERE label LIKE @keyword";
+                const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at " +
+                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                     "FROM tags AS t WHERE t.label LIKE @keyword";
 
                 if (!keyword.Contains('%'))
                     keyword = $"%{keyword}%";
@@ -368,8 +372,9 @@ namespace Asset_Management_System.Database.Repositories
 
             try
             {
-                const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at, options " +
-                                     "FROM tags";
+                const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, t.options " +
+                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                     "FROM tags AS t";
                 
                 con.Open();
                 using (var cmd = new MySqlCommand(query, con))
@@ -408,13 +413,14 @@ namespace Asset_Management_System.Database.Repositories
             ulong rowParentId = reader.GetUInt64("parent_id");
             ulong rowDepartmentId = reader.GetUInt64("department_id");
             string rowColor = reader.GetString("color");
+            int rowNumOfChildren = reader.GetInt32("countChildren");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
             string rowOptions = reader.GetString("options");
 
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowLabel, rowDepartmentId, rowParentId, rowColor, rowCreatedAt, rowUpdatedAt, rowOptions }, null,
+                new object[] { rowId, rowLabel, rowDepartmentId, rowParentId, rowColor, rowNumOfChildren, rowCreatedAt, rowUpdatedAt, rowOptions }, null,
                 null);
         }
     }
