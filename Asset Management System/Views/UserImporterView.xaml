@@ -138,13 +138,23 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
 
-                                <!--<GridViewColumn Header="Keep">
+                                <GridViewColumn Header="Keep">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Command="{Binding KeepUserCommand}" Content="Keep User" Visibility="{Binding Path=Status, Converter={StaticResource converter}}" />
+                                            <Button Command="{Binding KeepCommand}" Content="Keep User" Visibility="{Binding Path=Status, Converter={StaticResource converter}}" />
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
-                                </GridViewColumn>-->
+                                </GridViewColumn>
+
+
+                                <!--<i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="MouseDoubleClick">
+                                        --><!--ViewCommand--><!--
+                                        <i:InvokeCommandAction Command="{Binding EditCommand}"
+                                                                   CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}" />
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>-->
+
                             </GridView>
                         </ListView.View>
 

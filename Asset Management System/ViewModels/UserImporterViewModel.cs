@@ -165,6 +165,8 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand KeepUserCommand { get; set; }
 
+        public ICommand KeepCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -196,6 +198,8 @@ namespace Asset_Management_System.ViewModels
             CancelCommand = new Base.RelayCommand(Cancel);
             ApplyCommand = new Base.RelayCommand(Apply);
             KeepUserCommand = new Base.RelayCommand(KeepUser);
+            KeepCommand = new Base.RelayCommand<object>(Keep);
+
         }
 
         #endregion
@@ -288,6 +292,7 @@ namespace Asset_Management_System.ViewModels
             // Get the user that is currently selected. This is the user that is kept
             UserWithStatus keptUser = GetSelectedItem();
 
+            // If there weren't any selected users, or the selected user is not in conflict
             if (keptUser == null || keptUser.Status.CompareTo("Conflict") != 0)
             {
                 return;
@@ -298,9 +303,9 @@ namespace Asset_Management_System.ViewModels
                 .Where(p => p.Username.CompareTo(keptUser.Username) == 0 && p.Equals(keptUser) == false)
                 .FirstOrDefault();
 
-            // If the kept user i coming from the imported list: 
+            // If the kept user is coming from the imported list: 
             // Set their status to "Added". 
-            // Set the existing users status to empty, add the current date to their username, and set them to not show
+            // Set the existing users status to empty, add the current date to their username, and set them to not show.
             if (_importedUsersList.Contains(keptUser))
             {
                 keptUser.Status = "Added";
@@ -310,7 +315,9 @@ namespace Asset_Management_System.ViewModels
                 otherUser.IsShown = IsShowingDisabled;
             }
 
-            // Hvis brugeren der beholdes er den eksisterende bruger, skal deres status være String.Empty, IsEnabled skal sættes til true og den importerede bruger bliver fjernet fra listen.
+            // If the kept user is coming from the database:
+            // Set their status to String.Empty and IsEnabled to true.
+            // Remove the imported user from the final list.
             else if (_existingUsersList.Contains(keptUser))
             {
                 keptUser.Status = String.Empty;
@@ -369,8 +376,14 @@ namespace Asset_Management_System.ViewModels
             _main.ReturnToPreviousPage();
         }
 
+        private void Keep(object user)
+        {
+
+        }
+
         #endregion
 
+        #region Helpers
 
         private UserWithStatus GetSelectedItem()
         {
@@ -379,5 +392,9 @@ namespace Asset_Management_System.ViewModels
             else
                 return ShownUsersList.ElementAtOrDefault(SelectedItemIndex);
         }
+
+        #endregion
+
+
     }
 }
