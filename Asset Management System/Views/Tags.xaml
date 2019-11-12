@@ -81,14 +81,6 @@
                         SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                         Grid.Row="2"
                         Style="{StaticResource RegularList}">
-                    
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseDoubleClick">
-                            <!--ViewCommand-->
-                            <i:InvokeCommandAction Command="{Binding EditCommand}"
-                                                   CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}" />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
 
                     <ListView.View>
                         <GridView>
@@ -104,6 +96,12 @@
                         <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
                     </ListView.InputBindings>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <!--ViewCommand-->
+                            <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
                 </ListView>
             </Grid>
         </Border>
