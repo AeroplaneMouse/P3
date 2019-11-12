@@ -23,7 +23,6 @@
         <StackPanel Orientation="Horizontal"
             HorizontalAlignment="Right"
             Margin="10">
-
         </StackPanel>
 
         <Rectangle Style="{StaticResource HorizontalSeparator}"

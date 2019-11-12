@@ -4,6 +4,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:VM="clr-namespace:Asset_Management_System.Models"
     mc:Ignorable="d"
     d:DesignHeight="450" d:DesignWidth="800"
     ShowsNavigationUI="False"
@@ -75,12 +76,47 @@
                 </StackPanel>
 
                 <!--Style="{StaticResource RegularList}"-->
+                
+                <TreeView Margin="0 10 0 0" x:Name="TagAbleList" Grid.Row="2" ItemsSource="{Binding Tags}">
+                    <TreeView.ItemContainerStyle>
+                        <Style TargetType="{x:Type TreeViewItem}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="MouseDoubleClick">
+                                    <i:InvokeCommandAction Command="{Binding TagSelectCommand}" CommandParameter="{Binding ElementName=TagAbleList, Path=SelectedItem}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                            <Setter Property="FontWeight" Value="Normal" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                            <TreeViewItem Header="{Binding}" Margin="-15 0 0 0" Padding="0 0 5 0" />
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+                
+                <!--
                 <ListView x:Name="listViewWithItems"
                         SelectionMode="Extended"
                         ItemsSource="{Binding SearchList}"
                         SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                         Grid.Row="2"
                         Style="{StaticResource RegularList}">
+                    
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                  
+                            <i:InvokeCommandAction Command="{Binding EditCommand}"
+                                                   CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
 
                     <ListView.View>
                         <GridView>
@@ -98,11 +134,11 @@
                     </ListView.InputBindings>
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
-                            <!--ViewCommand-->
                             <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </ListView>
+                -->
             </Grid>
         </Border>
     </Grid>

@@ -28,7 +28,7 @@ namespace Asset_Management_System.ViewModels.Commands
             ulong tagId = ulong.Parse(parameter?.ToString() ?? throw new NullReferenceException("Input parameter == null"));
 
             // Find Tag by ID, then remove it.
-            _viewModel.Tags.RemoveFromQuery(_viewModel.Tags.AppliedTags.Single(tag => tag.TagId() == tagId));
+            _viewModel.Tags.RemoveFromQuery(_viewModel.Tags.AppliedTags.Single(tag => tag.TagId == tagId));
 
             _viewModel.Search();
         }

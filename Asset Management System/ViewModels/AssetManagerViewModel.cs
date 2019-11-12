@@ -25,8 +25,6 @@ namespace Asset_Management_System.ViewModels
 
         public string Title { get; set; }
 
-        #region Tag related private properties
-
         // The string that the user is searching with
         private string _searchString { get; set; }
 
@@ -54,11 +52,6 @@ namespace Asset_Management_System.ViewModels
         private IAssetRepository _assetRep { get; set; }
 
         private IAssetService _service;
-
-        #endregion
-
-
-        #region tag related public Properties
 
         public List<Asset> AssetList;
 
@@ -110,10 +103,7 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        #endregion
-
-
-        #region Commands
+ 
 
         public ICommand EnterKeyCommand { get; set; }
 
@@ -124,9 +114,6 @@ namespace Asset_Management_System.ViewModels
         public ICommand EscapeKeyCommand { get; set; }
 
         public ICommand BackspaceKeyCommand { get; set; }
-
-        #endregion
-
 
         public AssetManagerViewModel(MainViewModel main, Asset inputAsset, IAssetService service, TextBox box, bool addMultiple = false)
         {
