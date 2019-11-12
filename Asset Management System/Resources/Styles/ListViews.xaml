@@ -9,6 +9,12 @@
         <Setter Property="Margin" Value="0 10 0 0" />
     </Style>
     
+    <Style TargetType="GridViewColumnHeader" x:Key="HeaderClick">
+        <Setter Property="Command" Value="{Binding HeaderClickCommand}" />
+        <Setter Property="CommandParameter"
+                Value="{Binding RelativeSource={RelativeSource Self}}" />
+    </Style>
+    
     <!-- Notification container -->
     <Style TargetType="ListView" x:Key="NotificationView">
         <Setter Property="ItemsSource" Value="{Binding ActiveNotifications}"/>

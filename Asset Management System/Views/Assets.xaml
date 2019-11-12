@@ -137,8 +137,18 @@
                         SelectionChanged="ListView_SelectionChanged"
                         Grid.Row="2"
                         Style="{StaticResource RegularList}">
+                    
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Command" Value="{Binding HeaderClickCommand}" />
+                            <Setter Property="CommandParameter"
+                                    Value="{Binding RelativeSource={RelativeSource Self}}" />
+                        </Style>
+                    </ListView.Resources>
+                    
                     <ListView.View>
                         <GridView>
+                            
                             <GridViewColumn CellTemplate="{StaticResource SingleCheckBoxElement}" HeaderTemplate="{StaticResource HeaderCheckBoxElement}"/>
                             <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
                             <GridViewColumn DisplayMemberBinding="{Binding Path=Identifier}" Header="Identifier" />

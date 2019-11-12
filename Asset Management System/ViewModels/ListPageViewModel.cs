@@ -252,8 +252,8 @@ namespace Asset_Management_System.ViewModels
                 Orderings[property] = !isAscending;
             
             return new ObservableCollection<T>((isAscending
-                    ? list.OrderByDescending(p => prop.GetValue(typeof(T), null))
-                    : list.OrderBy(p => prop.GetValue(typeof(T), null))).ToList());
+                    ? list.OrderByDescending(p => prop.GetValue(p, null))
+                    : list.OrderBy(p => prop.GetValue(p, null))).ToList());
         }
 
         protected T GetSelectedItem()
