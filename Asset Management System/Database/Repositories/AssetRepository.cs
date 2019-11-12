@@ -298,86 +298,85 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
 
-            // ******
-            if (con == null)
-                return assets;
-
-            _query.Reset();
-            _query.AddTable("assets AS a");
-            _query.Columns.AddRange(new []{"a.id", "a.name", "a.description", "a.identifier", "a.department_id", "a.options", "a.created_at", "a.updated_at"});
-            
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                _query.Where("a.department_id", "1");                      
-                _query.Where("a.deleted_at", "IS NULL", "");
-                
-                if (keyword.Length > 0)
-                {
-                    if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
-                    {
-                        keyword = "%" + keyword + "%";
-                    }
-                    
-                    Statement statement = new Statement();
-                    statement.AddOrStatement("a.name", keyword, "LIKE");
-                    statement.AddOrStatement("a.identifier", keyword, "LIKE");
-                    statement.AddOrStatement("JSON_EXTRACT(a.options, '$[*].Content')", keyword, "LIKE");
-                    _query.Where(statement);
-                }
+                _query.Reset();
+                _query.AddTable("assets AS a");
+                _query.Columns.AddRange(new[] { "a.id", "a.name", "a.description", "a.identifier", "a.department_id", "a.options", "a.created_at", "a.updated_at" });
 
-                if (tags != null && tags.Count > 0)
+                try
                 {
-                    var pivot = new Table("asset_tags AS at", "INNER JOIN");
-                    pivot.AddConnection("at.asset_id", "a.id");
-                    _query.Tables.Add(pivot);
-                    _query.Where("at.tag_id", "("+string.Join(",", tags)+")", "IN");
-                    
-                    if (strict)
-                    {
-                        _query.HavingStatements.Add(new Statement("COUNT(DISTINCT at.tag_id)", tags.Count.ToString()));
-                    }
-                }
-                
-                if (users != null && users.Count > 0)
-                {
-                    var pivot = new Table("asset_users AS au", "INNER JOIN");
-                    pivot.AddConnection("au.asset_id", "a.id");
-                    _query.Tables.Add(pivot);
-                    _query.Where("au.user_id", "("+string.Join(",", users)+")", "IN");
-                    
-                    if (strict)
-                    {
-                        _query.HavingStatements.Add(new Statement("COUNT(DISTINCT au.user_id)", users.Count.ToString()));
-                    }
-                }
+                    _query.Where("a.department_id", "1");
+                    _query.Where("a.deleted_at", "IS NULL", "");
 
-                _query.GroupBy = "a.id"; 
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(_query.PrepareSelect(), con))
-                {
-                    //cmd.Parameters.Add("@keyword", MySqlDbType.String);
-                    //cmd.Parameters["@keyword"].Value = keyword;
-                    
-                    Console.WriteLine(cmd.CommandText);
-                    
-                    using (var reader = cmd.ExecuteReader())
+                    if (keyword.Length > 0)
                     {
-                        while (reader.Read())
+                        if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
                         {
-                            assets.Add(DBOToModelConvert(reader));
+                            keyword = "%" + keyword + "%";
                         }
-                        reader.Close();
+
+                        Statement statement = new Statement();
+                        statement.AddOrStatement("a.name", keyword, "LIKE");
+                        statement.AddOrStatement("a.identifier", keyword, "LIKE");
+                        statement.AddOrStatement("JSON_EXTRACT(a.options, '$[*].Content')", keyword, "LIKE");
+                        _query.Where(statement);
+                    }
+
+                    if (tags != null && tags.Count > 0)
+                    {
+                        var pivot = new Table("asset_tags AS at", "INNER JOIN");
+                        pivot.AddConnection("at.asset_id", "a.id");
+                        _query.Tables.Add(pivot);
+                        _query.Where("at.tag_id", "(" + string.Join(",", tags) + ")", "IN");
+
+                        if (strict)
+                        {
+                            _query.HavingStatements.Add(new Statement("COUNT(DISTINCT at.tag_id)", tags.Count.ToString()));
+                        }
+                    }
+
+                    if (users != null && users.Count > 0)
+                    {
+                        var pivot = new Table("asset_users AS au", "INNER JOIN");
+                        pivot.AddConnection("au.asset_id", "a.id");
+                        _query.Tables.Add(pivot);
+                        _query.Where("au.user_id", "(" + string.Join(",", users) + ")", "IN");
+
+                        if (strict)
+                        {
+                            _query.HavingStatements.Add(new Statement("COUNT(DISTINCT au.user_id)", users.Count.ToString()));
+                        }
+                    }
+
+                    _query.GroupBy = "a.id";
+
+                    using (var cmd = new MySqlCommand(_query.PrepareSelect(), con))
+                    {
+                        //cmd.Parameters.Add("@keyword", MySqlDbType.String);
+                        //cmd.Parameters["@keyword"].Value = keyword;
+
+                        Console.WriteLine(cmd.CommandText);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                assets.Add(DBOToModelConvert(reader));
+                            }
+                            reader.Close();
+                        }
                     }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
 
             return assets;

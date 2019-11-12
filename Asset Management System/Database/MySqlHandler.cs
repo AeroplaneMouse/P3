@@ -2,47 +2,71 @@
 using MySql.Data.MySqlClient;
 using Asset_Management_System.Events;
 using Asset_Management_System.Models;
+using System.Threading.Tasks;
 
 namespace Asset_Management_System.Database
 {
     public class MySqlHandler
     {
         private readonly MySqlConnection _connection;
+        //private static MySqlConnection _con;
         public static event SqlConnectionEventHandler ConnectionFailed;
         
+
         public MySqlHandler()
         {
             _connection = new MySqlConnection("Server=192.38.49.9; database=ds303e19_dev; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5");
         }
 
+        public static bool Open(ref MySqlConnection con)
+        {
+            try
+            {
+                con.Open();
+                return true;
+            }
+            catch (MySqlException e)
+            {
+                ConnectionFailed?.Invoke();
+            }
+            return false;
+            //_con = con;
+            //return await Task.Run(_open);
+        }
+
+        //private static bool _open()
+        //{
+        //    try
+        //    {
+        //        _con.Open();
+        //        return true;
+        //    }
+        //    catch (MySqlException e)
+        //    {
+        //        ConnectionFailed?.Invoke();
+        //    }
+        //    return false;
+        //}
+
         public MySqlConnection GetConnection()
         {
-            if (IsAvailable())
-                return _connection;
-            else
-                return null;
+            return _connection;
         }
 
         public bool IsAvailable()
         {
             try
             {
-                var con = _connection;
+                var con = GetConnection();
                 con.Open();
                 con.Close();
                 return true;
             }
-            catch (MySqlException e)
+            catch (MySqlException)
             {
-                Console.WriteLine($"SQL error message: { e.Message }");
-                const string message = "ERROR! Unfortunately, the excellent connection to the database has been lost...";
-                ConnectionFailed?.Invoke(new Notification(message, Notification.ERROR), true);
+                Console.WriteLine("Connection failed...");
             }
-            catch (Exception)
-            {
-                const string message = "ERROR! An unknown error has occured...";
-                ConnectionFailed?.Invoke(new Notification(message, Notification.ERROR), false);
-            }
+
             return false;
         }
 

@@ -125,6 +125,8 @@ namespace Asset_Management_System.ViewModels
         private Department _currentDepartment;
         private Stack<Page> _history = new Stack<Page>();
         private Page _currentPage;
+        private bool HasConnectionFailedBeenRaised = false;
+
 
         #endregion
 
@@ -327,13 +329,16 @@ namespace Asset_Management_System.ViewModels
         public void LoadSystem(Session session)
         {
             // Attaching notification
-            MySqlHandler.ConnectionFailed += ConnectionFailed;
+            MySqlHandler.ConnectionFailed += Reload;
 
             // Loads homepage and other stuff from the UI-thread.
             SplashPage.Dispatcher.Invoke(Load);
             
             // Remove splash page
             SplashPage = null;
+
+            // Resetting connection failed
+            HasConnectionFailedBeenRaised = false;
 
             // Show department and username
             DisplayCurrentDepartment = true;
@@ -351,17 +356,19 @@ namespace Asset_Management_System.ViewModels
 
         #region Private Methods
 
-        private async void ConnectionFailed(Notification n, bool reloadRequired)
+        private void ConnectionFailed(Notification n, bool reloadRequired)
         {
-            // Display notification if one was given
-            if (n != null)
-                AddNotification(n, 4000);
+            if (!HasConnectionFailedBeenRaised)
+            {
+                HasConnectionFailedBeenRaised = true;
+                // Display notification if one was given
+                if (n != null)
+                    AddNotification(n, 6000);
 
-            await Task.Delay(10000);
-
-            // Reload the application is that is required
-            if (reloadRequired)
-                Reload();
+                // Reload the application is that is required
+                if (reloadRequired)
+                    Reload();
+            }
         }
 
         // Loads excluded pages and sets homepage.
@@ -389,7 +396,7 @@ namespace Asset_Management_System.ViewModels
 
             // Clearing memory
             pages.Clear();
-            MySqlHandler.ConnectionFailed -= ConnectionFailed;
+            MySqlHandler.ConnectionFailed -= Reload;
             DisplayCurrentDepartment = false;
             CurrentUser = null;
             CurrentDepartment = null;

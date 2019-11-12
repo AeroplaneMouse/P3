@@ -366,35 +366,35 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             List<Tag> tags = new List<Tag>();
 
-            // ******
-            if (con == null)
-                return tags;
-
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at, options " +
-                                     "FROM tags";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                // Sending sql query
+                try
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at, options " +
+                                         "FROM tags";
+
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            tags.Add(DBOToModelConvert(reader));
+                            while (reader.Read())
+                            {
+                                tags.Add(DBOToModelConvert(reader));
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
                 
             return tags;

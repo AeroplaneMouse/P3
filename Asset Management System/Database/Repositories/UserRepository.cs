@@ -14,37 +14,37 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             List<User> users = new List<User>();
 
-            // ****
-            if (con == null)
-                return users;
-
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                string query = "SELECT id, name, description, domain, username, enabled, admin, default_department, created_at, updated_at " +
-                                     "FROM users "+(!includeDisabled ? "WHERE enabled = 1" : "");
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                // Sending sql query
+                try
                 {
-                    Console.WriteLine(cmd.CommandText);
-                    
-                    using (var reader = cmd.ExecuteReader())
+                    string query = "SELECT id, name, description, domain, username, enabled, admin, default_department, created_at, updated_at " +
+                                         "FROM users " + (!includeDisabled ? "WHERE enabled = 1" : "");
+
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        Console.WriteLine(cmd.CommandText);
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            users.Add(DBOToModelConvert(reader));
+                            while (reader.Read())
+                            {
+                                users.Add(DBOToModelConvert(reader));
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
                 
             return users;
