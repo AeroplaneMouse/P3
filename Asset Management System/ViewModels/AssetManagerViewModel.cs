@@ -136,7 +136,6 @@ namespace Asset_Management_System.ViewModels
                 {
                     _editing = true;
                 }
-                
             }
             else
             {

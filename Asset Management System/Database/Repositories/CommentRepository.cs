@@ -14,35 +14,38 @@ namespace Asset_Management_System.Database.Repositories
             var querySuccess = false;
             id = 0;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "INSERT INTO comments (asset_id, username, content, updated_at) " +
-                                     "VALUES (@asset_id, @username, @content, CURRENT_TIMESTAMP())";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
-                    cmd.Parameters["@asset_id"].Value = comment.AssetID;
+                    const string query = "INSERT INTO comments (asset_id, username, content, updated_at) " +
+                                         "VALUES (@asset_id, @username, @content, CURRENT_TIMESTAMP())";
 
-                    cmd.Parameters.Add("@username", MySqlDbType.String);
-                    cmd.Parameters["@username"].Value = comment.Username;
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@asset_id"].Value = comment.AssetID;
 
-                    cmd.Parameters.Add("@content", MySqlDbType.String);
-                    cmd.Parameters["@content"].Value = comment.Content;
+                        cmd.Parameters.Add("@username", MySqlDbType.String);
+                        cmd.Parameters["@username"].Value = comment.Username;
 
-                    querySuccess = cmd.ExecuteNonQuery() > 0;
-                    id = (ulong)cmd.LastInsertedId;
+                        cmd.Parameters.Add("@content", MySqlDbType.String);
+                        cmd.Parameters["@content"].Value = comment.Content;
+
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                        id = (ulong)cmd.LastInsertedId;
+                    }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
 
-            finally
-            {
-                con.Close();
+                finally
+                {
+                    con.Close();
+                }
             }
             
             return querySuccess;
@@ -53,34 +56,41 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "UPDATE comments SET asset_id=@asset_id, username=@username, content=@content, updated_at=CURRENT_TIMESTAMP() " +
-                                     "WHERE id=@id";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
-                    cmd.Parameters["@asset_id"].Value = comment.AssetID;
+                    const string query = "UPDATE comments SET asset_id=@asset_id, username=@username, content=@content, updated_at=CURRENT_TIMESTAMP() " +
+                                         "WHERE id=@id";
 
-                    cmd.Parameters.Add("@username", MySqlDbType.String);
-                    cmd.Parameters["@username"].Value = comment.Username;
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@asset_id"].Value = comment.AssetID;
 
-                    cmd.Parameters.Add("@content", MySqlDbType.String);
-                    cmd.Parameters["@content"].Value = comment.Content;
+                        cmd.Parameters.Add("@username", MySqlDbType.String);
+                        cmd.Parameters["@username"].Value = comment.Username;
 
-                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                    cmd.Parameters["@id"].Value = comment.ID;
+                        cmd.Parameters.Add("@content", MySqlDbType.String);
+                        cmd.Parameters["@content"].Value = comment.Content;
 
-                    querySuccess = cmd.ExecuteNonQuery() > 0;
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = comment.ID;
+
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                    }
                 }
-            }catch (MySqlException e){
-                Console.WriteLine(e);
-            }finally{
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
-            
+
             return querySuccess;
         }
 
@@ -89,24 +99,31 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "UPDATE comments SET deleted_at=CURRENT_TIMESTAMP() WHERE id=@id";
-
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                    cmd.Parameters["@id"].Value = comment.ID;
+                    const string query = "UPDATE comments SET deleted_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
-                    querySuccess = cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = comment.ID;
+
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                    }
                 }
-            }catch (MySqlException e){
-                Console.WriteLine(e);
-            }finally{
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
-            
+
             return querySuccess;
         }
 
@@ -115,30 +132,37 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             Comment comment = null;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
-                                     "FROM comments WHERE id=@id AND deleted_at IS NULL";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                    cmd.Parameters["@id"].Value = id;
+                    const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
+                                         "FROM comments WHERE id=@id AND deleted_at IS NULL";
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = id;
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            comment = DBOToModelConvert(reader);
+                            while (reader.Read())
+                            {
+                                comment = DBOToModelConvert(reader);
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
                 }
-            }catch (MySqlException e){
-                Console.WriteLine(e);
-            }finally{
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
             
             return comment;
@@ -149,30 +173,37 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             ObservableCollection<Comment> comments = new ObservableCollection<Comment>();
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
-                                     "FROM comments WHERE asset_id=@asset_id AND deleted_at IS NULL";
-
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
-                    cmd.Parameters["@asset_id"].Value = assetId;
+                    const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
+                                         "FROM comments WHERE asset_id=@asset_id AND deleted_at IS NULL";
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@asset_id"].Value = assetId;
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            comments.Add(DBOToModelConvert(reader));
+                            while (reader.Read())
+                            {
+                                comments.Add(DBOToModelConvert(reader));
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
                 }
-            }catch (MySqlException e){
-                Console.WriteLine(e);
-            }finally{
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
             
             return comments;

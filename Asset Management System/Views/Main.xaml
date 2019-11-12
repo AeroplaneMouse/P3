@@ -77,7 +77,7 @@
                                         <StackPanel Grid.Column="2"
                                                     Orientation="Horizontal">
                                             <!-- Departments -->
-                                            <Menu Style="{StaticResource MenuContainer}" IsEnabled="{Binding DisplayCurrentDepartment}">
+                                            <Menu Style="{StaticResource MenuContainer}" Visibility="{Binding CurrentDepartmentVisibility}">
                                                 <MenuItem ItemsSource="{Binding Departments}"
                                                           ItemContainerStyle="{StaticResource DepartmentWithEdit}"
                                                           Header="{Binding CurrentDepartment}"
