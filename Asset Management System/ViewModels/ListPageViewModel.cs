@@ -127,7 +127,7 @@ namespace Asset_Management_System.ViewModels
         /// <summary>
         /// Sends a search request to the database, and sets the list of items to the result.
         /// </summary>
-        protected virtual void Search() => SearchList = Rep.Search(SearchQueryText);
+        public virtual void Search() => SearchList = Rep.Search(SearchQueryText);
 
         /// <summary>
         /// Creates a csv file containing all the items

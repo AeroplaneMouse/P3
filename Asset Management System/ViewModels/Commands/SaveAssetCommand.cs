@@ -100,14 +100,14 @@ namespace Asset_Management_System.ViewModels.Commands
                     Log<Asset>.CreateLog(_asset);
                     _rep.Update(_asset);
                     if (_viewModel.CurrentlyAddedTags.Count > 0)
-                        _rep.AttachTagsToAsset(_asset, new List<Tag>(_viewModel.CurrentlyAddedTags));
+                        _rep.AttachTags(_asset, new List<ITagable>(_viewModel.CurrentlyAddedTags));
                 }
                 else
                 {
                     _rep.Insert(_asset, out ulong id);
                     Log<Asset>.CreateLog(_asset, id);
                     if (_viewModel.CurrentlyAddedTags.Count > 0)
-                        _rep.AttachTagsToAsset(_rep.GetById(id), new List<Tag>(_viewModel.CurrentlyAddedTags));
+                        _rep.AttachTags(_rep.GetById(id), new List<ITagable>(_viewModel.CurrentlyAddedTags));
                 }
 
                 _main.AddNotification(new Notification("Asset saved to database", Notification.APPROVE));

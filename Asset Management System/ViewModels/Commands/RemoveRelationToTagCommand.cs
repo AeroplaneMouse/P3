@@ -8,14 +8,14 @@ using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
-    public class UntagTagCommand : ICommand
+    public class RemoveRelationToTagCommand : ICommand
     {
         private AssetManagerViewModel _viewModel;
         public event EventHandler CanExecuteChanged;
 
         List<ShownField> removeList = new List<ShownField>();
 
-        public UntagTagCommand(AssetManagerViewModel viewModel)
+        public RemoveRelationToTagCommand(AssetManagerViewModel viewModel)
         {
             _viewModel = viewModel;
         }
@@ -32,7 +32,7 @@ namespace Asset_Management_System.ViewModels.Commands
 
 
             // Find Tag by ID, then remove it.
-            _viewModel.CurrentlyAddedTags.Remove(_viewModel.CurrentlyAddedTags.Single(tag => tag.ID == tagId));
+            _viewModel.CurrentlyAddedTags.Remove(_viewModel.CurrentlyAddedTags.Single(tag => tag.TagId == tagId));
             
 
             FindTagReferences(_viewModel.FieldsList,tagId,false);

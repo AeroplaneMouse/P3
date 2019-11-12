@@ -8,6 +8,7 @@ using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Services.Interfaces;
 using System.Windows;
 using Asset_Management_System.Functions;
+using Asset_Management_System.ViewModels.Commands;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -20,16 +21,16 @@ namespace Asset_Management_System.ViewModels
         private IAssetService _service;
         private IAssetRepository _rep;
         
-
         public int ViewType => 1;
         public int SelectedSuggestedIndex { get; set; }
         public Visibility IsCurrentGroupVisible { get; set; } = Visibility.Hidden;
         public ICommand DeleteCommand { get; set; }
         public ICommand EnterCommand { get; set; }
         public ICommand SelectTagCommand { get; set; }
+        public static ICommand RemoveTagCommand { get; set; }
         public bool IsStrict { get => _isStrict; set { _isStrict = value; Search(); } }
 
-        public Tagging TheTagger { get; }
+        public Tagging Tags { get; }
 
         public List<ITagable> Suggestions { get; set; } = new List<ITagable>();
 
@@ -54,11 +55,11 @@ namespace Asset_Management_System.ViewModels
                     _searchQueryText = "";
                     CurrentGroup = "#";
                     IsTagMode = true;
-                    Suggestions = TheTagger.Suggest(_searchQueryText);
+                    Suggestions = Tags.Suggest(_searchQueryText);
                 }
                 else if (IsTagMode)
                 {
-                    Suggestions = TheTagger.Suggest(_searchQueryText);
+                    Suggestions = Tags.Suggest(_searchQueryText);
                 }
             }
         }
@@ -68,7 +69,8 @@ namespace Asset_Management_System.ViewModels
             DeleteCommand = new Base.RelayCommand(Delete);
             SelectTagCommand = new Base.RelayCommand(SelectSuggestedTag);
             EnterCommand = new Base.RelayCommand(Enter);
-            TheTagger = new Tagging();
+            RemoveTagCommand = new RemoveTagFromSearchCommand(this);
+            Tags = new Tagging();
             _service = assetService;
             _rep = _service.GetSearchableRepository() as IAssetRepository;
         }
@@ -99,8 +101,8 @@ namespace Asset_Management_System.ViewModels
                 {
                     CurrentGroup = "#";
                     SearchQueryText = "";
-                    TheTagger.Parent(null);
-                    Suggestions = TheTagger.Suggest(_searchQueryText);
+                    Tags.Parent(null);
+                    Suggestions = Tags.Suggest(_searchQueryText);
                 }
             }
         }
@@ -109,7 +111,7 @@ namespace Asset_Management_System.ViewModels
         public override void PageFocus()
         {
             Search();
-            TheTagger.Reload();
+            Tags.Reload();
         }
 
         public override void PageLostFocus()
@@ -121,8 +123,8 @@ namespace Asset_Management_System.ViewModels
         {
             if (IsTagMode)
             {
-                if (SearchQueryText == String.Empty && TheTagger.IsParentSet())
-                    TheTagger.AddToQuery(TheTagger.GetParent());
+                if (SearchQueryText == String.Empty && Tags.IsParentSet())
+                    Tags.AddToQuery(Tags.GetParent());
                 else if (Suggestions.Count > 0)
                     SelectTag(Suggestions.First());
             }
@@ -130,31 +132,31 @@ namespace Asset_Management_System.ViewModels
         }
 
         // Search assets
-        protected override void Search()
+        public override void Search()
         {
             SearchList = _rep.Search(SearchQueryText,
-                TheTagger.TaggedWith.OfType<Tag>().Select(t => t.ID).ToList(),
-                TheTagger.TaggedWith.OfType<User>().Select(u => u.ID).ToList(),
+                Tags.AppliedTags.OfType<Tag>().Select(t => t.ID).ToList(),
+                Tags.AppliedTags.OfType<User>().Select(u => u.ID).ToList(),
                 IsStrict);
         }
 
         // Add the given tag to the search query
         private void SelectTag(ITagable t)
         {
-            if (TheTagger.IsParentSet())
+            if (Tags.IsParentSet())
             {
-                TheTagger.AddToQuery(t);
-                OnPropertyChanged(nameof(TheTagger.TaggedWith));
+                Tags.AddToQuery(t);
+                OnPropertyChanged(nameof(Tags.AppliedTags));
             }
             else
             {
                 Tag tag = (Tag)t;
-                TheTagger.Parent(tag);
+                Tags.Parent(tag);
                 CurrentGroup = tag.Name;
             }
 
             if (SearchQueryText == String.Empty)
-                Suggestions = TheTagger.Suggest(SearchQueryText);
+                Suggestions = Tags.Suggest(SearchQueryText);
             else
                 SearchQueryText = "";
         }

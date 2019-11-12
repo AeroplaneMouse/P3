@@ -335,4 +335,9 @@
         </Setter>
     </Style>
     
+    <!-- Keep user button -->
+    <Style TargetType="Button" x:Key="KeepUserButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="Padding" Value="1"/>
+    </Style>
+    
 </ResourceDictionary>

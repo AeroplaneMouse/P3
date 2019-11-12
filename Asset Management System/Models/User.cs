@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.Models
@@ -25,6 +26,11 @@ namespace Asset_Management_System.Models
             }
         }
 
+        ulong ITagable.TagId => ID;
+        string ITagable.TagType => GetType().ToString();
+        string ITagable.TagLabel => Username;
+        public List<ITagable> Children { get; set; }
+
         /* Constructor used by DB */
         private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
         {
@@ -43,21 +49,6 @@ namespace Asset_Management_System.Models
         public User()
         {
 
-        }
-
-        public ulong TagId()
-        {
-            return ID;
-        }
-
-        public string TagType()
-        {
-            return GetType().ToString();
-        }
-
-        public string TagLabel()
-        {
-            return Username;
         }
 
         public override string ToString() 
@@ -80,7 +71,7 @@ namespace Asset_Management_System.Models
             if (objAsPart == null)
                 return false;
 
-            return ID.Equals(objAsPart.TagId());
+            return ID.Equals(objAsPart.TagId);
         }
     }
 

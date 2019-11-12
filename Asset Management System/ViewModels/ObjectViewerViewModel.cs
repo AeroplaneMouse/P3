@@ -222,7 +222,7 @@ namespace Asset_Management_System.ViewModels
         private void LoadTags()
         {
             //TODO: Avoid doing this
-            TagsList = ((IAssetRepository) AssetInput.GetRepository()).GetAssetTags(AssetInput);
+            TagsList.AddRange( (List<Tag>)((IAssetRepository) AssetInput.GetRepository()).GetTags(AssetInput));;
             Console.WriteLine("Found " + TagsList.Count + " tags");
         }
 
