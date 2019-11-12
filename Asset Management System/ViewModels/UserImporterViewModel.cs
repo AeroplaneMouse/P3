@@ -165,8 +165,6 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand KeepUserCommand { get; set; }
 
-        public ICommand KeepCommand { get; set; }
-
         #endregion
 
         #region Constructor
@@ -197,8 +195,7 @@ namespace Asset_Management_System.ViewModels
             // Initialize commands 
             CancelCommand = new Base.RelayCommand(Cancel);
             ApplyCommand = new Base.RelayCommand(Apply);
-            KeepUserCommand = new Base.RelayCommand(KeepUser);
-            KeepCommand = new Base.RelayCommand<object>(Keep);
+            KeepUserCommand = new Base.RelayCommand<object>(KeepUser);
 
         }
 
@@ -287,10 +284,13 @@ namespace Asset_Management_System.ViewModels
         }
 
         // TODO: Ville være virkelig fint hvis den her knap sad på hver bruger i listen, i stedet for én stor
-        private void KeepUser()
+        private void KeepUser(object user)
         {
             // Get the user that is currently selected. This is the user that is kept
-            UserWithStatus keptUser = GetSelectedItem();
+            //UserWithStatus keptUser = GetSelectedItem();
+
+
+            UserWithStatus keptUser = user as UserWithStatus;
 
             // If there weren't any selected users, or the selected user is not in conflict
             if (keptUser == null || keptUser.Status.CompareTo("Conflict") != 0)
@@ -374,11 +374,6 @@ namespace Asset_Management_System.ViewModels
                 .ForEach(p => _rep.Update(p));
 
             _main.ReturnToPreviousPage();
-        }
-
-        private void Keep(object user)
-        {
-
         }
 
         #endregion

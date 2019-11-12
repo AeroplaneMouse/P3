@@ -26,6 +26,11 @@ namespace Asset_Management_System.Models
             }
         }
 
+        ulong ITagable.TagId => ID;
+        string ITagable.TagType => GetType().ToString();
+        string ITagable.TagLabel => Username;
+        public List<ITagable> Children { get; set; }
+
         /* Constructor used by DB */
         private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
         {
@@ -68,11 +73,6 @@ namespace Asset_Management_System.Models
 
             return ID.Equals(objAsPart.TagId);
         }
-        
-        ulong ITagable.TagId => ID;
-        string ITagable.TagType => GetType().ToString();
-        string ITagable.TagLabel => Username;
-        public List<ITagable> Children { get; set; }
     }
 
     public class UserWithStatus : User
