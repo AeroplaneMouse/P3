@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Collections.Generic;
 using Asset_Management_System.Views;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using Asset_Management_System.Models;
 using Asset_Management_System.Logging;
 using Asset_Management_System.Helpers;
@@ -23,10 +24,11 @@ namespace Asset_Management_System.ViewModels
         protected MainViewModel _main;
         private IDisplayableService<T> _service;
         private ICommentService _commentService;
+        private Dictionary<string, bool> Orderings = new Dictionary<string, bool>();
 
         private ObservableCollection<T> _list { get; set; }
         private string _searchQueryText { get; set; }
-        
+
         protected MainViewModel Main
         {
             get => _main;
@@ -43,11 +45,9 @@ namespace Asset_Management_System.ViewModels
 
         public List<DoesContainFields> SelectedItems { get; set; } = new List<DoesContainFields>();
 
-        public bool MultipleSelected {
-            get
-            {
-               return SelectedItems.Count > 0;
-            }
+        public bool MultipleSelected
+        {
+            get { return SelectedItems.Count > 0; }
             set => MultipleSelected = value;
         }
 
@@ -82,7 +82,8 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand RemoveCommand { get; set; }
 
-        public ListPageViewModel(MainViewModel main, IDisplayableService<T> service, ICommentService commentService = default)
+        public ListPageViewModel(MainViewModel main, IDisplayableService<T> service,
+            ICommentService commentService = default)
         {
             _service = service;
             _commentService = commentService;
@@ -111,7 +112,6 @@ namespace Asset_Management_System.ViewModels
 
         public virtual void PageLostFocus()
         {
-
         }
 
         private void RemoveItems()
@@ -186,6 +186,8 @@ namespace Asset_Management_System.ViewModels
         protected void HeaderClick(object header)
         {
             GridViewColumnHeader clickedHeader = header as GridViewColumnHeader;
+            bool isDescending;
+            bool isInDict;
             switch (SearchList[0])
             {
                 case Asset _:
@@ -193,16 +195,13 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Sorting Assets");
                     SearchList = clickedHeader?.Content.ToString() switch
                     {
-                        "Name" => new ObservableCollection<T>(SearchList.Cast<Asset>()
-                            .OrderBy(i => i.Name).Cast<T>()),
-                        "ID" => new ObservableCollection<T>(SearchList.Cast<Asset>()
-                            .OrderBy(i => i.ID).Cast<T>()),
-                        "Identifier" => new ObservableCollection<T>(SearchList.Cast<Asset>()
-                            .OrderBy(i => i.Identifier).Cast<T>()),
-                        "Created" => new ObservableCollection<T>(SearchList.Cast<Asset>()
-                            .OrderBy(i => i.CreatedAt).Cast<T>()),
+                        "Name" => SortByProperty(SearchList, "Name"),
+                        "ID" => SortByProperty(SearchList, "ID"),
+                        "Identifier" => SortByProperty(SearchList, "Identifier"),
+                        "Created" => SortByProperty(SearchList, "CreatedAt"),
                         _ => SearchList
                     };
+
                     break;
                 }
                 case Tag _:
@@ -210,20 +209,15 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Sorting Tags");
                     SearchList = clickedHeader?.Content.ToString() switch
                     {
-                        "Label" => new ObservableCollection<T>(SearchList.Cast<Tag>()
-                            .OrderBy(i => i.Name).Cast<T>()),
-                        "ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
-                            .OrderBy(i => i.ID).Cast<T>()),
-                        "Parent Tag ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
-                            .OrderBy(i => i.ParentID).Cast<T>()),
-                        "Department ID" => new ObservableCollection<T>(SearchList.Cast<Tag>()
-                            .OrderBy(i => i.DepartmentID).Cast<T>()),
-                        "Color" => new ObservableCollection<T>(SearchList.Cast<Tag>()
-                            .OrderBy(i => i.Color).Cast<T>()),
-                        "Created" => new ObservableCollection<T>(SearchList.Cast<Tag>()
-                            .OrderBy(i => i.CreatedAt).Cast<T>()),
+                        "Label" => SortByProperty(SearchList, "Name"),
+                        "ID" => SortByProperty(SearchList, "ID"),
+                        "Parent Tag ID" => SortByProperty(SearchList, "ParentID"),
+                        "Department ID" => SortByProperty(SearchList, "DepartmentID"),
+                        "Color" => SortByProperty(SearchList, "Color"),
+                        "Created" => SortByProperty(SearchList, "CreatedAt"),
                         _ => SearchList
                     };
+
                     break;
                 }
                 case Entry _:
@@ -231,21 +225,36 @@ namespace Asset_Management_System.ViewModels
                     Console.WriteLine("Sorting Log");
                     SearchList = clickedHeader?.Content.ToString() switch
                     {
-                        "Date" => new ObservableCollection<T>(SearchList.Cast<Entry>()
-                            .OrderBy(i => i.CreatedAt).Cast<T>()),
-                        "ID" => new ObservableCollection<T>(SearchList.Cast<Entry>()
-                            .OrderBy(i => i.ID).Cast<T>()),
-                        "Event" => new ObservableCollection<T>(SearchList.Cast<Entry>()
-                            .OrderBy(i => i.Description).Cast<T>()),
-                        "User" => new ObservableCollection<T>(SearchList.Cast<Entry>()
-                            .OrderBy(i => i.Username).Cast<T>()),
+                        "Date" => SortByProperty(SearchList, "CreatedAt"),
+                        "ID" => SortByProperty(SearchList, "ID"),
+                        "Event" => SortByProperty(SearchList, "Description"),
+                        "User" => SortByProperty(SearchList, "Username"),
                         _ => SearchList
                     };
+
                     break;
                 }
             }
         }
 
+        private ObservableCollection<T> SortByProperty(ObservableCollection<T> list, string property)
+        {
+            PropertyInfo prop = typeof(T).GetProperty(property);
+            if (prop == null)
+                return list;
+            
+            bool isAscending;
+            bool inDict = Orderings.TryGetValue(property, out isAscending);
+            // Determine if list is sorted in ascending or descending order
+            if (!inDict)
+                Orderings.Add(property, true);
+            else
+                Orderings[property] = !isAscending;
+            
+            return new ObservableCollection<T>((isAscending
+                    ? list.OrderByDescending(p => prop.GetValue(typeof(T), null))
+                    : list.OrderBy(p => prop.GetValue(typeof(T), null))).ToList());
+        }
 
         protected T GetSelectedItem()
         {
