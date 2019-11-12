@@ -191,7 +191,7 @@ namespace Asset_Management_System.ViewModels
 
             #endregion
 
-            UntagTagCommand = new UntagTagFromAssetCommand(this);
+            UntagTagCommand = new RemoveRelationToTagCommand(this);
         }
 
         public ICommand SaveAssetCommand { get; set; }

@@ -8,14 +8,14 @@ using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
-    public class UntagTagFromAssetCommand : ICommand
+    public class RemoveRelationToTagCommand : ICommand
     {
         private AssetManagerViewModel _viewModel;
         public event EventHandler CanExecuteChanged;
 
         List<ShownField> removeList = new List<ShownField>();
 
-        public UntagTagFromAssetCommand(AssetManagerViewModel viewModel)
+        public RemoveRelationToTagCommand(AssetManagerViewModel viewModel)
         {
             _viewModel = viewModel;
         }
