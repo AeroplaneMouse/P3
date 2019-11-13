@@ -24,19 +24,6 @@ namespace Asset_Management_System.ViewModels
     {
         #region Constructor
 
-        private IAssetService _assetService;
-        private ITagService _tagService;
-        private IEntryService _entryService;
-        private IUserService _userService;
-        private ICommentService _commentService;
-        private DepartmentService _departmentService;
-
-        // Accessed in that get main as parameter, dont know if its bad practice.
-        public IEntryService EntryService
-        {
-            get => _entryService;
-        }
-        
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -127,6 +114,12 @@ namespace Asset_Management_System.ViewModels
         private Page _currentPage;
         private bool HasConnectionFailedBeenRaised = false;
 
+        private IAssetService _assetService;
+        private ITagService _tagService;
+        private IEntryService _entryService;
+        private IUserService _userService;
+        private ICommentService _commentService;
+        private DepartmentService _departmentService;
 
         #endregion
 
@@ -218,6 +211,12 @@ namespace Asset_Management_System.ViewModels
             new ObservableCollection<Notification>();
 
         public Visibility Visible { get; set; }
+
+        // Accessed in that get main as parameter, dont know if its bad practice.
+        public IEntryService EntryService
+        {
+            get => _entryService;
+        }
 
         #endregion
 
@@ -378,7 +377,8 @@ namespace Asset_Management_System.ViewModels
             excludedPages.Add(new Views.AssetManager(null, _assetService));
             excludedPages.Add(new Views.TagManager(null, _tagService));
             excludedPages.Add(new Views.ObjectViewer(null, _commentService, null));
-            excludedPages.Add(new Views.UserImporterView(null, _userService));
+            excludedPages.Add(new Views.UserImporterView(null, _userService, _departmentService));
+            
 
             // Load homepage
             ChangeMainContent(new Views.Home(this, _assetService, _tagService));
@@ -386,7 +386,7 @@ namespace Asset_Management_System.ViewModels
 
         private void ImportUsers()
         {
-            ChangeMainContent(new Views.UserImporterView(this, _userService));
+            ChangeMainContent(new Views.UserImporterView(this, _userService, _departmentService));
         }
 
         // Used to reload the application
