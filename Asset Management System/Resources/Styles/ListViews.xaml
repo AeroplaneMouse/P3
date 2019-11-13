@@ -7,6 +7,19 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Margin" Value="0 10 0 0" />
+        <Setter Property="AlternationCount" Value="2"/>
+    </Style>
+    
+    <!-- Regular list item -->
+    <Style TargetType="ListViewItem" x:Key="RegularListItem">
+        <Style.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                <Setter Property="Background" Value="{StaticResource AlternatingColorLightBrush}"/>
+            </Trigger>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="{StaticResource AlternatingColorDarkBrush}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
     
     <Style TargetType="GridViewColumnHeader" x:Key="HeaderClick">
@@ -19,6 +32,7 @@
     <Style TargetType="ListView" x:Key="NotificationView">
         <Setter Property="ItemsSource" Value="{Binding ActiveNotifications}"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">

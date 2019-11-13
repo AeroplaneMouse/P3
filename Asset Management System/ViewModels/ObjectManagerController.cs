@@ -9,13 +9,13 @@ namespace Asset_Management_System.ViewModels
 {
     public abstract class ObjectManagerController : FieldsController
     {
-        public ObservableCollection<Tag> CurrentlyAddedTags { get; set; } = new ObservableCollection<Tag>();
+        public ObservableCollection<ITagable> CurrentlyAddedTags { get; set; } = new ObservableCollection<ITagable>();
 
         public ObservableCollection<ShownField> HiddenFields { get; set; } = new ObservableCollection<ShownField>();
 
         public ObjectManagerController() => RemoveFieldCommand = new RemoveFieldCommand(this);
 
-        
+
         protected void ConnectTags()
         {
             foreach (var tag in CurrentlyAddedTags)
@@ -23,10 +23,11 @@ namespace Asset_Management_System.ViewModels
         }
 
 
-        private void ShowIfNewField(Tag tag)
+        private void ShowIfNewField(ITagable tag)
         {
-            FieldTagsPopulator(tag, FieldsList, false);
-            FieldTagsPopulator(tag, HiddenFields, true);
+            if (tag.GetType() == typeof(User)) return;
+            FieldTagsPopulator((Tag)tag, FieldsList, false);
+            FieldTagsPopulator((Tag)tag, HiddenFields, true);
         }
 
         private void FieldTagsPopulator(Tag tag,
@@ -49,7 +50,7 @@ namespace Asset_Management_System.ViewModels
                             if (!shownField.FieldTags.Contains(tag))
                                 shownField.FieldTags.Add(tag);
                         }
-                        
+
                         //Adds relation between tag and field.
                         if (tag.FieldsList.FirstOrDefault(field => field.Equals(currentTagField)) == null
                             && !shownField.FieldTags.Contains(tag))

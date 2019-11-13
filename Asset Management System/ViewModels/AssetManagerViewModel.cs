@@ -24,8 +24,6 @@ namespace Asset_Management_System.ViewModels
 
         public string Title { get; set; }
 
-        #region Tag related private properties
-
         // The string that the user is searching with
         private string _searchString { get; set; }
 
@@ -54,13 +52,8 @@ namespace Asset_Management_System.ViewModels
 
         private IAssetService _service;
 
-        #endregion
-
-
-        #region tag related public Properties
-
         public List<Asset> AssetList;
-        
+
         // The current parent exposed to the view
         public string ParentID
         {
@@ -109,10 +102,7 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        #endregion
 
-
-        #region Commands
 
         public ICommand EnterKeyCommand { get; set; }
 
@@ -133,7 +123,7 @@ namespace Asset_Management_System.ViewModels
             Title = "Edit asset";
             _service = service;
             _assetRep = _service.GetRepository() as IAssetRepository;
-            
+
             if (inputAsset != null)
             {
                 Name = Asset.Name;
@@ -143,6 +133,19 @@ namespace Asset_Management_System.ViewModels
                 // Notify view about changes
                 OnPropertyChanged(nameof(Name));
                 OnPropertyChanged(nameof(Description));
+                CurrentlyAddedTags = new ObservableCollection<ITagable>(_assetRep.GetTags(_asset));
+
+                ConnectTags();
+                if (!addMultiple)
+                {
+                    _editing = true;
+                }
+            }
+            else
+            {
+                CurrentlyAddedTags = new ObservableCollection<ITagable>();
+                _asset = new Asset();
+                _editing = false;
             }
 
             // Initialize commands
@@ -152,7 +155,7 @@ namespace Asset_Management_System.ViewModels
             //RemoveFieldCommand = new RemoveFieldCommand(this);
 
             CancelCommand = new Base.RelayCommand(() => _main.ReturnToPreviousPage());
-            
+
             #region Tag related variables
 
             // TODO: get via Dependency Injection
@@ -178,12 +181,12 @@ namespace Asset_Management_System.ViewModels
 
             #endregion
 
-            UnTagTagCommand = new UntagTagCommand(this);
+            UntagTagCommand = new RemoveRelationToTagCommand(this);
         }
 
         public ICommand SaveAssetCommand { get; set; }
         public ICommand SaveMultipleAssetsCommand { get; set; }
-        public static ICommand UnTagTagCommand { get; set; }
+        public static ICommand UntagTagCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
         /// <summary>
@@ -223,16 +226,19 @@ namespace Asset_Management_System.ViewModels
                     .Select(tag => tag.Name)
                     .ElementAtOrDefault(0);
             }
-            
-            // If searchString does not match any in CurrentlyAddedTags
-            if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
+
+            if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.TagLabel, _searchString)) == null)
             {
                 Tag tag = _tagList.SingleOrDefault(p =>
                     String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase));
                 if (tag != null)
+                {
                     CurrentlyAddedTags.Add(tag);
+                }
                 else
+                {
                     _main.AddNotification(new Notification("No matching tags found", Notification.WARNING));
+                }
                 ConnectTags();
             }
 
@@ -284,7 +290,7 @@ namespace Asset_Management_System.ViewModels
         {
             // Can only go in, if the parent tag is at the highest level
             if (_parentID != 0) return;
-            
+
             // Checks if the tag we are "going into" has any children
             ulong tempID = _tagList
                 .Select(p => p.ID)

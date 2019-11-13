@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.Models
@@ -25,6 +26,11 @@ namespace Asset_Management_System.Models
             }
         }
 
+        ulong ITagable.TagId => ID;
+        string ITagable.TagType => GetType().ToString();
+        string ITagable.TagLabel => Username;
+        public List<ITagable> Children { get; set; }
+
         /* Constructor used by DB */
         private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
         {
@@ -37,7 +43,7 @@ namespace Asset_Management_System.Models
             IsAdmin = is_admin;
             CreatedAt = createdAt;
             UpdatedAt = updated_at;
-            
+
         }
 
         public User()
@@ -45,43 +51,27 @@ namespace Asset_Management_System.Models
 
         }
 
-        public ulong TagId()
-        {
-            return ID;
-        }
-
-        public string TagType()
-        {
-            return GetType().ToString();
-        }
-
-        public string TagLabel()
-        {
-            return Username;
-        }
-
-        public override string ToString() 
+        public override string ToString()
         {
             return Username;
         }
 
         public override bool Equals(object obj)
         {
-            if (obj == null) 
+            if (obj == null)
                 return false;
-            
-            ITagable objAsPart = obj as ITagable;
-            
-            if (objAsPart == null) 
-                return false;
-            
-            return ID.Equals(objAsPart.TagId());
-        }
 
-        public bool Equals(User other)
-        {
-            Console.WriteLine("Test");
-            return other != null && this.Username.CompareTo(other.Username) == 0 && this.ID.CompareTo(other.ID) == 0;
+            if (obj is UserWithStatus)
+            {
+                return base.Equals(obj);
+            }
+
+            ITagable objAsPart = obj as ITagable;
+
+            if (objAsPart == null)
+                return false;
+
+            return ID.Equals(objAsPart.TagId);
         }
     }
 
@@ -102,7 +92,7 @@ namespace Asset_Management_System.Models
             this.UpdatedAt = user.UpdatedAt;
 
             this.Status = String.Empty;
-            IsShown = true;
+            this.IsShown = true;
         }
 
         public string Status { get; set; }
@@ -121,7 +111,7 @@ namespace Asset_Management_System.Models
                     return "#E30000";
                 }
 
-                else if (Status.CompareTo("Conflict") == 0)
+                else if (Status.CompareTo("Conflicting") == 0)
                 {
                     return "#FFCC1A";
                 }

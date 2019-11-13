@@ -13,13 +13,14 @@ namespace Asset_Management_System.Models
         }
 
         /*Constructor used by DB*/
-        private Tag(ulong id, string name, ulong department_id, ulong parent_id, string color, DateTime created_at, DateTime updated_at,string SerializedField)
+        private Tag(ulong id, string name, ulong department_id, ulong parent_id, string color, int numOfChildren, DateTime created_at, DateTime updated_at, string SerializedField)
         {
             ID = id;
             Name = name;
             DepartmentID = department_id;
             ParentID = parent_id;
             Color = color;
+            NumOfChildren = numOfChildren;
             this.SerializedFields = SerializedField;
             CreatedAt = created_at;
             UpdatedAt = updated_at;
@@ -27,6 +28,9 @@ namespace Asset_Management_System.Models
         }
 
         private string _fontColor;
+        private ulong _tagId;
+        private string _tagType;
+        private string _tagLabel;
 
         public string FontColor {
             get {
@@ -44,6 +48,8 @@ namespace Asset_Management_System.Models
         public ulong ParentID { get; set; }
 
         public ulong DepartmentID { get; set; }
+
+        public int NumOfChildren { get; set; }
 
         public override string ToString() => Name;
         
@@ -123,12 +129,17 @@ namespace Asset_Management_System.Models
             if (objAsPart == null) 
                 return false;
             
-            return ID.Equals(objAsPart.TagId());
+            return ID.Equals(objAsPart.TagId);
         }
 
         public bool Equals(Tag other)
         {
             return other != null && ID.Equals(other.ID);
         }
+
+        ulong ITagable.TagId => ID;
+        string ITagable.TagType => GetType().ToString();
+        string ITagable.TagLabel => Name;
+        public List<ITagable> Children { get; set; }
     }
 }

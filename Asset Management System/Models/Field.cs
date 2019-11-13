@@ -8,16 +8,16 @@ namespace Asset_Management_System.Models
     [Serializable]
     public class Field
     {
-        public enum FieldType {Textarea = 1, Textbox, Integer, Date, Boolean};
+        public enum FieldType {Textarea = 1, TextBox, NumberField, Date, Checkbox};
 
         public static IEnumerable<FieldType> GetTypes()
         {
             return new List<FieldType>() {
                 FieldType.Textarea,
-                FieldType.Textbox,
-                FieldType.Integer,
+                FieldType.TextBox,
+                FieldType.NumberField,
                 FieldType.Date,
-                FieldType.Boolean
+                FieldType.Checkbox
             };
         }
 

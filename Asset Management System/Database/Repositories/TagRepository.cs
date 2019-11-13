@@ -14,30 +14,33 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             ulong count = 0;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "SELECT COUNT(*) FROM tags;";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    const string query = "SELECT COUNT(*) FROM tags;";
+                
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        if (reader.Read())
-                            count = reader.GetUInt64("COUNT(*)");
-                        reader.Close();
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                count = reader.GetUInt64("COUNT(*)");
+                            reader.Close();
+                        }
                     }
                 }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
-            }
-            
+
             return count;
         }
 
@@ -51,48 +54,50 @@ namespace Asset_Management_System.Database.Repositories
         {
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
-
             id = 0;
 
-            entity.SerializeFields();
-
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "INSERT INTO tags (label, color, options, department_id, parent_id, updated_at) " +
-                                     "VALUES (@label, @color, @options, @department_id, @parent_id, CURRENT_TIMESTAMP())";
+                entity.SerializeFields();
 
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@label", MySqlDbType.String);
-                    cmd.Parameters["@label"].Value = entity;
+                    const string query = "INSERT INTO tags (label, color, options, department_id, parent_id, updated_at) " +
+                                         "VALUES (@label, @color, @options, @department_id, @parent_id, CURRENT_TIMESTAMP())";
 
-                    cmd.Parameters.Add("@color", MySqlDbType.String);
-                    cmd.Parameters["@color"].Value = entity.Color;
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@label", MySqlDbType.String);
+                        cmd.Parameters["@label"].Value = entity;
 
-                    cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                    cmd.Parameters["@options"].Value = entity.SerializedFields;
+                        cmd.Parameters.Add("@color", MySqlDbType.String);
+                        cmd.Parameters["@color"].Value = entity.Color;
 
-                    cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
-                    cmd.Parameters["@department_id"].Value = entity.DepartmentID;
+                        cmd.Parameters.Add("@options", MySqlDbType.JSON);
+                        cmd.Parameters["@options"].Value = entity.SerializedFields;
 
-                    cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
-                    cmd.Parameters["@parent_id"].Value = entity.ParentID;
+                        cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@department_id"].Value = entity.DepartmentID;
 
-                    querySuccess = cmd.ExecuteNonQuery() > 0;
+                        cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@parent_id"].Value = entity.ParentID;
 
-                    id = (ulong)cmd.LastInsertedId;
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+
+                        id = (ulong)cmd.LastInsertedId;
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
                 }
             }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
-            }
-            
+
             return querySuccess;
         }
 
@@ -106,42 +111,44 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
-            entity.SerializeFields();
-
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "UPDATE tags SET label=@label, color=@color, options=@options, parent_id=@parent_id, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
-
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                entity.SerializeFields();
+                try
                 {
-                    cmd.Parameters.Add("@label", MySqlDbType.String);
-                    cmd.Parameters["@label"].Value = entity;
+                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options, parent_id=@parent_id, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
-                    cmd.Parameters.Add("@color", MySqlDbType.String);
-                    cmd.Parameters["@color"].Value = entity.Color;
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@label", MySqlDbType.String);
+                        cmd.Parameters["@label"].Value = entity;
 
-                    cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                    cmd.Parameters["@options"].Value = entity.SerializedFields;
-                    
-                    cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
-                    cmd.Parameters["@parent_id"].Value = entity.ParentID;
+                        cmd.Parameters.Add("@color", MySqlDbType.String);
+                        cmd.Parameters["@color"].Value = entity.Color;
 
-                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                    cmd.Parameters["@id"].Value = entity.ID;
+                        cmd.Parameters.Add("@options", MySqlDbType.JSON);
+                        cmd.Parameters["@options"].Value = entity.SerializedFields;
 
-                    querySuccess = cmd.ExecuteNonQuery() > 0;
+                        cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@parent_id"].Value = entity.ParentID;
+
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = entity.ID;
+
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
                 }
             }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
-            }
-  
+
             return querySuccess;
         }
 
@@ -155,28 +162,31 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "DELETE FROM tags WHERE id=@id";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                    cmd.Parameters["@id"].Value = entity.ID;
+                    const string query = "DELETE FROM tags WHERE id=@id";
 
-                    querySuccess = cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = entity.ID;
+
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
                 }
             }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
-            }
-            
+
             return querySuccess;
         }
 
@@ -190,36 +200,40 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             Tag tag = null;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at " +
-                                     "FROM tags WHERE id=@id";
-
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@ID", MySqlDbType.Int64);
-                    cmd.Parameters["@ID"].Value = id;
+                    const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
+                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                     "FROM tags AS t WHERE t.id=@id";
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.Add("@ID", MySqlDbType.Int64);
+                        cmd.Parameters["@ID"].Value = id;
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            tag = DBOToModelConvert(reader);
+                            while (reader.Read())
+                            {
+                                tag = DBOToModelConvert(reader);
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
                 }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
-            }
-            
+
             return tag;
         }
 
@@ -228,36 +242,40 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             List<Tag> tags = new List<Tag>();
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at " +
+                try
+                {
+                    const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
+                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
                                      "FROM tags AS t " +
                                      "INNER JOIN asset_tags AS at ON at.tag_id = t.id " +
                                      "WHERE at.asset_id = @id";
 
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
-                {
-                    cmd.Parameters.AddWithValue("@id", id);
-   
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            tags.Add(DBOToModelConvert(reader));
+                            while (reader.Read())
+                            {
+                                tags.Add(DBOToModelConvert(reader));
+                            }
+
+                            reader.Close();
                         }
-                        
-                        reader.Close();
                     }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
 
             return tags;
@@ -282,34 +300,38 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             List<Tag> tags = new List<Tag>();
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at " +
-                                     "FROM tags WHERE parent_id=@id";
+                try
+                { 
+                    const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
+                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                     "FROM tags AS t WHERE t.parent_id=@id";
 
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
-                {
-                    cmd.Parameters.Add("@id", MySqlDbType.Int64);
-                    cmd.Parameters["@id"].Value = parentId;
-
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                        cmd.Parameters["@id"].Value = parentId;
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            tags.Add(DBOToModelConvert(reader));
+                            while (reader.Read())
+                            {
+                                tags.Add(DBOToModelConvert(reader));
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
 
             return tags;
@@ -325,39 +347,43 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query =
-                    "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at FROM tags WHERE label LIKE @keyword";
-
-                if (!keyword.Contains('%'))
-                    keyword = $"%{keyword}%";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try 
                 {
-                    cmd.Parameters.Add("@keyword", MySqlDbType.String);
-                    cmd.Parameters["@keyword"].Value = keyword;
+                    const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
+                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                     "FROM tags AS t WHERE t.label LIKE @keyword";
 
-                    using (var reader = cmd.ExecuteReader())
+                    if (!keyword.Contains('%'))
+                        keyword = $"%{keyword}%";
+
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.Add("@keyword", MySqlDbType.String);
+                        cmd.Parameters["@keyword"].Value = keyword;
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            tags.Add(DBOToModelConvert(reader));
+                            while (reader.Read())
+                            {
+                                tags.Add(DBOToModelConvert(reader));
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
                 }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
-            }
-            
+
             return tags;
         }
 
@@ -366,31 +392,36 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             List<Tag> tags = new List<Tag>();
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "SELECT id, label, parent_id, department_id, color, options, created_at, updated_at, options " +
-                                     "FROM tags";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                // Sending sql query
+                try
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, t.options, " +
+                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                     "FROM tags AS t";
+
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            tags.Add(DBOToModelConvert(reader));
+                            while (reader.Read())
+                            {
+                                tags.Add(DBOToModelConvert(reader));
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
                 
             return tags;
@@ -408,13 +439,14 @@ namespace Asset_Management_System.Database.Repositories
             ulong rowParentId = reader.GetUInt64("parent_id");
             ulong rowDepartmentId = reader.GetUInt64("department_id");
             string rowColor = reader.GetString("color");
+            int rowNumOfChildren = reader.GetInt32("countChildren");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
             string rowOptions = reader.GetString("options");
 
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowLabel, rowDepartmentId, rowParentId, rowColor, rowCreatedAt, rowUpdatedAt, rowOptions }, null,
+                new object[] { rowId, rowLabel, rowDepartmentId, rowParentId, rowColor, rowNumOfChildren, rowCreatedAt, rowUpdatedAt, rowOptions }, null,
                 null);
         }
     }
