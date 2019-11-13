@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
-using MySql.Data.MySqlClient;
 
 namespace Asset_Management_System.Database
 {
