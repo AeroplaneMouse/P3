@@ -20,7 +20,7 @@ namespace Asset_Management_System.ViewModels
         public ICommand EditCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
 
-        private IDisplayableService<T> _service;
+        protected IDisplayableService<T> _service;
         
         public ChangeableListPageViewModel(MainViewModel main, IDisplayableService<T> service) : base(main, service)
         {

@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
@@ -15,32 +18,9 @@ namespace Asset_Management_System.ViewModels
     {
         public int ViewType => 2;
         public List<ITagable> Tags { get; set; }
-        public static ICommand TagSelectCommand { get; set; }
-
-        private bool _isExpanded;
-        private bool _isSelected;
-        private object _selected;
         
-
-        public object selectedElement
-        {
-            get { return _selected; }
-            set
-            {
-                _selected = value;
-                CalledStuff();
-            }
-        }
-
-        private void CalledStuff()
-        {
-            Console.WriteLine("Element clicked!");
-        }
-
-
         public TagsViewModel(MainViewModel main, ITagService tagService) : base(main, tagService)
         {
-            TagSelectCommand = new TagSelectCommand(main);
             ITagRepository rep = (ITagRepository)tagService.GetRepository();
             Tags = new List<ITagable>();
             Tags.AddRange(rep.GetParentTags());
@@ -51,8 +31,36 @@ namespace Asset_Management_System.ViewModels
                 tag.Children = new List<ITagable>();
                 tag.Children.AddRange(ofspring);
             }
-            
-            
+        }
+
+        public void GoToEdit(object sender, RoutedEventArgs e, ulong treeViewParentTagID)
+        {
+            Label pressedItem = (Label)sender;
+            if (pressedItem != null)
+            {
+                string pressedItemLabel = pressedItem.Content.ToString();
+                if (treeViewParentTagID != 0)
+                {
+                    Tag tag = (Tag)Tags
+                        .SingleOrDefault(tag => tag.TagLabel == pressedItemLabel || tag.TagId == treeViewParentTagID);
+                    if (tag != null)
+                    {
+                        if(tag.TagId() == treeViewParentTagID)
+                        {
+                            tag = (Tag)tag.Children.SingleOrDefault(tag => tag.TagLabel == pressedItemLabel);
+                        }
+                        Main.ChangeMainContent(_service.GetManagerPage(Main, tag));
+                    }
+                }
+                else
+                {
+                    Tag tag = (Tag)Tags.SingleOrDefault(tag => tag.TagLabel == pressedItemLabel);
+                    if (tag != null)
+                    {
+                        Main.ChangeMainContent(_service.GetManagerPage(Main, tag));
+                    }
+                }
+            }
         }
     }
 }
