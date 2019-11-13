@@ -49,7 +49,7 @@ namespace Asset_Management_System.ViewModels
                         {
                             tag = (Tag)tag.Children.SingleOrDefault(tag => tag.TagLabel == pressedItemLabel);
                         }
-                        Main.ChangeMainContent(_service.GetManagerPage(Main, tag));
+                        _main.ChangeMainContent(_service.GetManagerPage(_main, tag));
                     }
                 }
                 else
@@ -57,7 +57,7 @@ namespace Asset_Management_System.ViewModels
                     Tag tag = (Tag)Tags.SingleOrDefault(tag => tag.TagLabel == pressedItemLabel);
                     if (tag != null)
                     {
-                        Main.ChangeMainContent(_service.GetManagerPage(Main, tag));
+                        _main.ChangeMainContent(_service.GetManagerPage(_main, tag));
                     }
                 }
             }
