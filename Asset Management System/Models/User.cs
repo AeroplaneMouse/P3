@@ -111,7 +111,7 @@ namespace Asset_Management_System.Models
                     return "#E30000";
                 }
 
-                else if (Status.CompareTo("Conflict") == 0)
+                else if (Status.CompareTo("Conflicting") == 0)
                 {
                     return "#FFCC1A";
                 }

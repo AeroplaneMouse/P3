@@ -10,8 +10,8 @@ namespace Asset_Management_System.Views
     public class StatusToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return ((string)value).CompareTo("Conflict") == 0 ? Visibility.Visible : Visibility.Hidden;
+        { 
+            return ((string)value).CompareTo("Conflicting") == 0 ? Visibility.Visible : Visibility.Hidden;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

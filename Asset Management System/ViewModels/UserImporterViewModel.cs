@@ -19,11 +19,15 @@ namespace Asset_Management_System.ViewModels
 
         private MainViewModel _main { get; set; }
 
-        private IUserRepository _rep { get; set; }
+        private IUserRepository _userRep { get; set; }
 
         private UserImporter _importer { get; set; }
         
-        private IUserService _userService;
+        private IUserService _userService { get; set; }
+
+        private IDepartmentService _departmentService { get; set; }
+
+        private IDepartmentRepository _departmentRep { get; set; }
 
 
         // Checkboxes
@@ -60,12 +64,14 @@ namespace Asset_Management_System.ViewModels
                     .OrderBy(p => p.Username)
                     .OrderByDescending(p => p.Status.CompareTo("Removed") == 0)
                     .OrderByDescending(p => p.Status.CompareTo("Added") == 0)
-                    .OrderByDescending(p => p.Status.CompareTo("Conflict") == 0)
+                    .OrderByDescending(p => p.Status.CompareTo("Conflicting") == 0)
                     .ToList();
             }
 
             set => _finalUsersList = value;
         }
+
+        public List<Department> DepartmentsList { get; set; }
 
         public int SelectedItemIndex
         {
@@ -127,7 +133,7 @@ namespace Asset_Management_System.ViewModels
                 _isShowingConflicting = value;
 
                 (_finalUsersList ?? new List<UserWithStatus>())
-                    .Where(p => p.Status.CompareTo("Conflict") == 0)
+                    .Where(p => p.Status.CompareTo("Conflicting") == 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
 
@@ -147,7 +153,7 @@ namespace Asset_Management_System.ViewModels
                 _isShowingDisabled = value;
 
                 (_finalUsersList ?? new List<UserWithStatus>())
-                    .Where(p => p.IsEnabled == false && p.Status.CompareTo("Conflict") != 0)
+                    .Where(p => p.IsEnabled == false && p.Status.CompareTo("Conflicting") != 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
 
@@ -169,7 +175,7 @@ namespace Asset_Management_System.ViewModels
 
         #region Constructor
 
-        public UserImporterViewModel(MainViewModel main, IUserService userService)
+        public UserImporterViewModel(MainViewModel main, IUserService userService, IDepartmentService departmentService)
         {
             // Because page needs to be in the excluded pages, because of the GetAllUsers
             if (main == null)
@@ -177,16 +183,21 @@ namespace Asset_Management_System.ViewModels
                 return;
             }
 
+            _main = main;
+
             // Initialize checkboxes
             IsShowingAdded = true;
             IsShowingRemoved = true;
             IsShowingConflicting = true;
             IsShowingDisabled = false;
 
-            _main = main;
-
             _userService = userService;
-            _rep = _userService.GetRepository() as IUserRepository;
+            _userRep = _userService.GetRepository() as IUserRepository;
+
+            _departmentService = departmentService;
+            _departmentRep = _departmentService.GetRepository() as IDepartmentRepository;
+
+            DepartmentsList = _departmentRep.GetAll().ToList();
 
             _importer = new UserImporter(_userService);
 
@@ -196,13 +207,13 @@ namespace Asset_Management_System.ViewModels
             CancelCommand = new Base.RelayCommand(Cancel);
             ApplyCommand = new Base.RelayCommand(Apply);
             KeepUserCommand = new Base.RelayCommand<object>(KeepUser);
-
         }
 
         #endregion
 
         #region Public Methods
 
+        // When the page is focused, update the ShownUsersList
         public void PageGotFocus()
         {
             OnPropertyChanged(nameof(ShownUsersList));
@@ -217,10 +228,13 @@ namespace Asset_Management_System.ViewModels
 
         #region Private Methods
 
+        /// <summary>
+        /// Gets the users from the database, and from a .txt file the user chooses
+        /// </summary>
         private void GetAllUsers()
         {
             // Get the users already in the database
-            _existingUsersList = (_rep.GetAll(true) ?? new List<User>())
+            _existingUsersList = (_userRep.GetAll(true) ?? new List<User>())
                 .Select(u => new UserWithStatus(u))
                 .ToList();
 
@@ -229,23 +243,23 @@ namespace Asset_Management_System.ViewModels
                 .Select(u => new UserWithStatus(u))
                 .ToList();
 
-            // List with all users
+            // Initialize list with all users
             _finalUsersList = new List<UserWithStatus>();
             _finalUsersList.AddRange(_existingUsersList);
             _finalUsersList.AddRange(_importedUsersList);
 
-            // Conflicting users. Users that are not enabled, and are in both lists
+            // Conflicting users. Existing users that are not enabled, whose username occures in both lists
             _finalUsersList
                 .Where(u => u.Status.CompareTo(String.Empty) == 0)
                 .Where(u => IsInList(_existingUsersList.Where(p => p.IsEnabled == false).ToList(), u) && IsInList(_importedUsersList, u))
                 .ToList()
                 .ForEach(u =>
                 {
-                    u.Status = "Conflict";
+                    u.Status = "Conflicting";
                     u.IsShown = IsShowingConflicting;
                 });
 
-            // Added users. Users that are enabled, and only in the imported list
+            // Added users. Users who are in the imported list, and not in the existing list
             _finalUsersList
                 .Where(u => u.Status.CompareTo(String.Empty) == 0)
                 .Where(u => !IsInList(_existingUsersList.Where(p => p.IsEnabled == true).ToList(), u) && IsInList(_importedUsersList, u))
@@ -283,12 +297,21 @@ namespace Asset_Management_System.ViewModels
                 .ForEach(u => u.IsShown = IsShowingDisabled);
         }
 
+        /// <summary>
+        /// Checks whether or not a given <see cref="UserWithStatus"/> is in a given list
+        /// </summary>
+        /// <param name="users">The list of users</param>
+        /// <param name="user">The user that is searched for</param>
+        /// <returns>If this user is in the input list, returns true</returns>
         private bool IsInList(List<UserWithStatus> users, UserWithStatus user)
         {
             return users.Where(u => u.Username.CompareTo(user.Username) == 0).Count() > 0;
         }
 
-        // TODO: Ville være virkelig fint hvis den her knap sad på hver bruger i listen, i stedet for én stor
+        /// <summary>
+        /// In a conflict, keeps the input <see cref="UserWithStatus"/>, and either removes or deactivates the duplicate user
+        /// </summary>
+        /// <param name="user"></param>
         private void KeepUser(object user)
         {
             // Get the user that is currently selected. This is the user that is kept
@@ -298,7 +321,7 @@ namespace Asset_Management_System.ViewModels
             UserWithStatus keptUser = user as UserWithStatus;
 
             // If there weren't any selected users, or the selected user is not in conflict
-            if (keptUser == null || keptUser.Status.CompareTo("Conflict") != 0)
+            if (keptUser == null || keptUser.Status.CompareTo("Conflicting") != 0)
             {
                 return;
             }
@@ -340,17 +363,24 @@ namespace Asset_Management_System.ViewModels
             OnPropertyChanged(nameof(ShownUsersList));
         }
 
-        // Goes back to the page that the user came from
+
+        /// <summary>
+        /// Goes back to the page that the user came from
+        /// </summary>
         private void Cancel()
         {
             _main.ReturnToPreviousPage();
         }
 
-        // Applies the changes made to the users to the database
+        /// <summary>
+        /// Applies the changes made to the users to the database
+        /// </summary>
         private void Apply()
         {
+            return;
+
             // Check if there are any conflicts left
-            if (_finalUsersList.Where(p => p.Status.CompareTo("Conflict") == 0).Count() > 0)
+            if (_finalUsersList.Where(p => p.Status.CompareTo("Conflicting") == 0).Count() > 0)
             {
                 _main.AddNotification(new Notification("Not all conflicts are solved"));
                 return;
@@ -363,38 +393,24 @@ namespace Asset_Management_System.ViewModels
                 .ForEach(p =>
                 {
                     p.IsEnabled = false;
-                    _rep.Update(p);
+                    _userRep.Update(p);
                 });
 
             // Insert added users to the database
             _finalUsersList
                 .Where(p => p.Status.CompareTo("Added") == 0)
                 .ToList()
-                .ForEach(p => _rep.Insert(p, out ulong id));
+                .ForEach(p => _userRep.Insert(p, out ulong id));
 
             // Update the users that weren't removed, as they may have gotten new descriptions, etc.
             _finalUsersList
                 .Where(p => p.Status.CompareTo(String.Empty) == 0)
                 .ToList()
-                .ForEach(p => _rep.Update(p));
+                .ForEach(p => _userRep.Update(p));
 
             _main.ReturnToPreviousPage();
         }
 
         #endregion
-
-        #region Helpers
-
-        private UserWithStatus GetSelectedItem()
-        {
-            if (ShownUsersList.Count == 0)
-                return null;
-            else
-                return ShownUsersList.ElementAtOrDefault(SelectedItemIndex);
-        }
-
-        #endregion
-
-
     }
 }
