@@ -44,7 +44,7 @@
                                     </Grid.ColumnDefinitions>
                                     <Button OverridesDefaultStyle="True" x:Name="PART_DeleteFieldButton"
                                                 Grid.Column="1" Margin="3,0" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                                Visibility="Visible" Command="{x:Static v:ObjectManagerController.RemoveFieldCommand}" CommandParameter="{Binding Path=Field.HashId}">
+                                                Visibility="Visible" Command="{x:Static v:FieldsController.RemoveFieldCommand}" CommandParameter="{Binding Path=Field.HashId}">
                                         <Button.Template>
                                             <ControlTemplate>
                                                 <Grid Height="10" Width="10" Background="Transparent" >

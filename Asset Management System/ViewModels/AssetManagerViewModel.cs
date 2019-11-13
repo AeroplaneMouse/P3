@@ -3,19 +3,17 @@ using System.Linq;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.ViewModels.Commands;
 using Asset_Management_System.ViewModels.ViewModelHelper;
-using System.Drawing;
-using Asset_Management_System.Services;
 using Asset_Management_System.Services.Interfaces;
 using Asset_Management_System.ViewModels.Controllers;
+using Asset_Management_System.ViewModels.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class AssetManagerViewModel : AssetController
+    public class AssetManagerViewModel : AssetController, IAssetManager
     {
         private MainViewModel _main;
         private Asset _asset;
@@ -62,7 +60,7 @@ namespace Asset_Management_System.ViewModels
         #region tag related public Properties
 
         public List<Asset> AssetList;
-
+        
         // The current parent exposed to the view
         public string ParentID
         {
@@ -150,8 +148,8 @@ namespace Asset_Management_System.ViewModels
             // Initialize commands
             SaveAssetCommand = new SaveAssetCommand(this, _main, Asset, _service, Editing);
             SaveMultipleAssetsCommand = new SaveAssetCommand(this, _main, Asset, _service, false, true);
-            AddFieldCommand = new AddFieldCommand(_main, this, true);
-            RemoveFieldCommand = new RemoveFieldCommand(this);
+            //AddFieldCommand = new AddFieldCommand(_main, this, true);
+            //RemoveFieldCommand = new RemoveFieldCommand(this);
 
             CancelCommand = new Base.RelayCommand(() => _main.ReturnToPreviousPage());
             
@@ -351,5 +349,45 @@ namespace Asset_Management_System.ViewModels
         }
 
         #endregion
+
+        public bool AttachTag(Asset asset, ITagable tag)
+        {
+            return true;
+        }
+
+        public bool DetachTag(Asset asset, ITagable tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<ShownField> GetRelations(Asset asset, List<Tag> tags)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveRelations(Asset asset, Tag tag, List<ShownField> shownFields)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Tag CreateTag(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Save()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

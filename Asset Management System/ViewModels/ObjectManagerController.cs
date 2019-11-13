@@ -9,13 +9,9 @@ namespace Asset_Management_System.ViewModels
 {
     public abstract class ObjectManagerController : FieldsController
     {
-        protected abstract void LoadFields();
-
         public ObservableCollection<Tag> CurrentlyAddedTags { get; set; } = new ObservableCollection<Tag>();
 
         public ObservableCollection<ShownField> HiddenFields { get; set; } = new ObservableCollection<ShownField>();
-
-        public static ICommand RemoveFieldCommand { get; set; }
 
         public ObjectManagerController() => RemoveFieldCommand = new RemoveFieldCommand(this);
 

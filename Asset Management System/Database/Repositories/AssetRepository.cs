@@ -59,7 +59,7 @@ namespace Asset_Management_System.Database.Repositories
         /// </summary>
         /// <param name="entity">The asset to be inserted</param>
         /// <param name="id"></param>
-        /// <returns>Rather the insertion was successful or not</returns>
+        /// <returns>Whether the insertion was successful or not</returns>
         public bool Insert(Asset entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
