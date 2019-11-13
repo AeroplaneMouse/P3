@@ -154,14 +154,14 @@
                             </GridViewColumn>
 
                             <!-- Department -->
-                            <!--<GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
-                                            Header="Department" />-->
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
+                                            Header="Department" />
 
-                            <GridViewColumn Header="Department">
+                            <!--<GridViewColumn Header="Department">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox ItemsSource="{Binding DataContext.DepartmentsList, UpdateSourceTrigger=PropertyChanged, ElementName=UserListView}"
-                                                  SelectedIndex="0">
+                                                  SelectedItem="{Binding Path=DefaultDepartment}">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding Name}"/>
@@ -170,7 +170,7 @@
                                         </ComboBox>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
+                            </GridViewColumn>-->
 
 
                             <!--<ComboBox ItemsSource="{Binding ParentTagsList}" 

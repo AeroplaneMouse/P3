@@ -14,7 +14,6 @@ namespace Asset_Management_System.ViewModels
 {
     public class UserImporterViewModel : Base.BaseViewModel, IListUpdate
     {
-
         #region Private Properties
 
         private MainViewModel _main { get; set; }
@@ -371,6 +370,7 @@ namespace Asset_Management_System.ViewModels
         {
             _main.ReturnToPreviousPage();
         }
+
 
         /// <summary>
         /// Applies the changes made to the users to the database
