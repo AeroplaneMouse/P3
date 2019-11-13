@@ -23,8 +23,8 @@ namespace UnitTests
         {
             _assetManager = new AssetManagerViewModel(new MainViewModel(new Window()), new Asset(), new AssetService(new AssetRepository()), new TextBox());
             _tag = new Tag();
-            _tag.FieldsList.Add(new Field("1","", Field.FieldType.Textbox,"",false, true));
-            _tag.FieldsList.Add(new Field("2","", Field.FieldType.Textbox,"",false, true));
+            _tag.FieldsList.Add(new Field("1","", Field.FieldType.TextBox,"",false, true));
+            _tag.FieldsList.Add(new Field("2","", Field.FieldType.TextBox,"",false, true));
             _tagable = new Tag();
             _asset = new Asset();
         }

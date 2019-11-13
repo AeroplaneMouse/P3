@@ -137,6 +137,7 @@
                             <Setter Property="CommandParameter"
                                     Value="{Binding RelativeSource={RelativeSource Self}}" />
                         </Style>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource RegularListItem}"/>
                     </ListView.Resources>
                     
                     <ListView.View>
@@ -160,9 +161,6 @@
                             <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
-                    <ListView.Resources>
-                        <Style TargetType="ListViewItem" BasedOn="{StaticResource RegularListItem}"/>
-                    </ListView.Resources>
                 </ListView>
             </Grid>
         </Border>

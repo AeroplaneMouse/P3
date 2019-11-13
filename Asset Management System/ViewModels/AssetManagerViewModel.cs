@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.ViewModels.Commands;
@@ -16,7 +17,6 @@ namespace Asset_Management_System.ViewModels
     public class AssetManagerViewModel : AssetController, IAssetManager
     {
         private MainViewModel _main;
-        private Asset _asset;
 
         public string Name { get; set; }
         public string Identifier { get; set; } = String.Empty;
@@ -114,8 +114,6 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand BackspaceKeyCommand { get; set; }
 
-        #endregion
-
 
         public AssetManagerViewModel(MainViewModel main, Asset inputAsset, IAssetService service, TextBox box, bool addMultiple = false): base(inputAsset, service, addMultiple)
         {
@@ -133,19 +131,19 @@ namespace Asset_Management_System.ViewModels
                 // Notify view about changes
                 OnPropertyChanged(nameof(Name));
                 OnPropertyChanged(nameof(Description));
-                CurrentlyAddedTags = new ObservableCollection<ITagable>(_assetRep.GetTags(_asset));
+                CurrentlyAddedTags = new ObservableCollection<ITagable>(_assetRep.GetTags(Asset));
 
                 ConnectTags();
                 if (!addMultiple)
                 {
-                    _editing = true;
+                    Editing = true;
                 }
             }
             else
             {
                 CurrentlyAddedTags = new ObservableCollection<ITagable>();
-                _asset = new Asset();
-                _editing = false;
+                Asset = new Asset();
+                Editing = false;
             }
 
             // Initialize commands

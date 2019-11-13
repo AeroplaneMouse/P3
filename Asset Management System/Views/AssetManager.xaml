@@ -123,7 +123,7 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
+                                    <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelWithDelete}"></Label>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>

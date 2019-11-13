@@ -26,7 +26,7 @@ namespace Asset_Management_System.ViewModels.Controllers
                 Asset = inputAsset;
                 LoadFields();
 
-                CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(Asset));
+                CurrentlyAddedTags = new ObservableCollection<ITagable>(_assetRep.GetTags(Asset));
 
                 ConnectTags();
                 if (!addMultiple)
@@ -34,7 +34,7 @@ namespace Asset_Management_System.ViewModels.Controllers
             }
             else
             {
-                CurrentlyAddedTags = new ObservableCollection<Tag>();
+                CurrentlyAddedTags = new ObservableCollection<ITagable>();
                 Asset = new Asset();
                 Editing = false;
             }
