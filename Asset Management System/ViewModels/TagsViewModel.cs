@@ -16,7 +16,6 @@ namespace Asset_Management_System.ViewModels
 {
     public class TagsViewModel : ChangeableListPageViewModel<Tag>
     {
-        private MainViewModel mainViewModel;
         public int ViewType => 2;
         public List<ITagable> Tags { get; set; }
         
@@ -25,7 +24,6 @@ namespace Asset_Management_System.ViewModels
             ITagRepository rep = (ITagRepository)tagService.GetRepository();
             Tags = new List<ITagable>();
             Tags.AddRange(rep.GetParentTags());
-            mainViewModel = main;
 
             foreach (var tag in Tags)
             {
@@ -51,7 +49,7 @@ namespace Asset_Management_System.ViewModels
                         {
                             tag = (Tag)tag.Children.SingleOrDefault(tag => tag.TagLabel == pressedItemLabel);
                         }
-                        mainViewModel.ChangeMainContent(_service.GetManagerPage(mainViewModel, tag));
+                        _main.ChangeMainContent(_service.GetManagerPage(_main, tag));
                     }
                 }
                 else
@@ -59,7 +57,7 @@ namespace Asset_Management_System.ViewModels
                     Tag tag = (Tag)Tags.SingleOrDefault(tag => tag.TagLabel == pressedItemLabel);
                     if (tag != null)
                     {
-                        mainViewModel.ChangeMainContent(_service.GetManagerPage(mainViewModel, tag));
+                        _main.ChangeMainContent(_service.GetManagerPage(_main, tag));
                     }
                 }
             }
