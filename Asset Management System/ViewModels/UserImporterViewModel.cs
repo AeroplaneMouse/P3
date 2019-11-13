@@ -377,8 +377,6 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private void Apply()
         {
-            return;
-
             // Check if there are any conflicts left
             if (_finalUsersList.Where(p => p.Status.CompareTo("Conflicting") == 0).Count() > 0)
             {
