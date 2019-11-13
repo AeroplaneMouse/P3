@@ -104,18 +104,11 @@
                 </StackPanel>
 
                 <!-- Current tags -->
-                <ListView ItemsSource="{Binding Path=TheTagger.TaggedWith}"
+                <ListView ItemsSource="{Binding Path=Tags.AppliedTags}"
                           ItemContainerStyle="{StaticResource ListViewWithTags}"
                           Grid.Row="1"
                           Margin="0 0 0 0">
-                    
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="MouseDoubleClick">
-                            <!--ViewCommand-->
-                            <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
-                    
+
                     <ListView.Template>
                         <ControlTemplate>
                             <WrapPanel IsItemsHost="True"/>
@@ -124,7 +117,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid MaxWidth="100" HorizontalAlignment="Left">
-                                <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
+                                <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagAddedToSearch}"></Label>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -151,6 +144,15 @@
                         <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
                     </ListView.InputBindings>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <!--ViewCommand-->
+                            <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ListView.Resources>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource RegularListItem}"/>
+                    </ListView.Resources>
                 </ListView>
             </Grid>
         </Border>

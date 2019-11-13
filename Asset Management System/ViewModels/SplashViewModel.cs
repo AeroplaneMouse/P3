@@ -15,9 +15,11 @@ namespace Asset_Management_System.ViewModels
         private MainViewModel _main;
         private IUserService _userService;
         private const int _delay = 300;
+        private const int _reconnectWaitingTime = 5;
 
         public string LoadingText { get; set; }
-        public string StatusText { get; set; }
+        public string CurrentActionText { get; set; }
+        public string AdditionalText { get; set; }
 
         public ICommand LoadConfigCommand { get; set; }
 
@@ -40,51 +42,66 @@ namespace Asset_Management_System.ViewModels
         /// </summary>
         private async void Setup()
         {
-            UpdateStatusText(new StatusUpdateEventArgs("Loading...", "Initializing background worker..."));
-            await Task.Run(Authenticate);
+            //UpdateStatusText(new StatusUpdateEventArgs("Loading...", "Initializing background worker..."));
+            bool reconnectRequired;
+            do
+            {
+                reconnectRequired = await Task.Run(Authenticate);
+            } while (reconnectRequired);
         }
 
-        private void Authenticate()
+        private bool Authenticate()
         {
             // Connecting to database
-            UpdateStatusText(new StatusUpdateEventArgs("Establishing connection...", "An excellent connection to the database is being established..."));
+            LoadingText = "Establishing connection...";
+            CurrentActionText = "An excellent connection to the database is being established...";
+            AdditionalText = "";
             Thread.Sleep(_delay);
 
             if (new MySqlHandler().IsAvailable())
             {
                 // Authorizing user
-                UpdateStatusText(new StatusUpdateEventArgs("Connection established...", "The excellent connection to the database was succesfully established..."));
+                LoadingText = "Connection established...";
+                CurrentActionText = "The excellent connection to the database was succesfully established...";
                 Thread.Sleep(_delay);
 
                 Session t = new Session(_userService);
                 if (t.Authenticated())
                 {
                     // Runs the systemLoaded method to remove splashpage, and 
-                    UpdateStatusText(new StatusUpdateEventArgs("User authenticated", "Unlocking the Asset Management System..."));
+                    LoadingText = "User authenticated";
+                    CurrentActionText = "Unlocking the Asset Management System...";
                     Thread.Sleep(_delay);
 
                     _main.LoadSystem(t);
                 }
                 else
-                    UpdateStatusText(new StatusUpdateEventArgs(
-                        "!!! Access denied !!!",
-                        $"User \"{Session.GetIdentity()}\" is not authorized to access the application.")
-                    );
+                {
+                    LoadingText = "!!! Access denied !!!";
+                    CurrentActionText = $"User \"{Session.GetIdentity()}\" is not authorized to access the application.";
+                }
+
+                return false;
             }
             else
-                UpdateStatusText(new StatusUpdateEventArgs("Error!", "Unfortunately the excellent connection to the database was not established..."));
+            {
+                LoadingText = "ERROR!";
+                CurrentActionText = "Unfortunately the excellent connection to the database was not established...";
+                Reconnect();
+            }
+
+            return true;
         }
 
-        /// <summary>
-        /// Updates text on the screen with progress and status.
-        /// </summary>
-        /// <param name="e"></param>
-        public void UpdateStatusText(StatusUpdateEventArgs e)
+        private void Reconnect()
         {
-            LoadingText = e.Title;
-            StatusText = e.Message;
-            OnPropertyChanged(nameof(LoadingText));
-            OnPropertyChanged(nameof(StatusText));
+            const string baseText = "Reconnecting in";
+            for(int i = _reconnectWaitingTime; i > 0; i--)
+            {
+                AdditionalText = $"{ baseText } { i }...";
+                Thread.Sleep(1000);
+            }
+            AdditionalText = "";
         }
 
         private void LoadConfig()

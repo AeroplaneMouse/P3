@@ -12,9 +12,6 @@ using Asset_Management_System.Resources.Users;
 
 namespace Asset_Management_System.ViewModels
 {
-    
-    // Needs notifications
-
     public class UserImporterViewModel : Base.BaseViewModel, IListUpdate
     {
 
@@ -198,16 +195,22 @@ namespace Asset_Management_System.ViewModels
             // Initialize commands 
             CancelCommand = new Base.RelayCommand(Cancel);
             ApplyCommand = new Base.RelayCommand(Apply);
-            KeepUserCommand = new Base.RelayCommand(KeepUser);
+            KeepUserCommand = new Base.RelayCommand<object>(KeepUser);
+
         }
 
         #endregion
 
         #region Public Methods
 
-        public void PageFocus()
+        public void PageGotFocus()
         {
             OnPropertyChanged(nameof(ShownUsersList));
+        }
+
+        public void PageLostFocus()
+        {
+
         }
 
         #endregion
@@ -217,7 +220,7 @@ namespace Asset_Management_System.ViewModels
         private void GetAllUsers()
         {
             // Get the users already in the database
-            _existingUsersList = (_rep.GetAll() ?? new List<User>())
+            _existingUsersList = (_rep.GetAll(true) ?? new List<User>())
                 .Select(u => new UserWithStatus(u))
                 .ToList();
 
@@ -286,11 +289,15 @@ namespace Asset_Management_System.ViewModels
         }
 
         // TODO: Ville være virkelig fint hvis den her knap sad på hver bruger i listen, i stedet for én stor
-        private void KeepUser()
+        private void KeepUser(object user)
         {
             // Get the user that is currently selected. This is the user that is kept
-            UserWithStatus keptUser = GetSelectedItem();
+            //UserWithStatus keptUser = GetSelectedItem();
 
+
+            UserWithStatus keptUser = user as UserWithStatus;
+
+            // If there weren't any selected users, or the selected user is not in conflict
             if (keptUser == null || keptUser.Status.CompareTo("Conflict") != 0)
             {
                 return;
@@ -301,9 +308,9 @@ namespace Asset_Management_System.ViewModels
                 .Where(p => p.Username.CompareTo(keptUser.Username) == 0 && p.Equals(keptUser) == false)
                 .FirstOrDefault();
 
-            // If the kept user i coming from the imported list: 
+            // If the kept user is coming from the imported list: 
             // Set their status to "Added". 
-            // Set the existing users status to empty, add the current date to their username, and set them to not show
+            // Set the existing users status to empty, add the current date to their username, and set them to not show.
             if (_importedUsersList.Contains(keptUser))
             {
                 keptUser.Status = "Added";
@@ -313,7 +320,9 @@ namespace Asset_Management_System.ViewModels
                 otherUser.IsShown = IsShowingDisabled;
             }
 
-            // Hvis brugeren der beholdes er den eksisterende bruger, skal deres status være String.Empty, IsEnabled skal sættes til true og den importerede bruger bliver fjernet fra listen.
+            // If the kept user is coming from the database:
+            // Set their status to String.Empty and IsEnabled to true.
+            // Remove the imported user from the final list.
             else if (_existingUsersList.Contains(keptUser))
             {
                 keptUser.Status = String.Empty;
@@ -325,7 +334,7 @@ namespace Asset_Management_System.ViewModels
 
             else
             {
-                Console.WriteLine("Error. User not found in either list");
+                _main.AddNotification(new Notification("Error. User not found in either list"));
             }
 
             OnPropertyChanged(nameof(ShownUsersList));
@@ -343,7 +352,7 @@ namespace Asset_Management_System.ViewModels
             // Check if there are any conflicts left
             if (_finalUsersList.Where(p => p.Status.CompareTo("Conflict") == 0).Count() > 0)
             {
-                Console.WriteLine("Not all conflicts are solved");
+                _main.AddNotification(new Notification("Not all conflicts are solved"));
                 return;
             }
 
@@ -374,6 +383,7 @@ namespace Asset_Management_System.ViewModels
 
         #endregion
 
+        #region Helpers
 
         private UserWithStatus GetSelectedItem()
         {
@@ -382,5 +392,9 @@ namespace Asset_Management_System.ViewModels
             else
                 return ShownUsersList.ElementAtOrDefault(SelectedItemIndex);
         }
+
+        #endregion
+
+
     }
 }

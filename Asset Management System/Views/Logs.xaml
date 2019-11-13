@@ -23,7 +23,6 @@
         <StackPanel Orientation="Horizontal"
             HorizontalAlignment="Right"
             Margin="10">
-
         </StackPanel>
 
         <Rectangle Style="{StaticResource HorizontalSeparator}"
@@ -101,6 +100,9 @@
                         <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
                     </ListView.InputBindings>
+                    <ListView.Resources>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource RegularListItem}"/>
+                    </ListView.Resources>
                 </ListView>
             </Grid>
         </Border>

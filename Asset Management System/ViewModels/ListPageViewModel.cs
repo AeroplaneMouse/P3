@@ -23,26 +23,16 @@ namespace Asset_Management_System.ViewModels
         protected MainViewModel _main;
         private IDisplayableService<T> _service;
         private ICommentService _commentService;
-
         private ObservableCollection<T> _list { get; set; }
         private string _searchQueryText { get; set; }
         
-        protected MainViewModel Main
-        {
-            get => _main;
-            set => _main = value;
-        }
-
         protected ISearchableRepository<T> Rep { get; private set; }
-
         public Visibility Visible
         {
             get => _main.Visible;
             private set => Visible = value;
         }
-
         public List<DoesContainFields> SelectedItems { get; set; } = new List<DoesContainFields>();
-
         public bool MultipleSelected {
             get
             {
@@ -50,15 +40,12 @@ namespace Asset_Management_System.ViewModels
             }
             set => MultipleSelected = value;
         }
-
         public string SearchQueryText
         {
             get => _searchQueryText;
             set => _searchQueryText = value;
         }
-
         public int SelectedItemIndex { get; set; }
-
         public ObservableCollection<T> SearchList
         {
             get => _list;
@@ -67,36 +54,31 @@ namespace Asset_Management_System.ViewModels
                 _list.Clear();
 
                 foreach (T item in value)
-                {
                     _list.Add(item);
-                }
 
                 OnPropertyChanged(nameof(SearchList));
             }
         }
 
+        // Commands
         public ICommand PrintCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
         public ICommand HeaderClickCommand { get; set; }
-
         public ICommand RemoveCommand { get; set; }
 
         public ListPageViewModel(MainViewModel main, IDisplayableService<T> service, ICommentService commentService = default)
         {
+            _main = main;
             _service = service;
             _commentService = commentService;
             Rep = _service.GetSearchableRepository();
 
-            _main = main;
-
             _searchQueryText = String.Empty;
             _list = new ObservableCollection<T>();
 
-            //_pageType = pageType;
-
             // Initialize commands
-            PrintCommand = new Commands.PrintSelectedItemsCommand();
+            PrintCommand = new Commands.PrintSelectedItemsCommand(_main);
             SearchCommand = new Base.RelayCommand(Search);
             ViewCommand = new Base.RelayCommand(View);
             HeaderClickCommand = new Base.RelayCommand<object>(HeaderClick);
@@ -104,7 +86,7 @@ namespace Asset_Management_System.ViewModels
         }
 
 
-        public virtual void PageFocus()
+        public virtual void PageGotFocus()
         {
             Search();
         }
@@ -127,12 +109,19 @@ namespace Asset_Management_System.ViewModels
         /// <summary>
         /// Sends a search request to the database, and sets the list of items to the result.
         /// </summary>
-        protected virtual void Search() => SearchList = Rep.Search(SearchQueryText);
+        public virtual void Search() => SearchList = Rep.Search(SearchQueryText);
 
         /// <summary>
         /// Creates a csv file containing all the items
         /// </summary>
-        protected void Print() => PrintHelper.Print(SearchList as IEnumerable<object>);
+        protected void Print()
+        {
+            if (SearchList != null && SearchList.Count > 0)
+                PrintHelper.Print(SearchList as IEnumerable<object>);
+            else
+                _main.AddNotification(new Notification("Error! Cannot export an empty list.", Notification.ERROR));
+        }
+
 
         /// <summary>
         /// Displays the selected item
@@ -149,34 +138,14 @@ namespace Asset_Management_System.ViewModels
                     new ShowEntry(entry).ShowDialog();
                     break;
                 case DoesContainFields fields:
-                    Main.ChangeMainContent(new ObjectViewer(Main, _commentService, fields));
+                    _main.ChangeMainContent(new ObjectViewer(_main, _commentService, fields));
                     break;
                 default:
                     _main.AddNotification(
-                        new Notification("ERROR! Unknown error occured when trying to view.", Notification.ERROR),
+                        new Notification("Error! Unknown error occured when trying to view.", Notification.ERROR),
                         3000);
                     break;
             }
-
-            /*
-            switch (selected)
-            {
-                case Tag tag:
-                    _main.ChangeMainContent(new ObjectViewer(_main, tag));
-                    break;
-                case Asset asset:
-                    _main.ChangeMainContent(new ObjectViewer(_main, asset));
-                    break;
-                case Entry entry:
-                    new ShowEntry(entry).ShowDialog();
-                    break;
-                default:
-                    _main.AddNotification(
-                        new Notification("ERROR! Unknown error occured when trying to view.", Notification.ERROR),
-                        3000);
-                    break;
-            }
-            */
         }
 
         /// <summary>
@@ -245,7 +214,6 @@ namespace Asset_Management_System.ViewModels
                 }
             }
         }
-
 
         protected T GetSelectedItem()
         {

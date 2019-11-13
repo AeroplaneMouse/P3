@@ -125,6 +125,8 @@ namespace Asset_Management_System.ViewModels
         private Department _currentDepartment;
         private Stack<Page> _history = new Stack<Page>();
         private Page _currentPage;
+        private bool HasConnectionFailedBeenRaised = false;
+
 
         #endregion
 
@@ -208,7 +210,7 @@ namespace Asset_Management_System.ViewModels
             get => GetDepartments();
         }
 
-        public bool DisplayCurrentDepartment { get; set; } = false;
+        public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
 
         public Session CurrentSession { get; private set; }
 
@@ -278,7 +280,7 @@ namespace Asset_Management_System.ViewModels
 
             // Update the list on the page, if there is one
             if (setPage.DataContext is IListUpdate)
-                (setPage.DataContext as IListUpdate).PageFocus();
+                (setPage.DataContext as IListUpdate).PageGotFocus();
             
             _history.Push(_currentPage);
             // Setting the content of the given frame, to the newPage object to display the requested page.
@@ -327,7 +329,7 @@ namespace Asset_Management_System.ViewModels
         public void LoadSystem(Session session)
         {
             // Attaching notification
-            new MySqlHandler().SqlConnectionFailed += AddNotification;
+            MySqlHandler.ConnectionFailed += Reload;
 
             // Loads homepage and other stuff from the UI-thread.
             SplashPage.Dispatcher.Invoke(Load);
@@ -335,8 +337,11 @@ namespace Asset_Management_System.ViewModels
             // Remove splash page
             SplashPage = null;
 
+            // Resetting connection failed
+            HasConnectionFailedBeenRaised = false;
+
             // Show department and username
-            DisplayCurrentDepartment = true;
+            CurrentDepartmentVisibility = Visibility.Visible;
             CurrentSession = session;
             CurrentUser = CurrentSession.Username;
             OnPropertyChanged(nameof(CurrentUser));
@@ -347,6 +352,25 @@ namespace Asset_Management_System.ViewModels
                 CurrentDepartment = Department.GetDefault();
         }
 
+        #endregion
+
+        #region Private Methods
+
+        private void ConnectionFailed(Notification n, bool reloadRequired)
+        {
+            if (!HasConnectionFailedBeenRaised)
+            {
+                HasConnectionFailedBeenRaised = true;
+                // Display notification if one was given
+                if (n != null)
+                    AddNotification(n, 6000);
+
+                // Reload the application is that is required
+                if (reloadRequired)
+                    Reload();
+            }
+        }
+
         // Loads excluded pages and sets homepage.
         private void Load()
         {
@@ -355,15 +379,10 @@ namespace Asset_Management_System.ViewModels
             excludedPages.Add(new Views.TagManager(null, _tagService));
             excludedPages.Add(new Views.ObjectViewer(null, _commentService, null));
             excludedPages.Add(new Views.UserImporterView(null, _userService));
-            
 
             // Load homepage
             ChangeMainContent(new Views.Home(this, _assetService, _tagService));
         }
-
-        #endregion
-
-        #region Private Methods
 
         private void ImportUsers()
         {
@@ -377,8 +396,8 @@ namespace Asset_Management_System.ViewModels
 
             // Clearing memory
             pages.Clear();
-            new MySqlHandler().SqlConnectionFailed -= AddNotification;
-            DisplayCurrentDepartment = false;
+            MySqlHandler.ConnectionFailed -= Reload;
+            CurrentDepartmentVisibility = Visibility.Hidden;
             CurrentUser = null;
             CurrentDepartment = null;
             OnPropertyChanged(nameof(CurrentUser));
@@ -402,7 +421,7 @@ namespace Asset_Management_System.ViewModels
 
         private List<Department> GetDepartments()
         {
-            if (DisplayCurrentDepartment)
+            if (CurrentDepartmentVisibility == Visibility.Visible)
                 return (List<Department>) ((IDepartmentRepository) _departmentService.GetRepository()).GetAll();
             else
                 return new List<Department>();
