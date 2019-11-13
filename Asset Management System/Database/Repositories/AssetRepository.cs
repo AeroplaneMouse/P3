@@ -397,7 +397,7 @@ namespace Asset_Management_System.Database.Repositories
             return assets;
         }
 
-        public void AttachTags(Asset asset, List<ITagable> tagged)
+        public bool AttachTags(Asset asset, List<ITagable> tagged)
         {
             List<User> users = tagged.OfType<User>().ToList();
             List<Tag> tags = tagged.OfType<Tag>().ToList();
@@ -436,12 +436,12 @@ namespace Asset_Management_System.Database.Repositories
 
                     using (var cmd = new MySqlCommand(userQuery.ToString(), con))
                     {
-                        cmd.ExecuteNonQuery();
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
 
                     using (var cmd = new MySqlCommand(tagQuery.ToString(), con))
                     {
-                        cmd.ExecuteNonQuery();
+                        querySuccess = cmd.ExecuteNonQuery() > 0 && querySuccess;
                     }
                 }
                 catch (MySqlException e)
@@ -453,6 +453,8 @@ namespace Asset_Management_System.Database.Repositories
                     con.Close();
                 }
             }
+
+            return querySuccess;
         }
 
         public IEnumerable<ITagable> GetTags(Asset asset)
