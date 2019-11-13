@@ -15,14 +15,16 @@ namespace Asset_Management_System.ViewModels.Commands
         private MainViewModel _main;
         private Tag _tag;
         private bool _editing;
+        private PopupTagManager _popup;
         public event EventHandler CanExecuteChanged;
 
-        public SaveTagCommand(TagManagerViewModel viewModel, MainViewModel main, Tag tag, bool editing)
+        public SaveTagCommand(TagManagerViewModel viewModel, MainViewModel main, Tag tag, bool editing, PopupTagManager popup = null)
         {
             _viewModel = viewModel;
             _main = main;
             _tag = tag;
             _editing = editing;
+            _popup = popup;
         }
 
         public bool CanExecute(object parameter)
@@ -77,8 +79,17 @@ namespace Asset_Management_System.ViewModels.Commands
                     Log<Tag>.CreateLog(_tag, id);
                 }
 
-                // Change view to tags
-                _main.ChangeMainContent(new Tags(_main));
+                if (_popup == null)
+                {
+                    // Change view to tags
+                    _main.ChangeMainContent(new Tags(_main));
+                }
+                else
+                {
+                    _popup.DialogResult = true;
+                    _popup.Close();
+                }
+
             }
             else
                 _main.AddNotification(new Notification(

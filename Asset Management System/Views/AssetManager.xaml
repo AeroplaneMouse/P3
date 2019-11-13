@@ -97,6 +97,7 @@
                             <KeyBinding Key="Space" Command="{Binding SpaceKeyCommand}" />
                             <KeyBinding Key="Escape" Command="{Binding EscapeKeyCommand}" />
                             <KeyBinding Key="Back" Command="{Binding BackspaceKeyCommand}" />
+                            <KeyBinding Modifiers="Shift" Key="Return" Command="{Binding PopupTagCommand}"/>
                         </TextBox.InputBindings>
                     </TextBox>
                     <ListBox ItemsSource="{Binding TagList, UpdateSourceTrigger=PropertyChanged}">

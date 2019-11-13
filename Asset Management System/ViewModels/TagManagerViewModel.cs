@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
 using Asset_Management_System.ViewModels.ViewModelHelper;
+using Asset_Management_System.Views;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -47,7 +48,7 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        public TagManagerViewModel(MainViewModel main, Tag inputTag)
+        public TagManagerViewModel(MainViewModel main, Tag inputTag, PopupTagManager popup = null)
         {
             _main = main;
             _randomColor = CreateRandomColor();
@@ -57,7 +58,16 @@ namespace Asset_Management_System.ViewModels
             if (inputTag != null)
             {
                 _tag = inputTag;
-                _editing = true;
+
+                if (popup == null)
+                    _editing = true;
+                else
+                {
+                    _editing = false;
+                    _tag.Color = CreateRandomColor();
+                }
+
+
                 LoadFields();
                 Title = "Edit tag";
             }
@@ -69,14 +79,21 @@ namespace Asset_Management_System.ViewModels
             }
 
             // Initialize commands
-            SaveTagCommand = new Commands.SaveTagCommand(this, _main, _tag, _editing);
+            SaveTagCommand = new Commands.SaveTagCommand(this, _main, _tag, _editing, popup);
             AddFieldCommand = new Commands.AddFieldCommand(_main, this);
             RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
 
-            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Tags(_main)));
+            CancelCommand = new Base.RelayCommand(()=>
+            {
+                if (popup != null)
+                    popup.Close();
+                else
+                    _main.ChangeMainContent(new Views.Tags(_main));
+            });
         }
 
         public ICommand SaveTagCommand { get; set; }
+
 
         private string CreateRandomColor()
         {
@@ -85,7 +102,8 @@ namespace Asset_Management_System.ViewModels
 
             //Creates a hex values from three random ints converted to bytes and then to string
             string hex = "#" + ((byte) random.Next(25, 230)).ToString("X2") +
-                         ((byte) random.Next(25, 230)).ToString("X2") + ((byte) random.Next(25, 230)).ToString("X2");
+                         ((byte) random.Next(25, 230)).ToString("X2") + 
+                         ((byte) random.Next(25, 230)).ToString("X2");
 
             return hex;
         }

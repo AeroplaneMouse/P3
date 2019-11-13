@@ -27,6 +27,9 @@
     <Compile Update="Views\Main.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\PopupTagManager.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\Prompts\Confirm.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -102,6 +105,9 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Main.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\PopupTagManager.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Views\Prompts\Confirm.xaml">

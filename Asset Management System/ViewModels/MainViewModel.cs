@@ -15,6 +15,7 @@ using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Resources.Interfaces;
 using Asset_Management_System.Helpers.ConfigurationHandler;
+using Asset_Management_System.Views;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -81,6 +82,7 @@ namespace Asset_Management_System.ViewModels
             {
                 DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment));
             });
+
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
@@ -451,6 +453,8 @@ namespace Asset_Management_System.ViewModels
 
 
         public ICommand ImportUsersCommand { get; set; }
+
+
 
 
         #endregion

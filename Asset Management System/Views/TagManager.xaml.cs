@@ -19,10 +19,10 @@ namespace Asset_Management_System.Views
         /// </summary>
         /// <param name="main"></param>
         /// <param name="inputTag">Optional input, only used when editing a tag.</param>
-        public TagManager(MainViewModel main, Tag inputTag = null)
+        public TagManager(MainViewModel main, Tag inputTag = null, PopupTagManager popup = null)
         {
             InitializeComponent();
-            DataContext = new TagManagerViewModel(main, inputTag);
+            DataContext = new TagManagerViewModel(main, inputTag, popup);
             _editing = (inputTag == null ? false : true);
         }
 

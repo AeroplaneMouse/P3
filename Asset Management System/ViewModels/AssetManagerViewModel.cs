@@ -9,6 +9,7 @@ using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.ViewModels.Commands;
 using Asset_Management_System.ViewModels.ViewModelHelper;
 using System.Drawing;
+using Asset_Management_System.Views;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -50,6 +51,8 @@ namespace Asset_Management_System.ViewModels
         private List<Asset> _assetList { get; set; }
 
         private AssetRepository _assetRep { get; set; }
+
+        private Tag _newTag { get; set; }
 
         #endregion
 
@@ -187,12 +190,25 @@ namespace Asset_Management_System.ViewModels
             #endregion
 
             UnTagTagCommand = new UntagTagCommand(this);
+
+            PopupTagCommand = new Base.RelayCommand(() =>
+            {
+                _newTag = new Tag();
+                _newTag.Name = _searchString;
+                var dialog = new PopupTagManager(_main, _newTag);
+                if (dialog.ShowDialog() == true)
+                {
+                    SearchAndSortTagList(_searchString);
+                    Apply();
+                }
+            });
         }
 
         public ICommand SaveAssetCommand { get; set; }
         public ICommand SaveMultipleAssetsCommand { get; set; }
         public static ICommand UnTagTagCommand { get; set; }
         public ICommand CancelCommand { get; set; }
+        public ICommand PopupTagCommand { get; set; }
 
 
         /// <summary>
