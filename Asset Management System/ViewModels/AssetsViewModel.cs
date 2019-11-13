@@ -151,8 +151,15 @@ namespace Asset_Management_System.ViewModels
             else
             {
                 Tag tag = (Tag)t;
-                Tags.Parent(tag);
-                CurrentGroup = tag.Name;
+                if (false)
+                {
+                    Tags.AddToQuery(tag);
+                }
+                else
+                {
+                    Tags.Parent(tag);
+                    CurrentGroup = tag.Name;
+                }
             }
 
             if (SearchQueryText == String.Empty)

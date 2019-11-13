@@ -12,7 +12,7 @@ namespace Asset_Management_System.Database.Repositories
         //List<Tag> GetAssetTags(Asset asset);
         ulong GetCount();
 
-        void AttachTags(Asset asset, List<ITagable> tagged);
+        bool AttachTags(Asset asset, List<ITagable> tagged);
         IEnumerable<ITagable> GetTags(Asset asset);
     }
 }
