@@ -34,4 +34,12 @@
     <Color x:Key="CancelRedHighlight">#ff3333</Color>
     <SolidColorBrush x:Key="CancelRedHighlightBrush" Color="{StaticResource CancelRedHighlight}"/>
 
+    <!-- Alternation colors -->
+    <Color x:Key="AlternatingColorLight">#ffffff</Color>
+    <SolidColorBrush x:Key="AlternatingColorLightBrush" Color="{StaticResource AlternatingColorLight}"/>
+    
+    <Color x:Key="AlternatingColorDark">#e6e6e6</Color>
+    <SolidColorBrush x:Key="AlternatingColorDarkBrush" Color="{StaticResource AlternatingColorDark}"/>
+    
+    
 </ResourceDictionary>

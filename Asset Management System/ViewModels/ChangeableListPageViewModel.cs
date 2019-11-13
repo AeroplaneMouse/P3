@@ -58,8 +58,9 @@ namespace Asset_Management_System.ViewModels
             T selected = GetSelectedItem();
             Console.WriteLine("Check: " + SelectedItemIndex);
 
-            if (selected == null) return;
-            Main.ChangeMainContent(_service.GetManagerPage(Main, selected));
+            if (selected == null) 
+                return;
+            _main.ChangeMainContent(_service.GetManagerPage(_main, selected));
             /*
             switch (selected)
             {
@@ -84,47 +85,57 @@ namespace Asset_Management_System.ViewModels
             if (selected == null) 
                 return;
 
+            string message = $"Are you sure you want to delete { SelectedItems.Count } ";
             switch (selected)
             {
                 case Asset asset:
                     RemoveAsset = asset;
                     RemoveTag = null;
-                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete { SelectedItems.Count } asset(s)?", RemovePromptElapsed));
+                    message += "asset";
                     break;
                 case Tag tag:
                     RemoveAsset = null;
                     RemoveTag = tag;
-                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete { SelectedItems.Count } tag(s) ?", RemovePromptElapsed));
+                    message += "tag";
+                    
                     break;
                 default:
+                    _main.AddNotification(new Notification("Error! An unknown error occured...", Notification.ERROR));
                     Console.WriteLine("Fejl ved Remove");
-                    break;
+                    return;
             }
+
+            // Showing prompt
+            message += SelectedItems.Count > 1 ? "s?" : "?";
+            _main.DisplayPrompt(new Views.Prompts.Confirm(message, RemovePromptElapsed));
         }
 
         private void RemovePromptElapsed(object sender, PromptEventArgs e)
         {
-            //if (!e.Result) return;
-            Log<T>.CreateLog((ILoggable<T>)GetSelectedItem(), true); //TODO: Fix so typecast is unnecessary
-            if (RemoveAsset != null)
-                Rep.Delete(RemoveAsset as T);
-            else if(RemoveTag != null)
+            // Check if the pressed button was accept
+            if (e.Result)
             {
-                foreach (var var in SelectedItems)
+                Log<T>.CreateLog((ILoggable<T>)GetSelectedItem(), true); //TODO: Fix so typecast is unnecessary
+                if (RemoveAsset != null)
+                    Rep.Delete(RemoveAsset as T);
+                else if (RemoveTag != null)
                 {
-                    Rep.Delete(var as T);
-                    /*
-                    if (RemoveAsset != null)
-                        ((AssetRepository) Rep).Delete(var as Asset);
-                    
-                    else if(RemoveTag != null)
-                        ((TagRepository) Rep).Delete(var as Tag);
-                    */
-                    Search();
+                    foreach (var var in SelectedItems)
+                    {
+                        Rep.Delete(var as T);
+                        /*
+                        if (RemoveAsset != null)
+                            ((AssetRepository) Rep).Delete(var as Asset);
+
+                        else if(RemoveTag != null)
+                            ((TagRepository) Rep).Delete(var as Tag);
+                        */
+                        Search();
+                    }
                 }
+                /**/
+                Search();
             }
-            /**/
-            Search();
         }
     }
 }

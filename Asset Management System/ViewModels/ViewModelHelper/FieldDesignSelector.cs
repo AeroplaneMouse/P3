@@ -25,13 +25,13 @@ namespace Asset_Management_System.ViewModels.ViewModelHelper
             {
                 case Field.FieldType.Textarea: // Textbox
                     return element?.FindResource("TextBoxFieldStyle") as DataTemplate;
-                case Field.FieldType.Textbox: // String
+                case Field.FieldType.TextBox: // String
                     return element?.FindResource("StringFieldStyle") as DataTemplate;
-                case Field.FieldType.Integer: // Integer
+                case Field.FieldType.NumberField: // Integer
                     return element?.FindResource("IntegerFieldStyle") as DataTemplate;
                 case Field.FieldType.Date: // Date
                     return element?.FindResource("DateFieldStyle") as DataTemplate;
-                case Field.FieldType.Boolean: // Boolean
+                case Field.FieldType.Checkbox: // Boolean
                     return element?.FindResource("BooleanFieldStyle") as DataTemplate;
                 default:
                     throw new NotSupportedException("Wrong formatting syntax.");

@@ -32,7 +32,7 @@ namespace Asset_Management_System.ViewModels.Commands
 
 
             // Find Tag by ID, then remove it.
-            _viewModel.CurrentlyAddedTags.Remove(_viewModel.CurrentlyAddedTags.Single(tag => tag.ID == tagId));
+            _viewModel.CurrentlyAddedTags.Remove(_viewModel.CurrentlyAddedTags.Single(tag => tag.TagId == tagId));
             
 
             FindTagReferences(_viewModel.FieldsList,tagId,false);

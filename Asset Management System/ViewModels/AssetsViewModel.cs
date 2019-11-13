@@ -108,7 +108,7 @@ namespace Asset_Management_System.ViewModels
         }
 
         // Called when the page retrieves focus again.
-        public override void PageFocus()
+        public override void PageGotFocus()
         {
             Search();
             Tags.Reload();

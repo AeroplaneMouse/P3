@@ -27,11 +27,18 @@
             TextBlock.FontSize="{StaticResource FontSizeXLarge}"
             Content="{Binding LoadingText}"/>
 
-        <TextBlock 
-            Text="{Binding StatusText}"
-            HorizontalAlignment="Center"
-            Grid.Row="2"
-            FontSize="{StaticResource FontSizeRegular}"/>
+
+        <StackPanel Grid.Row="2">
+            <TextBlock 
+                Text="{Binding CurrentActionText}"
+                HorizontalAlignment="Center"
+                FontSize="{StaticResource FontSizeRegular}"/>
+            
+            <TextBlock
+                Text="{Binding AdditionalText}"
+                HorizontalAlignment="Center"
+                FontSize="{StaticResource FontSizeSmall}"/>
+        </StackPanel>
 
         <Button
             Grid.Row="2"

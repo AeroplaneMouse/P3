@@ -129,7 +129,7 @@ namespace UnitTests
         public void GetHashCode_ReturnsCorrectChecksumForField()
         {
             //Arrange
-            Field field = new Field("Field", "Some content", Field.FieldType.Textbox, "Default");
+            Field field = new Field("Field", "Some content", Field.FieldType.TextBox, "Default");
             string expected = "ee42e2903edb29ca88a78f4aa413b8d6".ToUpper();
 
             //Act
@@ -143,8 +143,8 @@ namespace UnitTests
         public void Equals_ReceivesAnEqualField_ReturnsTrue()
         {
             //Arrange
-            Field field = new Field("Field", "Some content", Field.FieldType.Textbox, "Default");
-            Field otherField = new Field("Field", "Some content", Field.FieldType.Textbox, "Default");
+            Field field = new Field("Field", "Some content", Field.FieldType.TextBox, "Default");
+            Field otherField = new Field("Field", "Some content", Field.FieldType.TextBox, "Default");
 
             //Act
             bool result = field.Equals(otherField);
@@ -157,7 +157,7 @@ namespace UnitTests
         public void Equals_ReceivesAnAsset_ReturnsFalse()
         {
             //Arrange
-            Field field = new Field("Field", "Some content", Field.FieldType.Textbox, "Default");
+            Field field = new Field("Field", "Some content", Field.FieldType.TextBox, "Default");
             Asset asset = new Asset();
 
             //Act
@@ -171,8 +171,8 @@ namespace UnitTests
         public void Equals_ReceivesADifferentField_ReturnsFalse()
         {
             //Arrange
-            Field field = new Field("Field", "Some content", Field.FieldType.Textbox, "Default");
-            Field otherField = new Field("Different field", "Some different content", Field.FieldType.Textbox, "Different default");
+            Field field = new Field("Field", "Some content", Field.FieldType.TextBox, "Default");
+            Field otherField = new Field("Different field", "Some different content", Field.FieldType.TextBox, "Different default");
 
             //Act
             bool result = field.Equals(otherField);

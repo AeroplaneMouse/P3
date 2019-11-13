@@ -30,7 +30,7 @@ namespace Asset_Management_System.ViewModels.Prompts
             : base(message, handler)
         {
             _isCustom = isCustom;
-            SelectedFieldType = Field.FieldType.Textbox;
+            SelectedFieldType = Field.FieldType.TextBox;
         }
 
 
@@ -39,7 +39,7 @@ namespace Asset_Management_System.ViewModels.Prompts
             if (SelectedFieldType == 0)
                 return;
 
-            if (SelectedFieldType == Field.FieldType.Boolean)
+            if (SelectedFieldType == Field.FieldType.Checkbox)
                 DefaultValue = DefaultBool ? "1" : "0";
 
             if (SelectedFieldType == Field.FieldType.Date)
@@ -72,10 +72,10 @@ namespace Asset_Management_System.ViewModels.Prompts
                 return type switch
                 {
                     Field.FieldType.Textarea => element?.FindResource("Area") as DataTemplate,
-                    Field.FieldType.Textbox => element?.FindResource("Box") as DataTemplate,
-                    Field.FieldType.Integer => element?.FindResource("NumberField") as DataTemplate,
+                    Field.FieldType.TextBox => element?.FindResource("Box") as DataTemplate,
+                    Field.FieldType.NumberField => element?.FindResource("NumberField") as DataTemplate,
                     Field.FieldType.Date => element?.FindResource("Date") as DataTemplate,
-                    Field.FieldType.Boolean => element?.FindResource("Boolean") as DataTemplate,
+                    Field.FieldType.Checkbox => element?.FindResource("Boolean") as DataTemplate,
                     _ => element?.FindResource("Box") as DataTemplate
                 };
             }
