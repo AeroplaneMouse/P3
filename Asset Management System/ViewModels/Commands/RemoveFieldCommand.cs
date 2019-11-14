@@ -10,10 +10,10 @@ namespace Asset_Management_System.ViewModels.Commands
 {
     class RemoveFieldCommand : ICommand
     {
-        private ObjectManagerController _viewModel;
+        private ObjectViewModelHelper _viewModel;
         public event EventHandler CanExecuteChanged;
 
-        public RemoveFieldCommand(ObjectManagerController viewModel)
+        public RemoveFieldCommand(ObjectViewModelHelper viewModel)
         {
             _viewModel = viewModel;
         }
