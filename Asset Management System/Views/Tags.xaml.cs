@@ -25,8 +25,6 @@ namespace Asset_Management_System.Views
 
         private void TreeView_MouseDoubleClick(object sender, RoutedEventArgs e)
         {
-            System.Console.WriteLine(sender.ToString());
-            System.Console.WriteLine(((Label)sender).Content);
             if (sender is Label)
             {
                 TagsViewModel vm = this.DataContext as TagsViewModel;
