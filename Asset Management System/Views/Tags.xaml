@@ -89,22 +89,6 @@
                 </TreeView>
 
                 <!--
-                <TreeView Margin="0 10 0 0" x:Name="TagAbleList" Grid.Row="2" ItemsSource="{Binding Tags}">
-                    <TreeView.ItemContainerStyle>
-                        <Style TargetType="{x:Type TreeViewItem}">
-                            <Setter Property="FontWeight" Value="Normal" />
-                            <Setter Property="Background" Value="AliceBlue"/>
-                            <Setter Property="MinWidth" Value="100"/>
-                        </Style>
-                    </TreeView.ItemContainerStyle>
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                            <TreeViewItem Header="{Binding}" Margin="-15 0 0 0" Padding="0 0 5 0" MouseDoubleClick="TreeView_MouseDoubleClick"/>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>-->
-                
-                <!--
                 <ListView x:Name="listViewWithItems"
                         SelectionMode="Extended"
                         ItemsSource="{Binding SearchList}"
