@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -7,30 +8,31 @@ using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
-    public abstract class ObjectManagerController : FieldsController
+    public class ObjectManagerController : Base.BaseViewModel
     {
-        public ObservableCollection<ITagable> CurrentlyAddedTags { get; set; } = new ObservableCollection<ITagable>();
+        public ICommand AddFieldCommand;
+        public ICommand RemoveFieldCommand;
 
-        public ObservableCollection<ShownField> HiddenFields { get; set; } = new ObservableCollection<ShownField>();
-
-        public ObjectManagerController() => RemoveFieldCommand = new RemoveFieldCommand(this);
+        private ObjectManagerController _objectManagerController;
 
 
-        protected void ConnectTags()
+        public void ConnectTags(ObservableCollection<ITagable> CurrentlyAddedTags,ObservableCollection<ShownField> shownFields,ObservableCollection<ShownField> hiddenList)
         {
             foreach (var tag in CurrentlyAddedTags)
-                ShowIfNewField(tag);
+            {
+                ShowIfNewField(tag,shownFields,false);
+                ShowIfNewField(tag,hiddenList,true);
+            }
         }
 
 
-        private void ShowIfNewField(ITagable tag)
+        private void ShowIfNewField(ITagable tag, ObservableCollection<ShownField> _fieldslist, bool isHidden = false)
         {
             if (tag.GetType() == typeof(User)) return;
-            FieldTagsPopulator((Tag)tag, FieldsList, false);
-            FieldTagsPopulator((Tag)tag, HiddenFields, true);
+            FieldTagsPopulator((Tag) tag, _fieldslist, isHidden);
         }
 
-        private void FieldTagsPopulator(Tag tag,
+        public void FieldTagsPopulator(Tag tag,
             ObservableCollection<ShownField> listOffFields, bool hidden)
         {
             foreach (var currentTagField in tag.FieldsList)
@@ -69,16 +71,22 @@ namespace Asset_Management_System.ViewModels
                     if (!newField.FieldTags.Contains(tag))
                         newField.FieldTags.Add(tag);
 
-                    if (currentTagField.IsHidden &&
-                        HiddenFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) == null)
-                        HiddenFields.Add(newField);
-                    else if (HiddenFields.SingleOrDefault(field => Equals(field.Field, currentTagField)) ==
-                             null)
-                        if (FieldsList.SingleOrDefault(field => Equals(field.Field, currentTagField)) ==
-                            null)
-                            FieldsList.Add(newField);
+                    if (listOffFields.FirstOrDefault(p => Equals(p.Field, currentTagField)) == null)
+                        listOffFields.Add(newField);
+
                 }
             }
+        }
+
+        public ObservableCollection<ShownField> ShownFieldsInitializer(List<Field> fields, bool hidden)
+        {
+            ObservableCollection<ShownField> output = new ObservableCollection<ShownField>();
+            foreach (var field in fields.Where(field => field.IsHidden == hidden))
+            {
+                output.Add(new ShownField(field));
+            }
+
+            return output;
         }
     }
 }

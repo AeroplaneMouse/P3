@@ -4,7 +4,7 @@ using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels.Interfaces
 {
-    public interface IAssetManager : IObjectManager, IFieldManager
+    public interface IAssetManager : IObjectManager
     {
         bool AttachTag(Asset asset, ITagable tag);
         bool DetachTag(Asset asset, ITagable tag);

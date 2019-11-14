@@ -12,10 +12,9 @@ using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
-    public abstract class FieldsController : Base.BaseViewModel, IFieldManager
+    public class FieldsController : IFieldManager
     {
-        protected abstract void LoadFields();
-        public ObservableCollection<ShownField> FieldsList { get; set; }
+        
         protected bool Editing;
 
 
@@ -40,6 +39,17 @@ namespace Asset_Management_System.ViewModels
             }
 
             return outputList;
+        }
+        
+        private void LoadFields(Asset asset,ObservableCollection<ShownField> HiddenFields,ObservableCollection<ShownField> FieldsList)
+        {
+            foreach (var field in asset.FieldsList)
+            {
+                if (field.IsHidden)
+                    HiddenFields.Add(new ShownField(field));
+                else
+                    FieldsList.Add(new ShownField(field));
+            }
         }
 
         public bool AddField(DoesContainFields obj, Field field)

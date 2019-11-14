@@ -29,20 +29,5 @@ namespace Asset_Management_System.Services
 
         public string GetName(Asset asset) => asset.Name;
 
-        public List<Tag> LoadTags(ITagRepository rep)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public List<Field> LoadFields()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public List<Comment> LoadComments(ICommentRepository rep)
-        {
-            throw new System.NotImplementedException();
-        }
-        
     }
 }
