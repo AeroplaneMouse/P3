@@ -15,14 +15,19 @@ namespace Asset_Management_System.ViewModels
 
         public ObjectManagerController() => RemoveFieldCommand = new RemoveFieldCommand(this);
 
-
+        /// <summary>
+        /// Adds fields from tags to asset
+        /// </summary>
         protected void ConnectTags()
         {
             foreach (var tag in CurrentlyAddedTags)
                 ShowIfNewField(tag);
         }
 
-
+        /// <summary>
+        /// Populates hidden and shown fields list
+        /// </summary>
+        /// <param name="tag"></param>
         private void ShowIfNewField(ITagable tag)
         {
             if (tag.GetType() == typeof(User)) return;
@@ -30,13 +35,19 @@ namespace Asset_Management_System.ViewModels
             FieldTagsPopulator((Tag)tag, HiddenFields, true);
         }
 
+        /// <summary>
+        /// Populate list with fields from tags
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <param name="listOffFields"></param>
+        /// <param name="hidden"></param>
         private void FieldTagsPopulator(Tag tag,
-            ObservableCollection<ShownField> listOffFields, bool hidden)
+            ObservableCollection<ShownField> listOfFields, bool hidden)
         {
             foreach (var currentTagField in tag.FieldsList)
             {
                 bool alreadyExists = false;
-                foreach (var shownField in listOffFields)
+                foreach (var shownField in listOfFields)
                 {
                     if (shownField.Field.IsHidden == hidden)
                     {
