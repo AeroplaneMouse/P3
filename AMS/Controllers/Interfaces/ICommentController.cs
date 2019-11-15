@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AMS.Services.IServices
+namespace AMS.Controllers.Interfaces
 {
-    public interface ITagService
+    public interface ICommentController
     {
     }
 }

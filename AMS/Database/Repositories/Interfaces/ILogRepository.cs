@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using AMS.Logging;
 
-namespace AMS.Database.Repositories
+namespace AMS.Database.Repositories.Interfaces
 {
     public interface ILogRepository : ISearchableRepository<Entry>
     {    

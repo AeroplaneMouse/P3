@@ -2,9 +2,9 @@
 using System.Reflection;
 using MySql.Data.MySqlClient;
 using System.Collections.Generic;
-using Asset_Management_System.Models;
+using AMS.Models;
 
-namespace Asset_Management_System.Database.Repositories
+namespace AMS.Database.Repositories
 {
     public class UserRepository : IUserRepository
     {

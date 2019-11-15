@@ -7,8 +7,9 @@ using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Collections.ObjectModel;
 using AMS.Database;
+using AMS.Database.Repositories;
 
-namespace Asset_Management_System.Database.Repositories
+namespace AMS.Database.Repositories
 {
     public class AssetRepository : IAssetRepository
     {

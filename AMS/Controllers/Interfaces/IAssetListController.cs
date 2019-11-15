@@ -1,11 +1,11 @@
 ﻿using AMS.Interfaces;
 using AMS.Models;
-using AMS.Services.IServices;
+using AMS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace AMS.Controllers.IControllers
+namespace AMS.Controllers.Interfaces
 {
     public interface IAssetListController
     {

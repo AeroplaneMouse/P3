@@ -1,4 +1,4 @@
-﻿using AMS.Controllers.IControllers;
+﻿using AMS.Controllers.Interfaces;
 using AMS.Helpers;
 using System;
 using System.Collections.Generic;

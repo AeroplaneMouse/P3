@@ -1,4 +1,4 @@
-﻿using AMS.Services.IServices;
+﻿using AMS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;

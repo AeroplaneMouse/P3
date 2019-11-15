@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AMS.Controllers.IControllers
+namespace AMS.Services.Interfaces
 {
-    public interface ICommentController
+    public interface IUserService : 
     {
     }
 }

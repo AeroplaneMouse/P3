@@ -10,6 +10,5 @@ namespace Asset_Management_System.Services.Interfaces
         IRepository<T> GetRepository();
 
         string GetName(T obj);
-
     }
 }

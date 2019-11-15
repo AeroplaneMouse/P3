@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace AMS.Database.Repositories
+namespace AMS.Database.Repositories.Interfaces
 {
     public interface ISearchableRepository<T> : IRepository<T>
     {

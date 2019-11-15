@@ -1,4 +1,4 @@
-﻿namespace AMS.Database.Repositories 
+﻿namespace AMS.Database.Repositories.Interfaces
 {
     public interface IRepository<T>
     {

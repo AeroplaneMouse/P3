@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AMS.Models;
 
-namespace AMS.Database.Repositories
+namespace AMS.Database.Repositories.Interfaces
 {
     public interface ITagRepository : IMysqlRepository<Tag>, ISearchableRepository<Tag>
     {

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Reflection;
 using MySql.Data.MySqlClient;
-using Asset_Management_System.Logging;
+using AMS.Logging;
 using System.Collections.ObjectModel;
 
-namespace Asset_Management_System.Database.Repositories
+namespace AMS.Database.Repositories
 {
     public class LogRepository : ILogRepository
     {

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace AMS.Services.IServices
+namespace AMS.Services.Interfaces
 {
-    public interface IAssetService
+    public interface ITagService
     {
-
     }
 }
