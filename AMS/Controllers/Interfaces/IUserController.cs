@@ -1,4 +1,5 @@
-﻿using AMS.Interfaces;
+﻿using AMS.Database.Repositories.Interfaces;
+using AMS.Interfaces;
 using AMS.IO;
 using AMS.Models;
 using AMS.Services.Interfaces;
@@ -12,11 +13,13 @@ namespace AMS.Controllers.Interfaces
     {
         #region Properties
 
-        IUserImporter Importer { get; set; }
-
         List<UserWithStatus> UsersList { get; set; }
 
+        IUserImporter Importer { get; set; }
+
         IUserService UserService { get; set; }
+
+        IUserRepository UserRepository { get; set; }
 
         #endregion
 

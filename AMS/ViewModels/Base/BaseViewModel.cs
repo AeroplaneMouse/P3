@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace Asset_Management_System.ViewModels.Base
+namespace AMS.ViewModels.Base
 {
     public class BaseViewModel : INotifyPropertyChanged
     {

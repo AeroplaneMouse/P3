@@ -79,22 +79,6 @@ namespace Asset_Management_System.Models
     {
 		public bool IsShown { get; set; }
 
-        public UserWithStatus(User user) : base()
-        {
-            this.ID = user.ID;
-            this.Username = user.Username;
-            this.Domain = user.Domain;
-            this.Description = user.Description;
-            this.IsEnabled = user.IsEnabled;
-            this.DefaultDepartment = user.DefaultDepartment;
-            this.IsAdmin = user.IsAdmin;
-            this.CreatedAt = user.CreatedAt;
-            this.UpdatedAt = user.UpdatedAt;
-
-            this.Status = String.Empty;
-            this.IsShown = true;
-        }
-
         public string Status { get; set; }
 
         public string StatusColor
@@ -126,6 +110,22 @@ namespace Asset_Management_System.Models
                     return "#ffffff";
                 }
             }
+        }
+
+        public UserWithStatus(User user) : base()
+        {
+            this.ID = user.ID;
+            this.Username = user.Username;
+            this.Domain = user.Domain;
+            this.Description = user.Description;
+            this.IsEnabled = user.IsEnabled;
+            this.DefaultDepartment = user.DefaultDepartment;
+            this.IsAdmin = user.IsAdmin;
+            this.CreatedAt = user.CreatedAt;
+            this.UpdatedAt = user.UpdatedAt;
+
+            this.Status = String.Empty;
+            this.IsShown = true;
         }
     }
 }

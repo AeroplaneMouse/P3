@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 
-namespace Asset_Management_System.ViewModels.Base
+namespace AMS.ViewModels.Base
 {
     internal class RelayCommand : ICommand
     {
