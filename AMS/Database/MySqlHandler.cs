@@ -1,8 +1,8 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
-using Asset_Management_System.Events;
 using AMS.Models;
 using System.Threading.Tasks;
+using AMS.Events;
 
 namespace AMS.Database
 {

@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 
-namespace Asset_Management_System.Database.Repositories
+namespace AMS.Database.Repositories
 {
     public interface IMysqlRepository<T> : IRepository<T>
     {

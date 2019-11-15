@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Asset_Management_System.Logging;
+using AMS.Logging;
 
-namespace Asset_Management_System.Database.Repositories
+namespace AMS.Database.Repositories
 {
     public interface ILogRepository : ISearchableRepository<Entry>
     {    

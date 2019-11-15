@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace Asset_Management_System.Database.Repositories
+namespace AMS.Database.Repositories
 {
     public interface ISearchableRepository<T> : IRepository<T>
     {
