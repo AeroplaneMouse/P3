@@ -8,30 +8,49 @@ namespace Asset_Management_System.ViewModels.Controllers
 {
     public class AssetController : ObjectManagerController
     {
+
         private IAssetRepository _assetRep;
 
         private IAssetService _service;
 
         public Asset Asset { get; set; }
 
-        public AssetController(Asset inputAsset, IAssetService service)
+        public AssetController(Asset inputAsset, IAssetService service, bool addMultiple = false)
         {
             _service = service;
             _assetRep = (IAssetRepository) _service.GetSearchableRepository();
-
+            
+            FieldsList = new ObservableCollection<ShownField>();
             if (inputAsset != null)
             {
                 Asset = inputAsset;
-                //Todo få implementeret funktioner i denne.
+                LoadFields();
 
-                //CurrentlyAddedTags = new ObservableCollection<ITagable>(_assetRep.GetTags(Asset));
+                CurrentlyAddedTags = new ObservableCollection<ITagable>(_assetRep.GetTags(Asset));
 
-                //ConnectTags();
+                ConnectTags();
+                if (!addMultiple)
+                    Editing = true;
             }
             else
             {
-                //CurrentlyAddedTags = new ObservableCollection<ITagable>();
-                //Asset = new Asset();
+                CurrentlyAddedTags = new ObservableCollection<ITagable>();
+                Asset = new Asset();
+                Editing = false;
+            }
+        }
+        
+        /// <summary>
+        /// This function loads the fields from the asset, and into the viewmodel.
+        /// </summary>
+        protected override void LoadFields()
+        {
+            foreach (var field in Asset.FieldsList)
+            {
+                if (field.IsHidden)
+                    HiddenFields.Add(new ShownField(field));
+                else
+                    FieldsList.Add(new ShownField(field));
             }
         }
     }

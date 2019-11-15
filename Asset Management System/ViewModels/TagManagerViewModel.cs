@@ -11,17 +11,13 @@ using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class TagManagerViewModel : ObjectViewModelHelper
+    public class TagManagerViewModel : TagController
     {
         // TODO: Edit style for fields to use dynamic binding, such fields on tags can be removed once added.
         private MainViewModel _main;
         private Tag _tag;
         private string _randomColor;
         private ITagService _service;
-        private readonly bool Editing;
-        public List<Tag> ParentTagsList;
-        public int SelectedParentIndex;
-
 
         public string Name { get; set; }
         public string Color { get; set; }
@@ -30,20 +26,18 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand CancelCommand { get; set; }
 
-        public TagManagerViewModel(MainViewModel main, ITagService service, Tag inputTag, bool editing = false)
+        public TagManagerViewModel(MainViewModel main, ITagService service, Tag inputTag): base(inputTag, service)
         {
             _main = main;
             _service = service;
-            Editing = editing;
 
             if (inputTag != null)
             {
-                _tag = inputTag;
                 //Set Name to the name of the chosen tag
-                Name = _tag.Name;
+                Name = Tag.Name;
 
                 //Set Color to the color of the chosen tag
-                Color = _tag.Color;
+                Color = Tag.Color;
                 OnPropertyChanged(nameof(Name));
                 OnPropertyChanged(nameof(Color));
                 Title = "Edit tag";
@@ -54,7 +48,7 @@ namespace Asset_Management_System.ViewModels
             }
 
             // Initialize commands
-            SaveTagCommand = new Commands.SaveTagCommand(this, _main, _tag, _service, Editing);
+            SaveTagCommand = new Commands.SaveTagCommand(this, _main, Tag, _service, Editing);
             AddFieldCommand = new Commands.AddFieldCommand(_main, this);
             RemoveFieldCommand = new Commands.RemoveFieldCommand(this);
 

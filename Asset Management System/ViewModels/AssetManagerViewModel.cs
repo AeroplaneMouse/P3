@@ -14,33 +14,13 @@ using Asset_Management_System.ViewModels.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class AssetManagerViewModel : ObjectViewModelHelper, IAssetManager
+    public class AssetManagerViewModel : AssetController, IAssetManager
     {
         private MainViewModel _main;
-        
-        private readonly Asset _asset;
 
-        public ObservableCollection<ITagable> CurrentlyAddedTags;
-
-
-
-        private bool Editing;
-
-        public string Name { get => _asset.Name;
-            set => _asset.Name = _asset.Name;
-        }
-
-        public string Identifier
-        {
-            get => _asset.Identifier;
-            set => _asset.Identifier = _asset.Identifier;
-        }
-
-        public string Description
-        {
-            get => _asset.Description;
-            set => _asset.Description = value;
-        }
+        public string Name { get; set; }
+        public string Identifier { get; set; } = String.Empty;
+        public string Description { get; set; } = String.Empty;
 
         public string Title { get; set; }
 
@@ -65,9 +45,14 @@ namespace Asset_Management_System.ViewModels
         // TODO: Kom uden om mig
         private TextBox _box { get; set; }
 
+
+        private List<Asset> _assetList { get; set; }
+
         private IAssetRepository _assetRep { get; set; }
 
         private IAssetService _service;
+
+        public List<Asset> AssetList;
 
         // The current parent exposed to the view
         public string ParentID
@@ -118,6 +103,7 @@ namespace Asset_Management_System.ViewModels
         }
 
 
+
         public ICommand EnterKeyCommand { get; set; }
 
         public ICommand TabKeyCommand { get; set; }
@@ -129,7 +115,7 @@ namespace Asset_Management_System.ViewModels
         public ICommand BackspaceKeyCommand { get; set; }
 
 
-        public AssetManagerViewModel(MainViewModel main, Asset inputAsset, IAssetService service, TextBox box, bool addMultiple = false)
+        public AssetManagerViewModel(MainViewModel main, Asset inputAsset, IAssetService service, TextBox box, bool addMultiple = false): base(inputAsset, service, addMultiple)
         {
             _main = main;
             Title = "Edit asset";
@@ -138,31 +124,34 @@ namespace Asset_Management_System.ViewModels
 
             if (inputAsset != null)
             {
+                Name = Asset.Name;
+                Identifier = Asset.Identifier;
+                Description = Asset.Description;
+
                 // Notify view about changes
-                _asset = inputAsset;
                 OnPropertyChanged(nameof(Name));
                 OnPropertyChanged(nameof(Description));
-                CurrentlyAddedTags = new ObservableCollection<ITagable>(_assetRep.GetTags(_asset));
-                FieldsList = _objectManagerController.ShownFieldsInitializer(_asset.FieldsList,false);
-                HiddenFields = _objectManagerController.ShownFieldsInitializer(_asset.FieldsList,true);
-                Editing = true;
+                CurrentlyAddedTags = new ObservableCollection<ITagable>(_assetRep.GetTags(Asset));
+
+                ConnectTags();
                 if (!addMultiple)
                 {
                     Editing = true;
-                    // DO more
                 }
             }
             else
             {
                 CurrentlyAddedTags = new ObservableCollection<ITagable>();
-                _asset = new Asset();
+                Asset = new Asset();
                 Editing = false;
             }
-            
+
             // Initialize commands
-            SaveAssetCommand = new SaveAssetCommand( _main, _asset, _service,CurrentlyAddedTags, Editing);
-            SaveMultipleAssetsCommand = new SaveAssetCommand( _main, _asset, _service, CurrentlyAddedTags,false, true);
-            
+            SaveAssetCommand = new SaveAssetCommand(this, _main, Asset, _service, Editing);
+            SaveMultipleAssetsCommand = new SaveAssetCommand(this, _main, Asset, _service, false, true);
+            //AddFieldCommand = new AddFieldCommand(_main, this, true);
+            //RemoveFieldCommand = new RemoveFieldCommand(this);
+
             CancelCommand = new Base.RelayCommand(() => _main.ReturnToPreviousPage());
 
             #region Tag related variables
@@ -248,8 +237,16 @@ namespace Asset_Management_System.ViewModels
                 {
                     _main.AddNotification(new Notification("No matching tags found", Notification.WARNING));
                 }
+                ConnectTags();
+            }
 
-                _objectManagerController.ConnectTags(CurrentlyAddedTags,FieldsList,HiddenFields);
+            foreach (var field in FieldsList)
+            {
+                Console.WriteLine(field.Field.Label);
+                foreach (var tag in field.FieldTags)
+                {
+                    Console.WriteLine("    " + tag.Name);
+                }
             }
 
             ResetSearch();
@@ -293,10 +290,10 @@ namespace Asset_Management_System.ViewModels
             if (_parentID != 0) return;
 
             // Checks if the tag we are "going into" has any children
-            ulong tempId = _tagList
+            ulong tempID = _tagList
                 .Select(p => p.ID)
                 .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-            List<Tag> childList = _tagRep.GetChildTags(tempId).ToList();
+            List<Tag> childList = _tagRep.GetChildTags(tempID).ToList();
 
             // If the tag we are "going into" has children, we go into it
             if (childList?.Count != 0)
@@ -305,7 +302,7 @@ namespace Asset_Management_System.ViewModels
                     .Select(p => p.Name)
                     .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
                 _searchString = String.Empty;
-                _parentID = tempId;
+                _parentID = tempID;
                 _tagList = childList;
 
                 _tabIndex = 0;

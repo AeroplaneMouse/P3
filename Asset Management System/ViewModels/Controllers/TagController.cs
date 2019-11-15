@@ -8,7 +8,7 @@ using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels.Controllers
 {
-    public class TagController
+    public class TagController : ObjectManagerController
     {
         private ITagService _service;
         private ITagRepository _rep;
@@ -46,18 +46,18 @@ namespace Asset_Management_System.ViewModels.Controllers
             _rep = (ITagRepository) _service.GetSearchableRepository();
             _color = CreateRandomColor();
             
-            //FieldsList = new ObservableCollection<ShownField>();
+            FieldsList = new ObservableCollection<ShownField>();
             
             if (inputTag != null)
             {
                 Tag = inputTag;
-                //Editing = true;
+                Editing = true;
                 LoadFields();
             }
             else
             {
                 Tag = new Tag();
-                //Editing = false;
+                Editing = false;
             }
         }
 
@@ -65,17 +65,17 @@ namespace Asset_Management_System.ViewModels.Controllers
         /// Runs through the saved fields within the tag, and adds these to the fieldList.
         /// </summary>
         /// <returns></returns>
-        protected void LoadFields()
+        protected override void LoadFields()
         {
             foreach (Field field in Tag.FieldsList)
             {
-                if (field.IsHidden) {}
-                    //HiddenFields.Add(new ShownField(field));
-                //else
-                    //FieldsList.Add(new ShownField(field));
+                if (field.IsHidden)
+                    HiddenFields.Add(new ShownField(field));
+                else
+                    FieldsList.Add(new ShownField(field));
             }
 
-           //ConnectTags();
+            ConnectTags();
 
             //Set the selected parent to the parent of the chosen tag
             int i = ParentTagsList.Count;
@@ -85,7 +85,7 @@ namespace Asset_Management_System.ViewModels.Controllers
             if (i > 0)
                 SelectedParentIndex = i - 1;
             
-            //OnPropertyChanged(nameof(SelectedParentIndex));
+            OnPropertyChanged(nameof(SelectedParentIndex));
         }
         
         private string CreateRandomColor()

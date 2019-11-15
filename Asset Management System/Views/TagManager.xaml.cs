@@ -40,7 +40,7 @@ namespace Asset_Management_System.Views
                 if (viewModel.Color == oldParentTag.Color)
                 {
                     //Changes the color to the color of the new parent tag
-                    //viewModel.Color = newParentTag;
+                    viewModel.Color = newParentTag.Color;
                 }
             }
             else if(!_editing)
