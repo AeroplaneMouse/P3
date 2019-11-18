@@ -1,4 +1,5 @@
-﻿using AMS.Models;
+﻿using AMS.Database.Repositories.Interfaces;
+using AMS.Models;
 using AMS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -10,8 +11,6 @@ namespace AMS.Controllers.Interfaces
     public interface ITagListController
     {
         ObservableCollection<Tag> TagsList { get; set; }
-
-        ITagService TagService { get; set; }
 
         void Search();
 

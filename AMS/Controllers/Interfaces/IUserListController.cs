@@ -9,10 +9,8 @@ using System.Text;
 
 namespace AMS.Controllers.Interfaces
 {
-    public interface IUserListController
+    public interface IUserListController : ITagListController
     {
-        #region Properties
-
         List<UserWithStatus> UsersList { get; set; }
 
         IUserImporter Importer { get; set; }
@@ -21,10 +19,6 @@ namespace AMS.Controllers.Interfaces
 
         IUserRepository UserRepository { get; set; }
 
-        #endregion
-
-        #region Methods
-
         void KeepUser(User user);
 
         void CancelChanges();
@@ -32,7 +26,5 @@ namespace AMS.Controllers.Interfaces
         void ApplyChanges();
 
         void SortUsers();
-
-        #endregion
     }
 }
