@@ -7,5 +7,9 @@ namespace AMS.IO
 {
     public class Exporter : IExporter
     {
+        public void ExportSelected()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

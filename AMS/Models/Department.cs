@@ -6,5 +6,7 @@ namespace AMS.Models
 {
     public class Department : Model
     {
+        public uint ID;
+        public string Name { get; set; }
     }
 }
