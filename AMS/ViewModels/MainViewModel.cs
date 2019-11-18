@@ -20,18 +20,13 @@ namespace AMS.ViewModels
     public class MainViewModel : Base.BaseViewModel
     {
         // The window this view model controls
-        private Window _window;
+        private readonly Window _window;
 
         // Margin around the window to allow a drop shadow
         private int _outerMarginSize;
 
-        private List<Page> pages = new List<Page>();
-        private List<Page> excludedPages = new List<Page>();
-
         private Department _currentDepartment;
-        private Page _currentPage;
-        private bool HasConnectionFailedBeenRaised = false;
-
+        private bool _hasConnectionFailedBeenRaised = false;
 
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
@@ -119,7 +114,9 @@ namespace AMS.ViewModels
 
             ImportUsersCommand = new Base.RelayCommand(ImportUsers);
 
-            //SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this, _departmentService);
+
+            //SelectDepartmentCommand = new Base.RelayCommand<object>(() => SelectDepartment())
+            //SelectDepartmentCommand = new Base.RelayCommand<object>.SelectDepartmentCommand(this);
             //RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, _departmentService);
             //EditDepartmentCommand = new Commands.EditDepartmentCommand(this, _departmentService);
             //AddDepartmentCommand = new Base.RelayCommand(() =>
@@ -191,7 +188,7 @@ namespace AMS.ViewModels
             SplashPage = null;
 
             // Resetting connection failed
-            HasConnectionFailedBeenRaised = false;
+            _hasConnectionFailedBeenRaised = false;
 
             // Show department and username
             CurrentDepartmentVisibility = Visibility.Visible;
@@ -224,15 +221,8 @@ namespace AMS.ViewModels
         // Loads excluded pages and sets homepage.
         private void Load()
         {
-            // Add excluded pages
-            //excludedPages.Add(new Views.AssetManager(null, _assetService));
-            //excludedPages.Add(new Views.TagManager(null, _tagService));
-            //excludedPages.Add(new Views.ObjectViewer(null, _commentService, null));
-            //excludedPages.Add(new Views.UserImporterView(null, _userService, _departmentService));
-
-            //// Load homepage
+            // Load homepage
             ContentFrame.Navigate(new Home());
-            //ChangeMainContent(new Views.Home(this, _assetService, _tagService));
         }
 
         private void ImportUsers()
@@ -246,7 +236,6 @@ namespace AMS.ViewModels
             Console.WriteLine("Reloading...");
 
             // Clearing memory
-            pages.Clear();
             MySqlHandler.ConnectionFailed -= Reload;
             CurrentDepartmentVisibility = Visibility.Hidden;
             CurrentUser = null;
@@ -255,19 +244,6 @@ namespace AMS.ViewModels
 
             // Load splash screen
             SplashPage = new Views.Splash(this);
-        }
-
-        private bool ExcludedFromSaving(Page page)
-        {
-            foreach (Page excludedPage in excludedPages)
-            {
-                // Return true if the page was found in the list of excluded pages.
-                if (excludedPage.GetType() == page.GetType())
-                    return true;
-            }
-
-            // If the page wasn't found, return false
-            return false;
         }
 
         private List<Department> GetDepartments()
