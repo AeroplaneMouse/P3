@@ -229,7 +229,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                asset = DBOToModelConvert(reader);
+                                asset = DataMapper(reader);
                             }
                             reader.Close();
                         }
@@ -277,7 +277,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                assets.Add(DBOToModelConvert(reader));
+                                assets.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -376,7 +376,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                assets.Add(DBOToModelConvert(reader));
+                                assets.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -506,7 +506,7 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="reader">A MySQLDataReader containing the data for the asset</param>
         /// <returns>The asset made from the given data</returns>
-        public Asset DBOToModelConvert(MySqlDataReader reader)
+        public Asset DataMapper(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
             string rowName = reader.GetString("name");
@@ -520,7 +520,6 @@ namespace AMS.Database.Repositories
                     Encoding.UTF8.GetBytes(reader.GetString("options"))));
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
-            
             
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
                 new object[] { rowId, rowName, rowDescription, rowIdentifier, rowDepartmentId, rowOptions, rowCreatedAt, rowUpdatedAt }, null, null);

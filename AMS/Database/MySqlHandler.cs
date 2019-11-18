@@ -27,7 +27,11 @@ namespace AMS.Database
             }
             catch (MySqlException e)
             {
-                ConnectionFailed?.Invoke();
+                // TODO: Open MySQL connection error handling
+                // Maybe something like
+                // e.Number == MysqlConnection.ErrorNumber
+                if (e.Message == "Something connection failed...")
+                    ConnectionFailed?.Invoke();
             }
             return false;
             //_con = con;

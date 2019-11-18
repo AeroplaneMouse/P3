@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AMS.Logging;
 
 namespace AMS.Database.Repositories.Interfaces
 {

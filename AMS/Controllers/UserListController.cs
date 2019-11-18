@@ -6,6 +6,7 @@ using AMS.Models;
 using AMS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace AMS.Controllers
@@ -21,6 +22,7 @@ namespace AMS.Controllers
         public IUserService UserService { get; set; }
 
         public IUserRepository UserRepository { get; set; }
+        public ObservableCollection<Tag> TagsList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         #endregion
 
@@ -48,12 +50,17 @@ namespace AMS.Controllers
             throw new NotImplementedException();
         }
 
-        public void KeepUser()
+        public void KeepUser(User user)
         {
             throw new NotImplementedException();
         }
 
         public void SortUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Search()
         {
             throw new NotImplementedException();
         }

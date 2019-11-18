@@ -17,10 +17,6 @@ namespace AMS.Controllers.Interfaces
         // List of tags that can be searched
         List<Tag> TagsList { get; set; }
 
-        IExporter Exporter { get; set; }
-
-        IAssetService AssetService { get; set; }
-
         #endregion
 
         #region Methods
@@ -32,6 +28,11 @@ namespace AMS.Controllers.Interfaces
         void Edit(Asset asset);
 
         void ViewAsset(Asset asset);
+
+        void Remove(Asset asset);
+
+        void Export(List<Asset> assets);
+        
 
         #endregion
     }
