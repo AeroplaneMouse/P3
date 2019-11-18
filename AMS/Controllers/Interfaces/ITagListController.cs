@@ -11,7 +11,7 @@ namespace AMS.Controllers.Interfaces
     public interface ITagListController
     {
         ObservableCollection<Tag> TagsList { get; set; }
-        IUserController UserController { get; set; }
+        IUserListController UserController { get; set; }
 
         void Search();
 

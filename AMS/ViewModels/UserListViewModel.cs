@@ -18,17 +18,17 @@ namespace AMS.ViewModels
 
         #region Private Properties
 
-        private IUserController _userController { get; set; }
+        private IUserListController _userListController { get; set; }
 
         #endregion
 
         #region Constructor
 
-        public UserListViewModel(IUserController userController)
+        public UserListViewModel(IUserListController userListController)
         {
             Title = "Users";
 
-            _userController = userController;
+            _userListController = userListController;
         }
 
         #endregion

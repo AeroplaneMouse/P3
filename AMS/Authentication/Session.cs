@@ -5,7 +5,7 @@ using AMS.Database.Repositories;
 using AMS.Services.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 
-namespace Asset_Management_System.Authentication
+namespace AMS.Authentication
 {
     public class Session
     {

@@ -6,11 +6,12 @@ using AMS.Models;
 using AMS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace AMS.Controllers
 {
-    public class UserListController
+    public class UserListController : IUserListController
     {
         #region Public Properties
 
@@ -21,6 +22,7 @@ namespace AMS.Controllers
         public IUserService UserService { get; set; }
 
         public IUserRepository UserRepository { get; set; }
+        public ObservableCollection<Tag> TagsList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         #endregion
 
@@ -54,6 +56,11 @@ namespace AMS.Controllers
         }
 
         public void SortUsers()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Search()
         {
             throw new NotImplementedException();
         }

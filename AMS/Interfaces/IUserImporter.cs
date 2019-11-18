@@ -21,6 +21,8 @@ namespace AMS.Interfaces
 
         List<User> ImportUsersFromFile(string filePath);
 
+        string GetUsersFile();
+
         List<User> ImportUsersFromDatabase();
 
         List<UserWithStatus> CombineLists(List<User> imported, List<User> existing);
