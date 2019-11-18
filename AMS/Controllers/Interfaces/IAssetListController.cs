@@ -34,10 +34,5 @@ namespace AMS.Controllers.Interfaces
         void ViewAsset(Asset asset);
 
         #endregion
-
-
-
-
-
     }
 }
