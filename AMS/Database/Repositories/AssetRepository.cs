@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Collections.ObjectModel;
 using AMS.Database;
 using AMS.Database.Repositories;
+using AMS.Database.Repositories.Interfaces;
 
 namespace AMS.Database.Repositories
 {

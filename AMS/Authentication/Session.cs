@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Security.Principal;
-using Asset_Management_System.Models;
-using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Services.Interfaces;
+using AMS.Models;
+using AMS.Database.Repositories;
+using AMS.Services.Interfaces;
+using AMS.Database.Repositories.Interfaces;
 
 namespace Asset_Management_System.Authentication
 {
