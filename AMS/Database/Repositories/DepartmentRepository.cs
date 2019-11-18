@@ -3,6 +3,7 @@ using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using AMS.Models;
 using System.Reflection;
+using AMS.Database.Repositories.Interfaces;
 
 namespace AMS.Database.Repositories
 {

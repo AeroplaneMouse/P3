@@ -9,7 +9,7 @@ using System.Text;
 
 namespace AMS.Controllers.Interfaces
 {
-    public interface IUserController
+    public interface IUserListController
     {
         #region Properties
 

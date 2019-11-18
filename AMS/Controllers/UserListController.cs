@@ -10,7 +10,7 @@ using System.Text;
 
 namespace AMS.Controllers
 {
-    public class UserController : IUserController
+    public class UserListController : IUserListController
     {
         #region Public Properties
 
@@ -26,7 +26,7 @@ namespace AMS.Controllers
 
         #region Constructor
 
-        public UserController(IUserImporter importer, IUserService service)
+        public UserListController(IUserImporter importer, IUserService service)
         {
             Importer = importer;
             UserService = service;

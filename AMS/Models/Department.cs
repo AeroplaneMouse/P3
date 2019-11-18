@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AMS.Models
 {
-    public class Department
+    public class Department : Model
     {
     }
 }
