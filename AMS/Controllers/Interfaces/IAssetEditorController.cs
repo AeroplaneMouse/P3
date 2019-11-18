@@ -26,11 +26,5 @@ namespace AMS.Controllers.Interfaces
         void AttachTag(List<ITagable> tagables);
 
         #endregion
-
-
-
-
-
-
     }
 }
