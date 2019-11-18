@@ -1,0 +1,40 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Style TargetType="ListView" x:Key="NotificationView">
+        <Setter Property="ItemsSource" Value="{Binding ActiveNotifications}"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListView">
+                    <ItemsPresenter>
+                        <ItemsPresenter.Resources>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListViewItem">
+                                            <Grid Background="{Binding Path=Background}">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Label Content="{Binding Path=Message}"
+                                                       FontSize="{TemplateBinding FontSize}"/>
+                                                <Button Grid.Column="1"
+                                                        Style="{StaticResource RemoveNotificationButton}"
+                                                        Command="{x:Static v:MainViewModel.RemoveNotificationCommand}"
+                                                        CommandParameter="{Binding Path=ID}">
+                                                </Button>
+                                            </Grid>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ItemsPresenter.Resources>
+                    </ItemsPresenter>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>
