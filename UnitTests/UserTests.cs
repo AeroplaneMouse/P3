@@ -15,7 +15,6 @@ using AMS.Database.Repositories;
 using AMS.Models;
 using AMS.Authentication;
 using System.Security.Permissions;
-using AMS.Utilities;
 
 namespace UnitTests
 {
