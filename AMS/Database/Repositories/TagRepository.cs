@@ -60,7 +60,6 @@ namespace AMS.Database.Repositories
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
-                entity.SerializeFields();
 
                 try
                 {
@@ -115,7 +114,6 @@ namespace AMS.Database.Repositories
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
-                entity.SerializeFields();
                 try
                 {
                     const string query = "UPDATE tags SET label=@label, color=@color, options=@options, parent_id=@parent_id, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
