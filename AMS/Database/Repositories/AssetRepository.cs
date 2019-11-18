@@ -6,8 +6,7 @@ using AMS.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Collections.ObjectModel;
-using AMS.Database;
-using AMS.Database.Repositories;
+
 using AMS.Database.Repositories.Interfaces;
 
 namespace AMS.Database.Repositories
@@ -75,8 +74,6 @@ namespace AMS.Database.Repositories
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
-                entity.SerializeFields();
-
                 try
                 {
                     const string query = "INSERT INTO assets (name, identifier, description, department_id, options, updated_at) " +
@@ -129,8 +126,6 @@ namespace AMS.Database.Repositories
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
-                entity.SerializeFields();
-
                 try
                 {
                     const string query = "UPDATE assets SET name=@name, identifier=@identifier, description=@description, options=@options, updated_at=CURRENT_TIMESTAMP() " +
