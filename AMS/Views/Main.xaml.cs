@@ -20,6 +20,9 @@ namespace AMS.Views
         public Main()
         {
             InitializeComponent();
+            DataContext = new ViewModels.MainViewModel(this);
         }
+
+
     }
 }
