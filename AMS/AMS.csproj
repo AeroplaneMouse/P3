@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -7,7 +7,7 @@
   </PropertyGroup>
 
 
-  <!--<ItemGroup>
+  <ItemGroup>
     <None Remove="placeholder-beaut.png" />
     <None Remove="Resources\Images\Logos\catface.jpg" />
     <None Remove="Resources\Images\Logos\catface2.jpg" />
@@ -47,12 +47,12 @@
     <Resource Include="Resources\Images\Logos\Edit\edit_white.png" />
     <Resource Include="Resources\Images\Logos\Edit\edit_gray.png" />
     <Resource Include="Resources\Images\Logos\Edit\edit_black.png" />
-  </ItemGroup>-->
+  </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="Resources\" />
-    <!--<Folder Include="Resources\Styles\" />
-    <Folder Include="Resources\Images\" />-->
+    <Folder Include="Resources\Styles\" />
+    <Folder Include="Resources\Images\" />
+    <Folder Include="Resources\Images\Logos\" />
   </ItemGroup>
 
   <ItemGroup>

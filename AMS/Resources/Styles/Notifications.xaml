@@ -22,8 +22,8 @@
                                                        FontSize="{TemplateBinding FontSize}"/>
                                                 <Button Grid.Column="1"
                                                         Style="{StaticResource RemoveNotificationButton}"
-                                                        Command="{x:Static v:MainViewModel.RemoveNotificationCommand}"
                                                         CommandParameter="{Binding Path=ID}">
+                                                        <!--Command="{x:Static v:MainViewModel.RemoveNotificationCommand}"-->
                                                 </Button>
                                             </Grid>
                                         </ControlTemplate>
