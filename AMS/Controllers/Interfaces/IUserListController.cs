@@ -9,7 +9,7 @@ using System.Text;
 
 namespace AMS.Controllers.Interfaces
 {
-    public interface IUserController : ITagListController
+    public interface IUserListController : ITagListController
     {
         List<UserWithStatus> UsersList { get; set; }
 

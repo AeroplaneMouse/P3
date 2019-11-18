@@ -14,7 +14,7 @@ namespace AMS.Controllers
         private readonly ITagRepository _rep;
 
         public ObservableCollection<Tag> TagsList { get; set; }
-        public IUserController UserController { get; set; }
+        public IUserListController UserController { get; set; }
 
         public TagListController(ITagRepository rep)
         {
