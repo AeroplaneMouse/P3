@@ -10,7 +10,7 @@ using System.Text;
 
 namespace AMS.Controllers
 {
-    public class UserListController : IUserListController
+    public class UserListController
     {
         #region Public Properties
 

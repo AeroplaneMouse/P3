@@ -23,7 +23,7 @@ namespace UnitTests
 
         private IUserImporter _userImporter { get; set; }
 
-        private IUserListController _userListController { get; set; }
+        private IUserController _userListController { get; set; }
 
         #region Helpers
 

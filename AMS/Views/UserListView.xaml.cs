@@ -20,7 +20,7 @@ namespace AMS.Views
     /// </summary>
     public partial class UserListView : Page
     {
-        public UserListView(IUserListController controller)
+        public UserListView(IUserController controller)
         {
             InitializeComponent();
             this.DataContext = new UserListViewModel(controller);
