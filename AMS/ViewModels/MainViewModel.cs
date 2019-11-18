@@ -12,6 +12,7 @@ using AMS.Models;
 using AMS.Events;
 using AMS.Database;
 using AMS.Authentication;
+using AMS.Views;
 
 namespace AMS.ViewModels
 {
@@ -284,6 +285,7 @@ namespace AMS.ViewModels
             //excludedPages.Add(new Views.UserImporterView(null, _userService, _departmentService));
 
             //// Load homepage
+            ContentFrame.Navigate(new Home());
             //ChangeMainContent(new Views.Home(this, _assetService, _tagService));
         }
 
