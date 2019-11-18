@@ -6,7 +6,7 @@ namespace AMS.ViewModels.Base
     internal class RelayCommand : ICommand
     {
         // The action to run
-        private Action _action;
+        private readonly Action _action;
 
         /// <summary>
         /// The event that is fired when the <see cref="CanExecute(object)"/> value has changed
@@ -37,7 +37,7 @@ namespace AMS.ViewModels.Base
             _action();
         }
     }
-
+    
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _execute;
@@ -50,19 +50,19 @@ namespace AMS.ViewModels.Base
         /// <param name="canExecute">The execution status logic.</param>
         public RelayCommand(Action<T> execute, Predicate<T> canExecute = null)
         {
-            _execute = execute ?? throw new ArgumentNullException("execute");
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
         }
 
         public bool CanExecute(object parameter)
         {
-            return _canExecute == null ? true : _canExecute((T) parameter);
+            return _canExecute?.Invoke((T) parameter) ?? true;
         }
         
         public event EventHandler CanExecuteChanged
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
         
         public void Execute(object parameter)

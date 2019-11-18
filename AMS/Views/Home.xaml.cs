@@ -7,6 +7,7 @@ namespace AMS.Views
         public Home()
         {
             InitializeComponent();
+            DataContext = new ViewModels.HomeViewModel();
         }
     }
 }
