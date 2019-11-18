@@ -40,5 +40,34 @@ namespace AMS.Models
         /// </summary>
         /// <returns>Name of the asset</returns>
         public override string ToString() => Name;
+
+        public override bool Equals(object obj)
+        {
+            if(obj is Asset == false)
+            {
+                return false;
+            }
+
+            Asset other = (Asset)obj;
+
+            if (this.Fields.Count != other.Fields.Count ||
+                this.Name != other.Name ||
+                this.Description != other.Description ||
+                this.DepartmentID != other.DepartmentID)
+            {
+                return false;
+            }
+
+            for(int i = this.Fields.Count - 1; i >= 0; i--)
+            {
+                if(! this.Fields[i].Equals(other.Fields[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
     }
 }

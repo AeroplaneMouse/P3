@@ -12,6 +12,8 @@ namespace AMS.Controllers.Interfaces
 
         bool Save();
         bool Update();
-        
+
+        bool Remove();
+
     }
 }
