@@ -22,8 +22,13 @@ namespace AMS.Controllers
 
         public bool DeSerializeFields()
         {
-            _containsFields.Fields = JsonConvert.DeserializeObject<ObservableCollection<Field>>(_containsFields.SerializedFields);
-            return _containsFields.Fields.Count > 0;
+            if (!string.IsNullOrEmpty(_containsFields.SerializedFields))
+            {
+                _containsFields.Fields = JsonConvert.DeserializeObject<ObservableCollection<Field>>(_containsFields.SerializedFields);
+                return true;
+            }
+
+            return false;
         }
         
         public bool AddField(Field field)

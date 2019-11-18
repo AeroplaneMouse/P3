@@ -4,8 +4,8 @@ namespace AMS.Models
 {
     public class ContainsFields : Model
     {
-        public ObservableCollection<Field> Fields = new ObservableCollection<Field>();
-        
+        public ObservableCollection<Field> Fields;
+
         public string SerializedFields;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 
 namespace AMS.Models
@@ -14,6 +15,7 @@ namespace AMS.Models
 
         public Asset()
         {
+            Fields = new ObservableCollection<Field>();
         }
 
         [JsonConstructor]

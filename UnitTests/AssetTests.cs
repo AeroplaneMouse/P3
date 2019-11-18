@@ -1,22 +1,35 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AMS.Models;
 using AMS.Controllers;
-using AMS.Database.Repositories;
+using AMS.Controllers.Interfaces;
+using AMS.Database.Repositories.Interfaces;
+using Moq;
 
 namespace UnitTests
 {
     [TestClass]
     public class AssetTests
     {
-        private AMS.Controllers.Interfaces.IAssetController _assetController;
+        private IAssetController _assetController;
+        
+        private Mock<IAssetRepository> _assetRepMock;
         
         [TestInitialize]
         public void InitiateAsset()
         {
-            _assetController = new AssetController(new Asset(), new AssetRepository());
+            ulong id;
+            // Mock setup
+            _assetRepMock = new Mock<IAssetRepository>();
+            _assetRepMock.Setup(p => p.Delete(It.IsAny<Asset>())).Returns(true);
+            _assetRepMock.Setup(p => p.Insert(It.IsAny<Asset>(),out id)).Returns(true);
+            
+            //Asset controller setup
+            _assetController = new AssetController(new Asset(), _assetRepMock.Object);
             _assetController.Asset.Name = "AssetTests_Asset";
             _assetController.Asset.Description = "Desription";
             _assetController.Asset.DepartmentID = 1;
+            
+            
             _assetController.AddField(new Field("Label of first field", "content of first field",
                 Field.FieldType.TextBox, "Default value of first field"));
             _assetController.AddField(new Field("Label of second field", "content of second field",
@@ -43,10 +56,11 @@ namespace UnitTests
         public void Equals_ReceivesAnEqualAsset_ReturnsTrue()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), new AssetRepository());
+            AssetController otherAsset = new AssetController(new Asset(), _assetRepMock.Object);
             otherAsset.Asset.Name = "AssetTests_Asset";
             otherAsset.Asset.Description = "Desription";
             otherAsset.Asset.DepartmentID = 1;
+            
             otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.TextBox,
                 "Default value of first field"));
             otherAsset.AddField(new Field("Label of second field", "content of second field", Field.FieldType.Checkbox,
@@ -63,10 +77,11 @@ namespace UnitTests
         public void Equals_ReceivesDifferentAsset_ReturnsFalse()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), new AssetRepository());
+            AssetController otherAsset = new AssetController(new Asset(), _assetRepMock.Object);
             otherAsset.Asset.Name = "AssetTests_Asset";
             otherAsset.Asset.Description = "Desription";
             otherAsset.Asset.DepartmentID = 4;
+            
             otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.TextBox,
                 "Default value of first field"));
 
@@ -80,7 +95,14 @@ namespace UnitTests
         [TestMethod]
         public void SaveAsset_Returns_RepositoryFunctionUsed()
         {
+            //Arrange
+            ulong id = 0;
             
+            //Act
+            _assetController.Save();
+            
+            //Assert
+            _assetRepMock.Verify(p => p.Insert(It.IsAny<Asset>(),out id), Times.Once());
         }
     }
 }
