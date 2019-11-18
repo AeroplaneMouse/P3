@@ -69,8 +69,8 @@ namespace UnitTests
             _assetListController = new AssetListController(_assetRepository, _exporter);
             Asset asset1 = new Asset {Name = "asset1"};
             Asset asset2 = new Asset {Name = "asset2"};
-            _assetListController.AssetList.Add();
-            _assetListController.AssetList.Add();
+            _assetListController.AssetList.Add(asset1);
+            _assetListController.AssetList.Add(asset2);
             
             int result = _assetListController.AssetList.Count;
 
