@@ -10,7 +10,7 @@ using System.Text;
 
 namespace AMS.Controllers
 {
-    public class UserListController : IUserListController
+    public class UserListController
     {
         #region Public Properties
 
@@ -48,7 +48,7 @@ namespace AMS.Controllers
             throw new NotImplementedException();
         }
 
-        public void KeepUser()
+        public void KeepUser(User user)
         {
             throw new NotImplementedException();
         }
@@ -63,6 +63,5 @@ namespace AMS.Controllers
         #region Private Methods
 
         #endregion
-
     }
 }

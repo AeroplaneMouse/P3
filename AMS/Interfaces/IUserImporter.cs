@@ -19,7 +19,7 @@ namespace AMS.Interfaces
 
         #region Methods
 
-        List<User> ImportUsersFromFile();
+        List<User> ImportUsersFromFile(string filePath);
 
         List<User> ImportUsersFromDatabase();
 

@@ -8,5 +8,9 @@ namespace AMS.Controllers
 {
     public class AssetEditorController
     {
+        public AssetEditorController()
+        {
+
+        }
     }
 }

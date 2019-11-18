@@ -32,7 +32,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                users.Add(DBOToModelConvert(reader));
+                                users.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -74,7 +74,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                users.Add(DBOToModelConvert(reader));
+                                users.Add(DataMapper(reader));
                             }
 
                             reader.Close();
@@ -286,7 +286,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                user = DBOToModelConvert(reader);
+                                user = DataMapper(reader);
                             }
                             reader.Close();
                         }
@@ -332,7 +332,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                user = DBOToModelConvert(reader);
+                                user = DataMapper(reader);
                             }
                             reader.Close();
                         }
@@ -351,7 +351,7 @@ namespace AMS.Database.Repositories
             return user;
         }
 
-        public User DBOToModelConvert(MySqlDataReader reader)
+        public User DataMapper(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
             String rowUsername = reader.GetString("username");

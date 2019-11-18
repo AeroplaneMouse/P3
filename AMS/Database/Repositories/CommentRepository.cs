@@ -150,7 +150,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                comment = DBOToModelConvert(reader);
+                                comment = DataMapper(reader);
                             }
                             reader.Close();
                         }
@@ -191,7 +191,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                comments.Add(DBOToModelConvert(reader));
+                                comments.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -210,7 +210,7 @@ namespace AMS.Database.Repositories
             return comments;
         }
 
-        public Comment DBOToModelConvert(MySqlDataReader reader)
+        public Comment DataMapper(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
             ulong rowAssetId = reader.GetUInt64("asset_id");

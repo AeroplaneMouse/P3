@@ -6,5 +6,6 @@ namespace AMS.Models
 {
     public class Department : Model
     {
+        public string Name { get; set; }
     }
 }

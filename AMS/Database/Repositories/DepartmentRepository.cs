@@ -189,7 +189,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                department = DBOToModelConvert(reader);
+                                department = DataMapper(reader);
                             }
                             reader.Close();
                         }
@@ -231,7 +231,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                Department dep = DBOToModelConvert(reader);
+                                Department dep = DataMapper(reader);
                                 departments.Add(dep);
                             }
                             reader.Close();
@@ -256,7 +256,7 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public Department DBOToModelConvert(MySqlDataReader reader)
+        public Department DataMapper(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
             string rowName = reader.GetString("name");

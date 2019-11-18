@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Reflection;
 using MySql.Data.MySqlClient;
-using AMS.Logging;
 using System.Collections.ObjectModel;
+using AMS.Database.Repositories.Interfaces;
+using AMS.Logging;
 
 namespace AMS.Database.Repositories
 {
