@@ -2,24 +2,70 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <RootNamespace>AMS</RootNamespace>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Resources\Styles\" />
+    <None Remove="placeholder-beaut.png" />
+    <None Remove="Resources\Images\Logos\catface.jpg" />
+    <None Remove="Resources\Images\Logos\catface2.jpg" />
+    <None Remove="Resources\Images\Logos\catface3.jpg" />
+    <None Remove="Resources\Images\Logos\catface4.jpg" />
+    <None Remove="Resources\Images\Logos\kitten.jpg" />
+    <None Remove="Resources\Images\Logos\logo-light.png" />
+    <None Remove="Resources\Images\Logos\logo-dark.png" />
+    <None Remove="Resources\Images\Logos\Test.svg" />
+    <!-- Trash -->
+    <None Remove="Resources\Images\Logos\Trash\trash_white.png" />
+    <None Remove="Resources\Images\Logos\Trash\trash_gray.png" />
+    <None Remove="Resources\Images\Logos\Trash\trash_black.png" />
+    <None Remove="Resources\Images\Logos\Trash\trash_red.png" />
+    <!-- Edit -->
+    <None Remove="Resources\Images\Logos\Edit\edit_white.png" />
+    <None Remove="Resources\Images\Logos\Edit\edit_gray.png" />
+    <None Remove="Resources\Images\Logos\Edit\edit_black.png" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Include="FodyWeavers.xsd" />
-  </ItemGroup>
-
+  
   <ItemGroup>
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0" />
     <PackageReference Include="MySql.Data" Version="8.0.18" />
     <PackageReference Include="PropertyChanged.Fody" Version="3.1.3" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Resources\Styles\" />
+    <Folder Include="Resources\Window\" />
+    <Folder Include="Resources\Images\" />
+    <Folder Include="Resources\Images\Logos\" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="Resources\Images\Logos\catface.jpg" />
+    <Resource Include="Resources\Images\Logos\catface2.jpg" />
+    <Resource Include="Resources\Images\Logos\catface3.jpg" />
+    <Resource Include="Resources\Images\Logos\catface4.jpg" />
+    <Resource Include="Resources\Images\Logos\kitten.jpg" />
+    <Resource Include="Resources\Images\Logos\placeholder-beaut.png" />
+    <Resource Include="Resources\Images\Logos\logo-light.png" />
+    <Resource Include="Resources\Images\Logos\logo-dark.png" />
+    <Resource Include="Resources\Images\Logos\Test.svg" />
+    <!-- Trash -->
+    <Resource Include="Resources\Images\Logos\Trash\trash_white.png" />
+    <Resource Include="Resources\Images\Logos\Trash\trash_gray.png" />
+    <Resource Include="Resources\Images\Logos\Trash\trash_black.png" />
+    <Resource Include="Resources\Images\Logos\Trash\trash_red.png" />
+    <!-- Edit -->
+    <Resource Include="Resources\Images\Logos\Edit\edit_white.png" />
+    <Resource Include="Resources\Images\Logos\Edit\edit_gray.png" />
+    <Resource Include="Resources\Images\Logos\Edit\edit_black.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="FodyWeavers.xsd" />
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\Asset Management System\Asset Management System.csproj" />
   </ItemGroup>
