@@ -22,6 +22,7 @@ namespace UnitTests
             _assetRepMock = new Mock<IAssetRepository>();
             _assetRepMock.Setup(p => p.Delete(It.IsAny<Asset>())).Returns(true);
             _assetRepMock.Setup(p => p.Insert(It.IsAny<Asset>(),out id)).Returns(true);
+            _assetRepMock.Setup(p => p.Update(It.IsAny<Asset>())).Returns(true);
             
             //Asset controller setup
             _assetController = new AssetController(new Asset(), _assetRepMock.Object);
@@ -103,6 +104,34 @@ namespace UnitTests
             
             //Assert
             _assetRepMock.Verify(p => p.Insert(It.IsAny<Asset>(),out id), Times.Once());
+        }
+        
+        [TestMethod]
+        public void DeleteAsset_Returns_RepositoryFunctionUsed()
+        {
+            //Arrange
+            //Nothin
+            
+            
+            //Act
+            _assetController.Remove();
+            
+            //Assert
+            _assetRepMock.Verify(p => p.Delete(It.IsAny<Asset>()), Times.Once());
+        }
+        
+        [TestMethod]
+        public void UpdateAsset_Returns_RepositoryFunctionUsed()
+        {
+            //Arrange
+            //Nothin
+            
+            
+            //Act
+            _assetController.Update();
+            
+            //Assert
+            _assetRepMock.Verify(p => p.Update(It.IsAny<Asset>()), Times.Once());
         }
     }
 }
