@@ -60,7 +60,7 @@ namespace AMS.IO
 
         public List<User> ImportUsersFromFile(string filePath)
         {
-            var session = new Session(UserService);
+            var session = new Session();
 
             if (!String.IsNullOrEmpty(filePath))
             {

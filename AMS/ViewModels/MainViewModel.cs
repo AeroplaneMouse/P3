@@ -128,9 +128,9 @@ namespace AMS.ViewModels
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
-            
+
             // Display splash page
-            //SplashPage = new Views.Splash(this, _userService);
+            SplashPage = new Views.Splash(this);
         }
 
 
@@ -306,7 +306,7 @@ namespace AMS.ViewModels
             //OnPropertyChanged(nameof(CurrentUser));
 
             //// Load splash screen
-            //SplashPage = new Views.Splash(this, _userService);
+            SplashPage = new Views.Splash(this);
         }
 
         private bool ExcludedFromSaving(Page page)

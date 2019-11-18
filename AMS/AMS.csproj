@@ -46,5 +46,17 @@
   <ItemGroup>
     <ProjectReference Include="..\Asset Management System\Asset Management System.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="Views\Splash.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Page Update="Views\Splash.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
 
 </Project>
