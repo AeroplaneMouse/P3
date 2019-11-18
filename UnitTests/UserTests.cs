@@ -9,9 +9,9 @@ namespace UnitTests
     class UserTests
     {
         [TestInitialize]
-        void InitializeUsers()
+        void InitializeUserTest()
         {
-
+            
         }
 
         [TestMethod]
@@ -21,8 +21,6 @@ namespace UnitTests
         }
 
         #region UserImporter
-
-        [TestMethod]
         
 
         #endregion
