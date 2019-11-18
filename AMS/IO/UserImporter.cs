@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Security.Permissions;
 
 namespace AMS.IO
 {
@@ -62,6 +63,8 @@ namespace AMS.IO
         {
             var session = new Session(UserService);
 
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
             if (!String.IsNullOrEmpty(filePath))
             {
                 return GetEncoding(filePath).GetString(File.ReadAllBytes(filePath))
@@ -97,7 +100,6 @@ namespace AMS.IO
             return true;
         }
 
-
         #endregion
 
         #region Private Methods
@@ -119,6 +121,8 @@ namespace AMS.IO
                 return Encoding.UTF7;
             if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
                 return Encoding.UTF8;
+            //if (bom[0] == 0x4e && bom[1] == 0x61 && bom[2] == 0x6d && bom[3] == 0x65)
+            //    return Encoding.UTF8;
             if (bom[0] == 0xff && bom[1] == 0xfe)
                 return Encoding.Unicode; //UTF-16LE
             if (bom[0] == 0xfe && bom[1] == 0xff)

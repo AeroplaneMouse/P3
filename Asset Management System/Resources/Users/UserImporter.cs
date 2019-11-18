@@ -23,11 +23,11 @@ namespace Asset_Management_System.Resources.Users
 
         public List<User> Import()
         {
-            var n = new Microsoft.Win32.OpenFileDialog();
+            var dialog = new Microsoft.Win32.OpenFileDialog();
 
             var session = new Session(_userService);
 
-            Nullable<bool> result = n.ShowDialog();
+            Nullable<bool> result = dialog.ShowDialog();
 
             string filePath = "";
 
@@ -36,7 +36,7 @@ namespace Asset_Management_System.Resources.Users
                 return new List<User>();
             }
 
-            filePath = n.FileName;
+            filePath = dialog.FileName;
 
             if (!String.IsNullOrEmpty(filePath))
             {

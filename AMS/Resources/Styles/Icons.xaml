@@ -16,6 +16,4 @@
     <BitmapImage x:Key="Edit_Gray" UriSource="/Resources/Images/Logos/Edit/edit_gray.png"/>
     <BitmapImage x:Key="Edit_Black" UriSource="/Resources/Images/Logos/Edit/edit_black.png"/>
     
-    
-    
 </ResourceDictionary>
