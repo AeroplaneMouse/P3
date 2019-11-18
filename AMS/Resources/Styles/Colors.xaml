@@ -1,0 +1,44 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Color x:Key="BackgroundDark">#24292e</Color>
+    <SolidColorBrush x:Key="BackgroundDarkBrush" Color="{StaticResource BackgroundDark}"/>
+
+    <Color x:Key="BackgroundLight">#ffffff</Color>
+    <SolidColorBrush x:Key="BackgroundLightBrush" Color="{StaticResource BackgroundLight}"/>
+
+    <Color x:Key="BackgroundGray">#384047</Color>
+    <SolidColorBrush x:Key="BackgroundGrayBrush" Color="{StaticResource BackgroundGray}"/>
+
+    <Color x:Key="BackgroundLightGray">#8d9aa5</Color>
+    <SolidColorBrush x:Key="BackgroundLightGrayBrush" Color="{StaticResource BackgroundGray}"/>
+    
+    <Color x:Key="CloseRed">#d21414</Color>
+    <SolidColorBrush x:Key="CloseRedBrush" Color="{StaticResource CloseRed}" />
+
+    <Color x:Key="NaviationBackground">#3d5266</Color>
+    <SolidColorBrush x:Key="NavigationBackgroundBrush" Color="{StaticResource NaviationBackground}"/>
+
+    <Color x:Key="NavigationSelected">#263340</Color>
+    <SolidColorBrush x:Key="NavigationSelectedBrush" Color="{StaticResource NavigationSelected}"/>
+
+    <Color x:Key="AcceptGreen">#32cd56</Color>
+    <SolidColorBrush x:Key="AcceptGreenBrush" Color="{StaticResource AcceptGreen}"/>
+
+    <Color x:Key="AcceptGreenHighlight">#28a445</Color>
+    <SolidColorBrush x:Key="AcceptGreenHightlightBrush" Color="{StaticResource AcceptGreenHighlight}"/>
+    
+    <Color x:Key="CancelRed">#ff5555</Color>
+    <SolidColorBrush x:Key="CancelRedBrush" Color="Transparent"/>
+
+    <Color x:Key="CancelRedHighlight">#ff3333</Color>
+    <SolidColorBrush x:Key="CancelRedHighlightBrush" Color="{StaticResource CancelRedHighlight}"/>
+
+    <!-- Alternation colors -->
+    <Color x:Key="AlternatingColorLight">#ffffff</Color>
+    <SolidColorBrush x:Key="AlternatingColorLightBrush" Color="{StaticResource AlternatingColorLight}"/>
+    
+    <Color x:Key="AlternatingColorDark">#e6e6e6</Color>
+    <SolidColorBrush x:Key="AlternatingColorDarkBrush" Color="{StaticResource AlternatingColorDark}"/>
+    
+</ResourceDictionary>
