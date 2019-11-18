@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AMS.Models
 {
-    public class Tag
+    public class Tag : Model
     {
         public void SerializeFields()
         {
