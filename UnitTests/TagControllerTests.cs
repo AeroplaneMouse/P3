@@ -1,23 +1,34 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Asset_Management_System.Models;
+using AMS.Database.Repositories;
+using Moq;
+using AMS.Database.Repositories.Interfaces;
+using AMS.Models;
+using AMS.Controllers;
+using System.Linq;
 
 namespace UnitTests
 {
     [TestClass]
-    public class TagTests
+    public class TagControllerTests
     {
         [TestMethod]
-        public void ToString_ReturnsLabelOfTag()
+        public void Save_InjectedWithFakeRepository_TagSavedInFakeRepository()
         {
             //Arrange
+            ulong id = 0;
             Tag tag = new Tag();
-            tag.Name = "Tag_label";
+            TagController tagController = new TagController();
+            tagController.tag = tag;
+
+            var mockRepository = new Mock<ITagRepository>();
+            mockRepository.Setup(repository => repository.Insert(tag, out id)).Returns<Tag>(t => t.Equals(tag));
 
             //Act
-            string result = tag.ToString();
+            tagController.tagRepository = (ITagRepository)mockRepository;
+            tagController.Save();
 
             //Assert
-            Assert.AreEqual("Tag_label", result);
+
         }
     }
 }

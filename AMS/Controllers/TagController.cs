@@ -10,12 +10,25 @@ namespace AMS.Controllers
 {
     public class TagController : ITagController
     {
+        public TagController(Tag tag) => this.tag = tag;
+
         public Tag tag { get; set; }
-        public ITagService TagService { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public ITagRepository tagRepository { get; set; }
+        public ulong tagID;
 
         public void Save()
         {
-            ITagRepository repository = (ITagRepository)TagService.GetRepository();
+            tagRepository.Insert(tag, out tagID);
+        }
+
+        public void Remove()
+        {
+            tagRepository.Delete(tag);
+        }
+
+        public void Update()
+        {
+            tagRepository.Update(tag);
         }
     }
 }

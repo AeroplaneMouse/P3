@@ -1,4 +1,5 @@
-﻿using AMS.Models;
+﻿using AMS.Database.Repositories.Interfaces;
+using AMS.Models;
 using AMS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -12,13 +13,17 @@ namespace AMS.Controllers.Interfaces
 
         Tag tag { get; set; }
 
-        ITagService TagService { get; set; }
+        ITagRepository tagRepository { get; set; }
 
         #endregion
 
         #region Methods
 
         void Save();
+
+        void Remove();
+
+        void Update();
 
         #endregion
     }
