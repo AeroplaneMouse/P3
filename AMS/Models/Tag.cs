@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AMS.Models
 {
-    public class Tag :ContainsFields
+    public class Tag :ContainsFields, ITagable
     {
         public Tag()
         {
@@ -36,5 +36,9 @@ namespace AMS.Models
         public int NumOfChildren { get; set; }
 
         public override string ToString() => Name;
+        public ulong TagId { get; }
+        public string TagType { get; }
+        public string TagLabel { get; }
+        public List<ITagable> Children { get; set; }
     }
 }
