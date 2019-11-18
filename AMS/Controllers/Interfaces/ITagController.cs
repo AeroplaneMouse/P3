@@ -6,7 +6,7 @@ using System.Text;
 
 namespace AMS.Controllers.Interfaces
 {
-    public interface ITagEditorController
+    public interface ITagController
     {
         #region Properties
 
