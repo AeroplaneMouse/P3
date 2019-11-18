@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+﻿using System.ComponentModel;
 
 namespace AMS.ViewModels.Base
 {
@@ -14,7 +11,7 @@ namespace AMS.ViewModels.Base
         /// Call this to fire a <see cref="PropertyChanged"/> event
         /// </summary>
         /// <param name="name"></param>
-        public void OnPropertyChanged(string name)
+        protected void OnPropertyChanged(string name)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
