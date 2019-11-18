@@ -13,6 +13,8 @@
                 <ResourceDictionary Source="Resources/Styles/Icons.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Buttons.xaml" />
+                <ResourceDictionary Source="Resources/Styles/TopNavigation.xaml" />
+                <ResourceDictionary Source="Resources/Styles/SideNavigation.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Tag.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Lists.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Prompt.xaml" />
