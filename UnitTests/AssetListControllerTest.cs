@@ -4,6 +4,7 @@ using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Models;
 using AMS.Services.Interfaces;
+using Castle.Core.Internal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -63,16 +64,35 @@ namespace UnitTests
         public void Remove_RemoveAsset_ReturnsOne()
         {
             //Arrange
-            int expected = 2;
+            int expected = 1;
 
             //Act
             _assetListController = new AssetListController(_assetRepository, _exporter);
             Asset asset1 = new Asset {Name = "asset1"};
             Asset asset2 = new Asset {Name = "asset2"};
-            _assetListController.AssetList.Add();
-            _assetListController.AssetList.Add();
+            _assetListController.AssetList.Add(asset1);
+            _assetListController.AssetList.Add(asset2);
+            _assetListController.Remove(asset1);
             
             int result = _assetListController.AssetList.Count;
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+        
+        [TestMethod]
+        public void Remove_RemoveOnlyAssetInList_ReturnsTrue()
+        {
+            //Arrange
+            bool expected = true;
+
+            //Act
+            _assetListController = new AssetListController(_assetRepository, _exporter);
+            Asset asset1 = new Asset {Name = "asset1"};
+            _assetListController.AssetList.Add(asset1);
+            _assetListController.Remove(asset1);
+            
+            bool result = _assetListController.AssetList.IsNullOrEmpty();
 
             //Assert
             Assert.AreEqual(expected, result);
