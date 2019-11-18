@@ -6,8 +6,53 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+
+  <!--<ItemGroup>
+    <None Remove="placeholder-beaut.png" />
+    <None Remove="Resources\Images\Logos\catface.jpg" />
+    <None Remove="Resources\Images\Logos\catface2.jpg" />
+    <None Remove="Resources\Images\Logos\catface3.jpg" />
+    <None Remove="Resources\Images\Logos\catface4.jpg" />
+    <None Remove="Resources\Images\Logos\kitten.jpg" />
+    <None Remove="Resources\Images\Logos\logo-light.png" />
+    <None Remove="Resources\Images\Logos\logo-dark.png" />
+    <None Remove="Resources\Images\Logos\Test.svg" />
+    --><!-- Trash --><!--
+    <None Remove="Resources\Images\Logos\Trash\trash_white.png" />
+    <None Remove="Resources\Images\Logos\Trash\trash_gray.png" />
+    <None Remove="Resources\Images\Logos\Trash\trash_black.png" />
+    <None Remove="Resources\Images\Logos\Trash\trash_red.png" />
+    --><!-- Edit --><!--
+    <None Remove="Resources\Images\Logos\Edit\edit_white.png" />
+    <None Remove="Resources\Images\Logos\Edit\edit_gray.png" />
+    <None Remove="Resources\Images\Logos\Edit\edit_black.png" />
+  </ItemGroup>
+  
   <ItemGroup>
-    <Folder Include="Resources\Styles\" />
+    <Resource Include="Resources\Images\Logos\catface.jpg" />
+    <Resource Include="Resources\Images\Logos\catface2.jpg" />
+    <Resource Include="Resources\Images\Logos\catface3.jpg" />
+    <Resource Include="Resources\Images\Logos\catface4.jpg" />
+    <Resource Include="Resources\Images\Logos\kitten.jpg" />
+    <Resource Include="Resources\Images\Logos\placeholder-beaut.png" />
+    <Resource Include="Resources\Images\Logos\logo-light.png" />
+    <Resource Include="Resources\Images\Logos\logo-dark.png" />
+    <Resource Include="Resources\Images\Logos\Test.svg" />
+    --><!-- Trash --><!--
+    <Resource Include="Resources\Images\Logos\Trash\trash_white.png" />
+    <Resource Include="Resources\Images\Logos\Trash\trash_gray.png" />
+    <Resource Include="Resources\Images\Logos\Trash\trash_black.png" />
+    <Resource Include="Resources\Images\Logos\Trash\trash_red.png" />
+    --><!-- Edit --><!--
+    <Resource Include="Resources\Images\Logos\Edit\edit_white.png" />
+    <Resource Include="Resources\Images\Logos\Edit\edit_gray.png" />
+    <Resource Include="Resources\Images\Logos\Edit\edit_black.png" />
+  </ItemGroup>-->
+  
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <!--<Folder Include="Resources\Styles\" />
+    <Folder Include="Resources\Images\" />-->
   </ItemGroup>
 
   <ItemGroup>
