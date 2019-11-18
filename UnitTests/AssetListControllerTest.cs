@@ -16,7 +16,7 @@ namespace UnitTests
         private IAssetListController _assetListController;
         private IExporter _exporter;
         private IAssetRepository _assetRepository;
-        
+
         [TestInitialize]
         public void InitiateAssets()
         {
@@ -28,7 +28,7 @@ namespace UnitTests
             //_assetListController.AssetList.Add(asset1);
             //_assetListController.AssetList.Add(asset2);
         }
-        
+
         [TestMethod]
         public void AddNew_NewAssetAdded_ReturnsOne()
         {
@@ -43,7 +43,7 @@ namespace UnitTests
             //Assert
             Assert.AreEqual(expected, result);
         }
-        
+
         [TestMethod]
         public void AddNew_TwoNewAssetAdded_ReturnsTwo()
         {
@@ -59,7 +59,7 @@ namespace UnitTests
             //Assert
             Assert.AreEqual(expected, result);
         }
-        
+
         [TestMethod]
         public void Remove_RemoveAsset_ReturnsOne()
         {
@@ -73,13 +73,13 @@ namespace UnitTests
             _assetListController.AssetList.Add(asset1);
             _assetListController.AssetList.Add(asset2);
             _assetListController.Remove(asset1);
-            
+
             int result = _assetListController.AssetList.Count;
 
             //Assert
             Assert.AreEqual(expected, result);
         }
-        
+
         [TestMethod]
         public void Remove_RemoveOnlyAssetInList_ReturnsTrue()
         {
@@ -91,13 +91,13 @@ namespace UnitTests
             Asset asset1 = new Asset {Name = "asset1"};
             _assetListController.AssetList.Add(asset1);
             _assetListController.Remove(asset1);
-            
+
             bool result = _assetListController.AssetList.IsNullOrEmpty();
 
             //Assert
             Assert.AreEqual(expected, result);
         }
-        
-        
+
+
     }
 }

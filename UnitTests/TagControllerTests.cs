@@ -17,7 +17,7 @@ namespace UnitTests
             //Arrange
             ulong id = 0;
             Tag tag = new Tag();
-            TagController tagController = new TagController();
+            TagController tagController = new TagController(tag);
             tagController.tag = tag;
 
             var mockRepository = new Mock<ITagRepository>();
