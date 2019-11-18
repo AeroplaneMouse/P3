@@ -70,7 +70,7 @@ namespace AMS.ViewModels
         public Visibility Visible { get; set; }
         public List<Department> Departments { get => GetDepartments(); }
         public Session CurrentSession { get; private set; }
-        //public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
+        public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
 
 
         /// <summary>
@@ -199,32 +199,32 @@ namespace AMS.ViewModels
             ContentFrame.Navigate(_history.Pop());
         }
 
-        //public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
-        //    => AddNotification(new Notification(message, foreground, background));
+        public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
+            => AddNotification(new Notification(message, foreground, background));
 
-        //public void AddNotification(Notification n) => AddNotification(n, 2500);
+        public void AddNotification(Notification n) => AddNotification(n, 2500);
 
-        //public async void AddNotification(Notification n, int displayTime)
-        //{
-        //    // Add notification to the list of active notifications
-        //    ActiveNotifications.Add(n);
+        public async void AddNotification(Notification n, int displayTime)
+        {
+            // Add notification to the list of active notifications
+            ActiveNotifications.Add(n);
 
-        //    // Wait some time, then remove it.
-        //    if (displayTime > 0)
-        //    {
-        //        await Task.Delay(displayTime);
-        //        RemoveNotification(n);
-        //    }
-        //}
+            // Wait some time, then remove it.
+            if (displayTime > 0)
+            {
+                await Task.Delay(displayTime);
+                RemoveNotification(n);
+            }
+        }
 
         // Removes an active notification.
-        //public void RemoveNotification(int id) =>
-        //    RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
+        public void RemoveNotification(int id) =>
+            RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
 
-        //public void RemoveNotification(Notification n)
-        //{
-        //    ActiveNotifications.Remove(n);
-        //}
+        public void RemoveNotification(Notification n)
+        {
+            ActiveNotifications.Remove(n);
+        }
 
 
         /// <summary>
