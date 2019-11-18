@@ -31,15 +31,47 @@ namespace AMS.ViewModels
         private Page _currentPage;
         private bool HasConnectionFailedBeenRaised = false;
 
-        //private IAssetService _assetService;
-        //private ITagService _tagService;
-        //private IEntryService _entryService;
-        //private IUserService _userService;
-        //private ICommentService _commentService;
-        //private DepartmentService _departmentService;
 
+        public double WindowMinWidth { get; set; }
+        public double WindowMinHeight { get; set; }
+        public int InnerContentPaddingSize { get; set; }
+        public Thickness InnerContentPadding { get => new Thickness(0); }
+        public int ResizeBorder { get; set; }
+        public Thickness ResizeBorderThickness { get => new Thickness(ResizeBorder + OuterMarginSize); }
+        public int OuterMarginSize
+        {
+            // If the window is maximised, remove the margin around the window, we don't need the drop shadow
+            get => _window.WindowState == WindowState.Maximized ? 0 : _outerMarginSize;
+            set => _outerMarginSize = value;
+        }
+        public Thickness OuterMarginThicknessSize { get => new Thickness(OuterMarginSize); }
+        public int TitleHeight { get; set; }
+        public int NavigationHeight { get; set; }
+        public GridLength TitleHeightGridLength { get => new GridLength(TitleHeight + ResizeBorder); }
+        public String CurrentUser { get; set; }
+        public Department CurrentDepartment
+        {
+            get => _currentDepartment;
+            set
+            {
+                _currentDepartment = value;
+                OnPropertyChanged(nameof(CurrentDepartment));
 
-        #region Constructor
+                // Update default department for user
+                if (_currentDepartment != null)
+                    CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
+            }
+        }
+        public Frame ContentFrame { get; set; } = new Frame();
+        public Page SplashPage { get; set; }
+        public Page PopupPage { get; set; }
+        //public Visibility SplashVisibility { get; set; } = Visibility.Visible;
+        public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
+        public Visibility Visible { get; set; }
+        public List<Department> Departments { get => GetDepartments(); }
+        public Session CurrentSession { get; private set; }
+        //public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
+
 
         /// <summary>
         /// Default constructor
@@ -64,20 +96,7 @@ namespace AMS.ViewModels
                 OnPropertyChanged(nameof(ResizeBorderThickness));
                 OnPropertyChanged(nameof(OuterMarginSize));
                 OnPropertyChanged(nameof(OuterMarginThicknessSize));
-                //OnPropertyChanged(nameof(WindowRadius));
-                //OnPropertyChanged(nameof(WindowCornerRadius));
             };
-
-            //TODO: Determine if this is composition root
-            //_assetService = new AssetService(new AssetRepository());
-            //_tagService = new TagService(new TagRepository());
-            //_entryService = new EntryService(new LogRepository());
-            //_userService = new UserService(new UserRepository());
-            //_commentService = new CommentService(new CommentRepository());
-            //_departmentService = new DepartmentService(new DepartmentRepository());
-
-            // Setting up frames
-            //SplashPage = new Views.Splash(this, _userService);
 
             // Initialize commands
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
@@ -85,7 +104,6 @@ namespace AMS.ViewModels
             CloseCommand = new Base.RelayCommand(() => _window.Close());
 
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
-
 
             //ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this, _assetService, _tagService)));
             //ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
@@ -110,89 +128,13 @@ namespace AMS.ViewModels
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
+            
+            // Display splash page
+            //SplashPage = new Views.Splash(this, _userService);
         }
 
-        #endregion
 
-
-        #region Public Propterties
-
-        // The smallest size the window can have 
-        public double WindowMinWidth { get; set; }
-        public double WindowMinHeight { get; set; }
-
-        // Size of padding of the inner content of the main window
-        public int InnerContentPaddingSize { get; set; }
-
-        // Padding of the inner content of the main window
-        public Thickness InnerContentPadding { get => new Thickness(0); }
-
-        // Size of the resize border around the window
-        public int ResizeBorder { get; set; }
-
-        // The size of the resize border around the window, taking the outer margin into account
-        public Thickness ResizeBorderThickness { get => new Thickness(ResizeBorder + OuterMarginSize); }
-
-        // Margin around the window to allow a drop shadow. Checks if the window is maximised
-        public int OuterMarginSize
-        {
-            // If the window is maximised, remove the margin around the window, we don't need the drop shadow
-            get => _window.WindowState == WindowState.Maximized ? 0 : _outerMarginSize;
-            set => _outerMarginSize = value;
-        }
-
-        // Thickness of the margin around the window to allow a drop shadow.
-        public Thickness OuterMarginThicknessSize
-        {
-            get { return new Thickness(OuterMarginSize); }
-        }
-
-        // The height of the title bar / caption of the window
-        public int TitleHeight { get; set; }
-
-        public int NavigationHeight { get; set; }
-
-        public GridLength TitleHeightGridLength { get => new GridLength(TitleHeight + ResizeBorder); }
-
-        public String CurrentUser { get; set; }
-
-        public Department CurrentDepartment
-        {
-            get => _currentDepartment;
-            set
-            {
-                _currentDepartment = value;
-                OnPropertyChanged(nameof(CurrentDepartment));
-
-                // Update default department for user
-                if (_currentDepartment != null)
-                {
-                    CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
-                    //_userService.GetRepository().Update(CurrentSession.user);
-                }
-            }
-        }
-
-        public Frame ContentFrame { get; set; } = new Frame();
-
-        public Page SplashPage { get; set; }
-
-        public Page PopupPage { get; set; }
-
-        //public Visibility SplashVisibility { get; set; } = Visibility.Visible;
-
-        public List<Department> Departments
-        {
-            get => GetDepartments();
-        }
-
-        public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
-
-        public Session CurrentSession { get; private set; }
-
-        //public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
-
-        public Visibility Visible { get; set; }
+        
 
         // Accessed in that get main as parameter, dont know if its bad practice.
         //public IEntryService EntryService
@@ -200,9 +142,6 @@ namespace AMS.ViewModels
         //    get => _entryService;
         //}
 
-        #endregion
-
-        #region Public Methods
 
         //public void DisplayPrompt(Page promptPage)
         //{
@@ -218,63 +157,46 @@ namespace AMS.ViewModels
 
 
         /// <summary>
-        /// Changes how many rows or columns a specific frame spans over. 
-        /// </summary>
-        /// <param name="frame"></param>
-        /// <param name="dir"></param>
-        //public void ChangeFrameExpasion(Frame frame, string dir)
-        //{
-        //    if (dir == FrameExpansionEventArgs.Right)
-        //        Grid.SetColumnSpan(frame, 10);
-        //    else if (dir == FrameExpansionEventArgs.Left)
-        //        Grid.SetColumnSpan(frame, 1);
-        //    else if (dir == FrameExpansionEventArgs.Down)
-        //        Grid.SetRowSpan(frame, 10);
-        //    else if (dir == FrameExpansionEventArgs.Up)
-        //        Grid.SetRowSpan(frame, 1);
-        //}
-
-        /// <summary>
         /// Changes the content for the main content frame to the new page. If the page exists in the
         /// list of loaded pages, that one would be used. One can also specify a different frame of 
         /// which content will be modified to contain the new page.
         /// </summary>
-        public void ChangeMainContent(Page newPage) => ChangeMainContent(newPage, ContentFrame);
+        //public void ChangeMainContent(Page newPage) => ChangeMainContent(newPage, ContentFrame);
 
-        public void ChangeMainContent(Page newPage, Frame frame)
-        {
-            frame.Navigate(newPage);
+        //public void ChangeMainContent(Page newPage, Frame frame)
+        //{
+        //    frame.Navigate(newPage);
 
-            //Page setPage = null;
-            //// Search the loaded page list, for the given page to check if it has allready been loaded.
-            //foreach (Page page in pages)
-            //{
-            //    if (page.GetType() == newPage.GetType())
-            //        setPage = page;
-            //}
+        //    //Page setPage = null;
+        //    //// Search the loaded page list, for the given page to check if it has allready been loaded.
+        //    //foreach (Page page in pages)
+        //    //{
+        //    //    if (page.GetType() == newPage.GetType())
+        //    //        setPage = page;
+        //    //}
 
-            //// If the new page wasn't found in the list, the given newPage object is used and added to the list of pages.
-            //if (setPage == null)
-            //{
-            //    setPage = newPage;
-            //    if (!ExcludedFromSaving(setPage))
-            //        pages.Add(setPage);
-            //}
+        //    //// If the new page wasn't found in the list, the given newPage object is used and added to the list of pages.
+        //    //if (setPage == null)
+        //    //{
+        //    //    setPage = newPage;
+        //    //    if (!ExcludedFromSaving(setPage))
+        //    //        pages.Add(setPage);
+        //    //}
 
-            //// Update the list on the page, if there is one
-            //if (setPage.DataContext is IListUpdate)
-            //    (setPage.DataContext as IListUpdate).PageGotFocus();
+        //    //// Update the list on the page, if there is one
+        //    //if (setPage.DataContext is IListUpdate)
+        //    //    (setPage.DataContext as IListUpdate).PageGotFocus();
 
-            //if (!_history.Contains(_currentPage))
-            //    _history.Push(_currentPage);
-            //// Setting the content of the given frame, to the newPage object to display the requested page.
-            //frame.Content = setPage;
-            //_currentPage = setPage;
-        }
+        //    //if (!_history.Contains(_currentPage))
+        //    //    _history.Push(_currentPage);
+        //    //// Setting the content of the given frame, to the newPage object to display the requested page.
+        //    //frame.Content = setPage;
+        //    //_currentPage = setPage;
+        //}
 
         public void ReturnToPreviousPage()
         {
-            ChangeMainContent(_history.Pop());
+            ContentFrame.Navigate(_history.Pop());
         }
 
         //public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
@@ -336,9 +258,6 @@ namespace AMS.ViewModels
             //    CurrentDepartment = Department.GetDefault();
         }
 
-        #endregion
-
-        #region Private Methods
 
         //private void ConnectionFailed(Notification n, bool reloadRequired)
         //{
@@ -364,14 +283,13 @@ namespace AMS.ViewModels
             //excludedPages.Add(new Views.ObjectViewer(null, _commentService, null));
             //excludedPages.Add(new Views.UserImporterView(null, _userService, _departmentService));
 
-
             //// Load homepage
             //ChangeMainContent(new Views.Home(this, _assetService, _tagService));
         }
 
         private void ImportUsers()
         {
-            //ChangeMainContent(new Views.UserImporterView(this, _userService, _departmentService));
+            //ContentFrame.Navigate(new Views.UserImporterView(this, _userService, _departmentService));
         }
 
         // Used to reload the application
@@ -436,10 +354,6 @@ namespace AMS.ViewModels
         //    }
         //}
 
-        #endregion
-
-        #region Commands
-
         // Window commands
         public ICommand MinimizeCommand { get; set; }
         public ICommand MaximizeCommand { get; set; }
@@ -447,9 +361,7 @@ namespace AMS.ViewModels
         public ICommand SystemMenuCommand { get; set; }
 
         public ICommand ShowHomePageCommand { get; set; }
-
         public ICommand ShowAssetsPageCommand { get; set; }
-
         public ICommand ShowTagPageCommand { get; set; }
 
         // Department commands
@@ -465,12 +377,9 @@ namespace AMS.ViewModels
         // Notification commands
         public ICommand AddFieldTestCommand { get; set; }
         public static ICommand RemoveNotificationCommand { get; set; }
-
-
         public ICommand ImportUsersCommand { get; set; }
 
 
-        #endregion
 
         #region Magic from StackOverflow: https://stackoverflow.com/questions/4226740/how-do-i-get-the-current-mouse-screen-coordinates-in-wpf
 
