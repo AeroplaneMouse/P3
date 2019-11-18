@@ -13,25 +13,20 @@ using AMS.Events;
 using AMS.Database;
 using AMS.Authentication;
 using AMS.Views;
+using AMS.Database.Repositories;
 
 namespace AMS.ViewModels
 {
     public class MainViewModel : Base.BaseViewModel
     {
         // The window this view model controls
-        private Window _window;
+        private readonly Window _window;
 
         // Margin around the window to allow a drop shadow
         private int _outerMarginSize;
 
-        private List<Page> pages = new List<Page>();
-        private List<Page> excludedPages = new List<Page>();
-
         private Department _currentDepartment;
-        private Stack<Page> _history = new Stack<Page>();
-        private Page _currentPage;
-        private bool HasConnectionFailedBeenRaised = false;
-
+        private bool _hasConnectionFailedBeenRaised = false;
 
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
@@ -119,7 +114,9 @@ namespace AMS.ViewModels
 
             ImportUsersCommand = new Base.RelayCommand(ImportUsers);
 
-            //SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this, _departmentService);
+
+            //SelectDepartmentCommand = new Base.RelayCommand<object>(() => SelectDepartment())
+            //SelectDepartmentCommand = new Base.RelayCommand<object>.SelectDepartmentCommand(this);
             //RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, _departmentService);
             //EditDepartmentCommand = new Commands.EditDepartmentCommand(this, _departmentService);
             //AddDepartmentCommand = new Base.RelayCommand(() =>
@@ -134,16 +131,6 @@ namespace AMS.ViewModels
             SplashPage = new Views.Splash(this);
         }
 
-
-        
-
-        // Accessed in that get main as parameter, dont know if its bad practice.
-        //public IEntryService EntryService
-        //{
-        //    get => _entryService;
-        //}
-
-
         //public void DisplayPrompt(Page promptPage)
         //{
         //    PopupPage = promptPage;
@@ -155,50 +142,6 @@ namespace AMS.ViewModels
         //    // Removing popup
         //    PopupPage = null;
         //}
-
-
-        /// <summary>
-        /// Changes the content for the main content frame to the new page. If the page exists in the
-        /// list of loaded pages, that one would be used. One can also specify a different frame of 
-        /// which content will be modified to contain the new page.
-        /// </summary>
-        //public void ChangeMainContent(Page newPage) => ChangeMainContent(newPage, ContentFrame);
-
-        //public void ChangeMainContent(Page newPage, Frame frame)
-        //{
-        //    frame.Navigate(newPage);
-
-        //    //Page setPage = null;
-        //    //// Search the loaded page list, for the given page to check if it has allready been loaded.
-        //    //foreach (Page page in pages)
-        //    //{
-        //    //    if (page.GetType() == newPage.GetType())
-        //    //        setPage = page;
-        //    //}
-
-        //    //// If the new page wasn't found in the list, the given newPage object is used and added to the list of pages.
-        //    //if (setPage == null)
-        //    //{
-        //    //    setPage = newPage;
-        //    //    if (!ExcludedFromSaving(setPage))
-        //    //        pages.Add(setPage);
-        //    //}
-
-        //    //// Update the list on the page, if there is one
-        //    //if (setPage.DataContext is IListUpdate)
-        //    //    (setPage.DataContext as IListUpdate).PageGotFocus();
-
-        //    //if (!_history.Contains(_currentPage))
-        //    //    _history.Push(_currentPage);
-        //    //// Setting the content of the given frame, to the newPage object to display the requested page.
-        //    //frame.Content = setPage;
-        //    //_currentPage = setPage;
-        //}
-
-        public void ReturnToPreviousPage()
-        {
-            ContentFrame.Navigate(_history.Pop());
-        }
 
         public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
             => AddNotification(new Notification(message, foreground, background));
@@ -245,7 +188,7 @@ namespace AMS.ViewModels
             SplashPage = null;
 
             // Resetting connection failed
-            HasConnectionFailedBeenRaised = false;
+            _hasConnectionFailedBeenRaised = false;
 
             // Show department and username
             CurrentDepartmentVisibility = Visibility.Visible;
@@ -254,9 +197,9 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(CurrentUser));
 
             // Setting the current department, from the default department of the current user.
-            //CurrentDepartment = _departmentService.GetRepository().GetById(session.user.DefaultDepartment);
-            //if (CurrentDepartment == null)
-            //    CurrentDepartment = Department.GetDefault();
+            CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);
+            if (CurrentDepartment == null)
+                CurrentDepartment = Department.GetDefault();
         }
 
 
@@ -278,15 +221,8 @@ namespace AMS.ViewModels
         // Loads excluded pages and sets homepage.
         private void Load()
         {
-            // Add excluded pages
-            //excludedPages.Add(new Views.AssetManager(null, _assetService));
-            //excludedPages.Add(new Views.TagManager(null, _tagService));
-            //excludedPages.Add(new Views.ObjectViewer(null, _commentService, null));
-            //excludedPages.Add(new Views.UserImporterView(null, _userService, _departmentService));
-
-            //// Load homepage
+            // Load homepage
             ContentFrame.Navigate(new Home());
-            //ChangeMainContent(new Views.Home(this, _assetService, _tagService));
         }
 
         private void ImportUsers()
@@ -299,38 +235,23 @@ namespace AMS.ViewModels
         {
             Console.WriteLine("Reloading...");
 
-            //// Clearing memory
-            //pages.Clear();
-            //MySqlHandler.ConnectionFailed -= Reload;
-            //CurrentDepartmentVisibility = Visibility.Hidden;
-            //CurrentUser = null;
-            //CurrentDepartment = null;
-            //OnPropertyChanged(nameof(CurrentUser));
+            // Clearing memory
+            MySqlHandler.ConnectionFailed -= Reload;
+            CurrentDepartmentVisibility = Visibility.Hidden;
+            CurrentUser = null;
+            CurrentDepartment = null;
+            OnPropertyChanged(nameof(CurrentUser));
 
-            //// Load splash screen
+            // Load splash screen
             SplashPage = new Views.Splash(this);
-        }
-
-        private bool ExcludedFromSaving(Page page)
-        {
-            foreach (Page excludedPage in excludedPages)
-            {
-                // Return true if the page was found in the list of excluded pages.
-                if (excludedPage.GetType() == page.GetType())
-                    return true;
-            }
-
-            // If the page wasn't found, return false
-            return false;
         }
 
         private List<Department> GetDepartments()
         {
-            return null;
-            //if (CurrentDepartmentVisibility == Visibility.Visible)
-            //    return (List<Department>)((IDepartmentRepository)_departmentService.GetRepository()).GetAll();
-            //else
-            //    return new List<Department>();
+            if (CurrentDepartmentVisibility == Visibility.Visible)
+                return (List<Department>)new DepartmentRepository().GetAll();
+            else
+                return new List<Department>();
         }
 
         //private void AddDepartment(object sender, PromptEventArgs e)

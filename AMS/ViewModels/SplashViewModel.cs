@@ -4,7 +4,6 @@ using System.Threading;
 using AMS.Authentication;
 using System.Windows.Input;
 using System.Threading.Tasks;
-using AMS.Services.Interfaces;
 
 namespace AMS.ViewModels
 {
