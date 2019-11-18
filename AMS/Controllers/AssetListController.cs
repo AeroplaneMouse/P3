@@ -19,6 +19,7 @@ namespace AMS.Controllers
 
         public AssetListController(IAssetRepository assetRepository, IExporter exporter)
         {
+            AssetList = new List<Asset>();
             _assetRepository = assetRepository;
             _exporter = exporter;
 
@@ -50,7 +51,8 @@ namespace AMS.Controllers
         public void Remove(Asset asset)
         {
             // Delete the asset
-            throw new NotImplementedException();
+            if (_assetRepository.Delete(asset))
+                AssetList.Remove(asset);
         }
 
         public void Export(List<Asset> assets)
