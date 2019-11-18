@@ -219,7 +219,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                tag = DBOToModelConvert(reader);
+                                tag = DataMapper(reader);
                             }
                             reader.Close();
                         }
@@ -262,7 +262,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                tags.Add(DBOToModelConvert(reader));
+                                tags.Add(DataMapper(reader));
                             }
 
                             reader.Close();
@@ -319,7 +319,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                tags.Add(DBOToModelConvert(reader));
+                                tags.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -369,7 +369,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                tags.Add(DBOToModelConvert(reader));
+                                tags.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -409,7 +409,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                tags.Add(DBOToModelConvert(reader));
+                                tags.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -433,7 +433,7 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public Tag DBOToModelConvert(MySqlDataReader reader)
+        public Tag DataMapper(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
             String rowLabel = reader.GetString("label");

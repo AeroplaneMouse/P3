@@ -4,6 +4,6 @@ namespace AMS.Database.Repositories.Interfaces
 {
     public interface IMysqlRepository<T> : IRepository<T>
     {
-        T DBOToModelConvert(MySqlDataReader reader);
+        T DataMapper(MySqlDataReader reader);
     }
 }

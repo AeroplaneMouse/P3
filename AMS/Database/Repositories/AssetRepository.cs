@@ -234,7 +234,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                asset = DBOToModelConvert(reader);
+                                asset = DataMapper(reader);
                             }
                             reader.Close();
                         }
@@ -282,7 +282,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                assets.Add(DBOToModelConvert(reader));
+                                assets.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -381,7 +381,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                assets.Add(DBOToModelConvert(reader));
+                                assets.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -511,7 +511,7 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="reader">A MySQLDataReader containing the data for the asset</param>
         /// <returns>The asset made from the given data</returns>
-        public Asset DBOToModelConvert(MySqlDataReader reader)
+        public Asset DataMapper(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
             string rowName = reader.GetString("name");
