@@ -18,6 +18,16 @@ namespace AMS.IO
 
         #endregion
 
+        #region Constructor
+
+        public UserImporter(IUserService service)
+        {
+            UserService = service;
+        }
+
+        #endregion
+
+        #region Public Methods
 
         public List<UserWithStatus> CombineLists(List<User> imported, List<User> existing)
         {
@@ -38,5 +48,7 @@ namespace AMS.IO
         {
             throw new NotImplementedException();
         }
+
+        #endregion
     }
 }

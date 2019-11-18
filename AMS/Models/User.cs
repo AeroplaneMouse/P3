@@ -5,7 +5,7 @@ using System.Text;
 
 namespace AMS.Models
 {
-    public class User : Model
+    public class User : Model, ITagable
     {
         public string Name { get; set; }
         public string Username { get; set; }

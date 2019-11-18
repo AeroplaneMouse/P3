@@ -6,5 +6,9 @@ namespace AMS.Models
 {
     public class Tag : Model
     {
+        public void SerializeFields()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
