@@ -114,9 +114,7 @@ namespace AMS.ViewModels
 
             ImportUsersCommand = new Base.RelayCommand(ImportUsers);
 
-
-            //SelectDepartmentCommand = new Base.RelayCommand<object>(() => SelectDepartment())
-            //SelectDepartmentCommand = new Base.RelayCommand<object>.SelectDepartmentCommand(this);
+            SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
             //RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, _departmentService);
             //EditDepartmentCommand = new Commands.EditDepartmentCommand(this, _departmentService);
             //AddDepartmentCommand = new Base.RelayCommand(() =>
@@ -129,6 +127,25 @@ namespace AMS.ViewModels
 
             // Display splash page
             SplashPage = new Views.Splash(this);
+        }
+
+        private void SelectDepartment(object parameter)
+        {
+            try
+            {
+                ulong id = ulong.Parse(parameter.ToString());
+                Department selectedDepartment = new DepartmentRepository().GetById(id);
+                if (selectedDepartment == null)
+                    selectedDepartment = Models.Department.GetDefault();
+
+                AddNotification(new Models.Notification(
+                    $"{selectedDepartment.Name} is now the current department.", Models.Notification.APPROVE));
+                CurrentDepartment = selectedDepartment;
+            }
+            catch (Exception e)
+            {
+                AddNotification(new Models.Notification(e.Message, Models.Notification.ERROR), 5000);
+            }
         }
 
         //public void DisplayPrompt(Page promptPage)
