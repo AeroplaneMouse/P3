@@ -48,7 +48,7 @@ namespace AMS.Controllers
             throw new NotImplementedException();
         }
 
-        public void KeepUser()
+        public void KeepUser(User user)
         {
             throw new NotImplementedException();
         }

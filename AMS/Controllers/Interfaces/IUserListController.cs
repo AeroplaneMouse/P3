@@ -25,7 +25,7 @@ namespace AMS.Controllers.Interfaces
 
         #region Methods
 
-        void KeepUser();
+        void KeepUser(User user);
 
         void CancelChanges();
 

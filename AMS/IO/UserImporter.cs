@@ -31,24 +31,25 @@ namespace AMS.IO
 
         public List<UserWithStatus> CombineLists(List<User> imported, List<User> existing)
         {
-            throw new NotImplementedException();
+            return new List<UserWithStatus>();
         }
 
         public List<User> ImportUsersFromDatabase()
         {
-            throw new NotImplementedException();
+            return new List<User>();
         }
 
-        public List<User> ImportUsersFromFile()
+        public List<User> ImportUsersFromFile(string filePath)
         {
-            throw new NotImplementedException();
+            return new List<User>();
         }
 
         public bool IsInList(List<User> list, User user)
         {
-            throw new NotImplementedException();
+            return true;
         }
 
+       
         #endregion
     }
 }
