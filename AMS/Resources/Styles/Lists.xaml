@@ -1,6 +1,25 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     
+    <Style TargetType="{x:Type ListView}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="0 10 0 0" />
+        <Setter Property="AlternationCount" Value="2"/>
+    </Style>
+    
+    <!-- Make odd and even colors in list rows. -->
+    <Style TargetType="{x:Type ListViewItem}">
+        <Style.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="0">
+                <Setter Property="Background" Value="{StaticResource AlternatingColorLightBrush}"/>
+            </Trigger>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="{StaticResource AlternatingColorDarkBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
     <Style TargetType="{x:Type GridViewColumnHeader}" >
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Margin" Value="-4, 0, 0, 0" />
