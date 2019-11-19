@@ -17,9 +17,9 @@ namespace AMS.Interfaces
 
         List<User> ImportUsersFromDatabase();
 
-        List<UserWithStatus> CombineLists(List<User> imported, List<User> existing);
+        List<UserWithStatus> CombineLists(List<UserWithStatus> imported, List<UserWithStatus> existing);
 
-        bool IsInList(List<User> list, User user);
+        bool UserIsInList(List<UserWithStatus> list, User user);
 
         #endregion
     }

@@ -39,7 +39,7 @@ namespace AMS.ViewModels
             {
                 List<Tag> ofspring = _tagListController.GetChildTags(tag.ID);
                 tag.Children = new List<ITagable>();
-                tag.Children.AddRange(ofspring);
+                tag.Children.AddRange(offspring);
             }
         }
 

@@ -5,10 +5,11 @@ using System.Text;
 using System.Windows.Input;
 using AMS.Controllers.Interfaces;
 using AMS.Models;
+using AMS.ViewModels.Base;
 
 namespace AMS.ViewModels
 {
-    public class AssetListViewModel
+    public class AssetListViewModel : BaseViewModel
     {
         private IAssetListController _listController;
         

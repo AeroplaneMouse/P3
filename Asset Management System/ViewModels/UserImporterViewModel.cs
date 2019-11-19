@@ -313,10 +313,7 @@ namespace Asset_Management_System.ViewModels
         /// <param name="user"></param>
         private void KeepUser(object user)
         {
-            // Get the user that is currently selected. This is the user that is kept
-            //UserWithStatus keptUser = GetSelectedItem();
-
-
+            // Get the kept user
             UserWithStatus keptUser = user as UserWithStatus;
 
             // If there weren't any selected users, or the selected user is not in conflict

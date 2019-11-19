@@ -42,11 +42,11 @@ namespace UnitTests
             _tagListController.TagsList.Add(_tagOne);
             _tagListController.TagsList.Add(_tagTwo);
             _tagListController.TagsList.Add(_tagThree);
-            
+
             //Act
             _tagListController.Remove(_tagThree);
-            
-            
+
+
             //Assert
             Assert.IsFalse(_tagListController.TagsList.Contains(_tagThree));
         }

@@ -1,11 +1,12 @@
 ﻿using AMS.Controllers.Interfaces;
-using AMS.Database.Repositories;
 using AMS.Models;
-using Asset_Management_System.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using AMS.Authentication;
+using AMS.Database.Repositories.Interfaces;
+using CommentRepository = AMS.Database.Repositories.CommentRepository;
 
 namespace AMS.Controllers 
 {
@@ -15,8 +16,14 @@ namespace AMS.Controllers
 
         Session _session;
 
-        CommentRepository _commentRep;
+        ICommentRepository _commentRep;
 
+        public CommentController(Session session, ICommentRepository commentRepository)
+        {
+            _session = session;
+            _commentRep = commentRepository;
+            CommentList = new ObservableCollection<Comment>();
+        }
 
         /// <summary>
         /// Adds a new comment to the database and updates the comment list with all 
@@ -31,7 +38,7 @@ namespace AMS.Controllers
             if (!string.IsNullOrEmpty(contentInput))
             {
                 // Creates a new comment based on the information available
-                Comment newComment = new Comment()
+                Comment newComment = new Comment 
                 {
                     Username = _session.Username,
                     Content = contentInput,

@@ -7,6 +7,7 @@ using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Models;
 using AMS.Services.Interfaces;
+using AMS.ViewModels;
 
 namespace AMS.Controllers
 {
@@ -25,7 +26,6 @@ namespace AMS.Controllers
             AssetList = new List<Asset>();
             _assetRepository = assetRepository;
             _exporter = exporter;
-
         }
         
         /// <summary>
@@ -81,6 +81,7 @@ namespace AMS.Controllers
         {
             //TODO: Redirect to ViewPage
             throw new NotImplementedException();
+            
         }
 
         /// <summary>
