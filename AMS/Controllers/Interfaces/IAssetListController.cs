@@ -23,9 +23,9 @@ namespace AMS.Controllers.Interfaces
 
         void Search(string query);
 
-        void AddNew();
-
-        void Edit(Asset asset);
+//        void AddNew();
+//
+//        void Edit(Asset asset);
 
         void ViewAsset(Asset asset);
 

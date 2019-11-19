@@ -6,12 +6,14 @@ using System.Windows.Input;
 using AMS.Controllers.Interfaces;
 using AMS.Models;
 using AMS.ViewModels.Base;
+using AMS.Views;
 
 namespace AMS.ViewModels
 {
     public class AssetListViewModel : BaseViewModel
     {
         private IAssetListController _listController;
+        private MainViewModel _main;
         
         public List<Asset> Items { get; set; }
         public int SelectedItemIndex { get; set; }
@@ -24,8 +26,9 @@ namespace AMS.ViewModels
         public ICommand ViewCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
 
-        public AssetListViewModel(IAssetListController listController)
+        public AssetListViewModel(MainViewModel main, IAssetListController listController)
         {
+            _main = main;
             _listController = listController;
             Items = _listController.AssetList;
             
@@ -38,14 +41,21 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
-        /// Handles the add new action
+        /// Changes the content to a blank AssetEditor
         /// </summary>
-        private void AddNewAsset() => _listController.AddNew();
+        private void AddNewAsset()
+        {
+            // TODO: Change so it is not necessary to create new page here
+            _main.ContentFrame.Navigate(new AssetEditor());
+        }
 
         /// <summary>
-        /// Handles the edit asset action
+        /// Changes the content to AssetEditor with the selected asset
         /// </summary>
-        private void EditAsset() => _listController.Edit(GetSelectedItem());
+        private void EditAsset()
+        {
+            _main.ContentFrame.Navigate(new AssetEditor(GetSelectedItem()));
+        }
 
         /// <summary>
         /// Searches the list for Assets matching the searchQuery
@@ -53,9 +63,13 @@ namespace AMS.ViewModels
         private void SearchAssets() => _listController.Search(SearchQuery);
 
         /// <summary>
-        /// Handles the view asset action
+        /// Changes the content to ViewAsset with the selected asset
         /// </summary>
-        private void ViewAsset() => _listController.ViewAsset(GetSelectedItem());
+        private void ViewAsset()
+        {
+            // TODO: Redirect to viewAsset page
+            _listController.ViewAsset(GetSelectedItem());
+        }
 
         /// <summary>
         /// Deletes the selected asset

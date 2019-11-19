@@ -1,8 +1,10 @@
 ﻿using System.Windows.Controls;
 using AMS.Controllers;
+using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories;
 using AMS.Helpers;
 using AMS.IO;
+using AMS.ViewModels;
 
 namespace AMS.Views
 {
@@ -11,10 +13,10 @@ namespace AMS.Views
     /// </summary>
     public partial class AssetList : Page
     {
-        public AssetList()
+        public AssetList(MainViewModel main, IAssetListController assetListController)
         {
             InitializeComponent();
-            DataContext = new ViewModels.AssetListViewModel(new AssetListController(new AssetRepository(), new PrintHelper()));
+            DataContext = new ViewModels.AssetListViewModel(main, assetListController);
         }
     }
 }

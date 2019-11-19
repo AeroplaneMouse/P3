@@ -1,16 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Models;
-using AMS.Services.Interfaces;
 using Castle.Core.Internal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using ITagController = Asset_Management_System.ViewModels.Controllers.Interfaces.ITagController;
 
 namespace UnitTests
 {
@@ -32,6 +28,7 @@ namespace UnitTests
             _assetListController = new AssetListController(assetRepMock.Object, _exporter);
         }
 
+        /* Tests deprecated method
         [TestMethod]
         public void AddNew_NewAssetAdded_ReturnsOne()
         {
@@ -45,7 +42,9 @@ namespace UnitTests
             //Assert
             Assert.AreEqual(expected, result);
         }
+        */
 
+        /* Tests deprecated method
         [TestMethod]
         public void AddNew_TwoNewAssetAdded_ReturnsTwo()
         {
@@ -60,6 +59,7 @@ namespace UnitTests
             //Assert
             Assert.AreEqual(expected, result);
         }
+        */
 
         [TestMethod]
         public void Remove_RemoveAsset_ReturnsOne()

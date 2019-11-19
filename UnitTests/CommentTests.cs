@@ -1,10 +1,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AMS.Models;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using AMS.Controllers.Interfaces;
 using AMS.Controllers;
-using AMS.Database.Repositories;
 using System.Linq;
 using AMS.Authentication;
 using Moq;
@@ -121,7 +119,7 @@ namespace UnitTests
         }
         
         [TestMethod]
-        public void AddComment_CallsRepositoryDelete_ReturnsTrue()
+        public void RemoveComment_CallsRepositoryDelete_ReturnsTrue()
         {
             // Arrange 
             ulong assetId = 1;
@@ -133,6 +131,25 @@ namespace UnitTests
 
             // Assert
             _commentRepMock.Verify(p => p.Delete(It.IsAny<Comment>()), Times.Once);
+        }
+        
+        [TestMethod]
+        public void RemoveComment_ListContainsRemovedAsset_ReturnsFalse()
+        {
+            // Arrange 
+            ulong assetId = 1;
+            Comment comment1 = new Comment {AssetID = assetId, Content = "Comment1"};
+            Comment comment2 = new Comment {AssetID = assetId, Content = "Comment2"};
+            Comment comment3 = new Comment {AssetID = assetId, Content = "Comment3"};
+            _commentRepMock.Setup(p => p.Delete(It.IsAny<Comment>())).Returns(true);
+            _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new ObservableCollection<Comment> {comment1, comment2});
+            _controller.CommentList = new ObservableCollection<Comment> {comment1, comment2, comment3};
+            
+            // Act
+            _controller.RemoveComment(comment3, assetId);
+
+            // Assert
+            Assert.IsFalse(_controller.CommentList.Contains(comment3));
         }
 
         /*
