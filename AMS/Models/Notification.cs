@@ -10,7 +10,7 @@ namespace AMS.Models
 
         // Static stuff
         public static readonly SolidColorBrush ERROR = Brushes.Red;
-        public static readonly SolidColorBrush WARNING = Brushes.DarkGoldenrod;
+        public static readonly SolidColorBrush WARNING = Brushes.Orange;
         public static readonly SolidColorBrush INFO = Brushes.LightGray;
         public static readonly SolidColorBrush APPROVE = Brushes.Green;
 

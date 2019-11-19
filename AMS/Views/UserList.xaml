@@ -32,14 +32,19 @@
                     HorizontalAlignment="Right"
                     Margin="10">
 
+                <Button Style="{StaticResource RegularButton}"
+                        Command="{Binding ImportUsersCommand}"
+                        Content="Import Users"/>
+
                 <Button Style="{StaticResource RegularAcceptButton}"
-                    Command="{Binding ApplyCommand}"
-                    Content="Apply" />
+                        Command="{Binding ApplyCommand}"
+                        Margin="10 0 0 0"
+                        Content="Apply" />
 
                 <Button Style="{StaticResource RegularCancelButton}"
-                    Command="{Binding CancelCommand}"
-                    Margin="10 0 0 0"
-                    Content="Cancel" />
+                        Command="{Binding CancelCommand}"
+                        Margin="10 0 0 0"
+                        Content="Cancel" />
             </StackPanel>
 
             <Rectangle Style="{StaticResource HorizontalSeparator}"

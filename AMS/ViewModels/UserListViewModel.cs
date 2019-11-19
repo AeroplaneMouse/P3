@@ -88,6 +88,8 @@ namespace AMS.ViewModels
 
         public ICommand KeepUserCommand { get; set; }
 
+        public ICommand ImportUsersCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -106,6 +108,7 @@ namespace AMS.ViewModels
             CancelCommand = new Base.RelayCommand(Cancel);
             ApplyCommand = new Base.RelayCommand(Apply);
             KeepUserCommand = new Base.RelayCommand<object>(KeepUser);
+            ImportUsersCommand = new Base.RelayCommand(Import);
 
             //ShownUsersList = new List<UserWithStatus>()
             //{
@@ -120,6 +123,12 @@ namespace AMS.ViewModels
 
         #region Private Methods
 
+        private void Import()
+        {
+            _userListController.GetUsersFromFile();
+            OnPropertyChanged(nameof(ShownUsersList));
+        }
+
         private void Cancel()
         {
             _userListController.CancelChanges();
@@ -129,9 +138,13 @@ namespace AMS.ViewModels
 
         private void Apply()
         {
-            _userListController.ApplyChanges();
+            if (_userListController.ApplyChanges())
+                _main.AddNotification(new Notification("Changes applied", Notification.APPROVE));
+
+            else
+                _main.AddNotification(new Notification("Not all conflicts solved", Notification.WARNING));
+
             OnPropertyChanged(nameof(ShownUsersList));
-            _main.AddNotification(new Notification("Changes applied", Notification.APPROVE));
         }
 
         private void KeepUser(object user)

@@ -39,7 +39,7 @@ namespace AMS.Controllers.Interfaces
 
         void CancelChanges();
 
-        void ApplyChanges();
+        bool ApplyChanges();
 
         void SortUsers();
 

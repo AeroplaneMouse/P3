@@ -159,14 +159,12 @@ namespace AMS.Controllers
 
         #region Public Methods
 
-        public void ApplyChanges()
+        public bool ApplyChanges()
         {
             // Check if there are any conflicts left
             if (_finalUsersList.Where(p => p.Status.CompareTo("Conflicting") == 0).Count() > 0)
             {
-                //_main.AddNotification(new Notification("Not all conflicts are solved"));
-                Console.WriteLine("Not all conflicts are solved");
-                return;
+                return false;
             }
 
             // Disable the removed users in the database
@@ -193,6 +191,8 @@ namespace AMS.Controllers
 
             GetExistingUsers();
             _finalUsersList = _existingUsersList;
+
+            return true;
         }
 
         public void CancelChanges()
@@ -262,6 +262,7 @@ namespace AMS.Controllers
         public void GetUsersFromFile()
         {
             _importedUsersList = Importer.ImportUsersFromFile(Importer.GetUsersFile()).Select(u => new UserWithStatus(u)).ToList();
+            _finalUsersList = Importer.CombineLists(_importedUsersList, _existingUsersList);
         }
 
 
