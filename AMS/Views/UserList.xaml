@@ -99,7 +99,8 @@
                           SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                           Margin="0 0 2 0"
                           Grid.Row="1"
-                          x:Name="UserListView">
+                          x:Name="UserListView"
+                          Grid.IsSharedSizeScope="True">
 
                     <ListView.View>
                         <GridView>
@@ -121,36 +122,54 @@
                             </GridViewColumn>
 
                             <!-- Username -->
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
-                                            Header="Username"/>
+                            <GridViewColumn Header="Username"
+                                            Width="250">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Username}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
                             <!-- Domain -->
-                            <GridViewColumn Header="Domain">
+                            <GridViewColumn Header="Domain" Width="175">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Path=Domain, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                  BorderBrush="Transparent"
-                                                 Background="Transparent"/>
+                                                 Background="Transparent"
+                                                 Style="{StaticResource ParagraphTextBox}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
                             <!-- Description-->
-                            <GridViewColumn Header="Description">
+                            <GridViewColumn Header="Description" Width="220">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                  BorderBrush="Transparent"
                                                  Background="Transparent"
-                                                 MinWidth="100"
-                                                 Height="Auto"/>
+                                                 MinWidth="200"
+                                                 Height="Auto" 
+                                                 Style="{StaticResource ParagraphTextBox}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
                             <!-- Department -->
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
-                                            Header="Department" />
+                            <GridViewColumn Header="Department"
+                                            Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=DefaultDepartmentName}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
                             <!--<GridViewColumn Header="Department">
                                 <GridViewColumn.CellTemplate>
