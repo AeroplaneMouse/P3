@@ -12,7 +12,17 @@ namespace AMS.Controllers.Interfaces
     {
         ObservableCollection<Tag> TagsList { get; set; }
 
-        void Search();
+        void Search(string query);
+        
+        void AddNew();
+
+        void Edit(Tag tag);
+
+        void ViewTag(Tag tag);
+
+        void Remove(Tag tag);
+
+        void Export(List<Tag> tags);
 
     }
 }
