@@ -57,7 +57,10 @@ namespace AMS.ViewModels
 
                 // Update default department for user
                 if (_currentDepartment != null)
+                {
                     CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
+                    new UserRepository().Update(CurrentSession.user);
+                }
             }
         }
         public Frame ContentFrame { get; set; } = new Frame();
@@ -141,15 +144,15 @@ namespace AMS.ViewModels
                 ulong id = ulong.Parse(parameter.ToString());
                 Department selectedDepartment = new DepartmentRepository().GetById(id);
                 if (selectedDepartment == null)
-                    selectedDepartment = Models.Department.GetDefault();
+                    selectedDepartment = Department.GetDefault();
 
-                AddNotification(new Models.Notification(
-                    $"{selectedDepartment.Name} is now the current department.", Models.Notification.APPROVE));
+                AddNotification(new Notification(
+                    $"{selectedDepartment.Name} is now the current department.", Notification.APPROVE));
                 CurrentDepartment = selectedDepartment;
             }
             catch (Exception e)
             {
-                AddNotification(new Models.Notification(e.Message, Models.Notification.ERROR), 5000);
+                AddNotification(new Notification(e.Message, Notification.ERROR), 5000);
             }
         }
 
