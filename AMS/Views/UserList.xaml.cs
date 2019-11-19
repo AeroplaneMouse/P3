@@ -1,4 +1,4 @@
-﻿using AMS.Controllers.Interfaces;
+using AMS.Controllers.Interfaces;
 using AMS.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -20,10 +20,10 @@ namespace AMS.Views
     /// </summary>
     public partial class UserList : Page
     {
-        public UserList(IUserListController controller)
+        public UserList(MainViewModel main, IUserListController controller)
         {
             InitializeComponent();
-            this.DataContext = new UserListViewModel(controller);
+            this.DataContext = new UserListViewModel(main, controller);
         }
     }
 }

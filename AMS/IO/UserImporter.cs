@@ -1,4 +1,4 @@
-﻿using AMS.Authentication;
+using AMS.Authentication;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Models;
@@ -130,6 +130,7 @@ namespace AMS.IO
 
                     return u;
                 })  // Converts each string[] into a user
+                .Select(u => new UserWithStatus(u))
                 .ToList();
             }
 

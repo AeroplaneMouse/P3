@@ -16,6 +16,7 @@ using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using AMS.Controllers;
 using AMS.Helpers;
+using AMS.IO;
 
 namespace AMS.ViewModels
 {
@@ -107,6 +108,7 @@ namespace AMS.ViewModels
             //TODO: Create repositories elsewhere and send the same instance to all that use it
             ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, new AssetListController(new AssetRepository(), new PrintHelper()))));
             ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this)));
+            ShowUserListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new UserList(this, new UserListController(new UserImporter(new UserRepository()), new UserRepository(), new DepartmentRepository()))));
             //ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
             //ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this, _tagService)));
             //ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this, _entryService)));
@@ -303,6 +305,7 @@ namespace AMS.ViewModels
         public ICommand ShowHomePageCommand { get; set; }
         public ICommand ShowAssetListPageCommand { get; set; }
         public ICommand ShowTagListPageCommand { get; set; }
+        public ICommand ShowUserListPageCommand { get; set; }
 
         // Department commands
         public ICommand SelectDepartmentCommand { get; set; }

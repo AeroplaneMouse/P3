@@ -1,4 +1,4 @@
-﻿using AMS.Database.Repositories.Interfaces;
+using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.IO;
 using AMS.Models;
@@ -30,6 +30,10 @@ namespace AMS.Controllers.Interfaces
         #endregion
 
         #region Methods
+
+        void GetExistingUsers();
+
+        void GetUsersFromFile();
 
         void KeepUser(object user);
 

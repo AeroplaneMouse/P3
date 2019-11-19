@@ -1,4 +1,4 @@
-﻿using AMS.Controllers.Interfaces;
+using AMS.Controllers.Interfaces;
 using AMS.Models;
 using System;
 using System.Collections.Generic;
@@ -72,6 +72,8 @@ namespace AMS.ViewModels
 
         private IUserListController _userListController { get; set; }
 
+        private MainViewModel _main { get; set; }
+
         #endregion
 
         #region Commands
@@ -86,8 +88,13 @@ namespace AMS.ViewModels
 
         #region Constructor
 
-        public UserListViewModel(IUserListController userListController)
+        public UserListViewModel(MainViewModel main, IUserListController userListController)
         {
+            if (main != null)
+            {
+                _main = main;
+            }
+
             Title = "Users";
 
             _userListController = userListController;
@@ -95,6 +102,8 @@ namespace AMS.ViewModels
             CancelCommand = new Base.RelayCommand(Cancel);
             ApplyCommand = new Base.RelayCommand(Apply);
             KeepUserCommand = new Base.RelayCommand<object>(KeepUser);
+
+            OnPropertyChanged(nameof(UserList));
         }
 
         #endregion
@@ -104,11 +113,13 @@ namespace AMS.ViewModels
         private void Cancel()
         {
             _userListController.CancelChanges();
+            _main.ContentFrame.GoBack();
         }
 
         private void Apply()
         {
             _userListController.ApplyChanges();
+            _main.ContentFrame.GoBack();
         }
 
         private void KeepUser(object user)

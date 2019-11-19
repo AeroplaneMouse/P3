@@ -1,4 +1,4 @@
-﻿using AMS.Controllers.Interfaces;
+using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
@@ -147,7 +147,8 @@ namespace AMS.Controllers
             _isShowingDisabled = true;
             _isShowingRemoved = true;
 
-            _existingUsersList = Importer.ImportUsersFromDatabase().Select(u => new UserWithStatus(u)).ToList();
+            GetExistingUsers();
+            GetUsersFromFile();
 
             _finalUsersList = Importer.CombineLists(_importedUsersList, _existingUsersList);
 
@@ -193,10 +194,7 @@ namespace AMS.Controllers
             //_main.ReturnToPreviousPage();
         }
 
-        public void CancelChanges()
-        {
-            throw new NotImplementedException();
-        }
+        public void CancelChanges() { }
 
         public void KeepUser(object user)
         {
@@ -251,6 +249,15 @@ namespace AMS.Controllers
             throw new NotImplementedException();
         }
        
+        public void GetExistingUsers()
+        {
+            _existingUsersList = Importer.ImportUsersFromDatabase().Select(u => new UserWithStatus(u)).ToList();
+        }
+
+        public void GetUsersFromFile()
+        {
+            _importedUsersList = Importer.ImportUsersFromFile(Importer.GetUsersFile()).Select(u => new UserWithStatus(u)).ToList();
+        }
 
 
         #endregion
