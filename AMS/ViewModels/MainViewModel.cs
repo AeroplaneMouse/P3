@@ -108,10 +108,9 @@ namespace AMS.ViewModels
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
             ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList()));
             ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList()));
-            //ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this, _entryService)));
-
-            RemoveNotificationCommand = new Base.RelayCommand<object>((object parameter) =>
-            {
+            ShowLogPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Log()));
+            
+            RemoveNotificationCommand = new Base.RelayCommand<object>((object parameter) => {
                 int id = int.Parse(parameter.ToString());
                 RemoveNotification(id);
             });
