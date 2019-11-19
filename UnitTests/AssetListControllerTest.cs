@@ -1,15 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Models;
-using AMS.Services.Interfaces;
 using Castle.Core.Internal;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using ITagController = Asset_Management_System.ViewModels.Controllers.Interfaces.ITagController;
 
 namespace UnitTests
 {
@@ -31,6 +28,7 @@ namespace UnitTests
             _assetListController = new AssetListController(assetRepMock.Object, _exporter);
         }
 
+        /* Tests deprecated method
         [TestMethod]
         public void AddNew_NewAssetAdded_ReturnsOne()
         {
@@ -44,7 +42,9 @@ namespace UnitTests
             //Assert
             Assert.AreEqual(expected, result);
         }
+        */
 
+        /* Tests deprecated method
         [TestMethod]
         public void AddNew_TwoNewAssetAdded_ReturnsTwo()
         {
@@ -59,6 +59,7 @@ namespace UnitTests
             //Assert
             Assert.AreEqual(expected, result);
         }
+        */
 
         [TestMethod]
         public void Remove_RemoveAsset_ReturnsOne()
@@ -146,40 +147,16 @@ namespace UnitTests
                 && _assetListController.AssetList.Count == 2;
 
             //Assert
-            Assert.AreEqual(expected, result);
-        }
-        
-        [TestMethod]
-        public void Search_ListOnlyContainsElementsWithNamesMatchingQuery_ReturnsTrue()
-        {
-            //Arrange
-            Asset asset1 = new Asset {Name = "asset1"};
-            Asset asset2 = new Asset {Name = "asset2"};
-            Asset testAsset1 = new Asset {Name = "testAsset1"};
-            Asset testAsset2 = new Asset {Name = "testAsset2"};
-            _assetListController.AssetList.Add(asset1);
-            _assetListController.AssetList.Add(asset2);
-            _assetListController.AssetList.Add(testAsset1);
-            _assetListController.AssetList.Add(testAsset2);
-            List<Asset> list = _assetListController.AssetList;
-            List<Asset> expected = new List<Asset>() {testAsset1, testAsset2};
-
-            //Act
-            _assetListController.Search("testAsset");
-
-            bool result = _assetListController.AssetList.SequenceEqual(list);
-
-            //Assert
             Assert.IsTrue(result);
         }
-        
+
         [TestMethod]
         public void Search_CallsRepositorySearchMethod_ReturnsTrue()
         {
             //Arrange
             Asset asset1 = new Asset {Name = "asset1"};
             _assetListController.AssetList.Add(asset1);
-            //assetRepMock.Setup(p => p.Search(It.IsAny<string>())).Returns(true);
+            assetRepMock.Setup(p => p.Search(It.IsAny<string>(), null, null, false)).Returns(() => new ObservableCollection<Asset>());
 
             //Act
             _assetListController.Search("asset");

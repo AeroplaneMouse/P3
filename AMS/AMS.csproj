@@ -16,7 +16,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="Helpers" />
     <Folder Include="Resources\Styles\" />
     <Folder Include="Resources\Window\" />
   </ItemGroup>
@@ -77,6 +76,12 @@
     <Page Update="Views\Splash.xaml">
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="AMS, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\UnitTests\bin\Debug\netcoreapp3.0\AMS.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

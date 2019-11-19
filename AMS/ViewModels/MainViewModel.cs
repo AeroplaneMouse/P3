@@ -14,6 +14,8 @@ using AMS.Database.Repositories;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
+using AMS.Controllers;
+using AMS.Helpers;
 
 namespace AMS.ViewModels
 {

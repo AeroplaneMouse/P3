@@ -1,10 +1,8 @@
 ﻿using System.Windows.Controls;
 using Asset_Management_System.ViewModels;
-using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Services.Interfaces;
 using System.Windows;
 using Asset_Management_System.Models;
-using Asset_Management_System.ViewModels.Commands;
 
 namespace Asset_Management_System.Views
 {

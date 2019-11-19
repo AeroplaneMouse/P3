@@ -7,6 +7,7 @@ using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Models;
 using AMS.Services.Interfaces;
+using AMS.ViewModels;
 
 namespace AMS.Controllers
 {
@@ -14,6 +15,8 @@ namespace AMS.Controllers
     {
         private IExporter _exporter;
         private IAssetRepository _assetRepository;
+        //TODO: Create tagging class
+        //public Tagging _tags;
 
         public List<Asset> AssetList { get; set; }
         public List<Tag> TagsList { get; set; } 
@@ -23,7 +26,6 @@ namespace AMS.Controllers
             AssetList = new List<Asset>();
             _assetRepository = assetRepository;
             _exporter = exporter;
-
         }
         
         /// <summary>
@@ -35,6 +37,13 @@ namespace AMS.Controllers
             //TODO: Filter list based on search query, also search by tags
             List<Asset> searchResult = _assetRepository.Search(query).ToList();
             AssetList = searchResult;
+            //TODO: Determine if search should be on assets or by tags
+            /* Remove comment when tagging class is implementet
+            SearchList = _rep.Search(SearchQueryText,
+                Tags.AppliedTags.OfType<Tag>().Select(t => t.ID).ToList(),
+                Tags.AppliedTags.OfType<User>().Select(u => u.ID).ToList(),
+                IsStrict);
+                */
         }
 
         /// <summary>
@@ -53,6 +62,12 @@ namespace AMS.Controllers
         /// <exception cref="NotImplementedException"></exception>
         public void Edit(Asset asset)
         {
+            // Handle if asset is null
+            if (asset == null)
+            {
+                //TODO: Handle error and notify user
+                return;
+            }
             //TODO: Redirect to EditPage
             throw new NotImplementedException();
         }
@@ -66,6 +81,7 @@ namespace AMS.Controllers
         {
             //TODO: Redirect to ViewPage
             throw new NotImplementedException();
+            
         }
 
         /// <summary>
@@ -84,12 +100,13 @@ namespace AMS.Controllers
 
         /// <summary>
         /// Exports the selected items in the listView to a .csv file
+        /// Using an IExporter
         /// </summary>
         /// <param name="assets"></param>
         public void Export(List<Asset> assets)
         {
             //TODO: Implement printHelper
-            _exporter.ExportSelected();
+            _exporter.Print(assets);
         }
     }
 }

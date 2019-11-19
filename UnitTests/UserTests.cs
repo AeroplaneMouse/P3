@@ -16,6 +16,7 @@ using AMS.Models;
 using AMS.Authentication;
 using System.Security.Permissions;
 using AMS.Database.Repositories.Interfaces;
+using Moq;
 
 namespace UnitTests
 {
@@ -24,11 +25,13 @@ namespace UnitTests
     {
         private IUserRepository _userRepository { get; set; }
 
+        private IDepartmentRepository _departmentRepository { get; set; }
+
         private IUserImporter _userImporter { get; set; }
 
         private IUserListController _userListController { get; set; }
 
-        #region Helpers
+        private Mock<IUserRepository> _userRepMock { get; set; }
 
         [TestInitialize]
         public void InitializeUserTest()
@@ -36,10 +39,15 @@ namespace UnitTests
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             _userRepository = new UserRepository();
+            _departmentRepository = new DepartmentRepository();
 
             _userImporter = new UserImporter(_userRepository);
-            _userListController = new UserListController(_userImporter, _userRepository);
+            _userListController = new UserListController(_userImporter, _userRepository, _departmentRepository);
+
+            _userRepMock = new Mock<IUserRepository>();
         }
+
+        #region Helpers
 
         [TestCleanup]
         public void CleanUpUserTest()
@@ -158,7 +166,20 @@ namespace UnitTests
 
         #region UserListController
 
+        [TestMethod]
+        public void UserListController_KeepUser_UserIsInConflictAndFromFile_()
+        {
+            // Arrange
 
+            _userRepMock.Setup(p => p.GetAll(true)).Returns(new List<User>());
+
+            List<UserWithStatus> existing = _userRepository.GetAll(true).Select(u => new UserWithStatus(u)).ToList();
+
+            int noget = 1;
+            // Act
+
+            // Assert
+        }
 
         #endregion
     }
