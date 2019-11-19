@@ -10,8 +10,8 @@ namespace AMS.Database
     {
         private readonly MySqlConnection _connection;
         //private static MySqlConnection _con;
-        public static event SqlConnectionEventHandler ConnectionFailed;
         
+        public static event SqlConnectionEventHandler ConnectionFailed;
 
         public MySqlHandler()
         {
@@ -59,16 +59,11 @@ namespace AMS.Database
 
         public bool IsAvailable()
         {
-            try
+            var con = GetConnection();
+            if (Open(ref con))
             {
-                var con = GetConnection();
-                con.Open();
                 con.Close();
                 return true;
-            }
-            catch (MySqlException)
-            {
-                Console.WriteLine("Connection failed...");
             }
 
             return false;

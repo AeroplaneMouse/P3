@@ -152,19 +152,19 @@ namespace AMS.ViewModels
         public void DisplayPrompt(Page promptPage)
         {
             PopupPage = promptPage;
-            (promptPage.DataContext as Prompts.PromptViewModel).PromptElapsed += PromptElapsed;
+            (promptPage.DataContext as Prompts.PromptViewModel).PromptElapsed += RemovePrompt;
         }
 
-        private void PromptElapsed(object sender, PromptEventArgs e)
+        private void RemovePrompt(object sender, PromptEventArgs e)
         {
-            // Removing popup
             PopupPage = null;
         }
 
         public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
             => AddNotification(new Notification(message, foreground, background));
 
-        public void AddNotification(Notification n) => AddNotification(n, 2500);
+        public void AddNotification(Notification n) 
+            => AddNotification(n, 2500);
 
         public async void AddNotification(Notification n, int displayTime)
         {
@@ -180,8 +180,8 @@ namespace AMS.ViewModels
         }
 
         // Removes an active notification.
-        public void RemoveNotification(int id) =>
-            RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
+        public void RemoveNotification(int id) 
+            => RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
 
         public void RemoveNotification(Notification n)
         {
@@ -197,7 +197,7 @@ namespace AMS.ViewModels
         public void LoadSystem(Session session)
         {
             // Attaching notification
-            MySqlHandler.ConnectionFailed += Reload;
+            MySqlHandler.ConnectionFailed += ConnectionFailed;
 
             // Loads homepage and other stuff from the UI-thread.
             SplashPage.Dispatcher.Invoke(Load);
@@ -221,20 +221,14 @@ namespace AMS.ViewModels
         }
 
 
-        //private void ConnectionFailed(Notification n, bool reloadRequired)
-        //{
-        //    if (!HasConnectionFailedBeenRaised)
-        //    {
-        //        HasConnectionFailedBeenRaised = true;
-        //        // Display notification if one was given
-        //        if (n != null)
-        //            AddNotification(n, 6000);
-
-        //        // Reload the application is that is required
-        //        if (reloadRequired)
-        //            Reload();
-        //    }
-        //}
+        private void ConnectionFailed()
+        {
+            if (!_hasConnectionFailedBeenRaised)
+            {
+                _hasConnectionFailedBeenRaised = true;
+                Reload();
+            }
+        }
 
         // Loads excluded pages and sets homepage.
         private void Load()
@@ -254,7 +248,7 @@ namespace AMS.ViewModels
             Console.WriteLine("Reloading...");
 
             // Clearing memory
-            MySqlHandler.ConnectionFailed -= Reload;
+            MySqlHandler.ConnectionFailed -= ConnectionFailed;
             CurrentDepartmentVisibility = Visibility.Hidden;
             CurrentUser = null;
             CurrentDepartment = null;
