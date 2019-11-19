@@ -73,8 +73,7 @@
                         SelectionMode="Extended"
                         ItemsSource="{Binding SearchList}"
                         SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
-                        Grid.Row="2"
-                        Style="{StaticResource RegularList}">
+                        Grid.Row="2">
                     
                     <!-- <i:Interaction.Triggers> -->
                     <!--     <i:EventTrigger EventName="MouseDoubleClick"> -->
