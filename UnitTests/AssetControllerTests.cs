@@ -36,23 +36,7 @@ namespace UnitTests
             _assetController.AddField(new Field("Label of second field", "content of second field",
                 Field.FieldType.Checkbox, "Default value of second field"));
         }
-
-
-        [TestMethod]
-        public void ToString_ReturnsNameOfAsset()
-        {
-            //Arrange
-            string expected = "AssetTests_Asset";
-
-            //Act
-            string result = _assetController.Asset.ToString();
-
-            //Assert
-            Assert.AreEqual(expected, result);
-        }
-
- 
-
+        
         [TestMethod]
         public void Equals_ReceivesAnEqualAsset_ReturnsTrue()
         {
