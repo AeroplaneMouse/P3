@@ -107,7 +107,11 @@ namespace AMS.ViewModels
             //ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this, _tagService)));
             //ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this, _entryService)));
 
-            //RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
+            RemoveNotificationCommand = new Base.RelayCommand<object>((object parameter) =>
+            {
+                int id = int.Parse(parameter.ToString());
+                RemoveNotification(id);
+            });
 
             ReloadCommand = new Base.RelayCommand(Reload);
 
@@ -116,12 +120,9 @@ namespace AMS.ViewModels
             ImportUsersCommand = new Base.RelayCommand(ImportUsers);
 
             SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
-            //RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, _departmentService);
-            //EditDepartmentCommand = new Commands.EditDepartmentCommand(this, _departmentService);
-            AddDepartmentCommand = new Base.RelayCommand(() =>
-            {
-                DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment));
-            });
+            RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
+            EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
+            AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment)));
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
@@ -277,7 +278,7 @@ namespace AMS.ViewModels
             if (e.Result)
             {
                 Department department = new Department();
-                department.Name = ((TextInputPromptEventArgs) e).Text;
+                department.Name = (e as TextInputPromptEventArgs).Text;
 
                 ulong id;
                 if (new DepartmentRepository().Insert(department, out id))
@@ -317,7 +318,7 @@ namespace AMS.ViewModels
 
         // Notification commands
         public ICommand AddFieldTestCommand { get; set; }
-        public static ICommand RemoveNotificationCommand { get; set; }
+        public ICommand RemoveNotificationCommand { get; set; }
         public ICommand ImportUsersCommand { get; set; }
 
 
