@@ -1,12 +1,8 @@
 ﻿using AMS.Controllers.Interfaces;
 using AMS.Models;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
 using AMS.Authentication;
 using AMS.Database.Repositories.Interfaces;
-using CommentRepository = AMS.Database.Repositories.CommentRepository;
 
 namespace AMS.Controllers 
 {
@@ -56,6 +52,11 @@ namespace AMS.Controllers
             else return 0;
         }
 
+        /// <summary>
+        /// Removes a comment from an asset, and refreshes the list of comments
+        /// </summary>
+        /// <param name="comment"></param>
+        /// <param name="assetId"></param>
         public void RemoveComment(Comment comment, ulong assetId)
         {
             if (comment != null)
