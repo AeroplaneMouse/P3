@@ -167,8 +167,8 @@ namespace AMS.ViewModels
             PopupPage = null;
         }
 
-        public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
-            => AddNotification(new Notification(message, foreground, background));
+        public void AddNotification(string message, SolidColorBrush background)
+            => AddNotification(new Notification(message, background));
 
         public void AddNotification(Notification n) 
             => AddNotification(n, 2500);
