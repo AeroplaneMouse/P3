@@ -102,7 +102,8 @@ namespace AMS.ViewModels
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
 
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
-            ShowAssetsPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetListView()));
+            ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList()));
+            ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList()));
             //ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
             //ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this, _tagService)));
             //ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this, _entryService)));
@@ -302,8 +303,8 @@ namespace AMS.ViewModels
         public ICommand SystemMenuCommand { get; set; }
 
         public ICommand ShowHomePageCommand { get; set; }
-        public ICommand ShowAssetsPageCommand { get; set; }
-        public ICommand ShowTagPageCommand { get; set; }
+        public ICommand ShowAssetListPageCommand { get; set; }
+        public ICommand ShowTagListPageCommand { get; set; }
 
         // Department commands
         public static ICommand SelectDepartmentCommand { get; set; }
