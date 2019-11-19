@@ -117,10 +117,10 @@ namespace AMS.ViewModels
             SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
             //RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, _departmentService);
             //EditDepartmentCommand = new Commands.EditDepartmentCommand(this, _departmentService);
-            //AddDepartmentCommand = new Base.RelayCommand(() =>
-            //{
-            //    DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment));
-            //});
+            AddDepartmentCommand = new Base.RelayCommand(() =>
+            {
+                DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment));
+            });
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
@@ -148,17 +148,17 @@ namespace AMS.ViewModels
             }
         }
 
-        //public void DisplayPrompt(Page promptPage)
-        //{
-        //    PopupPage = promptPage;
-        //    (promptPage.DataContext as Prompts.PromptViewModel).PromptElapsed += PromptElapsed;
-        //}
+        public void DisplayPrompt(Page promptPage)
+        {
+            PopupPage = promptPage;
+            (promptPage.DataContext as Prompts.PromptViewModel).PromptElapsed += PromptElapsed;
+        }
 
-        //private void PromptElapsed(object sender, PromptEventArgs e)
-        //{
-        //    // Removing popup
-        //    PopupPage = null;
-        //}
+        private void PromptElapsed(object sender, PromptEventArgs e)
+        {
+            // Removing popup
+            PopupPage = null;
+        }
 
         public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
             => AddNotification(new Notification(message, foreground, background));
@@ -271,28 +271,28 @@ namespace AMS.ViewModels
                 return new List<Department>();
         }
 
-        //private void AddDepartment(object sender, PromptEventArgs e)
-        //{
-        //    if (e.Result)
-        //    {
-        //        Department department = new Department();
-        //        department.Name = e.ResultMessage;
+        private void AddDepartment(object sender, PromptEventArgs e)
+        {
+            if (e.Result)
+            {
+                Department department = new Department();
+                department.Name = e.ResultMessage;
 
-        //        ulong id;
-        //        if (_departmentService.GetRepository().Insert(department, out id))
-        //        {
-        //            // TODO: Add log of department insert
-        //            OnPropertyChanged(nameof(Departments));
-        //            AddNotification(new Notification($"{department.Name} has now been add to the system.",
-        //                Notification.APPROVE));
-        //        }
-        //        else
-        //            AddNotification(
-        //                new Notification(
-        //                    $"ERROR! An unknown error stopped the department {department.Name} from beeing added.",
-        //                    Notification.ERROR), 3000);
-        //    }
-        //}
+                ulong id;
+                if (new DepartmentRepository().Insert(department, out id))
+                {
+                    // TODO: Add log of department insert
+                    OnPropertyChanged(nameof(Departments));
+                    AddNotification(new Notification($"{department.Name} has now been add to the system.",
+                        Notification.APPROVE));
+                }
+                else
+                    AddNotification(
+                        new Notification(
+                            $"ERROR! An unknown error stopped the department {department.Name} from beeing added.",
+                            Notification.ERROR), 3000);
+            }
+        }
 
         // Window commands
         public ICommand MinimizeCommand { get; set; }
