@@ -56,8 +56,9 @@
                                         <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,0,2" />
                                         <Button OverridesDefaultStyle="True" x:Name="PART_DeleteTagButton"
                                                 Grid.Column="1" Margin="3,0" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                                Visibility="Hidden" Command="{x:Static v:AssetManagerViewModel.UntagTagCommand}"
+                                                Visibility="Hidden" 
                                                 CommandParameter="{Binding Path=ID}">
+                                            <!--Command="{x:Static v:AMS.UntagTagCommand}"-->
                                             <Button.Template>
                                                 <ControlTemplate>
                                                     <Grid Height="10" Width="10" Background="Transparent" >
@@ -107,8 +108,9 @@
                                         <!-- set command to delete the tag from the search query -->
                                         <Button OverridesDefaultStyle="True" x:Name="PART_DeleteTagButton"
                                                 Grid.Column="1" Margin="3,0" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                                Visibility="Hidden" Command="{x:Static v:AssetsViewModel.RemoveTagCommand}"
+                                                Visibility="Hidden" 
                                                 CommandParameter="{Binding Path=ID}">
+                                            <!--Command="{x:Static v:AssetsViewModel.RemoveTagCommand}"-->
                                             <Button.Template>
                                                 <ControlTemplate>
                                                     <Grid Height="10" Width="10" Background="Transparent" >

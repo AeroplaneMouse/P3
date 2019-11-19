@@ -83,7 +83,6 @@ namespace UnitTests
         public void Remove_RemoveOnlyAssetInList_ReturnsTrue()
         {
             //Arrange
-            bool expected = true;
             Asset asset1 = new Asset {Name = "asset1"};
             _assetListController.AssetList.Add(asset1);
 
@@ -93,7 +92,7 @@ namespace UnitTests
             bool result = _assetListController.AssetList.IsNullOrEmpty();
 
             //Assert
-            Assert.AreEqual(expected, result);
+            Assert.IsTrue(result);
         }
         
         [TestMethod]
@@ -108,7 +107,7 @@ namespace UnitTests
 
             //Assert
             // Verify that the method IAssetRepository.Delete(Asset) is called once
-            assetRepMock.Verify((p => p.Delete(It.IsAny<Asset>())), Times.Once());
+            assetRepMock.Verify(p => p.Delete(It.IsAny<Asset>()), Times.Once());
         }
         
         [TestMethod]
@@ -133,7 +132,6 @@ namespace UnitTests
         public void Remove_RemoveAssetNotInListDoesNotChangeList_ReturnsTrue()
         {
             //Arrange
-            bool expected = true;
             Asset asset1 = new Asset {Name = "asset1"};
             Asset asset2 = new Asset {Name = "asset2"};
             _assetListController.AssetList.Add(asset1);
@@ -172,7 +170,7 @@ namespace UnitTests
             bool result = _assetListController.AssetList.SequenceEqual(list);
 
             //Assert
-            Assert.AreEqual(expected, result);
+            Assert.IsTrue(result);
         }
         
         [TestMethod]

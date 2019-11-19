@@ -13,13 +13,16 @@ using System.IO;
 using System.Linq;
 using AMS.Database.Repositories;
 using AMS.Models;
+using AMS.Authentication;
+using System.Security.Permissions;
+using AMS.Database.Repositories.Interfaces;
 
 namespace UnitTests
 {
     [TestClass]
-    class UserTests
+    public class UserTests
     {
-        private IUserService _userService { get; set; }
+        private IUserRepository _userRepository { get; set; }
 
         private IUserImporter _userImporter { get; set; }
 
@@ -30,14 +33,12 @@ namespace UnitTests
         [TestInitialize]
         public void InitializeUserTest()
         {
-            _userService = new UserService();
-            _userImporter = new UserImporter(_userService);
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            _userListController = new UserListController(_userImporter, _userService);
+            _userRepository = new UserRepository();
 
-
-            
-
+            _userImporter = new UserImporter(_userRepository);
+            _userListController = new UserListController(_userImporter, _userRepository);
         }
 
         [TestCleanup]
@@ -46,14 +47,12 @@ namespace UnitTests
 
         }
 
-        void CreateFileAt(string filePath)
+        // Make test file
+        void CreateFileAt(string filePath, Encoding encoding)
         {
-            // Make test file
-            Encoding encoding = Encoding.GetEncoding(1252);
-
             string fileContent = "Name\tType\tDescription\r\n" +
                                  "Hans Hansen\tUser\tHan er bare for god\r\n" +
-                                 "Åge Ågesen\tUser\tÅge øser æsler";
+                                 "Åge Ågesen\tUser\tÅge øser æsler\r\n";
 
             byte[] contentArray = encoding.GetBytes(fileContent);
 
@@ -63,18 +62,16 @@ namespace UnitTests
             }
         }
 
-        void DestroyFileAt(string filePath)
+        // Delete test file
+        void DeleteFileAt(string filePath)
         {
-
+            File.Delete(filePath);
         }
 
         #endregion
 
-
-
-
         [TestMethod]
-        public void Method_ContextSituation_ExpectedReturn()
+        public void Interface_Method_ContextSituation_ExpectedReturn()
         {
             // Arrange
 
@@ -86,11 +83,11 @@ namespace UnitTests
         #region UserImporter
 
         [TestMethod]
-        public void IUserImporter_ImportUsersFromFile_FileIsFormatted()
+        public void IUserImporter_ImportUsersFromFile_FileIsFormatted_UsersReturnedInList()
         {
             // Arrange
-            string filePath = "userFileTest";
-            CreateFileAt(filePath);
+            string filePath = "userFileTest.txt";
+            CreateFileAt(filePath, Encoding.GetEncoding(1252));
 
             // Act
             List<User> users = _userImporter.ImportUsersFromFile(filePath);
@@ -98,8 +95,64 @@ namespace UnitTests
             // Assert
             Assert.IsTrue(users.Count() == 2);
 
-            DestroyFileAt(filePath);
+            // Cleanup
+            DeleteFileAt(filePath);
         }
+
+        [TestMethod]
+        public void IUserImporter_ImportUsersFromFile_FileDoesNotExist_ReturnNull()
+        {
+            // Arrange
+
+            // Act
+            List<User> users = _userImporter.ImportUsersFromFile(string.Empty);
+
+            // Assert
+            Assert.IsTrue(users == null);
+        }
+
+        [TestMethod]
+        public void IUserImporter_ImportUsersFromFile_FileNotFormattedCorrectly_FileNotFormattedCorrectlyExceptionThrown()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+        }
+
+        [TestMethod]
+        public void IUserImporter_ImportUsersFromFile_EncodingIs1252_UsersReturnedInListWithSpecialCharacters()
+        {
+            // Arrange
+            string filePath = "userFileTest.txt";
+            CreateFileAt(filePath, Encoding.GetEncoding(1252));
+
+            // Act
+            List<User> users = _userImporter.ImportUsersFromFile(filePath);
+
+            // Assert
+            Assert.IsTrue(users.Count() == 2 && users.Where(p => p.Username.ToLower().Contains('å')).Count() == 1);
+
+            DeleteFileAt(filePath);
+        }
+
+        //[TestMethod]
+        //public void IUserImporter_ImportUsersFromFile_EncodingIsUTF8_UsersReturnedInListWithSpecialCharacters()
+        //{
+        //    // Arrange
+        //    string filePath = "userFileTest.txt";
+
+        //    CreateFileAt(filePath, new UTF8Encoding(false));
+
+        //    // Act
+        //    List<User> users = _userImporter.ImportUsersFromFile(filePath);
+
+        //    // Assert
+        //    Assert.IsTrue(users.Count() == 2 && users.Where(p => p.Username.ToLower().Contains('å')).Count() == 1);
+
+        //    DeleteFileAt(filePath);
+        //}
 
         #endregion
 
