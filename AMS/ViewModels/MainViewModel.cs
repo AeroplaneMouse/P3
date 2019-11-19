@@ -1,19 +1,19 @@
 ﻿using System;
+using AMS.Views;
+using AMS.Models;
+using AMS.Events;
 using System.Linq;
+using AMS.Database;
 using System.Windows;
+using AMS.Authentication;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using AMS.Database.Repositories;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
-using AMS.Models;
-using AMS.Events;
-using AMS.Database;
-using AMS.Authentication;
-using AMS.Views;
-using AMS.Database.Repositories;
 
 namespace AMS.ViewModels
 {
@@ -98,7 +98,6 @@ namespace AMS.ViewModels
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
             MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
             CloseCommand = new Base.RelayCommand(() => _window.Close());
-
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
 
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
@@ -108,7 +107,11 @@ namespace AMS.ViewModels
             //ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this, _tagService)));
             //ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this, _entryService)));
 
-            //RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
+            RemoveNotificationCommand = new Base.RelayCommand<object>((object parameter) =>
+            {
+                int id = int.Parse(parameter.ToString());
+                RemoveNotification(id);
+            });
 
             ReloadCommand = new Base.RelayCommand(Reload);
 
@@ -117,12 +120,9 @@ namespace AMS.ViewModels
             ImportUsersCommand = new Base.RelayCommand(ImportUsers);
 
             SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
-            //RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, _departmentService);
-            //EditDepartmentCommand = new Commands.EditDepartmentCommand(this, _departmentService);
-            AddDepartmentCommand = new Base.RelayCommand(() =>
-            {
-                DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment));
-            });
+            RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
+            EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
+            AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment)));
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
@@ -153,19 +153,19 @@ namespace AMS.ViewModels
         public void DisplayPrompt(Page promptPage)
         {
             PopupPage = promptPage;
-            (promptPage.DataContext as Prompts.PromptViewModel).PromptElapsed += PromptElapsed;
+            (promptPage.DataContext as Prompts.PromptViewModel).PromptElapsed += RemovePrompt;
         }
 
-        private void PromptElapsed(object sender, PromptEventArgs e)
+        private void RemovePrompt(object sender, PromptEventArgs e)
         {
-            // Removing popup
             PopupPage = null;
         }
 
         public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
             => AddNotification(new Notification(message, foreground, background));
 
-        public void AddNotification(Notification n) => AddNotification(n, 2500);
+        public void AddNotification(Notification n) 
+            => AddNotification(n, 2500);
 
         public async void AddNotification(Notification n, int displayTime)
         {
@@ -181,8 +181,8 @@ namespace AMS.ViewModels
         }
 
         // Removes an active notification.
-        public void RemoveNotification(int id) =>
-            RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
+        public void RemoveNotification(int id) 
+            => RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
 
         public void RemoveNotification(Notification n)
         {
@@ -198,7 +198,7 @@ namespace AMS.ViewModels
         public void LoadSystem(Session session)
         {
             // Attaching notification
-            MySqlHandler.ConnectionFailed += Reload;
+            MySqlHandler.ConnectionFailed += ConnectionFailed;
 
             // Loads homepage and other stuff from the UI-thread.
             SplashPage.Dispatcher.Invoke(Load);
@@ -222,20 +222,14 @@ namespace AMS.ViewModels
         }
 
 
-        //private void ConnectionFailed(Notification n, bool reloadRequired)
-        //{
-        //    if (!HasConnectionFailedBeenRaised)
-        //    {
-        //        HasConnectionFailedBeenRaised = true;
-        //        // Display notification if one was given
-        //        if (n != null)
-        //            AddNotification(n, 6000);
-
-        //        // Reload the application is that is required
-        //        if (reloadRequired)
-        //            Reload();
-        //    }
-        //}
+        private void ConnectionFailed()
+        {
+            if (!_hasConnectionFailedBeenRaised)
+            {
+                _hasConnectionFailedBeenRaised = true;
+                Reload();
+            }
+        }
 
         // Loads excluded pages and sets homepage.
         private void Load()
@@ -255,7 +249,7 @@ namespace AMS.ViewModels
             Console.WriteLine("Reloading...");
 
             // Clearing memory
-            MySqlHandler.ConnectionFailed -= Reload;
+            MySqlHandler.ConnectionFailed -= ConnectionFailed;
             CurrentDepartmentVisibility = Visibility.Hidden;
             CurrentUser = null;
             CurrentDepartment = null;
@@ -278,7 +272,7 @@ namespace AMS.ViewModels
             if (e.Result)
             {
                 Department department = new Department();
-                department.Name = ((TextInputPromptEventArgs) e).Text;
+                department.Name = (e as TextInputPromptEventArgs).Text;
 
                 ulong id;
                 if (new DepartmentRepository().Insert(department, out id))
@@ -318,7 +312,7 @@ namespace AMS.ViewModels
 
         // Notification commands
         public ICommand AddFieldTestCommand { get; set; }
-        public static ICommand RemoveNotificationCommand { get; set; }
+        public ICommand RemoveNotificationCommand { get; set; }
         public ICommand ImportUsersCommand { get; set; }
 
 

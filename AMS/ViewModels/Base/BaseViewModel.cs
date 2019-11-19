@@ -11,7 +11,7 @@ namespace AMS.ViewModels.Base
         /// Call this to fire a <see cref="PropertyChanged"/> event
         /// </summary>
         /// <param name="name"></param>
-        protected void OnPropertyChanged(string name)
+        public void OnPropertyChanged(string name)
         {
             PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
