@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
@@ -136,16 +137,34 @@ namespace UnitTests
             Asset asset2 = new Asset {Name = "asset2"};
             _assetListController.AssetList.Add(asset1);
             _assetListController.AssetList.Add(asset2);
-            List<Asset> list = _assetListController.AssetList;
             Asset asset3 = new Asset {Name = "asset3"};
 
             //Act
             _assetListController.Remove(asset3);
 
-            bool result = _assetListController.AssetList.SequenceEqual(list);
+            bool result = _assetListController.AssetList.Contains(asset1)
+                && _assetListController.AssetList.Contains(asset2)
+                && _assetListController.AssetList.Count == 2;
 
             //Assert
             Assert.IsTrue(result);
         }
+
+        [TestMethod]
+        public void Search_CallsRepositorySearchMethod_ReturnsTrue()
+        {
+            //Arrange
+            Asset asset1 = new Asset {Name = "asset1"};
+            _assetListController.AssetList.Add(asset1);
+            assetRepMock.Setup(p => p.Search(It.IsAny<string>(), null, null, false)).Returns(() => new ObservableCollection<Asset>());
+
+            //Act
+            _assetListController.Search("asset");
+
+            //Assert
+            // Verify that the method IAssetRepository.Delete(Asset) is called once
+            assetRepMock.Verify((p => p.Search(It.IsAny<string>(), null, null, false)), Times.Once());
+        }
+        
     }
 }

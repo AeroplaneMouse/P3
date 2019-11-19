@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Composition.Primitives;
 using System.Text;
 using System.Windows.Input;
 using AMS.Controllers.Interfaces;
@@ -20,6 +21,7 @@ namespace AMS.ViewModels
         public ICommand PrintCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
 
         public AssetListViewModel(IAssetListController listController)
         {
@@ -28,9 +30,10 @@ namespace AMS.ViewModels
             
             AddNewCommand = new Base.RelayCommand(AddNewAsset);
             EditCommand = new Base.RelayCommand(EditAsset);
-            //PrintCommand = new Base.RelayCommand();
+            PrintCommand = new Base.RelayCommand(Export);
             SearchCommand = new Base.RelayCommand(SearchAssets);
             ViewCommand = new Base.RelayCommand(ViewAsset);
+            RemoveCommand = new Base.RelayCommand(RemoveAsset);
         }
 
         /// <summary>
@@ -52,6 +55,29 @@ namespace AMS.ViewModels
         /// Handles the view asset action
         /// </summary>
         private void ViewAsset() => _listController.ViewAsset(GetSelectedItem());
+
+        /// <summary>
+        /// Deletes the selected asset
+        /// </summary>
+        private void RemoveAsset()
+        {
+            _listController.Remove(GetSelectedItem());
+            
+            //TODO: Display notification?
+        }
+
+        /// <summary>
+        /// Exports selected assets to .csv file
+        /// </summary>
+        private void Export()
+        {
+            //TODO: Get selected assets
+            // Look here for how to (Answer 2): https://stackoverflow.com/questions/2282138/wpf-listview-selecting-multiple-list-view-items
+            List<Asset> selected = new List<Asset>();
+            
+            if(selected.Count < 1)
+                _listController.Export(selected);
+        }
 
         /// <summary>
         /// Returns the selected asset, or throws an error if it is not valid

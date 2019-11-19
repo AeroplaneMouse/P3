@@ -38,12 +38,14 @@ namespace AMS.Controllers
         public IUserImporter Importer { get; set; }
 
         public ObservableCollection<Tag> TagsList { get; set; }
+        
+        public List<Tag> TagsList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         // Checkboxes
         public bool IsShowingAdded
         {
             get => _isShowingAdded;
-
+        
             set
             {
                 _isShowingAdded = value;
@@ -249,6 +251,36 @@ namespace AMS.Controllers
         }
 
         public void Search()
+        {
+            throw new NotImplementedException();
+        }
+        
+        public void Search(string query)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddNew()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Edit(Tag tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ViewTag(Tag tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Remove(Tag tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Export(List<Tag> tags)
         {
             throw new NotImplementedException();
         }

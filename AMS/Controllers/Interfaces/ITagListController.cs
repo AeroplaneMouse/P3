@@ -10,9 +10,19 @@ namespace AMS.Controllers.Interfaces
 {
     public interface ITagListController
     {
-        ObservableCollection<Tag> TagsList { get; set; }
+        List<Tag> TagsList { get; set; }
 
-        void Search();
+        void Search(string query);
+        
+        void AddNew();
+
+        void Edit(Tag tag);
+
+        void ViewTag(Tag tag);
+
+        void Remove(Tag tag);
+
+        void Export(List<Tag> tags);
 
     }
 }

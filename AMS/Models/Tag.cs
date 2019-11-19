@@ -11,6 +11,7 @@ namespace AMS.Models
             
         }
 
+
         /*Constructor used by DB*/
         private Tag(ulong id, string name, ulong department_id, ulong parent_id, string color, int numOfChildren, DateTime created_at, DateTime updated_at, string SerializedField)
         {
