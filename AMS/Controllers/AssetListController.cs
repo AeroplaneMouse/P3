@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Models;
-using AMS.Services.Interfaces;
-using AMS.ViewModels;
 
 namespace AMS.Controllers
 {
@@ -26,6 +23,7 @@ namespace AMS.Controllers
             AssetList = new List<Asset>();
             _assetRepository = assetRepository;
             _exporter = exporter;
+            Search("");
         }
         
         /// <summary>

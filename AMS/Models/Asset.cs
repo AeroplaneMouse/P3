@@ -29,6 +29,23 @@ namespace AMS.Models
             SerializedFields = serializedFields;
             CreatedAt = created_at;
             UpdatedAt = updated_at;
+            Identifier = identifier;
+            Fields = JsonConvert.DeserializeObject<ObservableCollection<Field>>(SerializedFields);
+            
+        }
+        
+        private Asset(ulong id, string name, string description, string identifier, ulong departmentId, string options,
+            DateTime created_at, DateTime updated_at)
+        {
+            ID = id;
+            Name = name;
+            Description = description;
+            DepartmentID = departmentId;
+            Identifier = identifier;
+            SerializedFields = options;
+            Fields = JsonConvert.DeserializeObject<ObservableCollection<Field>>(SerializedFields);
+            CreatedAt = created_at;
+            UpdatedAt = updated_at;
         }
 
         /// <summary>
