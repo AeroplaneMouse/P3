@@ -1,19 +1,21 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using AMS.Controllers.Interfaces;
 using AMS.Models;
 using Newtonsoft.Json;
 
 namespace AMS.Controllers
 {
-    public abstract class FieldController
+    public abstract class FieldController : IFieldController
     {
         private ContainsFields _containsFields;
-        
-        public FieldController(ContainsFields element)
+
+        protected FieldController(ContainsFields element)
         {
             _containsFields = element;
         }
+        
         public bool SerializeFields()
         {
             _containsFields.SerializedFields = JsonConvert.SerializeObject(_containsFields.Fields);
@@ -22,8 +24,13 @@ namespace AMS.Controllers
 
         public bool DeSerializeFields()
         {
-            _containsFields.Fields = JsonConvert.DeserializeObject<ObservableCollection<Field>>(_containsFields.SerializedFields);
-            return _containsFields.Fields.Count > 0;
+            if (!string.IsNullOrEmpty(_containsFields.SerializedFields))
+            {
+                _containsFields.Fields = JsonConvert.DeserializeObject<ObservableCollection<Field>>(_containsFields.SerializedFields);
+                return true;
+            }
+
+            return false;
         }
         
         public bool AddField(Field field)

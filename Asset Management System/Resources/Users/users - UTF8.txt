@@ -1,4 +1,4 @@
-Name	Type	Description
+﻿Name	Type	Description
 MEKR-PC	Computer	
 ZD-GRAFIKER	Computer	Grafiker - Sussi
 ZN-HEJ	Computer	

@@ -2,10 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Asset_Management_System.ViewModels.Interfaces;
 using Asset_Management_System.ViewModels.ViewModelHelper;

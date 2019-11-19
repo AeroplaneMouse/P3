@@ -1,4 +1,5 @@
-﻿using AMS.Database.Repositories.Interfaces;
+﻿using AMS.Database.Repositories;
+using AMS.Database.Repositories.Interfaces;
 using AMS.Models;
 using AMS.Services.Interfaces;
 using System;
@@ -16,7 +17,7 @@ namespace AMS.Services
 
         public IRepository<User> GetRepository()
         {
-            throw new NotImplementedException();
+            return new UserRepository() as IUserRepository;
         }
     }
 }

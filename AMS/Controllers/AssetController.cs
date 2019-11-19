@@ -1,11 +1,6 @@
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text.Json.Serialization;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Models;
-using Newtonsoft.Json;
 
 namespace AMS.Controllers
 {
@@ -18,6 +13,7 @@ namespace AMS.Controllers
         public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset)
         {
             Asset = asset;
+            DeSerializeFields();
             _assetRepository = assetRepository;
         }
         
@@ -31,8 +27,13 @@ namespace AMS.Controllers
 
         public bool Update()
         {
-            throw new System.NotImplementedException();
+            SerializeFields();
+            return _assetRepository.Update(Asset);
         }
-        
+
+        public bool Remove()
+        {
+            return _assetRepository.Delete(Asset);
+        }
     }
 }
