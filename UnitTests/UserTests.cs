@@ -24,11 +24,13 @@ namespace UnitTests
     {
         private IUserRepository _userRepository { get; set; }
 
+        private IDepartmentRepository _departmentRepository { get; set; }
+
         private IUserImporter _userImporter { get; set; }
 
         private IUserListController _userListController { get; set; }
 
-        #region Helpers
+        
 
         [TestInitialize]
         public void InitializeUserTest()
@@ -36,10 +38,13 @@ namespace UnitTests
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
             _userRepository = new UserRepository();
+            _departmentRepository = new DepartmentRepository();
 
             _userImporter = new UserImporter(_userRepository);
-            _userListController = new UserListController(_userImporter, _userRepository);
+            _userListController = new UserListController(_userImporter, _userRepository, _departmentRepository);
         }
+
+        #region Helpers
 
         [TestCleanup]
         public void CleanUpUserTest()
@@ -158,7 +163,15 @@ namespace UnitTests
 
         #region UserListController
 
+        [TestMethod]
+        public void UserListController_KeepUser_UserIsInConflictAndFromFile_()
+        {
+            // Arrange
 
+            // Act
+
+            // Assert
+        }
 
         #endregion
     }

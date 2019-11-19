@@ -16,7 +16,7 @@ namespace AMS.IO
     {
         #region Public Properties
 
-        private IUserRepository _userRepository { get; set; }
+        private IUserRepository _userRep { get; set; }
 
         #endregion
 
@@ -24,21 +24,69 @@ namespace AMS.IO
 
         public UserImporter(IUserRepository repository)
         {
-            _userRepository = repository;
+            _userRep = repository;
         }
 
         #endregion
 
         #region Public Methods
 
-        public List<UserWithStatus> CombineLists(List<User> imported, List<User> existing)
+        public List<UserWithStatus> CombineLists(List<UserWithStatus> imported, List<UserWithStatus> existing)
         {
-            return new List<UserWithStatus>();
+            List<UserWithStatus> importedList = imported;
+            List<UserWithStatus> existingList = existing;
+
+            List<UserWithStatus> finalList = new List<UserWithStatus>();
+            finalList.AddRange(existingList);
+            finalList.AddRange(importedList);
+
+            // Conflicting users. Existing users that are not enabled, whose username occures in both lists
+            finalList
+                .Where(u => u.Status.CompareTo(String.Empty) == 0)
+                .Where(u => UserIsInList(existingList.Where(p => p.IsEnabled == false).ToList(), u) && UserIsInList(importedList, u))
+                .ToList()
+                .ForEach(u =>
+                {
+                    u.Status = "Conflicting";
+                    //u.IsShown = IsShowningConflicting;
+                });
+
+            // Added users. Users who are in the imported list, and not in the existing list
+            finalList
+                .Where(u => u.Status.CompareTo(String.Empty) == 0)
+                .Where(u => !UserIsInList(existingList.Where(p => p.IsEnabled == true).ToList(), u) && UserIsInList(importedList, u))
+                .ToList()
+                .ForEach(u =>
+                {
+                    u.Status = "Added";
+                    //u.IsShown = IsShowingAdded;
+                });
+
+            // Removed users. Users that are enabled, and are only in the existing list
+            finalList
+                .Where(u => u.Status.CompareTo(String.Empty) == 0)
+                .Where(u => UserIsInList(existingList.Where(p => p.IsEnabled == true).ToList(), u) && !UserIsInList(importedList, u))
+                .ToList()
+                .ForEach(u =>
+                {
+                    u.Status = "Removed";
+                    //u.IsShown = IsShowingRemoved;
+                });
+
+            // Kept users. Users that are enabled, and are in both lists. Remove the copy coming from the imported file
+            finalList
+                .Where(u => u.Status.CompareTo(String.Empty) == 0)
+                .Where(u => UserIsInList(existingList.Where(p => p.IsEnabled == true).ToList(), u) && UserIsInList(importedList, u))
+                .Where(u => u.ID == 0)
+                .ToList()
+                .ForEach(u => finalList.Remove(u));
+
+            return finalList;
         }
 
         public List<User> ImportUsersFromDatabase()
         {
-            return new List<User>();
+            return (_userRep.GetAll(true) ?? new List<User>()).ToList();
         }
 
         public string GetUsersFile()
@@ -59,9 +107,7 @@ namespace AMS.IO
 
         public List<User> ImportUsersFromFile(string filePath)
         {
-            var session = new Session(_userRepository);
-
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var session = new Session(_userRep);
 
             if (!String.IsNullOrEmpty(filePath))
             {
@@ -89,13 +135,13 @@ namespace AMS.IO
 
             else
             {
-                return null;
+                return new List<User>();
             }
         }
 
-        public bool IsInList(List<User> list, User user)
+        public bool UserIsInList(List<UserWithStatus> list, User user)
         {
-            return true;
+            return list.Where(u => u.Username.CompareTo(user.Username) == 0).Count() > 0;
         }
 
         #endregion
