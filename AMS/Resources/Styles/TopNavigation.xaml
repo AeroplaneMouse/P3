@@ -61,7 +61,7 @@
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         <Setter Property="FontWeight" Value="Light"/>
-        <Setter Property="Command" Value="{x:Static v:MainViewModel.SelectDepartmentCommand}"/>
+        <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SelectDepartmentCommand}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
@@ -104,7 +104,7 @@
 
     <!-- Department edit item -->
     <Style TargetType="MenuItem" x:Key="DepartmentEdit" BasedOn="{StaticResource DepartmentItem}">
-         <Setter Property="Command" Value="{x:Static v:MainViewModel.EditDepartmentCommand}"/> 
+        <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.EditDepartmentCommand}"/> 
         <Setter Property="Header" Value="{StaticResource Edit_White}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -115,7 +115,7 @@
 
     <!-- Department remove item -->
     <Style TargetType="MenuItem" x:Key="DepartmentRemove" BasedOn="{StaticResource DepartmentItem}">
-         <Setter Property="Command" Value="{x:Static v:MainViewModel.RemoveDepartmentCommand}"/> 
+        <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RemoveDepartmentCommand}"/> 
         <Setter Property="Header" Value="{StaticResource Trash_White}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
@@ -145,15 +145,14 @@
                             <ContentPresenter Content="{TemplateBinding Header}"
                                               Margin="0 3 40 3"
                                               Grid.Column="1"/>
-                             
-                             <MenuItem Grid.Column="2" 
-                                       Command="{x:Static v:MainViewModel.EditDepartmentCommand}" 
-                                       CommandParameter="{TemplateBinding CommandParameter}" 
-                                       Style="{StaticResource DepartmentEdit}"/> 
-                             <MenuItem Grid.Column="4" 
-                                       Command="{x:Static v:MainViewModel.RemoveDepartmentCommand}" 
-                                       CommandParameter="{TemplateBinding CommandParameter}" 
-                                       Style="{StaticResource DepartmentRemove}"/> 
+                                <MenuItem Grid.Column="2" 
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.EditDepartmentCommand}" 
+                                        CommandParameter="{TemplateBinding CommandParameter}" 
+                                        Style="{StaticResource DepartmentEdit}"/> 
+                                <MenuItem Grid.Column="4" 
+                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RemoveDepartmentCommand}" 
+                                        CommandParameter="{TemplateBinding CommandParameter}" 
+                                        Style="{StaticResource DepartmentRemove}"/> 
                         </Grid>
                     </Border>
                 </ControlTemplate>
