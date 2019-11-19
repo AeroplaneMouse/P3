@@ -79,6 +79,7 @@ namespace AMS.ViewModels
             // Setting private fields
             _window = window;
             _outerMarginSize = 10;
+            Features.Main = this;
 
             WindowMinWidth = 300;
             WindowMinHeight = 400;
@@ -128,7 +129,7 @@ namespace AMS.ViewModels
             var resizer = new Resources.Window.WindowResizer(_window);
 
             // Display splash page
-            SplashPage = new Views.Splash(this);
+            SplashPage = new Splash(this);
         }
 
         /// <summary>

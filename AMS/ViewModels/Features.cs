@@ -1,9 +1,5 @@
-﻿using AMS.Authentication;
-using AMS.Models;
-using AMS.ViewModels.Prompts;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using AMS.Models;
+using AMS.Authentication;
 using System.Windows.Controls;
 
 namespace AMS.ViewModels
