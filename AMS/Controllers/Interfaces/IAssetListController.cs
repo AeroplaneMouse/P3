@@ -3,6 +3,7 @@ using AMS.Models;
 using AMS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace AMS.Controllers.Interfaces
@@ -12,7 +13,7 @@ namespace AMS.Controllers.Interfaces
         #region Properties
 
         // Main asset list
-        List<Asset> AssetList { get; set; }
+        ObservableCollection<Asset> AssetList { get; set; }
 
         // List of tags that can be searched
         List<Tag> TagsList { get; set; }
@@ -22,10 +23,6 @@ namespace AMS.Controllers.Interfaces
         #region Methods
 
         void Search(string query);
-
-//        void AddNew();
-//
-//        void Edit(Asset asset);
 
         void ViewAsset(Asset asset);
 
