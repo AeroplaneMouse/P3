@@ -106,7 +106,7 @@ namespace AMS.ViewModels
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
             // Creating all dependencies in composition root (Which is here)
             //TODO: Create repositories elsewhere and send the same instance to all that use it
-            ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, new AssetListController(new AssetRepository(), new PrintHelper()))));
+            ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, new AssetRepository(), new PrintHelper())));
             ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this)));
             ShowUserListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new UserList(this, new UserListController(new UserImporter(new UserRepository()), new UserRepository(), new DepartmentRepository()))));
             //ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
