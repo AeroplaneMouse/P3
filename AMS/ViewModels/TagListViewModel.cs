@@ -37,7 +37,7 @@ namespace AMS.ViewModels
 
             foreach (var tag in Tags)
             {
-                List<Tag> ofspring = _tagListController.GetChildTags(tag.ID);
+                List<Tag> offspring = _tagListController.GetChildTags(tag.ID);
                 tag.Children = new List<ITagable>();
                 tag.Children.AddRange(offspring);
             }
