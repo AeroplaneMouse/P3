@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using AMS.Controllers;
 using AMS.Database.Repositories.Interfaces;
 using AMS.IO;
@@ -11,13 +12,13 @@ namespace AMS.ViewModels
 {
     public class TagListViewModel
     {
-        public List<ITagable> Tags { get; set; }
+        public List<Tag> Tags { get; set; }
         private TagListController _tagListController;
 
         public TagListViewModel(ITagRepository tagRepository)
         {
             ITagRepository rep = tagRepository;
-            Tags = new List<ITagable>();
+            Tags = _tagListController.TagsList= new List<Tag>();
             Tags.AddRange(rep.GetParentTags());
             //Todo Evt inkluder en exporter i stedet for at skrive new
             _tagListController = new TagListController(tagRepository, new Exporter());
@@ -29,8 +30,10 @@ namespace AMS.ViewModels
                 tag.Children.AddRange(ofspring);
             }
         }
+        
+        
 
-        public void GoToEdit(object sender, RoutedEventArgs e, ulong treeViewParentTagID)
+        public Tag GetSelectedItem(object sender, RoutedEventArgs e, ulong treeViewParentTagID)
         {
             Label pressedItem = (Label) sender;
             if (pressedItem != null)
@@ -47,7 +50,7 @@ namespace AMS.ViewModels
                             tag = (Tag) tag.Children.SingleOrDefault(tag => tag.TagLabel == pressedItemLabel);
                         }
 
-                        _tagListController.Edit(tag);
+                        return tag;
                     }
                 }
                 else
@@ -55,10 +58,14 @@ namespace AMS.ViewModels
                     Tag tag = (Tag) Tags.SingleOrDefault(tag => tag.TagLabel == pressedItemLabel);
                     if (tag != null)
                     {
-                        _tagListController.Edit(tag);
+                        return tag;
                     }
                 }
             }
+
+            return null;
         }
+
+        
     }
 }

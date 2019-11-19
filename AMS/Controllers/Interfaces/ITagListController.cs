@@ -10,7 +10,7 @@ namespace AMS.Controllers.Interfaces
 {
     public interface ITagListController
     {
-        ObservableCollection<Tag> TagsList { get; set; }
+        List<Tag> TagsList { get; set; }
 
         void Search(string query);
         

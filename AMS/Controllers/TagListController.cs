@@ -5,6 +5,7 @@ using AMS.Services.Interfaces;
 using System.Collections.Generic;
 using AMS.Controllers.Interfaces;
 using System.Collections.ObjectModel;
+using System.Linq;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 
@@ -15,7 +16,7 @@ namespace AMS.Controllers
         private readonly ITagRepository _rep;
         private IExporter _exporter;
 
-        public ObservableCollection<Tag> TagsList { get; set; }
+        public List<Tag> TagsList { get; set; }
         public IUserListController UserListController { get; set; }
 
         public TagListController(ITagRepository rep, IExporter exporter)
@@ -27,7 +28,7 @@ namespace AMS.Controllers
 
         public void Search(string query)
         {
-            TagsList = _rep.Search("");
+            TagsList = _rep.Search("").ToList();
 
         }
 
@@ -51,7 +52,7 @@ namespace AMS.Controllers
 
         public void Remove(Tag tag)
         {
-            if (TagsList.Contains(tag))
+            if (TagsList.Contains(tag) && tag.ID != 1)
             {
                 TagsList.Remove(tag);
             }

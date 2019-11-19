@@ -22,7 +22,7 @@ namespace AMS.Controllers
         public IUserService UserService { get; set; }
 
         public IUserRepository UserRepository { get; set; }
-        public ObservableCollection<Tag> TagsList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public List<Tag> TagsList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
         
 
         #endregion
