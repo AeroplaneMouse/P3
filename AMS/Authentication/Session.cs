@@ -1,6 +1,7 @@
 ﻿using AMS.Models;
 using System.Security.Principal;
 using AMS.Database.Repositories;
+using AMS.Database.Repositories.Interfaces;
 
 namespace AMS.Authentication
 {

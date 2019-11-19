@@ -4,6 +4,7 @@ using System.Threading;
 using AMS.Authentication;
 using System.Windows.Input;
 using System.Threading.Tasks;
+using AMS.Database.Repositories;
 
 namespace AMS.ViewModels
 {
@@ -59,7 +60,7 @@ namespace AMS.ViewModels
                 CurrentActionText = "The excellent connection to the database was succesfully established...";
                 Thread.Sleep(_delay);
 
-                Session t = new Session();
+                Session t = new Session(new UserRepository());
                 if (t.Authenticated())
                 {
                     // Runs the systemLoaded method to remove splashpage, and 
