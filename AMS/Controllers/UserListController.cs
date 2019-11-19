@@ -50,8 +50,6 @@ namespace AMS.Controllers
                     .Where(p => p.Status.CompareTo("Added") == 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
-
-                //OnPropertyChanged(nameof(UsersList));
             }
         }
 
@@ -67,8 +65,6 @@ namespace AMS.Controllers
                     .Where(p => p.Status.CompareTo("Removed") == 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
-
-                //OnPropertyChanged(nameof(UsersList));
             }
         }
 
@@ -84,8 +80,6 @@ namespace AMS.Controllers
                     .Where(p => p.Status.CompareTo("Conflicting") == 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
-
-                //OnPropertyChanged(nameof(ShownUsersList));
             }
         }
 
@@ -101,8 +95,6 @@ namespace AMS.Controllers
                     .Where(p => p.IsEnabled == false && p.Status.CompareTo("Conflicting") != 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
-
-                //OnPropertyChanged(nameof(ShownUsersList));
             }
         }
 
@@ -144,11 +136,10 @@ namespace AMS.Controllers
 
             _isShowingAdded = true;
             _isShowingConflicting = true;
-            _isShowingDisabled = true;
+            _isShowingDisabled = false;
             _isShowingRemoved = true;
 
             GetExistingUsers();
-            //GetUsersFromFile();
 
             _finalUsersList = _existingUsersList;
 
@@ -191,6 +182,7 @@ namespace AMS.Controllers
 
             GetExistingUsers();
             _finalUsersList = _existingUsersList;
+            UpdateShownUsers(_finalUsersList);
 
             return true;
         }
@@ -199,6 +191,7 @@ namespace AMS.Controllers
         {
             GetExistingUsers();
             _finalUsersList = _existingUsersList;
+            UpdateShownUsers(_finalUsersList);
         }
 
         public void KeepUser(object user)
@@ -240,13 +233,11 @@ namespace AMS.Controllers
 
                 _finalUsersList.Remove(otherUser);
             }
-
-            //OnPropertyChanged(nameof(ShownUsersList));
         }
 
         public void SortUsers()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Search()
@@ -261,8 +252,13 @@ namespace AMS.Controllers
 
         public void GetUsersFromFile()
         {
-            _importedUsersList = Importer.ImportUsersFromFile(Importer.GetUsersFile()).Select(u => new UserWithStatus(u)).ToList();
-            _finalUsersList = Importer.CombineLists(_importedUsersList, _existingUsersList);
+            string filePath = Importer.GetUsersFile();
+
+            if (filePath.CompareTo(String.Empty) != 0)
+            {
+                _importedUsersList = Importer.ImportUsersFromFile(filePath).Select(u => new UserWithStatus(u)).ToList();
+                _finalUsersList = Importer.CombineLists(_importedUsersList, _existingUsersList);
+            }
         }
 
 

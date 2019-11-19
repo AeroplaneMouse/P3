@@ -99,7 +99,7 @@ namespace AMS.IO
 
             if (result == false)
             {
-                return filePath;
+                return String.Empty;
             }
 
             return dialog.FileName;

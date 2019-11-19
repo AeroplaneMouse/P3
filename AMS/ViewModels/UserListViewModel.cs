@@ -110,12 +110,6 @@ namespace AMS.ViewModels
             KeepUserCommand = new Base.RelayCommand<object>(KeepUser);
             ImportUsersCommand = new Base.RelayCommand(Import);
 
-            //ShownUsersList = new List<UserWithStatus>()
-            //{
-            //    new UserWithStatus(new User() {Username = "Hans"}) {Status = "Added"},
-            //    new UserWithStatus(new User() {Username = "Grethe"}) {Status = String.Empty},
-            //};
-
             OnPropertyChanged(nameof(ShownUsersList));
         }
 
@@ -132,8 +126,10 @@ namespace AMS.ViewModels
         private void Cancel()
         {
             _userListController.CancelChanges();
-            OnPropertyChanged(nameof(ShownUsersList));
+            
             _main.AddNotification(new Notification("Changes cancelled", Notification.ERROR));
+
+            OnPropertyChanged(nameof(ShownUsersList));
         }
 
         private void Apply()
