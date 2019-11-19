@@ -1,8 +1,6 @@
-﻿using System;
+﻿using AMS.Models;
 using System.Security.Principal;
-using AMS.Models;
 using AMS.Database.Repositories;
-using AMS.Services.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 
 namespace AMS.Authentication
@@ -10,7 +8,6 @@ namespace AMS.Authentication
     public class Session
     {
         public readonly User user;
-        
         public string Username { get => GetIdentity().Split('\\')[1]; }
         public string Domain { get => GetIdentity().Split('\\')[0]; }
 

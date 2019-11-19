@@ -1,10 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>AMS</RootNamespace>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon />
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,11 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Images\Logos\catface.jpg" />
-    <Resource Include="Resources\Images\Logos\catface2.jpg" />
-    <Resource Include="Resources\Images\Logos\catface3.jpg" />
-    <Resource Include="Resources\Images\Logos\catface4.jpg" />
-    <Resource Include="Resources\Images\Logos\kitten.jpg" />
     <Resource Include="Resources\Images\Logos\placeholder-beaut.png" />
     <Resource Include="Resources\Images\Logos\logo-light.png" />
     <Resource Include="Resources\Images\Logos\logo-dark.png" />
@@ -33,7 +30,7 @@
     <Resource Include="Resources\Images\Logos\Trash\trash_gray.png" />
     <Resource Include="Resources\Images\Logos\Trash\trash_black.png" />
     <Resource Include="Resources\Images\Logos\Trash\trash_red.png" />
-    <!-- Edit -->
+    <!-- Edit --> 
     <Resource Include="Resources\Images\Logos\Edit\edit_white.png" />
     <Resource Include="Resources\Images\Logos\Edit\edit_gray.png" />
     <Resource Include="Resources\Images\Logos\Edit\edit_black.png" />
@@ -49,6 +46,36 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Asset Management System\Asset Management System.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Update="Views\Prompts\Confirm.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Prompts\CustomField.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Prompts\TextInput.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Splash.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Page Update="Views\Prompts\Confirm.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Prompts\CustomField.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Prompts\TextInput.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\Splash.xaml">
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>

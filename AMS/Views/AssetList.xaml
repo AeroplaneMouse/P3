@@ -1,14 +1,184 @@
-﻿<Page x:Class="AMS.Views.AssetListView"
+﻿<Page x:Class="AMS.Views.AssetList"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:AMS.Views"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
-      Title="AssetListView">
+      Title="AssetList">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
         
+        <TextBlock Style="{StaticResource TitleStyle}"
+                   VerticalAlignment="Center"
+                   Margin="10, 11, 0, 11"
+                   Text="Assets"/>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+            <Button Style="{StaticResource RegularAcceptButton}"
+                    Command="{Binding AddNewCommand}"
+                    Content="Add"/>
+        </StackPanel>
+
+        <Rectangle Style="{StaticResource HorizontalSeparator}"
+                   VerticalAlignment="Bottom"/>
+
+        <!-- Content of list assets page -->
+        <Border Padding="10"
+                Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Left">
+                    <Border Background="LightGray"
+                            BorderThickness="0"
+                            Visibility="{Binding IsCurrentGroupVisible}">
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="{Binding CurrentGroup}"
+                                   VerticalAlignment="Center"/>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <Trigger Property="IsVisible" Value="True">
+                                        <Setter Property="Padding" Value="5 0 5 0"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+
+                    <TextBox FontSize="{StaticResource FontSizeSmall}"
+                             Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalContentAlignment="Center"
+                             MinWidth="200"
+                             Name="SearchElement"
+                             TabIndex="0">
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
+                            <KeyBinding Key="Escape" Command="{Binding DeleteCommand}"/>
+                            <!--<KeyBinding Key="Tab" FocusManager.FocusedElement="{Binding ElementName=SuggestionsList}"/>-->
+                        </TextBox.InputBindings>
+                    </TextBox>
+
+                    <Button Style="{StaticResource RegularButton}"
+                            Margin="10 0 10 0"
+                            Command="{Binding SearchCommand}"
+                            Content="Search"/>
+
+                    <StackPanel Orientation="Horizontal" ToolTip="Enables strict searching. Assets MUST have all the applied tags.">
+                        <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsStrict, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Style="{StaticResource ParagraphStyle}" Text="Strict" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Style="{StaticResource RegularCancelButton}"
+                            Command="{Binding RemoveCommand}"
+                            Content="Remove"
+                            Visibility="{Binding MultipleSelected,UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <Button Style="{StaticResource RegularButton}"
+                            Command="{Binding EditCommand}"
+                            Margin="10 0 0 0 "
+                            Content="Edit"/>
+
+                    <Button Style="{StaticResource RegularButton}"
+                            Margin="10 0 0 0 "
+                            Content="Export selected items"
+                            Width="Auto"
+                            Command="{Binding PrintCommand}"/>
+                </StackPanel>
+
+                <!-- Current tags -->
+                <ListView ItemsSource="{Binding Path=Tags.AppliedTags}"
+                          ItemContainerStyle="{StaticResource ListViewWithTags}"
+                          Grid.Row="1"
+                          Margin="0 0 0 0">
+
+                    <ListView.Template>
+                        <ControlTemplate>
+                            <WrapPanel IsItemsHost="True"/>
+                        </ControlTemplate>
+                    </ListView.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid MaxWidth="100" HorizontalAlignment="Left">
+                                <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagAddedToSearch}"></Label>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ListView>
+
+                <!--Style="{StaticResource RegularList}"-->
+                <ListView ItemsSource="{Binding Items}"
+                        SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                        Name="ListView"
+                        Grid.Row="2">
+                    
+                    <ListView.Resources>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="Command" Value="{Binding HeaderClickCommand}" />
+                            <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}" />
+                        </Style>
+                        <Style TargetType="ListViewItem" BasedOn="{StaticResource RegularListItem}"/>
+                    </ListView.Resources>
+                    
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=Identifier}" Header="Identifier" />
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
+                        </GridView>
+                    </ListView.View>
+
+                    <ListView.InputBindings>
+                        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
+                        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
+                        <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
+                    </ListView.InputBindings>
+                    <!-- <i:Interaction.Triggers> -->
+                    <!--     <i:EventTrigger EventName="MouseDoubleClick"> -->
+                    <!--         ~1~ViewCommand@1@ -->
+                    <!--         <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/> -->
+                    <!--     </i:EventTrigger> -->
+                    <!-- </i:Interaction.Triggers> -->
+                </ListView>
+            </Grid>
+        </Border>
+
+        <!-- Suggestion dropdown -->
+        <Grid
+            VerticalAlignment="Top"
+            HorizontalAlignment="Left"
+            Margin="10 40 0 0"
+            Grid.Row="1">
+            <Border Background="LightGray" 
+                    Opacity="0.7"
+                    BorderThickness="0"
+                    BorderBrush="Black">
+            </Border>
+            <ListView SelectedIndex="{Binding SelectedSuggestedIndex}"
+                        Background="Transparent"
+                        Name="SuggestionsList"
+                        BorderThickness="0"
+                        ItemsSource="{Binding Suggestions}"
+                        MinWidth="209"
+                        TabIndex="1">
+                <ListView.InputBindings>
+                    <KeyBinding Key="Enter"
+                                Command="{Binding SelectTagCommand}"/>
+                </ListView.InputBindings>
+            </ListView>
+        </Grid>
     </Grid>
 </Page>

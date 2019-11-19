@@ -1,11 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Asset_Management_System.Models;
+﻿using AMS.Models;
 
 namespace AMS.Events
 {
     public delegate void NotificationEventHandler(Notification n);
 
     public delegate void SqlConnectionEventHandler();
+
+    public delegate void PromptEventHandler(object sender, PromptEventArgs e);
+
+    public delegate void TextInputPromptEventHandler(object sender, TextInputPromptEventArgs e);
+
+    public delegate void FieldInputPromptEventHandler(object sender, FieldInputPromptEventArgs e);
 }

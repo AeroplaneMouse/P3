@@ -158,6 +158,9 @@ namespace AMS.Database.Repositories
         /// <returns></returns>
         public bool Delete(Tag entity)
         {
+            if (entity.ID == 1)
+                return false;
+            
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
