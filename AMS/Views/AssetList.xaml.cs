@@ -10,6 +10,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using AMS.Controllers;
+using AMS.Database.Repositories;
+using AMS.IO;
 
 namespace AMS.Views
 {
@@ -21,6 +24,7 @@ namespace AMS.Views
         public AssetListView()
         {
             InitializeComponent();
+            DataContext = new ViewModels.AssetListViewModel(new AssetListController(new AssetRepository(), new Exporter()));
         }
     }
 }

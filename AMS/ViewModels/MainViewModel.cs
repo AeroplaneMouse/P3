@@ -102,6 +102,7 @@ namespace AMS.ViewModels
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
 
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
+            ShowAssetsPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetListView()));
             //ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
             //ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this, _tagService)));
             //ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this, _entryService)));
@@ -276,7 +277,7 @@ namespace AMS.ViewModels
             if (e.Result)
             {
                 Department department = new Department();
-                department.Name = e.ResultMessage;
+                department.Name = ((TextInputPromptEventArgs) e).Text;
 
                 ulong id;
                 if (new DepartmentRepository().Insert(department, out id))
