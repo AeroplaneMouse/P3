@@ -300,9 +300,9 @@ namespace AMS.ViewModels
         public ICommand ShowTagPageCommand { get; set; }
 
         // Department commands
-        public static ICommand SelectDepartmentCommand { get; set; }
-        public static ICommand RemoveDepartmentCommand { get; set; }
-        public static ICommand EditDepartmentCommand { get; set; }
+        public ICommand SelectDepartmentCommand { get; set; }
+        public ICommand RemoveDepartmentCommand { get; set; }
+        public ICommand EditDepartmentCommand { get; set; }
         public ICommand AddDepartmentCommand { get; set; }
 
         public ICommand ShowLogPageCommand { get; set; }
