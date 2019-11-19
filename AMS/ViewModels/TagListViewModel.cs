@@ -50,7 +50,6 @@ namespace AMS.ViewModels
             {
                 _tagListController.Remove(SelectedItem);
             }
-            
         }
     }
 }
