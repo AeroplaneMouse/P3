@@ -45,8 +45,4 @@
     <PackageReference Include="System.Text.Encoding.CodePages" Version="4.6.0" />
   </ItemGroup>
   
-  <ItemGroup>
-    <ProjectReference Include="..\Asset Management System\Asset Management System.csproj" />
-  </ItemGroup>
-
 </Project>
