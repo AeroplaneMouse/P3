@@ -14,7 +14,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="Helpers" />
     <Folder Include="Resources\Styles\" />
     <Folder Include="Resources\Window\" />
   </ItemGroup>
