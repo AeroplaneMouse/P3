@@ -15,10 +15,6 @@ namespace AMS.Controllers.Interfaces
 
         IUserImporter Importer { get; set; }
 
-        IUserService UserService { get; set; }
-
-        IUserRepository UserRepository { get; set; }
-
         void KeepUser(User user);
 
         void CancelChanges();

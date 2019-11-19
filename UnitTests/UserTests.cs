@@ -15,13 +15,14 @@ using AMS.Database.Repositories;
 using AMS.Models;
 using AMS.Authentication;
 using System.Security.Permissions;
+using AMS.Database.Repositories.Interfaces;
 
 namespace UnitTests
 {
     [TestClass]
     public class UserTests
     {
-        private IUserService _userService { get; set; }
+        private IUserRepository _userRepository { get; set; }
 
         private IUserImporter _userImporter { get; set; }
 
@@ -34,9 +35,10 @@ namespace UnitTests
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            _userService = new UserService();
-            _userImporter = new UserImporter(_userService);
-            _userListController = new UserListController(_userImporter, _userService);
+            _userRepository = new UserRepository();
+
+            _userImporter = new UserImporter(_userRepository);
+            _userListController = new UserListController(_userImporter, _userRepository);
         }
 
         [TestCleanup]
