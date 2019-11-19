@@ -92,9 +92,28 @@ namespace AMS.ViewModels
 
             _userListController = userListController;
 
-            CancelCommand = new Base.RelayCommand(_userListController.CancelChanges);
-            ApplyCommand = new Base.RelayCommand(_userListController.ApplyChanges);
-            KeepUserCommand = new Base.RelayCommand<object>(_userListController.KeepUser);
+            CancelCommand = new Base.RelayCommand(Cancel);
+            ApplyCommand = new Base.RelayCommand(Apply);
+            KeepUserCommand = new Base.RelayCommand<object>(KeepUser);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void Cancel()
+        {
+            _userListController.CancelChanges();
+        }
+
+        private void Apply()
+        {
+            _userListController.ApplyChanges();
+        }
+
+        private void KeepUser(object user)
+        {
+            _userListController.KeepUser(user);
         }
 
         #endregion

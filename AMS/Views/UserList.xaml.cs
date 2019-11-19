@@ -18,9 +18,9 @@ namespace AMS.Views
     /// <summary>
     /// Interaction logic for UserListView.xaml
     /// </summary>
-    public partial class UserListView : Page
+    public partial class UserList : Page
     {
-        public UserListView(IUserListController controller)
+        public UserList(IUserListController controller)
         {
             InitializeComponent();
             this.DataContext = new UserListViewModel(controller);

@@ -23,6 +23,5 @@ namespace AMS.Controllers.Interfaces
         void Remove(Tag tag);
 
         void Export(List<Tag> tags);
-
     }
 }

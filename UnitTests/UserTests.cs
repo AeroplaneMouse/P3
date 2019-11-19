@@ -16,6 +16,7 @@ using AMS.Models;
 using AMS.Authentication;
 using System.Security.Permissions;
 using AMS.Database.Repositories.Interfaces;
+using Moq;
 
 namespace UnitTests
 {
@@ -30,7 +31,7 @@ namespace UnitTests
 
         private IUserListController _userListController { get; set; }
 
-        
+        private Mock<IUserRepository> _userRepMock { get; set; }
 
         [TestInitialize]
         public void InitializeUserTest()
@@ -42,6 +43,8 @@ namespace UnitTests
 
             _userImporter = new UserImporter(_userRepository);
             _userListController = new UserListController(_userImporter, _userRepository, _departmentRepository);
+
+            _userRepMock = new Mock<IUserRepository>();
         }
 
         #region Helpers
@@ -168,6 +171,11 @@ namespace UnitTests
         {
             // Arrange
 
+            _userRepMock.Setup(p => p.GetAll(true)).Returns(new List<User>());
+
+            List<UserWithStatus> existing = _userRepository.GetAll(true).Select(u => new UserWithStatus(u)).ToList();
+
+            int noget = 1;
             // Act
 
             // Assert
