@@ -23,7 +23,8 @@
     <SolidColorBrush x:Key="NavigationSelectedBrush" Color="{StaticResource NavigationSelected}"/>
 
     <!-- 32cd56-->
-    <Color x:Key="AcceptGreen">#5FCF80</Color>
+    <!-- 5FCF80 -->
+    <Color x:Key="AcceptGreen">#32cd56</Color>
     <SolidColorBrush x:Key="AcceptGreenBrush" Color="{StaticResource AcceptGreen}"/>
 
     <!-- 28a445 -->
