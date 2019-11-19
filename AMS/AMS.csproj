@@ -21,12 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Images\Logos\*" />
-    <Resource Include="Resources\Images\Logos\catface.jpg" />
-    <Resource Include="Resources\Images\Logos\catface2.jpg" />
-    <Resource Include="Resources\Images\Logos\catface3.jpg" />
-    <Resource Include="Resources\Images\Logos\catface4.jpg" />
-    <Resource Include="Resources\Images\Logos\kitten.jpg" />
     <Resource Include="Resources\Images\Logos\placeholder-beaut.png" />
     <Resource Include="Resources\Images\Logos\logo-light.png" />
     <Resource Include="Resources\Images\Logos\logo-dark.png" />
