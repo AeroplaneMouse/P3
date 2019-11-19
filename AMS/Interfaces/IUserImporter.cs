@@ -9,14 +9,6 @@ namespace AMS.Interfaces
 {
     public interface IUserImporter
     {
-        #region Properties
-
-        IUserService UserService { get; set; }
-
-        IUserRepository UserRepository { get; set; }
-
-        #endregion
-
         #region Methods
 
         List<User> ImportUsersFromFile(string filePath);

@@ -10,9 +10,9 @@ namespace AMS.Authentication
         public string Username { get => GetIdentity().Split('\\')[1]; }
         public string Domain { get => GetIdentity().Split('\\')[0]; }
 
-        public Session()
+        public Session(IUserRepository repository)
         {
-            user = new UserRepository().GetByIdentity(GetIdentity());
+            user = repository.GetByIdentity(GetIdentity());
         }
 
         public bool Authenticated()
