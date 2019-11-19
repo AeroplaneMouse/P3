@@ -57,7 +57,7 @@
                     </Border>
 
                     <TextBox FontSize="{StaticResource FontSizeSmall}"
-                             Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
                              VerticalContentAlignment="Center"
                              MinWidth="200"
                              Name="SearchElement"
