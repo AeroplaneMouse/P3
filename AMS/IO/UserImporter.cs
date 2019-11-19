@@ -16,17 +16,15 @@ namespace AMS.IO
     {
         #region Public Properties
 
-        public IUserService UserService { get; set; }
-
-        public IUserRepository UserRepository { get; set; }
+        private IUserRepository _userRepository { get; set; }
 
         #endregion
 
         #region Constructor
 
-        public UserImporter(IUserService service)
+        public UserImporter(IUserRepository repository)
         {
-            UserService = service;
+            _userRepository = repository;
         }
 
         #endregion
@@ -61,7 +59,7 @@ namespace AMS.IO
 
         public List<User> ImportUsersFromFile(string filePath)
         {
-            var session = new Session(UserService);
+            var session = new Session(_userRepository);
 
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 

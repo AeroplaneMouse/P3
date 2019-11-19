@@ -6,6 +6,6 @@ namespace AMS.Interfaces
 {
     public interface IExporter
     {
-        void ExportSelected();
+        void Print(IEnumerable<object> items);
     }
 }

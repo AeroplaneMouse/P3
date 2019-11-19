@@ -1,36 +1,32 @@
 ﻿using System;
+using AMS.Views;
+using AMS.Models;
+using AMS.Events;
 using System.Linq;
+using AMS.Database;
 using System.Windows;
+using AMS.Authentication;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using AMS.Database.Repositories;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
-using AMS.Models;
-using AMS.Events;
-using AMS.Database;
-using AMS.Authentication;
 
 namespace AMS.ViewModels
 {
     public class MainViewModel : Base.BaseViewModel
     {
         // The window this view model controls
-        private Window _window;
+        private readonly Window _window;
 
         // Margin around the window to allow a drop shadow
         private int _outerMarginSize;
 
-        private List<Page> pages = new List<Page>();
-        private List<Page> excludedPages = new List<Page>();
-
         private Department _currentDepartment;
-        private Stack<Page> _history = new Stack<Page>();
-        private Page _currentPage;
-        private bool HasConnectionFailedBeenRaised = false;
-
+        private bool _hasConnectionFailedBeenRaised = false;
 
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
@@ -70,7 +66,7 @@ namespace AMS.ViewModels
         public Visibility Visible { get; set; }
         public List<Department> Departments { get => GetDepartments(); }
         public Session CurrentSession { get; private set; }
-        //public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
+        public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
 
 
         /// <summary>
@@ -102,15 +98,20 @@ namespace AMS.ViewModels
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
             MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
             CloseCommand = new Base.RelayCommand(() => _window.Close());
-
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
 
-            //ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this, _assetService, _tagService)));
+            ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
+            ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList()));
+            ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList()));
             //ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
             //ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this, _tagService)));
             //ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this, _entryService)));
 
-            //RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
+            RemoveNotificationCommand = new Base.RelayCommand<object>((object parameter) =>
+            {
+                int id = int.Parse(parameter.ToString());
+                RemoveNotification(id);
+            });
 
             ReloadCommand = new Base.RelayCommand(Reload);
 
@@ -118,113 +119,75 @@ namespace AMS.ViewModels
 
             ImportUsersCommand = new Base.RelayCommand(ImportUsers);
 
-            //SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this, _departmentService);
-            //RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, _departmentService);
-            //EditDepartmentCommand = new Commands.EditDepartmentCommand(this, _departmentService);
-            //AddDepartmentCommand = new Base.RelayCommand(() =>
-            //{
-            //    DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment));
-            //});
+            SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
+            RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
+            EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
+            AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment)));
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
-            
+
             // Display splash page
-            //SplashPage = new Views.Splash(this, _userService);
+            SplashPage = new Views.Splash(this);
         }
 
-
-        
-
-        // Accessed in that get main as parameter, dont know if its bad practice.
-        //public IEntryService EntryService
-        //{
-        //    get => _entryService;
-        //}
-
-
-        //public void DisplayPrompt(Page promptPage)
-        //{
-        //    PopupPage = promptPage;
-        //    (promptPage.DataContext as Prompts.PromptViewModel).PromptElapsed += PromptElapsed;
-        //}
-
-        //private void PromptElapsed(object sender, PromptEventArgs e)
-        //{
-        //    // Removing popup
-        //    PopupPage = null;
-        //}
-
-
-        /// <summary>
-        /// Changes the content for the main content frame to the new page. If the page exists in the
-        /// list of loaded pages, that one would be used. One can also specify a different frame of 
-        /// which content will be modified to contain the new page.
-        /// </summary>
-        //public void ChangeMainContent(Page newPage) => ChangeMainContent(newPage, ContentFrame);
-
-        //public void ChangeMainContent(Page newPage, Frame frame)
-        //{
-        //    frame.Navigate(newPage);
-
-        //    //Page setPage = null;
-        //    //// Search the loaded page list, for the given page to check if it has allready been loaded.
-        //    //foreach (Page page in pages)
-        //    //{
-        //    //    if (page.GetType() == newPage.GetType())
-        //    //        setPage = page;
-        //    //}
-
-        //    //// If the new page wasn't found in the list, the given newPage object is used and added to the list of pages.
-        //    //if (setPage == null)
-        //    //{
-        //    //    setPage = newPage;
-        //    //    if (!ExcludedFromSaving(setPage))
-        //    //        pages.Add(setPage);
-        //    //}
-
-        //    //// Update the list on the page, if there is one
-        //    //if (setPage.DataContext is IListUpdate)
-        //    //    (setPage.DataContext as IListUpdate).PageGotFocus();
-
-        //    //if (!_history.Contains(_currentPage))
-        //    //    _history.Push(_currentPage);
-        //    //// Setting the content of the given frame, to the newPage object to display the requested page.
-        //    //frame.Content = setPage;
-        //    //_currentPage = setPage;
-        //}
-
-        public void ReturnToPreviousPage()
+        private void SelectDepartment(object parameter)
         {
-            ContentFrame.Navigate(_history.Pop());
+            try
+            {
+                ulong id = ulong.Parse(parameter.ToString());
+                Department selectedDepartment = new DepartmentRepository().GetById(id);
+                if (selectedDepartment == null)
+                    selectedDepartment = Models.Department.GetDefault();
+
+                AddNotification(new Models.Notification(
+                    $"{selectedDepartment.Name} is now the current department.", Models.Notification.APPROVE));
+                CurrentDepartment = selectedDepartment;
+            }
+            catch (Exception e)
+            {
+                AddNotification(new Models.Notification(e.Message, Models.Notification.ERROR), 5000);
+            }
         }
 
-        //public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
-        //    => AddNotification(new Notification(message, foreground, background));
+        public void DisplayPrompt(Page promptPage)
+        {
+            PopupPage = promptPage;
+            (promptPage.DataContext as Prompts.PromptViewModel).PromptElapsed += RemovePrompt;
+        }
 
-        //public void AddNotification(Notification n) => AddNotification(n, 2500);
+        private void RemovePrompt(object sender, PromptEventArgs e)
+        {
+            PopupPage = null;
+        }
 
-        //public async void AddNotification(Notification n, int displayTime)
-        //{
-        //    // Add notification to the list of active notifications
-        //    ActiveNotifications.Add(n);
+        public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
+            => AddNotification(new Notification(message, foreground, background));
 
-        //    // Wait some time, then remove it.
-        //    if (displayTime > 0)
-        //    {
-        //        await Task.Delay(displayTime);
-        //        RemoveNotification(n);
-        //    }
-        //}
+        public void AddNotification(Notification n) 
+            => AddNotification(n, 2500);
+
+        public async void AddNotification(Notification n, int displayTime)
+        {
+            // Add notification to the list of active notifications
+            ActiveNotifications.Add(n);
+
+            // Wait some time, then remove it.
+            if (displayTime > 0)
+            {
+                await Task.Delay(displayTime);
+                RemoveNotification(n);
+            }
+        }
 
         // Removes an active notification.
-        //public void RemoveNotification(int id) =>
-        //    RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
+        public void RemoveNotification(int id) 
+            => RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
 
-        //public void RemoveNotification(Notification n)
-        //{
-        //    ActiveNotifications.Remove(n);
-        //}
+        public void RemoveNotification(Notification n)
+        {
+            ActiveNotifications.Remove(n);
+        }
 
 
         /// <summary>
@@ -235,7 +198,7 @@ namespace AMS.ViewModels
         public void LoadSystem(Session session)
         {
             // Attaching notification
-            MySqlHandler.ConnectionFailed += Reload;
+            MySqlHandler.ConnectionFailed += ConnectionFailed;
 
             // Loads homepage and other stuff from the UI-thread.
             SplashPage.Dispatcher.Invoke(Load);
@@ -244,7 +207,7 @@ namespace AMS.ViewModels
             SplashPage = null;
 
             // Resetting connection failed
-            HasConnectionFailedBeenRaised = false;
+            _hasConnectionFailedBeenRaised = false;
 
             // Show department and username
             CurrentDepartmentVisibility = Visibility.Visible;
@@ -253,38 +216,26 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(CurrentUser));
 
             // Setting the current department, from the default department of the current user.
-            //CurrentDepartment = _departmentService.GetRepository().GetById(session.user.DefaultDepartment);
-            //if (CurrentDepartment == null)
-            //    CurrentDepartment = Department.GetDefault();
+            CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);
+            if (CurrentDepartment == null)
+                CurrentDepartment = Department.GetDefault();
         }
 
 
-        //private void ConnectionFailed(Notification n, bool reloadRequired)
-        //{
-        //    if (!HasConnectionFailedBeenRaised)
-        //    {
-        //        HasConnectionFailedBeenRaised = true;
-        //        // Display notification if one was given
-        //        if (n != null)
-        //            AddNotification(n, 6000);
-
-        //        // Reload the application is that is required
-        //        if (reloadRequired)
-        //            Reload();
-        //    }
-        //}
+        private void ConnectionFailed()
+        {
+            if (!_hasConnectionFailedBeenRaised)
+            {
+                _hasConnectionFailedBeenRaised = true;
+                Reload();
+            }
+        }
 
         // Loads excluded pages and sets homepage.
         private void Load()
         {
-            // Add excluded pages
-            //excludedPages.Add(new Views.AssetManager(null, _assetService));
-            //excludedPages.Add(new Views.TagManager(null, _tagService));
-            //excludedPages.Add(new Views.ObjectViewer(null, _commentService, null));
-            //excludedPages.Add(new Views.UserImporterView(null, _userService, _departmentService));
-
-            //// Load homepage
-            //ChangeMainContent(new Views.Home(this, _assetService, _tagService));
+            // Load homepage
+            ContentFrame.Navigate(new Home());
         }
 
         private void ImportUsers()
@@ -297,62 +248,47 @@ namespace AMS.ViewModels
         {
             Console.WriteLine("Reloading...");
 
-            //// Clearing memory
-            //pages.Clear();
-            //MySqlHandler.ConnectionFailed -= Reload;
-            //CurrentDepartmentVisibility = Visibility.Hidden;
-            //CurrentUser = null;
-            //CurrentDepartment = null;
-            //OnPropertyChanged(nameof(CurrentUser));
+            // Clearing memory
+            MySqlHandler.ConnectionFailed -= ConnectionFailed;
+            CurrentDepartmentVisibility = Visibility.Hidden;
+            CurrentUser = null;
+            CurrentDepartment = null;
+            OnPropertyChanged(nameof(CurrentUser));
 
-            //// Load splash screen
-            //SplashPage = new Views.Splash(this, _userService);
-        }
-
-        private bool ExcludedFromSaving(Page page)
-        {
-            foreach (Page excludedPage in excludedPages)
-            {
-                // Return true if the page was found in the list of excluded pages.
-                if (excludedPage.GetType() == page.GetType())
-                    return true;
-            }
-
-            // If the page wasn't found, return false
-            return false;
+            // Load splash screen
+            SplashPage = new Views.Splash(this);
         }
 
         private List<Department> GetDepartments()
         {
-            return null;
-            //if (CurrentDepartmentVisibility == Visibility.Visible)
-            //    return (List<Department>)((IDepartmentRepository)_departmentService.GetRepository()).GetAll();
-            //else
-            //    return new List<Department>();
+            if (CurrentDepartmentVisibility == Visibility.Visible)
+                return (List<Department>)new DepartmentRepository().GetAll();
+            else
+                return new List<Department>();
         }
 
-        //private void AddDepartment(object sender, PromptEventArgs e)
-        //{
-        //    if (e.Result)
-        //    {
-        //        Department department = new Department();
-        //        department.Name = e.ResultMessage;
+        private void AddDepartment(object sender, PromptEventArgs e)
+        {
+            if (e.Result)
+            {
+                Department department = new Department();
+                department.Name = (e as TextInputPromptEventArgs).Text;
 
-        //        ulong id;
-        //        if (_departmentService.GetRepository().Insert(department, out id))
-        //        {
-        //            // TODO: Add log of department insert
-        //            OnPropertyChanged(nameof(Departments));
-        //            AddNotification(new Notification($"{department.Name} has now been add to the system.",
-        //                Notification.APPROVE));
-        //        }
-        //        else
-        //            AddNotification(
-        //                new Notification(
-        //                    $"ERROR! An unknown error stopped the department {department.Name} from beeing added.",
-        //                    Notification.ERROR), 3000);
-        //    }
-        //}
+                ulong id;
+                if (new DepartmentRepository().Insert(department, out id))
+                {
+                    // TODO: Add log of department insert
+                    OnPropertyChanged(nameof(Departments));
+                    AddNotification(new Notification($"{department.Name} has now been add to the system.",
+                        Notification.APPROVE));
+                }
+                else
+                    AddNotification(
+                        new Notification(
+                            $"ERROR! An unknown error stopped the department {department.Name} from beeing added.",
+                            Notification.ERROR), 3000);
+            }
+        }
 
         // Window commands
         public ICommand MinimizeCommand { get; set; }
@@ -361,13 +297,13 @@ namespace AMS.ViewModels
         public ICommand SystemMenuCommand { get; set; }
 
         public ICommand ShowHomePageCommand { get; set; }
-        public ICommand ShowAssetsPageCommand { get; set; }
-        public ICommand ShowTagPageCommand { get; set; }
+        public ICommand ShowAssetListPageCommand { get; set; }
+        public ICommand ShowTagListPageCommand { get; set; }
 
         // Department commands
-        public static ICommand SelectDepartmentCommand { get; set; }
-        public static ICommand RemoveDepartmentCommand { get; set; }
-        public static ICommand EditDepartmentCommand { get; set; }
+        public ICommand SelectDepartmentCommand { get; set; }
+        public ICommand RemoveDepartmentCommand { get; set; }
+        public ICommand EditDepartmentCommand { get; set; }
         public ICommand AddDepartmentCommand { get; set; }
 
         public ICommand ShowLogPageCommand { get; set; }
@@ -376,7 +312,7 @@ namespace AMS.ViewModels
 
         // Notification commands
         public ICommand AddFieldTestCommand { get; set; }
-        public static ICommand RemoveNotificationCommand { get; set; }
+        public ICommand RemoveNotificationCommand { get; set; }
         public ICommand ImportUsersCommand { get; set; }
 
 

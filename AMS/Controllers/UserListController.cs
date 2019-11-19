@@ -19,7 +19,7 @@ namespace AMS.Controllers
 
         public IUserImporter Importer { get; set; }
 
-        public IUserService UserService { get; set; }
+        private IUserRepository _userRepository { get; set; }
 
         public IUserRepository UserRepository { get; set; }
         public List<Tag> TagsList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
@@ -29,12 +29,11 @@ namespace AMS.Controllers
 
         #region Constructor
 
-        public UserListController(IUserImporter importer, IUserService service)
+        public UserListController(IUserImporter importer, IUserRepository repository)
         {
             Importer = importer;
-            UserService = service;
 
-            UserRepository = service.GetRepository() as UserRepository;
+            _userRepository = repository;
         }
 
         #endregion

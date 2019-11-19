@@ -42,7 +42,7 @@ namespace AMS.ViewModels
                 if (treeViewParentTagID != 0)
                 {
                     Tag tag = (Tag) Tags
-                        .SingleOrDefault(tag => tag.TagLabel == pressedItemLabel || tag.TagId == treeViewParentTagID);
+                    .SingleOrDefault(tag => tag.TagLabel == pressedItemLabel || tag.TagId == treeViewParentTagID);
                     if (tag != null)
                     {
                         if (tag.TagId == treeViewParentTagID)
@@ -64,8 +64,6 @@ namespace AMS.ViewModels
             }
 
             return null;
-        }
-
-        
+        }      
     }
 }

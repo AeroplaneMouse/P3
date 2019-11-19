@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:v="clr-namespace:AMS.ViewModels">
     
     <Style TargetType="ListView" x:Key="NotificationView">
         <Setter Property="ItemsSource" Value="{Binding ActiveNotifications}"/>
@@ -13,7 +14,8 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListViewItem">
-                                            <Grid Background="{Binding Path=Background}">
+                                            <Grid Background="{Binding Path=Background}"
+                                                  Opacity="0.9">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="Auto"/>
@@ -22,8 +24,8 @@
                                                        FontSize="{TemplateBinding FontSize}"/>
                                                 <Button Grid.Column="1"
                                                         Style="{StaticResource RemoveNotificationButton}"
+                                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RemoveNotificationCommand}"
                                                         CommandParameter="{Binding Path=ID}">
-                                                        <!--Command="{x:Static v:MainViewModel.RemoveNotificationCommand}"-->
                                                 </Button>
                                             </Grid>
                                         </ControlTemplate>
