@@ -133,9 +133,27 @@
                     
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Identifier}" Header="Identifier" />
+                            <!-- Name -->
+                            <GridViewColumn Header="Name">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Name}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <!-- Identifier -->
+                            <GridViewColumn Header="Identifier">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Identifier}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                             <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
                         </GridView>
                     </ListView.View>
