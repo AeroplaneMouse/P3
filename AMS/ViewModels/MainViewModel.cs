@@ -63,7 +63,6 @@ namespace AMS.ViewModels
         public Frame ContentFrame { get; set; } = new Frame();
         public Page SplashPage { get; set; }
         public Page PopupPage { get; set; }
-        //public Visibility SplashVisibility { get; set; } = Visibility.Visible;
         public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
         public Visibility Visible { get; set; }
         public List<Department> Departments { get => GetDepartments(); }
