@@ -13,16 +13,14 @@ namespace AMS.Controllers.Interfaces
         List<Tag> TagsList { get; set; }
 
         void Search(string query);
-        
-        void AddNew();
-
-        void Edit(Tag tag);
-
-        void ViewTag(Tag tag);
 
         void Remove(Tag tag);
 
         void Export(List<Tag> tags);
+
+        List<Tag> GetParentTags();
+
+        List<Tag> GetChildTags(ulong id);
 
     }
 }

@@ -4,66 +4,53 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using AMS.Controllers;
-using AMS.Database.Repositories.Interfaces;
-using AMS.IO;
+using AMS.Controllers.Interfaces;
+using AMS.Events;
+using AMS.Helpers;
 using AMS.Models;
+using AMS.Views;
+using AMS.Views.Prompts;
 
 namespace AMS.ViewModels
 {
     public class TagListViewModel
     {
         public List<Tag> Tags { get; set; }
-        private TagListController _tagListController;
+        private ITagListController _tagListController;
+        private MainViewModel _mainViewModel;
+        
+        public Tag SelectedItem { get; set; }
+        
+        public ICommand RemoveCommand { get; set; }
 
-        public TagListViewModel(ITagRepository tagRepository)
+        public ICommand EditCommand { get; set; }
+        
+        public TagListViewModel(MainViewModel mainViewModel)
         {
-            ITagRepository rep = tagRepository;
-            Tags = _tagListController.TagsList= new List<Tag>();
-            Tags.AddRange(rep.GetParentTags());
+            _mainViewModel = mainViewModel;
             //Todo Evt inkluder en exporter i stedet for at skrive new
-            _tagListController = new TagListController(tagRepository, new Exporter());
+            _tagListController = new TagListController(new PrintHelper());
+            Tags = _tagListController.TagsList;
+            Tags.AddRange(_tagListController.GetParentTags());
+            RemoveCommand = new Base.RelayCommand(() => _mainViewModel.DisplayPrompt(new Confirm("Delete the selected tag, cannot be recovered?",RemoveTag)));
+            EditCommand = new Base.RelayCommand(()=>_mainViewModel.ContentFrame.Navigate(new TagEditor(SelectedItem)));
 
             foreach (var tag in Tags)
             {
-                List<Tag> ofspring = rep.GetChildTags(tag.TagId).ToList();
+                List<Tag> ofspring = _tagListController.GetChildTags(tag.ID);
                 tag.Children = new List<ITagable>();
                 tag.Children.AddRange(ofspring);
             }
         }
-        
-        
 
-        public Tag GetSelectedItem(object sender, RoutedEventArgs e, ulong treeViewParentTagID)
+        private void RemoveTag(object sender, PromptEventArgs e)
         {
-            Label pressedItem = (Label) sender;
-            if (pressedItem != null)
+            // If the prompt returns true, delete the item
+            if (e.Result)
             {
-                string pressedItemLabel = pressedItem.Content.ToString();
-                if (treeViewParentTagID != 0)
-                {
-                    Tag tag = (Tag) Tags
-                    .SingleOrDefault(tag => tag.TagLabel == pressedItemLabel || tag.TagId == treeViewParentTagID);
-                    if (tag != null)
-                    {
-                        if (tag.TagId == treeViewParentTagID)
-                        {
-                            tag = (Tag) tag.Children.SingleOrDefault(tag => tag.TagLabel == pressedItemLabel);
-                        }
-
-                        return tag;
-                    }
-                }
-                else
-                {
-                    Tag tag = (Tag) Tags.SingleOrDefault(tag => tag.TagLabel == pressedItemLabel);
-                    if (tag != null)
-                    {
-                        return tag;
-                    }
-                }
+                _tagListController.Remove(SelectedItem);
             }
-
-            return null;
-        }      
+            
+        }
     }
 }

@@ -1,7 +1,8 @@
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
+using AMS.Helpers;
 using AMS.Interfaces;
 using AMS.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,7 +28,7 @@ namespace UnitTests
             _tagRepMock = new Mock<ITagRepository>();
             _tagRepMock.Setup(p => p.Delete(It.IsAny<Tag>())).Returns(true);
             // This creates a new instance of the class for each test
-            _tagListController = new TagListController(_tagRepMock.Object, _exporter);
+            _tagListController = new TagListController(new PrintHelper());
             _tagOne = new Tag {Name = "TagOne", Color = "#f2f2f2f2"};
             _tagTwo = new Tag {Name = "TagTwo", Color = "#f2f2f2f2"};
             _tagThree = new Tag {Name = "TagThree", Color = "#f2f2f2f2"};
@@ -37,7 +38,7 @@ namespace UnitTests
         public void TagListRemove_ElementInList_ReturnContains()
         {
             //Arrange
-            _tagListController.TagsList = new ObservableCollection<Tag>();
+            _tagListController.TagsList = new List<Tag>();
             _tagListController.TagsList.Add(_tagOne);
             _tagListController.TagsList.Add(_tagTwo);
             _tagListController.TagsList.Add(_tagThree);
