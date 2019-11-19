@@ -123,13 +123,15 @@ namespace AMS.ViewModels
         private void Cancel()
         {
             _userListController.CancelChanges();
-            _main.ContentFrame.GoBack();
+            OnPropertyChanged(nameof(ShownUsersList));
+            _main.AddNotification(new Notification("Changes cancelled", Notification.ERROR));
         }
 
         private void Apply()
         {
             _userListController.ApplyChanges();
-            _main.ContentFrame.GoBack();
+            OnPropertyChanged(nameof(ShownUsersList));
+            _main.AddNotification(new Notification("Changes applied", Notification.APPROVE));
         }
 
         private void KeepUser(object user)

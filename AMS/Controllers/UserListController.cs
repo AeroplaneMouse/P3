@@ -22,8 +22,8 @@ namespace AMS.Controllers
             {
                 return (_finalUsersList ?? new List<UserWithStatus>())
                     .Where(u => u.IsShown == true)
-                    .OrderByDescending(p => p.IsEnabled)
                     .OrderBy(p => p.Username)
+                    .OrderByDescending(p => p.IsEnabled)
                     .OrderByDescending(p => p.Status.CompareTo("Removed") == 0)
                     .OrderByDescending(p => p.Status.CompareTo("Added") == 0)
                     .OrderByDescending(p => p.Status.CompareTo("Conflicting") == 0)
@@ -148,9 +148,9 @@ namespace AMS.Controllers
             _isShowingRemoved = true;
 
             GetExistingUsers();
-            GetUsersFromFile();
+            //GetUsersFromFile();
 
-            _finalUsersList = Importer.CombineLists(_importedUsersList, _existingUsersList);
+            _finalUsersList = _existingUsersList;
 
             UpdateShownUsers(_finalUsersList);
         }
@@ -191,10 +191,15 @@ namespace AMS.Controllers
                 .ToList()
                 .ForEach(p => _userRep.Update(p));
 
-            //_main.ReturnToPreviousPage();
+            GetExistingUsers();
+            _finalUsersList = _existingUsersList;
         }
 
-        public void CancelChanges() { }
+        public void CancelChanges()
+        {
+            GetExistingUsers();
+            _finalUsersList = _existingUsersList;
+        }
 
         public void KeepUser(object user)
         {
