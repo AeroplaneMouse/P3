@@ -2,6 +2,8 @@
 using AMS.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Windows.Input;
 
@@ -13,11 +15,13 @@ namespace AMS.ViewModels
 
         public string Title { get; set; }
 
-        public List<UserWithStatus> UserList
+        public ObservableCollection<UserWithStatus> ShownUsersList
         {
-            get => _userListController.UsersList;
-            set => _userListController.UsersList = value;
+            get => new ObservableCollection<UserWithStatus>(_userListController.UsersList);
+            set => _userListController.UsersList = value.ToList();
         }
+
+        //public List<UserWithStatus> ShownUsersList { get; set; }
 
         public List<Department> DepartmentsList
         {
@@ -32,7 +36,7 @@ namespace AMS.ViewModels
             set
             {
                 _userListController.IsShowingAdded = value;
-                OnPropertyChanged(nameof(UserList));
+                OnPropertyChanged(nameof(ShownUsersList));
             }
         }
 
@@ -42,7 +46,7 @@ namespace AMS.ViewModels
             set
             {
                 _userListController.IsShowingConflicting = value;
-                OnPropertyChanged(nameof(UserList));
+                OnPropertyChanged(nameof(ShownUsersList));
             }
         }
 
@@ -52,7 +56,7 @@ namespace AMS.ViewModels
             set
             {
                 _userListController.IsShowingRemoved = value;
-                OnPropertyChanged(nameof(UserList));
+                OnPropertyChanged(nameof(ShownUsersList));
             }
         }
 
@@ -62,7 +66,7 @@ namespace AMS.ViewModels
             set
             {
                 _userListController.IsShowingDisabled = value;
-                OnPropertyChanged(nameof(UserList));
+                OnPropertyChanged(nameof(ShownUsersList));
             }
         }
 
@@ -103,7 +107,13 @@ namespace AMS.ViewModels
             ApplyCommand = new Base.RelayCommand(Apply);
             KeepUserCommand = new Base.RelayCommand<object>(KeepUser);
 
-            OnPropertyChanged(nameof(UserList));
+            //ShownUsersList = new List<UserWithStatus>()
+            //{
+            //    new UserWithStatus(new User() {Username = "Hans"}) {Status = "Added"},
+            //    new UserWithStatus(new User() {Username = "Grethe"}) {Status = String.Empty},
+            //};
+
+            OnPropertyChanged(nameof(ShownUsersList));
         }
 
         #endregion
@@ -125,6 +135,7 @@ namespace AMS.ViewModels
         private void KeepUser(object user)
         {
             _userListController.KeepUser(user);
+            OnPropertyChanged(nameof(ShownUsersList));
         }
 
         #endregion

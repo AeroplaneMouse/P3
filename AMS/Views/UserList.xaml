@@ -148,7 +148,8 @@
                                         <TextBox Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                  BorderBrush="Transparent"
                                                  Background="Transparent"
-                                                 MinWidth="100"/>
+                                                 MinWidth="100"
+                                                 Height="Auto"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
