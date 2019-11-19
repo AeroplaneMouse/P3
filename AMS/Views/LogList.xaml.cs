@@ -2,9 +2,9 @@
 
 namespace AMS.Views
 {
-    public partial class Log : Page
+    public partial class LogList : Page
     {
-        public Log()
+        public LogList()
         {
             InitializeComponent();
         }
