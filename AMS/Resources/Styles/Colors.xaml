@@ -30,9 +30,8 @@
     <Color x:Key="AcceptGreenHighlight">#4BC970</Color>
     <SolidColorBrush x:Key="AcceptGreenHightlightBrush" Color="{StaticResource AcceptGreenHighlight}"/>
 
-
     <!-- EB4848 -->
-    <Color x:Key="CancelRed">#ED5A5A</Color>
+    <Color x:Key="CancelRed">#EB4848</Color>
     <SolidColorBrush x:Key="CancelRedBrush" Color="{StaticResource CancelRed}"/>
 
     <!-- ff3333 -->

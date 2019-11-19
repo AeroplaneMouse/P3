@@ -127,7 +127,6 @@
 
                                         <!-- Notifications -->
                                         <ListView Grid.Column="1" 
-                                                  VerticalAlignment="Bottom"
                                                   FontSize="{StaticResource FontSizeLarge}"
                                                   Style="{StaticResource NotificationView}"/>
 
