@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using AMS.Controllers;
 using AMS.Database.Repositories.Interfaces;
+using AMS.Helpers;
 using AMS.IO;
 using AMS.Models;
 
@@ -21,7 +22,7 @@ namespace AMS.ViewModels
             Tags = _tagListController.TagsList= new List<Tag>();
             Tags.AddRange(rep.GetParentTags());
             //Todo Evt inkluder en exporter i stedet for at skrive new
-            _tagListController = new TagListController(tagRepository, new Exporter());
+            _tagListController = new TagListController(tagRepository, new PrintHelper());
 
             foreach (var tag in Tags)
             {

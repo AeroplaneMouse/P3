@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
@@ -37,7 +38,7 @@ namespace UnitTests
         public void TagListRemove_ElementInList_ReturnContains()
         {
             //Arrange
-            _tagListController.TagsList = new ObservableCollection<Tag>();
+            _tagListController.TagsList = new List<Tag>();
             _tagListController.TagsList.Add(_tagOne);
             _tagListController.TagsList.Add(_tagTwo);
             _tagListController.TagsList.Add(_tagThree);
