@@ -138,16 +138,58 @@ namespace UnitTests
             Asset asset2 = new Asset {Name = "asset2"};
             _assetListController.AssetList.Add(asset1);
             _assetListController.AssetList.Add(asset2);
-            List<Asset> list = _assetListController.AssetList;
             Asset asset3 = new Asset {Name = "asset3"};
 
             //Act
             _assetListController.Remove(asset3);
+
+            bool result = _assetListController.AssetList.Contains(asset1)
+                && _assetListController.AssetList.Contains(asset2)
+                && _assetListController.AssetList.Count == 2;
+
+            //Assert
+            Assert.AreEqual(expected, result);
+        }
+        
+        [TestMethod]
+        public void Search_ListOnlyContainsElementsWithNamesMatchingQuery_ReturnsTrue()
+        {
+            //Arrange
+            Asset asset1 = new Asset {Name = "asset1"};
+            Asset asset2 = new Asset {Name = "asset2"};
+            Asset testAsset1 = new Asset {Name = "testAsset1"};
+            Asset testAsset2 = new Asset {Name = "testAsset2"};
+            _assetListController.AssetList.Add(asset1);
+            _assetListController.AssetList.Add(asset2);
+            _assetListController.AssetList.Add(testAsset1);
+            _assetListController.AssetList.Add(testAsset2);
+            List<Asset> list = _assetListController.AssetList;
+            List<Asset> expected = new List<Asset>() {testAsset1, testAsset2};
+
+            //Act
+            _assetListController.Search("testAsset");
 
             bool result = _assetListController.AssetList.SequenceEqual(list);
 
             //Assert
             Assert.AreEqual(expected, result);
         }
+        
+        [TestMethod]
+        public void Search_CallsRepositorySearchMethod_ReturnsTrue()
+        {
+            //Arrange
+            Asset asset1 = new Asset {Name = "asset1"};
+            _assetListController.AssetList.Add(asset1);
+            //assetRepMock.Setup(p => p.Search(It.IsAny<string>())).Returns(true);
+
+            //Act
+            _assetListController.Search("asset");
+
+            //Assert
+            // Verify that the method IAssetRepository.Delete(Asset) is called once
+            assetRepMock.Verify((p => p.Search(It.IsAny<string>(), null, null, false)), Times.Once());
+        }
+        
     }
 }
