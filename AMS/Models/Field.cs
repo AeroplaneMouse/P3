@@ -55,11 +55,12 @@ namespace AMS.Models
             this.IsCustom = isCustom;
             this.FieldPresentIn = new List<ulong>();
         }
+        
         [JsonConstructor]
         private Field(string label, string content, FieldType type, string defaultValue, bool required = false,
             bool isCustom = false,List<ulong> fieldPresentIn = null)
         {
-            this.HashId = CalculateMd5Hash(true);
+            this.HashId = CalculateMd5Hash(false);
             this.Label = label;
             this.Content = content;
             Type = type;
