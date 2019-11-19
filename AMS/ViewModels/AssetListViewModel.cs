@@ -66,8 +66,9 @@ namespace AMS.ViewModels
         /// </summary>
         private void SearchAssets()
         {
-            if (SearchQuery != null)
-                _listController.Search(SearchQuery);
+            if (SearchQuery == null) return;
+            _listController.Search(SearchQuery);
+            Items = _listController.AssetList;
         }
 
         /// <summary>
