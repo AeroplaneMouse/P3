@@ -1,19 +1,19 @@
 ﻿using System;
+using AMS.Views;
+using AMS.Models;
+using AMS.Events;
 using System.Linq;
+using AMS.Database;
 using System.Windows;
+using AMS.Authentication;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using AMS.Database.Repositories;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
-using AMS.Models;
-using AMS.Events;
-using AMS.Database;
-using AMS.Authentication;
-using AMS.Views;
-using AMS.Database.Repositories;
 
 namespace AMS.ViewModels
 {
@@ -98,7 +98,6 @@ namespace AMS.ViewModels
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
             MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
             CloseCommand = new Base.RelayCommand(() => _window.Close());
-
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
 
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
