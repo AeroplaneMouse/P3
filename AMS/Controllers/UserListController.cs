@@ -37,8 +37,6 @@ namespace AMS.Controllers
 
         public IUserImporter Importer { get; set; }
 
-        public List<Tag> TagsList { get; set; }
-
         // Checkboxes
         public bool IsShowingAdded
         {
@@ -252,36 +250,8 @@ namespace AMS.Controllers
         {
             throw new NotImplementedException();
         }
-        
-        public void Search(string query)
-        {
-            throw new NotImplementedException();
-        }
+       
 
-        public void AddNew()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Edit(Tag tag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ViewTag(Tag tag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(Tag tag)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Export(List<Tag> tags)
-        {
-            throw new NotImplementedException();
-        }
 
         #endregion
 
