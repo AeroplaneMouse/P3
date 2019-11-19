@@ -21,7 +21,7 @@ namespace AMS.Models
         public SolidColorBrush Foreground { get; set; }
 
         public Notification(string message)
-            : this(message, Brushes.Black, RandomColor()) { } 
+            : this(message, Brushes.White, RandomColor()) { } 
 
         public Notification(string message, SolidColorBrush background)
             : this(message, Brushes.White, background) { }

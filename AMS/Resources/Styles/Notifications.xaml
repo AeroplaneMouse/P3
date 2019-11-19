@@ -5,6 +5,8 @@
     <Style TargetType="ListView" x:Key="NotificationView">
         <Setter Property="ItemsSource" Value="{Binding ActiveNotifications}"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ListView">
@@ -20,13 +22,19 @@
                                                     <ColumnDefinition Width="*"/>
                                                     <ColumnDefinition Width="Auto"/>
                                                 </Grid.ColumnDefinitions>
+                                                
                                                 <Label Content="{Binding Path=Message}"
-                                                       FontSize="{TemplateBinding FontSize}"/>
+                                                       FontSize="20"
+                                                       VerticalAlignment="Center"
+                                                       HorizontalAlignment="Center"
+                                                       Margin="10 0 0 0"
+                                                       Foreground="{Binding Path=Foreground}"/>
+
                                                 <Button Grid.Column="1"
+                                                        VerticalAlignment="Center"
                                                         Style="{StaticResource RemoveNotificationButton}"
                                                         Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RemoveNotificationCommand}"
-                                                        CommandParameter="{Binding Path=ID}">
-                                                </Button>
+                                                        CommandParameter="{Binding Path=ID}" />
                                             </Grid>
                                         </ControlTemplate>
                                     </Setter.Value>
