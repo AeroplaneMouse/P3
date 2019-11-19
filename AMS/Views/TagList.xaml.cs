@@ -3,8 +3,9 @@ using System.Windows;
 using System.Windows.Controls;
 using AMS.Database.Repositories;
 using AMS.Models;
+using AMS.Services.Interfaces;
 using AMS.ViewModels;
-using Asset_Management_System.Services.Interfaces;
+
 
 namespace AMS.Views
 {
