@@ -37,9 +37,7 @@ namespace AMS.Controllers
 
         public IUserImporter Importer { get; set; }
 
-        public ObservableCollection<Tag> TagsList { get; set; }
-        
-        public List<Tag> TagsList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public List<Tag> TagsList { get; set; }
 
         // Checkboxes
         public bool IsShowingAdded
