@@ -367,11 +367,6 @@ namespace AMS.Database.Repositories
 
                     using (var cmd = new MySqlCommand(_query.PrepareSelect(), con))
                     {
-                        //cmd.Parameters.Add("@keyword", MySqlDbType.String);
-                        //cmd.Parameters["@keyword"].Value = keyword;
-
-                        Console.WriteLine(cmd.CommandText);
-
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())

@@ -109,8 +109,8 @@ namespace AMS.ViewModels
             )));
 
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
-            ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList()));
-            ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList()));
+            ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, new AssetListController(new AssetRepository(), new PrintHelper()))));
+            ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Log()));
             
             RemoveNotificationCommand = new Base.RelayCommand<object>((object parameter) => {
