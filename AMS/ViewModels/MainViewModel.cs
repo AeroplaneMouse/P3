@@ -5,15 +5,14 @@ using AMS.Events;
 using System.Linq;
 using AMS.Database;
 using System.Windows;
+using AMS.Views.Prompts;
 using AMS.Authentication;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using AMS.Database.Repositories;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Runtime.InteropServices;
 using AMS.Controllers;
 using AMS.Helpers;
 
@@ -125,7 +124,7 @@ namespace AMS.ViewModels
             SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
             EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
-            AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment)));
+            AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)));
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
