@@ -26,6 +26,7 @@ namespace UnitTests
             assetRepMock.Setup(p => p.Delete(It.IsAny<Asset>())).Returns(true);
             // This creates a new instance of the class for each test
             _assetListController = new AssetListController(assetRepMock.Object, _exporter);
+            _assetListController.AssetList = new ObservableCollection<Asset>();
         }
 
         /* Tests deprecated method
