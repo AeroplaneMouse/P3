@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition.Primitives;
 using System.Text;
 using System.Windows.Input;
+using AMS.Controllers;
 using AMS.Controllers.Interfaces;
+using AMS.Database.Repositories;
+using AMS.Helpers;
 using AMS.Models;
 using AMS.ViewModels.Base;
 using AMS.Views;
@@ -45,8 +48,8 @@ namespace AMS.ViewModels
         /// </summary>
         private void AddNewAsset()
         {
-            // TODO: Change so it is not necessary to create new page here
-            _main.ContentFrame.Navigate(new AssetEditor());
+            //Todo FIx news
+            _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main));
         }
 
         /// <summary>
@@ -54,7 +57,8 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset()
         {
-            _main.ContentFrame.Navigate(new AssetEditor(GetSelectedItem()));
+            //Todo FIx news
+            _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main, GetSelectedItem()));
         }
 
         /// <summary>

@@ -1,12 +1,10 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
 using AMS.Events;
 using AMS.Helpers;
+using AMS.Interfaces;
 using AMS.Models;
 using AMS.Views;
 using AMS.Views.Prompts;
