@@ -4,18 +4,28 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      Height="Auto" d:DesignWidth="800"
       Title="Confirm"
       FocusManager.FocusedElement="{Binding ElementName=Cancel}">
     <Grid>
         <Canvas Style="{StaticResource PromptBackground}"/>
         <Border Style="{StaticResource PromptBorder}">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
                 <TextBlock Text="{Binding MessageText}"
-                            Style="{StaticResource PromptDisplay}"/>
+                           Style="{StaticResource PromptDisplay}"/>
+
+                <Rectangle Style="{StaticResource HorizontalSeparator}"
+                           Grid.Row="1"/>
+
                 <StackPanel Orientation="Horizontal" 
                             VerticalAlignment="Bottom" 
                             HorizontalAlignment="Center"
+                            Grid.Row="2"
                             Margin="15">
                     <Button Style="{StaticResource RegularAcceptButton}"
                             Command="{Binding AcceptCommand}"

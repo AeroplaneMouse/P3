@@ -26,8 +26,6 @@ namespace AMS.Database.Repositories
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
-                        Console.WriteLine(cmd.CommandText);
-
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())

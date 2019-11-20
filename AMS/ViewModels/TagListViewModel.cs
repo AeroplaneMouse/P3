@@ -14,8 +14,8 @@ namespace AMS.ViewModels
     public class TagListViewModel
     {
         public List<Tag> Tags { get; set; }
-        private ITagListController _tagListController;
-        private MainViewModel _mainViewModel;
+        private readonly ITagListController _tagListController;
+        private readonly MainViewModel _mainViewModel;
         
         public Tag SelectedItem { get; set; }
         
@@ -35,6 +35,7 @@ namespace AMS.ViewModels
 
             foreach (var tag in Tags)
             {
+                if (tag.NumOfChildren <= 0) continue;
                 List<Tag> offspring = _tagListController.GetChildTags(tag.ID);
                 tag.Children = new List<ITagable>();
                 tag.Children.AddRange(offspring);
@@ -48,7 +49,6 @@ namespace AMS.ViewModels
             {
                 _tagListController.Remove(SelectedItem);
             }
-            
         }
     }
 }
