@@ -1,11 +1,14 @@
-﻿using AMS.Views;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
+using AMS.Views;
+using AMS.Controllers;
+using AMS.Controllers.Interfaces;
+using AMS.Database.Repositories;
+using AMS.Helpers;
 using AMS.Models;
 using AMS.ViewModels.Base;
-using System.Windows.Input;
-using System.Collections.Generic;
-using AMS.Controllers.Interfaces;
-using System.Collections.ObjectModel;
-using System;
 using System.Linq;
 
 namespace AMS.ViewModels
@@ -13,7 +16,7 @@ namespace AMS.ViewModels
     public class AssetListViewModel : BaseViewModel
     {
         private IAssetListController _listController;
-        private MainViewModel _main;
+        public MainViewModel Main { get; set; }
         
         public ObservableCollection<Asset> Items { get; set; }
         public int SelectedItemIndex { get; set; }
@@ -30,7 +33,7 @@ namespace AMS.ViewModels
 
         public AssetListViewModel(MainViewModel main, IAssetListController listController)
         {
-            _main = main;
+            Main = main;
             _listController = listController;
             Items = _listController.AssetList;
             
@@ -49,8 +52,8 @@ namespace AMS.ViewModels
         /// </summary>
         private void AddNewAsset()
         {
-            // TODO: Change so it is not necessary to create new page here
-            _main.ContentFrame.Navigate(new AssetEditor());
+            //Todo FIx news
+            Main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), Main));
         }
 
         private void EditById(object parameter)
@@ -63,11 +66,11 @@ namespace AMS.ViewModels
             finally
             {
                 if (id == 0)
-                    _main.AddNotification(new Notification("Error! Unknown ID"), 3500);
+                    Main.AddNotification(new Notification("Error! Unknown ID"), 3500);
                 else
                 {
                     Asset asset = _listController.AssetList.Where(a => a.ID == id).First();
-                    _main.ContentFrame.Navigate(new AssetEditor(asset));
+                    Main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), Main, asset));
                 }
             }
         }
@@ -77,10 +80,13 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset()
         {
+
+            //Todo FIx news
+            
             if (IsSelectedAssetValid())
-                _main.ContentFrame.Navigate(new AssetEditor(GetSelectedItem()));
+                Main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),Main, GetSelectedItem()));
             else
-                _main.AddNotification(new Notification("Could not edit asset", Notification.ERROR));
+                Main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
         }
 
         /// <summary>
@@ -102,7 +108,7 @@ namespace AMS.ViewModels
             if(IsSelectedAssetValid())
                 _listController.ViewAsset(GetSelectedItem());
             else
-                _main.AddNotification(new Notification("Could not view asset", Notification.ERROR));
+                Main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
         }
 
         private void RemoveAssetByID(object parameter)
@@ -114,13 +120,9 @@ namespace AMS.ViewModels
             }
             finally
             {
-                if (id == 0)
-                    _main.AddNotification(new Notification("Error! Unknown ID"), 3500);
-                else
-                {
-                    Asset asset = _listController.AssetList.Where(a => a.ID == id).First();
-                    RemoveAsset(asset);
-                }
+                // Delete Asset and display notification
+                _listController.Remove(GetSelectedItem());
+                Main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " Was deleted", Notification.INFO));
             }
         }
 
@@ -131,18 +133,18 @@ namespace AMS.ViewModels
             else
             {
                 // Display error notification on error
-                _main.AddNotification(new Notification("Could not delete asset", Notification.ERROR));
+                Main.AddNotification(new Notification("Could not delete Asset", Notification.ERROR));
             }
         }
 
         private void RemoveAsset(Asset asset)
         {
             // Prompt user for confirmation of removal
-            _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
+            Main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
             {
                 if (e.Result)
                 {
-                    _main.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
+                    Main.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
                     _listController.Remove(asset);
                 }
             }));
@@ -179,7 +181,15 @@ namespace AMS.ViewModels
         /// <returns>Is selected Asset Valid</returns>
         private bool IsSelectedAssetValid()
         {
-            return GetSelectedItem() != null;
+            Asset selectedAsset = _listController.AssetList[SelectedItemIndex];
+            if (selectedAsset == null)
+            {
+                // Display error notification
+                Main.AddNotification(new Notification("Selected Asset is not valid", Notification.ERROR));
+                return false;
+            }
+
+            return true;
         }
         
     }

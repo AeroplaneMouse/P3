@@ -44,15 +44,10 @@ namespace Asset_Management_System.ViewModels
 
         // TODO: Kom uden om mig
         private TextBox _box { get; set; }
-
-
-        private List<Asset> _assetList { get; set; }
-
+        
         private IAssetRepository _assetRep { get; set; }
 
         private IAssetService _service;
-
-        public List<Asset> AssetList;
 
         // The current parent exposed to the view
         public string ParentID

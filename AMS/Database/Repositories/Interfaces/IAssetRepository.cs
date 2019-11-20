@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using AMS.Interfaces;
 using AMS.Models;
 
 namespace AMS.Database.Repositories.Interfaces
