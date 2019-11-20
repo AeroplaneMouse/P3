@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Security.Cryptography;
+using Newtonsoft.Json;
 
 namespace AMS.Models
 {
@@ -27,6 +28,8 @@ namespace AMS.Models
                 FieldType.Checkbox
             };
         }
+        
+        public List<ulong> FieldPresentIn { get; set; }
 
         /// <summary>
         /// Default constructor for initiating a new Field object.
@@ -46,11 +49,25 @@ namespace AMS.Models
             this.Label = label;
             this.Content = content;
             Type = type;
-
             this.DefaultValue = defaultValue;
             this.Required = required;
             this.Hash = CalculateMd5Hash();
             this.IsCustom = isCustom;
+            this.FieldPresentIn = new List<ulong>();
+        }
+        
+        [JsonConstructor]
+        private Field(string label, string content, FieldType type, string defaultValue, bool required = false,
+            bool isCustom = false,List<ulong> fieldPresentIn = null)
+        {
+            this.HashId = CalculateMd5Hash(false);
+            this.Label = label;
+            this.Content = content;
+            Type = type;
+            this.DefaultValue = defaultValue;
+            this.Required = required;
+            this.Hash = CalculateMd5Hash();
+            this.FieldPresentIn = fieldPresentIn;
         }
 
         public string HashId { get; set; }

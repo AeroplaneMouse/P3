@@ -1,4 +1,4 @@
-﻿using AMS.Controllers.Interfaces;
+using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
@@ -22,8 +22,8 @@ namespace AMS.Controllers
             {
                 return (_finalUsersList ?? new List<UserWithStatus>())
                     .Where(u => u.IsShown == true)
-                    .OrderByDescending(p => p.IsEnabled)
                     .OrderBy(p => p.Username)
+                    .OrderByDescending(p => p.IsEnabled)
                     .OrderByDescending(p => p.Status.CompareTo("Removed") == 0)
                     .OrderByDescending(p => p.Status.CompareTo("Added") == 0)
                     .OrderByDescending(p => p.Status.CompareTo("Conflicting") == 0)
@@ -50,8 +50,6 @@ namespace AMS.Controllers
                     .Where(p => p.Status.CompareTo("Added") == 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
-
-                //OnPropertyChanged(nameof(UsersList));
             }
         }
 
@@ -67,8 +65,6 @@ namespace AMS.Controllers
                     .Where(p => p.Status.CompareTo("Removed") == 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
-
-                //OnPropertyChanged(nameof(UsersList));
             }
         }
 
@@ -84,8 +80,6 @@ namespace AMS.Controllers
                     .Where(p => p.Status.CompareTo("Conflicting") == 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
-
-                //OnPropertyChanged(nameof(ShownUsersList));
             }
         }
 
@@ -101,8 +95,6 @@ namespace AMS.Controllers
                     .Where(p => p.IsEnabled == false && p.Status.CompareTo("Conflicting") != 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
-
-                //OnPropertyChanged(nameof(ShownUsersList));
             }
         }
 
@@ -144,12 +136,12 @@ namespace AMS.Controllers
 
             _isShowingAdded = true;
             _isShowingConflicting = true;
-            _isShowingDisabled = true;
+            _isShowingDisabled = false;
             _isShowingRemoved = true;
 
-            _existingUsersList = Importer.ImportUsersFromDatabase().Select(u => new UserWithStatus(u)).ToList();
+            GetExistingUsers();
 
-            _finalUsersList = Importer.CombineLists(_importedUsersList, _existingUsersList);
+            _finalUsersList = _existingUsersList;
 
             UpdateShownUsers(_finalUsersList);
         }
@@ -158,14 +150,12 @@ namespace AMS.Controllers
 
         #region Public Methods
 
-        public void ApplyChanges()
+        public bool ApplyChanges()
         {
             // Check if there are any conflicts left
             if (_finalUsersList.Where(p => p.Status.CompareTo("Conflicting") == 0).Count() > 0)
             {
-                //_main.AddNotification(new Notification("Not all conflicts are solved"));
-                Console.WriteLine("Not all conflicts are solved");
-                return;
+                return false;
             }
 
             // Disable the removed users in the database
@@ -190,12 +180,18 @@ namespace AMS.Controllers
                 .ToList()
                 .ForEach(p => _userRep.Update(p));
 
-            //_main.ReturnToPreviousPage();
+            GetExistingUsers();
+            _finalUsersList = _existingUsersList;
+            UpdateShownUsers(_finalUsersList);
+
+            return true;
         }
 
         public void CancelChanges()
         {
-            throw new NotImplementedException();
+            GetExistingUsers();
+            _finalUsersList = _existingUsersList;
+            UpdateShownUsers(_finalUsersList);
         }
 
         public void KeepUser(object user)
@@ -237,13 +233,11 @@ namespace AMS.Controllers
 
                 _finalUsersList.Remove(otherUser);
             }
-
-            //OnPropertyChanged(nameof(ShownUsersList));
         }
 
         public void SortUsers()
         {
-            throw new NotImplementedException();
+            
         }
 
         public void Search()
@@ -251,6 +245,21 @@ namespace AMS.Controllers
             throw new NotImplementedException();
         }
        
+        public void GetExistingUsers()
+        {
+            _existingUsersList = Importer.ImportUsersFromDatabase().Select(u => new UserWithStatus(u)).ToList();
+        }
+
+        public void GetUsersFromFile()
+        {
+            string filePath = Importer.GetUsersFile();
+
+            if (filePath.CompareTo(String.Empty) != 0)
+            {
+                _importedUsersList = Importer.ImportUsersFromFile(filePath).Select(u => new UserWithStatus(u)).ToList();
+                _finalUsersList = Importer.CombineLists(_importedUsersList, _existingUsersList);
+            }
+        }
 
 
         #endregion

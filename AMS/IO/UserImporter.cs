@@ -1,4 +1,4 @@
-﻿using AMS.Authentication;
+using AMS.Authentication;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Models;
@@ -84,9 +84,9 @@ namespace AMS.IO
             return finalList;
         }
 
-        public List<User> ImportUsersFromDatabase()
+        public List<UserWithStatus> ImportUsersFromDatabase()
         {
-            return (_userRep.GetAll(true) ?? new List<User>()).ToList();
+            return (_userRep.GetAll(true) ?? new List<UserWithStatus>()).Select(u => new UserWithStatus(u)).ToList();
         }
 
         public string GetUsersFile()
@@ -99,13 +99,13 @@ namespace AMS.IO
 
             if (result == false)
             {
-                return filePath;
+                return String.Empty;
             }
 
             return dialog.FileName;
         }
 
-        public List<User> ImportUsersFromFile(string filePath)
+        public List<UserWithStatus> ImportUsersFromFile(string filePath)
         {
             var session = new Session(_userRep);
 
@@ -130,12 +130,13 @@ namespace AMS.IO
 
                     return u;
                 })  // Converts each string[] into a user
+                .Select(u => new UserWithStatus(u))
                 .ToList();
             }
 
             else
             {
-                return new List<User>();
+                return new List<UserWithStatus>();
             }
         }
 

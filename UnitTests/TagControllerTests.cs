@@ -5,6 +5,7 @@ using AMS.Database.Repositories.Interfaces;
 using AMS.Models;
 using AMS.Controllers;
 using System.Linq;
+using AMS.Controllers.Interfaces;
 
 namespace UnitTests
 {
@@ -17,18 +18,18 @@ namespace UnitTests
             //Arrange
             ulong id = 0;
             Tag tag = new Tag();
-            TagController tagController = new TagController(tag);
+            ITagController tagController = new TagController(tag);
             tagController.tag = tag;
 
             var mockRepository = new Mock<ITagRepository>();
-            mockRepository.Setup(repository => repository.Insert(tag, out id)).Returns<Tag>(t => t.Equals(tag));
+            mockRepository.Setup(repository => repository.Insert(tag, out id)).Returns(true);
 
             //Act
-            tagController.tagRepository = (ITagRepository)mockRepository;
+            tagController.tagRepository = mockRepository.Object;
             tagController.Save();
 
             //Assert
-
+            mockRepository.Verify(p => p.Insert(It.IsAny<Tag>(),out id), Times.Once());
         }
     }
 }

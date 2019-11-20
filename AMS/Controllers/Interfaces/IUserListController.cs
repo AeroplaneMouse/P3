@@ -1,4 +1,4 @@
-﻿using AMS.Database.Repositories.Interfaces;
+using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.IO;
 using AMS.Models;
@@ -31,11 +31,15 @@ namespace AMS.Controllers.Interfaces
 
         #region Methods
 
+        void GetExistingUsers();
+
+        void GetUsersFromFile();
+
         void KeepUser(object user);
 
         void CancelChanges();
 
-        void ApplyChanges();
+        bool ApplyChanges();
 
         void SortUsers();
 

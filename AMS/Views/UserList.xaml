@@ -32,14 +32,19 @@
                     HorizontalAlignment="Right"
                     Margin="10">
 
+                <Button Style="{StaticResource RegularButton}"
+                        Command="{Binding ImportUsersCommand}"
+                        Content="Import Users"/>
+
                 <Button Style="{StaticResource RegularAcceptButton}"
-                    Command="{Binding ApplyCommand}"
-                    Content="Apply" />
+                        Command="{Binding ApplyCommand}"
+                        Margin="10 0 0 0"
+                        Content="Apply" />
 
                 <Button Style="{StaticResource RegularCancelButton}"
-                    Command="{Binding CancelCommand}"
-                    Margin="10 0 0 0"
-                    Content="Cancel" />
+                        Command="{Binding CancelCommand}"
+                        Margin="10 0 0 0"
+                        Content="Cancel" />
             </StackPanel>
 
             <Rectangle Style="{StaticResource HorizontalSeparator}"
@@ -94,18 +99,8 @@
                           SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                           Margin="0 0 2 0"
                           Grid.Row="1"
-                          x:Name="UserListView">
-
-                    <ListView.Resources>
-                        <!--<Style TargetType="GridViewColumnHeader">
-                                <Setter Property="Padding" Value="20 5" />
-                            </Style>-->
-
-                        <!--<Style TargetType="Button" x:Key="KeepButton">
-                                <Setter Property="Command" Value="{Binding KeepCommand}" />
-                                <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}" />
-                            </Style>-->
-                    </ListView.Resources>
+                          x:Name="UserListView"
+                          Grid.IsSharedSizeScope="True">
 
                     <ListView.View>
                         <GridView>
@@ -127,35 +122,54 @@
                             </GridViewColumn>
 
                             <!-- Username -->
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" 
-                                            Header="Username"/>
+                            <GridViewColumn Header="Username"
+                                            Width="250">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Username}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
                             <!-- Domain -->
-                            <GridViewColumn Header="Domain">
+                            <GridViewColumn Header="Domain" Width="175">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Path=Domain, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                  BorderBrush="Transparent"
-                                                 Background="Transparent"/>
+                                                 Background="Transparent"
+                                                 Style="{StaticResource ParagraphTextBox}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
                             <!-- Description-->
-                            <GridViewColumn Header="Description">
+                            <GridViewColumn Header="Description" Width="220">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBox Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                  BorderBrush="Transparent"
                                                  Background="Transparent"
-                                                 MinWidth="100"/>
+                                                 MinWidth="200"
+                                                 Height="Auto" 
+                                                 Style="{StaticResource ParagraphTextBox}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
                             <!-- Department -->
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=DefaultDepartmentName}" 
-                                            Header="Department" />
+                            <GridViewColumn Header="Department"
+                                            Width="150">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=DefaultDepartmentName}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
                             <!--<GridViewColumn Header="Department">
                                 <GridViewColumn.CellTemplate>
@@ -206,22 +220,6 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-
-                            <!--<Button Content="Test keep"
-                                        Style="{StaticResource RegularButton}"
-                                        Command="{Binding KeepCommand}"/>-->
-
-
-                            <!--<i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="MouseDoubleClick">
-                                        -->
-                            <!--ViewCommand-->
-                            <!--
-                                        <i:InvokeCommandAction Command="{Binding EditCommand}"
-                                                                   CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}" />
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>-->
-
                         </GridView>
                     </ListView.View>
 

@@ -57,7 +57,7 @@
                     </Border>
 
                     <TextBox FontSize="{StaticResource FontSizeSmall}"
-                             Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
+                             Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
                              VerticalContentAlignment="Center"
                              MinWidth="200"
                              Name="SearchElement"
@@ -129,14 +129,31 @@
                             <Setter Property="Command" Value="{Binding HeaderClickCommand}" />
                             <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}" />
                         </Style>
-                        <Style TargetType="ListViewItem" BasedOn="{StaticResource RegularListItem}"/>
                     </ListView.Resources>
                     
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Name}" Header="Name" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Identifier}" Header="Identifier" />
+                            <!-- Name -->
+                            <GridViewColumn Header="Name">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Name}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <!-- Identifier -->
+                            <GridViewColumn Header="Identifier">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Identifier}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                             <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
                         </GridView>
                     </ListView.View>

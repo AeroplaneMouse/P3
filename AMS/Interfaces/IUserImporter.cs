@@ -1,4 +1,4 @@
-﻿using AMS.Database.Repositories.Interfaces;
+using AMS.Database.Repositories.Interfaces;
 using AMS.Models;
 using AMS.Services.Interfaces;
 using System;
@@ -11,11 +11,11 @@ namespace AMS.Interfaces
     {
         #region Methods
 
-        List<User> ImportUsersFromFile(string filePath);
-
         string GetUsersFile();
 
-        List<User> ImportUsersFromDatabase();
+        List<UserWithStatus> ImportUsersFromFile(string filePath);
+
+        List<UserWithStatus> ImportUsersFromDatabase();
 
         List<UserWithStatus> CombineLists(List<UserWithStatus> imported, List<UserWithStatus> existing);
 

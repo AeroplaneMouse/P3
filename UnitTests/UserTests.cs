@@ -2,19 +2,13 @@
 using AMS.Controllers.Interfaces;
 using AMS.Interfaces;
 using AMS.IO;
-using AMS.Services;
-using AMS.Services.Interfaces;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using AMS.Database.Repositories;
 using AMS.Models;
-using AMS.Authentication;
-using System.Security.Permissions;
 using AMS.Database.Repositories.Interfaces;
 using Moq;
 
@@ -38,13 +32,16 @@ namespace UnitTests
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
+            _userRepMock = new Mock<IUserRepository>();
+            _userRepMock.Setup(p => p.GetAll(true)).Returns(new List<User>());
+
             _userRepository = new UserRepository();
             _departmentRepository = new DepartmentRepository();
 
             _userImporter = new UserImporter(_userRepository);
             _userListController = new UserListController(_userImporter, _userRepository, _departmentRepository);
 
-            _userRepMock = new Mock<IUserRepository>();
+            
         }
 
         #region Helpers
@@ -98,7 +95,7 @@ namespace UnitTests
             CreateFileAt(filePath, Encoding.GetEncoding(1252));
 
             // Act
-            List<User> users = _userImporter.ImportUsersFromFile(filePath);
+            List<UserWithStatus> users = _userImporter.ImportUsersFromFile(filePath);
 
             // Assert
             Assert.IsTrue(users.Count() == 2);
@@ -108,15 +105,15 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void IUserImporter_ImportUsersFromFile_FileDoesNotExist_ReturnNull()
+        public void IUserImporter_ImportUsersFromFile_FileDoesNotExist_ReturnEmptyList()
         {
             // Arrange
 
             // Act
-            List<User> users = _userImporter.ImportUsersFromFile(string.Empty);
+            List<UserWithStatus> users = _userImporter.ImportUsersFromFile(string.Empty);
 
             // Assert
-            Assert.IsTrue(users == null);
+            Assert.IsTrue(users.Count() == 0);
         }
 
         [TestMethod]
@@ -137,7 +134,7 @@ namespace UnitTests
             CreateFileAt(filePath, Encoding.GetEncoding(1252));
 
             // Act
-            List<User> users = _userImporter.ImportUsersFromFile(filePath);
+            List<UserWithStatus> users = _userImporter.ImportUsersFromFile(filePath);
 
             // Assert
             Assert.IsTrue(users.Count() == 2 && users.Where(p => p.Username.ToLower().Contains('å')).Count() == 1);
@@ -170,13 +167,34 @@ namespace UnitTests
         public void UserListController_KeepUser_UserIsInConflictAndFromFile_()
         {
             // Arrange
+            UserWithStatus existingUser = new UserWithStatus(new User() { IsEnabled = false, Username = "Hans Hansen" });
+            UserWithStatus importedUser = new UserWithStatus(new User() { IsEnabled = true, Username = "Hans Hansen" });
 
-            _userRepMock.Setup(p => p.GetAll(true)).Returns(new List<User>());
+            // Set up test lists
+            List<UserWithStatus> existing = new List<UserWithStatus>();
+            existing.Add(existingUser);
 
-            List<UserWithStatus> existing = _userRepository.GetAll(true).Select(u => new UserWithStatus(u)).ToList();
+            List<UserWithStatus> imported = new List<UserWithStatus>();
+            imported.Add(importedUser);
+
+            // Set up mocks
+            Mock<IUserImporter> importerMock = new Mock<IUserImporter>();
+
+            importerMock.Setup(p => p.ImportUsersFromDatabase()).Returns(existing);
+            importerMock.Setup(p => p.ImportUsersFromFile(It.IsAny<string>())).Returns(imported);
+
+            IUserListController controller = new UserListController(importerMock.Object, new UserRepository(), new DepartmentRepository());
+
+
+            controller.GetExistingUsers();
+            controller.GetUsersFromFile();
+
+            //controller.UsersList = controller.Importer.CombineLists(imported, existing);
+            controller.UsersList = new List<UserWithStatus>();
 
             int noget = 1;
             // Act
+            controller.KeepUser(importedUser);
 
             // Assert
         }

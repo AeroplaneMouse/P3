@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using AMS.Controllers;
 using AMS.Helpers;
+using AMS.IO;
 
 namespace AMS.ViewModels
 {
@@ -110,9 +111,10 @@ namespace AMS.ViewModels
             )));
 
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
-            ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, new AssetListController(new AssetRepository(), new PrintHelper()))));
+            ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, new AssetRepository(), new PrintHelper())));
             ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new LogList()));
+            ShowUserListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new UserList(this, new UserListController(new UserImporter(new UserRepository()), new UserRepository(), new DepartmentRepository()))));
             
             RemoveNotificationCommand = new Base.RelayCommand<object>((object parameter) => {
                 int id = int.Parse(parameter.ToString());
@@ -173,9 +175,13 @@ namespace AMS.ViewModels
             PopupPage = null;
         }
 
+
         /// <summary>
         /// Adds a notification to the list of active notifications, with a displayTime of 2500 milliseconds.
         /// </summary>
+        public void AddNotification(string message, SolidColorBrush background)
+            => AddNotification(new Notification(message, background));
+
         public void AddNotification(Notification n) 
             => AddNotification(n, 2500);
 
@@ -331,6 +337,7 @@ namespace AMS.ViewModels
         public ICommand ShowAssetListPageCommand { get; set; }
         public ICommand ShowTagListPageCommand { get; set; }
         public ICommand ShowLogPageCommand { get; set; }
+        public ICommand ShowUserListPageCommand { get; set; }
 
         // Department commands
         public ICommand SelectDepartmentCommand { get; set; }
