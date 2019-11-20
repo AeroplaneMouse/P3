@@ -164,7 +164,7 @@ namespace UnitTests
 
             //Assert
             // Verify that the method IAssetRepository.Delete(Asset) is called once
-            assetRepMock.Verify((p => p.Search(It.IsAny<string>(), null, null, false)), Times.Once());
+            assetRepMock.Verify((p => p.Search(It.IsAny<string>(), null, null, false)), Times.Exactly(2));
         }
         
     }

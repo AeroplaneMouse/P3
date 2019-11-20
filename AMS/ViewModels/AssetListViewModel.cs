@@ -14,7 +14,7 @@ namespace AMS.ViewModels
     public class AssetListViewModel : BaseViewModel
     {
         private IAssetListController _listController;
-        private MainViewModel _main;
+        public MainViewModel Main { get; set; }
         
         public ObservableCollection<Asset> Items { get; set; }
         public int SelectedItemIndex { get; set; }
@@ -29,7 +29,7 @@ namespace AMS.ViewModels
 
         public AssetListViewModel(MainViewModel main, IAssetListController listController)
         {
-            _main = main;
+            Main = main;
             _listController = listController;
             Items = _listController.AssetList;
             
@@ -47,7 +47,7 @@ namespace AMS.ViewModels
         private void AddNewAsset()
         {
             // TODO: Change so it is not necessary to create new page here
-            _main.ContentFrame.Navigate(new AssetEditor());
+            Main.ContentFrame.Navigate(new AssetEditor());
         }
 
         /// <summary>
@@ -56,9 +56,9 @@ namespace AMS.ViewModels
         private void EditAsset()
         {
             if (IsSelectedAssetValid())
-                _main.ContentFrame.Navigate(new AssetEditor(GetSelectedItem()));
+                Main.ContentFrame.Navigate(new AssetEditor(GetSelectedItem()));
             else
-                _main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
+                Main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace AMS.ViewModels
             if(IsSelectedAssetValid())
                 _listController.ViewAsset(GetSelectedItem());
             else
-                _main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
+                Main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
         }
 
         /// <summary>
@@ -92,12 +92,12 @@ namespace AMS.ViewModels
             {
                 // Delete Asset and display notification
                 _listController.Remove(GetSelectedItem());
-                _main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " Was deleted", Notification.INFO));
+                Main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " Was deleted", Notification.INFO));
             }
             else
             {
                 // Display error notification on error
-                _main.AddNotification(new Notification("Could not delete Asset", Notification.ERROR));
+                Main.AddNotification(new Notification("Could not delete Asset", Notification.ERROR));
             }
         }
 
@@ -134,7 +134,7 @@ namespace AMS.ViewModels
             if (selectedAsset == null)
             {
                 // Display error notification
-                _main.AddNotification(new Notification("Selected Asset is not valid", Notification.ERROR));
+                Main.AddNotification(new Notification("Selected Asset is not valid", Notification.ERROR));
                 return false;
             }
 
