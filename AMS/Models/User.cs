@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using AMS.Interfaces;
 
 namespace AMS.Models
 {
@@ -28,7 +29,7 @@ namespace AMS.Models
         }
 
         ulong ITagable.TagId => ID;
-        string ITagable.TagType => GetType().ToString();
+        Type ITagable.TagType => GetType();
         string ITagable.TagLabel => Username;
         public List<ITagable> Children { get; set; }
 

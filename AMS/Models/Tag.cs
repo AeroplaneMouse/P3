@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using AMS.Interfaces;
 
 namespace AMS.Models
 {
@@ -38,7 +39,7 @@ namespace AMS.Models
 
         public override string ToString() => Name;
         public ulong TagId { get; }
-        public string TagType { get; }
+        public Type TagType => this.GetType();
         public string TagLabel => Name;
         public List<ITagable> Children { get; set; }
     }

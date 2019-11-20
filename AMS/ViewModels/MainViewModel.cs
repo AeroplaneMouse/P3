@@ -68,7 +68,8 @@ namespace AMS.ViewModels
         public Page SplashPage { get; set; }
         public Page PopupPage { get; set; }
         public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
-        public Visibility Visible { get; set; }
+        public Visibility VisibleForAdmin { get; set; }
+    
         public List<Department> Departments { get => GetDepartments(); }
         public Session CurrentSession { get; private set; }
         public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
@@ -90,7 +91,7 @@ namespace AMS.ViewModels
             ResizeBorder = 4;
             TitleHeight = 25;
             InnerContentPaddingSize = 6;
-
+            
             // Listen out for the window resizing
             _window.StateChanged += (sender, e) =>
             {
@@ -176,13 +177,9 @@ namespace AMS.ViewModels
             PopupPage = null;
         }
 
-
         /// <summary>
         /// Adds a notification to the list of active notifications, with a displayTime of 2500 milliseconds.
         /// </summary>
-        public void AddNotification(string message, SolidColorBrush background)
-            => AddNotification(new Notification(message, background));
-
         public void AddNotification(Notification n) 
             => AddNotification(n, 2500);
 
@@ -253,6 +250,9 @@ namespace AMS.ViewModels
             CurrentSession = session;
             CurrentUser = CurrentSession.Username;
             OnPropertyChanged(nameof(CurrentUser));
+            
+            // Sets the visibility of WPF elements binding to this, based on whether or not the current user is an admin
+            VisibleForAdmin = CurrentSession.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
 
             // Setting the current department, from the default department of the current user.
             CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);

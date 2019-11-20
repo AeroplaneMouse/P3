@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
-namespace AMS.Models
+namespace AMS.Interfaces
 {
     public interface ITagable
     {
         ulong TagId { get; }
-        string TagType { get; }
+        Type TagType { get; }
         string TagLabel { get; }
         List<ITagable> Children { get; set; }
     }

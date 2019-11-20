@@ -165,8 +165,8 @@
 
                 <!--Style="{StaticResource RegularList}"-->
                 <ListView ItemsSource="{Binding Items}"
-                        SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
-                        Grid.Row="2">
+                          SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                          Grid.Row="2">
                     
                     <!-- <ListView.Resources> -->
                     <!--     <Style TargetType="GridViewColumnHeader"> -->
@@ -177,6 +177,15 @@
                     
                     <ListView.View>
                         <GridView>
+                            <!-- Checkbox -->
+                            <GridViewColumn Header="">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            
                             <!-- Name -->
                             <GridViewColumn Header="Name">
                                 <GridViewColumn.CellTemplate>
@@ -198,7 +207,33 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Created" />
+                            
+                            <!-- Created -->
+                            <GridViewColumn Width="140" 
+                                            DisplayMemberBinding="{Binding Path=UpdatedAt}" 
+                                            Header="Created"/>
+                            <!-- Edit -->
+                            <GridViewColumn Width="32">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource EditButton}"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.EditByIdCommand}"
+                                                CommandParameter="{Binding Path=ID}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            
+                            <!-- Remove -->
+                            <GridViewColumn Width="32">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource TrashButton}"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveByIdCommand}"
+                                            CommandParameter="{Binding Path=ID}">
+                                        </Button>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
 
