@@ -127,6 +127,7 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
                 <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderBrush" Value="{StaticResource NavigationSelectedBrush}"/>
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
                 <Setter Property="BorderThickness" Value="1"/>
@@ -137,25 +138,13 @@
     <!-- Regular cancel button -->
     <Style TargetType="Button" x:Key="RegularCancelButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <!--<Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>-->
-                <!--<Setter Property="Background" Value="{StaticResource CancelRedHighlightBrush}"/>-->
-                <!--<Setter Property="BorderBrush" Value="{StaticResource CancelRedHighlightBrush}"/>-->
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="BorderBrush" Value="{StaticResource CancelRedBrush}"/>
     </Style>
     
     <!-- Regular accept button -->
     <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <!--<Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>-->
-                <!--<Setter Property="Background" Value="{StaticResource AcceptGreenHightlightBrush}"/>-->
-                <!--<Setter Property="BorderBrush" Value="{StaticResource AcceptGreenHightlightBrush}"/>-->
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="BorderBrush" Value="{StaticResource AcceptGreenBrush}"/>
     </Style>
 
     <Style x:Key="ButtonFocusVisual">

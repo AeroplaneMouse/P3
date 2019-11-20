@@ -176,13 +176,9 @@ namespace AMS.ViewModels
             PopupPage = null;
         }
 
-
         /// <summary>
         /// Adds a notification to the list of active notifications, with a displayTime of 2500 milliseconds.
         /// </summary>
-        public void AddNotification(string message, SolidColorBrush background)
-            => AddNotification(new Notification(message, background));
-
         public void AddNotification(Notification n) 
             => AddNotification(n, 2500);
 
