@@ -1,7 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
@@ -15,9 +12,9 @@ namespace AMS.ViewModels
 {
     public class TagListViewModel
     {
-        public List<Tag> Tags { get; set; }
-        private ITagListController _tagListController;
-        private MainViewModel _mainViewModel;
+        private List<Tag> Tags { get; set; }
+        private readonly ITagListController _tagListController;
+        private readonly MainViewModel _mainViewModel;
         
         public Tag SelectedItem { get; set; }
         
@@ -37,6 +34,7 @@ namespace AMS.ViewModels
 
             foreach (var tag in Tags)
             {
+                if (tag.NumOfChildren <= 0) continue;
                 List<Tag> offspring = _tagListController.GetChildTags(tag.ID);
                 tag.Children = new List<ITagable>();
                 tag.Children.AddRange(offspring);
