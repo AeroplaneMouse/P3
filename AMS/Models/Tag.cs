@@ -39,7 +39,7 @@ namespace AMS.Models
         public override string ToString() => Name;
         public ulong TagId { get; }
         public string TagType { get; }
-        public string TagLabel { get; }
+        public string TagLabel => Name;
         public List<ITagable> Children { get; set; }
     }
 }

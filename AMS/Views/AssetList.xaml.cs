@@ -18,7 +18,7 @@ namespace AMS.Views
         public AssetList(MainViewModel main, IAssetRepository assetRepository, IExporter exporter)
         {
             InitializeComponent();
-            DataContext = new ViewModels.AssetListViewModel(main, new AssetListController(assetRepository, exporter));
+            DataContext = new AssetListViewModel(main, new AssetListController(assetRepository, exporter));
         }
     }
 }
