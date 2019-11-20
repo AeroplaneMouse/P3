@@ -128,18 +128,18 @@
                     <Button Style="{StaticResource RegularCancelButton}" 
                             Command="{Binding RemoveCommand}" 
                             Content="Remove" 
-                            Visibility="{Binding MultipleSelected,UpdateSourceTrigger=PropertyChanged}"/> 
+                            Visibility="{Binding MultipleSelected, UpdateSourceTrigger=PropertyChanged}"/> 
  
                     <Button Style="{StaticResource RegularButton}" 
                             Command="{Binding EditCommand}" 
                             Margin="10 0 0 0 " 
-                            Content="Edit"/> 
- 
+                            Content="Edit"/>
+
                     <Button Style="{StaticResource RegularButton}" 
                             Margin="10 0 0 0 " 
                             Content="Export selected items" 
                             Width="Auto" 
-                            Command="{Binding PrintCommand}"/> 
+                            Command="{Binding PrintCommand}"/>
                 </StackPanel> 
 
                 <!-- Current tags -->
@@ -165,7 +165,7 @@
 
                 <!--Style="{StaticResource RegularList}"-->
                 <ListView ItemsSource="{Binding Items}"
-                          SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                          SelectionMode="Extended"
                           Grid.Row="2">
                     
                     <!-- <ListView.Resources> -->
@@ -181,7 +181,7 @@
                             <GridViewColumn Header="">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox />
+                                        <CheckBox IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -217,8 +217,8 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{StaticResource EditButton}"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.EditByIdCommand}"
-                                                CommandParameter="{Binding Path=ID}"/>
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.EditCommand}"
+                                                CommandParameter="{Binding Path=.}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -228,8 +228,8 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{StaticResource TrashButton}"
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveByIdCommand}"
-                                            CommandParameter="{Binding Path=ID}">
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveCommand}"
+                                            CommandParameter="{Binding Path=.}">
                                         </Button>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>

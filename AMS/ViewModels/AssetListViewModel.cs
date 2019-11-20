@@ -14,6 +14,8 @@ using AMS.Helpers;
 using AMS.Models;
 using AMS.ViewModels.Base;
 using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace AMS.ViewModels
 {
@@ -59,27 +61,39 @@ namespace AMS.ViewModels
 
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
-        public ICommand EditByIdCommand { get; set; }
         public ICommand PrintCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
-        public ICommand RemoveByIdCommand { get; set; }
+        public ICommand RemoveMultipleCommand { get; set; }
 
         public AssetListViewModel(MainViewModel main, IAssetListController listController)
         {
-            Main = main;
+            _main = main;
             _listController = listController;
             Items = _listController.AssetList;
             
             AddNewCommand = new RelayCommand(AddNewAsset);
-            EditCommand = new RelayCommand(EditAsset);
+            EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
             PrintCommand = new RelayCommand(Export);
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
-            RemoveCommand = new RelayCommand(RemoveSelected);
-            EditByIdCommand = new RelayCommand<object>(EditById);
-            RemoveByIdCommand = new RelayCommand<object>(RemoveAssetByID);
+            RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
+            RemoveMultipleCommand = new RelayCommand<object>((parameter) => RemoveAssets(parameter as List<Asset>));
+        }
+
+        private void RemoveAssets(List<Asset> list)
+        {
+            if (list != null)
+            {
+                // Prompt user for approval for the removal of x assets 
+                string message = $"Are you sure you want to remove { list.Count } asset";
+                message += list.Count > 1 ? "s?" : "?";
+                _main.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
+                {
+
+                }));
+            }
         }
 
         /// <summary>
@@ -88,7 +102,7 @@ namespace AMS.ViewModels
         private void AddNewAsset()
         {
             //Todo FIx news
-            Main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), Main));
+            _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), _main));
         }
 
         private void EditById(object parameter)
@@ -101,11 +115,11 @@ namespace AMS.ViewModels
             finally
             {
                 if (id == 0)
-                    Main.AddNotification(new Notification("Error! Unknown ID"), 3500);
+                    _main.AddNotification(new Notification("Error! Unknown ID"), 3500);
                 else
                 {
                     Asset asset = _listController.AssetList.Where(a => a.ID == id).First();
-                    Main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), Main, asset));
+                    _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), _main, asset));
                 }
             }
         }
@@ -113,15 +127,14 @@ namespace AMS.ViewModels
         /// <summary>
         /// Changes the content to AssetEditor with the selected asset
         /// </summary>
-        private void EditAsset()
+        private void EditAsset(Asset asset)
         {
-
-            //Todo FIx news
-            
-            if (IsSelectedAssetValid())
-                Main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),Main, GetSelectedItem()));
+            if (asset != null)
+                _main.ContentFrame.Navigate(new AssetEditor(
+                    new AssetRepository(), 
+                    new TagListController(new PrintHelper()),_main, asset));
             else
-                Main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
+                _main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
         }
 
         /// <summary>
@@ -252,7 +265,7 @@ namespace AMS.ViewModels
             if(IsSelectedAssetValid())
                 _listController.ViewAsset(GetSelectedItem());
             else
-                Main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
+                _main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
         }
 
         private void RemoveAssetByID(object parameter)
@@ -266,7 +279,7 @@ namespace AMS.ViewModels
             {
                 // Delete Asset and display notification
                 _listController.Remove(GetSelectedItem());
-                Main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " Was deleted", Notification.INFO));
+                _main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " Was deleted", Notification.INFO));
             }
         }
 
@@ -277,18 +290,18 @@ namespace AMS.ViewModels
             else
             {
                 // Display error notification on error
-                Main.AddNotification(new Notification("Could not delete Asset", Notification.ERROR));
+                _main.AddNotification(new Notification("Could not delete Asset", Notification.ERROR));
             }
         }
 
         private void RemoveAsset(Asset asset)
         {
             // Prompt user for confirmation of removal
-            Main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
+            _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
             {
                 if (e.Result)
                 {
-                    Main.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
+                    _main.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
                     _listController.Remove(asset);
                 }
             }));
@@ -329,7 +342,7 @@ namespace AMS.ViewModels
             if (selectedAsset == null)
             {
                 // Display error notification
-                Main.AddNotification(new Notification("Selected Asset is not valid", Notification.ERROR));
+                _main.AddNotification(new Notification("Selected Asset is not valid", Notification.ERROR));
                 return false;
             }
 
