@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel.Composition.Primitives;
-using System.Text;
-using System.Windows.Input;
-using AMS.Controllers.Interfaces;
+﻿using AMS.Views;
 using AMS.Models;
 using AMS.ViewModels.Base;
-using AMS.Views;
+using System.Windows.Input;
+using System.Collections.Generic;
+using AMS.Controllers.Interfaces;
+using System.Collections.ObjectModel;
 
 namespace AMS.ViewModels
 {
@@ -90,14 +87,20 @@ namespace AMS.ViewModels
         {
             if (IsSelectedAssetValid())
             {
-                // Delete Asset and display notification
-                _listController.Remove(GetSelectedItem());
-                _main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " Was deleted", Notification.INFO));
+                // Prompt user for confirmation of removal
+                _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { GetSelectedItem().Name }?", (sender, e) =>
+                {
+                    if (e.Result)
+                    {
+                        _main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " was deleted", Notification.INFO));
+                        _listController.Remove(GetSelectedItem());
+                    }
+                }));
             }
             else
             {
                 // Display error notification on error
-                _main.AddNotification(new Notification("Could not delete Asset", Notification.ERROR));
+                _main.AddNotification(new Notification("Could not delete asset", Notification.ERROR));
             }
         }
 
@@ -120,25 +123,19 @@ namespace AMS.ViewModels
         /// <returns>Selected Asset</returns>
         private Asset GetSelectedItem()
         {
+            if (SelectedItemIndex == -1 || SelectedItemIndex >= _listController.AssetList.Count)
+                return null;
+
             return _listController.AssetList[SelectedItemIndex];
         }
 
         /// <summary>
         /// Determines if the selected Asset is valid.
-        /// Displays error notification if Asset is not value
         /// </summary>
         /// <returns>Is selected Asset Valid</returns>
         private bool IsSelectedAssetValid()
         {
-            Asset selectedAsset = _listController.AssetList[SelectedItemIndex];
-            if (selectedAsset == null)
-            {
-                // Display error notification
-                _main.AddNotification(new Notification("Selected Asset is not valid", Notification.ERROR));
-                return false;
-            }
-
-            return true;
+            return GetSelectedItem() != null;
         }
         
     }
