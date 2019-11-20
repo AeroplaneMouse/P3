@@ -116,11 +116,8 @@ namespace AMS.ViewModels
             ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this)));
             ShowLogPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new LogList()));
             ShowUserListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new UserList(this, new UserListController(new UserImporter(new UserRepository()), new UserRepository(), new DepartmentRepository()))));
-            
-            RemoveNotificationCommand = new Base.RelayCommand<object>((object parameter) => {
-                int id = int.Parse(parameter.ToString());
-                RemoveNotification(id);
-            });
+
+            RemoveNotificationCommand = new Base.RelayCommand<object>((parameter) => RemoveNotification(parameter as Notification));
 
             ReloadCommand = new Base.RelayCommand(Reload);
 
@@ -200,25 +197,6 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
-        /// Removes an active notification by ID
-        /// </summary>
-        private bool RemoveNotification(int id)
-        {
-            Notification n;
-            bool result = false;
-            try
-            {
-                n = ActiveNotifications.Where(n => n.ID == id).First();
-                result = RemoveNotification(n);
-            }
-            catch (ArgumentNullException)
-            {
-                result = false;
-            }
-            return result;
-        }
-
-        /// <summary>
         /// Removes an active notification by notification object
         /// </summary>
         private bool RemoveNotification(Notification n)
@@ -268,7 +246,6 @@ namespace AMS.ViewModels
                 Reload();
             }
         }
-
 
         /// <summary>
         /// Resets saved content, and reconnects to the database.
