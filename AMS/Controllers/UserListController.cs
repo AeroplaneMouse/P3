@@ -16,7 +16,7 @@ namespace AMS.Controllers
     {
         #region Public Properties
 
-        public List<UserWithStatus> UsersList
+        public List<UserWithStatus> UserList
         {
             get
             {
@@ -33,9 +33,20 @@ namespace AMS.Controllers
             set => _finalUsersList = value;
         }
 
-        public List<Department> DepartmentsList { get; set; }
+        public List<Department> DepartmentList
+        {
+            get
+            {
+                if (_departmentList == null)
+                {
+                    return _departmentRep.GetAll().ToList();
+                }
 
-        public IUserImporter Importer { get; set; }
+                return _departmentList;
+            }
+
+            set => _departmentList = value;
+        }
 
         // Checkboxes
         public bool IsShowingAdded
@@ -50,8 +61,6 @@ namespace AMS.Controllers
                     .Where(p => p.Status.CompareTo("Added") == 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
-
-                //OnPropertyChanged(nameof(UsersList));
             }
         }
 
@@ -67,8 +76,6 @@ namespace AMS.Controllers
                     .Where(p => p.Status.CompareTo("Removed") == 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
-
-                //OnPropertyChanged(nameof(UsersList));
             }
         }
 
@@ -84,8 +91,6 @@ namespace AMS.Controllers
                     .Where(p => p.Status.CompareTo("Conflicting") == 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
-
-                //OnPropertyChanged(nameof(ShownUsersList));
             }
         }
 
@@ -101,8 +106,6 @@ namespace AMS.Controllers
                     .Where(p => p.IsEnabled == false && p.Status.CompareTo("Conflicting") != 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
-
-                //OnPropertyChanged(nameof(ShownUsersList));
             }
         }
 
@@ -114,12 +117,16 @@ namespace AMS.Controllers
 
         private IDepartmentRepository _departmentRep { get; set; }
 
+        private IUserImporter _importer { get; set; }
+
         // Lists
         private List<UserWithStatus> _importedUsersList { get; set; }
 
         private List<UserWithStatus> _existingUsersList { get; set; }
 
         private List<UserWithStatus> _finalUsersList { get; set; }
+
+        private List<Department> _departmentList { get; set; }
 
 
         // Checkboxes
@@ -137,20 +144,19 @@ namespace AMS.Controllers
 
         public UserListController(IUserImporter importer, IUserRepository userRep, IDepartmentRepository departmentRep)
         {
-            Importer = importer;
+            _importer = importer;
 
             _userRep = userRep;
             _departmentRep = departmentRep;
 
             _isShowingAdded = true;
             _isShowingConflicting = true;
-            _isShowingDisabled = true;
+            _isShowingDisabled = false;
             _isShowingRemoved = true;
 
             GetExistingUsers();
-            GetUsersFromFile();
 
-            _finalUsersList = Importer.CombineLists(_importedUsersList, _existingUsersList);
+            _finalUsersList = _existingUsersList;
 
             UpdateShownUsers(_finalUsersList);
         }
@@ -159,14 +165,12 @@ namespace AMS.Controllers
 
         #region Public Methods
 
-        public void ApplyChanges()
+        public bool ApplyChanges()
         {
             // Check if there are any conflicts left
             if (_finalUsersList.Where(p => p.Status.CompareTo("Conflicting") == 0).Count() > 0)
             {
-                //_main.AddNotification(new Notification("Not all conflicts are solved"));
-                Console.WriteLine("Not all conflicts are solved");
-                return;
+                return false;
             }
 
             // Disable the removed users in the database
@@ -191,10 +195,19 @@ namespace AMS.Controllers
                 .ToList()
                 .ForEach(p => _userRep.Update(p));
 
-            //_main.ReturnToPreviousPage();
+            GetExistingUsers();
+            _finalUsersList = _existingUsersList;
+            UpdateShownUsers(_finalUsersList);
+
+            return true;
         }
 
-        public void CancelChanges() { }
+        public void CancelChanges()
+        {
+            GetExistingUsers();
+            _finalUsersList = _existingUsersList;
+            UpdateShownUsers(_finalUsersList);
+        }
 
         public void KeepUser(object user)
         {
@@ -235,30 +248,39 @@ namespace AMS.Controllers
 
                 _finalUsersList.Remove(otherUser);
             }
-
-            //OnPropertyChanged(nameof(ShownUsersList));
         }
 
-        public void SortUsers()
+        public void ChangeStatusOfUser(object user)
         {
-            throw new NotImplementedException();
-        }
+            if (user == null)
+                return;
 
-        public void Search()
-        {
-            throw new NotImplementedException();
+            UserWithStatus selectedUser = user as UserWithStatus;
+
+            if (selectedUser.Status.CompareTo(String.Empty) == 0)
+            {
+                selectedUser.IsEnabled = !selectedUser.IsEnabled;
+            }
+
+            UpdateShownUsers(_finalUsersList);
         }
        
         public void GetExistingUsers()
         {
-            _existingUsersList = Importer.ImportUsersFromDatabase().Select(u => new UserWithStatus(u)).ToList();
+            _existingUsersList = _importer.ImportUsersFromDatabase().Select(u => new UserWithStatus(u)).ToList();
         }
 
         public void GetUsersFromFile()
         {
-            _importedUsersList = Importer.ImportUsersFromFile(Importer.GetUsersFile()).Select(u => new UserWithStatus(u)).ToList();
-        }
+            string filePath = _importer.GetUsersFile();
 
+            if (filePath.CompareTo(String.Empty) != 0)
+            {
+                _importedUsersList = _importer.ImportUsersFromFile(filePath).Select(u => new UserWithStatus(u)).ToList();
+                _finalUsersList = _importer.CombineLists(_importedUsersList, _existingUsersList);
+                UpdateShownUsers(_finalUsersList);
+            }
+        }
 
         #endregion
 

@@ -13,11 +13,9 @@ namespace AMS.Controllers.Interfaces
     {
         #region Properties
 
-        List<UserWithStatus> UsersList { get; set; }
+        List<UserWithStatus> UserList { get; set; }
 
-        List<Department> DepartmentsList { get; set; }
-
-        IUserImporter Importer { get; set; }
+        List<Department> DepartmentList { get; set; }
 
         bool IsShowingAdded { get; set; }
 
@@ -37,11 +35,11 @@ namespace AMS.Controllers.Interfaces
 
         void KeepUser(object user);
 
+        void ChangeStatusOfUser(object user);
+
         void CancelChanges();
 
-        void ApplyChanges();
-
-        void SortUsers();
+        bool ApplyChanges();
 
         #endregion
 

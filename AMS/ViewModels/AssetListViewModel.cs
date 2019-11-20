@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition.Primitives;
 using System.Text;
 using System.Windows.Input;
@@ -16,9 +17,9 @@ namespace AMS.ViewModels
     public class AssetListViewModel : BaseViewModel
     {
         private IAssetListController _listController;
-        private MainViewModel _main;
+        public MainViewModel Main { get; set; }
         
-        public List<Asset> Items { get; set; }
+        public ObservableCollection<Asset> Items { get; set; }
         public int SelectedItemIndex { get; set; }
         public string SearchQuery { get; set; }
         
@@ -31,16 +32,16 @@ namespace AMS.ViewModels
 
         public AssetListViewModel(MainViewModel main, IAssetListController listController)
         {
-            _main = main;
+            Main = main;
             _listController = listController;
             Items = _listController.AssetList;
             
-            AddNewCommand = new Base.RelayCommand(AddNewAsset);
-            EditCommand = new Base.RelayCommand(EditAsset);
-            PrintCommand = new Base.RelayCommand(Export);
-            SearchCommand = new Base.RelayCommand(SearchAssets);
-            ViewCommand = new Base.RelayCommand(ViewAsset);
-            RemoveCommand = new Base.RelayCommand(RemoveAsset);
+            AddNewCommand = new RelayCommand(AddNewAsset);
+            EditCommand = new RelayCommand(EditAsset);
+            PrintCommand = new RelayCommand(Export);
+            SearchCommand = new RelayCommand(SearchAssets);
+            ViewCommand = new RelayCommand(ViewAsset);
+            RemoveCommand = new RelayCommand(RemoveAsset);
         }
 
         /// <summary>
@@ -57,14 +58,24 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset()
         {
+
             //Todo FIx news
-            _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main, GetSelectedItem()));
+            
+            if (IsSelectedAssetValid())
+                _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main, GetSelectedItem()));
+            else
+                Main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
         }
 
         /// <summary>
         /// Searches the list for Assets matching the searchQuery
         /// </summary>
-        private void SearchAssets() => _listController.Search(SearchQuery);
+        private void SearchAssets()
+        {
+            if (SearchQuery == null) return;
+            _listController.Search(SearchQuery);
+            Items = _listController.AssetList;
+        }
 
         /// <summary>
         /// Changes the content to ViewAsset with the selected asset
@@ -72,7 +83,10 @@ namespace AMS.ViewModels
         private void ViewAsset()
         {
             // TODO: Redirect to viewAsset page
-            _listController.ViewAsset(GetSelectedItem());
+            if(IsSelectedAssetValid())
+                _listController.ViewAsset(GetSelectedItem());
+            else
+                Main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
         }
 
         /// <summary>
@@ -80,9 +94,17 @@ namespace AMS.ViewModels
         /// </summary>
         private void RemoveAsset()
         {
-            _listController.Remove(GetSelectedItem());
-            
-            //TODO: Display notification?
+            if (IsSelectedAssetValid())
+            {
+                // Delete Asset and display notification
+                _listController.Remove(GetSelectedItem());
+                Main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " Was deleted", Notification.INFO));
+            }
+            else
+            {
+                // Display error notification on error
+                Main.AddNotification(new Notification("Could not delete Asset", Notification.ERROR));
+            }
         }
 
         /// <summary>
@@ -99,17 +121,30 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
-        /// Returns the selected asset, or throws an error if it is not valid
+        /// Returns the selected asset
         /// </summary>
         /// <returns>Selected Asset</returns>
         private Asset GetSelectedItem()
         {
-            Asset selectedAsset = _listController.AssetList[SelectedItemIndex];
-            //TODO: Handle error
-            if(selectedAsset == null)
-                throw new NullReferenceException("The selected asset is not valid");
+            return _listController.AssetList[SelectedItemIndex];
+        }
 
-            return selectedAsset;
+        /// <summary>
+        /// Determines if the selected Asset is valid.
+        /// Displays error notification if Asset is not value
+        /// </summary>
+        /// <returns>Is selected Asset Valid</returns>
+        private bool IsSelectedAssetValid()
+        {
+            Asset selectedAsset = _listController.AssetList[SelectedItemIndex];
+            if (selectedAsset == null)
+            {
+                // Display error notification
+                Main.AddNotification(new Notification("Selected Asset is not valid", Notification.ERROR));
+                return false;
+            }
+
+            return true;
         }
         
     }

@@ -1,5 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    
     <!-- Menu button -->
     <Style TargetType="{x:Type Button}" x:Key="MenuButton" BasedOn="{StaticResource BaseStyle}">
 
@@ -137,8 +139,9 @@
         <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource CancelRedHighlightBrush}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource CancelRedHighlightBrush}"/>
+                <!--<Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>-->
+                <!--<Setter Property="Background" Value="{StaticResource CancelRedHighlightBrush}"/>-->
+                <!--<Setter Property="BorderBrush" Value="{StaticResource CancelRedHighlightBrush}"/>-->
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -146,10 +149,11 @@
     <!-- Regular accept button -->
     <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource AcceptGreenHightlightBrush}"/>
+                <!--<Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>-->
+                <!--<Setter Property="Background" Value="{StaticResource AcceptGreenHightlightBrush}"/>-->
+                <!--<Setter Property="BorderBrush" Value="{StaticResource AcceptGreenHightlightBrush}"/>-->
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -231,12 +235,20 @@
     <Style TargetType="Button" x:Key="RemoveNotificationButton">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Content" Value="[X]"/>
+        <Setter Property="Content" Value="X"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Margin" Value="0, 0, 10, 0"/>
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
+
+        <Setter Property="LayoutTransform">
+            <Setter.Value>
+                <ScaleTransform ScaleX="1.5"/>
+            </Setter.Value>
+        </Setter>
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -246,6 +258,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+        
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Foreground" Value="Gray"/>

@@ -113,8 +113,8 @@
                                                 <Button Content="Home" Command="{Binding ShowHomePageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Assets" Command="{Binding ShowAssetListPageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Tags" Command="{Binding ShowTagListPageCommand}" Style="{StaticResource NavigationButton}"/>
-                                                <Button Content="Log" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding Visible}"/>
-                                                <Button Content="Users" Command="{Binding ShowUserListPageCommand}" Style="{StaticResource NavigationButton}"/>
+                                                <Button Content="Log" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding VisibleForAdmin}"/>
+                                                <Button Content="Users" Command="{Binding ShowUserListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding VisibleForAdmin}"/>
                                                 <!--<Button Content="Test" Command="{Binding AddFieldTestCommand}" Style="{StaticResource NavigationButton}"/>-->
                                                 <!--<Button Content="Random" Command="{Binding AddNotificationTestCommand}" Style="{StaticResource NavigationButton}"/>-->
                                             </StackPanel>
@@ -127,8 +127,7 @@
 
                                         <!-- Notifications -->
                                         <ListView Grid.Column="1" 
-                                                  VerticalAlignment="Top"
-                                                  FontSize="{StaticResource FontSizeSmall}"
+                                                  FontSize="{StaticResource FontSizeLarge}"
                                                   Style="{StaticResource NotificationView}"/>
 
                                     </Grid>
