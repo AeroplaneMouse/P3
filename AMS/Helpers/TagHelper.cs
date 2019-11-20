@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using AMS.Database.Repositories;
+using AMS.Database.Repositories.Interfaces;
+using AMS.Models;
 using System.Linq;
-using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Models;
-using Asset_Management_System.Views;
 
-namespace Asset_Management_System.Functions
+namespace AMS.Helpers
 {
-    public class Tagging
+    public class TagHelper
     {
         private Tag _parent;
-        private List<Tag> _suggestedTags;
+        public List<ITagable> SuggestedTags;
         private List<Tag> _tags;
         private List<User> _users;
+        private bool _hasSuggestions = false;
         public ObservableCollection<ITagable> AppliedTags { get; set; }
-        private ITagRepository _tagRep;
-        private IUserRepository _userRep;
+        private readonly ITagRepository _tagRepository;
+        private readonly IUserRepository _userRepository;
 
-        public Tagging(ObservableCollection<ITagable> tags=null)
+        public TagHelper(ITagRepository tagRepository, IUserRepository userRepository, ObservableCollection<ITagable> tags=null)
         {
-            _tagRep = new TagRepository();
-            _userRep = new UserRepository();
+            _tagRepository = tagRepository;
+            _userRepository = userRepository;
 
             AppliedTags = tags ?? new ObservableCollection<ITagable>();
+            SuggestedTags = new List<ITagable>();
 
             Reload();
             Parent(null);
@@ -31,8 +33,8 @@ namespace Asset_Management_System.Functions
 
         public void Reload()
         {
-            _tags = (List<Tag>) _tagRep.GetAll();
-            _users = (List<User>) _userRep.GetAll();
+            _tags = (List<Tag>) _tagRepository.GetAll();
+            _users = (List<User>) _userRepository.GetAll();
         }
 
         public List<ITagable> Suggest(string input)
@@ -46,11 +48,18 @@ namespace Asset_Management_System.Functions
             }
             else
             {
-                result.AddRange(_suggestedTags.Where(t => t.Name.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)
+                result.AddRange(SuggestedTags.Where(t => t.TagLabel.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)
                                                   && (!AppliedTags.Contains(t))).ToList());
             }
 
+            _hasSuggestions = result.Any();
+
             return result;
+        }
+
+        public bool HasSuggestions()
+        {
+            return _hasSuggestions;
         }
 
         public void AddToQuery(ITagable tag)
@@ -65,7 +74,7 @@ namespace Asset_Management_System.Functions
 
         public void Parent(Tag tag=null)
         {
-            _suggestedTags = tag != null ? _tags.Where(a => a.ParentID == tag.ID).ToList() : _tags.Where(a => a.ParentID == 0).ToList();
+            SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentID == tag.ID).ToList() : _tags.Where(a => a.ParentID == 0).ToList());
             _parent = tag;
         }
 

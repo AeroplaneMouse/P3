@@ -57,19 +57,62 @@
                     <!--     </Border.Style> -->
                     <!-- </Border> -->
 
-                    <TextBox FontSize="{StaticResource FontSizeSmall}"
-                             Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                             VerticalContentAlignment="Center"
-                             MinWidth="200"
-                             Name="SearchElement"
-                             TabIndex="0">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding EnterCommand}"/>
-                            <KeyBinding Key="Escape" Command="{Binding DeleteCommand}"/>
-                            <!--<KeyBinding Key="Tab" FocusManager.FocusedElement="{Binding ElementName=SuggestionsList}"/>-->
-                        </TextBox.InputBindings>
-                    </TextBox>
-
+                    <StackPanel Orientation="Vertical"    
+                                VerticalAlignment="Center"    
+                                HorizontalAlignment="Center">
+                        
+                        <StackPanel Orientation="Horizontal"    
+                                    VerticalAlignment="Center">
+                            
+                            <Border x:Name="CurrentTagGroup" Background="LightGray"
+                                    BorderThickness="0"
+                                    Visibility="{Binding CurrentGroupVisibility}">
+                                <TextBlock Style="{StaticResource ParagraphStyle}"
+                                           Text="{Binding CurrentGroup, UpdateSourceTrigger=PropertyChanged}"
+                                           VerticalAlignment="Center"/>
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsVisible" Value="True">
+                                                <Setter Property="Padding" Value="5 0 5 0"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                            </Border>
+                            
+                            <TextBox FontSize="{StaticResource FontSizeSmall}"
+                                     Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                     VerticalContentAlignment="Center"
+                                     MinWidth="200"
+                                     MaxWidth="350"
+                                     Height="30"
+                                     x:Name="SearchElement"
+                                     TabIndex="0">
+                                
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                                    <KeyBinding Key="Escape" Command="{Binding DeleteCommand}"/>
+                                    <!--<KeyBinding Key="Tab" FocusManager.FocusedElement="{Binding ElementName=SuggestionsList}"/>-->
+                                </TextBox.InputBindings>
+                            </TextBox>
+                        </StackPanel>
+                    
+                        <Popup x:Name="TagSuggestionPopup"    
+                               Visibility="{Binding TagSuggestionsVisibility}"                    
+                               IsOpen="{Binding TagSuggestionIsOpen}"
+                               StaysOpen="False"
+                               MaxHeight="100"
+                               Placement="Bottom">
+    
+                            <ListBox x:Name="TagSuggestionList"    
+                                     Visibility="{Binding TagSuggestionsVisibility}"    
+                                     Width="200"
+                                     ItemsSource="{ Binding TagSearchSuggestions }"/>
+                        </Popup>
+                    </StackPanel>
+                    
+                    
                     <Button Style="{StaticResource RegularButton}"
                             Margin="10 0 10 0"
                             Command="{Binding SearchCommand}"

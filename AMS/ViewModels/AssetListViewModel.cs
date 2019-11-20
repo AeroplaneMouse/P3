@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Composition.Primitives;
+using System.Linq;
+using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using AMS.Views;
 using AMS.Controllers;
@@ -16,12 +20,43 @@ namespace AMS.ViewModels
     public class AssetListViewModel : BaseViewModel
     {
         private IAssetListController _listController;
-        public MainViewModel Main { get; set; }
-        
+        private MainViewModel _main;
+        private string _searchQuery;
+        private TagHelper _tagHelper;
+
         public ObservableCollection<Asset> Items { get; set; }
         public int SelectedItemIndex { get; set; }
-        public string SearchQuery { get; set; }
-        
+
+        public string SearchQuery
+        {
+            get => _searchQuery;
+            set
+            {
+                _searchQuery = value;
+                
+                if (!inTagMode && _searchQuery == "#")
+                {
+                    inTagMode = true;
+                    _searchQuery = "";
+                    EnteringTagMode();
+                }
+                
+                if (inTagMode)
+                {
+                    TagSearchProcess();
+                }
+            }
+            
+        }
+
+        public string CurrentGroup { get; set; }
+        public Visibility CurrentGroupVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility TagSuggestionsVisibility { get; set; } = Visibility.Collapsed;
+        public bool TagSuggestionIsOpen { get; set; } = false;
+        public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
+        public ITagable TagParent;
+        public bool inTagMode = false;
+
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand EditByIdCommand { get; set; }
@@ -94,9 +129,118 @@ namespace AMS.ViewModels
         /// </summary>
         private void SearchAssets()
         {
+            Console.WriteLine("This is super stupid!");
+            
+            if (SearchQuery == null) 
+                return;
+
+            if (!inTagMode)
+            {
+                _listController.Search(SearchQuery);
+                Items = _listController.AssetList;
+            }
+
+            /*
             if (SearchQuery == null) return;
             _listController.Search(SearchQuery);
             Items = _listController.AssetList;
+            */
+        }
+
+        private void EnteringTagMode()
+        {
+            try
+            {
+                _tagHelper = new TagHelper(new TagRepository(), new UserRepository(), new ObservableCollection<ITagable>());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            
+
+            CurrentGroup = "#";
+            CurrentGroupVisibility = Visibility.Visible;
+
+        }
+
+        private void TagSearchProcess()
+        {
+            try
+            {
+                //Console.WriteLine("Hest!");
+                if (_searchQuery == "exit")
+                {
+                    inTagMode = false;
+                    LeavingTagMode();
+                }
+                else
+                {
+                    try
+                    {
+                        TagSearchSuggestions = new ObservableCollection<ITagable>(_tagHelper.Suggest(_searchQuery));
+
+                        if (_tagHelper.HasSuggestions())
+                        {
+                            TagSuggestionsVisibility = Visibility.Visible;
+                            TagSuggestionIsOpen = true;
+                        }
+                        else
+                        {
+                            TagSuggestionsVisibility = Visibility.Collapsed;
+                            TagSuggestionIsOpen = false;
+                        }
+
+                        foreach (var item in TagSearchSuggestions)
+                        {
+                            Console.WriteLine(item.TagLabel);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            
+            //List<ITagable> list = _tagHelper.Suggest(_searchQuery);
+            //TagSearchSuggestions = new ObservableCollection<ITagable>(_tagHelper.SuggestedTags);
+            
+           
+            /*
+            foreach (var item in list)
+            {
+                Console.WriteLine(item.TagLabel);
+            }
+
+            if (_tagHelper.HasSuggestions())
+            {
+                TagSuggestionsVisibility = Visibility.Visible;
+                TagSuggestionIsOpen = true;
+            }
+            else
+            {
+                TagSuggestionsVisibility = Visibility.Collapsed;
+                TagSuggestionIsOpen = false;
+            }
+            */
+        }
+
+        private void LeavingTagMode()
+        {
+            
+            CurrentGroup = "";
+            SearchQuery = "";
+            TagSuggestionsVisibility = Visibility.Collapsed;
+            TagSuggestionIsOpen = false;
+            CurrentGroupVisibility = Visibility.Collapsed;
+            
         }
 
         /// <summary>
