@@ -184,6 +184,44 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <!-- Image button -->
+    <Style TargetType="Button" x:Key="ImageButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Padding="{TemplateBinding Padding}">
+                        <Image Source="{TemplateBinding Content}"
+                               VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Trash button -->
+    <Style TargetType="Button" x:Key="TrashButton" BasedOn="{StaticResource ImageButton}">
+        <Setter Property="Content" Value="{StaticResource Trash_Gray}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Content" Value="{StaticResource Trash_Red}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Edit button -->
+    <Style TargetType="Button" x:Key="EditButton" BasedOn="{StaticResource ImageButton}">
+        <Setter Property="Content" Value="{StaticResource Edit_Gray}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Content" Value="{StaticResource Edit_Black}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
     <!--<Style TargetType="Button" x:Key="DepartmentButtonEdit" BasedOn="{StaticResource DepartmentButton}">
         <Setter Property="Content">
