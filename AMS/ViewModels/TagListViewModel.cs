@@ -12,7 +12,7 @@ namespace AMS.ViewModels
 {
     public class TagListViewModel
     {
-        private List<Tag> Tags { get; set; }
+        public List<Tag> Tags { get; set; }
         private readonly ITagListController _tagListController;
         private readonly MainViewModel _mainViewModel;
         

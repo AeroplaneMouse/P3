@@ -3,7 +3,7 @@
     
     <Style x:Key="{x:Type ListView}" TargetType="ListView">
         <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="0 10 0 0" />
         <Setter Property="AlternationCount" Value="2"/>
     </Style>
@@ -20,7 +20,7 @@
         </Style.Triggers>
     </Style>
     
-    <Style TargetType="{x:Type GridViewColumnHeader}">
+    <Style x:Key="{x:Type GridViewColumnHeader}" TargetType="GridViewColumnHeader">
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Margin" Value="-4, 0, 0, 0" />
         <Setter Property="Padding" Value="10, 3, 0, 1" />
