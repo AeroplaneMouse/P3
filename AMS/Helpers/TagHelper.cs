@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Models;
 using System.Linq;
+using AMS.Interfaces;
 
 namespace AMS.Helpers
 {
