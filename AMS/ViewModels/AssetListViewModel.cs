@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.Composition.Primitives;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using AMS.Views;
@@ -13,9 +11,7 @@ using AMS.Database.Repositories;
 using AMS.Helpers;
 using AMS.Models;
 using AMS.ViewModels.Base;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
+using AMS.Interfaces;
 
 namespace AMS.ViewModels
 {
