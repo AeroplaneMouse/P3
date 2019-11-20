@@ -190,7 +190,7 @@ namespace UnitTests
             controller.GetUsersFromFile();
 
             //controller.UsersList = controller.Importer.CombineLists(imported, existing);
-            controller.UsersList = new List<UserWithStatus>();
+            controller.UserList = new List<UserWithStatus>();
 
             int noget = 1;
             // Act

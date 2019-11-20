@@ -10,6 +10,6 @@ namespace AMS.Controllers.Interfaces
 
         bool AddField(Field field);
 
-        bool RemoveField(Field inputField);
+        bool RemoveFieldOrFieldRelations(Field inputField, Tag tag = null);
     }
 }

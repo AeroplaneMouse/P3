@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace AMS.ViewModels
@@ -17,16 +18,14 @@ namespace AMS.ViewModels
 
         public ObservableCollection<UserWithStatus> ShownUsersList
         {
-            get => new ObservableCollection<UserWithStatus>(_userListController.UsersList);
-            set => _userListController.UsersList = value.ToList();
+            get => new ObservableCollection<UserWithStatus>(_userListController.UserList);
+            set => _userListController.UserList = value.ToList();
         }
 
-        //public List<UserWithStatus> ShownUsersList { get; set; }
-
-        public List<Department> DepartmentsList
+        public ObservableCollection<Department> DepartmentList
         {
-            get => _userListController.DepartmentsList;
-            set => _userListController.DepartmentsList = value;
+            get => new ObservableCollection<Department>(_userListController.DepartmentList);
+            set => _userListController.DepartmentList = value.ToList();
         }
 
         // Checkboxes
@@ -90,6 +89,10 @@ namespace AMS.ViewModels
 
         public ICommand ImportUsersCommand { get; set; }
 
+        public ICommand ChangeStatusCommand { get; set; }
+
+        public ICommand ChangeDepartmentCommand { get; set; }
+
         #endregion
 
         #region Constructor
@@ -110,12 +113,27 @@ namespace AMS.ViewModels
             KeepUserCommand = new Base.RelayCommand<object>(KeepUser);
             ImportUsersCommand = new Base.RelayCommand(Import);
 
+            ChangeStatusCommand = new Base.RelayCommand<object>(ChangeStatus);
+
+            ChangeDepartmentCommand = new Base.RelayCommand<object>(ChangeDepartment);
+
             OnPropertyChanged(nameof(ShownUsersList));
         }
 
         #endregion
 
         #region Private Methods
+
+        private void ChangeDepartment(object user)
+        {
+            Console.WriteLine(DepartmentList.IndexOf(DepartmentList.Where(p => p.ID == (user as UserWithStatus).DefaultDepartment).SingleOrDefault()));
+        }
+
+        private void ChangeStatus(object user)
+        {
+            _userListController.ChangeStatusOfUser(user);
+            OnPropertyChanged(nameof(ShownUsersList));
+        }
 
         private void Import()
         {

@@ -26,6 +26,7 @@ namespace UnitTests
             assetRepMock.Setup(p => p.Delete(It.IsAny<Asset>())).Returns(true);
             // This creates a new instance of the class for each test
             _assetListController = new AssetListController(assetRepMock.Object, _exporter);
+            _assetListController.AssetList = new ObservableCollection<Asset>();
         }
 
         /* Tests deprecated method
@@ -163,7 +164,7 @@ namespace UnitTests
 
             //Assert
             // Verify that the method IAssetRepository.Delete(Asset) is called once
-            assetRepMock.Verify((p => p.Search(It.IsAny<string>(), null, null, false)), Times.Once());
+            assetRepMock.Verify((p => p.Search(It.IsAny<string>(), null, null, false)), Times.Exactly(2));
         }
         
     }
