@@ -76,12 +76,19 @@ namespace AMS.ViewModels
             _listController = listController;
             Items = _listController.AssetList;
 
-            AddNewCommand = new RelayCommand(() => EditAsset(null));
-            EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
+            // Admin only functions
+            if (_main.CurrentSession.IsAdmin())
+            {
+                AddNewCommand = new RelayCommand(() => EditAsset(null));
+                EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
+                RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
+                RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
+                EditBySelectionCommand = new RelayCommand(EditBySelection);
+            }
+
             PrintCommand = new RelayCommand(Export);
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
-            RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
             RemoveTagCommand = new RelayCommand<object>((parameter) => 
             {
                 ITagable tag = parameter as ITagable;
@@ -90,8 +97,6 @@ namespace AMS.ViewModels
                 OnPropertyChanged(nameof(AppliedTags));
             });
 
-            RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
-            EditBySelectionCommand = new RelayCommand(EditBySelection);
             AutoTagCommand = new RelayCommand(AutoTag);
             ClearInputCommand = new RelayCommand(ClearInput);
         }

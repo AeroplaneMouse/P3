@@ -1,12 +1,14 @@
 ﻿using AMS.Models;
 using AMS.Authentication;
 using System.Windows.Controls;
+using System.Windows;
 
 namespace AMS.ViewModels
 {
     static class Features
     {
         public static MainViewModel Main;
+        public static Visibility OnlyVisibleForAdmin { get => Main.OnlyVisibleForAdmin; }
 
         // Notifications
         public static void AddNotification(Notification n, int displayTime = 2500)

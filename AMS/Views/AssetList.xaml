@@ -3,10 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-      xmlns:local="clr-namespace:AMS.Views"
-      xmlns:i1="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
-      xmlns:i2="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
+      xmlns:viewModel="clr-namespace:AMS.ViewModels"
       mc:Ignorable="d" 
       Title="AssetList">
 
@@ -24,7 +21,8 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Grid.Row="0">
             <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding AddNewCommand}"
-                    Content="Add"/>
+                    Content="Add"
+                    Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
         </StackPanel>
 
         <Rectangle Style="{StaticResource HorizontalSeparator}"
@@ -70,7 +68,7 @@
                                 Visibility="{Binding CurrentGroupVisibility}">
                             
                             <TextBlock Style="{StaticResource ParagraphStyle}"
-                                       Text="{Binding CurrentGroup, UpdateSourceTrigger=PropertyChanged}"
+                                       Text="{Binding CurrentGroup}"
                                        VerticalAlignment="Center"/>
                             
                             <Border.Style>
@@ -226,7 +224,8 @@
                                     <DataTemplate>
                                         <Button Style="{StaticResource EditButton}"
                                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.EditCommand}"
-                                                CommandParameter="{Binding Path=.}"/>
+                                                CommandParameter="{Binding Path=.}"
+                                                Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -236,9 +235,9 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{StaticResource TrashButton}"
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveCommand}"
-                                            CommandParameter="{Binding Path=.}">
-                                        </Button>
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveCommand}"
+                                                CommandParameter="{Binding Path=.}"
+                                                Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -270,30 +269,5 @@
                 </ListView>
             </Grid>
         </Border>
-
-        <!-- Suggestion dropdown -->
-        
-        <!-- <Grid -->
-        <!--     VerticalAlignment="Top" -->
-        <!--     HorizontalAlignment="Left" -->
-        <!--     Margin="10 40 0 0" -->
-        <!--     Grid.Row="1"> -->
-        <!--     <Border Background="LightGray"  -->
-        <!--             Opacity="0.7" -->
-        <!--             BorderThickness="0" -->
-        <!--             BorderBrush="Black"> -->
-        <!--     </Border> -->
-        <!--     <ListView SelectedIndex="{Binding SelectedSuggestedIndex}" -->
-        <!--                 Background="Transparent" -->
-        <!--                 Name="SuggestionsList" -->
-        <!--                 BorderThickness="0" -->
-        <!--                 ItemsSource="{Binding Suggestions}" -->
-        <!--                 MinWidth="209" -->
-        <!--                 TabIndex="1"> -->
-        <!--         <ListView.InputBindings> -->
-        <!--             <KeyBinding Key="Enter" Command="{Binding SelectTagCommand}"/> -->
-        <!--         </ListView.InputBindings> -->
-        <!--     </ListView> -->
-        <!-- </Grid> -->
     </Grid>
 </Page>
