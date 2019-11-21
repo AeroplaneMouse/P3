@@ -65,21 +65,20 @@ namespace AMS.ViewModels
         public AssetEditorViewModel(Asset asset, IAssetRepository assetRepository, TagListController tagListController,MainViewModel main)
         {
             _main = main;
+            _isEditing = (asset != null);
+            if (_isEditing)
+                Title = "Edit asset";
+            else
+            {
+                Title = "Add asset";
+                asset = new Asset();
+            }
+
             _assetController = new AssetController(asset, assetRepository);
             NonHiddenFieldList = new ObservableCollection<Field>(_assetController.FieldList.Where(f => f.IsHidden == false));
             HiddenFieldList = new ObservableCollection<Field>(_assetController.FieldList.Where(f => f.IsHidden == true));
             _tagListController = tagListController;
-            _isEditing = (asset != null);
 
-            if (_isEditing)
-            {
-                Title = "Edit asset";
-                
-            }
-            else
-            {
-                Title = "Add asset";
-            }
 
             //Commands
             SaveCommand = new RelayCommand(() => SaveAndExist());
