@@ -1,5 +1,6 @@
 ﻿using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
+using AMS.Logging;
 using AMS.Models;
 using AMS.Services.Interfaces;
 using System;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace AMS.Controllers
 {
-    public class TagController : FieldListController, ITagController
+    public class TagController : FieldListController, ITagController, ILoggableValues
     {
         public Tag Tag { get; set; }
         public string PageTitle { get; set; }
@@ -81,5 +82,30 @@ namespace AMS.Controllers
 
             return hex;
         }
+
+        /// <summary>
+        /// Makes a loggable dictionary from the tag
+        /// </summary>
+        /// <returns>The tag formatted as a loggable dictionary</returns>
+        public Dictionary<string, string> GetLoggableValues()
+        {
+            Dictionary<string, string> props = new Dictionary<string, string>();
+            props.Add("ID", Tag.ID.ToString());
+            props.Add("Name", Tag.Name);
+            props.Add("ParentId", Tag.ParentID.ToString());
+            props.Add("Number of children", Tag.NumOfChildren.ToString());
+            props.Add("Department ID", Tag.DepartmentID.ToString());
+            SerializeFields();
+            props.Add("Created at", Tag.CreatedAt.ToString());
+            props.Add("Last updated at", Tag.UpdatedAt.ToString());
+            return props;
+
+        }
+
+        /// <summary>
+        /// Returns the name of the tag
+        /// </summary>
+        /// <returns>The name of the tag</returns>
+        public string GetLoggableTypeName() => Tag.Name;
     }
 }

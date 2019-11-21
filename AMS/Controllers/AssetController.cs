@@ -3,11 +3,12 @@ using System.Linq;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
+using AMS.Logging;
 using AMS.Models;
 
 namespace AMS.Controllers
 {
-    public class AssetController : FieldListController, IAssetController
+    public class AssetController : FieldListController, IAssetController, ILoggableValues
     {
         public Asset Asset { get; set; }
         public List<ITagable> CurrentlyAddedTags { get; } = new List<ITagable>();
@@ -79,5 +80,30 @@ namespace AMS.Controllers
         {
             return _assetRepository.Delete(Asset);
         }
+
+        /// <summary>
+        /// Makes a loggable dictionary from the asset
+        /// </summary>
+        /// <returns>The asset formatted as a loggable dictionary</returns>
+        public Dictionary<string, string> GetLoggableValues()
+        {
+            Dictionary<string, string> props = new Dictionary<string, string>();
+            props.Add("ID", Asset.ID.ToString());
+            props.Add("Name", Asset.Name);
+            props.Add("Description", Asset.Description);
+            props.Add("Department ID", Asset.DepartmentID.ToString());
+            SerializeFields();
+            props.Add("Options", Asset.SerializedFields);
+            props.Add("Created at", Asset.CreatedAt.ToString());
+            props.Add("Last updated at", Asset.UpdatedAt.ToString());
+            return props;
+
+        }
+
+        /// <summary>
+        /// Returns the name of the asset
+        /// </summary>
+        /// <returns>Name of the asset</returns>
+        public string GetLoggableTypeName() => Asset.Name;
     }
 }

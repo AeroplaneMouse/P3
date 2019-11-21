@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace AMS.Controllers.Interfaces
 {
-    public interface ICommentController
+    public interface ICommentListController
     {
         ObservableCollection<Comment> CommentList { get; set; }
 

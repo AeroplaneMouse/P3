@@ -13,7 +13,7 @@ namespace UnitTests
     [TestClass]
     public class CommentTests
     {
-        ICommentController _controller;
+        ICommentListController _controller;
         //ICommentRepository _commentRep;
         private Mock<ICommentRepository> _commentRepMock;
         private Mock<IUserRepository> _userRepMock;
@@ -27,7 +27,7 @@ namespace UnitTests
             _commentRepMock = new Mock<ICommentRepository>();
             _userRepMock = new Mock<IUserRepository>();
             _sessionMock = new Mock<Session>(_userRepMock.Object);
-            _controller = new CommentController(_sessionMock.Object, _commentRepMock.Object);
+            _controller = new CommentListController(_sessionMock.Object, _commentRepMock.Object);
         }
 
         [TestMethod]
