@@ -46,32 +46,6 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Displays the editPage for a blank asset
-        /// </summary>
-        public void AddNew()
-        {
-            //TODO: Redirect to blank editPage
-            AssetList.Add(new Asset());
-        }
-
-        /// <summary>
-        /// Displays the editPage for the given page
-        /// </summary>
-        /// <param name="asset"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        public void Edit(Asset asset)
-        {
-            // Handle if asset is null
-            if (asset == null)
-            {
-                //TODO: Handle error and notify user
-                return;
-            }
-            //TODO: Redirect to EditPage
-            throw new NotImplementedException();
-        }
-        
-        /// <summary>
         /// Displays the viewPage for the given asset
         /// </summary>
         /// <param name="asset"></param>

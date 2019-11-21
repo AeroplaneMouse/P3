@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
 using AMS.Controllers;
+using AMS.Database.Repositories.Interfaces;
 using AMS.Helpers;
 using AMS.IO;
 using System.Windows.Navigation;
@@ -31,6 +32,10 @@ namespace AMS.ViewModels
 
         private Department _currentDepartment;
         private bool _hasConnectionFailedBeenRaised = false;
+
+        private IAssetRepository _assetRep;
+        private IUserRepository _userRep;
+        private IDepartmentRepository _departmentRep;
 
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
@@ -72,7 +77,7 @@ namespace AMS.ViewModels
         public Page PopupPage { get; set; }
         public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
         public Visibility VisibleForAdmin { get; set; }
-    
+
         public List<Department> Departments { get => GetDepartments(); }
         public Session CurrentSession { get; private set; }
         public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
@@ -94,7 +99,7 @@ namespace AMS.ViewModels
             ResizeBorder = 4;
             TitleHeight = 25;
             InnerContentPaddingSize = 6;
-            
+
             // Listen out for the window resizing
             _window.StateChanged += (sender, e) =>
             {
@@ -115,9 +120,14 @@ namespace AMS.ViewModels
                 )
             )));
 
+            // Dependencies that should be the same for the entire application
+            _assetRep = new AssetRepository();
+            _userRep = new UserRepository();
+            _departmentRep = new DepartmentRepository();
+
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
             ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, new AssetRepository(), new PrintHelper())));
-            ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this)));
+            ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this, new TagRepository())));
             ShowLogPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new LogList()));
             ShowUserListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new UserList(this, new UserListController(new UserImporter(new UserRepository()), new UserRepository(), new DepartmentRepository()))));
 
@@ -180,7 +190,7 @@ namespace AMS.ViewModels
         /// <summary>
         /// Adds a notification to the list of active notifications, with a displayTime of 2500 milliseconds.
         /// </summary>
-        public void AddNotification(Notification n) 
+        public void AddNotification(Notification n)
             => AddNotification(n, 2500);
 
         /// <summary>
@@ -231,7 +241,7 @@ namespace AMS.ViewModels
             CurrentSession = session;
             CurrentUser = CurrentSession.Username;
             OnPropertyChanged(nameof(CurrentUser));
-            
+
             // Sets the visibility of WPF elements binding to this, based on whether or not the current user is an admin
             VisibleForAdmin = CurrentSession.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
 

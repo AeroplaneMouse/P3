@@ -19,11 +19,7 @@ namespace AMS.ViewModels
         public ICommand SaveAssetCommand;
 
 
-        public List<ITagable> CurrentlyAddedTags
-        {
-            get => _assetController.CurrentlyAddedTags;
-            set => _assetController.CurrentlyAddedTags = value;
-        }
+        public List<ITagable> CurrentlyAddedTags => _assetController.CurrentlyAddedTags;
 
         public string Name
         {

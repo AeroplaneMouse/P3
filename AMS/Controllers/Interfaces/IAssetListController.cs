@@ -24,6 +24,7 @@ namespace AMS.Controllers.Interfaces
 
         void Search(string query);
 
+        // TODO: Remove when AssetView is created
         void ViewAsset(Asset asset);
 
         void Remove(Asset asset);

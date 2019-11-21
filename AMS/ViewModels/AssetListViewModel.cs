@@ -31,20 +31,20 @@ namespace AMS.ViewModels
             set
             {
                 _searchQuery = value;
-                
+
                 if (!inTagMode && _searchQuery == "#")
                 {
                     inTagMode = true;
                     _searchQuery = "";
                     EnteringTagMode();
                 }
-                
+
                 if (inTagMode)
                 {
                     TagSearchProcess();
                 }
             }
-            
+
         }
 
         public string CurrentGroup { get; set; }
@@ -68,7 +68,7 @@ namespace AMS.ViewModels
             _main = main;
             _listController = listController;
             Items = _listController.AssetList;
-            
+
             AddNewCommand = new RelayCommand(AddNewAsset);
             EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
             PrintCommand = new RelayCommand(Export);
@@ -82,7 +82,7 @@ namespace AMS.ViewModels
         {
             if (list != null)
             {
-                // Prompt user for approval for the removal of x assets 
+                // Prompt user for approval for the removal of x assets
                 string message = $"Are you sure you want to remove { list.Count } asset";
                 message += list.Count > 1 ? "s?" : "?";
                 _main.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
@@ -98,26 +98,7 @@ namespace AMS.ViewModels
         private void AddNewAsset()
         {
             //Todo FIx news
-            _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), _main));
-        }
-
-        private void EditById(object parameter)
-        {
-            ulong id = 0;
-            try
-            {
-                id = ulong.Parse(parameter.ToString());
-            }
-            finally
-            {
-                if (id == 0)
-                    _main.AddNotification(new Notification("Error! Unknown ID"), 3500);
-                else
-                {
-                    Asset asset = _listController.AssetList.Where(a => a.ID == id).First();
-                    _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), _main, asset));
-                }
-            }
+            Features.NavigatePage(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main));
         }
 
         /// <summary>
@@ -125,10 +106,12 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset(Asset asset)
         {
-            if (asset != null)
-                _main.ContentFrame.Navigate(new AssetEditor(
-                    new AssetRepository(), 
-                    new TagListController(new PrintHelper()),_main, asset));
+
+            //Todo FIx news
+            
+            if (IsSelectedAssetValid())
+                Features.NavigatePage(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main, GetSelectedItem()));
+
             else
                 _main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
         }
@@ -139,8 +122,8 @@ namespace AMS.ViewModels
         private void SearchAssets()
         {
             Console.WriteLine("This is super stupid!");
-            
-            if (SearchQuery == null) 
+
+            if (SearchQuery == null)
                 return;
 
             if (!inTagMode)
@@ -167,7 +150,7 @@ namespace AMS.ViewModels
                 Console.WriteLine(e);
             }
 
-            
+
 
             CurrentGroup = "#";
             CurrentGroupVisibility = Visibility.Visible;
@@ -217,11 +200,11 @@ namespace AMS.ViewModels
                 Console.WriteLine(e);
             }
 
-            
+
             //List<ITagable> list = _tagHelper.Suggest(_searchQuery);
             //TagSearchSuggestions = new ObservableCollection<ITagable>(_tagHelper.SuggestedTags);
-            
-           
+
+
             /*
             foreach (var item in list)
             {
@@ -243,13 +226,13 @@ namespace AMS.ViewModels
 
         private void LeavingTagMode()
         {
-            
+
             CurrentGroup = "";
             SearchQuery = "";
             TagSuggestionsVisibility = Visibility.Collapsed;
             TagSuggestionIsOpen = false;
             CurrentGroupVisibility = Visibility.Collapsed;
-            
+
         }
 
         /// <summary>
@@ -311,7 +294,7 @@ namespace AMS.ViewModels
             //TODO: Get selected assets
             // Look here for how to (Answer 2): https://stackoverflow.com/questions/2282138/wpf-listview-selecting-multiple-list-view-items
             List<Asset> selected = new List<Asset>();
-            
+
             if(selected.Count < 1)
                 _listController.Export(selected);
         }
@@ -344,6 +327,6 @@ namespace AMS.ViewModels
 
             return true;
         }
-        
+
     }
 }
