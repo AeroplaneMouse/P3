@@ -219,7 +219,7 @@
                             <!-- Created -->
                             <GridViewColumn Width="140" 
                                             DisplayMemberBinding="{Binding Path=UpdatedAt}" 
-                                            Header="Created"/>
+                                            Header="Updated"/>
                             <!-- Edit -->
                             <GridViewColumn Width="32">
                                 <GridViewColumn.CellTemplate>
