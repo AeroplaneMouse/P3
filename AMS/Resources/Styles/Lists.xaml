@@ -26,4 +26,13 @@
         <Setter Property="Padding" Value="10, 3, 0, 1" />
     </Style>
     
+    <Style x:Key="HideIfEmpty" TargetType="{x:Type ListView}">
+        <Setter Property="Visibility" Value="Collapsed" />
+        <Style.Triggers>
+            <Trigger Property="HasItems" Value="True">
+                <Setter Property="Visibility" Value="Visible" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
 </ResourceDictionary>

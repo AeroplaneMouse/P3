@@ -41,7 +41,7 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Left">
+                            HorizontalAlignment="Left" Grid.Row="0">
                     <!-- -->
                     <!-- <Border Background="LightGray" -->
                     <!--         BorderThickness="0" -->
@@ -60,29 +60,32 @@
                     <!--     </Border.Style> -->
                     <!-- </Border> -->
 
-                    <StackPanel Orientation="Vertical"    
+
+                    <StackPanel Orientation="Horizontal"    
                                 VerticalAlignment="Center"    
                                 HorizontalAlignment="Center">
-                        
-                        <StackPanel Orientation="Horizontal"    
-                                    VerticalAlignment="Center">
                             
-                            <Border x:Name="CurrentTagGroup" Background="LightGray"
-                                    BorderThickness="0"
-                                    Visibility="{Binding CurrentGroupVisibility}">
-                                <TextBlock Style="{StaticResource ParagraphStyle}"
-                                           Text="{Binding CurrentGroup, UpdateSourceTrigger=PropertyChanged}"
-                                           VerticalAlignment="Center"/>
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Style.Triggers>
-                                            <Trigger Property="IsVisible" Value="True">
-                                                <Setter Property="Padding" Value="5 0 5 0"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                            </Border>
+                        <Border x:Name="CurrentTagGroup" Background="LightGray"
+                                BorderThickness="0"
+                                Visibility="{Binding CurrentGroupVisibility}">
+                            
+                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                       Text="{Binding CurrentGroup, UpdateSourceTrigger=PropertyChanged}"
+                                       VerticalAlignment="Center"/>
+                            
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsVisible" Value="True">
+                                            <Setter Property="Padding" Value="5 0 5 0"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                        
+                        <StackPanel Orientation="Vertical"    
+                                    VerticalAlignment="Center">
                             
                             <TextBox FontSize="{StaticResource FontSizeSmall}"
                                      Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
@@ -95,27 +98,27 @@
                                 
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
-                                    <KeyBinding Key="Escape" Command="{Binding DeleteCommand}"/>
-                                    <!--<KeyBinding Key="Tab" FocusManager.FocusedElement="{Binding ElementName=SuggestionsList}"/>-->
+                                    <KeyBinding Key="Escape" Command="{Binding ClearInputCommand}"/>
+                                    <KeyBinding Key="Tab" Command="{Binding AutoTagCommand}" />
                                 </TextBox.InputBindings>
                             </TextBox>
+                                
+                            <Popup x:Name="TagSuggestionPopup"    
+                                   Visibility="{Binding TagSuggestionsVisibility}"                    
+                                   IsOpen="{Binding TagSuggestionIsOpen}"
+                                   StaysOpen="False"
+                                   MaxHeight="100"
+                                   Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
+                                   Placement="Bottom">
+                            
+                                <ListBox x:Name="TagSuggestionList"    
+                                         Visibility="{Binding TagSuggestionsVisibility}"    
+                                         Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
+                                         ItemsSource="{ Binding TagSearchSuggestions }"/>
+                            </Popup>
                         </StackPanel>
-                    
-                        <Popup x:Name="TagSuggestionPopup"    
-                               Visibility="{Binding TagSuggestionsVisibility}"                    
-                               IsOpen="{Binding TagSuggestionIsOpen}"
-                               StaysOpen="False"
-                               MaxHeight="100"
-                               Placement="Bottom">
-    
-                            <ListBox x:Name="TagSuggestionList"    
-                                     Visibility="{Binding TagSuggestionsVisibility}"    
-                                     Width="200"
-                                     ItemsSource="{ Binding TagSearchSuggestions }"/>
-                        </Popup>
                     </StackPanel>
-                    
-                    
+
                     <Button Style="{StaticResource RegularButton}"
                             Margin="10 0 10 0"
                             Command="{Binding SearchCommand}"
@@ -145,6 +148,27 @@
                             Width="Auto" 
                             Command="{Binding PrintCommand}"/>
                 </StackPanel> 
+                
+                <!-- Current tags -->
+                <ListView ItemsSource="{Binding AppliedTags, UpdateSourceTrigger=PropertyChanged}"
+                          ItemContainerStyle="{StaticResource ListViewWithTags}"
+                          Style="{ StaticResource HideIfEmpty }"
+                          Grid.Row="1"
+                          Margin="0 7 0 -6">
+                   
+                    <ListView.Template>
+                        <ControlTemplate>
+                            <WrapPanel IsItemsHost="True"/>
+                        </ControlTemplate>
+                    </ListView.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid MaxWidth="100" HorizontalAlignment="Left">
+                                <Label BorderThickness="1" Foreground="{Binding FontColor}" Content="{Binding TagLabel}" Style="{StaticResource TagAddedToSearch}"></Label>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ListView>
 
                 <!-- Current tags -->
                 <!-- -->

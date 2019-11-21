@@ -38,8 +38,8 @@ namespace AMS.Models
         public int NumOfChildren { get; set; }
 
         public override string ToString() => Name;
-        public ulong TagId { get; }
-        public Type TagType => this.GetType();
+        public ulong TagId => ID;
+        public Type TagType => GetType();
         public string TagLabel => Name;
         public List<ITagable> Children { get; set; }
     }

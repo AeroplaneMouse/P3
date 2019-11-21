@@ -55,6 +55,7 @@ namespace AMS.ViewModels
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
         public ITagable TagParent;
         public bool inTagMode = false;
+        public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
 
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
@@ -65,6 +66,9 @@ namespace AMS.ViewModels
         public ICommand RemoveBySelectionCommand { get; set; }
         public ICommand EditBySelectionCommand { get; set; }
         public int SelectedItemIndex { get; private set; }
+
+        public ICommand AutoTagCommand { get; set; }
+        public ICommand ClearInputCommand { get; set; }
 
         public AssetListViewModel(MainViewModel main, IAssetListController listController)
         {
@@ -80,6 +84,8 @@ namespace AMS.ViewModels
             RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
             RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
             EditBySelectionCommand = new RelayCommand(EditBySelection);
+            AutoTagCommand = new RelayCommand(AutoTag);
+            ClearInputCommand = new RelayCommand(ClearInput);
         }
 
         private void EditBySelection()
@@ -149,12 +155,83 @@ namespace AMS.ViewModels
                 _listController.Search(SearchQuery);
                 Items = _listController.AssetList;
             }
+            else
+            {
+                //AutoTag();
+            }
 
             /*
             if (SearchQuery == null) return;
             _listController.Search(SearchQuery);
             Items = _listController.AssetList;
             */
+        }
+
+        private void AutoTag()
+        {
+            Console.WriteLine("Tap clicked!");
+            try
+            {
+                if (!inTagMode)
+                    return;
+
+                Console.WriteLine("In tag mode so go on!");
+                
+                if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+                {
+                    ITagable tag = TagSearchSuggestions[0];
+
+                    if (_tagHelper.IsParentSet())
+                    {
+                        Console.WriteLine("Think there is a parent!");
+                        _tagHelper.AddToQuery(tag);
+                        AppliedTags.Add(tag);
+                        TagSearchProcess();
+                    }
+                    else
+                    {
+                        // Only tag can be parent
+                        Tag taggedItem = (Tag)tag;
+                    
+                        if (taggedItem.NumOfChildren > 0 || tag.TagId == 1)
+                        {
+                            // So we need to switch to a group of tags.
+                            _tagHelper.Parent(taggedItem);
+                            CurrentGroup = "#"+taggedItem.Name;
+                        }
+                        else
+                        {
+                            _tagHelper.AddToQuery(tag);
+                            AppliedTags.Add(tag);
+                            TagSearchProcess();
+                        }
+                    }
+                    SearchQuery = "";
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
+        private void ClearInput()
+        {
+            if (!inTagMode)
+                return;
+
+            if (_tagHelper.IsParentSet())
+            {
+                _tagHelper.Parent(null);
+                CurrentGroup = "#";
+                SearchQuery = "";
+                TagSearchProcess();
+            }
+            else
+            {
+                LeavingTagMode();
+            }
         }
 
         private void EnteringTagMode()
@@ -168,11 +245,8 @@ namespace AMS.ViewModels
                 Console.WriteLine(e);
             }
 
-            
-
             CurrentGroup = "#";
             CurrentGroupVisibility = Visibility.Visible;
-
         }
 
         private void TagSearchProcess()
@@ -182,8 +256,8 @@ namespace AMS.ViewModels
                 //Console.WriteLine("Hest!");
                 if (_searchQuery == "exit")
                 {
-                    inTagMode = false;
                     LeavingTagMode();
+                    
                 }
                 else
                 {
@@ -201,11 +275,6 @@ namespace AMS.ViewModels
                             TagSuggestionsVisibility = Visibility.Collapsed;
                             TagSuggestionIsOpen = false;
                         }
-
-                        foreach (var item in TagSearchSuggestions)
-                        {
-                            Console.WriteLine(item.TagLabel);
-                        }
                     }
                     catch (Exception e)
                     {
@@ -217,39 +286,17 @@ namespace AMS.ViewModels
             {
                 Console.WriteLine(e);
             }
-
-            
-            //List<ITagable> list = _tagHelper.Suggest(_searchQuery);
-            //TagSearchSuggestions = new ObservableCollection<ITagable>(_tagHelper.SuggestedTags);
-            
-           
-            /*
-            foreach (var item in list)
-            {
-                Console.WriteLine(item.TagLabel);
-            }
-
-            if (_tagHelper.HasSuggestions())
-            {
-                TagSuggestionsVisibility = Visibility.Visible;
-                TagSuggestionIsOpen = true;
-            }
-            else
-            {
-                TagSuggestionsVisibility = Visibility.Collapsed;
-                TagSuggestionIsOpen = false;
-            }
-            */
         }
 
         private void LeavingTagMode()
         {
+            inTagMode = false;
             CurrentGroup = "";
             SearchQuery = "";
             TagSuggestionsVisibility = Visibility.Collapsed;
             TagSuggestionIsOpen = false;
             CurrentGroupVisibility = Visibility.Collapsed;
-            
+            AppliedTags.Clear();
         }
 
         /// <summary>
