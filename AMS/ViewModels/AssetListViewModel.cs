@@ -197,7 +197,6 @@ namespace AMS.ViewModels
                             // So we need to switch to a group of tags.
                             _tagHelper.Parent(taggedItem);
                             CurrentGroup = "#"+taggedItem.Name;
-                            SearchQuery = "";
                         }
                         else
                         {
@@ -206,6 +205,7 @@ namespace AMS.ViewModels
                             TagSearchProcess();
                         }
                     }
+                    SearchQuery = "";
                 }
             }
             catch (Exception e)
