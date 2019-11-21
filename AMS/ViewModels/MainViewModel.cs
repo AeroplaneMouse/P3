@@ -17,6 +17,7 @@ using System.Windows.Media;
 using AMS.Controllers;
 using AMS.Helpers;
 using AMS.IO;
+using System.Windows.Navigation;
 
 namespace AMS.ViewModels
 {
@@ -66,6 +67,7 @@ namespace AMS.ViewModels
             }
         }
         public Frame ContentFrame { get; set; } = new Frame();
+
         public Page SplashPage { get; set; }
         public Page PopupPage { get; set; }
         public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
