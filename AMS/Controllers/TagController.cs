@@ -8,7 +8,7 @@ using System.Text;
 
 namespace AMS.Controllers
 {
-    public class TagController : FieldController, ITagController
+    public class TagController : FieldListController, ITagController
     {
         public TagController(Tag tag) : base(tag) => this.tag = tag;
 

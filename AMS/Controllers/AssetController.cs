@@ -7,7 +7,7 @@ using AMS.Models;
 
 namespace AMS.Controllers
 {
-    public class AssetController : FieldController, IAssetController
+    public class AssetController : FieldListController, IAssetController
     {
         public Asset Asset { get; set; }
         public List<ITagable> CurrentlyAddedTags { get; } = new List<ITagable>();

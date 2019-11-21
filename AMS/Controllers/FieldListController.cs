@@ -6,11 +6,11 @@ using Newtonsoft.Json;
 
 namespace AMS.Controllers
 {
-    public abstract class FieldController : IFieldController
+    public abstract class FieldListController : IFieldListController
     {
         private ContainsFields _containsFields;
 
-        protected FieldController(ContainsFields element)
+        protected FieldListController(ContainsFields element)
         {
             _containsFields = element;
         }

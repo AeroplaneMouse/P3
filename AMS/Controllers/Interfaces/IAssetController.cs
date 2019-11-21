@@ -6,7 +6,7 @@ using AMS.Models;
 
 namespace AMS.Controllers.Interfaces
 {
-    public interface IAssetController : IFieldController
+    public interface IAssetController : IFieldListController
     {
         Asset Asset { get; set; }
         List<ITagable> CurrentlyAddedTags { get; }
