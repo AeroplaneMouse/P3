@@ -66,7 +66,6 @@ namespace AMS.ViewModels
         public ICommand RemoveTagCommand { get; set; }
         public ICommand RemoveBySelectionCommand { get; set; }
         public ICommand EditBySelectionCommand { get; set; }
-        public int SelectedItemIndex { get; private set; }
 
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
@@ -77,7 +76,7 @@ namespace AMS.ViewModels
             _listController = listController;
             Items = _listController.AssetList;
 
-            AddNewCommand = new RelayCommand(AddNewAsset);
+            AddNewCommand = new RelayCommand(() => EditAsset(null));
             EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
             PrintCommand = new RelayCommand(Export);
             SearchCommand = new RelayCommand(SearchAssets);
@@ -98,53 +97,23 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
-        /// Changes the content to a blank AssetEditor
-        /// </summary>
-        private void AddNewAsset()
-        {
-            //Todo FIx news
-            _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), _main));
-        }
-
-        private void EditById(object parameter)
-        {
-            ulong id = 0;
-            try
-            {
-                id = ulong.Parse(parameter.ToString());
-            }
-            finally
-            {
-                if (id == 0)
-                    _main.AddNotification(new Notification("Error! Unknown ID"), 3500);
-                else
-                {
-                    Asset asset = _listController.AssetList.Where(a => a.ID == id).First();
-                    _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), _main, asset));
-                }
-            }
-        }
-
-        /// <summary>
         /// Changes the content to AssetEditor with the selected asset
+        /// if asset is null, a new asset will be created.
         /// </summary>
         private void EditAsset(Asset asset)
         {
-            if (asset != null)
-                _main.ContentFrame.Navigate(new AssetEditor(
-                    new AssetRepository(), 
-                    new TagListController(new PrintHelper()),_main, asset));
-            else
-                _main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
+            _main.ContentFrame.Navigate(new AssetEditor(
+                new AssetRepository(), 
+                new TagListController(new PrintHelper()),
+                _main,
+                asset));
         }
 
         private void EditBySelection()
         {
             // Only ONE item can be edited
             if (SelectedItems.Count == 1)
-            {
-                throw new NotImplementedException();
-            }
+                EditAsset(SelectedItems.First());
             else
                 _main.AddNotification(new Notification("Error! Please select one and only one asset.", Notification.ERROR), 3500);
         }
