@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
@@ -11,7 +12,8 @@ namespace AMS.Controllers
     {
         public Asset Asset { get; set; }
         public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
-        
+        public List<Field> FieldList { get; set; } = new List<Field>();
+
         private IAssetRepository _assetRepository;
         
 
@@ -19,6 +21,7 @@ namespace AMS.Controllers
         {
             Asset = asset;
             DeSerializeFields();
+            FieldList = asset.Fields.ToList<Field>();
             _assetRepository = assetRepository;
         }
 
@@ -64,6 +67,7 @@ namespace AMS.Controllers
 
         public bool Save()
         {
+            Asset.Fields = new ObservableCollection<Field>(FieldList);
             SerializeFields();
             ulong id = 0;
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
@@ -73,6 +77,7 @@ namespace AMS.Controllers
 
         public bool Update()
         {
+            Asset.Fields = new ObservableCollection<Field>(FieldList);
             SerializeFields();
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
             return _assetRepository.Update(Asset);
