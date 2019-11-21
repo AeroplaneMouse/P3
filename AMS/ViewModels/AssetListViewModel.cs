@@ -205,6 +205,7 @@ namespace AMS.ViewModels
                             TagSearchProcess();
                         }
                     }
+                    
                     SearchQuery = "";
                 }
             }
@@ -295,7 +296,7 @@ namespace AMS.ViewModels
             TagSuggestionsVisibility = Visibility.Collapsed;
             TagSuggestionIsOpen = false;
             CurrentGroupVisibility = Visibility.Collapsed;
-            AppliedTags.Clear();
+            //AppliedTags.Clear();
         }
 
         /// <summary>

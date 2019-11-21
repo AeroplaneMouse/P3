@@ -150,7 +150,7 @@
                           ItemContainerStyle="{StaticResource ListViewWithTags}"
                           Style="{ StaticResource HideIfEmpty }"
                           Grid.Row="1"
-                          Margin="0 7 0 -6">
+                          Margin="0 5 0 -4">
                    
                     <ListView.Template>
                         <ControlTemplate>
@@ -160,7 +160,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid MaxWidth="100" HorizontalAlignment="Left">
-                                <Label BorderThickness="1" Foreground="{Binding FontColor}" Content="{Binding TagLabel}" Style="{StaticResource TagAddedToSearch}"></Label>
+                                <Label Foreground="{Binding FontColor}" Content="{Binding TagLabel}" Style="{StaticResource TagAddedToSearch}"></Label>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
