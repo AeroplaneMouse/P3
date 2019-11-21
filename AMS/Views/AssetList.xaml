@@ -128,12 +128,12 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"> 
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Style="{StaticResource RegularCancelButton}" 
                             Command="{Binding RemoveBySelectionCommand}" 
                             Content="Remove" 
-                            Visibility="{Binding MultipleSelected}"/> 
- 
+                            Visibility="{Binding MultipleSelected}"/>
+
                     <Button Style="{StaticResource RegularButton}" 
                             Command="{Binding EditBySelectionCommand}" 
                             Margin="10 0 0 0 " 
@@ -145,8 +145,8 @@
                             Content="Export selected items" 
                             Width="Auto" 
                             Command="{Binding PrintCommand}"/>
-                </StackPanel> 
-                
+                </StackPanel>
+
                 <!-- Current tags -->
                 <ListView ItemsSource="{Binding AppliedTags, UpdateSourceTrigger=PropertyChanged}"
                           ItemContainerStyle="{StaticResource ListViewWithTags}"

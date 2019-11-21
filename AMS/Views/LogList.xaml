@@ -55,11 +55,6 @@
 
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
-                    <Button Style="{StaticResource RegularCancelButton}"
-                        Command="{Binding RemoveCommand}"
-                        Content="Remove"
-                        Visibility="{Binding IsRemoveVisible}"/>
-
                     <Button Style="{StaticResource RegularButton}"
                         Margin="10 0 0 0 "
                         Content="Export selected items"
@@ -92,8 +87,6 @@
                     </ListView.View>
 
                     <ListView.InputBindings>
-                        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
-                        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
                     </ListView.InputBindings>
                     <ListView.Resources>
