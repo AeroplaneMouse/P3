@@ -6,27 +6,27 @@ using Newtonsoft.Json;
 
 namespace AMS.Controllers
 {
-    public abstract class FieldController : IFieldController
+    public abstract class FieldListController : IFieldListController
     {
-        private ContainsFields _containsFields;
+        private FieldContainer _fieldContainer;
 
-        protected FieldController(ContainsFields element)
+        protected FieldListController(FieldContainer element)
         {
-            _containsFields = element;
+            _fieldContainer = element;
         }
 
         public bool SerializeFields()
         {
-            _containsFields.SerializedFields = JsonConvert.SerializeObject(_containsFields.Fields);
-            return !string.IsNullOrEmpty(_containsFields.SerializedFields);
+            _fieldContainer.SerializedFields = JsonConvert.SerializeObject(_fieldContainer.FieldList);
+            return !string.IsNullOrEmpty(_fieldContainer.SerializedFields);
         }
 
         public bool DeSerializeFields()
         {
-            if (!string.IsNullOrEmpty(_containsFields.SerializedFields))
+            if (!string.IsNullOrEmpty(_fieldContainer.SerializedFields))
             {
-                _containsFields.Fields =
-                    JsonConvert.DeserializeObject<ObservableCollection<Field>>(_containsFields.SerializedFields);
+                _fieldContainer.FieldList =
+                    JsonConvert.DeserializeObject<ObservableCollection<Field>>(_fieldContainer.SerializedFields);
                 return true;
             }
 
@@ -35,13 +35,13 @@ namespace AMS.Controllers
 
         public bool AddField(Field field)
         {
-            _containsFields.Fields.Add(field);
-            return _containsFields.Fields.Contains(field);
+            _fieldContainer.FieldList.Add(field);
+            return _fieldContainer.FieldList.Contains(field);
         }
 
         public bool RemoveFieldOrFieldRelations(Field inputField, Tag tag = null)
         {
-            Field currentField = _containsFields.Fields.SingleOrDefault(field => field.Equals(inputField));
+            Field currentField = _fieldContainer.FieldList.SingleOrDefault(field => field.Equals(inputField));
             if (currentField != null)
             {
                 if (inputField.IsCustom)
@@ -50,23 +50,22 @@ namespace AMS.Controllers
                     {
                         currentField.FieldPresentIn.Remove(tag.ID);
                     }
-                    
                     if (inputField.FieldPresentIn.Count > 0)
                     {
                         currentField.IsHidden = !currentField.IsHidden;
                     }
                     else
                     {
-                        _containsFields.Fields.Remove(inputField);
+                        _fieldContainer.FieldList.Remove(inputField);
                     }
                 }
                 else
                 {
-                    _containsFields.Fields.Remove(inputField);
+                    _fieldContainer.FieldList.Remove(inputField);
                 }
             }
 
-            return !_containsFields.Fields.Contains(inputField);
+            return !_fieldContainer.FieldList.Contains(inputField);
         }
     }
 }

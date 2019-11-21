@@ -117,16 +117,6 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void IUserImporter_ImportUsersFromFile_FileNotFormattedCorrectly_FileNotFormattedCorrectlyExceptionThrown()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-        }
-
-        [TestMethod]
         public void IUserImporter_ImportUsersFromFile_EncodingIs1252_UsersReturnedInListWithSpecialCharacters()
         {
             // Arrange
@@ -142,29 +132,29 @@ namespace UnitTests
             DeleteFileAt(filePath);
         }
 
-        //[TestMethod]
-        //public void IUserImporter_ImportUsersFromFile_EncodingIsUTF8_UsersReturnedInListWithSpecialCharacters()
-        //{
-        //    // Arrange
-        //    string filePath = "userFileTest.txt";
+        [TestMethod]
+        public void IUserImporter_ImportUsersFromFile_EncodingIsUTF8_UsersReturnedInListWithSpecialCharacters()
+        {
+            // Arrange
+            string filePath = "userFileTest.txt";
 
-        //    CreateFileAt(filePath, new UTF8Encoding(false));
+            CreateFileAt(filePath, new UTF8Encoding(false));
 
-        //    // Act
-        //    List<User> users = _userImporter.ImportUsersFromFile(filePath);
+            // Act
+            List<UserWithStatus> users = _userImporter.ImportUsersFromFile(filePath);
 
-        //    // Assert
-        //    Assert.IsTrue(users.Count() == 2 && users.Where(p => p.Username.ToLower().Contains('å')).Count() == 1);
+            // Assert
+            Assert.IsTrue(users.Count() == 2 && users.Where(p => p.Username.ToLower().Contains('å')).Count() == 1);
 
-        //    DeleteFileAt(filePath);
-        //}
+            DeleteFileAt(filePath);
+        }
 
         #endregion
 
         #region UserListController
 
         [TestMethod]
-        public void UserListController_KeepUser_UserIsInConflictAndFromFile_()
+        public void UserListController_KeepUser_KeptUserIsFromFile_KeptUserSetToAdded()
         {
             // Arrange
             UserWithStatus existingUser = new UserWithStatus(new User() { IsEnabled = false, Username = "Hans Hansen" });

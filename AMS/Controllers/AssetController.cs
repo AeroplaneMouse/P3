@@ -7,10 +7,10 @@ using AMS.Models;
 
 namespace AMS.Controllers
 {
-    public class AssetController : FieldController, IAssetController
+    public class AssetController : FieldListController, IAssetController
     {
         public Asset Asset { get; set; }
-        public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
+        public List<ITagable> CurrentlyAddedTags { get; } = new List<ITagable>();
         
         private IAssetRepository _assetRepository;
         
@@ -25,20 +25,17 @@ namespace AMS.Controllers
         public bool AttachTag(ITagable tag)
         {
             CurrentlyAddedTags.Add(tag);
-            if (tag.GetType() == typeof(Tag))
+            if (tag is Tag currentTag)
             {
-                Tag tagWithFields = (Tag) tag;
-                foreach (var tagField in tagWithFields.Fields)
+                foreach (var tagField in currentTag.FieldList)
                 {
-                    if (Asset.Fields.SingleOrDefault(assetField => assetField.Hash == tagField.Hash) == null)
+                    if (Asset.FieldList.SingleOrDefault(assetField => assetField.Hash == tagField.Hash) == null)
                     {
-                        Asset.Fields.Add(tagField);
+                        Asset.FieldList.Add(tagField);
                     }
                     else
                     {
-                        Field fieldToUpdate =
-                            Asset.Fields.Single(assetField => assetField.Hash == tagField.Hash);
-                        fieldToUpdate.FieldPresentIn.Add(tagWithFields.ID);
+                        Asset.FieldList.Single(assetField => assetField.Hash == tagField.Hash).FieldPresentIn.Add(currentTag.ID);
                     }
                 }
             }
@@ -52,7 +49,7 @@ namespace AMS.Controllers
                 CurrentlyAddedTags.Remove(tag);
                 if (tag is Tag currentTag)
                 {
-                    foreach (var field in currentTag.Fields)
+                    foreach (var field in currentTag.FieldList)
                     {
                         RemoveFieldOrFieldRelations(field, currentTag);
                     }

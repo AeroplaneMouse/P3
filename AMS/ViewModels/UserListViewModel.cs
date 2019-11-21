@@ -91,8 +91,6 @@ namespace AMS.ViewModels
 
         public ICommand ChangeStatusCommand { get; set; }
 
-        public ICommand ChangeDepartmentCommand { get; set; }
-
         #endregion
 
         #region Constructor
@@ -115,19 +113,12 @@ namespace AMS.ViewModels
 
             ChangeStatusCommand = new Base.RelayCommand<object>(ChangeStatus);
 
-            ChangeDepartmentCommand = new Base.RelayCommand<object>(ChangeDepartment);
-
             OnPropertyChanged(nameof(ShownUsersList));
         }
 
         #endregion
 
         #region Private Methods
-
-        private void ChangeDepartment(object user)
-        {
-            Console.WriteLine(DepartmentList.IndexOf(DepartmentList.Where(p => p.ID == (user as UserWithStatus).DefaultDepartment).SingleOrDefault()));
-        }
 
         private void ChangeStatus(object user)
         {

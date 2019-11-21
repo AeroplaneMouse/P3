@@ -1,4 +1,5 @@
 using AMS.Controllers;
+using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories;
 using AMS.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -36,7 +37,7 @@ namespace UnitTests
             otherAsset.AddField(_fourthField);
             
             //Assert
-            Assert.IsTrue(otherAsset.Asset.Fields.Contains(_thirdField) && otherAsset.Asset.Fields.Contains(_fourthField));
+            Assert.IsTrue(otherAsset.Asset.FieldList.Contains(_thirdField) && otherAsset.Asset.FieldList.Contains(_fourthField));
         }
         
         [TestMethod]
@@ -54,7 +55,7 @@ namespace UnitTests
             otherAsset.RemoveFieldOrFieldRelations(_fourthField);
 
             //Assert
-            Assert.IsFalse(otherAsset.Asset.Fields.Contains(_fourthField));
+            Assert.IsFalse(otherAsset.Asset.FieldList.Contains(_fourthField));
         }
         
         [TestMethod]
@@ -72,7 +73,42 @@ namespace UnitTests
             otherAsset.RemoveFieldOrFieldRelations(_thirdField);
 
             //Assert
-            Assert.IsTrue(otherAsset.Asset.Fields.Contains(_thirdField) && _thirdField.IsHidden);
+            Assert.IsTrue(otherAsset.Asset.FieldList.Contains(_thirdField) && _thirdField.IsHidden);
+        }
+        
+        [TestMethod]
+        public void AddField_UsingInheritedField_CheckFieldsContains()
+        {
+            //Arrange
+            AssetController otherAsset = new AssetController(new Asset(), new AssetRepository())
+            {
+                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+            };
+            otherAsset.AddField(_fourthField);
+            
+            //Act
+            otherAsset.AddField(_thirdField);
+            
+            //Assert
+            Assert.IsTrue(otherAsset.Asset.FieldList.Contains(_thirdField));
+        }
+        
+        [TestMethod]
+        public void DeserializeField_WithNullField()
+        {
+            //Arrange
+            AssetController otherAsset = new AssetController(new Asset(), new AssetRepository())
+            {
+                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+            };
+            otherAsset.SerializeFields();
+            
+            //Act
+            //Done in assert.
+            
+            
+            //Assert
+            Assert.IsTrue(otherAsset.DeSerializeFields());
         }
     }
 }

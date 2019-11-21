@@ -98,26 +98,7 @@ namespace AMS.ViewModels
         private void AddNewAsset()
         {
             //Todo FIx news
-            _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), _main));
-        }
-
-        private void EditById(object parameter)
-        {
-            ulong id = 0;
-            try
-            {
-                id = ulong.Parse(parameter.ToString());
-            }
-            finally
-            {
-                if (id == 0)
-                    _main.AddNotification(new Notification("Error! Unknown ID"), 3500);
-                else
-                {
-                    Asset asset = _listController.AssetList.Where(a => a.ID == id).First();
-                    _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), _main, asset));
-                }
-            }
+            Features.NavigatePage(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main));
         }
 
         /// <summary>
@@ -125,10 +106,12 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset(Asset asset)
         {
-            if (asset != null)
-                _main.ContentFrame.Navigate(new AssetEditor(
-                    new AssetRepository(),
-                    new TagListController(new PrintHelper()),_main, asset));
+
+            //Todo FIx news
+            
+            if (IsSelectedAssetValid())
+                Features.NavigatePage(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main, GetSelectedItem()));
+
             else
                 _main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
         }

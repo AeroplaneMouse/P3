@@ -22,8 +22,8 @@ namespace AMS.Controllers
             {
                 return (_finalUsersList ?? new List<UserWithStatus>())
                     .Where(u => u.IsShown == true)
-                    .OrderByDescending(p => p.IsEnabled)
                     .OrderBy(p => p.Username)
+                    .OrderBy(p => p.Status.CompareTo("Disabled") == 0)
                     .OrderByDescending(p => p.Status.CompareTo("Removed") == 0)
                     .OrderByDescending(p => p.Status.CompareTo("Added") == 0)
                     .OrderByDescending(p => p.Status.CompareTo("Conflicting") == 0)
@@ -39,7 +39,10 @@ namespace AMS.Controllers
             {
                 if (_departmentList == null)
                 {
-                    return _departmentRep.GetAll().ToList();
+                    _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
+                    _departmentList.AddRange(_departmentRep.GetAll().ToList());
+
+                    return _departmentList;
                 }
 
                 return _departmentList;
@@ -103,7 +106,7 @@ namespace AMS.Controllers
                 _isShowingDisabled = value;
 
                 (_finalUsersList ?? new List<UserWithStatus>())
-                    .Where(p => p.IsEnabled == false && p.Status.CompareTo("Conflicting") != 0)
+                    .Where(p => p.Status.CompareTo("Disabled") == 0)
                     .ToList()
                     .ForEach(p => p.IsShown = value);
             }
@@ -191,7 +194,7 @@ namespace AMS.Controllers
 
             // Update the users that weren't removed, as they may have gotten new descriptions, etc.
             _finalUsersList
-                .Where(p => p.Status.CompareTo(String.Empty) == 0)
+                .Where(p => p.Status.CompareTo(String.Empty) == 0 || p.Status.CompareTo("Disabled") == 0)
                 .ToList()
                 .ForEach(p => _userRep.Update(p));
 
@@ -227,12 +230,12 @@ namespace AMS.Controllers
 
             // If the kept user is coming from the imported list:
             // Set their status to "Added".
-            // Set the existing users status to empty, add the current date to their username, and set them to not show.
+            // Set the existing users status to Disabled, add the current date to their username, and set them to not show.
             if (_importedUsersList.Contains(keptUser))
             {
                 keptUser.Status = "Added";
 
-                otherUser.Status = String.Empty;
+                otherUser.Status = "Disabled";
                 otherUser.Username = otherUser.Username + " (" + DateTime.Now.ToString() + ")";
                 otherUser.IsShown = IsShowingDisabled;
             }
@@ -257,10 +260,18 @@ namespace AMS.Controllers
 
             UserWithStatus selectedUser = user as UserWithStatus;
 
-            if (selectedUser.Status.CompareTo(String.Empty) == 0)
+            if (selectedUser.Status.CompareTo("Disabled") == 0)
             {
                 selectedUser.IsEnabled = !selectedUser.IsEnabled;
+                selectedUser.Status = String.Empty;
             }
+
+            else if (selectedUser.Status.CompareTo(String.Empty) == 0)
+            {
+                selectedUser.IsEnabled = !selectedUser.IsEnabled;
+                selectedUser.Status = "Disabled";
+            }
+                
 
             UpdateShownUsers(_finalUsersList);
         }
@@ -268,13 +279,22 @@ namespace AMS.Controllers
         public void GetExistingUsers()
         {
             _existingUsersList = _importer.ImportUsersFromDatabase().Select(u => new UserWithStatus(u)).ToList();
+
+            // Sets inactive users to "Disabled" for sorting purposes
+            _existingUsersList
+                .Where(u => u.IsEnabled == false)
+                .ToList()
+                .ForEach(u =>
+                {
+                    u.Status = "Disabled";
+                });
         }
 
         public void GetUsersFromFile()
         {
             string filePath = _importer.GetUsersFile();
 
-            if (filePath.CompareTo(String.Empty) != 0)
+            if (!string.IsNullOrEmpty(filePath))
             {
                 _importedUsersList = _importer.ImportUsersFromFile(filePath).Select(u => new UserWithStatus(u)).ToList();
                 _finalUsersList = _importer.CombineLists(_importedUsersList, _existingUsersList);
@@ -299,7 +319,7 @@ namespace AMS.Controllers
                     else if (u.Status.CompareTo("Conflicting") == 0)
                         u.IsShown = IsShowingConflicting;
 
-                    else if (u.Status.CompareTo(String.Empty) == 0 && u.IsEnabled == false)
+                    else if (u.Status.CompareTo("Disabled") == 0)
                         u.IsShown = IsShowingDisabled;
                 });
         }

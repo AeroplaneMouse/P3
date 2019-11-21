@@ -18,6 +18,7 @@ using AMS.Controllers;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Helpers;
 using AMS.IO;
+using System.Windows.Navigation;
 
 namespace AMS.ViewModels
 {
@@ -59,17 +60,19 @@ namespace AMS.ViewModels
             set
             {
                 _currentDepartment = value;
-                OnPropertyChanged(nameof(CurrentDepartment));
-
+               
                 // Update default department for user
                 if (_currentDepartment != null)
                 {
                     CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
                     new UserRepository().Update(CurrentSession.user);
                 }
+
+                OnPropertyChanged(nameof(CurrentDepartment));
             }
         }
         public Frame ContentFrame { get; set; } = new Frame();
+
         public Page SplashPage { get; set; }
         public Page PopupPage { get; set; }
         public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
@@ -124,7 +127,7 @@ namespace AMS.ViewModels
 
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
             ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, new AssetRepository(), new PrintHelper())));
-            ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this)));
+            ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this, new TagRepository())));
             ShowLogPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new LogList()));
             ShowUserListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new UserList(this, new UserListController(new UserImporter(new UserRepository()), new UserRepository(), new DepartmentRepository()))));
 
@@ -336,7 +339,6 @@ namespace AMS.ViewModels
         // Notification commands
         public ICommand AddFieldTestCommand { get; set; }
         public ICommand RemoveNotificationCommand { get; set; }
-        public ICommand ImportUsersCommand { get; set; }
 
         public ICommand ReloadCommand { get; set; }
     }
