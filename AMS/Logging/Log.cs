@@ -1,14 +1,15 @@
 ﻿using System.Collections.Generic;
 using AMS.Authentication;
 using AMS.Database.Repositories.Interfaces;
+using AMS.Logging.Interfaces;
 using AMS.Models;
 using Newtonsoft.Json;
 
 namespace AMS.Logging
 {
-    public class Log
+    public class Log : ILogger
     {
-        private Dictionary<string, string> _previousValues;
+        public Dictionary<string, string> PreviousValues { get; private set; }
         private readonly ILogRepository _logRepository;
 
         public Log(ILogRepository logRepository)
@@ -66,7 +67,7 @@ namespace AMS.Logging
         public bool LogUpdate(ILoggableValues loggableValues)
         {
             // Return false if previous values are not saved
-            if (_previousValues == null)
+            if (PreviousValues == null)
                 return false;
 
             var values = loggableValues.GetLoggableValues();
@@ -92,8 +93,8 @@ namespace AMS.Logging
         /// <returns></returns>
         public bool SavePreviousValues(ILoggableValues previousLoggableValues)
         {
-            _previousValues = previousLoggableValues.GetLoggableValues();
-            return _previousValues.Count > 0;
+            PreviousValues = previousLoggableValues.GetLoggableValues();
+            return PreviousValues.Count > 0;
         }
         
         /// <summary>
@@ -105,16 +106,12 @@ namespace AMS.Logging
         /// <returns></returns>
         private  Dictionary<string, Change> GetChanges(Dictionary<string, string> newValues)
         {
-            Dictionary<string, Change> changes = new Dictionary<string, Change>();
-            
-            // Return empty dictionary if entries are not of the same type.
-            if (_previousValues == null)
-                return changes;
-            
+            Dictionary<string, Change> changes = new Dictionary<string, Change>();   
+
             // Iterates through the values and creates a new change if they do not match
-            foreach (var prop in _previousValues)
+            foreach (var prop in PreviousValues)
             {
-                string oldValue = _previousValues[prop.Key];
+                string oldValue = PreviousValues[prop.Key];
                 string newValue = newValues[prop.Key];
                 
                 if (newValue != oldValue)
