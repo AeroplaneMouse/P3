@@ -7,13 +7,15 @@ using System.Text;
 
 namespace AMS.Controllers.Interfaces
 {
-    public interface ITagController
+    public interface ITagController : IFieldListController
     {
         #region Properties
 
-        Tag tag { get; set; }
+        Tag Tag { get; set; }
 
-        ITagRepository tagRepository { get; set; }
+        string PageTitle { get; set; }
+
+        List<Tag> ParentTagList { get; }
 
         #endregion
 
@@ -24,6 +26,8 @@ namespace AMS.Controllers.Interfaces
         void Remove();
 
         void Update();
+
+        string CreateRandomColor();
 
         #endregion
     }

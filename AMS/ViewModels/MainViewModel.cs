@@ -124,7 +124,7 @@ namespace AMS.ViewModels
 
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
             ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, new AssetRepository(), new PrintHelper())));
-            ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this)));
+            ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this, new TagRepository())));
             ShowLogPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new LogList()));
             ShowUserListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new UserList(this, new UserListController(new UserImporter(new UserRepository()), new UserRepository(), new DepartmentRepository()))));
 

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace AMS.Models
 {
-    public class Asset : ContainsFields
+    public class Asset : FieldContainer
     {
         public string Name { get; set; }
         public string Description { get; set; }
@@ -15,7 +15,7 @@ namespace AMS.Models
 
         public Asset()
         {
-            Fields = new ObservableCollection<Field>();
+            FieldList = new ObservableCollection<Field>();
         }
 
         [JsonConstructor]
@@ -30,7 +30,7 @@ namespace AMS.Models
             CreatedAt = created_at;
             UpdatedAt = updated_at;
             Identifier = identifier;
-            Fields = JsonConvert.DeserializeObject<ObservableCollection<Field>>(SerializedFields);
+            FieldList = JsonConvert.DeserializeObject<ObservableCollection<Field>>(SerializedFields);
             
         }
         
@@ -43,7 +43,7 @@ namespace AMS.Models
             DepartmentID = departmentId;
             Identifier = identifier;
             SerializedFields = options;
-            Fields = JsonConvert.DeserializeObject<ObservableCollection<Field>>(SerializedFields);
+            FieldList = JsonConvert.DeserializeObject<ObservableCollection<Field>>(SerializedFields);
             CreatedAt = created_at;
             UpdatedAt = updated_at;
         }
@@ -69,7 +69,7 @@ namespace AMS.Models
 
             Asset other = (Asset)obj;
 
-            if (this.Fields.Count != other.Fields.Count ||
+            if (this.FieldList.Count != other.FieldList.Count ||
                 this.Name != other.Name ||
                 this.Description != other.Description ||
                 this.DepartmentID != other.DepartmentID)
@@ -77,9 +77,9 @@ namespace AMS.Models
                 return false;
             }
 
-            for(int i = this.Fields.Count - 1; i >= 0; i--)
+            for(int i = this.FieldList.Count - 1; i >= 0; i--)
             {
-                if(! this.Fields[i].Equals(other.Fields[i]))
+                if(! this.FieldList[i].Equals(other.FieldList[i]))
                 {
                     return false;
                 }

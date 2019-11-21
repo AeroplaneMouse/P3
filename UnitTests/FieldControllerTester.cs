@@ -37,7 +37,7 @@ namespace UnitTests
             otherAsset.AddField(_fourthField);
             
             //Assert
-            Assert.IsTrue(otherAsset.Asset.Fields.Contains(_thirdField) && otherAsset.Asset.Fields.Contains(_fourthField));
+            Assert.IsTrue(otherAsset.Asset.FieldList.Contains(_thirdField) && otherAsset.Asset.FieldList.Contains(_fourthField));
         }
         
         [TestMethod]
