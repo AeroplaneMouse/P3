@@ -101,10 +101,10 @@
                                         RenderOptions.EdgeMode="Aliased">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="AUto" />
                                         </Grid.ColumnDefinitions>
-                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 0 5 0" />
+                                        <ContentPresenter Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 0 5 0" />
                                         <!-- set command to delete the tag from the search query -->
                                         <Button OverridesDefaultStyle="True" x:Name="PART_DeleteTagButton"
                                                 Grid.Column="1" Margin="0" VerticalAlignment="Center"
@@ -113,7 +113,7 @@
                                                 Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveTagCommand}">
                                             <Button.Template>
                                                 <ControlTemplate>
-                                                    <Grid Height="10" Width="10" Background="Transparent" >
+                                                    <Grid Background="Transparent" >
                                                         <TextBlock Foreground="{Binding FontColor}" 
                                                                    FontFamily="{StaticResource SegoeBold}"
                                                                    VerticalAlignment="Center" 
