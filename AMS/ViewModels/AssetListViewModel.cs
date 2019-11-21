@@ -63,6 +63,7 @@ namespace AMS.ViewModels
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
+        public ICommand RemoveTagCommand { get; set; }
         public ICommand RemoveBySelectionCommand { get; set; }
         public ICommand EditBySelectionCommand { get; set; }
         public int SelectedItemIndex { get; private set; }
@@ -75,28 +76,25 @@ namespace AMS.ViewModels
             _main = main;
             _listController = listController;
             Items = _listController.AssetList;
-            
+
             AddNewCommand = new RelayCommand(AddNewAsset);
             EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
             PrintCommand = new RelayCommand(Export);
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
             RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
+            RemoveTagCommand = new RelayCommand<object>((parameter) => 
+            {
+                ITagable tag = parameter as ITagable;
+                AppliedTags.Remove(tag);
+                _tagHelper.RemoveFromQuery(tag);
+                OnPropertyChanged(nameof(AppliedTags));
+            });
+
             RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
             EditBySelectionCommand = new RelayCommand(EditBySelection);
             AutoTagCommand = new RelayCommand(AutoTag);
             ClearInputCommand = new RelayCommand(ClearInput);
-        }
-
-        private void EditBySelection()
-        {
-            // Only ONE item can be edited
-            if (SelectedItems.Count == 1)
-            {
-                throw new NotImplementedException();
-            }
-            else
-                _main.AddNotification(new Notification("Error! Please select one and only one asset.", Notification.ERROR), 3500);
         }
 
         /// <summary>
@@ -138,6 +136,17 @@ namespace AMS.ViewModels
                     new TagListController(new PrintHelper()),_main, asset));
             else
                 _main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
+        }
+
+        private void EditBySelection()
+        {
+            // Only ONE item can be edited
+            if (SelectedItems.Count == 1)
+            {
+                throw new NotImplementedException();
+            }
+            else
+                _main.AddNotification(new Notification("Error! Please select one and only one asset.", Notification.ERROR), 3500);
         }
 
         /// <summary>
