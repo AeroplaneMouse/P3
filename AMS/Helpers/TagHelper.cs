@@ -87,5 +87,10 @@ namespace AMS.Helpers
         {
             return null;
         }
+
+        public void RemoveAppliedTag(ITagable tag)
+        {
+            
+        }
     }
 }
