@@ -3,7 +3,10 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:local="clr-namespace:AMS.Views"
+      xmlns:i1="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
+      xmlns:i2="clr-namespace:Microsoft.VisualBasic;assembly=Microsoft.VisualBasic.Core"
       mc:Ignorable="d" 
       Title="AssetList">
 
@@ -129,14 +132,15 @@
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"> 
                     <Button Style="{StaticResource RegularCancelButton}" 
-                            Command="{Binding RemoveCommand}" 
+                            Command="{Binding RemoveBySelectionCommand}" 
                             Content="Remove" 
-                            Visibility="{Binding MultipleSelected, UpdateSourceTrigger=PropertyChanged}"/> 
+                            Visibility="{Binding MultipleSelected}"/> 
  
                     <Button Style="{StaticResource RegularButton}" 
-                            Command="{Binding EditCommand}" 
+                            Command="{Binding EditBySelectionCommand}" 
                             Margin="10 0 0 0 " 
-                            Content="Edit"/>
+                            Content="Edit"
+                            Visibility="{Binding SingleSelected}"/>
 
                     <Button Style="{StaticResource RegularButton}" 
                             Margin="10 0 0 0 " 
@@ -187,9 +191,9 @@
                 <!--     </ItemsControl.ItemTemplate> -->
                 <!-- </ListView> -->
 
-                <!--Style="{StaticResource RegularList}"-->
                 <ListView ItemsSource="{Binding Items}"
                           SelectionMode="Extended"
+                          SelectionChanged="ListView_SelectionChanged"
                           Grid.Row="2">
                     
                     <!-- <ListView.Resources> -->
@@ -202,7 +206,7 @@
                     <ListView.View>
                         <GridView>
                             <!-- Checkbox -->
-                            <GridViewColumn Header="">
+                            <GridViewColumn Header="[  ]">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
@@ -262,11 +266,22 @@
                     </ListView.View>
 
                     <ListView.InputBindings>
-                        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
+                        <KeyBinding Key="Delete" Command="{Binding RemoveBySelectionCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
                     </ListView.InputBindings>
-                    <!-- <i:Interaction.Triggers> -->
+                    
+                    <!--<Interaction.Triggers>
+                        <EventTrigger>
+                            
+                        </EventTrigger>                       
+                        <i1:EventTrigger EventName="MouseDoubleClick">
+                            --><!--ViewCommand--><!--
+                            <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/>
+                        </i1:EventTrigger>
+                    </Interaction.Triggers>-->
+
+                        <!-- <i:Interaction.Triggers> -->
                     <!--     <i:EventTrigger EventName="MouseDoubleClick"> -->
                     <!--         ~1~ViewCommand@1@ -->
                     <!--         <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/> -->
