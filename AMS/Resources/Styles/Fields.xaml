@@ -2,8 +2,9 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:AMS"
                     xmlns:controllers="clr-namespace:AMS.Controllers"
-                    xmlns:helper1="clr-namespace:AMS.ViewModels.ViewModelHelper">
-    <helper1:FieldDesignSelector x:Name="MyFieldDesignSelector"/>
+                    xmlns:viewModelHelper="clr-namespace:AMS.ViewModels.ViewModelHelper"
+                    xmlns:v="clr-namespace:AMS.Controllers">
+    <viewModelHelper:FieldDesignSelector x:Key="MyFieldDesignSelector" />
 
     <!-- Label of a field -->
     <Style TargetType="TextBlock" x:Key="FieldLabel">
@@ -19,7 +20,7 @@
         <Setter Property="HorizontalAlignment" Value="Left" />
         <Setter Property="FontWeight" Value="ExtraBold" />
         <Style.Triggers>
-            <DataTrigger Binding="{Binding Field.Required}" Value="False">
+            <DataTrigger Binding="{Binding Required}" Value="False">
                 <Setter Property="Visibility" Value="Hidden" />
             </DataTrigger>
         </Style.Triggers>
@@ -44,7 +45,7 @@
                                     </Grid.ColumnDefinitions>
                                     <Button OverridesDefaultStyle="True" x:Name="PART_DeleteFieldButton"
                                                 Grid.Column="1" Margin="3,0" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                                Visibility="Visible">
+                                                Visibility="Visible" Command="{Binding RemoveFieldCommand}" CommandParameter="{Binding this}">
                                         <Button.Template>
                                             <ControlTemplate>
                                                 <Grid Height="10" Width="10" Background="Transparent" >
@@ -125,8 +126,8 @@
     <!-- Textareafield style -->
     <DataTemplate x:Key="TextBoxFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
-            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Field.Label}" />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Field.Content}" MinHeight="50" TextWrapping="Wrap"
+            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" MinHeight="50" TextWrapping="Wrap"
                      BorderThickness="1.5" AcceptsReturn="True" AcceptsTab="True" />
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
@@ -136,8 +137,8 @@
     <!-- Textboxfield style -->
     <DataTemplate x:Key="StringFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
-            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Field.Label}" />
-            <TextBox Grid.Row="1" Grid.Column="1" BorderThickness="1.5" Text="{Binding Field.Content}" />
+            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
+            <TextBox Grid.Row="1" Grid.Column="1" BorderThickness="1.5" Text="{Binding Content}" />
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
@@ -146,8 +147,8 @@
     <!-- Numberboxfield style -->
     <DataTemplate x:Key="IntegerFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
-            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Field.Label}" />
-            <TextBox Grid.Row="1" Grid.Column="1" BorderThickness="1.5" Text="{Binding Field.Content}" />
+            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
+            <TextBox Grid.Row="1" Grid.Column="1" BorderThickness="1.5" Text="{Binding Content}" />
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
@@ -156,8 +157,8 @@
     <!-- Dateboxfield style -->
     <DataTemplate x:Key="DateFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
-            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Field.Label}" />
-            <DatePicker Grid.Row="1" Grid.Column="1" BorderThickness="1.5" SelectedDate="{Binding Field.Content}" />
+            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
+            <DatePicker Grid.Row="1" Grid.Column="1" BorderThickness="1.5" SelectedDate="{Binding Content}" />
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
@@ -166,8 +167,8 @@
     <!-- Checkboxfield style -->
     <DataTemplate x:Key="BooleanFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
-            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Field.Label}" />
-            <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding Field.Content}" Name="CheckBox" />
+            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
+            <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding Content}" Name="CheckBox" />
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
