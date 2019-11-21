@@ -61,8 +61,8 @@
 
                     <StackPanel Orientation="Horizontal"    
                                 VerticalAlignment="Center"    
-                                HorizontalAlignment="Center">
-                            
+                                HorizontalAlignment="Center"
+                                ToolTip="Enter '#' to start tag mode. Here you can search on tags and add them to the list of things, to care about when searching.">
                         <Border x:Name="CurrentTagGroup" Background="LightGray"
                                 BorderThickness="0"
                                 Visibility="{Binding CurrentGroupVisibility}">
