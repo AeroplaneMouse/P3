@@ -90,7 +90,7 @@ namespace AMS.ViewModels
 
         public void SaveAndExist()
         {
-            SaveAsset();
+            SaveAsset(false);
             if (_main.ContentFrame.CanGoBack)
             {
                 _main.ContentFrame.GoBack();
@@ -101,15 +101,26 @@ namespace AMS.ViewModels
             }
         }
 
-        public void SaveAsset()
+        public void SaveAsset(bool multiAdd = true)
         {
             if (_isEditing)
             {
-                _assetController.FieldList = NonHiddenFieldList.ToList<Field>();
-                _assetController.FieldList.AddRange(HiddenFieldList.ToList<Field>());
-                //TODO Add tags
-                _assetController.Update();
-                _main.AddNotification(new Notification("Asset updated", Notification.APPROVE));
+                if (!multiAdd)
+                {
+                    _assetController.FieldList = NonHiddenFieldList.ToList<Field>();
+                    _assetController.FieldList.AddRange(HiddenFieldList.ToList<Field>());
+                    //TODO Add tags
+                    _assetController.Update();
+                    _main.AddNotification(new Notification("Asset updated", Notification.APPROVE));
+                }
+                else
+                {
+                    _assetController.FieldList = NonHiddenFieldList.ToList<Field>();
+                    _assetController.FieldList.AddRange(HiddenFieldList.ToList<Field>());
+                    //TODO Add tags
+                    _assetController.Save();
+                    _main.AddNotification(new Notification("Asset added", Notification.APPROVE));
+                }
             }
             else
             {
