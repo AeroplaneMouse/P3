@@ -1,6 +1,8 @@
 ﻿using AMS.Database.Repositories;
+using AMS.Database.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using AMS.Interfaces;
 
@@ -15,23 +17,40 @@ namespace AMS.Models
         public string Description { get; set; }
         public bool IsEnabled { get; set; }
         public string Domain { get; set; }
-        public string DefaultDepartmentName
+
+        // Index of the default department in the list of departments
+        public int DepartmentIndex
         {
+            // TODO: All departments vises i departments dropdown menu
             get
             {
-                if (DefaultDepartment == 0)
-                    return "All departments";
+                List<Department> list = new List<Department>() { new Department() { Name = "All departments" } };
 
-                var department = new DepartmentRepository().GetById(DefaultDepartment);
+                list.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
 
-                return department == null ? String.Empty : department.Name;
+                return DefaultDepartment == 0 ? 0 : list.Select(p => p.ID).ToList().IndexOf(DefaultDepartment);
+            }
+
+            set
+            {
+                List<Department> list = new List<Department>() { new Department() { Name = "All departments" } };
+
+                list.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
+
+                DefaultDepartment = (value == 0) ? 0 : list[value].ID;
             }
         }
+
+        #region ITagable
 
         ulong ITagable.TagId => ID;
         Type ITagable.TagType => GetType();
         string ITagable.TagLabel => Username;
         public List<ITagable> Children { get; set; }
+
+        #endregion
+
+        private IDepartmentRepository _departmentRep;
 
         /* Constructor used by DB */
         private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
@@ -52,10 +71,7 @@ namespace AMS.Models
 
         }
 
-        public override string ToString()
-        {
-            return Username;
-        }
+        public override string ToString() => Username;
 
         public override bool Equals(object obj)
         {

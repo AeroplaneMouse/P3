@@ -3,10 +3,117 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:AMS.Views"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      xmlns:viewModelHelper1="clr-namespace:AMS.ViewModels.ViewModelHelper"
       mc:Ignorable="d"
-      Title="TagEditor" Height="450" Width="800">
+      d:DesignHeight="450" d:DesignWidth="800"
+      ShowsNavigationUI="False"
+      Title="NewTag">
+
+    <Page.Resources>
+        <viewModelHelper1:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+    </Page.Resources>
+    
     <Grid>
-        
+        <!-- Header -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource TitleStyle}"
+                   VerticalAlignment="Center"
+                   Margin="10 0 0 0"
+                   Text="{Binding PageTitle}" />
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="10">
+
+            <Button Style="{StaticResource RegularAcceptButton}"
+                    Command="{Binding SaveTagCommand}"
+                    Content="Save" />
+
+            <Button Style="{StaticResource RegularCancelButton}"
+                    Command="{Binding CancelCommand}"
+                    Margin="10 0 0 0"
+                    Content="Cancel" />
+        </StackPanel>
+
+        <Rectangle Style="{StaticResource HorizontalSeparator}"
+                   VerticalAlignment="Bottom" />
+
+        <!-- Content of the page -->
+        <ScrollViewer Grid.Row="1"
+                      Margin="10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="400" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Details -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock Style="{StaticResource HeaderStyle}"
+                               Text="Details"
+                               Margin="0 0 0 10"/>
+                    <!-- Label -->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Label" />
+                    <TextBox Style="{StaticResource ParagraphTextBox}"
+                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                             Margin="0 0 0 10" />
+
+                    <!-- Parent tag id -->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Parent tag ID"/>
+                    <ComboBox ItemsSource="{Binding ParentTagList}" 
+                              SelectedIndex="{Binding SelectedParentIndex}"
+                              Margin="0 0 0 10">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                    <!-- Color -->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Color"/>
+                    <xctk:ColorPicker SelectedColor="{Binding Color}" Name="ColorPicker" />
+
+                </StackPanel>
+
+                <!-- Separator -->
+                <Rectangle Style="{StaticResource VerticalSeparator}"
+                           Grid.Column="1"
+                           Margin="10 0 10 0"/>
+
+                <!-- Fields -->
+                <StackPanel Grid.Column="2">
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 0 0 10">
+                        <TextBlock Style="{StaticResource HeaderStyle}"
+                                   Margin="0 0 10 0"
+                                   Text="Fields"/>
+                        <Button Style="{StaticResource RegularButton}"
+                                Command="{Binding AddFieldCommand}"
+                                Content="+"
+                                Width="Auto"
+                                Height="20"/>
+                    </StackPanel>
+
+                    <!-- The list of added fields -->
+                    <ItemsControl ItemsSource="{Binding FieldList}"
+                                  ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

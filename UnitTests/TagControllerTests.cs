@@ -18,14 +18,16 @@ namespace UnitTests
             //Arrange
             ulong id = 0;
             Tag tag = new Tag();
-            ITagController tagController = new TagController(tag);
-            tagController.tag = tag;
 
             var mockRepository = new Mock<ITagRepository>();
             mockRepository.Setup(repository => repository.Insert(tag, out id)).Returns(true);
 
+            ITagController tagController = new TagController(tag, mockRepository.Object);
+            tagController.Tag = tag;
+
+
             //Act
-            tagController.tagRepository = mockRepository.Object;
+            //tagController.tagRepository = mockRepository.Object;
             tagController.Save();
 
             //Assert

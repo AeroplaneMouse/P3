@@ -27,15 +27,15 @@ namespace AMS.Controllers
             CurrentlyAddedTags.Add(tag);
             if (tag is Tag currentTag)
             {
-                foreach (var tagField in currentTag.Fields)
+                foreach (var tagField in currentTag.FieldList)
                 {
-                    if (Asset.Fields.SingleOrDefault(assetField => assetField.Hash == tagField.Hash) == null)
+                    if (Asset.FieldList.SingleOrDefault(assetField => assetField.Hash == tagField.Hash) == null)
                     {
-                        Asset.Fields.Add(tagField);
+                        Asset.FieldList.Add(tagField);
                     }
                     else
                     {
-                        Asset.Fields.Single(assetField => assetField.Hash == tagField.Hash).FieldPresentIn.Add(currentTag.ID);
+                        Asset.FieldList.Single(assetField => assetField.Hash == tagField.Hash).FieldPresentIn.Add(currentTag.ID);
                     }
                 }
             }
@@ -49,7 +49,7 @@ namespace AMS.Controllers
                 CurrentlyAddedTags.Remove(tag);
                 if (tag is Tag currentTag)
                 {
-                    foreach (var field in currentTag.Fields)
+                    foreach (var field in currentTag.FieldList)
                     {
                         RemoveFieldOrFieldRelations(field, currentTag);
                     }

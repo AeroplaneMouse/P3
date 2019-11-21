@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using AMS.Database.Repositories;
+using AMS.Database.Repositories.Interfaces;
 using AMS.Models;
 using AMS.Services.Interfaces;
 using AMS.ViewModels;
@@ -14,12 +15,10 @@ namespace AMS.Views
     /// </summary>
     public partial class TagList : Page
     {
-        private ITagService _service;
-
-        public TagList(MainViewModel mainViewModel)
+        public TagList(MainViewModel mainViewModel, ITagRepository tagRep)
         {
             InitializeComponent();
-            DataContext = new TagListViewModel(mainViewModel);
+            DataContext = new TagListViewModel(mainViewModel, tagRep);
         }
 
         protected void TreeView_MouseDoubleClick(object sender, RoutedEventArgs e)
