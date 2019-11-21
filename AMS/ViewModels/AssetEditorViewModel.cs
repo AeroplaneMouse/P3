@@ -128,23 +128,29 @@ namespace AMS.ViewModels
             if(e is FieldInputPromptEventArgs)
             {
                 Field returnedField = ((FieldInputPromptEventArgs)e).Field;
-                Console.WriteLine(NonHiddenFieldList.Count);
-                Console.WriteLine(returnedField.Label);
                 NonHiddenFieldList.Insert(NonHiddenFieldList.Count, returnedField);
-                Console.WriteLine(NonHiddenFieldList.Count);
-                OnPropertyChanged(nameof(NonHiddenFieldList));
             }
         }
         
         public void RemoveField(object sender)
         {
-            if(sender is Field field)
+            Console.WriteLine(sender.GetType());
+            if (sender is Field field)
             {
                 Console.WriteLine(NonHiddenFieldList.Count);
                 Console.WriteLine(field.Label);
+                if (!field.IsCustom)
+                {
+                    Console.WriteLine("Adding... current:" + HiddenFieldList.Count);
+                    HiddenFieldList.Add(field);
+                    Console.WriteLine("Added to hidden field now:" + HiddenFieldList.Count);
+                }
                 NonHiddenFieldList.Remove(field);
-                Console.WriteLine(NonHiddenFieldList.Count);
-                OnPropertyChanged(nameof(NonHiddenFieldList));
+                Console.WriteLine(NonHiddenFieldList.Count);   
+            }
+            else
+            {
+                Console.WriteLine("Not a field");
             }
         }
 
