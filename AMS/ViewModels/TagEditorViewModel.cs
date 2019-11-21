@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 using System.Linq;
+using System.Collections.ObjectModel;
 
 namespace AMS.ViewModels
 {
@@ -46,6 +47,11 @@ namespace AMS.ViewModels
             get => _controller.ParentTagList;
         }
         public int SelectedParentIndex { get; set; }
+        public ObservableCollection<Field> FieldList
+        {
+            get => _controller.Tag.FieldList;
+            set => _controller.Tag.FieldList = value;
+        }
         #endregion
         #region Commands
         public ICommand SaveTagCommand { get; set; }
@@ -85,7 +91,8 @@ namespace AMS.ViewModels
         {
             if (e is FieldInputPromptEventArgs && e.Result)
             {
-                if (((FieldInputPromptEventArgs)e).Field is Field newField)
+                Field newField = ((FieldInputPromptEventArgs)e).Field;
+                if (newField is Field )
                 {
                     _controller.AddField(newField);
                 }

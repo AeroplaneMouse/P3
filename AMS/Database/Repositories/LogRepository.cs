@@ -41,7 +41,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@logable_id"].Value = entity.LogableId;
 
                         cmd.Parameters.Add("@logable_type", MySqlDbType.String);
-                        cmd.Parameters["@logable_type"].Value = entity.LogableType.ToString();
+                        cmd.Parameters["@logable_type"].Value = entity.LogableType;
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
