@@ -294,7 +294,7 @@ namespace AMS.Controllers
         {
             string filePath = _importer.GetUsersFile();
 
-            if (filePath.CompareTo(String.Empty) != 0)
+            if (!string.IsNullOrEmpty(filePath))
             {
                 _importedUsersList = _importer.ImportUsersFromFile(filePath).Select(u => new UserWithStatus(u)).ToList();
                 _finalUsersList = _importer.CombineLists(_importedUsersList, _existingUsersList);
