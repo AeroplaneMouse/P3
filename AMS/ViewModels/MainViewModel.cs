@@ -54,14 +54,15 @@ namespace AMS.ViewModels
             set
             {
                 _currentDepartment = value;
-                OnPropertyChanged(nameof(CurrentDepartment));
-
+               
                 // Update default department for user
                 if (_currentDepartment != null)
                 {
                     CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
                     new UserRepository().Update(CurrentSession.user);
                 }
+
+                OnPropertyChanged(nameof(CurrentDepartment));
             }
         }
         public Frame ContentFrame { get; set; } = new Frame();
@@ -326,7 +327,6 @@ namespace AMS.ViewModels
         // Notification commands
         public ICommand AddFieldTestCommand { get; set; }
         public ICommand RemoveNotificationCommand { get; set; }
-        public ICommand ImportUsersCommand { get; set; }
 
         public ICommand ReloadCommand { get; set; }
     }
