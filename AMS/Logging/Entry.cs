@@ -19,7 +19,7 @@ namespace AMS.Logging
         /// <param name="username"></param>
         /// <param name="options"></param>
         /// <param name="created_at"></param>
-        private Entry(ulong id, ulong logable_id, Type logable_type, string description, string username, string options, DateTime created_at)
+        private Entry(ulong id, ulong logable_id, string logable_type, string description, string username, string options, DateTime created_at)
         {
             ID = id;
             LogableId = logable_id;
@@ -37,7 +37,7 @@ namespace AMS.Logging
 
         public ulong LogableId { get; set; }
 
-        public Type LogableType { get; set; }
+        public string LogableType { get; set; }
         public string Description { get; set; }
 
         public string Options { get; set; }
