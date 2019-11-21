@@ -50,7 +50,6 @@ namespace AMS.Controllers
                     {
                         currentField.FieldPresentIn.Remove(tag.ID);
                     }
-                    
                     if (inputField.FieldPresentIn.Count > 0)
                     {
                         currentField.IsHidden = !currentField.IsHidden;

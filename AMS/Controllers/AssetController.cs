@@ -10,7 +10,7 @@ namespace AMS.Controllers
     public class AssetController : FieldController, IAssetController
     {
         public Asset Asset { get; set; }
-        public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
+        public List<ITagable> CurrentlyAddedTags { get; } = new List<ITagable>();
         
         private IAssetRepository _assetRepository;
         
@@ -25,10 +25,9 @@ namespace AMS.Controllers
         public bool AttachTag(ITagable tag)
         {
             CurrentlyAddedTags.Add(tag);
-            if (tag.GetType() == typeof(Tag))
+            if (tag is Tag currentTag)
             {
-                Tag tagWithFields = (Tag) tag;
-                foreach (var tagField in tagWithFields.Fields)
+                foreach (var tagField in currentTag.Fields)
                 {
                     if (Asset.Fields.SingleOrDefault(assetField => assetField.Hash == tagField.Hash) == null)
                     {
@@ -36,9 +35,7 @@ namespace AMS.Controllers
                     }
                     else
                     {
-                        Field fieldToUpdate =
-                            Asset.Fields.Single(assetField => assetField.Hash == tagField.Hash);
-                        fieldToUpdate.FieldPresentIn.Add(tagWithFields.ID);
+                        Asset.Fields.Single(assetField => assetField.Hash == tagField.Hash).FieldPresentIn.Add(currentTag.ID);
                     }
                 }
             }

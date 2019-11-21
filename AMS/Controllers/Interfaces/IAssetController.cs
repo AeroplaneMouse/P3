@@ -9,7 +9,7 @@ namespace AMS.Controllers.Interfaces
     public interface IAssetController : IFieldController
     {
         Asset Asset { get; set; }
-        List<ITagable> CurrentlyAddedTags { get; set; }
+        List<ITagable> CurrentlyAddedTags { get; }
         
         bool AttachTag(ITagable tag);
 

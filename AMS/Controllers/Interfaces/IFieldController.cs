@@ -1,4 +1,5 @@
-﻿using AMS.Models;
+﻿using System.Collections.Generic;
+using AMS.Models;
 
 namespace AMS.Controllers.Interfaces
 {
