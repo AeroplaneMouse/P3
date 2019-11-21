@@ -27,7 +27,6 @@ namespace AMS.Controllers
             _rep = new TagRepository();
             _exporter = printHelper;
             TagsList = new List<Tag>();
-
         }
 
         public void Search(string query)

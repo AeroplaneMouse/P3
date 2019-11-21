@@ -127,6 +127,7 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
                 <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderBrush" Value="{StaticResource NavigationSelectedBrush}"/>
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
                 <Setter Property="BorderThickness" Value="1"/>
@@ -137,25 +138,13 @@
     <!-- Regular cancel button -->
     <Style TargetType="Button" x:Key="RegularCancelButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <!--<Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>-->
-                <!--<Setter Property="Background" Value="{StaticResource CancelRedHighlightBrush}"/>-->
-                <!--<Setter Property="BorderBrush" Value="{StaticResource CancelRedHighlightBrush}"/>-->
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="BorderBrush" Value="{StaticResource CancelRedBrush}"/>
     </Style>
     
     <!-- Regular accept button -->
     <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <!--<Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>-->
-                <!--<Setter Property="Background" Value="{StaticResource AcceptGreenHightlightBrush}"/>-->
-                <!--<Setter Property="BorderBrush" Value="{StaticResource AcceptGreenHightlightBrush}"/>-->
-            </Trigger>
-        </Style.Triggers>
+        <Setter Property="BorderBrush" Value="{StaticResource AcceptGreenBrush}"/>
     </Style>
 
     <Style x:Key="ButtonFocusVisual">
@@ -194,6 +183,44 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+    
+    <!-- Image button -->
+    <Style TargetType="Button" x:Key="ImageButton">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Padding="{TemplateBinding Padding}">
+                        <Image Source="{TemplateBinding Content}"
+                               VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Trash button -->
+    <Style TargetType="Button" x:Key="TrashButton" BasedOn="{StaticResource ImageButton}">
+        <Setter Property="Content" Value="{StaticResource Trash_Gray}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Content" Value="{StaticResource Trash_Red}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Edit button -->
+    <Style TargetType="Button" x:Key="EditButton" BasedOn="{StaticResource ImageButton}">
+        <Setter Property="Content" Value="{StaticResource Edit_Gray}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Content" Value="{StaticResource Edit_Black}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <!--<Style TargetType="Button" x:Key="DepartmentButtonEdit" BasedOn="{StaticResource DepartmentButton}">

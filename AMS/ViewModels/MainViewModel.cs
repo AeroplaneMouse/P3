@@ -5,16 +5,17 @@ using AMS.Events;
 using System.Linq;
 using AMS.Database;
 using System.Windows;
+using AMS.Views.Prompts;
 using AMS.Authentication;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using AMS.Database.Repositories;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Runtime.InteropServices;
+using System.Windows.Media;
 using AMS.Controllers;
+using AMS.Database.Repositories.Interfaces;
 using AMS.Helpers;
 using AMS.IO;
 
@@ -30,6 +31,10 @@ namespace AMS.ViewModels
 
         private Department _currentDepartment;
         private bool _hasConnectionFailedBeenRaised = false;
+
+        private IAssetRepository _assetRep;
+        private IUserRepository _userRep;
+        private IDepartmentRepository _departmentRep;
 
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
@@ -58,16 +63,18 @@ namespace AMS.ViewModels
 
                 // Update default department for user
                 if (_currentDepartment != null)
+                {
                     CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
+                    new UserRepository().Update(CurrentSession.user);
+                }
             }
         }
         public Frame ContentFrame { get; set; } = new Frame();
         public Page SplashPage { get; set; }
         public Page PopupPage { get; set; }
-        //public Visibility SplashVisibility { get; set; } = Visibility.Visible;
         public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
         public Visibility VisibleForAdmin { get; set; }
-    
+
         public List<Department> Departments { get => GetDepartments(); }
         public Session CurrentSession { get; private set; }
         public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
@@ -81,6 +88,7 @@ namespace AMS.ViewModels
             // Setting private fields
             _window = window;
             _outerMarginSize = 10;
+            Features.Main = this;
 
             WindowMinWidth = 300;
             WindowMinHeight = 400;
@@ -88,7 +96,7 @@ namespace AMS.ViewModels
             ResizeBorder = 4;
             TitleHeight = 25;
             InnerContentPaddingSize = 6;
-            
+
             // Listen out for the window resizing
             _window.StateChanged += (sender, e) =>
             {
@@ -102,42 +110,43 @@ namespace AMS.ViewModels
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
             MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
             CloseCommand = new Base.RelayCommand(() => _window.Close());
-            SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
+            SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, _window.PointToScreen(
+                new Point(
+                    OuterMarginSize,
+                    OuterMarginSize + ResizeBorder + TitleHeight
+                )
+            )));
+
+            // Dependencies that should be the same for the entire application
+            _assetRep = new AssetRepository();
+            _userRep = new UserRepository();
+            _departmentRep = new DepartmentRepository();
 
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
-            // Creating all dependencies in composition root (Which is here)
-            //TODO: Create repositories elsewhere and send the same instance to all that use it
             ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, new AssetRepository(), new PrintHelper())));
             ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this)));
+            ShowLogPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new LogList()));
             ShowUserListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new UserList(this, new UserListController(new UserImporter(new UserRepository()), new UserRepository(), new DepartmentRepository()))));
-            //ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
-            //ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this, _tagService)));
-            //ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this, _entryService)));
 
-            RemoveNotificationCommand = new Base.RelayCommand<object>((object parameter) =>
-            {
-                int id = int.Parse(parameter.ToString());
-                RemoveNotification(id);
-            });
+            RemoveNotificationCommand = new Base.RelayCommand<object>((parameter) => RemoveNotification(parameter as Notification));
 
             ReloadCommand = new Base.RelayCommand(Reload);
-
-            //AddFieldTestCommand = new Base.RelayCommand();
-
-            ImportUsersCommand = new Base.RelayCommand(ImportUsers);
 
             SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
             EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
-            AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment)));
+            AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)));
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
 
             // Display splash page
-            SplashPage = new Views.Splash(this);
+            SplashPage = new Splash(this);
         }
 
+        /// <summary>
+        /// Selects a new department where parameter is the id of the department to be selected
+        /// </summary>
         private void SelectDepartment(object parameter)
         {
             try
@@ -145,35 +154,46 @@ namespace AMS.ViewModels
                 ulong id = ulong.Parse(parameter.ToString());
                 Department selectedDepartment = new DepartmentRepository().GetById(id);
                 if (selectedDepartment == null)
-                    selectedDepartment = Models.Department.GetDefault();
+                    selectedDepartment = Department.GetDefault();
 
-                AddNotification(new Models.Notification(
-                    $"{selectedDepartment.Name} is now the current department.", Models.Notification.APPROVE));
+                AddNotification(new Notification(
+                    $"{selectedDepartment.Name} is now the current department.", Notification.APPROVE));
                 CurrentDepartment = selectedDepartment;
             }
             catch (Exception e)
             {
-                AddNotification(new Models.Notification(e.Message, Models.Notification.ERROR), 5000);
+                AddNotification(new Notification(e.Message, Notification.ERROR), 5000);
             }
         }
 
+        /// <summary>
+        /// Displays the given prompt and attaches a remove delegate to remove it
+        /// after accept or cancel.
+        /// </summary>
         public void DisplayPrompt(Page promptPage)
         {
             PopupPage = promptPage;
             (promptPage.DataContext as Prompts.PromptViewModel).PromptElapsed += RemovePrompt;
         }
 
+        /// <summary>
+        /// Removes the prompt view
+        /// </summary>
         private void RemovePrompt(object sender, PromptEventArgs e)
         {
             PopupPage = null;
         }
 
-        public void AddNotification(string message, SolidColorBrush background)
-            => AddNotification(new Notification(message, background));
-
-        public void AddNotification(Notification n) 
+        /// <summary>
+        /// Adds a notification to the list of active notifications, with a displayTime of 2500 milliseconds.
+        /// </summary>
+        public void AddNotification(Notification n)
             => AddNotification(n, 2500);
 
+        /// <summary>
+        /// Adds a notification to the list of active notifications, and removes is after the specified displayTime.
+        /// If the displayTime is 0, the notification will not be removed.
+        /// </summary>
         public async void AddNotification(Notification n, int displayTime)
         {
             // Add notification to the list of active notifications
@@ -187,28 +207,25 @@ namespace AMS.ViewModels
             }
         }
 
-        // Removes an active notification.
-        public void RemoveNotification(int id) 
-            => RemoveNotification(ActiveNotifications.Where(n => n.ID == id).First());
-
-        public void RemoveNotification(Notification n)
+        /// <summary>
+        /// Removes an active notification by notification object
+        /// </summary>
+        private bool RemoveNotification(Notification n)
         {
-            ActiveNotifications.Remove(n);
+            return ActiveNotifications.Remove(n);
         }
-
 
         /// <summary>
         /// Used when the application has connected to the database and other external services,
         /// to remove the splash page and shows the navigation menu's and homepage.
         /// </summary>
-        //public void SystemLoaded(object _session, EventArgs e)
         public void LoadSystem(Session session)
         {
             // Attaching notification
             MySqlHandler.ConnectionFailed += ConnectionFailed;
 
             // Loads homepage and other stuff from the UI-thread.
-            SplashPage.Dispatcher.Invoke(Load);
+            SplashPage.Dispatcher.Invoke(() => ContentFrame.Navigate(new Home()));
 
             // Remove splash page
             SplashPage = null;
@@ -221,7 +238,7 @@ namespace AMS.ViewModels
             CurrentSession = session;
             CurrentUser = CurrentSession.Username;
             OnPropertyChanged(nameof(CurrentUser));
-            
+
             // Sets the visibility of WPF elements binding to this, based on whether or not the current user is an admin
             VisibleForAdmin = CurrentSession.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
 
@@ -231,7 +248,10 @@ namespace AMS.ViewModels
                 CurrentDepartment = Department.GetDefault();
         }
 
-
+        /// <summary>
+        /// Calls the reload method, if it has not been called and sets a flag to prevent
+        /// it from being called again if multiple connection failes occur within a short amount of time.
+        /// </summary>
         private void ConnectionFailed()
         {
             if (!_hasConnectionFailedBeenRaised)
@@ -241,19 +261,9 @@ namespace AMS.ViewModels
             }
         }
 
-        // Loads excluded pages and sets homepage.
-        private void Load()
-        {
-            // Load homepage
-            ContentFrame.Navigate(new Home());
-        }
-
-        private void ImportUsers()
-        {
-            //ContentFrame.Navigate(new Views.UserImporterView(this, _userService, _departmentService));
-        }
-
-        // Used to reload the application
+        /// <summary>
+        /// Resets saved content, and reconnects to the database.
+        /// </summary>
         private void Reload()
         {
             Console.WriteLine("Reloading...");
@@ -277,6 +287,10 @@ namespace AMS.ViewModels
                 return new List<Department>();
         }
 
+
+        /// <summary>
+        /// Adds a new department to the system if the given prompt resulted accept with the name specified
+        /// </summary>
         private void AddDepartment(object sender, PromptEventArgs e)
         {
             if (e.Result)
@@ -306,9 +320,11 @@ namespace AMS.ViewModels
         public ICommand CloseCommand { get; set; }
         public ICommand SystemMenuCommand { get; set; }
 
+        // Change page commands
         public ICommand ShowHomePageCommand { get; set; }
         public ICommand ShowAssetListPageCommand { get; set; }
         public ICommand ShowTagListPageCommand { get; set; }
+        public ICommand ShowLogPageCommand { get; set; }
         public ICommand ShowUserListPageCommand { get; set; }
 
         // Department commands
@@ -317,38 +333,11 @@ namespace AMS.ViewModels
         public ICommand EditDepartmentCommand { get; set; }
         public ICommand AddDepartmentCommand { get; set; }
 
-        public ICommand ShowLogPageCommand { get; set; }
-
-        public ICommand ReloadCommand { get; set; }
-
         // Notification commands
         public ICommand AddFieldTestCommand { get; set; }
         public ICommand RemoveNotificationCommand { get; set; }
         public ICommand ImportUsersCommand { get; set; }
 
-
-
-        #region Magic from StackOverflow: https://stackoverflow.com/questions/4226740/how-do-i-get-the-current-mouse-screen-coordinates-in-wpf
-
-        [DllImport("user32.dll")]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        private static extern bool GetCursorPos(ref Win32Point pt);
-
-        [StructLayout(LayoutKind.Sequential)]
-        private struct Win32Point
-        {
-            public Int32 X;
-            public Int32 Y;
-        };
-
-        // Gets the current mouse position on the screen
-        private static Point GetMousePosition()
-        {
-            Win32Point w32Mouse = new Win32Point();
-            GetCursorPos(ref w32Mouse);
-            return new Point(w32Mouse.X, w32Mouse.Y);
-        }
-
-        #endregion
+        public ICommand ReloadCommand { get; set; }
     }
 }
