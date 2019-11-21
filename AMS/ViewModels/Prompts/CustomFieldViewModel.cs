@@ -33,6 +33,7 @@ namespace AMS.ViewModels.Prompts
 
         protected override void Accept()
         {
+            Console.WriteLine($"Default value: { DefaultValue }");
             if (SelectedFieldType == 0)
                 return;
 
