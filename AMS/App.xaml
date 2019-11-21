@@ -21,6 +21,7 @@
                 <ResourceDictionary Source="Resources/Styles/Lists.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Prompt.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Notifications.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Fields.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

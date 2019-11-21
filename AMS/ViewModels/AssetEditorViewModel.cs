@@ -26,6 +26,8 @@ namespace AMS.ViewModels
         private bool _isEditing;
 
         public ICommand AddFieldCommand { get; set; }
+        
+        public ICommand RemoveFieldCommand { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand SaveMultipleCommand { get; set; }
         public ICommand CancelCommand { get; set; }
@@ -84,6 +86,7 @@ namespace AMS.ViewModels
             SaveMultipleCommand = new RelayCommand(() => SaveAsset());
             AddFieldCommand = new Base.RelayCommand(() => PromptForCustomField());
             CancelCommand = new Base.RelayCommand(() => Cancel());
+            RemoveFieldCommand = new RelayCommand<object>((parameter) => RemoveField(parameter));
         }
 
         public void SaveAndExist()
@@ -128,6 +131,18 @@ namespace AMS.ViewModels
                 Console.WriteLine(NonHiddenFieldList.Count);
                 Console.WriteLine(returnedField.Label);
                 NonHiddenFieldList.Insert(NonHiddenFieldList.Count, returnedField);
+                Console.WriteLine(NonHiddenFieldList.Count);
+                OnPropertyChanged(nameof(NonHiddenFieldList));
+            }
+        }
+        
+        public void RemoveField(object sender)
+        {
+            if(sender is Field field)
+            {
+                Console.WriteLine(NonHiddenFieldList.Count);
+                Console.WriteLine(field.Label);
+                NonHiddenFieldList.Remove(field);
                 Console.WriteLine(NonHiddenFieldList.Count);
                 OnPropertyChanged(nameof(NonHiddenFieldList));
             }
