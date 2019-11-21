@@ -71,7 +71,6 @@ namespace AMS.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
             id = 0;
-
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
