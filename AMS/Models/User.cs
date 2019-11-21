@@ -45,7 +45,6 @@ namespace AMS.Models
             IsAdmin = is_admin;
             CreatedAt = createdAt;
             UpdatedAt = updated_at;
-
         }
 
         public User()

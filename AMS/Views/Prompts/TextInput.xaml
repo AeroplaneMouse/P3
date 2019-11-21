@@ -14,7 +14,8 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <StackPanel>
                     <TextBlock Text="{Binding MessageText}"
@@ -24,11 +25,14 @@
                                 Name="Input"/>
                 </StackPanel>
 
+                <Rectangle Style="{StaticResource HorizontalSeparator}"
+                           Grid.Row="1"/>
+
                 <StackPanel Orientation="Horizontal" 
                             VerticalAlignment="Bottom" 
                             HorizontalAlignment="Center"
                             Margin="15"
-                            Grid.Row="1">
+                            Grid.Row="2">
                     <Button Style="{StaticResource RegularAcceptButton}"
                             Command="{Binding AcceptCommand}"
                             Content="Accept"/>

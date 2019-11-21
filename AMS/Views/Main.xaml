@@ -127,7 +127,7 @@
 
                                         <!-- Notifications -->
                                         <ListView Grid.Column="1" 
-                                                  FontSize="{StaticResource FontSizeLarge}"
+                                                  FontSize="{StaticResource FontSizeRegular}"
                                                   Style="{StaticResource NotificationView}"/>
 
                                     </Grid>
