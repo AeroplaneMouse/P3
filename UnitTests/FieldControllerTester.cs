@@ -55,7 +55,7 @@ namespace UnitTests
             otherAsset.RemoveFieldOrFieldRelations(_fourthField);
 
             //Assert
-            Assert.IsFalse(otherAsset.Asset.Fields.Contains(_fourthField));
+            Assert.IsFalse(otherAsset.Asset.FieldList.Contains(_fourthField));
         }
         
         [TestMethod]
@@ -73,7 +73,7 @@ namespace UnitTests
             otherAsset.RemoveFieldOrFieldRelations(_thirdField);
 
             //Assert
-            Assert.IsTrue(otherAsset.Asset.Fields.Contains(_thirdField) && _thirdField.IsHidden);
+            Assert.IsTrue(otherAsset.Asset.FieldList.Contains(_thirdField) && _thirdField.IsHidden);
         }
         
         [TestMethod]
@@ -90,7 +90,7 @@ namespace UnitTests
             otherAsset.AddField(_thirdField);
             
             //Assert
-            Assert.IsTrue(otherAsset.Asset.Fields.Contains(_thirdField));
+            Assert.IsTrue(otherAsset.Asset.FieldList.Contains(_thirdField));
         }
         
         [TestMethod]

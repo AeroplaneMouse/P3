@@ -192,7 +192,7 @@ namespace UnitTests
             TestingTag localTag = new TestingTag();
             localTag.Name = "First tag";
             localTag.ID = 1;
-            localTag.Fields.Add(localField);
+            localTag.FieldList.Add(localField);
 
 
             otherAsset.AttachTag(_tagOne);
@@ -203,7 +203,7 @@ namespace UnitTests
 
             //Assert
             Assert.IsTrue(otherAsset.CurrentlyAddedTags.Contains(localTag) &&
-                          _assetController.Asset.Fields.Contains(localField));
+                          _assetController.Asset.FieldList.Contains(localField));
         }
 
         [TestMethod]
@@ -220,7 +220,7 @@ namespace UnitTests
             TestingTag localTag = new TestingTag();
             localTag.Name = "First tag";
             localTag.ID = 3;
-            localTag.Fields.Add(localField);
+            localTag.FieldList.Add(localField);
 
 
             otherAsset.AttachTag(_tagOne);
@@ -231,7 +231,7 @@ namespace UnitTests
 
             //Assert
             Assert.IsTrue(otherAsset.CurrentlyAddedTags.Contains(localTag) &&
-                          _assetController.Asset.Fields.Contains(localField));
+                          _assetController.Asset.FieldList.Contains(localField));
         }
 
         [TestMethod]
@@ -247,7 +247,7 @@ namespace UnitTests
             TestingTag localTag = new TestingTag();
             localTag.Name = "First tag";
             localTag.ID = 1;
-            localTag.Fields.Add(localField);
+            localTag.FieldList.Add(localField);
 
 
             otherAsset.AttachTag(_tagOne);
@@ -260,7 +260,7 @@ namespace UnitTests
 
             //Assert
             Assert.IsFalse(otherAsset.CurrentlyAddedTags.Contains(localTag) &&
-                           _assetController.Asset.Fields.Contains(localField));
+                           _assetController.Asset.FieldList.Contains(localField));
         }
 
         [TestMethod]
@@ -278,7 +278,7 @@ namespace UnitTests
             otherAsset.AddField(localField);
 
             TestingTag localTag = new TestingTag {Name = "First tag"};
-            localTag.Fields.Add(localField);
+            localTag.FieldList.Add(localField);
 
 
             otherAsset.AttachTag(_tagOne);
