@@ -94,12 +94,10 @@ namespace AMS.ViewModels
             SaveAsset();
             if (_main.ContentFrame.CanGoBack)
             {
-                Console.WriteLine("GOBack");
                 _main.ContentFrame.GoBack();
             }
             else
             {
-                Console.WriteLine("Navigated");
                 _main.ContentFrame.Navigate(new AssetList(_main, new AssetRepository(), new PrintHelper()));
             }
         }
@@ -108,11 +106,17 @@ namespace AMS.ViewModels
         {
             if (_isEditing)
             {
+                _assetController.FieldList = NonHiddenFieldList.ToList<Field>();
+                _assetController.FieldList.AddRange(HiddenFieldList.ToList<Field>());
+                //TODO Add tags
                 _assetController.Update();
                 _main.AddNotification(new Notification("Asset updated", Notification.APPROVE));
             }
             else
             {
+                _assetController.FieldList = NonHiddenFieldList.ToList<Field>();
+                _assetController.FieldList.AddRange(HiddenFieldList.ToList<Field>());
+                //TODO Add tags
                 _assetController.Save();
                 _main.AddNotification(new Notification("Asset added", Notification.APPROVE));
             }
@@ -120,7 +124,7 @@ namespace AMS.ViewModels
 
         public void PromptForCustomField()
         {
-            _main.DisplayPrompt(new CustomField("Add field", AddCustomField));
+            _main.DisplayPrompt(new CustomField("Add field", AddCustomField, true));
         }
 
         public void AddCustomField(object sender, PromptEventArgs e)
@@ -128,29 +132,34 @@ namespace AMS.ViewModels
             if(e is FieldInputPromptEventArgs)
             {
                 Field returnedField = ((FieldInputPromptEventArgs)e).Field;
-                NonHiddenFieldList.Insert(NonHiddenFieldList.Count, returnedField);
+                returnedField.Content = returnedField.DefaultValue;
+                NonHiddenFieldList.Add(returnedField);
             }
         }
         
         public void RemoveField(object sender)
         {
-            Console.WriteLine(sender.GetType());
             if (sender is Field field)
             {
-                Console.WriteLine(NonHiddenFieldList.Count);
-                Console.WriteLine(field.Label);
                 if (!field.IsCustom)
                 {
-                    Console.WriteLine("Adding... current:" + HiddenFieldList.Count);
-                    HiddenFieldList.Add(field);
-                    Console.WriteLine("Added to hidden field now:" + HiddenFieldList.Count);
+                    if (field.IsHidden)
+                    {
+                        field.IsHidden = false;
+                        NonHiddenFieldList.Add(field);
+                        HiddenFieldList.Remove(field);
+                    }
+                    else
+                    {
+                        field.IsHidden = true;
+                        HiddenFieldList.Add(field);
+                        NonHiddenFieldList.Remove(field);
+                    }
                 }
-                NonHiddenFieldList.Remove(field);
-                Console.WriteLine(NonHiddenFieldList.Count);   
-            }
-            else
-            {
-                Console.WriteLine("Not a field");
+                else
+                {
+                    NonHiddenFieldList.Remove(field);
+                }
             }
         }
 
@@ -158,12 +167,10 @@ namespace AMS.ViewModels
         {
             if (_main.ContentFrame.CanGoBack)
             {
-                Console.WriteLine("GOBack");
                 _main.ContentFrame.GoBack();
             }
             else
             {
-                Console.WriteLine("Navigated");
                 _main.ContentFrame.Navigate(new AssetList(_main, new AssetRepository(), new PrintHelper()));
             }
         }
