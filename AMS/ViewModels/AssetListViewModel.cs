@@ -98,7 +98,7 @@ namespace AMS.ViewModels
         private void AddNewAsset()
         {
             //Todo FIx news
-            Main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),Main));
+            Features.NavigatePage(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main));
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace AMS.ViewModels
             //Todo FIx news
             
             if (IsSelectedAssetValid())
-                Main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),Main, GetSelectedItem()));
+                Features.NavigatePage(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main, GetSelectedItem()));
 
             else
                 _main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
