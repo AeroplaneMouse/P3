@@ -45,8 +45,8 @@
                                     </Grid.ColumnDefinitions>
                                     <Button OverridesDefaultStyle="True" x:Name="PART_DeleteFieldButton"
                                             Grid.Column="1" Margin="3,0" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                            Visibility="Visible" Command="{Binding RemoveFieldCommand}"
-                                            CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                                            Visibility="Visible" Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveFieldCommand}"
+                                            CommandParameter="{Binding Path=.}">
                                         <Button.Template>
                                             <ControlTemplate>
                                                 <Grid Height="10" Width="10" Background="Transparent" >
