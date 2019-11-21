@@ -50,7 +50,7 @@ namespace AMS.ViewModels
         private void AddNewAsset()
         {
             //Todo FIx news
-            _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main));
+            Main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),Main));
         }
 
         /// <summary>
@@ -58,11 +58,9 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset()
         {
-
             //Todo FIx news
-            
             if (IsSelectedAssetValid())
-                _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main, GetSelectedItem()));
+                Main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), Main, GetSelectedItem()));
             else
                 Main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
         }

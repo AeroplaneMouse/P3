@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Runtime.InteropServices;
 using AMS.Controllers;
+using AMS.Database.Repositories.Interfaces;
 using AMS.Helpers;
 using AMS.IO;
 
@@ -30,6 +31,10 @@ namespace AMS.ViewModels
 
         private Department _currentDepartment;
         private bool _hasConnectionFailedBeenRaised = false;
+
+        private IAssetRepository _assetRep;
+        private IUserRepository _userRep;
+        private IDepartmentRepository _departmentRep;
 
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
@@ -104,12 +109,17 @@ namespace AMS.ViewModels
             CloseCommand = new Base.RelayCommand(() => _window.Close());
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
 
+            // Dependencies that should be the same for the entire application
+            _assetRep = new AssetRepository();
+            _userRep = new UserRepository();
+            _departmentRep = new DepartmentRepository();
+            
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
             // Creating all dependencies in composition root (Which is here)
             //TODO: Create repositories elsewhere and send the same instance to all that use it
-            ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, new AssetRepository(), new PrintHelper())));
+            ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, _assetRep, new PrintHelper())));
             ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this)));
-            ShowUserListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new UserList(this, new UserListController(new UserImporter(new UserRepository()), new UserRepository(), new DepartmentRepository()))));
+            ShowUserListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new UserList(this, new UserListController(new UserImporter(_userRep), _userRep, _departmentRep))));
             //ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
             //ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this, _tagService)));
             //ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this, _entryService)));
