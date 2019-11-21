@@ -80,6 +80,9 @@ namespace AMS.Models
 
             if (obj is UserWithStatus)
             {
+                var a = this.GetHashCode();
+                var b = (obj as UserWithStatus).GetHashCode();
+
                 return base.Equals(obj);
             }
 
