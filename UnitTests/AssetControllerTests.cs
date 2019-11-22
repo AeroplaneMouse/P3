@@ -40,9 +40,9 @@ namespace UnitTests
 
             //Field setup
             _fieldOne = new Field("Label of first field", "content of first field",
-                Field.FieldType.TextBox, "Default value of first field");
+                Field.FieldType.TextBox);
             _fieldTwo = new Field("Label of second field", "content of second field",
-                Field.FieldType.Checkbox, "Default value of second field",false,true);
+                Field.FieldType.Checkbox, false,true);
 
 
             //Asset controller setup
@@ -72,10 +72,8 @@ namespace UnitTests
             otherAsset.Asset.Description = "Desription";
             otherAsset.Asset.DepartmentID = 1;
 
-            otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.TextBox,
-                "Default value of first field"));
-            otherAsset.AddField(new Field("Label of second field", "content of second field", Field.FieldType.Checkbox,
-                "Default value of second field"));
+            otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.TextBox));
+            otherAsset.AddField(new Field("Label of second field", "content of second field", Field.FieldType.Checkbox));
 
             //Act
             bool result = _assetController.Asset.Equals(otherAsset.Asset);
@@ -93,8 +91,7 @@ namespace UnitTests
             otherAsset.Asset.Description = "Desription";
             otherAsset.Asset.DepartmentID = 4;
 
-            otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.TextBox,
-                "Default value of first field"));
+            otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.TextBox));
 
             //Act
             bool result = _assetController.Asset.Equals(otherAsset.Asset);
@@ -187,8 +184,7 @@ namespace UnitTests
             otherAsset.Asset.Name = "AssetTests_Asset";
             otherAsset.Asset.Description = "Desription";
             otherAsset.Asset.DepartmentID = 4;
-            Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox,
-                "Default value of first field");
+            Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox);
             TestingTag localTag = new TestingTag();
             localTag.Name = "First tag";
             localTag.ID = 1;
@@ -214,8 +210,7 @@ namespace UnitTests
             otherAsset.Asset.Name = "AssetTests_Asset";
             otherAsset.Asset.Description = "Desription";
             otherAsset.Asset.DepartmentID = 4;
-            Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox,
-                "Default value of first field");
+            Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox);
             otherAsset.AddField(localField);
             TestingTag localTag = new TestingTag();
             localTag.Name = "First tag";
@@ -242,8 +237,7 @@ namespace UnitTests
             otherAsset.Asset.Name = "AssetTests_Asset";
             otherAsset.Asset.Description = "Desription";
             otherAsset.Asset.DepartmentID = 4;
-            Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox,
-                "Default value of first field",true,true);
+            Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox,true,true);
             TestingTag localTag = new TestingTag();
             localTag.Name = "First tag";
             localTag.ID = 1;
@@ -274,7 +268,7 @@ namespace UnitTests
 
             //Local field moq
             Field localField = new Field("Label of the first field", "content of the first field",
-                Field.FieldType.TextBox, "Default value of the first field");
+                Field.FieldType.TextBox);
             otherAsset.AddField(localField);
 
             TestingTag localTag = new TestingTag {Name = "First tag"};

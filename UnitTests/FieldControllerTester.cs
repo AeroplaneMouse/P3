@@ -16,11 +16,11 @@ namespace UnitTests
         {
                         
             _thirdField = new Field("Label of third field", "content of third field",
-                Field.FieldType.TextBox, "Default value of third field",true,true);
+                Field.FieldType.TextBox,true,true);
             _thirdField.TagIDs.Add(5);
             
             _fourthField = new Field("Label of fourth field", "content of fourth field",
-                Field.FieldType.Textarea, "Default value of fourth field");
+                Field.FieldType.Textarea);
             
         }
         
@@ -40,7 +40,6 @@ namespace UnitTests
             Assert.IsTrue(otherAsset.Asset.FieldList.Contains(_thirdField) && otherAsset.Asset.FieldList.Contains(_fourthField));
         }
         
-        [TestMethod]
         public void RemoveField_CheckFieldDoesNotContain()
         {
             //Arrange
@@ -52,13 +51,12 @@ namespace UnitTests
             otherAsset.AddField(_fourthField);
             
             //Act
-            otherAsset.RemoveFieldOrFieldRelations(_fourthField);
+            otherAsset.RemoveField(_fourthField);
 
             //Assert
             Assert.IsFalse(otherAsset.Asset.FieldList.Contains(_fourthField));
         }
         
-        [TestMethod]
         public void RemoveField_UsingInheritedField_CheckFieldIsHidden()
         {
             //Arrange
@@ -70,7 +68,7 @@ namespace UnitTests
             otherAsset.AddField(_fourthField);
             
             //Act
-            otherAsset.RemoveFieldOrFieldRelations(_thirdField);
+            otherAsset.RemoveField(_thirdField);
 
             //Assert
             Assert.IsTrue(otherAsset.Asset.FieldList.Contains(_thirdField) && _thirdField.IsHidden);
