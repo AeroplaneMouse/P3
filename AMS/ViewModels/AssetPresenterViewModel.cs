@@ -45,8 +45,13 @@ namespace AMS.ViewModels
             _Asset = asset;
             CommentListController = commentListController;
 
-            //EditCommand = new Base.RelayCommand();
+            //EditCommand = new Base.RelayCommand(Edit);
             //CancelCommand = new Base.RelayCommand(Cancel);
+        }
+
+        private void Edit (object asset)
+        {
+
         }
     }
 }
