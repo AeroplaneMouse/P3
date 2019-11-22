@@ -23,7 +23,7 @@ namespace AMS.Models
 
         private IDepartmentRepository _departmentRep;
 
-        private ITagRepository _tagRepository;
+        private ITagRepository _tagRepository { get; set; }
 
         // Index of the default department in the list of departments
         public int DepartmentIndex
@@ -59,7 +59,11 @@ namespace AMS.Models
         Type ITagable.TagType => GetType();
         public string TagLabel { get => Username; }
         public List<ITagable> Children { get; set; }
-        public string TagColor { get; set; } = "#ff0000";
+        public string TagColor
+        {
+            get => (_tagRepository ?? new TagRepository()).GetById(1).TagColor;
+            set => TagColor = value;
+        }
         public SolidColorBrush TagFontColor { get => Notification.GetForegroundColor(TagColor); }
 
         #endregion
