@@ -2,18 +2,21 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using AMS.Controllers.Interfaces;
+using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
+using AMS.Logging;
+using AMS.Logging.Interfaces;
 using AMS.Models;
 
 namespace AMS.Controllers
 {
-    public class AssetController : FieldController, IAssetController
+    public class AssetController : FieldListController, IAssetController, ILoggableValues
     {
         public Asset Asset { get; set; }
         public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
         public List<Field> FieldList { get; set; } = new List<Field>();
-
+        private ILogger logger;
         private IAssetRepository _assetRepository;
         
 
@@ -21,33 +24,42 @@ namespace AMS.Controllers
         {
             Asset = asset;
             DeSerializeFields();
-            FieldList = asset.Fields.ToList<Field>();
+            FieldList = asset.FieldList.ToList<Field>();
             _assetRepository = assetRepository;
+            logger = new Log(new LogRepository());
         }
 
+        /// <summary>
+        /// Attaches a tag and its fields to a asset.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         public bool AttachTag(ITagable tag)
         {
             CurrentlyAddedTags.Add(tag);
-            if (tag.GetType() == typeof(Tag))
+            if (tag is Tag currentTag)
             {
-                Tag tagWithFields = (Tag) tag;
-                foreach (var tagField in tagWithFields.Fields)
+                foreach (var tagField in currentTag.FieldList)
                 {
-                    if (Asset.Fields.SingleOrDefault(assetField => assetField.Hash == tagField.Hash) == null)
+                    if (Asset.FieldList.SingleOrDefault(assetField => assetField.Hash == tagField.Hash) == null)
                     {
-                        Asset.Fields.Add(tagField);
+                        Asset.FieldList.Add(tagField);
                     }
                     else
                     {
-                        Field fieldToUpdate =
-                            Asset.Fields.Single(assetField => assetField.Hash == tagField.Hash);
-                        fieldToUpdate.FieldPresentIn.Add(tagWithFields.ID);
+                        Asset.FieldList.Single(assetField => assetField.Hash == tagField.Hash).FieldPresentIn.Add(currentTag.ID);
                     }
                 }
             }
+            logger.LogCreate(this);
             return CurrentlyAddedTags.Contains(tag);
         }
 
+        /// <summary>
+        /// Detaches tag from an asset.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         public bool DetachTag(ITagable tag)
         {
             if (CurrentlyAddedTags.Contains(tag))
@@ -55,7 +67,7 @@ namespace AMS.Controllers
                 CurrentlyAddedTags.Remove(tag);
                 if (tag is Tag currentTag)
                 {
-                    foreach (var field in currentTag.Fields)
+                    foreach (var field in currentTag.FieldList)
                     {
                         RemoveFieldOrFieldRelations(field, currentTag);
                     }
@@ -65,27 +77,67 @@ namespace AMS.Controllers
             return !CurrentlyAddedTags.Contains(tag);
         }
 
+        /// <summary>
+        /// Saves the asset to the database. As well as connects the tag in the tag repository.
+        /// </summary>
+        /// <returns></returns>
         public bool Save()
         {
-            Asset.Fields = new ObservableCollection<Field>(FieldList);
+            Asset.FieldList = new ObservableCollection<Field>(FieldList);
             SerializeFields();
             ulong id = 0;
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
             _assetRepository.Insert(Asset, out id);
+            logger.LogCreate(this);
             return id != 0;
         }
 
+        /// <summary>
+        /// Updates the asset in the database.
+        /// </summary>
+        /// <returns></returns>
         public bool Update()
         {
-            Asset.Fields = new ObservableCollection<Field>(FieldList);
+            Asset.FieldList = new ObservableCollection<Field>(FieldList);
             SerializeFields();
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
+            logger.LogCreate(this);
             return _assetRepository.Update(Asset);
         }
 
+        /// <summary>
+        /// Removes the asset form the database.
+        /// </summary>
+        /// <returns></returns>
         public bool Remove()
         {
+            logger.LogCreate(this);
             return _assetRepository.Delete(Asset);
         }
+
+        /// <summary>
+        /// Makes a loggable dictionary from the asset
+        /// </summary>
+        /// <returns>The asset formatted as a loggable dictionary</returns>
+        public Dictionary<string, string> GetLoggableValues()
+        {
+            Dictionary<string, string> props = new Dictionary<string, string>();
+            props.Add("ID", Asset.ID.ToString());
+            props.Add("Name", Asset.Name);
+            props.Add("Description", Asset.Description);
+            props.Add("Department ID", Asset.DepartmentID.ToString());
+            SerializeFields();
+            props.Add("Options", Asset.SerializedFields);
+            props.Add("Created at", Asset.CreatedAt.ToString());
+            props.Add("Last updated at", Asset.UpdatedAt.ToString());
+            return props;
+
+        }
+
+        /// <summary>
+        /// Returns the name of the asset
+        /// </summary>
+        /// <returns>Name of the asset</returns>
+        public string GetLoggableTypeName() => Asset.Name;
     }
 }

@@ -14,11 +14,12 @@ namespace AMS.Controllers.Interfaces
         ObservableCollection<Asset> AssetList { get; set; }
 
         // List of tags that can be searched
-        List<Tag> TagsList { get; set; }
-
+        List<Tag> TagList { get; set; }
         void Search(string query, List<ulong> tags, List<ulong> users=null, bool strict=false);
-        void ViewAsset(Asset asset);
+        void Search(string query);
         void Remove(Asset asset);
         void Export(List<Asset> assets);
+
+        List<ITagable> GetTags(Asset asset);
     }
 }

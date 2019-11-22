@@ -1,9 +1,9 @@
-﻿using System;
+using AMS.Models;
+using System;
 using System.Windows;
 using System.Windows.Controls;
-using AMS.Models;
 
-namespace Asset_Management_System.Views
+namespace AMS.Views
 {
     /// <summary>
     /// Class used for selecting a template for the fields.

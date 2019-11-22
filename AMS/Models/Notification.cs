@@ -26,7 +26,7 @@ namespace AMS.Models
         {
             ID = _id++;
             Message = message;
-            Foreground = Brightness(background.Color) < 130 ? Brushes.White : Brushes.Black;
+            Foreground = GetForegroundColor(background.Color);
             Background = background;
         }
 
@@ -69,6 +69,18 @@ namespace AMS.Models
         /// </summary>
         /// <param name="c"></param>
         /// <returns>Brightness of the color</returns>
-        public static int Brightness(Color c) => (int)Math.Sqrt(c.R * c.R * 0.241 + c.G * c.G * 0.691 + c.B * c.B * 0.068);
+        private static int Brightness(Color c) => (int)Math.Sqrt(c.R * c.R * 0.241 + c.G * c.G * 0.691 + c.B * c.B * 0.068);
+
+        public static SolidColorBrush GetForegroundColor(Color c)
+        {
+            return Brightness(c) < 130 ? Brushes.White : Brushes.Black;
+        }
+
+        public static SolidColorBrush GetForegroundColor(string colorString)
+        {
+            Color c = (Color)ColorConverter.ConvertFromString(colorString);
+
+            return Brightness(c) < 140 ? Brushes.White : Brushes.Black;
+        }
     }
 }

@@ -38,7 +38,7 @@
                 <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Left">
                     <TextBox FontSize="{StaticResource FontSizeSmall}"
-                        Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
+                        Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
                         VerticalContentAlignment="Center"
                         MinWidth="200"
                         Name="StartElement">
@@ -55,11 +55,6 @@
 
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
-                    <Button Style="{StaticResource RegularCancelButton}"
-                        Command="{Binding RemoveCommand}"
-                        Content="Remove"
-                        Visibility="{Binding IsRemoveVisible}"/>
-
                     <Button Style="{StaticResource RegularButton}"
                         Margin="10 0 0 0 "
                         Content="Export selected items"
@@ -71,8 +66,9 @@
                 <!--Style="{StaticResource RegularList}"-->
                 <ListView x:Name="listViewWithItems"
                         SelectionMode="Extended"
-                        ItemsSource="{Binding SearchList}"
+                        ItemsSource="{Binding Entries}"
                         SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                        SelectionChanged="ListView_SelectionChanged"
                         Grid.Row="2">
                     
                     <!-- <i:Interaction.Triggers> -->
@@ -92,13 +88,13 @@
                     </ListView.View>
 
                     <ListView.InputBindings>
-                        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
-                        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
                     </ListView.InputBindings>
+                    <!--
                     <ListView.Resources>
                         <Style TargetType="ListViewItem" BasedOn="{StaticResource RegularListItem}"/>
                     </ListView.Resources>
+                    -->
                 </ListView>
             </Grid>
         </Border>

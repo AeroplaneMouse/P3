@@ -4,8 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AMS.Views"
+      
       mc:Ignorable="d"
       Title="AssetEditor" Margin="20">
+    
+    <Page.Resources>
+        <local:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -152,7 +157,7 @@
 
                     <!-- FieldList -->
                     <StackPanel>
-                        <ItemsControl ItemsSource="{Binding NonHiddenFieldList}"
+                        <ItemsControl ItemsSource="{Binding NonHiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
                                       ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -166,7 +171,7 @@
                                Text="Hidden fields"
                                Margin="10 20 10 0" />
                     <StackPanel>
-                        <ItemsControl ItemsSource="{Binding HiddenFieldList}"
+                        <ItemsControl ItemsSource="{Binding HiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
                             ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>

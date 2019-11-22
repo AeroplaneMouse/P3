@@ -18,12 +18,14 @@ namespace AMS.ViewModels
     public class AssetListViewModel : BaseViewModel
     {
         private IAssetListController _listController;
-        private MainViewModel _main;
         private string _searchQuery;
         private TagHelper _tagHelper;
+        private ICommentListController _commentListController;
 
         public ObservableCollection<Asset> Items { get; set; }
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
+
+        private MainViewModel _main { get; set; }
 
         public string SearchQuery
         {
@@ -31,14 +33,14 @@ namespace AMS.ViewModels
             set
             {
                 _searchQuery = value;
-                
+
                 if (!inTagMode && _searchQuery == "#")
                 {
                     inTagMode = true;
                     _searchQuery = "";
                     EnteringTagMode();
                 }
-                
+
                 if (inTagMode)
                 {
                     TagSearchProcess();
@@ -66,23 +68,31 @@ namespace AMS.ViewModels
         public ICommand RemoveTagCommand { get; set; }
         public ICommand RemoveBySelectionCommand { get; set; }
         public ICommand EditBySelectionCommand { get; set; }
-        public int SelectedItemIndex { get; private set; }
 
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
 
-        public AssetListViewModel(MainViewModel main, IAssetListController listController)
+        public AssetListViewModel(MainViewModel main, IAssetListController listController, ICommentListController commentListController)
         {
             _main = main;
             _listController = listController;
+            _commentListController = commentListController;
             Items = _listController.AssetList;
 
-            AddNewCommand = new RelayCommand(AddNewAsset);
-            EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
-            PrintCommand = new RelayCommand(Export);
+            // Admin only functions
+            if (_main.CurrentSession.IsAdmin())
+            {
+                AddNewCommand = new RelayCommand(() => EditAsset(null));
+                EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
+                RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
+                RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
+                EditBySelectionCommand = new RelayCommand(EditBySelection);
+                PrintCommand = new RelayCommand(Export);
+            }
+
+            // Other functions
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
-            RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
             RemoveTagCommand = new RelayCommand<object>((parameter) => 
             {
                 ITagable tag = parameter as ITagable;
@@ -92,60 +102,28 @@ namespace AMS.ViewModels
                 OnPropertyChanged(nameof(AppliedTags));
             });
 
-            RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
-            EditBySelectionCommand = new RelayCommand(EditBySelection);
             AutoTagCommand = new RelayCommand(AutoTag);
             ClearInputCommand = new RelayCommand(ClearInput);
         }
 
         /// <summary>
-        /// Changes the content to a blank AssetEditor
-        /// </summary>
-        private void AddNewAsset()
-        {
-            //Todo FIx news
-            _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), _main));
-        }
-
-        private void EditById(object parameter)
-        {
-            ulong id = 0;
-            try
-            {
-                id = ulong.Parse(parameter.ToString());
-            }
-            finally
-            {
-                if (id == 0)
-                    _main.AddNotification(new Notification("Error! Unknown ID"), 3500);
-                else
-                {
-                    Asset asset = _listController.AssetList.Where(a => a.ID == id).First();
-                    _main.ContentFrame.Navigate(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()), _main, asset));
-                }
-            }
-        }
-
-        /// <summary>
         /// Changes the content to AssetEditor with the selected asset
+        /// if asset is null, a new asset will be created.
         /// </summary>
         private void EditAsset(Asset asset)
         {
-            if (asset != null)
-                _main.ContentFrame.Navigate(new AssetEditor(
-                    new AssetRepository(), 
-                    new TagListController(new PrintHelper()),_main, asset));
-            else
-                _main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
+            _main.ContentFrame.Navigate(new AssetEditor(
+                new AssetRepository(), 
+                new TagListController(new PrintHelper()),
+                _main,
+                asset));
         }
 
         private void EditBySelection()
         {
             // Only ONE item can be edited
             if (SelectedItems.Count == 1)
-            {
-                throw new NotImplementedException();
-            }
+                EditAsset(SelectedItems.First());
             else
                 _main.AddNotification(new Notification("Error! Please select one and only one asset.", Notification.ERROR), 3500);
         }
@@ -156,8 +134,8 @@ namespace AMS.ViewModels
         private void SearchAssets()
         {
             Console.WriteLine("This is super stupid!");
-            
-            if (SearchQuery == null) 
+
+            if (SearchQuery == null)
                 return;
 
             if (!inTagMode)
@@ -270,7 +248,6 @@ namespace AMS.ViewModels
             {
                 Console.WriteLine(e);
             }
-
             CurrentGroup = "#";
             CurrentGroupVisibility = Visibility.Visible;
         }
@@ -331,7 +308,9 @@ namespace AMS.ViewModels
         {
             // TODO: Redirect to viewAsset page
             if (SelectedItems.Count == 1)
-                _listController.ViewAsset(SelectedItems.First());
+            {
+                _main.ContentFrame.Navigate(new AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First()), _commentListController));
+            }
             else
                 _main.AddNotification(new Notification("Error! Could not view asset", Notification.ERROR));
         }
@@ -371,7 +350,6 @@ namespace AMS.ViewModels
                         // Move selected items to new list
                         List<Asset> items = new List<Asset>();
                         SelectedItems.ForEach(a => items.Add(a));
-
                         // Remove each asset
                         foreach (Asset asset in items)
                             _listController.Remove(asset);
@@ -389,27 +367,12 @@ namespace AMS.ViewModels
         /// </summary>
         private void Export()
         {
-            //TODO: Get selected assets
-            // Look here for how to (Answer 2): https://stackoverflow.com/questions/2282138/wpf-listview-selecting-multiple-list-view-items
-            // Fly: Jeg tror, at jeg har lavet det.
-            
             if (SelectedItems.Count > 0)
                 // Export selected items
                 _listController.Export(SelectedItems);
             else
                 // Export all items found by search
-                _listController.Export(ObservableToList(Items));
-        }
-
-        // This is super stupid. Please fix
-        // Takes an ObservableCollecion and returns a List with the items
-        // of the observableCollection
-        private List<Asset> ObservableToList(ObservableCollection<Asset> list)
-        {
-            List<Asset> newList = new List<Asset>();
-            foreach (Asset asset in list)
-                newList.Add(asset);
-            return newList;
+                _listController.Export(Items.ToList());
         }
     }
 }

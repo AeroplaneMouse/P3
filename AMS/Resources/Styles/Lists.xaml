@@ -24,6 +24,7 @@
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Margin" Value="-4, 0, 0, 0" />
         <Setter Property="Padding" Value="10, 3, 0, 1" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
     </Style>
     
     <Style x:Key="HideIfEmpty" TargetType="{x:Type ListView}">

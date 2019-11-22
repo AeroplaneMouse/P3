@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
@@ -17,16 +18,19 @@ namespace UnitTests
         private IExporter _exporter;
         private IAssetRepository _assetRepository;
         private Mock<IAssetRepository> assetRepMock;
+        private Mock<IExporter> exporterMock;
 
         [TestInitialize]
         public void InitiateAssets()
         {
-            // Change this line to change the class that is tested
+            // Create Mocks of dependencies
             assetRepMock = new Mock<IAssetRepository>();
-            assetRepMock.Setup(p => p.Delete(It.IsAny<Asset>())).Returns(true);
+            exporterMock = new Mock<IExporter>();
             // This creates a new instance of the class for each test
-            _assetListController = new AssetListController(assetRepMock.Object, _exporter);
-            _assetListController.AssetList = new ObservableCollection<Asset>();
+            _assetListController = new AssetListController(assetRepMock.Object, exporterMock.Object)
+            {
+                AssetList = new ObservableCollection<Asset>()
+            };
         }
 
         /* Tests deprecated method
@@ -71,6 +75,7 @@ namespace UnitTests
             Asset asset2 = new Asset {Name = "asset2"};
             _assetListController.AssetList.Add(asset1);
             _assetListController.AssetList.Add(asset2);
+            assetRepMock.Setup(p => p.Delete(It.IsAny<Asset>())).Returns(true);
 
             //Act
             _assetListController.Remove(asset1);
@@ -87,6 +92,7 @@ namespace UnitTests
             //Arrange
             Asset asset1 = new Asset {Name = "asset1"};
             _assetListController.AssetList.Add(asset1);
+            assetRepMock.Setup(p => p.Delete(It.IsAny<Asset>())).Returns(true);
 
             //Act
             _assetListController.Remove(asset1);
@@ -164,7 +170,22 @@ namespace UnitTests
 
             //Assert
             // Verify that the method IAssetRepository.Delete(Asset) is called once
-            assetRepMock.Verify((p => p.Search(It.IsAny<string>(), null, null, false)), Times.Exactly(2));
+            assetRepMock.Verify((p => p.Search(It.IsAny<string>(), null, null, false)), Times.AtLeastOnce);
+        }
+        
+        [TestMethod]
+        public void Export_CallsExporterPrintMethod_ReturnsTrue()
+        {
+            //Arrange
+            exporterMock.Setup(p => p.Print(It.IsAny<IEnumerable<object>>()));
+            List<Asset> list = new List<Asset>();
+
+            //Act
+            _assetListController.Export(list);
+
+            //Assert
+            // Verify that the method IAssetRepository.Delete(Asset) is called once
+            exporterMock.Verify((p => p.Print(It.IsAny<IEnumerable<object>>())), Times.Once);
         }
         
     }

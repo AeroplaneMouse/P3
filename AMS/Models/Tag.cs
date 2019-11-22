@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Media;
 using System.Text;
 using AMS.Interfaces;
 
 namespace AMS.Models
 {
-    public class Tag :ContainsFields, ITagable
+    public class Tag :FieldContainer, ITagable
     {
         public Tag()
         {
@@ -20,7 +21,7 @@ namespace AMS.Models
             Name = name;
             DepartmentID = department_id;
             ParentID = parent_id;
-            Color = color;
+            TagColor = color;
             NumOfChildren = numOfChildren;
             this.SerializedFields = SerializedField;
             CreatedAt = created_at;
@@ -29,8 +30,6 @@ namespace AMS.Models
         
         public string Name { get; set; }
 
-        public string Color { get; set; }
-
         public ulong ParentID { get; set; }
 
         public ulong DepartmentID { get; set; }
@@ -38,11 +37,15 @@ namespace AMS.Models
         public int NumOfChildren { get; set; }
 
         public override string ToString() => Name;
-        public ulong TagId => ID;
-        public Type TagType => GetType();
+        #region From ITagable
+        public ulong TagId { get; }
+        public Type TagType => this.GetType();
         public string TagLabel => Name;
         public ulong ParentId => ParentID;
         public int ChildrenCount => NumOfChildren;
         public List<ITagable> Children { get; set; }
+        public string TagColor { get; set; }
+        public SolidColorBrush TagFontColor { get => Notification.GetForegroundColor(TagColor); }
+        #endregion
     }
 }
