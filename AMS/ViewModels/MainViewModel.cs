@@ -303,13 +303,13 @@ namespace AMS.ViewModels
                 {
                     // TODO: Add log of department insert
                     OnPropertyChanged(nameof(Departments));
-                    AddNotification(new Notification($"{department.Name} has now been add to the system.",
+                    AddNotification(new Notification($"{department.Name} has now been added to the system.",
                         Notification.APPROVE));
                 }
                 else
                     AddNotification(
                         new Notification(
-                            $"ERROR! An unknown error stopped the department {department.Name} from beeing added.",
+                            $"An unknown error stopped the department {department.Name} from beeing added.",
                             Notification.ERROR), 3000);
             }
         }

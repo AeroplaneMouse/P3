@@ -97,7 +97,7 @@ namespace AMS.ViewModels
                 }
                 else
                     Features.AddNotification(
-                        new Notification("ERROR! Adding field failed. Received object is not a field.",
+                        new Notification("Adding field failed. Received object is not a field.",
                             Notification.ERROR), 5000);
             }
         }

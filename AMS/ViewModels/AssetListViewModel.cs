@@ -119,7 +119,7 @@ namespace AMS.ViewModels
             if (SelectedItems.Count == 1)
                 EditAsset(SelectedItems.First());
             else
-                Features.AddNotification(new Notification("Error! Please select one and only one asset.", Notification.ERROR), 3500);
+                Features.AddNotification(new Notification("Please select only one asset.", Notification.ERROR), 3500);
         }
 
         /// <summary>
@@ -310,7 +310,7 @@ namespace AMS.ViewModels
             {
                 if (e.Result)
                 {
-                    Features.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
+                    Features.AddNotification(new Notification(asset.Name + " has been removed from the system", Notification.INFO));
                     _listController.Remove(asset);
                 }
             }));
@@ -324,14 +324,14 @@ namespace AMS.ViewModels
             if (SelectedItems.Count > 0)
             {
                 // Prompt user for approval for the removal of x assets 
-                string message = $"Are you sure you want to remove { SelectedItems.Count } asset";
-                message += SelectedItems.Count > 1 ? "s?" : "?";
+                string message = $"Are you sure you want to remove { ((SelectedItems.Count == 1) ? SelectedItems[0].Name : (SelectedItems.Count.ToString()) + " assets")}?";
                 Features.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
                 {
                     // Check if the user approved
                     if (e.Result)
                     {
                         // Move selected items to new list
+                        // Hvorfor flyttes de til en ny liste?
                         List<Asset> items = new List<Asset>();
                         SelectedItems.ForEach(a => items.Add(a));
                         // Remove each asset
@@ -339,7 +339,7 @@ namespace AMS.ViewModels
                             _listController.Remove(asset);
 
                         Features.AddNotification(
-                            new Notification($"{ items.Count } asset{ (items.Count > 1 ? "s" : "" ) } have been removed from the system", Notification.INFO),
+                            new Notification($"{ ((items.Count == 1) ? items[0].Name : (items.Count + " assets")) } { (items.Count > 1 ? "have" : "has") } been removed from the system", Notification.INFO),
                             3000);
                     }
                 }));
