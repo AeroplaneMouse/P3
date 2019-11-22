@@ -37,6 +37,7 @@ namespace AMS.Models
         public int NumOfChildren { get; set; }
 
         public override string ToString() => Name;
+
         #region From ITagable
         public ulong TagId { get; }
         public Type TagType => this.GetType();

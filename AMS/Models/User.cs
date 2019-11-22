@@ -59,7 +59,7 @@ namespace AMS.Models
         Type ITagable.TagType => GetType();
         string ITagable.TagLabel => Username;
         public List<ITagable> Children { get; set; }
-        public string TagColor { get; set; }
+        public string TagColor { get; set; } = "#ff0000";
         public SolidColorBrush TagFontColor { get => Notification.GetForegroundColor(TagColor); }
 
         #endregion
