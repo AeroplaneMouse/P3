@@ -197,7 +197,7 @@
                             <GridViewColumn Header="Updated">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=UpdatedAt, Converter={StaticResource DateConverter}}"
+                                        <TextBlock Text="{Binding Path=UpdatedAtString}"
                                                    Foreground="Black"
                                                    FontSize="{StaticResource FontSizeSmall}"/>
                                     </DataTemplate>
