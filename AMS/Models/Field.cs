@@ -31,46 +31,6 @@ namespace AMS.Models
         
         public List<ulong> TagIDs { get; set; }
 
-        /// <summary>
-        /// Default constructor for initiating a new Field object.
-        /// </summary>
-        /// <param name="label">The label of the field</param>
-        /// <param name="content">The content added to the field</param>
-        /// <param name="isCustom"></param>
-        /// <param name="required">A boolean, whether the field is required or not</param>
-        /// <param name="type">Selecting the type of the field. 1= TextBox,2 = String,3= Int, 4 = Date, 5 = Boolean</param>
-        /// <param name="defaultValue">The default value which should be entered into the field</param>
-        public Field(string label, string content, FieldType type, string defaultValue, bool required = false,
-            bool isCustom = false)
-        {
-            // Creates unique hash
-            this.HashId = CalculateMd5Hash(true);
-
-            this.Label = label;
-            this.Content = content;
-            Type = type;
-            this.DefaultValue = defaultValue;
-            this.Required = required;
-            this.Hash = CalculateMd5Hash();
-            this.IsCustom = isCustom;
-            this.IsHidden = false;
-            this.TagIDs = new List<ulong>();
-        }
-        
-        [JsonConstructor]
-        private Field(string label, string content, FieldType type, string defaultValue, bool required = false,
-            bool isCustom = false,List<ulong> fieldPresentIn = null)
-        {
-            this.HashId = CalculateMd5Hash(false);
-            this.Label = label;
-            this.Content = content;
-            Type = type;
-            this.DefaultValue = defaultValue;
-            this.Required = required;
-            this.Hash = CalculateMd5Hash();
-            this.TagIDs = fieldPresentIn;
-        }
-
         public string HashId { get; set; }
 
         public bool IsCustom;
@@ -83,7 +43,42 @@ namespace AMS.Models
 
         public FieldType Type { get; set; }
 
-        public string DefaultValue;
+        /// <summary>
+        /// Default constructor for initiating a new Field object.
+        /// </summary>
+        /// <param name="label">The label of the field</param>
+        /// <param name="content">The content added to the field</param>
+        /// <param name="isCustom"></param>
+        /// <param name="required">A boolean, whether the field is required or not</param>
+        /// <param name="type">Selecting the type of the field. 1= TextBox,2 = String,3= Int, 4 = Date, 5 = Boolean</param>
+        /// <param name="defaultValue">The default value which should be entered into the field</param>
+        public Field(string label, string content, FieldType type, bool required = false,
+            bool isCustom = false)
+        {
+            // Creates unique hash
+            this.HashId = CalculateMd5Hash(true);
+            this.Label = label;
+            this.Content = content;
+            Type = type;
+            this.Required = required;
+            this.Hash = CalculateMd5Hash();
+            this.IsCustom = isCustom;
+            this.IsHidden = false;
+            this.TagIDs = new List<ulong>();
+        }
+        
+        [JsonConstructor]
+        private Field(string label, string content, FieldType type, bool required = false,
+            bool isCustom = false,List<ulong> fieldPresentIn = null)
+        {
+            this.HashId = CalculateMd5Hash(false);
+            this.Label = label;
+            this.Content = content;
+            Type = type;
+            this.Required = required;
+            this.Hash = CalculateMd5Hash();
+            this.TagIDs = fieldPresentIn;
+        }
 
         /// <summary>
         /// Returns the object information as a dictionary.
@@ -97,7 +92,6 @@ namespace AMS.Models
                 {"Description", Content},
                 {"Required", Required.ToString()},
                 {"Type", Type.ToString()},
-                {"DefaultValue", DefaultValue}
             };
             return output;
         }
@@ -121,10 +115,9 @@ namespace AMS.Models
         {
             string hashString = "";
             if (uniqueHash)
-                hashString += this.Label + this.Required.ToString() + Type.ToString() + this.DefaultValue +
-                              DateTime.Now;
+                hashString += this.Label + this.Required.ToString() + Type.ToString() + DateTime.Now;
             else
-                hashString += this.Label + this.Required.ToString() + Type.ToString() + this.DefaultValue;
+                hashString += this.Label + this.Required.ToString() + Type.ToString();
 
             // step 1, calculate MD5 hash from input
             MD5 md5 = MD5.Create();
@@ -140,6 +133,6 @@ namespace AMS.Models
             return sb.ToString();
         }
 
-        public override string ToString() => $"{Label} : {Content} : {DefaultValue} : {Type} : {Required} : {IsHidden}";
+        public override string ToString() => $"{Label} : {Content} : {Type} : {Required} : {IsHidden}";
     }
 }
