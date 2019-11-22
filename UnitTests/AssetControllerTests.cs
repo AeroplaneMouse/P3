@@ -285,11 +285,11 @@ namespace UnitTests
             otherAsset.AttachTag(_tagTwo);
 
             //Act
-            int count = localField.FieldPresentIn.Count;
+            int count = localField.TagIDs.Count;
             otherAsset.AttachTag(localTag);
 
             //Assert
-            Assert.IsTrue(localField.FieldPresentIn.Count == count + 1);
+            Assert.IsTrue(localField.TagIDs.Count == count + 1);
         }
     }
 }

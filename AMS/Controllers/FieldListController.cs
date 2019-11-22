@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using AMS.Controllers.Interfaces;
@@ -9,6 +10,8 @@ namespace AMS.Controllers
     public abstract class FieldListController : IFieldListController
     {
         private FieldContainer _fieldContainer;
+        public List<Field> NonHiddenFieldList { get; set; } = new List<Field>();
+        public List<Field> HiddenFieldList { get; set; } = new List<Field>();
 
         protected FieldListController(FieldContainer element)
         {
@@ -34,7 +37,7 @@ namespace AMS.Controllers
             if (!string.IsNullOrEmpty(_fieldContainer.SerializedFields))
             {
                 _fieldContainer.FieldList =
-                    JsonConvert.DeserializeObject<ObservableCollection<Field>>(_fieldContainer.SerializedFields);
+                    JsonConvert.DeserializeObject<List<Field>>(_fieldContainer.SerializedFields);
                 return true;
             }
 
@@ -48,7 +51,7 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool AddField(Field field)
         {
-            _fieldContainer.FieldList.Add(field);
+            NonHiddenFieldList.Add(field);
             return _fieldContainer.FieldList.Contains(field);
         }
 
@@ -56,35 +59,35 @@ namespace AMS.Controllers
         /// Remove a field, or its relation to a tag, from the fields list.
         /// </summary>
         /// <param name="inputField">The field to update/remove</param>
-        /// <param name="tag">The tag to remove a relation from.</param>
-        /// <returns></returns>
-        public bool RemoveFieldOrFieldRelations(Field inputField, Tag tag = null)
+        /// <returns>Rather the field was removed</returns>
+        public bool RemoveField(Field field)
         {
-            Field currentField = _fieldContainer.FieldList.SingleOrDefault(field => field.Equals(inputField));
-            if (currentField != null)
+            if (field != null)
             {
-                if (inputField.IsCustom)
+                if (field.IsCustom)
                 {
-                    if (tag != null)
-                    {
-                        currentField.FieldPresentIn.Remove(tag.ID);
-                    }
-                    if (inputField.FieldPresentIn.Count > 0)
-                    {
-                        currentField.IsHidden = !currentField.IsHidden;
-                    }
-                    else
-                    {
-                        _fieldContainer.FieldList.Remove(inputField);
-                    }
+                    NonHiddenFieldList.Remove(field);
+                    return true;
                 }
                 else
                 {
-                    _fieldContainer.FieldList.Remove(inputField);
+                    if (field.IsHidden)
+                    {
+                        field.IsHidden = false;
+                        NonHiddenFieldList.Add(field);
+                        HiddenFieldList.Remove(field);
+                        return true;
+                    }
+                    else
+                    {
+                        field.IsHidden = true;
+                        HiddenFieldList.Add(field);
+                        NonHiddenFieldList.Remove(field);
+                        return true;
+                    }
                 }
             }
-
-            return !_fieldContainer.FieldList.Contains(inputField);
+            return false;
         }
     }
 }
