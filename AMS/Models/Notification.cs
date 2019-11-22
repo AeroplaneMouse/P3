@@ -75,5 +75,12 @@ namespace AMS.Models
         {
             return Brightness(c) < 130 ? Brushes.White : Brushes.Black;
         }
+
+        public static SolidColorBrush GetForegroundColor(string colorString)
+        {
+            Color c = (Color)ColorConverter.ConvertFromString(colorString);
+
+            return Brightness(c) < 130 ? Brushes.White : Brushes.Black;
+        }
     }
 }
