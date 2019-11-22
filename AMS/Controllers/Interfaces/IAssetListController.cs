@@ -16,7 +16,7 @@ namespace AMS.Controllers.Interfaces
         ObservableCollection<Asset> AssetList { get; set; }
 
         // List of tags that can be searched
-        List<Tag> TagsList { get; set; }
+        List<Tag> TagList { get; set; }
 
         #endregion
 
@@ -24,13 +24,11 @@ namespace AMS.Controllers.Interfaces
 
         void Search(string query);
 
-        // TODO: Remove when AssetView is created
-        void ViewAsset(Asset asset);
-
         void Remove(Asset asset);
 
         void Export(List<Asset> assets);
-        
+
+        List<ITagable> GetTags(Asset asset);
 
         #endregion
     }
