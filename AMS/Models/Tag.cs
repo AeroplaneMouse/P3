@@ -38,7 +38,8 @@ namespace AMS.Models
 
         public override string ToString() => Name;
         #region From ITagable
-        public ulong TagId { get; }
+
+        public ulong TagId => ID;
         public Type TagType => this.GetType();
         public string TagLabel => Name;
         public ulong ParentId => ParentID;
