@@ -16,7 +16,6 @@ namespace AMS.ViewModels
     {
         public List<Tag> Tags { get; set; }
         private readonly ITagListController _tagListController;
-        private readonly MainViewModel _mainViewModel;
         
         public Tag SelectedItem { get; set; }
         
@@ -27,16 +26,15 @@ namespace AMS.ViewModels
         public ICommand AddNewCommand { get; set; }
 
 
-        public TagListViewModel(MainViewModel mainViewModel, ITagRepository tagRep)
+        public TagListViewModel(ITagListController controller)
         {
-            _mainViewModel = mainViewModel;
             //Todo Evt inkluder en exporter i stedet for at skrive new
-            _tagListController = new TagListController(new PrintHelper());
+            _tagListController = controller;
             Tags = _tagListController.TagsList;
             Tags.AddRange(_tagListController.GetParentTags());
-            RemoveCommand = new Base.RelayCommand(() => _mainViewModel.DisplayPrompt(new Confirm("Delete the selected tag, cannot be recovered?",RemoveTag)));
-            EditCommand = new Base.RelayCommand(()=>_mainViewModel.ContentFrame.Navigate(new TagEditor(_mainViewModel, new TagController(SelectedItem, tagRep))));
-            AddNewCommand = new Base.RelayCommand(() => _mainViewModel.ContentFrame.Navigate(new TagEditor(_mainViewModel, new TagController(null, tagRep))));
+            RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Delete the selected tag, cannot be recovered?",RemoveTag)));
+            EditCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateTagEditor(SelectedItem)));
+            AddNewCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateTagEditor(null)));
 
 
             foreach (var tag in Tags)

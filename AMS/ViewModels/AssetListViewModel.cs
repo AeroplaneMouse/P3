@@ -20,12 +20,9 @@ namespace AMS.ViewModels
         private IAssetListController _listController;
         private string _searchQuery;
         private TagHelper _tagHelper;
-        private ICommentListController _commentListController;
 
         public ObservableCollection<Asset> Items { get; set; }
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
-
-        private MainViewModel _main { get; set; }
 
         public string SearchQuery
         {
@@ -72,18 +69,16 @@ namespace AMS.ViewModels
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
 
-        public AssetListViewModel(MainViewModel main, IAssetListController listController, ICommentListController commentListController)
+        public AssetListViewModel(IAssetListController listController)
         {
-            _main = main;
             _listController = listController;
-            _commentListController = commentListController;
             Items = _listController.AssetList;
             
             _tagHelper = new TagHelper(new TagRepository(), new UserRepository(), new ObservableCollection<ITagable>());
             _tagHelper.CanApplyParentTags = true;
 
             // Admin only functions
-            if (_main.CurrentSession.IsAdmin())
+            if (Features.GetCurrentSession().IsAdmin())
             {
                 AddNewCommand = new RelayCommand(() => EditAsset(null));
                 EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
@@ -115,11 +110,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset(Asset asset)
         {
-            _main.ContentFrame.Navigate(new AssetEditor(
-                new AssetRepository(), 
-                new TagListController(new PrintHelper()),
-                _main,
-                asset));
+            Features.NavigatePage(PageMaker.CreateAssetEditor(asset));
         }
 
         private void EditBySelection()
@@ -128,7 +119,7 @@ namespace AMS.ViewModels
             if (SelectedItems.Count == 1)
                 EditAsset(SelectedItems.First());
             else
-                _main.AddNotification(new Notification("Error! Please select one and only one asset.", Notification.ERROR), 3500);
+                Features.AddNotification(new Notification("Error! Please select one and only one asset.", Notification.ERROR), 3500);
         }
 
         /// <summary>
@@ -303,10 +294,10 @@ namespace AMS.ViewModels
             // TODO: Redirect to viewAsset page
             if (SelectedItems.Count == 1)
             {
-                _main.ContentFrame.Navigate(new AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First()), _commentListController));
+                Features.NavigatePage(PageMaker.CreateAssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First())));
             }
             else
-                _main.AddNotification(new Notification("Error! Could not view asset", Notification.ERROR));
+                Features.AddNotification(new Notification("Error! Could not view asset", Notification.ERROR));
         }
 
         /// <summary>
@@ -316,11 +307,11 @@ namespace AMS.ViewModels
         private void RemoveAsset(Asset asset)
         {
             // Prompt user for confirmation of removal
-            _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
+            Features.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
             {
                 if (e.Result)
                 {
-                    _main.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
+                    Features.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
                     _listController.Remove(asset);
                 }
             }));
@@ -336,7 +327,7 @@ namespace AMS.ViewModels
                 // Prompt user for approval for the removal of x assets 
                 string message = $"Are you sure you want to remove { SelectedItems.Count } asset";
                 message += SelectedItems.Count > 1 ? "s?" : "?";
-                _main.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
+                Features.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
                 {
                     // Check if the user approved
                     if (e.Result)
@@ -348,7 +339,7 @@ namespace AMS.ViewModels
                         foreach (Asset asset in items)
                             _listController.Remove(asset);
 
-                        _main.AddNotification(
+                        Features.AddNotification(
                             new Notification($"{ items.Count } asset{ (items.Count > 1 ? "s" : "" ) } have been removed from the system", Notification.INFO),
                             3000);
                     }

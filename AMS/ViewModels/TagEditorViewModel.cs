@@ -14,7 +14,6 @@ namespace AMS.ViewModels
     {
         #region Properties
         ITagController _controller;
-        MainViewModel _main;
         public Tag _tag
         {
             get => _controller.Tag;
@@ -53,6 +52,7 @@ namespace AMS.ViewModels
             set => _controller.Tag.FieldList = value.ToList();
         }
         #endregion
+
         #region Commands
         public ICommand SaveTagCommand { get; set; }
         public ICommand AddFieldCommand { get; set; }
@@ -60,9 +60,8 @@ namespace AMS.ViewModels
         public ICommand CancelCommand { get; set; }
         #endregion
 
-        public TagEditorViewModel(MainViewModel main, ITagController tagController)
+        public TagEditorViewModel(ITagController tagController)
         {
-            _main = main;
             _controller = tagController;
 
             PageTitle = _controller.PageTitle;
@@ -78,13 +77,13 @@ namespace AMS.ViewModels
         private void SaveTag()
         {
             _controller.Save();
-            _main.ContentFrame.GoBack();
+            Features.NavigateBack();
         }
 
         private void AddField()
         {
             //TODO: Fix det her!
-            _main.DisplayPrompt(new Views.Prompts.CustomField(null, AddNewFieldConfirmed));
+            Features.DisplayPrompt(new Views.Prompts.CustomField(null, AddNewFieldConfirmed));
         }
 
         private void AddNewFieldConfirmed(object sender, PromptEventArgs e)
@@ -97,7 +96,7 @@ namespace AMS.ViewModels
                     _controller.AddField(newField);
                 }
                 else
-                    _main.AddNotification(
+                    Features.AddNotification(
                         new Notification("ERROR! Adding field failed. Received object is not a field.",
                             Notification.ERROR), 5000);
             }
@@ -110,7 +109,7 @@ namespace AMS.ViewModels
 
         private void Cancel()
         {
-            _main.ContentFrame.GoBack();
+            Features.NavigateBack();
         }
         #endregion
     }

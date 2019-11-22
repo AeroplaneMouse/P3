@@ -34,7 +34,7 @@ namespace AMS.ViewModels
             }
         }
 
-        public ICommentListController CommentListController { get; set; }
+        private ICommentListController _commentListController { get; set; }
 
         ICommand EditCommand { get; set; }
         ICommand CancelCommand { get; set; }
@@ -43,7 +43,7 @@ namespace AMS.ViewModels
         {
             TagList = tagList;
             _Asset = asset;
-            CommentListController = commentListController;
+            _commentListController = commentListController;
 
             //EditCommand = new Base.RelayCommand();
             //CancelCommand = new Base.RelayCommand(Cancel);
