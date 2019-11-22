@@ -452,6 +452,7 @@ namespace AMS.Database.Repositories
 
         public IEnumerable<ITagable> GetTags(Asset asset)
         {
+            // TODO: Ingen new repositories!
             var taggedWith = new List<ITagable>();
             var tagRepository = new TagRepository();
             var userRepository = new UserRepository();

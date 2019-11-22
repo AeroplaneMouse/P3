@@ -34,18 +34,19 @@ namespace AMS.ViewModels.Commands
             }
             catch (Exception)
             {
-                _main.AddNotification(new Models.Notification(
+                Features.AddNotification(new Models.Notification(
                     $"Error! An unknown occured. Unable to edit department with id: { parameter.ToString() }",
                     Models.Notification.ERROR));
                 return;
             }
 
             // Validating id
+            // TODO: Ingen new repositories!
             _department = new DepartmentRepository().GetById(id);
             if (_department != null)
-                _main.DisplayPrompt(new TextInput("Enter new name", _department.Name, PromptElapsed));
+                Features.DisplayPrompt(new TextInput("Enter new name", _department.Name, PromptElapsed));
             else
-                _main.AddNotification(
+                Features.AddNotification(
                     new Notification("Error! Editing department failed. Department not found!", Notification.ERROR),
                     3500);
         }
@@ -59,6 +60,8 @@ namespace AMS.ViewModels.Commands
                 if (f.Text != String.Empty)
                 {
                     _department.Name = f.Text;
+
+                    // TODO: Ingen new repositories!
                     if (new DepartmentRepository().Update(_department))
                     {
                         _main.CurrentDepartment = _department;

@@ -8,6 +8,7 @@ using AMS.ViewModels;
 using AMS.Views;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -38,6 +39,11 @@ namespace AMS.Helpers
 
         private static IUserImporter _userImporter = new UserImporter(_userRepository);
 
+        private static TagHelper CreateTagHelper(ObservableCollection<ITagable> tags = null)
+        {
+            return new TagHelper(_tagRepository, _userRepository, tags ?? new ObservableCollection<ITagable>());
+        }
+
         #endregion
 
         #region Pages
@@ -60,7 +66,7 @@ namespace AMS.Helpers
         /// <returns></returns>
         public static Page CreateAssetEditor(Asset asset = null)
         {
-            return new AssetEditor(new AssetController(asset, _assetRepository), new TagListController(_printHelper));
+            return new AssetEditor(new AssetController(asset, _assetRepository), new TagListController(_tagRepository, _printHelper));
         }
 
         /// <summary>
@@ -69,7 +75,7 @@ namespace AMS.Helpers
         /// <returns></returns>
         public static Page CreateAssetList()
         {
-            return new AssetList(new AssetListController(_assetRepository, _printHelper));
+            return new AssetList(new AssetListController(_assetRepository, _printHelper), CreateTagHelper());
         }
 
         /// <summary>
@@ -116,7 +122,7 @@ namespace AMS.Helpers
         /// <returns></returns>
         public static Page CreateTagList()
         {
-            return new TagList(new TagListController(_printHelper));
+            return new TagList(new TagListController(_tagRepository, _printHelper));
         }
 
         /// <summary>

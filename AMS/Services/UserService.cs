@@ -17,6 +17,7 @@ namespace AMS.Services
 
         public IRepository<User> GetRepository()
         {
+            // TODO: Ingen new repositories!
             return new UserRepository() as IUserRepository;
         }
     }

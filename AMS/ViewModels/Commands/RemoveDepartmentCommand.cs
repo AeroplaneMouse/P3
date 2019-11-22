@@ -40,6 +40,7 @@ namespace AMS.ViewModels.Commands
             }
 
             // Validating id
+            //TODO: Ingen new repositories!
             _department = new DepartmentRepository().GetById(id);
             if (_department != null)
             {
@@ -48,14 +49,14 @@ namespace AMS.ViewModels.Commands
                     // TODO: Add check for assets and tags conneced to the department.
 
                     // Prompting user for confirmation
-                    _main.DisplayPrompt(new Confirm($"Are you sure you want to delete { _department.Name }?", PromptElapsed));
+                    Features.DisplayPrompt(new Confirm($"Are you sure you want to delete { _department.Name }?", PromptElapsed));
                 }
                 else
-                    _main.AddNotification(new Notification("Error! You cannot remove your current department. Please change your department and then try again.", Notification.ERROR),
+                    Features.AddNotification(new Notification("Error! You cannot remove your current department. Please change your department and then try again.", Notification.ERROR),
                         3500);
             }
             else
-                _main.AddNotification(new Notification("Error! Removing department failed. Department not found!",
+                Features.AddNotification(new Notification("Error! Removing department failed. Department not found!",
                     Notification.ERROR));
         }
 
@@ -64,14 +65,15 @@ namespace AMS.ViewModels.Commands
             if (e.Result)
             {
                 // Removing department
+                // TODO: Ingen new repositories!
                 if (new DepartmentRepository().Delete(_department))
                 {
                     _main.OnPropertyChanged(nameof(_main.Departments));
-                    _main.AddNotification(new Notification(
+                    Features.AddNotification(new Notification(
                         $"{ _department.Name } has now been removed from the system.", Notification.APPROVE));
                 }
                 else
-                    _main.AddNotification(new Notification(
+                    Features.AddNotification(new Notification(
                         "Error! An unknown error occurred. Unable to remove department.", Notification.ERROR));
             }
         }

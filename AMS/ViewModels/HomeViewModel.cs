@@ -19,7 +19,6 @@ namespace AMS.ViewModels
         {
             // Get the number of stored assets, tags and departments
             NumberOfUsers = (ulong)userRepository.GetAll().Count(p => p.IsEnabled);
-            //TODO: fix so it uses Dependency Injection
             NumberOfAssets = assetRepository.GetCount();
             NumberOfTags = tagRepository.GetCount();
             NumberOfDepartments = departmentRepository.GetCount();
