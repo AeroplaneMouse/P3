@@ -297,7 +297,7 @@ namespace AMS.Controllers
             if (!string.IsNullOrEmpty(filePath))
             {
                 _importedUsersList = _importer.ImportUsersFromFile(filePath).Select(u => new UserWithStatus(u)).ToList();
-                _finalUsersList = _importer.CombineLists(_importedUsersList, _existingUsersList);
+                CombineLists();
                 UpdateShownUsers(_finalUsersList);
             }
         }
@@ -305,6 +305,64 @@ namespace AMS.Controllers
         #endregion
 
         #region Private Methods
+
+        private bool UserIsInList(List<UserWithStatus> list, User user)
+        {
+            return list.Where(u => u.Username.CompareTo(user.Username) == 0).Count() > 0;
+        }
+
+        private void CombineLists()
+        {
+            _finalUsersList = new List<UserWithStatus>();
+            _finalUsersList.AddRange(_existingUsersList);
+            _finalUsersList.AddRange(_importedUsersList);
+
+            // Conflicting users. Existing users that are not enabled, whose username occures in both lists
+            _finalUsersList
+                .Where(u => UserIsInList(_existingUsersList.Where(p => p.IsEnabled == false).ToList(), u) && UserIsInList(_importedUsersList, u))
+                .ToList()
+                .ForEach(u =>
+                {
+                    u.Status = "Conflicting";
+                });
+
+            // Added users. Users who are in the imported list, and not in the existing list
+            _finalUsersList
+                .Where(u => u.Status.CompareTo(String.Empty) == 0)
+                .Where(u => !UserIsInList(_existingUsersList.Where(p => p.IsEnabled == true).ToList(), u) && UserIsInList(_importedUsersList, u))
+                .ToList()
+                .ForEach(u =>
+                {
+                    u.Status = "Added";
+                });
+
+            // Removed users. Users that are enabled, and are only in the existing list
+            _finalUsersList
+                .Where(u => u.Status.CompareTo(String.Empty) == 0)
+                .Where(u => UserIsInList(_existingUsersList.Where(p => p.IsEnabled == true).ToList(), u) && !UserIsInList(_importedUsersList, u))
+                .ToList()
+                .ForEach(u =>
+                {
+                    u.Status = "Removed";
+                });
+
+            // Kept users. Users that are enabled, and are in both lists. Remove the copy coming from the imported file
+            _finalUsersList
+                .Where(u => u.Status.CompareTo(String.Empty) == 0)
+                .Where(u => UserIsInList(_existingUsersList.Where(p => p.IsEnabled == true).ToList(), u) && UserIsInList(_importedUsersList, u))
+                .Where(u => u.ID == 0)
+                .ToList()
+                .ForEach(u => _finalUsersList.Remove(u));
+
+            // Sets inactive users to "Disabled" for sorting purposes
+            _finalUsersList
+                .Where(u => u.Status.CompareTo(String.Empty) == 0 && u.IsEnabled == false)
+                .ToList()
+                .ForEach(u =>
+                {
+                    u.Status = "Disabled";
+                });
+        }
 
         private void UpdateShownUsers(List<UserWithStatus> list)
         {
