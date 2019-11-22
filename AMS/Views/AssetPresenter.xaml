@@ -22,15 +22,23 @@
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="10">
-
-            <Button Style="{StaticResource RegularAcceptButton}"
-                    Command="{Binding SaveTagCommand}"
-                    Content="Save" />
-
+            
+            <Button Style="{StaticResource RegularButton}"
+                    Command="{Binding Command}"
+                    Content="Edit" />
+            
             <Button Style="{StaticResource RegularCancelButton}"
                     Command="{Binding CancelCommand}"
                     Margin="10 0 0 0"
                     Content="Cancel" />
         </StackPanel>
+
+        <TabControl Grid.Row="1">
+            <TabItem Header="Details">
+                <Label Content="Content goes here..." />
+            </TabItem>
+            <TabItem Header="Comments" />
+            <TabItem Header="Log" />
+        </TabControl>
     </Grid>
 </Page>
