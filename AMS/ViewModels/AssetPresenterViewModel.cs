@@ -27,7 +27,7 @@ namespace AMS.ViewModels
 
             TagList = tagList;
 
-            CommentListController = commenListtController;
+            CommentListController = commentListController;
 
         }
     }
