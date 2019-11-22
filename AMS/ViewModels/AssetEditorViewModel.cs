@@ -103,30 +103,23 @@ namespace AMS.ViewModels
 
         public void SaveAsset(bool multiAdd = true)
         {
+            _assetController.FieldList = NonHiddenFieldList.ToList<Field>();
+            _assetController.FieldList.AddRange(HiddenFieldList.ToList<Field>());
             if (_isEditing)
             {
                 if (!multiAdd)
                 {
-                    _assetController.FieldList = NonHiddenFieldList.ToList<Field>();
-                    _assetController.FieldList.AddRange(HiddenFieldList.ToList<Field>());
-                    //TODO Add tags
                     _assetController.Update();
                     _main.AddNotification(new Notification("Asset updated", Notification.APPROVE));
                 }
                 else
                 {
-                    _assetController.FieldList = NonHiddenFieldList.ToList<Field>();
-                    _assetController.FieldList.AddRange(HiddenFieldList.ToList<Field>());
-                    //TODO Add tags
                     _assetController.Save();
                     _main.AddNotification(new Notification("Asset added", Notification.APPROVE));
                 }
             }
             else
             {
-                _assetController.FieldList = NonHiddenFieldList.ToList<Field>();
-                _assetController.FieldList.AddRange(HiddenFieldList.ToList<Field>());
-                //TODO Add tags
                 _assetController.Save();
                 _main.AddNotification(new Notification("Asset added", Notification.APPROVE));
             }
