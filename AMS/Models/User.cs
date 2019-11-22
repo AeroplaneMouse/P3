@@ -28,9 +28,11 @@ namespace AMS.Models
             }
         }
 
-        ulong ITagable.TagId => ID;
-        Type ITagable.TagType => GetType();
-        string ITagable.TagLabel => Username;
+        public ulong TagId => ID;
+        public Type TagType => this.GetType();
+        public string TagLabel => Username;
+        public ulong ParentId => 1;
+        public int ChildrenCount => 0;
         public List<ITagable> Children { get; set; }
 
         /* Constructor used by DB */

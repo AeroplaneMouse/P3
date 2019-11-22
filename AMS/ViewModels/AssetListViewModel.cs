@@ -86,8 +86,9 @@ namespace AMS.ViewModels
             RemoveTagCommand = new RelayCommand<object>((parameter) => 
             {
                 ITagable tag = parameter as ITagable;
-                AppliedTags.Remove(tag);
-                _tagHelper.RemoveFromQuery(tag);
+                _tagHelper.RemoveTag(tag);
+                AppliedTags = _tagHelper.GetAppliedTags(true);
+                SearchAssets();
                 OnPropertyChanged(nameof(AppliedTags));
             });
 
@@ -161,14 +162,22 @@ namespace AMS.ViewModels
 
             if (!inTagMode)
             {
-                _listController.Search(SearchQuery);
-                Items = _listController.AssetList;
+                _listController.Search(SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)));
             }
             else
             {
-                //AutoTag();
+                if (SearchQuery == "" && _tagHelper.IsParentSet())
+                {
+                    _tagHelper.ApplyTag(_tagHelper.GetParent());
+                    _tagHelper.Parent(null);
+                    CurrentGroup = "#";
+                    AppliedTags = _tagHelper.GetAppliedTags(true);
+                }
+
+                _listController.Search("", _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)));
             }
 
+            Items = _listController.AssetList;
             /*
             if (SearchQuery == null) return;
             _listController.Search(SearchQuery);
@@ -184,18 +193,23 @@ namespace AMS.ViewModels
                 if (!inTagMode)
                     return;
 
-                Console.WriteLine("In tag mode so go on!");
-                
                 if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
                 {
                     ITagable tag = TagSearchSuggestions[0];
 
                     if (_tagHelper.IsParentSet())
                     {
-                        Console.WriteLine("Think there is a parent!");
-                        _tagHelper.AddToQuery(tag);
-                        AppliedTags.Add(tag);
-                        TagSearchProcess();
+                        try
+                        {
+                            _tagHelper.ApplyTag(tag);
+                            AppliedTags = _tagHelper.GetAppliedTags(true);
+                            TagSearchProcess();
+                            SearchAssets();
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
                     }
                     else
                     {
@@ -210,9 +224,10 @@ namespace AMS.ViewModels
                         }
                         else
                         {
-                            _tagHelper.AddToQuery(tag);
-                            AppliedTags.Add(tag);
+                            _tagHelper.ApplyTag(tag);
+                            AppliedTags = _tagHelper.GetAppliedTags(true);
                             TagSearchProcess();
+                            SearchAssets();
                         }
                     }
                     
@@ -249,6 +264,7 @@ namespace AMS.ViewModels
             try
             {
                 _tagHelper = new TagHelper(new TagRepository(), new UserRepository(), new ObservableCollection<ITagable>());
+                _tagHelper.CanApplyParentTags = true;
             }
             catch (Exception e)
             {
@@ -306,7 +322,6 @@ namespace AMS.ViewModels
             TagSuggestionsVisibility = Visibility.Collapsed;
             TagSuggestionIsOpen = false;
             CurrentGroupVisibility = Visibility.Collapsed;
-            //AppliedTags.Clear();
         }
 
         /// <summary>

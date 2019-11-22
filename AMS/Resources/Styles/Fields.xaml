@@ -3,7 +3,6 @@
                     xmlns:local="clr-namespace:AMS"
                     xmlns:controllers="clr-namespace:AMS.Controllers"
                     xmlns:helper1="clr-namespace:AMS.ViewModels.ViewModelHelper">
-    <helper1:FieldDesignSelector x:Name="MyFieldDesignSelector"/>
 
     <!-- Label of a field -->
     <Style TargetType="TextBlock" x:Key="FieldLabel">

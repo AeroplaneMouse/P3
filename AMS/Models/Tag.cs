@@ -41,6 +41,8 @@ namespace AMS.Models
         public ulong TagId => ID;
         public Type TagType => GetType();
         public string TagLabel => Name;
+        public ulong ParentId => ParentID;
+        public int ChildrenCount => NumOfChildren;
         public List<ITagable> Children { get; set; }
     }
 }

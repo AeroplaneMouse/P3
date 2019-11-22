@@ -160,7 +160,7 @@ namespace UnitTests
             assetRepMock.Setup(p => p.Search(It.IsAny<string>(), null, null, false)).Returns(() => new ObservableCollection<Asset>());
 
             //Act
-            _assetListController.Search("asset");
+            _assetListController.Search("asset", null);
 
             //Assert
             // Verify that the method IAssetRepository.Delete(Asset) is called once
