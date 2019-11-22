@@ -49,8 +49,8 @@ namespace AMS.ViewModels
         public int SelectedParentIndex { get; set; }
         public ObservableCollection<Field> FieldList
         {
-            get => _controller.Tag.FieldList;
-            set => _controller.Tag.FieldList = value;
+            get => new ObservableCollection<Field>(_controller.Tag.FieldList);
+            set => _controller.Tag.FieldList = value.ToList();
         }
         #endregion
         #region Commands
@@ -105,7 +105,7 @@ namespace AMS.ViewModels
 
         private void RemoveField(object field)
         {
-            _controller.RemoveFieldOrFieldRelations(field as Field);
+            _controller.RemoveField(field as Field);
         }
 
         private void Cancel()

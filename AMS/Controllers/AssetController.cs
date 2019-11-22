@@ -15,7 +15,6 @@ namespace AMS.Controllers
     {
         public Asset Asset { get; set; }
         public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
-        public List<Field> FieldList { get; set; } = new List<Field>();
         private ILogger logger;
         private IAssetRepository _assetRepository;
         
@@ -24,7 +23,8 @@ namespace AMS.Controllers
         {
             Asset = asset;
             DeSerializeFields();
-            FieldList = asset.FieldList.ToList<Field>();
+            NonHiddenFieldList = asset.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = asset.FieldList.Where(f => f.IsHidden == true).ToList();
             _assetRepository = assetRepository;
             logger = new Log(new LogRepository());
         }
@@ -47,7 +47,7 @@ namespace AMS.Controllers
                     }
                     else
                     {
-                        Asset.FieldList.Single(assetField => assetField.Hash == tagField.Hash).FieldPresentIn.Add(currentTag.ID);
+                        Asset.FieldList.Single(assetField => assetField.Hash == tagField.Hash).TagIDs.Add(currentTag.ID);
                     }
                 }
             }
@@ -69,7 +69,10 @@ namespace AMS.Controllers
                 {
                     foreach (var field in currentTag.FieldList)
                     {
-                        RemoveFieldOrFieldRelations(field, currentTag);
+                        if(field.TagIDs.Count == 1 && field.TagIDs.Contains(currentTag.ID))
+                        {
+                            RemoveField(field);
+                        }
                     }
                 }
             }
@@ -83,7 +86,9 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Save()
         {
-            Asset.FieldList = new ObservableCollection<Field>(FieldList);
+            List<Field> fieldList = NonHiddenFieldList;
+            fieldList.AddRange(HiddenFieldList);
+            Asset.FieldList = fieldList;
             SerializeFields();
             ulong id = 0;
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
@@ -98,7 +103,9 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Update()
         {
-            Asset.FieldList = new ObservableCollection<Field>(FieldList);
+            List<Field> fieldList = NonHiddenFieldList;
+            fieldList.AddRange(HiddenFieldList);
+            Asset.FieldList = fieldList;
             SerializeFields();
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
             logger.LogCreate(this);

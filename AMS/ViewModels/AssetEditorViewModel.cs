@@ -26,7 +26,6 @@ namespace AMS.ViewModels
         private bool _isEditing;
 
         public ICommand AddFieldCommand { get; set; }
-        
         public ICommand RemoveFieldCommand { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand SaveMultipleCommand { get; set; }
@@ -34,9 +33,8 @@ namespace AMS.ViewModels
 
         public List<ITagable> CurrentlyAddedTags => _assetController.CurrentlyAddedTags;
 
-        public ObservableCollection<Field> NonHiddenFieldList { get; set; }
-        
-        public ObservableCollection<Field> HiddenFieldList { get; set; }
+        public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
+        public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.HiddenFieldList);
 
         public string Name
         {
@@ -71,8 +69,6 @@ namespace AMS.ViewModels
             }
 
             _assetController = new AssetController(asset, assetRepository);
-            NonHiddenFieldList = new ObservableCollection<Field>(_assetController.FieldList.Where(f => f.IsHidden == false));
-            HiddenFieldList = new ObservableCollection<Field>(_assetController.FieldList.Where(f => f.IsHidden == true));
             _tagListController = tagListController;
 
 
@@ -99,8 +95,6 @@ namespace AMS.ViewModels
 
         public void SaveAsset(bool multiAdd = true)
         {
-            _assetController.FieldList = NonHiddenFieldList.ToList<Field>();
-            _assetController.FieldList.AddRange(HiddenFieldList.ToList<Field>());
             if (_isEditing)
             {
                 if (!multiAdd)
@@ -128,11 +122,11 @@ namespace AMS.ViewModels
 
         public void AddCustomField(object sender, PromptEventArgs e)
         {
-            if(e is FieldInputPromptEventArgs)
+            if(e is FieldInputPromptEventArgs args)
             {
-                Field returnedField = ((FieldInputPromptEventArgs)e).Field;
-                returnedField.Content = returnedField.DefaultValue;
-                NonHiddenFieldList.Add(returnedField);
+                _assetController.AddField(args.Field);
+                OnPropertyChanged(nameof(NonHiddenFieldList));
+                OnPropertyChanged(nameof(HiddenFieldList));
             }
         }
         
@@ -140,25 +134,10 @@ namespace AMS.ViewModels
         {
             if (sender is Field field)
             {
-                if (!field.IsCustom)
-                {
-                    if (field.IsHidden)
-                    {
-                        field.IsHidden = false;
-                        NonHiddenFieldList.Add(field);
-                        HiddenFieldList.Remove(field);
-                    }
-                    else
-                    {
-                        field.IsHidden = true;
-                        HiddenFieldList.Add(field);
-                        NonHiddenFieldList.Remove(field);
-                    }
-                }
-                else
-                {
-                    NonHiddenFieldList.Remove(field);
-                }
+                Console.WriteLine("Tag removed");
+                _assetController.RemoveField(field);
+                OnPropertyChanged(nameof(NonHiddenFieldList));
+                OnPropertyChanged(nameof(HiddenFieldList));
             }
         }
 

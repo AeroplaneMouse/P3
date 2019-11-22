@@ -29,7 +29,7 @@ namespace AMS.Models
             };
         }
         
-        public List<ulong> FieldPresentIn { get; set; }
+        public List<ulong> TagIDs { get; set; }
 
         /// <summary>
         /// Default constructor for initiating a new Field object.
@@ -54,7 +54,7 @@ namespace AMS.Models
             this.Hash = CalculateMd5Hash();
             this.IsCustom = isCustom;
             this.IsHidden = false;
-            this.FieldPresentIn = new List<ulong>();
+            this.TagIDs = new List<ulong>();
         }
         
         [JsonConstructor]
@@ -68,7 +68,7 @@ namespace AMS.Models
             this.DefaultValue = defaultValue;
             this.Required = required;
             this.Hash = CalculateMd5Hash();
-            this.FieldPresentIn = fieldPresentIn;
+            this.TagIDs = fieldPresentIn;
         }
 
         public string HashId { get; set; }

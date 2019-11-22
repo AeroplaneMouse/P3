@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 
@@ -15,7 +16,7 @@ namespace AMS.Models
 
         public Asset()
         {
-            FieldList = new ObservableCollection<Field>();
+            FieldList = new List<Field>();
         }
 
         [JsonConstructor]
@@ -30,7 +31,7 @@ namespace AMS.Models
             CreatedAt = created_at;
             UpdatedAt = updated_at;
             Identifier = identifier;
-            FieldList = JsonConvert.DeserializeObject<ObservableCollection<Field>>(SerializedFields);
+            FieldList = JsonConvert.DeserializeObject<List<Field>>(SerializedFields);
             
         }
         
@@ -43,7 +44,7 @@ namespace AMS.Models
             DepartmentID = departmentId;
             Identifier = identifier;
             SerializedFields = options;
-            FieldList = JsonConvert.DeserializeObject<ObservableCollection<Field>>(SerializedFields);
+            FieldList = JsonConvert.DeserializeObject<List<Field>>(SerializedFields);
             CreatedAt = created_at;
             UpdatedAt = updated_at;
         }

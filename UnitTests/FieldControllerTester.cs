@@ -17,7 +17,7 @@ namespace UnitTests
                         
             _thirdField = new Field("Label of third field", "content of third field",
                 Field.FieldType.TextBox, "Default value of third field",true,true);
-            _thirdField.FieldPresentIn.Add(5);
+            _thirdField.TagIDs.Add(5);
             
             _fourthField = new Field("Label of fourth field", "content of fourth field",
                 Field.FieldType.Textarea, "Default value of fourth field");
