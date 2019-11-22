@@ -34,7 +34,7 @@ namespace AMS.ViewModels.Commands
             }
             catch (Exception)
             {
-                _main.AddNotification(new Notification("Error! An unknown error occurred. Unable to remove department.", Notification.ERROR),
+                Features.AddNotification(new Notification("Error! An unknown error occurred. Unable to remove department.", Notification.ERROR),
                     3500);
                 return;
             }
