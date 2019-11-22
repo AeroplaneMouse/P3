@@ -44,25 +44,7 @@
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Left" Grid.Row="0">
-                    <!-- -->
-                    <!-- <Border Background="LightGray" -->
-                    <!--         BorderThickness="0" -->
-                    <!--         Visibility="{Binding IsCurrentGroupVisible}"> -->
-                    <!--     <TextBlock Style="{StaticResource ParagraphStyle}" -->
-                    <!--                Text="{Binding CurrentGroup}" -->
-                    <!--                VerticalAlignment="Center"/> -->
-                    <!--     <Border.Style> -->
-                    <!--         <Style TargetType="Border"> -->
-                    <!--             <Style.Triggers> -->
-                    <!--                 <Trigger Property="IsVisible" Value="True"> -->
-                    <!--                     <Setter Property="Padding" Value="5 0 5 0"/> -->
-                    <!--                 </Trigger> -->
-                    <!--             </Style.Triggers> -->
-                    <!--         </Style> -->
-                    <!--     </Border.Style> -->
-                    <!-- </Border> -->
-
-
+                    
                     <StackPanel Orientation="Horizontal"    
                                 VerticalAlignment="Center"    
                                 HorizontalAlignment="Center"
@@ -173,19 +155,11 @@
                     </ItemsControl.ItemTemplate>
                 </ListView>
                 
-                
                 <ListView ItemsSource="{Binding Items}"
                           SelectionMode="Extended"
                           SelectionChanged="ListView_SelectionChanged"
                           Grid.Row="2">
-                    
-                    <!-- <ListView.Resources> -->
-                    <!--     <Style TargetType="GridViewColumnHeader"> -->
-                    <!--         <Setter Property="Command" Value="{Binding HeaderClickCommand}" /> -->
-                    <!--         <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}" /> -->
-                    <!--     </Style> -->
-                    <!-- </ListView.Resources> -->
-                    
+
                     <ListView.View>
                         <GridView>
                             <!-- Checkbox -->
@@ -223,7 +197,7 @@
                             <GridViewColumn Header="Updated">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=UpdatedAt, Converter={StaticResource DateConverter}}"
+                                        <TextBlock Text="{Binding Path=UpdatedAtString}"
                                                    Foreground="Black"
                                                    FontSize="{StaticResource FontSizeSmall}"/>
                                     </DataTemplate>
@@ -263,22 +237,6 @@
                         <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding ViewCommand}"/>
                     </ListView.InputBindings>
                     
-                    <!--<Interaction.Triggers>
-                        <EventTrigger>
-                            
-                        </EventTrigger>                       
-                        <i1:EventTrigger EventName="MouseDoubleClick">
-                            --><!--ViewCommand--><!--
-                            <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/>
-                        </i1:EventTrigger>
-                    </Interaction.Triggers>-->
-
-                        <!-- <i:Interaction.Triggers> -->
-                    <!--     <i:EventTrigger EventName="MouseDoubleClick"> -->
-                    <!--         ~1~ViewCommand@1@ -->
-                    <!--         <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/> -->
-                    <!--     </i:EventTrigger> -->
-                    <!-- </i:Interaction.Triggers> -->
                 </ListView>
             </Grid>
         </Border>

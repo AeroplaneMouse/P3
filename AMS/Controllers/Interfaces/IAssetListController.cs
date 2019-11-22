@@ -15,8 +15,7 @@ namespace AMS.Controllers.Interfaces
 
         // List of tags that can be searched
         List<Tag> TagList { get; set; }
-
-        void Search(string query);
+        void Search(string query, List<ulong> tags, List<ulong> users=null, bool strict=false);
         void Remove(Asset asset);
         void Export(List<Asset> assets);
 

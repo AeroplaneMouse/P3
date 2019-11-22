@@ -1,16 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:AMS"
-                    xmlns:controllers="clr-namespace:AMS.Controllers"
-                    xmlns:designSelector="clr-namespace:AMS.Views"
-                    xmlns:v="clr-namespace:AMS.Controllers">
+                    xmlns:designSelector="clr-namespace:AMS.Views">
     
     <designSelector:FieldDesignSelector x:Key="MyFieldDesignSelector" />
 
     <!-- Label of a field -->
     <Style TargetType="TextBlock" x:Key="FieldLabel">
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}" />
-        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}" />
         <Setter Property="Text" Value="{Binding Label}" />
     </Style>
 
