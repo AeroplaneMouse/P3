@@ -88,6 +88,8 @@ namespace AMS.ViewModels
                 RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
                 EditBySelectionCommand = new RelayCommand(EditBySelection);
             }
+
+            // Other functions
             PrintCommand = new RelayCommand(Export);
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
@@ -289,43 +291,12 @@ namespace AMS.ViewModels
         private void ViewAsset()
         {
             // TODO: Redirect to viewAsset page
-/*<<<<<<< HEAD
             if (SelectedItems.Count == 1)
-                _listController.ViewAsset(SelectedItems.First());
-            else
-                _main.AddNotification(new Notification("Error! Could not view asset", Notification.ERROR));
-=======
-            if(IsSelectedAssetValid())
-                _main.ContentFrame.Navigate(new AssetPresenter(GetSelectedItem(), _listController.GetTags(GetSelectedItem()), _commentController));
-            else
-                Main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
-        }
-
-        private void RemoveAssetByID(object parameter)
-        {
-            ulong id = 0;
-            try
             {
-                id = ulong.Parse(parameter.ToString());
+                //Main.ContentFrame.Navigate(new AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First(), _commentListController));
             }
-            finally
-            {
-                // Delete Asset and display notification
-                _listController.Remove(GetSelectedItem());
-                Main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " Was deleted", Notification.INFO));
-            }
-        }
-
-        private void RemoveSelected()
-        {
-            if (IsSelectedAssetValid())
-                RemoveAsset(GetSelectedItem());
             else
-            {
-                // Display error notification on error
-                Main.AddNotification(new Notification("Could not delete Asset", Notification.ERROR));
-            }
->>>>>>> The-Grand-Restructure!*/
+                Main.AddNotification(new Notification("Error! Could not view asset", Notification.ERROR));
         }
 
         /// <summary>
