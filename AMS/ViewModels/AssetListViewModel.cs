@@ -351,27 +351,12 @@ namespace AMS.ViewModels
         /// </summary>
         private void Export()
         {
-            //TODO: Get selected assets
-            // Look here for how to (Answer 2): https://stackoverflow.com/questions/2282138/wpf-listview-selecting-multiple-list-view-items
-            // Fly: Jeg tror, at jeg har lavet det.
-            
             if (SelectedItems.Count > 0)
                 // Export selected items
                 _listController.Export(SelectedItems);
             else
                 // Export all items found by search
-                _listController.Export(ObservableToList(Items));
-        }
-
-        // This is super stupid. Please fix
-        // Takes an ObservableCollecion and returns a List with the items
-        // of the observableCollection
-        private List<Asset> ObservableToList(ObservableCollection<Asset> list)
-        {
-            List<Asset> newList = new List<Asset>();
-            foreach (Asset asset in list)
-                newList.Add(asset);
-            return newList;
+                _listController.Export(Items.ToList());
         }
     }
 }

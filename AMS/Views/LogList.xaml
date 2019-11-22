@@ -66,8 +66,9 @@
                 <!--Style="{StaticResource RegularList}"-->
                 <ListView x:Name="listViewWithItems"
                         SelectionMode="Extended"
-                        ItemsSource="{Binding SearchList}"
+                        ItemsSource="{Binding Entries}"
                         SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                        SelectionChanged="ListView_SelectionChanged"
                         Grid.Row="2">
                     
                     <!-- <i:Interaction.Triggers> -->
