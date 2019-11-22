@@ -245,7 +245,7 @@ namespace AMS.ViewModels
         {
             // TODO: Redirect to viewAsset page
             if(IsSelectedAssetValid())
-                _main.ContentFrame.Navigate(new AssetPresenter(GetSelectedItem(), _listController.GetTags(GetSelectedItem()), _commentController));
+                Main.ContentFrame.Navigate(new AssetPresenter(GetSelectedItem(), _listController.GetTags(GetSelectedItem()), _commentController));
             else
                 Main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
         }
