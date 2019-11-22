@@ -6,6 +6,7 @@ using AMS.Database.Repositories.Interfaces;
 using System.Collections;
 using AMS.Models;
 using System.Windows;
+using AMS.Controllers.Interfaces;
 
 namespace AMS.Views
 {
@@ -14,10 +15,10 @@ namespace AMS.Views
     /// </summary>
     public partial class AssetList : Page
     {
-        public AssetList(MainViewModel main, IAssetRepository assetRepository, IExporter exporter)
+        public AssetList(MainViewModel main, IAssetRepository assetRepository, IExporter exporter, ICommentListController commentListController)
         {
             InitializeComponent();
-            DataContext = new AssetListViewModel(main, new AssetListController(assetRepository, exporter));
+            DataContext = new AssetListViewModel(main, new AssetListController(assetRepository, exporter), commentListController);
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

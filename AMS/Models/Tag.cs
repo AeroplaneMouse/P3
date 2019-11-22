@@ -5,7 +5,7 @@ using AMS.Interfaces;
 
 namespace AMS.Models
 {
-    public class Tag :ContainsFields, ITagable
+    public class Tag :FieldContainer, ITagable
     {
         public Tag()
         {
@@ -38,9 +38,11 @@ namespace AMS.Models
         public int NumOfChildren { get; set; }
 
         public override string ToString() => Name;
-        public ulong TagId => ID;
-        public Type TagType => GetType();
+        #region From ITagable
+        public ulong TagId { get; }
+        public Type TagType => this.GetType();
         public string TagLabel => Name;
         public List<ITagable> Children { get; set; }
+        #endregion
     }
 }

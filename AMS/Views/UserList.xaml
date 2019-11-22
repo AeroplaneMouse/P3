@@ -6,14 +6,15 @@
       xmlns:local="clr-namespace:AMS.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="UserList">
+      Title="UserList"
+    xmlns:theme="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2">
 
     <Page.Resources>
         <DataTemplate x:Key="TextColumn">
             <TextBlock Text="{Binding}" Margin="5 0 0 5"/>
         </DataTemplate>
 
-        <local:StatusToVisibilityConverter x:Key="converter"/>
+        <local:StatusToVisibilityConverter x:Key="visibilityConverter"/>
     </Page.Resources>
 
     <Grid>
@@ -115,7 +116,10 @@
                                                 BorderThickness="0.4"
                                                 BorderBrush="Black"
                                                 Height="15">
-                                            <TextBlock Width="14"/>
+                                            <Button Width="14" 
+                                                    Opacity="0"
+                                                    Command="{Binding DataContext.ChangeStatusCommand, ElementName=UserListView}"
+                                                    CommandParameter="{Binding .}"/>
                                         </Border>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -140,7 +144,8 @@
                                         <TextBox Text="{Binding Path=Domain, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                  BorderBrush="Transparent"
                                                  Background="Transparent"
-                                                 Style="{StaticResource ParagraphTextBox}"/>
+                                                 Style="{StaticResource ParagraphTextBox}"
+                                                 MinWidth="150"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -154,49 +159,31 @@
                                                  Background="Transparent"
                                                  MinWidth="200"
                                                  Height="Auto" 
-                                                 Style="{StaticResource ParagraphTextBox}"/>
+                                                 Style="{StaticResource ParagraphTextBox}"
+                                                 TextWrapping="Wrap"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
                             <!-- Department -->
-                            <GridViewColumn Header="Department"
-                                            Width="150">
+                            <GridViewColumn Header="Department" Width="150">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=DefaultDepartmentName}"
-                                                   Style="{StaticResource ParagraphStyle}"
-                                                   Foreground="Black"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <!--<GridViewColumn Header="Department">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <ComboBox ItemsSource="{Binding DataContext.DepartmentsList, UpdateSourceTrigger=PropertyChanged, ElementName=UserListView}"
-                                                  SelectedItem="{Binding Path=DefaultDepartment}">
+                                        <ComboBox ItemsSource="{Binding DataContext.DepartmentList, UpdateSourceTrigger=PropertyChanged, ElementName=UserListView}"
+                                                  SelectedIndex="{Binding Path=DepartmentIndex}"
+                                                  MinWidth="130"
+                                                  Template="{StaticResource UserListDepartmentComboBoxTemplate}">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Text="{Binding Name}"/>
+                                                    <TextBlock Text="{Binding Name}"
+                                                               Style="{StaticResource ParagraphStyle}"
+                                                               Foreground="Black"/>
                                                 </DataTemplate>
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>-->
-
-
-                            <!--<ComboBox ItemsSource="{Binding ParentTagsList}" 
-                                      SelectedIndex="{Binding SelectedParentIndex}"
-                                      SelectionChanged="ParentTag_SelectionChanged"
-                                      Margin="0 0 0 10">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Name}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>-->
+                            </GridViewColumn>
 
                             <!-- Admin or not -->
                             <GridViewColumn Header="Admin" Width="50">
@@ -216,7 +203,7 @@
                                                 Content="Keep User" 
                                                 IsEnabled="True"
                                                 Style="{StaticResource KeepUserButton}"
-                                                Visibility="{Binding Path=Status, Converter={StaticResource converter}}" />
+                                                Visibility="{Binding Path=Status, Converter={StaticResource visibilityConverter}}" />
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

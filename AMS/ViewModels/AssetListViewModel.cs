@@ -18,12 +18,14 @@ namespace AMS.ViewModels
     public class AssetListViewModel : BaseViewModel
     {
         private IAssetListController _listController;
-        private MainViewModel _main;
         private string _searchQuery;
         private TagHelper _tagHelper;
+        private ICommentListController _commentListController;
 
         public ObservableCollection<Asset> Items { get; set; }
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
+
+        public MainViewModel Main { get; set; }
 
         public string SearchQuery
         {
@@ -31,14 +33,14 @@ namespace AMS.ViewModels
             set
             {
                 _searchQuery = value;
-                
+
                 if (!inTagMode && _searchQuery == "#")
                 {
                     inTagMode = true;
                     _searchQuery = "";
                     EnteringTagMode();
                 }
-                
+
                 if (inTagMode)
                 {
                     TagSearchProcess();
@@ -70,14 +72,15 @@ namespace AMS.ViewModels
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
 
-        public AssetListViewModel(MainViewModel main, IAssetListController listController)
+        public AssetListViewModel(MainViewModel main, IAssetListController listController, ICommentListController commentController)
         {
-            _main = main;
+            Main = main;
             _listController = listController;
+            _commentListController = commentController;
             Items = _listController.AssetList;
 
             // Admin only functions
-            if (_main.CurrentSession.IsAdmin())
+            if (Main.CurrentSession.IsAdmin())
             {
                 AddNewCommand = new RelayCommand(() => EditAsset(null));
                 EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
@@ -85,7 +88,6 @@ namespace AMS.ViewModels
                 RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
                 EditBySelectionCommand = new RelayCommand(EditBySelection);
             }
-
             PrintCommand = new RelayCommand(Export);
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
@@ -107,10 +109,10 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset(Asset asset)
         {
-            _main.ContentFrame.Navigate(new AssetEditor(
+            Main.ContentFrame.Navigate(new AssetEditor(
                 new AssetRepository(), 
                 new TagListController(new PrintHelper()),
-                _main,
+                Main,
                 asset));
         }
 
@@ -120,7 +122,7 @@ namespace AMS.ViewModels
             if (SelectedItems.Count == 1)
                 EditAsset(SelectedItems.First());
             else
-                _main.AddNotification(new Notification("Error! Please select one and only one asset.", Notification.ERROR), 3500);
+                Main.AddNotification(new Notification("Error! Please select one and only one asset.", Notification.ERROR), 3500);
         }
 
         /// <summary>
@@ -129,8 +131,8 @@ namespace AMS.ViewModels
         private void SearchAssets()
         {
             Console.WriteLine("This is super stupid!");
-            
-            if (SearchQuery == null) 
+
+            if (SearchQuery == null)
                 return;
 
             if (!inTagMode)
@@ -228,7 +230,6 @@ namespace AMS.ViewModels
             {
                 Console.WriteLine(e);
             }
-
             CurrentGroup = "#";
             CurrentGroupVisibility = Visibility.Visible;
         }
@@ -280,7 +281,6 @@ namespace AMS.ViewModels
             TagSuggestionsVisibility = Visibility.Collapsed;
             TagSuggestionIsOpen = false;
             CurrentGroupVisibility = Visibility.Collapsed;
-            //AppliedTags.Clear();
         }
 
         /// <summary>
@@ -289,10 +289,43 @@ namespace AMS.ViewModels
         private void ViewAsset()
         {
             // TODO: Redirect to viewAsset page
+/*<<<<<<< HEAD
             if (SelectedItems.Count == 1)
                 _listController.ViewAsset(SelectedItems.First());
             else
                 _main.AddNotification(new Notification("Error! Could not view asset", Notification.ERROR));
+=======
+            if(IsSelectedAssetValid())
+                _main.ContentFrame.Navigate(new AssetPresenter(GetSelectedItem(), _listController.GetTags(GetSelectedItem()), _commentController));
+            else
+                Main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
+        }
+
+        private void RemoveAssetByID(object parameter)
+        {
+            ulong id = 0;
+            try
+            {
+                id = ulong.Parse(parameter.ToString());
+            }
+            finally
+            {
+                // Delete Asset and display notification
+                _listController.Remove(GetSelectedItem());
+                Main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " Was deleted", Notification.INFO));
+            }
+        }
+
+        private void RemoveSelected()
+        {
+            if (IsSelectedAssetValid())
+                RemoveAsset(GetSelectedItem());
+            else
+            {
+                // Display error notification on error
+                Main.AddNotification(new Notification("Could not delete Asset", Notification.ERROR));
+            }
+>>>>>>> The-Grand-Restructure!*/
         }
 
         /// <summary>
@@ -302,11 +335,11 @@ namespace AMS.ViewModels
         private void RemoveAsset(Asset asset)
         {
             // Prompt user for confirmation of removal
-            _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
+            Main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
             {
                 if (e.Result)
                 {
-                    _main.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
+                    Main.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
                     _listController.Remove(asset);
                 }
             }));
@@ -322,7 +355,7 @@ namespace AMS.ViewModels
                 // Prompt user for approval for the removal of x assets 
                 string message = $"Are you sure you want to remove { SelectedItems.Count } asset";
                 message += SelectedItems.Count > 1 ? "s?" : "?";
-                _main.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
+                Main.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
                 {
                     // Check if the user approved
                     if (e.Result)
@@ -330,12 +363,11 @@ namespace AMS.ViewModels
                         // Move selected items to new list
                         List<Asset> items = new List<Asset>();
                         SelectedItems.ForEach(a => items.Add(a));
-
                         // Remove each asset
                         foreach (Asset asset in items)
                             _listController.Remove(asset);
 
-                        _main.AddNotification(
+                        Main.AddNotification(
                             new Notification($"{ items.Count } asset{ (items.Count > 1 ? "s" : "" ) } have been removed from the system", Notification.INFO),
                             3000);
                     }

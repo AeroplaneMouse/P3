@@ -42,13 +42,11 @@ namespace AMS.IO
 
             // Conflicting users. Existing users that are not enabled, whose username occures in both lists
             finalList
-                .Where(u => u.Status.CompareTo(String.Empty) == 0)
                 .Where(u => UserIsInList(existingList.Where(p => p.IsEnabled == false).ToList(), u) && UserIsInList(importedList, u))
                 .ToList()
                 .ForEach(u =>
                 {
                     u.Status = "Conflicting";
-                    //u.IsShown = IsShowningConflicting;
                 });
 
             // Added users. Users who are in the imported list, and not in the existing list
@@ -59,7 +57,6 @@ namespace AMS.IO
                 .ForEach(u =>
                 {
                     u.Status = "Added";
-                    //u.IsShown = IsShowingAdded;
                 });
 
             // Removed users. Users that are enabled, and are only in the existing list
@@ -70,7 +67,6 @@ namespace AMS.IO
                 .ForEach(u =>
                 {
                     u.Status = "Removed";
-                    //u.IsShown = IsShowingRemoved;
                 });
 
             // Kept users. Users that are enabled, and are in both lists. Remove the copy coming from the imported file
@@ -80,6 +76,15 @@ namespace AMS.IO
                 .Where(u => u.ID == 0)
                 .ToList()
                 .ForEach(u => finalList.Remove(u));
+
+            // Sets inactive users to "Disabled" for sorting purposes
+            finalList
+                .Where(u => u.Status.CompareTo(String.Empty) == 0 && u.IsEnabled == false)
+                .ToList()
+                .ForEach(u =>
+                {
+                    u.Status = "Disabled";
+                });
 
             return finalList;
         }

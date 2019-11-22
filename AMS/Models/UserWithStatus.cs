@@ -31,14 +31,14 @@ namespace AMS.Models
                     return "#FFCC1A";
                 }
 
-                else if (IsEnabled == false)
+                else if (Status.CompareTo("Disabled") == 0)
                 {
                     return "#C0C0C0";
                 }
 
                 else
                 {
-                    return "#ffffff";
+                    return "#3385ff";
                 }
             }
         }

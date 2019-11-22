@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
+using AMS.Database.Repositories.Interfaces;
 using AMS.Events;
 using AMS.Helpers;
 using AMS.Interfaces;
@@ -22,8 +23,11 @@ namespace AMS.ViewModels
         public ICommand RemoveCommand { get; set; }
 
         public ICommand EditCommand { get; set; }
-        
-        public TagListViewModel(MainViewModel mainViewModel)
+
+        public ICommand AddNewCommand { get; set; }
+
+
+        public TagListViewModel(MainViewModel mainViewModel, ITagRepository tagRep)
         {
             _mainViewModel = mainViewModel;
             //Todo Evt inkluder en exporter i stedet for at skrive new
@@ -31,7 +35,9 @@ namespace AMS.ViewModels
             Tags = _tagListController.TagsList;
             Tags.AddRange(_tagListController.GetParentTags());
             RemoveCommand = new Base.RelayCommand(() => _mainViewModel.DisplayPrompt(new Confirm("Delete the selected tag, cannot be recovered?",RemoveTag)));
-            EditCommand = new Base.RelayCommand(()=>_mainViewModel.ContentFrame.Navigate(new TagEditor(SelectedItem)));
+            EditCommand = new Base.RelayCommand(()=>_mainViewModel.ContentFrame.Navigate(new TagEditor(_mainViewModel, new TagController(SelectedItem, tagRep))));
+            AddNewCommand = new Base.RelayCommand(() => _mainViewModel.ContentFrame.Navigate(new TagEditor(_mainViewModel, new TagController(null, tagRep))));
+
 
             foreach (var tag in Tags)
             {

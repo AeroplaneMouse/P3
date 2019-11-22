@@ -32,11 +32,7 @@ namespace AMS.ViewModels
         public ICommand SaveMultipleCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
-        public List<ITagable> CurrentlyAddedTags
-        {
-            get => _assetController.CurrentlyAddedTags;
-            set => _assetController.CurrentlyAddedTags = value;
-        }
+        public List<ITagable> CurrentlyAddedTags => _assetController.CurrentlyAddedTags;
 
         public ObservableCollection<Field> NonHiddenFieldList { get; set; }
         
@@ -97,7 +93,7 @@ namespace AMS.ViewModels
             }
             else
             {
-                _main.ContentFrame.Navigate(new AssetList(_main, new AssetRepository(), new PrintHelper()));
+                _main.ContentFrame.Navigate(new AssetList(_main, new AssetRepository(), new PrintHelper(), new CommentListController(_main.CurrentSession, new CommentRepository())));
             }
         }
 
@@ -174,7 +170,7 @@ namespace AMS.ViewModels
             }
             else
             {
-                _main.ContentFrame.Navigate(new AssetList(_main, new AssetRepository(), new PrintHelper()));
+                _main.ContentFrame.Navigate(new AssetList(_main, new AssetRepository(), new PrintHelper(), new CommentListController(_main.CurrentSession, new CommentRepository())));
             }
         }
     }
