@@ -45,8 +45,8 @@ namespace AMS.ViewModels
         }
         public Thickness OuterMarginThicknessSize { get => new Thickness(OuterMarginSize); }
         public int TitleHeight { get; set; }
-        public int NavigationHeight { get; set; }
         public GridLength TitleHeightGridLength { get => new GridLength(TitleHeight + ResizeBorder); }
+        public int NavigationHeight { get; set; }
         public String CurrentUser { get; set; }
         public Department CurrentDepartment
         {
@@ -89,7 +89,7 @@ namespace AMS.ViewModels
             WindowMinHeight = 400;
 
             ResizeBorder = 4;
-            TitleHeight = 25;
+            TitleHeight = 28;
             InnerContentPaddingSize = 6;
             
             // Listen out for the window resizing
