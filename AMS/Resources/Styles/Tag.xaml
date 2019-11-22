@@ -4,7 +4,7 @@
     <!-- Tag style for tags where they can not be removed -->
     <Style TargetType="{x:Type Label}" x:Key="TagLabelOnlyShow">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="MinWidth" Value="50" />
+        <Setter Property="MinWidth" Value="auto" />
         <Setter Property="Margin" Value="0,2,2,2" />
         <Setter Property="Padding" Value="5,2,5,2" />
         <Setter Property="Template">
@@ -21,7 +21,7 @@
                                             <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
-                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,0,2" />
+                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left"/>
                                     </Grid>
                                 </Border>
                             </ControlTemplate>
@@ -63,7 +63,7 @@
                                                 <ControlTemplate>
                                                     <Grid Height="10" Width="10" Background="Transparent" >
                                                         <TextBlock Foreground="{Binding FontColor}" FontFamily="{StaticResource SegoeBold}"
-                                                                   VerticalAlignment="Center" Text=" x" Margin="-2, -2, 0, 0"></TextBlock>
+                                                                   VerticalAlignment="Center" Text="X"/>
                                                     </Grid>
                                                 </ControlTemplate>
                                             </Button.Template>
@@ -87,7 +87,7 @@
     <Style TargetType="{x:Type Label}" x:Key="TagAddedToSearch">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinWidth" Value="50" />
-        <Setter Property="Padding" Value="5,2,0,2" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
@@ -99,23 +99,25 @@
                                         BorderBrush="{Binding Color}" BorderThickness="2" CornerRadius="10"
                                         Background="{Binding Color}" FocusVisualStyle="{x:Null}"
                                         RenderOptions.EdgeMode="Aliased">
-                                    <Grid >
+                                    <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
                                             <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="AUto" />
                                         </Grid.ColumnDefinitions>
-                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,0,2" />
+                                        <ContentPresenter Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 0 5 0" />
                                         <!-- set command to delete the tag from the search query -->
                                         <Button OverridesDefaultStyle="True" x:Name="PART_DeleteTagButton"
-                                                Grid.Column="1" Margin="3,0" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                                Visibility="Hidden" 
-                                                CommandParameter="{Binding Path=ID}">
-                                            <!--Command="{x:Static v:AssetsViewModel.RemoveTagCommand}"-->
+                                                Grid.Column="1" Margin="0" VerticalAlignment="Center"
+                                                Visibility="Collapsed" 
+                                                CommandParameter="{Binding Path=.}"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveTagCommand}">
                                             <Button.Template>
                                                 <ControlTemplate>
-                                                    <Grid Height="10" Width="10" Background="Transparent" >
-                                                        <TextBlock Foreground="{Binding FontColor}" FontFamily="{StaticResource SegoeBold}"
-                                                                   VerticalAlignment="Center" Text=" x" Margin="-2, -2, 0, 0"></TextBlock>
+                                                    <Grid Background="Transparent" >
+                                                        <TextBlock Foreground="{Binding FontColor}" 
+                                                                   FontFamily="{StaticResource SegoeBold}"
+                                                                   VerticalAlignment="Center" 
+                                                                   Text="X"/>
                                                     </Grid>
                                                 </ControlTemplate>
                                             </Button.Template>
@@ -142,9 +144,10 @@
     <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="Transparent"/>
     <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="Transparent"/>
     <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="Transparent"/>
+    
     <Style x:Key="ListViewWithTags" TargetType="{x:Type ListViewItem}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="Padding" Value="4,1"/>
+        <Setter Property="Padding" Value="0"/>
         <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
         <Setter Property="Background" Value="Transparent"/>

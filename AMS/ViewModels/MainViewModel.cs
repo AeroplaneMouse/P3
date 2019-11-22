@@ -51,8 +51,8 @@ namespace AMS.ViewModels
         }
         public Thickness OuterMarginThicknessSize { get => new Thickness(OuterMarginSize); }
         public int TitleHeight { get; set; }
-        public int NavigationHeight { get; set; }
         public GridLength TitleHeightGridLength { get => new GridLength(TitleHeight + ResizeBorder); }
+        public int NavigationHeight { get; set; }
         public String CurrentUser { get; set; }
         public Department CurrentDepartment
         {
@@ -76,8 +76,7 @@ namespace AMS.ViewModels
         public Page SplashPage { get; set; }
         public Page PopupPage { get; set; }
         public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
-        public Visibility VisibleForAdmin { get; set; }
-
+        public Visibility OnlyVisibleForAdmin { get; set; }
         public List<Department> Departments { get => GetDepartments(); }
         public Session CurrentSession { get; private set; }
         public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
@@ -97,7 +96,7 @@ namespace AMS.ViewModels
             WindowMinHeight = 400;
 
             ResizeBorder = 4;
-            TitleHeight = 25;
+            TitleHeight = 28;
             InnerContentPaddingSize = 6;
 
             // Listen out for the window resizing
@@ -243,7 +242,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(CurrentUser));
 
             // Sets the visibility of WPF elements binding to this, based on whether or not the current user is an admin
-            VisibleForAdmin = CurrentSession.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
+            OnlyVisibleForAdmin = CurrentSession.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
 
             // Setting the current department, from the default department of the current user.
             CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories;
@@ -13,8 +14,8 @@ namespace AMS.Controllers
     public class AssetController : FieldListController, IAssetController, ILoggableValues
     {
         public Asset Asset { get; set; }
-        public List<ITagable> CurrentlyAddedTags { get; } = new List<ITagable>();
-        
+        public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
+        public List<Field> FieldList { get; set; } = new List<Field>();
         private ILogger logger;
         private IAssetRepository _assetRepository;
         
@@ -23,6 +24,7 @@ namespace AMS.Controllers
         {
             Asset = asset;
             DeSerializeFields();
+            FieldList = asset.FieldList.ToList<Field>();
             _assetRepository = assetRepository;
             logger = new Log(new LogRepository());
         }
@@ -81,6 +83,7 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Save()
         {
+            Asset.FieldList = new ObservableCollection<Field>(FieldList);
             SerializeFields();
             ulong id = 0;
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
@@ -95,6 +98,7 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Update()
         {
+            Asset.FieldList = new ObservableCollection<Field>(FieldList);
             SerializeFields();
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
             logger.LogCreate(this);

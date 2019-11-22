@@ -111,9 +111,10 @@
                                             <StackPanel Orientation="Vertical">
                                                 <Button Content="Home" Command="{Binding ShowHomePageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Assets" Command="{Binding ShowAssetListPageCommand}" Style="{StaticResource NavigationButton}"/>
-                                                <Button Content="Tags" Command="{Binding ShowTagListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding VisibleForAdmin}"/>
-                                                <Button Content="Log" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding VisibleForAdmin}"/>
-                                                <Button Content="Users" Command="{Binding ShowUserListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding VisibleForAdmin}"/>
+
+                                                <Button Content="Tags" Command="{Binding ShowTagListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
+                                                <Button Content="Log" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
+                                                <Button Content="Users" Command="{Binding ShowUserListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
                                             </StackPanel>
                                         </Border>
 

@@ -1,17 +1,17 @@
 ﻿using System;
+using AMS.Views;
+using AMS.Models;
+using System.Linq;
+using AMS.Helpers;
+using AMS.Interfaces;
+using System.Windows;
+using AMS.Controllers;
+using AMS.ViewModels.Base;
+using System.Windows.Input;
+using AMS.Database.Repositories;
+using AMS.Controllers.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows;
-using System.Windows.Input;
-using AMS.Views;
-using AMS.Controllers;
-using AMS.Controllers.Interfaces;
-using AMS.Database.Repositories;
-using AMS.Helpers;
-using AMS.Models;
-using AMS.ViewModels.Base;
-using AMS.Interfaces;
 
 namespace AMS.ViewModels
 {
@@ -23,7 +23,7 @@ namespace AMS.ViewModels
         private ICommentListController _commentListController;
 
         public ObservableCollection<Asset> Items { get; set; }
-        public int SelectedItemIndex { get; set; }
+        public List<Asset> SelectedItems { get; set; } = new List<Asset>();
 
         public MainViewModel Main { get; set; }
 
@@ -46,16 +46,18 @@ namespace AMS.ViewModels
                     TagSearchProcess();
                 }
             }
-
         }
 
         public string CurrentGroup { get; set; }
         public Visibility CurrentGroupVisibility { get; set; } = Visibility.Collapsed;
         public Visibility TagSuggestionsVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
+        public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
         public bool TagSuggestionIsOpen { get; set; } = false;
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
         public ITagable TagParent;
         public bool inTagMode = false;
+        public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
 
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
@@ -63,7 +65,12 @@ namespace AMS.ViewModels
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
-        public ICommand RemoveMultipleCommand { get; set; }
+        public ICommand RemoveTagCommand { get; set; }
+        public ICommand RemoveBySelectionCommand { get; set; }
+        public ICommand EditBySelectionCommand { get; set; }
+
+        public ICommand AutoTagCommand { get; set; }
+        public ICommand ClearInputCommand { get; set; }
 
         public AssetListViewModel(MainViewModel main, IAssetListController listController, ICommentListController commentListController)
         {
@@ -72,51 +79,52 @@ namespace AMS.ViewModels
             _commentListController = commentListController;
             Items = _listController.AssetList;
 
-            AddNewCommand = new RelayCommand(AddNewAsset);
-            EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
+            // Admin only functions
+            if (Main.CurrentSession.IsAdmin())
+            {
+                AddNewCommand = new RelayCommand(() => EditAsset(null));
+                EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
+                RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
+                RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
+                EditBySelectionCommand = new RelayCommand(EditBySelection);
+            }
+
+            // Other functions
             PrintCommand = new RelayCommand(Export);
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
-            RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
-            RemoveMultipleCommand = new RelayCommand<object>((parameter) => RemoveAssets(parameter as List<Asset>));
-        }
-
-        private void RemoveAssets(List<Asset> list)
-        {
-            if (list != null)
+            RemoveTagCommand = new RelayCommand<object>((parameter) => 
             {
-                // Prompt user for approval for the removal of x assets
-                string message = $"Are you sure you want to remove { list.Count } asset";
-                message += list.Count > 1 ? "s?" : "?";
-                Main.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
-                {
+                ITagable tag = parameter as ITagable;
+                AppliedTags.Remove(tag);
+                _tagHelper.RemoveFromQuery(tag);
+                OnPropertyChanged(nameof(AppliedTags));
+            });
 
-                }));
-            }
-        }
-
-        /// <summary>
-        /// Changes the content to a blank AssetEditor
-        /// </summary>
-        private void AddNewAsset()
-        {
-            //Todo FIx news
-            Features.NavigatePage(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),Main));
+            AutoTagCommand = new RelayCommand(AutoTag);
+            ClearInputCommand = new RelayCommand(ClearInput);
         }
 
         /// <summary>
         /// Changes the content to AssetEditor with the selected asset
+        /// if asset is null, a new asset will be created.
         /// </summary>
         private void EditAsset(Asset asset)
         {
+            Main.ContentFrame.Navigate(new AssetEditor(
+                new AssetRepository(), 
+                new TagListController(new PrintHelper()),
+                Main,
+                asset));
+        }
 
-            //Todo FIx news
-            
-            if (IsSelectedAssetValid())
-                Features.NavigatePage(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),Main, GetSelectedItem()));
-
+        private void EditBySelection()
+        {
+            // Only ONE item can be edited
+            if (SelectedItems.Count == 1)
+                EditAsset(SelectedItems.First());
             else
-                Main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
+                Main.AddNotification(new Notification("Error! Please select one and only one asset.", Notification.ERROR), 3500);
         }
 
         /// <summary>
@@ -134,12 +142,84 @@ namespace AMS.ViewModels
                 _listController.Search(SearchQuery);
                 Items = _listController.AssetList;
             }
+            else
+            {
+                //AutoTag();
+            }
 
             /*
             if (SearchQuery == null) return;
             _listController.Search(SearchQuery);
             Items = _listController.AssetList;
             */
+        }
+
+        private void AutoTag()
+        {
+            Console.WriteLine("Tap clicked!");
+            try
+            {
+                if (!inTagMode)
+                    return;
+
+                Console.WriteLine("In tag mode so go on!");
+                
+                if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+                {
+                    ITagable tag = TagSearchSuggestions[0];
+
+                    if (_tagHelper.IsParentSet())
+                    {
+                        Console.WriteLine("Think there is a parent!");
+                        _tagHelper.AddToQuery(tag);
+                        AppliedTags.Add(tag);
+                        TagSearchProcess();
+                    }
+                    else
+                    {
+                        // Only tag can be parent
+                        Tag taggedItem = (Tag)tag;
+                    
+                        if (taggedItem.NumOfChildren > 0 || tag.TagId == 1)
+                        {
+                            // So we need to switch to a group of tags.
+                            _tagHelper.Parent(taggedItem);
+                            CurrentGroup = "#"+taggedItem.Name;
+                        }
+                        else
+                        {
+                            _tagHelper.AddToQuery(tag);
+                            AppliedTags.Add(tag);
+                            TagSearchProcess();
+                        }
+                    }
+                    
+                    SearchQuery = "";
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
+        private void ClearInput()
+        {
+            if (!inTagMode)
+                return;
+
+            if (_tagHelper.IsParentSet())
+            {
+                _tagHelper.Parent(null);
+                CurrentGroup = "#";
+                SearchQuery = "";
+                TagSearchProcess();
+            }
+            else
+            {
+                LeavingTagMode();
+            }
         }
 
         private void EnteringTagMode()
@@ -152,12 +232,8 @@ namespace AMS.ViewModels
             {
                 Console.WriteLine(e);
             }
-
-
-
             CurrentGroup = "#";
             CurrentGroupVisibility = Visibility.Visible;
-
         }
 
         private void TagSearchProcess()
@@ -167,8 +243,8 @@ namespace AMS.ViewModels
                 //Console.WriteLine("Hest!");
                 if (_searchQuery == "exit")
                 {
-                    inTagMode = false;
                     LeavingTagMode();
+                    
                 }
                 else
                 {
@@ -186,11 +262,6 @@ namespace AMS.ViewModels
                             TagSuggestionsVisibility = Visibility.Collapsed;
                             TagSuggestionIsOpen = false;
                         }
-
-                        foreach (var item in TagSearchSuggestions)
-                        {
-                            Console.WriteLine(item.TagLabel);
-                        }
                     }
                     catch (Exception e)
                     {
@@ -202,40 +273,16 @@ namespace AMS.ViewModels
             {
                 Console.WriteLine(e);
             }
-
-
-            //List<ITagable> list = _tagHelper.Suggest(_searchQuery);
-            //TagSearchSuggestions = new ObservableCollection<ITagable>(_tagHelper.SuggestedTags);
-
-
-            /*
-            foreach (var item in list)
-            {
-                Console.WriteLine(item.TagLabel);
-            }
-
-            if (_tagHelper.HasSuggestions())
-            {
-                TagSuggestionsVisibility = Visibility.Visible;
-                TagSuggestionIsOpen = true;
-            }
-            else
-            {
-                TagSuggestionsVisibility = Visibility.Collapsed;
-                TagSuggestionIsOpen = false;
-            }
-            */
         }
 
         private void LeavingTagMode()
         {
-
+            inTagMode = false;
             CurrentGroup = "";
             SearchQuery = "";
             TagSuggestionsVisibility = Visibility.Collapsed;
             TagSuggestionIsOpen = false;
             CurrentGroupVisibility = Visibility.Collapsed;
-
         }
 
         /// <summary>
@@ -244,38 +291,18 @@ namespace AMS.ViewModels
         private void ViewAsset()
         {
             // TODO: Redirect to viewAsset page
-            if(IsSelectedAssetValid())
-                Main.ContentFrame.Navigate(new AssetPresenter(GetSelectedItem(), _listController.GetTags(GetSelectedItem()), _commentListController));
+            if (SelectedItems.Count == 1)
+            {
+                Main.ContentFrame.Navigate(new AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First(), _commentListController));
+            }
             else
-                Main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
+                Main.AddNotification(new Notification("Error! Could not view asset", Notification.ERROR));
         }
 
-        private void RemoveAssetByID(object parameter)
-        {
-            ulong id = 0;
-            try
-            {
-                id = ulong.Parse(parameter.ToString());
-            }
-            finally
-            {
-                // Delete Asset and display notification
-                _listController.Remove(GetSelectedItem());
-                Main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " Was deleted", Notification.INFO));
-            }
-        }
-
-        private void RemoveSelected()
-        {
-            if (IsSelectedAssetValid())
-                RemoveAsset(GetSelectedItem());
-            else
-            {
-                // Display error notification on error
-                Main.AddNotification(new Notification("Could not delete Asset", Notification.ERROR));
-            }
-        }
-
+        /// <summary>
+        /// Removes the given asset and displays a prompt
+        /// </summary>
+        /// <param name="asset"></param>
         private void RemoveAsset(Asset asset)
         {
             // Prompt user for confirmation of removal
@@ -290,46 +317,61 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
+        /// Removes all the selected items
+        /// </summary>
+        private void RemoveSelected()
+        {
+            if (SelectedItems.Count > 0)
+            {
+                // Prompt user for approval for the removal of x assets 
+                string message = $"Are you sure you want to remove { SelectedItems.Count } asset";
+                message += SelectedItems.Count > 1 ? "s?" : "?";
+                Main.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
+                {
+                    // Check if the user approved
+                    if (e.Result)
+                    {
+                        // Move selected items to new list
+                        List<Asset> items = new List<Asset>();
+                        SelectedItems.ForEach(a => items.Add(a));
+                        // Remove each asset
+                        foreach (Asset asset in items)
+                            _listController.Remove(asset);
+
+                        Main.AddNotification(
+                            new Notification($"{ items.Count } asset{ (items.Count > 1 ? "s" : "" ) } have been removed from the system", Notification.INFO),
+                            3000);
+                    }
+                }));
+            }
+        }
+
+        /// <summary>
         /// Exports selected assets to .csv file
         /// </summary>
         private void Export()
         {
             //TODO: Get selected assets
             // Look here for how to (Answer 2): https://stackoverflow.com/questions/2282138/wpf-listview-selecting-multiple-list-view-items
-            List<Asset> selected = new List<Asset>();
-
-            if(selected.Count < 1)
-                _listController.Export(selected);
+            // Fly: Jeg tror, at jeg har lavet det.
+            
+            if (SelectedItems.Count > 0)
+                // Export selected items
+                _listController.Export(SelectedItems);
+            else
+                // Export all items found by search
+                _listController.Export(ObservableToList(Items));
         }
 
-        /// <summary>
-        /// Returns the selected asset
-        /// </summary>
-        /// <returns>Selected Asset</returns>
-        private Asset GetSelectedItem()
+        // This is super stupid. Please fix
+        // Takes an ObservableCollecion and returns a List with the items
+        // of the observableCollection
+        private List<Asset> ObservableToList(ObservableCollection<Asset> list)
         {
-            if (SelectedItemIndex == -1 || SelectedItemIndex >= _listController.AssetList.Count)
-                return null;
-
-            return _listController.AssetList[SelectedItemIndex];
+            List<Asset> newList = new List<Asset>();
+            foreach (Asset asset in list)
+                newList.Add(asset);
+            return newList;
         }
-
-        /// <summary>
-        /// Determines if the selected Asset is valid.
-        /// </summary>
-        /// <returns>Is selected Asset Valid</returns>
-        private bool IsSelectedAssetValid()
-        {
-            Asset selectedAsset = _listController.AssetList[SelectedItemIndex];
-            if (selectedAsset == null)
-            {
-                // Display error notification
-                Main.AddNotification(new Notification("Selected Asset is not valid", Notification.ERROR));
-                return false;
-            }
-
-            return true;
-        }
-
     }
 }

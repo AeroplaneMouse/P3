@@ -53,6 +53,7 @@ namespace AMS.Models
             this.Required = required;
             this.Hash = CalculateMd5Hash();
             this.IsCustom = isCustom;
+            this.IsHidden = false;
             this.FieldPresentIn = new List<ulong>();
         }
         

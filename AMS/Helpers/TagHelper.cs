@@ -74,6 +74,7 @@ namespace AMS.Helpers
 
         public void Parent(Tag tag=null)
         {
+            SuggestedTags.Clear();
             SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentID == tag.ID).ToList() : _tags.Where(a => a.ParentID == 0).ToList());
             _parent = tag;
         }
@@ -85,6 +86,11 @@ namespace AMS.Helpers
         public List<Tag> Tags()
         {
             return null;
+        }
+
+        public void RemoveAppliedTag(ITagable tag)
+        {
+            
         }
     }
 }

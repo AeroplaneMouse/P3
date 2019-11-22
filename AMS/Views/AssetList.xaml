@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:AMS.Views"
+      xmlns:viewModel="clr-namespace:AMS.ViewModels"
       mc:Ignorable="d" 
       Title="AssetList">
 
@@ -21,8 +21,8 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Grid.Row="0">
             <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding AddNewCommand}"
-                    Visibility="{Binding Main.VisibleForAdmin}"
-                    Content="Add"/>
+                    Content="Add"
+                    Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
         </StackPanel>
 
         <Rectangle Style="{StaticResource HorizontalSeparator}"
@@ -39,7 +39,7 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel Orientation="Horizontal"
-                            HorizontalAlignment="Left">
+                            HorizontalAlignment="Left" Grid.Row="0">
                     <!-- -->
                     <!-- <Border Background="LightGray" -->
                     <!--         BorderThickness="0" -->
@@ -58,29 +58,32 @@
                     <!--     </Border.Style> -->
                     <!-- </Border> -->
 
-                    <StackPanel Orientation="Vertical"    
+
+                    <StackPanel Orientation="Horizontal"    
                                 VerticalAlignment="Center"    
-                                HorizontalAlignment="Center">
-                        
-                        <StackPanel Orientation="Horizontal"    
-                                    VerticalAlignment="Center">
+                                HorizontalAlignment="Center"
+                                ToolTip="Enter '#' to start tag mode. Here you can search on tags and add them to the list of things, to care about when searching.">
+                        <Border x:Name="CurrentTagGroup" Background="LightGray"
+                                BorderThickness="0"
+                                Visibility="{Binding CurrentGroupVisibility}">
                             
-                            <Border x:Name="CurrentTagGroup" Background="LightGray"
-                                    BorderThickness="0"
-                                    Visibility="{Binding CurrentGroupVisibility}">
-                                <TextBlock Style="{StaticResource ParagraphStyle}"
-                                           Text="{Binding CurrentGroup, UpdateSourceTrigger=PropertyChanged}"
-                                           VerticalAlignment="Center"/>
-                                <Border.Style>
-                                    <Style TargetType="Border">
-                                        <Style.Triggers>
-                                            <Trigger Property="IsVisible" Value="True">
-                                                <Setter Property="Padding" Value="5 0 5 0"/>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Border.Style>
-                            </Border>
+                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                       Text="{Binding CurrentGroup}"
+                                       VerticalAlignment="Center"/>
+                            
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsVisible" Value="True">
+                                            <Setter Property="Padding" Value="5 0 5 0"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                        
+                        <StackPanel Orientation="Vertical"    
+                                    VerticalAlignment="Center">
                             
                             <TextBox FontSize="{StaticResource FontSizeSmall}"
                                      Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
@@ -93,27 +96,27 @@
                                 
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
-                                    <KeyBinding Key="Escape" Command="{Binding DeleteCommand}"/>
-                                    <!--<KeyBinding Key="Tab" FocusManager.FocusedElement="{Binding ElementName=SuggestionsList}"/>-->
+                                    <KeyBinding Key="Escape" Command="{Binding ClearInputCommand}"/>
+                                    <KeyBinding Key="Tab" Command="{Binding AutoTagCommand}" />
                                 </TextBox.InputBindings>
                             </TextBox>
+                                
+                            <Popup x:Name="TagSuggestionPopup"    
+                                   Visibility="{Binding TagSuggestionsVisibility}"                    
+                                   IsOpen="{Binding TagSuggestionIsOpen}"
+                                   StaysOpen="False"
+                                   MaxHeight="100"
+                                   Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
+                                   Placement="Bottom">
+                            
+                                <ListBox x:Name="TagSuggestionList"    
+                                         Visibility="{Binding TagSuggestionsVisibility}"    
+                                         Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
+                                         ItemsSource="{ Binding TagSearchSuggestions }"/>
+                            </Popup>
                         </StackPanel>
-                    
-                        <Popup x:Name="TagSuggestionPopup"    
-                               Visibility="{Binding TagSuggestionsVisibility}"                    
-                               IsOpen="{Binding TagSuggestionIsOpen}"
-                               StaysOpen="False"
-                               MaxHeight="100"
-                               Placement="Bottom">
-    
-                            <ListBox x:Name="TagSuggestionList"    
-                                     Visibility="{Binding TagSuggestionsVisibility}"    
-                                     Width="200"
-                                     ItemsSource="{ Binding TagSearchSuggestions }"/>
-                        </Popup>
                     </StackPanel>
-                    
-                    
+
                     <Button Style="{StaticResource RegularButton}"
                             Margin="10 0 10 0"
                             Command="{Binding SearchCommand}"
@@ -125,17 +128,17 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"> 
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                     <Button Style="{StaticResource RegularCancelButton}" 
-                            Command="{Binding RemoveCommand}" 
+                            Command="{Binding RemoveBySelectionCommand}" 
                             Content="Remove" 
-                            Visibility="{Binding Main.VisibleForAdmin}"/> 
- 
+                            Visibility="{Binding MultipleSelected}"/>
+
                     <Button Style="{StaticResource RegularButton}" 
-                            Command="{Binding EditCommand}" 
-                            Visibility="{Binding Main.VisibleForAdmin}"
+                            Command="{Binding EditBySelectionCommand}" 
                             Margin="10 0 0 0 " 
-                            Content="Edit"/>
+                            Content="Edit"
+                            Visibility="{Binding SingleSelected}"/>
 
                     <Button Style="{StaticResource RegularButton}" 
                             Visibility="{Binding Main.VisibleForAdmin}"
@@ -143,32 +146,33 @@
                             Content="Export selected items" 
                             Width="Auto" 
                             Command="{Binding PrintCommand}"/>
-                </StackPanel> 
+                </StackPanel>
 
                 <!-- Current tags -->
-                <!-- -->
-                <!-- <ListView ItemsSource="{Binding Path=Tags.AppliedTags}" -->
-                <!--           ItemContainerStyle="{StaticResource ListViewWithTags}" -->
-                <!--           Grid.Row="1" -->
-                <!--           Margin="0 0 0 0"> -->
-                <!-- -->
-                <!--     <ListView.Template> -->
-                <!--         <ControlTemplate> -->
-                <!--             <WrapPanel IsItemsHost="True"/> -->
-                <!--         </ControlTemplate> -->
-                <!--     </ListView.Template> -->
-                <!--     <ItemsControl.ItemTemplate> -->
-                <!--         <DataTemplate> -->
-                <!--             <Grid MaxWidth="100" HorizontalAlignment="Left"> -->
-                <!--                 <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagAddedToSearch}"></Label> -->
-                <!--             </Grid> -->
-                <!--         </DataTemplate> -->
-                <!--     </ItemsControl.ItemTemplate> -->
-                <!-- </ListView> -->
-
-                <!--Style="{StaticResource RegularList}"-->
+                <ListView ItemsSource="{Binding AppliedTags, UpdateSourceTrigger=PropertyChanged}"
+                          ItemContainerStyle="{StaticResource ListViewWithTags}"
+                          Style="{ StaticResource HideIfEmpty }"
+                          Grid.Row="1"
+                          Margin="0 5 0 -4">
+                   
+                    <ListView.Template>
+                        <ControlTemplate>
+                            <WrapPanel IsItemsHost="True"/>
+                        </ControlTemplate>
+                    </ListView.Template>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid MaxWidth="100" HorizontalAlignment="Left">
+                                <Label Foreground="{Binding FontColor}" Content="{Binding TagLabel}" Style="{StaticResource TagAddedToSearch}"></Label>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ListView>
+                
+                
                 <ListView ItemsSource="{Binding Items}"
                           SelectionMode="Extended"
+                          SelectionChanged="ListView_SelectionChanged"
                           Grid.Row="2">
                     
                     <!-- <ListView.Resources> -->
@@ -181,7 +185,7 @@
                     <ListView.View>
                         <GridView>
                             <!-- Checkbox -->
-                            <GridViewColumn Header="">
+                            <GridViewColumn Header="[  ]">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
@@ -214,7 +218,7 @@
                             <!-- Created -->
                             <GridViewColumn Width="140" 
                                             DisplayMemberBinding="{Binding Path=UpdatedAt}" 
-                                            Header="Created"/>
+                                            Header="Updated"/>
                             <!-- Edit -->
                             <GridViewColumn Width="32">
                                 <GridViewColumn.CellTemplate>
@@ -222,7 +226,7 @@
                                         <Button Style="{StaticResource EditButton}"
                                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.EditCommand}"
                                                 CommandParameter="{Binding Path=.}"
-                                                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.Main.VisibleForAdmin}"/>
+                                                Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -234,7 +238,7 @@
                                         <Button Style="{StaticResource TrashButton}"
                                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveCommand}"
                                                 CommandParameter="{Binding Path=.}"
-                                                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.Main.VisibleForAdmin}"/>
+                                                Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -242,12 +246,23 @@
                     </ListView.View>
 
                     <ListView.InputBindings>
-                        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
+                        <KeyBinding Key="Delete" Command="{Binding RemoveBySelectionCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding ViewCommand}"/>
                     </ListView.InputBindings>
-                    <!-- <i:Interaction.Triggers> -->
+                    
+                    <!--<Interaction.Triggers>
+                        <EventTrigger>
+                            
+                        </EventTrigger>                       
+                        <i1:EventTrigger EventName="MouseDoubleClick">
+                            --><!--ViewCommand--><!--
+                            <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/>
+                        </i1:EventTrigger>
+                    </Interaction.Triggers>-->
+
+                        <!-- <i:Interaction.Triggers> -->
                     <!--     <i:EventTrigger EventName="MouseDoubleClick"> -->
                     <!--         ~1~ViewCommand@1@ -->
                     <!--         <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=ListViewWithItems, Path=SelectedItem}"/> -->
@@ -256,30 +271,5 @@
                 </ListView>
             </Grid>
         </Border>
-
-        <!-- Suggestion dropdown -->
-        
-        <!-- <Grid -->
-        <!--     VerticalAlignment="Top" -->
-        <!--     HorizontalAlignment="Left" -->
-        <!--     Margin="10 40 0 0" -->
-        <!--     Grid.Row="1"> -->
-        <!--     <Border Background="LightGray"  -->
-        <!--             Opacity="0.7" -->
-        <!--             BorderThickness="0" -->
-        <!--             BorderBrush="Black"> -->
-        <!--     </Border> -->
-        <!--     <ListView SelectedIndex="{Binding SelectedSuggestedIndex}" -->
-        <!--                 Background="Transparent" -->
-        <!--                 Name="SuggestionsList" -->
-        <!--                 BorderThickness="0" -->
-        <!--                 ItemsSource="{Binding Suggestions}" -->
-        <!--                 MinWidth="209" -->
-        <!--                 TabIndex="1"> -->
-        <!--         <ListView.InputBindings> -->
-        <!--             <KeyBinding Key="Enter" Command="{Binding SelectTagCommand}"/> -->
-        <!--         </ListView.InputBindings> -->
-        <!--     </ListView> -->
-        <!-- </Grid> -->
     </Grid>
 </Page>
