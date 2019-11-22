@@ -69,12 +69,12 @@ namespace AMS.ViewModels
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
 
-        public AssetListViewModel(IAssetListController listController)
+        public AssetListViewModel(IAssetListController listController, TagHelper tagHelper)
         {
             _listController = listController;
             Items = _listController.AssetList;
-            
-            _tagHelper = new TagHelper(new TagRepository(), new UserRepository(), new ObservableCollection<ITagable>());
+
+            _tagHelper = tagHelper;
             _tagHelper.CanApplyParentTags = true;
 
             // Admin only functions
@@ -291,13 +291,12 @@ namespace AMS.ViewModels
         /// </summary>
         private void ViewAsset()
         {
-            // TODO: Redirect to viewAsset page
             if (SelectedItems.Count == 1)
             {
                 Features.NavigatePage(PageMaker.CreateAssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First())));
             }
             else
-                Features.AddNotification(new Notification("Error! Could not view asset", Notification.ERROR));
+                Features.AddNotification(new Notification("Can only view one asset", Notification.ERROR));
         }
 
         /// <summary>

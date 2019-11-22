@@ -22,9 +22,9 @@ namespace AMS.Controllers
         
         public IUserListController UserListController { get; set; }
 
-        public TagListController(IExporter printHelper)
+        public TagListController(ITagRepository tagRepository, IExporter printHelper)
         {
-            _rep = new TagRepository();
+            _rep = tagRepository;
             _exporter = printHelper;
             TagsList = new List<Tag>();
         }

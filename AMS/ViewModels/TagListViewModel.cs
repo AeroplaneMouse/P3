@@ -28,7 +28,6 @@ namespace AMS.ViewModels
 
         public TagListViewModel(ITagListController controller)
         {
-            //Todo Evt inkluder en exporter i stedet for at skrive new
             _tagListController = controller;
             Tags = _tagListController.TagsList;
             Tags.AddRange(_tagListController.GetParentTags());

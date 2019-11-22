@@ -21,7 +21,7 @@ namespace AMS.Models
 
         private List<Department> _departmentList { get; set; }
 
-        private IDepartmentRepository _departmentRep;
+        private IDepartmentRepository _departmentRep { get; set; }
 
         private ITagRepository _tagRepository { get; set; }
 
@@ -34,6 +34,7 @@ namespace AMS.Models
                 {
                     _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
 
+                    // TODO: Ingen new repositories!
                     _departmentList.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
                 }
 
@@ -46,6 +47,7 @@ namespace AMS.Models
                 {
                     _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
 
+                    // TODO: Ingen new repositories!
                     _departmentList.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
                 }
 
@@ -62,7 +64,7 @@ namespace AMS.Models
         public int ChildrenCount => 0;
         public List<ITagable> Children { get; set; }
         public string TagColor
-        {
+        {            // TODO: Ingen new repositories!
             get => (_tagRepository ?? new TagRepository()).GetById(1).TagColor;
             set => TagColor = value;
         }
