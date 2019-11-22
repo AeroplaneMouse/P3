@@ -26,7 +26,7 @@ namespace AMS.Controllers
             NonHiddenFieldList = asset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = asset.FieldList.Where(f => f.IsHidden == true).ToList();
             _assetRepository = assetRepository;
-            logger = new Log(new LogRepository());
+            //logger = new Log(new LogRepository());
         }
 
         /// <summary>
