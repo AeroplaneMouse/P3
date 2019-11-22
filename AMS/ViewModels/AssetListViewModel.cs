@@ -20,7 +20,7 @@ namespace AMS.ViewModels
         private IAssetListController _listController;
         private string _searchQuery;
         private TagHelper _tagHelper;
-        private ICommentController _commentController;
+        private ICommentListController _commentListController;
 
         public ObservableCollection<Asset> Items { get; set; }
         public int SelectedItemIndex { get; set; }
@@ -65,11 +65,11 @@ namespace AMS.ViewModels
         public ICommand RemoveCommand { get; set; }
         public ICommand RemoveMultipleCommand { get; set; }
 
-        public AssetListViewModel(MainViewModel main, IAssetListController listController, ICommentController commentController)
+        public AssetListViewModel(MainViewModel main, IAssetListController listController, ICommentListController commentListController)
         {
             Main = main;
             _listController = listController;
-            _commentController = commentController;
+            _commentListController = commentListController;
             Items = _listController.AssetList;
 
             AddNewCommand = new RelayCommand(AddNewAsset);
@@ -245,7 +245,7 @@ namespace AMS.ViewModels
         {
             // TODO: Redirect to viewAsset page
             if(IsSelectedAssetValid())
-                Main.ContentFrame.Navigate(new AssetPresenter(GetSelectedItem(), _listController.GetTags(GetSelectedItem()), _commentController));
+                Main.ContentFrame.Navigate(new AssetPresenter(GetSelectedItem(), _listController.GetTags(GetSelectedItem()), _commentListController));
             else
                 Main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
         }
