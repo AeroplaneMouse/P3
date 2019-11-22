@@ -293,7 +293,7 @@ namespace AMS.ViewModels
             // TODO: Redirect to viewAsset page
             if (SelectedItems.Count == 1)
             {
-                Main.ContentFrame.Navigate(new AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First(), _commentListController));
+                Main.ContentFrame.Navigate(new AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First()), _commentListController));
             }
             else
                 Main.AddNotification(new Notification("Error! Could not view asset", Notification.ERROR));
