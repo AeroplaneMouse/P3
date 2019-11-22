@@ -26,7 +26,7 @@ namespace AMS.Controllers
                     {
                         Name = "[No Parent Tag]",
                         ParentID = 0,
-                        Color = Tag.Color
+                        TagColor = Tag.TagColor
                     }
                 };
                 foreach (Tag parentTag in (List<Tag>)_tagRepository.GetParentTags())
@@ -49,7 +49,7 @@ namespace AMS.Controllers
             else
             {
                 Tag = new Tag();
-                Tag.Color = CreateRandomColor();
+                Tag.TagColor = CreateRandomColor();
                 PageTitle = "Add tag";
             }
         }

@@ -28,8 +28,8 @@ namespace AMS.ViewModels
         }
         public string Color
         {
-            get => _controller.Tag.Color;
-            set => _controller.Tag.Color = value;
+            get => _controller.Tag.TagColor;
+            set => _controller.Tag.TagColor = value;
         }
         public ulong ParentID
         {

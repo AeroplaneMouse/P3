@@ -8,10 +8,6 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AssetPresenter">
 
-    <Page.Resources>
-        <local:FieldDesignSelector x:Key="MyFieldDesignSelector" />
-    </Page.Resources>
-
     <Grid>
         <!-- Header -->
         <Grid.RowDefinitions>
@@ -21,14 +17,14 @@
         <TextBlock Style="{StaticResource TitleStyle}"
                    VerticalAlignment="Center"
                    Margin="10 0 0 0"
-                   Text="{Binding PageTitle}" />
+                   Text="{Binding Name}" />
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="10">
             
             <Button Style="{StaticResource RegularButton}"
-                    Command="{Binding Command}"
+                    Command="{Binding EditCommand}"
                     Content="Edit" />
             
             <Button Style="{StaticResource RegularCancelButton}"
@@ -57,7 +53,7 @@
                                 
                                 <TextBlock Style="{StaticResource ParagraphStyle}"
                                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                           Margin="0 0 0 10" />
+                                           Margin="0 5 0 15" />
                                 
                                 <!-- Identifier -->
                                 <TextBlock Style="{StaticResource HeaderStyle}"
@@ -65,14 +61,14 @@
 
                                 <TextBlock Style="{StaticResource ParagraphStyle}"
                                            Text="{Binding Identifier}"
-                                           Margin="0 0 0 10"/>
+                                           Margin="0 5 0 15"/>
                                 <!-- Desription -->
                                 <TextBlock Style="{StaticResource HeaderStyle}"
                                            Text="Description"/>
 
                                 <TextBlock Style="{StaticResource ParagraphStyle}"
                                            Text="{Binding Description}"
-                                           Margin="0 0 0 10"/>
+                                           Margin="0 5 0 15"/>
 
                                 <!-- Tags -->
                                 <TextBlock Style="{StaticResource HeaderStyle}"
@@ -80,7 +76,8 @@
                                 
                                 <ListView ItemsSource="{Binding TagList}"
                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                          ItemContainerStyle="{StaticResource ListViewWithTags}">
+                                          ItemContainerStyle="{StaticResource ListViewWithTags}"
+                                          BorderBrush="Transparent">
                                     <ListView.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel
@@ -94,7 +91,7 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
-                                                <Label Foreground="{Binding FontColor}" 
+                                                <Label Foreground="{Binding TagFontColor}" 
                                                        Content="{Binding Name}" 
                                                        Style="{StaticResource TagLabelOnlyShow}"/>
                                             </Grid>
