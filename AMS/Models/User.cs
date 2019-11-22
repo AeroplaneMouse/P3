@@ -19,26 +19,37 @@ namespace AMS.Models
         public bool IsEnabled { get; set; }
         public string Domain { get; set; }
 
+        private List<Department> _departmentList { get; set; }
+
+        private IDepartmentRepository _departmentRep;
+
+        private ITagRepository _tagRepository;
+
         // Index of the default department in the list of departments
         public int DepartmentIndex
         {
-            // TODO: All departments vises i departments dropdown menu
             get
             {
-                List<Department> list = new List<Department>() { new Department() { Name = "All departments" } };
+                if (_departmentList == null)
+                {
+                    _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
 
-                list.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
+                    _departmentList.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
+                }
 
-                return DefaultDepartment == 0 ? 0 : list.Select(p => p.ID).ToList().IndexOf(DefaultDepartment);
+                return DefaultDepartment == 0 ? 0 : _departmentList.Select(p => p.ID).ToList().IndexOf(DefaultDepartment);
             }
 
             set
             {
-                List<Department> list = new List<Department>() { new Department() { Name = "All departments" } };
+                if (_departmentList == null)
+                {
+                    _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
 
-                list.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
+                    _departmentList.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
+                }
 
-                DefaultDepartment = (value == 0) ? 0 : list[value].ID;
+                DefaultDepartment = (value == 0) ? 0 : _departmentList[value].ID;
             }
         }
 
@@ -53,7 +64,7 @@ namespace AMS.Models
 
         #endregion
 
-        private IDepartmentRepository _departmentRep;
+        
 
         /* Constructor used by DB */
         private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)

@@ -38,22 +38,6 @@ namespace AMS.IO
             return (_userRep.GetAll(true) ?? new List<UserWithStatus>()).Select(u => new UserWithStatus(u)).ToList();
         }
 
-        public string GetUsersFile()
-        {
-            var dialog = new Microsoft.Win32.OpenFileDialog();
-
-            Nullable<bool> result = dialog.ShowDialog();
-
-            string filePath = String.Empty;
-
-            if (result == false)
-            {
-                return String.Empty;
-            }
-
-            return dialog.FileName;
-        }
-
         public List<UserWithStatus> ImportUsersFromFile(string filePath)
         {
             var session = new Session(_userRep);
@@ -87,6 +71,22 @@ namespace AMS.IO
             {
                 return new List<UserWithStatus>();
             }
+        }
+
+        public string GetUsersFile()
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+
+            Nullable<bool> result = dialog.ShowDialog();
+
+            string filePath = String.Empty;
+
+            if (result == false)
+            {
+                return String.Empty;
+            }
+
+            return dialog.FileName;
         }
 
         #endregion

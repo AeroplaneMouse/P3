@@ -15,6 +15,7 @@
         </DataTemplate>
 
         <local:StatusToVisibilityConverter x:Key="visibilityConverter"/>
+        <local:StatusToToolTipConverter x:Key="toolTipConverter" />
     </Page.Resources>
 
     <Grid>
@@ -96,7 +97,7 @@
                 </StackPanel>
 
                 <!-- List of users -->
-                <ListView ItemsSource="{Binding ShownUsersList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                <ListView ItemsSource="{Binding ShownUsersList, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                           SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                           Margin="0 0 2 0"
                           Grid.Row="1"
@@ -119,7 +120,8 @@
                                             <Button Width="14" 
                                                     Opacity="0"
                                                     Command="{Binding DataContext.ChangeStatusCommand, ElementName=UserListView}"
-                                                    CommandParameter="{Binding .}"/>
+                                                    CommandParameter="{Binding .}"
+                                                    ToolTip="{Binding Path=Status, Converter={StaticResource toolTipConverter}}"/>
                                         </Border>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
