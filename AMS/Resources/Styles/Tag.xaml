@@ -87,12 +87,14 @@
     <Style TargetType="{x:Type Label}" x:Key="TagAddedToSearch">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinWidth" Value="50" />
-        <Setter Property="Padding" Value="0" />
+        <Setter Property="Padding" Value="2" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
                     <Button OverridesDefaultStyle="True" x:Name="PART_TagButton"
-                            Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" VerticalAlignment="Center" Padding="{TemplateBinding Padding}">
+                            Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" VerticalAlignment="Center" Padding="{TemplateBinding Padding}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveTagCommand}"
+                            CommandParameter="{Binding Path=.}">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}"
@@ -101,12 +103,20 @@
                                         RenderOptions.EdgeMode="Aliased">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="AUto" />
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
                                         </Grid.ColumnDefinitions>
                                         <ContentPresenter Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="5 0 5 0" />
                                         <!-- set command to delete the tag from the search query -->
-                                        <Button OverridesDefaultStyle="True" x:Name="PART_DeleteTagButton"
+                                        <TextBlock Foreground="{Binding FontColor}"
+                                                   Padding="0 0 5 0"
+                                                   FontFamily="{StaticResource SegoeBold}"
+                                                   x:Name="PART_DeleteTagText"
+                                                   Grid.Column="1"
+                                                   Visibility="Collapsed"
+                                                   VerticalAlignment="Center" 
+                                                   Text="X"/>
+                                        <!--<Button OverridesDefaultStyle="True" x:Name="PART_DeleteTagButton"
                                                 Grid.Column="1" Margin="0" VerticalAlignment="Center"
                                                 Visibility="Collapsed" 
                                                 CommandParameter="{Binding Path=.}"
@@ -114,19 +124,15 @@
                                             <Button.Template>
                                                 <ControlTemplate>
                                                     <Grid Background="Transparent" >
-                                                        <TextBlock Foreground="{Binding FontColor}" 
-                                                                   FontFamily="{StaticResource SegoeBold}"
-                                                                   VerticalAlignment="Center" 
-                                                                   Text="X"/>
                                                     </Grid>
                                                 </ControlTemplate>
                                             </Button.Template>
-                                        </Button>
+                                        </Button>-->
                                     </Grid>
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="PART_DeleteTagButton" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="PART_DeleteTagText" Property="Visibility" Value="Visible" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>

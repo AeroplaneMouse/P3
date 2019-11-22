@@ -166,8 +166,8 @@
                     </ListView.Template>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid MaxWidth="100" HorizontalAlignment="Left">
-                                <Label Foreground="{Binding FontColor}" Content="{Binding TagLabel}" Style="{StaticResource TagAddedToSearch}"></Label>
+                            <Grid HorizontalAlignment="Left">
+                                <Label Foreground="{Binding FontColor}" Content="{Binding TagLabel}" Style="{StaticResource TagAddedToSearch}"/>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
