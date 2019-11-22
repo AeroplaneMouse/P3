@@ -167,7 +167,6 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -266,7 +265,6 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="HorizontalAlignment" Value="Center" />
-        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
 
@@ -303,7 +301,6 @@
         <Setter Property="Content" Value="X"/>
         <Setter Property="Grid.Row" Value="0"/>
         <Setter Property="Grid.Column" Value="1"/>
-        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}"/>
         <Setter Property="Command" Value="{Binding DeleteFieldCommand}"/>
         <Setter Property="CommandParameter" Value="{Binding Path=ID}"/>
         <Setter Property="Padding" Value="0"/>

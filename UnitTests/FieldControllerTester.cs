@@ -16,11 +16,11 @@ namespace UnitTests
         {
                         
             _thirdField = new Field("Label of third field", "content of third field",
-                Field.FieldType.TextBox, "Default value of third field",true,true);
-            _thirdField.FieldPresentIn.Add(5);
+                Field.FieldType.TextBox,true,true);
+            _thirdField.TagIDs.Add(5);
             
             _fourthField = new Field("Label of fourth field", "content of fourth field",
-                Field.FieldType.Textarea, "Default value of fourth field");
+                Field.FieldType.Textarea);
             
         }
         
@@ -28,19 +28,18 @@ namespace UnitTests
         public void AddField_ChecksFieldsContains()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), new AssetRepository())
+            AssetController otherAssetController = new AssetController(new Asset(), new AssetRepository())
             {
                 Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             //Act
-            otherAsset.AddField(_thirdField);
-            otherAsset.AddField(_fourthField);
+            otherAssetController.AddField(_thirdField);
+            otherAssetController.AddField(_fourthField);
             
             //Assert
-            Assert.IsTrue(otherAsset.Asset.FieldList.Contains(_thirdField) && otherAsset.Asset.FieldList.Contains(_fourthField));
+            Assert.IsTrue(otherAssetController.NonHiddenFieldList.Contains(_thirdField) && otherAssetController.NonHiddenFieldList.Contains(_fourthField));
         }
         
-        [TestMethod]
         public void RemoveField_CheckFieldDoesNotContain()
         {
             //Arrange
@@ -52,13 +51,12 @@ namespace UnitTests
             otherAsset.AddField(_fourthField);
             
             //Act
-            otherAsset.RemoveFieldOrFieldRelations(_fourthField);
+            otherAsset.RemoveField(_fourthField);
 
             //Assert
             Assert.IsFalse(otherAsset.Asset.FieldList.Contains(_fourthField));
         }
         
-        [TestMethod]
         public void RemoveField_UsingInheritedField_CheckFieldIsHidden()
         {
             //Arrange
@@ -70,7 +68,7 @@ namespace UnitTests
             otherAsset.AddField(_fourthField);
             
             //Act
-            otherAsset.RemoveFieldOrFieldRelations(_thirdField);
+            otherAsset.RemoveField(_thirdField);
 
             //Assert
             Assert.IsTrue(otherAsset.Asset.FieldList.Contains(_thirdField) && _thirdField.IsHidden);
@@ -80,17 +78,17 @@ namespace UnitTests
         public void AddField_UsingInheritedField_CheckFieldsContains()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), new AssetRepository())
+            AssetController otherAssetController = new AssetController(new Asset(), new AssetRepository())
             {
                 Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
-            otherAsset.AddField(_fourthField);
+            otherAssetController.AddField(_fourthField);
             
             //Act
-            otherAsset.AddField(_thirdField);
+            otherAssetController.AddField(_thirdField);
             
             //Assert
-            Assert.IsTrue(otherAsset.Asset.FieldList.Contains(_thirdField));
+            Assert.IsTrue(otherAssetController.NonHiddenFieldList.Contains(_thirdField));
         }
         
         [TestMethod]

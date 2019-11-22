@@ -7,7 +7,6 @@
     <!-- Label of a field -->
     <Style TargetType="TextBlock" x:Key="FieldLabel">
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}" />
-        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}" />
         <Setter Property="Text" Value="{Binding Label}" />
     </Style>
 
@@ -42,13 +41,13 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Button OverridesDefaultStyle="True" x:Name="PART_DeleteFieldButton"
-                                            Grid.Column="1" Margin="3,0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                                            Grid.Column="1" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Right"
                                             Visibility="Visible" Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveFieldCommand}"
-                                            CommandParameter="{Binding Path=.}">
+                                            CommandParameter="{Binding Path=.}" >
                                         <Button.Template>
                                             <ControlTemplate>
-                                                <Grid Height="10" Width="10" Background="Transparent" >
-                                                    <TextBlock Foreground="Black" Style="{StaticResource ParagraphStyle}" VerticalAlignment="Center" Text=" x"></TextBlock>
+                                                <Grid Height="10" Width="10" Background="Transparent">
+                                                    <TextBlock Foreground="Black" Style="{StaticResource ParagraphStyle}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="x"></TextBlock>
                                                 </Grid>
                                             </ControlTemplate>
                                         </Button.Template>

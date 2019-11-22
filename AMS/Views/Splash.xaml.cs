@@ -1,6 +1,6 @@
 using AMS.ViewModels;
 using System.Windows.Controls;
-using AMS.Services.Interfaces;
+using AMS.Database.Repositories.Interfaces;
 
 namespace AMS.Views
 {
@@ -9,10 +9,10 @@ namespace AMS.Views
     /// </summary>
     public partial class Splash : Page
     {
-        public Splash(MainViewModel main)
+        public Splash(MainViewModel main, IUserRepository userRepository)
         {
             InitializeComponent();
-            DataContext = new ViewModels.SplashViewModel(main);
+            DataContext = new SplashViewModel(main, userRepository);
         }
     }
 }

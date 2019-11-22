@@ -20,10 +20,10 @@ namespace AMS.Views
     /// </summary>
     public partial class UserList : Page
     {
-        public UserList(MainViewModel main, IUserListController controller)
+        public UserList(IUserListController controller)
         {
             InitializeComponent();
-            this.DataContext = new UserListViewModel(main, controller);
+            this.DataContext = new UserListViewModel(controller);
         }
     }
 }

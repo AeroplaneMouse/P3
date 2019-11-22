@@ -43,7 +43,7 @@ namespace AMS.ViewModels.Prompts
             if (SelectedFieldType == Field.FieldType.Date)
                 DefaultValue = SelectedDate;
 
-            _newField = new Field(Name, "", SelectedFieldType, DefaultValue, IsRequired, _isCustom);
+            _newField = new Field(Name, DefaultValue, SelectedFieldType, IsRequired, _isCustom);
             PromptElapsed?.Invoke(this, new FieldInputPromptEventArgs(true, _newField));
         }
 

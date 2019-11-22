@@ -11,30 +11,47 @@ namespace AMS.ViewModels
 {
     class AssetPresenterViewModel : Base.BaseViewModel
     {
-        public string Name { get; set; }
-        public string Identifier { get; set; }
-        public string Description { get; set; }
+        private Asset _Asset { get; set; }
+        public string Name {
+            get {
+                return _Asset.Name;
+            } }
+        public string Identifier {
+            get {
+                return _Asset.Identifier;
+            }
+        }
+        public string Description {
+            get {
+                return _Asset.Description;
+            }
+        }
         public List<ITagable> TagList { get; set; }
-        public ObservableCollection<Field> FieldList { get; set; }
 
-        public ICommentListController CommentListController { get; set; }
+        public ObservableCollection<Field> FieldList {
+            get {
+                return new ObservableCollection<Field>(_Asset.FieldList);
+            }
+        }
+
+        private ICommentListController _commentListController { get; set; }
 
         ICommand EditCommand { get; set; }
         ICommand CancelCommand { get; set; }
 
         public AssetPresenterViewModel(Asset asset, List<ITagable> tagList, ICommentListController commentListController)
         {
-            Name = asset.Name;
-            Identifier = asset.Identifier;
-            Description = asset.Description;
-            FieldList = asset.FieldList ?? new ObservableCollection<Field>();
-
             TagList = tagList;
+            _Asset = asset;
+            _commentListController = commentListController;
 
-            CommentListController = commentListController;
-
-            //EditCommand = new Base.RelayCommand();
+            //EditCommand = new Base.RelayCommand(Edit);
             //CancelCommand = new Base.RelayCommand(Cancel);
+        }
+
+        private void Edit (object asset)
+        {
+
         }
     }
 }

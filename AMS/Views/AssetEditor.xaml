@@ -151,7 +151,9 @@
                                 Command="{Binding AddFieldCommand}"
                                 Content="+"
                                 Width="Auto"
-                                Height="20"/>
+                                Height="20"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"/>
                     </StackPanel>
 
                     <!-- FieldList -->
