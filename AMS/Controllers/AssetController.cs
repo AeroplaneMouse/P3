@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using AMS.Controllers.Interfaces;
+using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Logging;
+using AMS.Logging.Interfaces;
 using AMS.Models;
 
 namespace AMS.Controllers
@@ -13,6 +15,7 @@ namespace AMS.Controllers
         public Asset Asset { get; set; }
         public List<ITagable> CurrentlyAddedTags { get; } = new List<ITagable>();
         
+        private ILogger logger;
         private IAssetRepository _assetRepository;
         
 
@@ -21,6 +24,7 @@ namespace AMS.Controllers
             Asset = asset;
             DeSerializeFields();
             _assetRepository = assetRepository;
+            logger = new Log(new LogRepository());
         }
 
         public bool AttachTag(ITagable tag)
@@ -40,6 +44,7 @@ namespace AMS.Controllers
                     }
                 }
             }
+            logger.LogCreate(this);
             return CurrentlyAddedTags.Contains(tag);
         }
 
@@ -66,6 +71,7 @@ namespace AMS.Controllers
             ulong id = 0;
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
             _assetRepository.Insert(Asset, out id);
+            logger.LogCreate(this);
             return id != 0;
         }
 
@@ -73,11 +79,13 @@ namespace AMS.Controllers
         {
             SerializeFields();
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
+            logger.LogCreate(this);
             return _assetRepository.Update(Asset);
         }
 
         public bool Remove()
         {
+            logger.LogCreate(this);
             return _assetRepository.Delete(Asset);
         }
 
