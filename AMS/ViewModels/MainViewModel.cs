@@ -33,10 +33,8 @@ namespace AMS.ViewModels
         private Department _currentDepartment;
         private bool _hasConnectionFailedBeenRaised = false;
 
-        private IAssetRepository _assetRep;
         private IUserRepository _userRep;
         private IDepartmentRepository _departmentRep;
-        private LogRepository _logRep;
 
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
@@ -66,7 +64,7 @@ namespace AMS.ViewModels
                 if (_currentDepartment != null)
                 {
                     CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
-                    new UserRepository().Update(CurrentSession.user);
+                    _userRep.Update(CurrentSession.user);
                 }
 
                 OnPropertyChanged(nameof(CurrentDepartment));
@@ -86,7 +84,7 @@ namespace AMS.ViewModels
         /// <summary>
         /// Default constructor
         /// </summary>
-        public MainViewModel(Window window)
+        public MainViewModel(Window window, IUserRepository userRepository, IDepartmentRepository departmentRepository)
         {
             // Setting private fields
             _window = window;
@@ -121,10 +119,8 @@ namespace AMS.ViewModels
             )));
 
             // Dependencies that should be the same for the entire application
-            _assetRep = new AssetRepository();
-            _userRep = new UserRepository();
-            _departmentRep = new DepartmentRepository();
-            _logRep = new LogRepository();
+            _userRep = userRepository;
+            _departmentRep = departmentRepository;
 
             ShowHomePageCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateHome()));
             ShowAssetListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateAssetList()));
@@ -145,7 +141,7 @@ namespace AMS.ViewModels
             var resizer = new Resources.Window.WindowResizer(_window);
 
             // Display splash page
-            SplashPage = new Splash(this);
+            SplashPage = PageMaker.CreateSplash(this);
         }
 
         /// <summary>
@@ -156,7 +152,7 @@ namespace AMS.ViewModels
             try
             {
                 ulong id = ulong.Parse(parameter.ToString());
-                Department selectedDepartment = new DepartmentRepository().GetById(id);
+                Department selectedDepartment = _departmentRep.GetById(id);
                 if (selectedDepartment == null)
                     selectedDepartment = Department.GetDefault();
 
@@ -229,7 +225,7 @@ namespace AMS.ViewModels
             MySqlHandler.ConnectionFailed += ConnectionFailed;
 
             // Loads homepage and other stuff from the UI-thread.
-            SplashPage.Dispatcher.Invoke(() => ContentFrame.Navigate(new Home()));
+            SplashPage.Dispatcher.Invoke(() => ContentFrame.Navigate(PageMaker.CreateHome()));
 
             // Remove splash page
             SplashPage = null;
@@ -247,7 +243,7 @@ namespace AMS.ViewModels
             OnlyVisibleForAdmin = CurrentSession.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
 
             // Setting the current department, from the default department of the current user.
-            CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);
+            CurrentDepartment = _departmentRep.GetById(session.user.DefaultDepartment);
             if (CurrentDepartment == null)
                 CurrentDepartment = Department.GetDefault();
         }
@@ -280,13 +276,13 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(CurrentUser));
 
             // Load splash screen
-            SplashPage = new Views.Splash(this);
+            SplashPage = PageMaker.CreateSplash(this);
         }
 
         private List<Department> GetDepartments()
         {
             if (CurrentDepartmentVisibility == Visibility.Visible)
-                return (List<Department>)new DepartmentRepository().GetAll();
+                return (List<Department>)_departmentRep.GetAll();
             else
                 return new List<Department>();
         }
@@ -303,7 +299,7 @@ namespace AMS.ViewModels
                 department.Name = (e as TextInputPromptEventArgs).Text;
 
                 ulong id;
-                if (new DepartmentRepository().Insert(department, out id))
+                if (_departmentRep.Insert(department, out id))
                 {
                     // TODO: Add log of department insert
                     OnPropertyChanged(nameof(Departments));

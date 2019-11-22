@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AMS.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,10 @@ namespace AMS
     /// </summary>
     public partial class App : Application
     {
+        void App_Startup(object sender, StartupEventArgs e)
+        {
+            Window main = PageMaker.CreateMain();
+            main.Show();
+        }
     }
 }

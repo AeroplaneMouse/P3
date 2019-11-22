@@ -9,6 +9,7 @@ using AMS.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace AMS.Helpers
@@ -38,6 +39,8 @@ namespace AMS.Helpers
         private static IUserImporter _userImporter = new UserImporter(_userRepository);
 
         #endregion
+
+        #region Pages
 
         /// <summary>
         /// Returns a new AssetPresenter page
@@ -75,7 +78,17 @@ namespace AMS.Helpers
         /// <returns></returns>
         public static Page CreateHome()
         {
-            return new Home();
+            return new Home(_userRepository, _assetRepository, _tagRepository, _departmentRepository);
+        }
+
+        /// <summary>
+        /// Returns a new Splash page
+        /// </summary>
+        /// <param name="main"></param>
+        /// <returns></returns>
+        public static Page CreateSplash(MainViewModel main)
+        {
+            return new Splash(main, _userRepository);
         }
 
         /// <summary>
@@ -87,11 +100,20 @@ namespace AMS.Helpers
             return new LogList(new LogListController(_logRepository, _printHelper));
         }
 
+        /// <summary>
+        /// Returns a new TagEditor page
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         public static Page CreateTagEditor(Tag tag)
         {
             return new TagEditor(new TagController(tag, _tagRepository));
         }
 
+        /// <summary>
+        /// Returns a new TagList page
+        /// </summary>
+        /// <returns></returns>
         public static Page CreateTagList()
         {
             return new TagList(new TagListController(_printHelper));
@@ -105,5 +127,18 @@ namespace AMS.Helpers
         {
             return new UserList(new UserListController(_userImporter, _userRepository, _departmentRepository));
         }
+
+        #endregion
+
+        #region Windows
+
+        public static Window CreateMain()
+        {
+            return new Main(_userRepository, _departmentRepository);
+        }
+
+        #endregion
+
+
     }
 }
