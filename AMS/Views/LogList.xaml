@@ -38,7 +38,7 @@
                 <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Left">
                     <TextBox FontSize="{StaticResource FontSizeSmall}"
-                        Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
+                        Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
                         VerticalContentAlignment="Center"
                         MinWidth="200"
                         Name="StartElement">
@@ -89,9 +89,11 @@
                     <ListView.InputBindings>
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
                     </ListView.InputBindings>
+                    <!--
                     <ListView.Resources>
                         <Style TargetType="ListViewItem" BasedOn="{StaticResource RegularListItem}"/>
                     </ListView.Resources>
+                    -->
                 </ListView>
             </Grid>
         </Border>
