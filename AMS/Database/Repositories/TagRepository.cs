@@ -72,7 +72,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@label"].Value = entity;
 
                         cmd.Parameters.Add("@color", MySqlDbType.String);
-                        cmd.Parameters["@color"].Value = entity.Color;
+                        cmd.Parameters["@color"].Value = entity.TagColor;
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
                         cmd.Parameters["@options"].Value = entity.SerializedFields;
@@ -124,7 +124,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@label"].Value = entity;
 
                         cmd.Parameters.Add("@color", MySqlDbType.String);
-                        cmd.Parameters["@color"].Value = entity.Color;
+                        cmd.Parameters["@color"].Value = entity.TagColor;
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
                         cmd.Parameters["@options"].Value = entity.SerializedFields;

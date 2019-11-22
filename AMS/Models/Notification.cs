@@ -80,7 +80,7 @@ namespace AMS.Models
         {
             Color c = (Color)ColorConverter.ConvertFromString(colorString);
 
-            return Brightness(c) < 130 ? Brushes.White : Brushes.Black;
+            return Brightness(c) < 140 ? Brushes.White : Brushes.Black;
         }
     }
 }

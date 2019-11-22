@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using AMS.Interfaces;
+using System.Windows.Media;
 
 namespace AMS.Models
 {
@@ -47,6 +48,8 @@ namespace AMS.Models
         Type ITagable.TagType => GetType();
         string ITagable.TagLabel => Username;
         public List<ITagable> Children { get; set; }
+        public string TagColor { get; set; }
+        public SolidColorBrush TagFontColor { get => Notification.GetForegroundColor(TagColor); }
 
         #endregion
 

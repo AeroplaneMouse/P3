@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Media;
 
 namespace AMS.Interfaces
 {
@@ -9,5 +10,8 @@ namespace AMS.Interfaces
         Type TagType { get; }
         string TagLabel { get; }
         List<ITagable> Children { get; set; }
+        public string TagColor { get; set; }
+        public SolidColorBrush TagFontColor { get; }
+
     }
 }

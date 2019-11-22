@@ -14,8 +14,8 @@
                             Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" BorderBrush="{Binding Color}" BorderThickness="2" CornerRadius="10"
-                                        Background="{Binding Color}" FocusVisualStyle="{x:Null}" RenderOptions.EdgeMode="Aliased">
+                                <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" BorderBrush="{Binding TagColor}" BorderThickness="2" CornerRadius="10"
+                                        Background="{Binding TagColor}" FocusVisualStyle="{x:Null}" RenderOptions.EdgeMode="Aliased">
                                     <Grid >
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*" />
@@ -45,8 +45,8 @@
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}"
-                                        BorderBrush="{Binding Color}" BorderThickness="2" CornerRadius="10"
-                                        Background="{Binding Color}" FocusVisualStyle="{x:Null}"
+                                        BorderBrush="{Binding TagColor}" BorderThickness="2" CornerRadius="10"
+                                        Background="{Binding TagColor}" FocusVisualStyle="{x:Null}"
                                         RenderOptions.EdgeMode="Aliased">
                                     <Grid >
                                         <Grid.ColumnDefinitions>
@@ -96,8 +96,8 @@
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}"
-                                        BorderBrush="{Binding Color}" BorderThickness="2" CornerRadius="10"
-                                        Background="{Binding Color}" FocusVisualStyle="{x:Null}"
+                                        BorderBrush="{Binding TagColor}" BorderThickness="2" CornerRadius="10"
+                                        Background="{Binding TagColor}" FocusVisualStyle="{x:Null}"
                                         RenderOptions.EdgeMode="Aliased">
                                     <Grid>
                                         <Grid.ColumnDefinitions>

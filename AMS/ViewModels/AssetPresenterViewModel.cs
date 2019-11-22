@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Windows.Input;
 
 namespace AMS.ViewModels
 {
@@ -18,16 +19,22 @@ namespace AMS.ViewModels
 
         public ICommentListController CommentListController { get; set; }
 
+        ICommand EditCommand { get; set; }
+        ICommand CancelCommand { get; set; }
+
         public AssetPresenterViewModel(Asset asset, List<ITagable> tagList, ICommentListController commentListController)
         {
             Name = asset.Name;
             Identifier = asset.Identifier;
             Description = asset.Description;
-            FieldList = asset.FieldList;
+            FieldList = asset.FieldList ?? new ObservableCollection<Field>();
 
             TagList = tagList;
 
             CommentListController = commentListController;
+
+            //EditCommand = new Base.RelayCommand();
+            //CancelCommand = new Base.RelayCommand(Cancel);
         }
     }
 }
