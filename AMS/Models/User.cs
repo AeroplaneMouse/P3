@@ -19,41 +19,56 @@ namespace AMS.Models
         public bool IsEnabled { get; set; }
         public string Domain { get; set; }
 
+        private List<Department> _departmentList { get; set; }
+
+        private IDepartmentRepository _departmentRep;
+
+        private ITagRepository _tagRepository { get; set; }
+
         // Index of the default department in the list of departments
         public int DepartmentIndex
         {
-            // TODO: All departments vises i departments dropdown menu
             get
             {
-                List<Department> list = new List<Department>() { new Department() { Name = "All departments" } };
+                if (_departmentList == null)
+                {
+                    _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
 
-                list.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
+                    _departmentList.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
+                }
 
-                return DefaultDepartment == 0 ? 0 : list.Select(p => p.ID).ToList().IndexOf(DefaultDepartment);
+                return DefaultDepartment == 0 ? 0 : _departmentList.Select(p => p.ID).ToList().IndexOf(DefaultDepartment);
             }
 
             set
             {
-                List<Department> list = new List<Department>() { new Department() { Name = "All departments" } };
+                if (_departmentList == null)
+                {
+                    _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
 
-                list.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
+                    _departmentList.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
+                }
 
-                DefaultDepartment = (value == 0) ? 0 : list[value].ID;
+                DefaultDepartment = (value == 0) ? 0 : _departmentList[value].ID;
             }
         }
 
         #region ITagable
 
-        ulong ITagable.TagId => ID;
-        Type ITagable.TagType => GetType();
-        string ITagable.TagLabel => Username;
+        public ulong TagId => ID;
+        public Type TagType => GetType();
+        public string TagLabel => Username;
         public List<ITagable> Children { get; set; }
-        public string TagColor { get; set; }
-        public SolidColorBrush TagFontColor { get => Notification.GetForegroundColor(TagColor); }
+        public string TagColor
+        {
+            get => (_tagRepository ?? new TagRepository()).GetById(1).TagColor;
+            set => TagColor = value;
+        }
+        public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
 
         #endregion
 
-        private IDepartmentRepository _departmentRep;
+
 
         /* Constructor used by DB */
         private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)

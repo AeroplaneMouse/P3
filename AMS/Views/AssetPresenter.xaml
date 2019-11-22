@@ -40,7 +40,7 @@
                     <ScrollViewer Grid.Row="1" Margin="10">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="250" />
+                                <ColumnDefinition Width="350" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="400" />
                             </Grid.ColumnDefinitions>
@@ -48,36 +48,41 @@
                             <!-- Details -->
                             <StackPanel Grid.Column="0">
                                 <!-- Name -->
-                                <TextBlock Style="{StaticResource HeaderStyle}"
+                                <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                            Text="Name" />
                                 
                                 <TextBlock Style="{StaticResource ParagraphStyle}"
                                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                           Margin="0 5 0 15" />
+                                           Margin="0 5 0 15" 
+                                           TextWrapping="Wrap"/>
                                 
                                 <!-- Identifier -->
-                                <TextBlock Style="{StaticResource HeaderStyle}"
+                                <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                            Text="Identifier"/>
 
                                 <TextBlock Style="{StaticResource ParagraphStyle}"
                                            Text="{Binding Identifier}"
-                                           Margin="0 5 0 15"/>
+                                           Margin="0 5 0 15"
+                                           TextWrapping="Wrap"/>
+                                
                                 <!-- Desription -->
-                                <TextBlock Style="{StaticResource HeaderStyle}"
+                                <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                            Text="Description"/>
 
                                 <TextBlock Style="{StaticResource ParagraphStyle}"
                                            Text="{Binding Description}"
-                                           Margin="0 5 0 15"/>
+                                           Margin="0 5 0 15"
+                                           TextWrapping="Wrap"/>
 
                                 <!-- Tags -->
-                                <TextBlock Style="{StaticResource HeaderStyle}"
+                                <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                            Text="Tags"/>
                                 
                                 <ListView ItemsSource="{Binding TagList}"
                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                           ItemContainerStyle="{StaticResource ListViewWithTags}"
-                                          BorderBrush="Transparent">
+                                          BorderBrush="Transparent"
+                                          Margin="0 0 0 0">
                                     <ListView.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel
@@ -92,8 +97,10 @@
                                         <DataTemplate>
                                             <Grid>
                                                 <Label Foreground="{Binding TagFontColor}" 
-                                                       Content="{Binding Name}" 
-                                                       Style="{StaticResource TagLabelOnlyShow}"/>
+                                                       Content="{Binding TagLabel}" 
+                                                       Style="{StaticResource TagLabelOnlyShow}"
+                                                       FontSize="{StaticResource FontSizeXSmall}"
+                                                       FontWeight="UltraBold"/>
                                             </Grid>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
@@ -111,9 +118,10 @@
                             <StackPanel Grid.Column="2">
                                 <StackPanel Orientation="Horizontal"
                                             Margin="0 0 0 10">
-                                    <TextBlock Style="{StaticResource HeaderStyle}"
+                                    
+                                    <!--<TextBlock Style="{StaticResource HeaderStyle}"
                                                Margin="0 0 10 0"
-                                               Text="Fields"/>
+                                               Text="Fields"/>-->
                                 </StackPanel>
 
                                 <!-- The list of added fields -->

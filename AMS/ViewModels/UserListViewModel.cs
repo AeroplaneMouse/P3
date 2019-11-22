@@ -19,13 +19,11 @@ namespace AMS.ViewModels
         public ObservableCollection<UserWithStatus> ShownUsersList
         {
             get => new ObservableCollection<UserWithStatus>(_userListController.UserList);
-            set => _userListController.UserList = value.ToList();
         }
 
         public ObservableCollection<Department> DepartmentList
         {
             get => new ObservableCollection<Department>(_userListController.DepartmentList);
-            set => _userListController.DepartmentList = value.ToList();
         }
 
         // Checkboxes
