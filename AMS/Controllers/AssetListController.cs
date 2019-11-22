@@ -17,7 +17,7 @@ namespace AMS.Controllers
         //public Tagging _tags;
 
         public ObservableCollection<Asset> AssetList { get; set; }
-        public List<Tag> TagsList { get; set; } 
+        public List<Tag> TagList { get; set; } 
 
         public AssetListController(IAssetRepository assetRepository, IExporter exporter)
         {
@@ -46,18 +46,6 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Displays the viewPage for the given asset
-        /// </summary>
-        /// <param name="asset"></param>
-        /// <exception cref="NotImplementedException"></exception>
-        public void ViewAsset(Asset asset)
-        {
-            //TODO: Redirect to ViewPage
-            throw new NotImplementedException();
-            
-        }
-
-        /// <summary>
         /// Removes the given asset from the database and from the list
         /// </summary>
         /// <param name="asset"></param>
@@ -80,6 +68,11 @@ namespace AMS.Controllers
         {
             //TODO: Implement printHelper
             _exporter.Print(assets);
+        }
+
+        public List<ITagable> GetTags(Asset asset)
+        {
+            return _assetRepository.GetTags(asset).ToList();
         }
     }
 }

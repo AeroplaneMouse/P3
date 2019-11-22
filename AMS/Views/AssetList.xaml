@@ -245,6 +245,7 @@
                         <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
+                        <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding ViewCommand}"/>
                     </ListView.InputBindings>
                     <!-- <i:Interaction.Triggers> -->
                     <!--     <i:EventTrigger EventName="MouseDoubleClick"> -->
