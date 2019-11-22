@@ -3,7 +3,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace AMS.ViewModels.ViewModelHelper
+namespace AMS.Views
 {
     /// <summary>
     /// Class used for selecting a template for the fields.

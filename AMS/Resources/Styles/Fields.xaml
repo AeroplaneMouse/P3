@@ -2,9 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:AMS"
                     xmlns:controllers="clr-namespace:AMS.Controllers"
-                    xmlns:viewModelHelper="clr-namespace:AMS.ViewModels.ViewModelHelper"
+                    xmlns:designSelector="clr-namespace:AMS.Views"
                     xmlns:v="clr-namespace:AMS.Controllers">
-    <viewModelHelper:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+    
+    <designSelector:FieldDesignSelector x:Key="MyFieldDesignSelector" />
 
     <!-- Label of a field -->
     <Style TargetType="TextBlock" x:Key="FieldLabel">
