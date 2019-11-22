@@ -1,8 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using AMS.Controllers.Interfaces;
 using AMS.Logging;
+using AMS.Models;
 using AMS.ViewModels.Base;
 
 namespace AMS.ViewModels
@@ -12,8 +16,11 @@ namespace AMS.ViewModels
         private readonly MainViewModel _main;
         private ILogListController _logListController;
 
-        public ObservableCollection<Entry> SearchList { get; set; }
+        public ObservableCollection<Entry> Entries { get; set; }
         public string SearchQuery { get; set; }
+        public List<Entry> SelectedItems { get; set; } = new List<Entry>();
+        public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
+        public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
 
         public ICommand ViewCommand { get; set; }
         public ICommand SearchCommand { get; set; }
@@ -24,7 +31,7 @@ namespace AMS.ViewModels
         {
             _main = main;
             _logListController = logListController;
-            SearchList = _logListController.EntryList;
+            Entries = _logListController.EntryList;
 
             ViewCommand = new RelayCommand(View);
             SearchCommand = new RelayCommand(Search);
@@ -46,7 +53,7 @@ namespace AMS.ViewModels
                 return;
             
             _logListController.Search(SearchQuery);
-            SearchList = _logListController.EntryList;
+            Entries = _logListController.EntryList;
         }
 
         /// <summary>
@@ -54,8 +61,12 @@ namespace AMS.ViewModels
         /// </summary>
         private void Export()
         {
-            //TODO: figure out how to get selected items
-            throw new NotImplementedException();
+            if (SelectedItems.Count > 0)
+                // Export selected items
+                _logListController.Export(SelectedItems);
+            else
+                // Export all items found by search
+                _logListController.Export(Entries.ToList());
         }
     }
 }
