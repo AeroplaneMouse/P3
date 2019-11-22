@@ -10,7 +10,7 @@ namespace AMS.ViewModels
     class AssetPresenterViewModel : Base.BaseViewModel
     {
         public string PageTitle { get; set; }
-        public AssetPresenterViewModel(Asset asset, List<ITagable> tagList, ICommentController commentController)
+        public AssetPresenterViewModel(Asset asset, List<ITagable> tagList, ICommentListController commentListController)
         {
             PageTitle = asset.Name;
         }

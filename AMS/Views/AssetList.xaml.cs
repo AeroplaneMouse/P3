@@ -15,10 +15,10 @@ namespace AMS.Views
     /// </summary>
     public partial class AssetList : Page
     {
-        public AssetList(MainViewModel main, IAssetRepository assetRepository, IExporter exporter, ICommentController commentController)
+        public AssetList(MainViewModel main, IAssetRepository assetRepository, IExporter exporter, ICommentListController commentListController)
         {
             InitializeComponent();
-            DataContext = new AssetListViewModel(main, new AssetListController(assetRepository, exporter), commentController);
+            DataContext = new AssetListViewModel(main, new AssetListController(assetRepository, exporter), commentListController);
         }
     }
 }
