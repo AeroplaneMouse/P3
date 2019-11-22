@@ -21,6 +21,7 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Grid.Row="0">
             <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding AddNewCommand}"
+                    Visibility="{Binding Main.VisibleForAdmin}"
                     Content="Add"/>
         </StackPanel>
 
@@ -128,14 +129,16 @@
                     <Button Style="{StaticResource RegularCancelButton}" 
                             Command="{Binding RemoveCommand}" 
                             Content="Remove" 
-                            Visibility="{Binding MultipleSelected, UpdateSourceTrigger=PropertyChanged}"/> 
+                            Visibility="{Binding Main.VisibleForAdmin}"/> 
  
                     <Button Style="{StaticResource RegularButton}" 
                             Command="{Binding EditCommand}" 
+                            Visibility="{Binding Main.VisibleForAdmin}"
                             Margin="10 0 0 0 " 
                             Content="Edit"/>
 
                     <Button Style="{StaticResource RegularButton}" 
+                            Visibility="{Binding Main.VisibleForAdmin}"
                             Margin="10 0 0 0 " 
                             Content="Export selected items" 
                             Width="Auto" 
@@ -218,7 +221,8 @@
                                     <DataTemplate>
                                         <Button Style="{StaticResource EditButton}"
                                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.EditCommand}"
-                                                CommandParameter="{Binding Path=.}"/>
+                                                CommandParameter="{Binding Path=.}"
+                                                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.Main.VisibleForAdmin}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -228,9 +232,9 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{StaticResource TrashButton}"
-                                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveCommand}"
-                                            CommandParameter="{Binding Path=.}">
-                                        </Button>
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveCommand}"
+                                                CommandParameter="{Binding Path=.}"
+                                                Visibility="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.Main.VisibleForAdmin}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

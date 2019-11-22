@@ -18,12 +18,13 @@ namespace AMS.ViewModels
     public class AssetListViewModel : BaseViewModel
     {
         private IAssetListController _listController;
-        private MainViewModel _main;
         private string _searchQuery;
         private TagHelper _tagHelper;
 
         public ObservableCollection<Asset> Items { get; set; }
         public int SelectedItemIndex { get; set; }
+
+        public MainViewModel Main { get; set; }
 
         public string SearchQuery
         {
@@ -65,7 +66,7 @@ namespace AMS.ViewModels
 
         public AssetListViewModel(MainViewModel main, IAssetListController listController)
         {
-            _main = main;
+            Main = main;
             _listController = listController;
             Items = _listController.AssetList;
 
@@ -85,7 +86,7 @@ namespace AMS.ViewModels
                 // Prompt user for approval for the removal of x assets
                 string message = $"Are you sure you want to remove { list.Count } asset";
                 message += list.Count > 1 ? "s?" : "?";
-                _main.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
+                Main.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
                 {
 
                 }));
@@ -98,7 +99,7 @@ namespace AMS.ViewModels
         private void AddNewAsset()
         {
             //Todo FIx news
-            Features.NavigatePage(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main));
+            Features.NavigatePage(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),Main));
         }
 
         /// <summary>
@@ -110,10 +111,10 @@ namespace AMS.ViewModels
             //Todo FIx news
             
             if (IsSelectedAssetValid())
-                Features.NavigatePage(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),_main, GetSelectedItem()));
+                Features.NavigatePage(new AssetEditor(new AssetRepository(), new TagListController(new PrintHelper()),Main, GetSelectedItem()));
 
             else
-                _main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
+                Main.AddNotification(new Notification("Could not edit Asset", Notification.ERROR));
         }
 
         /// <summary>
@@ -244,7 +245,7 @@ namespace AMS.ViewModels
             if(IsSelectedAssetValid())
                 _listController.ViewAsset(GetSelectedItem());
             else
-                _main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
+                Main.AddNotification(new Notification("Could not view Asset", Notification.ERROR));
         }
 
         private void RemoveAssetByID(object parameter)
@@ -258,7 +259,7 @@ namespace AMS.ViewModels
             {
                 // Delete Asset and display notification
                 _listController.Remove(GetSelectedItem());
-                _main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " Was deleted", Notification.INFO));
+                Main.AddNotification(new Notification("Asset " + GetSelectedItem().Name + " Was deleted", Notification.INFO));
             }
         }
 
@@ -269,18 +270,18 @@ namespace AMS.ViewModels
             else
             {
                 // Display error notification on error
-                _main.AddNotification(new Notification("Could not delete Asset", Notification.ERROR));
+                Main.AddNotification(new Notification("Could not delete Asset", Notification.ERROR));
             }
         }
 
         private void RemoveAsset(Asset asset)
         {
             // Prompt user for confirmation of removal
-            _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
+            Main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
             {
                 if (e.Result)
                 {
-                    _main.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
+                    Main.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
                     _listController.Remove(asset);
                 }
             }));
@@ -321,7 +322,7 @@ namespace AMS.ViewModels
             if (selectedAsset == null)
             {
                 // Display error notification
-                _main.AddNotification(new Notification("Selected Asset is not valid", Notification.ERROR));
+                Main.AddNotification(new Notification("Selected Asset is not valid", Notification.ERROR));
                 return false;
             }
 
