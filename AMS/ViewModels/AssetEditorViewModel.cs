@@ -134,7 +134,6 @@ namespace AMS.ViewModels
         {
             if (sender is Field field)
             {
-                Console.WriteLine("Tag removed");
                 _assetController.RemoveField(field);
                 OnPropertyChanged(nameof(NonHiddenFieldList));
                 OnPropertyChanged(nameof(HiddenFieldList));
