@@ -22,6 +22,11 @@ namespace AMS.Controllers
             _assetRepository = assetRepository;
         }
 
+        /// <summary>
+        /// Attaches a tag and its fields to a asset.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         public bool AttachTag(ITagable tag)
         {
             CurrentlyAddedTags.Add(tag);
@@ -42,6 +47,11 @@ namespace AMS.Controllers
             return CurrentlyAddedTags.Contains(tag);
         }
 
+        /// <summary>
+        /// Detaches tag from an asset.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         public bool DetachTag(ITagable tag)
         {
             if (CurrentlyAddedTags.Contains(tag))
@@ -59,6 +69,10 @@ namespace AMS.Controllers
             return !CurrentlyAddedTags.Contains(tag);
         }
 
+        /// <summary>
+        /// Saves the asset to the database. As well as connects the tag in the tag repository.
+        /// </summary>
+        /// <returns></returns>
         public bool Save()
         {
             SerializeFields();
@@ -68,6 +82,10 @@ namespace AMS.Controllers
             return id != 0;
         }
 
+        /// <summary>
+        /// Updates the asset in the database.
+        /// </summary>
+        /// <returns></returns>
         public bool Update()
         {
             SerializeFields();
@@ -75,6 +93,10 @@ namespace AMS.Controllers
             return _assetRepository.Update(Asset);
         }
 
+        /// <summary>
+        /// Removes the asset form the database.
+        /// </summary>
+        /// <returns></returns>
         public bool Remove()
         {
             return _assetRepository.Delete(Asset);
