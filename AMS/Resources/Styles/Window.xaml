@@ -50,5 +50,12 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
+    <!-- Better rendering of fonts and shapes -->
+    <Style x:Key="{x:Type Window}" TargetType="Window">
+        <Setter Property="TextOptions.TextRenderingMode" Value="Auto"/>
+        <Setter Property="TextOptions.TextFormattingMode" Value="Ideal"/>
+        <Setter Property="RenderOptions.ClearTypeHint" Value="Auto" />
+    </Style>
+
 </ResourceDictionary>
