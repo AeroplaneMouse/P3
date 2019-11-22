@@ -36,6 +36,7 @@ namespace AMS.ViewModels
         private IAssetRepository _assetRep;
         private IUserRepository _userRep;
         private IDepartmentRepository _departmentRep;
+        private LogRepository _logRep;
 
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
@@ -123,11 +124,12 @@ namespace AMS.ViewModels
             _assetRep = new AssetRepository();
             _userRep = new UserRepository();
             _departmentRep = new DepartmentRepository();
+            _logRep = new LogRepository();
 
             ShowHomePageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new Home()));
             ShowAssetListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new AssetList(this, new AssetRepository(), new PrintHelper(), new CommentListController(CurrentSession, new CommentRepository()))));
             ShowTagListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new TagList(this, new TagRepository())));
-            ShowLogPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new LogList()));
+            ShowLogPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new LogList(this, _logRep, new PrintHelper())));
             ShowUserListPageCommand = new Base.RelayCommand(() => ContentFrame.Navigate(new UserList(this, new UserListController(new UserImporter(new UserRepository()), new UserRepository(), new DepartmentRepository()))));
 
             RemoveNotificationCommand = new Base.RelayCommand<object>((parameter) => RemoveNotification(parameter as Notification));

@@ -25,7 +25,7 @@ namespace AMS.ViewModels
         public ObservableCollection<Asset> Items { get; set; }
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
 
-        public MainViewModel Main { get; set; }
+        private MainViewModel _main { get; set; }
 
         public string SearchQuery
         {
@@ -72,25 +72,25 @@ namespace AMS.ViewModels
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
 
-        public AssetListViewModel(MainViewModel main, IAssetListController listController, ICommentListController commentController)
+        public AssetListViewModel(MainViewModel main, IAssetListController listController, ICommentListController commentListController)
         {
-            Main = main;
+            _main = main;
             _listController = listController;
-            _commentListController = commentController;
+            _commentListController = commentListController;
             Items = _listController.AssetList;
 
             // Admin only functions
-            if (Main.CurrentSession.IsAdmin())
+            if (_main.CurrentSession.IsAdmin())
             {
                 AddNewCommand = new RelayCommand(() => EditAsset(null));
                 EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
                 RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
                 RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
                 EditBySelectionCommand = new RelayCommand(EditBySelection);
+                PrintCommand = new RelayCommand(Export);
             }
 
             // Other functions
-            PrintCommand = new RelayCommand(Export);
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
             RemoveTagCommand = new RelayCommand<object>((parameter) => 
@@ -111,10 +111,10 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset(Asset asset)
         {
-            Main.ContentFrame.Navigate(new AssetEditor(
+            _main.ContentFrame.Navigate(new AssetEditor(
                 new AssetRepository(), 
                 new TagListController(new PrintHelper()),
-                Main,
+                _main,
                 asset));
         }
 
@@ -124,7 +124,7 @@ namespace AMS.ViewModels
             if (SelectedItems.Count == 1)
                 EditAsset(SelectedItems.First());
             else
-                Main.AddNotification(new Notification("Error! Please select one and only one asset.", Notification.ERROR), 3500);
+                _main.AddNotification(new Notification("Error! Please select one and only one asset.", Notification.ERROR), 3500);
         }
 
         /// <summary>
@@ -293,10 +293,10 @@ namespace AMS.ViewModels
             // TODO: Redirect to viewAsset page
             if (SelectedItems.Count == 1)
             {
-                //Main.ContentFrame.Navigate(new AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First(), _commentListController));
+                _main.ContentFrame.Navigate(new AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First()), _commentListController));
             }
             else
-                Main.AddNotification(new Notification("Error! Could not view asset", Notification.ERROR));
+                _main.AddNotification(new Notification("Error! Could not view asset", Notification.ERROR));
         }
 
         /// <summary>
@@ -306,11 +306,11 @@ namespace AMS.ViewModels
         private void RemoveAsset(Asset asset)
         {
             // Prompt user for confirmation of removal
-            Main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
+            _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
             {
                 if (e.Result)
                 {
-                    Main.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
+                    _main.AddNotification(new Notification("Asset " + asset.Name + " was deleted", Notification.INFO));
                     _listController.Remove(asset);
                 }
             }));
@@ -326,7 +326,7 @@ namespace AMS.ViewModels
                 // Prompt user for approval for the removal of x assets 
                 string message = $"Are you sure you want to remove { SelectedItems.Count } asset";
                 message += SelectedItems.Count > 1 ? "s?" : "?";
-                Main.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
+                _main.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
                 {
                     // Check if the user approved
                     if (e.Result)
@@ -338,7 +338,7 @@ namespace AMS.ViewModels
                         foreach (Asset asset in items)
                             _listController.Remove(asset);
 
-                        Main.AddNotification(
+                        _main.AddNotification(
                             new Notification($"{ items.Count } asset{ (items.Count > 1 ? "s" : "" ) } have been removed from the system", Notification.INFO),
                             3000);
                     }
@@ -351,27 +351,12 @@ namespace AMS.ViewModels
         /// </summary>
         private void Export()
         {
-            //TODO: Get selected assets
-            // Look here for how to (Answer 2): https://stackoverflow.com/questions/2282138/wpf-listview-selecting-multiple-list-view-items
-            // Fly: Jeg tror, at jeg har lavet det.
-            
             if (SelectedItems.Count > 0)
                 // Export selected items
                 _listController.Export(SelectedItems);
             else
                 // Export all items found by search
-                _listController.Export(ObservableToList(Items));
-        }
-
-        // This is super stupid. Please fix
-        // Takes an ObservableCollecion and returns a List with the items
-        // of the observableCollection
-        private List<Asset> ObservableToList(ObservableCollection<Asset> list)
-        {
-            List<Asset> newList = new List<Asset>();
-            foreach (Asset asset in list)
-                newList.Add(asset);
-            return newList;
+                _listController.Export(Items.ToList());
         }
     }
 }

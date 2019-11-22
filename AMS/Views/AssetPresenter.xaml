@@ -17,14 +17,14 @@
         <TextBlock Style="{StaticResource TitleStyle}"
                    VerticalAlignment="Center"
                    Margin="10 0 0 0"
-                   Text="{Binding PageTitle}" />
+                   Text="{Binding Name}" />
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="10">
             
             <Button Style="{StaticResource RegularButton}"
-                    Command="{Binding Command}"
+                    Command="{Binding EditCommand}"
                     Content="Edit" />
             
             <Button Style="{StaticResource RegularCancelButton}"
@@ -35,7 +35,100 @@
 
         <TabControl Grid.Row="1">
             <TabItem Header="Details">
-                <Label Content="Content goes here..." />
+                <Grid>
+                    <!-- Content of the page -->
+                    <ScrollViewer Grid.Row="1" Margin="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="250" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="400" />
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Details -->
+                            <StackPanel Grid.Column="0">
+                                <!-- Name -->
+                                <TextBlock Style="{StaticResource HeaderStyle}"
+                                           Text="Name" />
+                                
+                                <TextBlock Style="{StaticResource ParagraphStyle}"
+                                           Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                           Margin="0 5 0 15" />
+                                
+                                <!-- Identifier -->
+                                <TextBlock Style="{StaticResource HeaderStyle}"
+                                           Text="Identifier"/>
+
+                                <TextBlock Style="{StaticResource ParagraphStyle}"
+                                           Text="{Binding Identifier}"
+                                           Margin="0 5 0 15"/>
+                                <!-- Desription -->
+                                <TextBlock Style="{StaticResource HeaderStyle}"
+                                           Text="Description"/>
+
+                                <TextBlock Style="{StaticResource ParagraphStyle}"
+                                           Text="{Binding Description}"
+                                           Margin="0 5 0 15"/>
+
+                                <!-- Tags -->
+                                <TextBlock Style="{StaticResource HeaderStyle}"
+                                           Text="Tags"/>
+                                
+                                <ListView ItemsSource="{Binding TagList}"
+                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                          ItemContainerStyle="{StaticResource ListViewWithTags}"
+                                          BorderBrush="Transparent">
+                                    <ListView.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel
+                                                Orientation="Horizontal"
+                                                ItemHeight="40"
+                                                VerticalAlignment="Top"
+                                                HorizontalAlignment="Left"
+                                                OverridesDefaultStyle="True"/>
+                                        </ItemsPanelTemplate>
+                                    </ListView.ItemsPanel>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Label Foreground="{Binding TagFontColor}" 
+                                                       Content="{Binding Name}" 
+                                                       Style="{StaticResource TagLabelOnlyShow}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+
+
+                            </StackPanel>
+
+                            <!-- Separator -->
+                            <Rectangle Style="{StaticResource VerticalSeparator}"
+                           Grid.Column="1"
+                           Margin="10 0 10 0"/>
+
+                            <!-- Fields -->
+                            <StackPanel Grid.Column="2">
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0 0 0 10">
+                                    <TextBlock Style="{StaticResource HeaderStyle}"
+                                               Margin="0 0 10 0"
+                                               Text="Fields"/>
+                                </StackPanel>
+
+                                <!-- The list of added fields -->
+                                <ItemsControl ItemsSource="{Binding FieldList}"
+                                              ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <StackPanel />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
             </TabItem>
             <TabItem Header="Comments" />
             <TabItem Header="Log" />

@@ -4,8 +4,12 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:viewModel="clr-namespace:AMS.ViewModels"
+      xmlns:converter="clr-namespace:AMS.Views.ValueConverters"
       mc:Ignorable="d" 
       Title="AssetList">
+    <Page.Resources>
+        <converter:DateValueConverter x:Key="DateConverter"/>
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -124,7 +128,7 @@
 
                     <StackPanel Orientation="Horizontal" ToolTip="Enables strict searching. Assets MUST have all the applied tags.">
                         <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsStrict, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Style="{StaticResource ParagraphStyle}" Text="Strict" VerticalAlignment="Center"/>
+                        <TextBlock Style="{StaticResource ParagraphStyle}" Text="Strict" VerticalAlignment="Center" Margin="2 0 0 0"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -141,7 +145,7 @@
                             Visibility="{Binding SingleSelected}"/>
 
                     <Button Style="{StaticResource RegularButton}" 
-                            Visibility="{Binding Main.VisibleForAdmin}"
+                            Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"
                             Margin="10 0 0 0 " 
                             Content="Export selected items" 
                             Width="Auto" 
@@ -162,8 +166,8 @@
                     </ListView.Template>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Grid MaxWidth="100" HorizontalAlignment="Left">
-                                <Label Foreground="{Binding FontColor}" Content="{Binding TagLabel}" Style="{StaticResource TagAddedToSearch}"></Label>
+                            <Grid HorizontalAlignment="Left">
+                                <Label Foreground="{Binding FontColor}" Content="{Binding TagLabel}" Style="{StaticResource TagAddedToSearch}"/>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -214,11 +218,18 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            
+
                             <!-- Created -->
-                            <GridViewColumn Width="140" 
-                                            DisplayMemberBinding="{Binding Path=UpdatedAt}" 
-                                            Header="Updated"/>
+                            <GridViewColumn Header="Updated">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=UpdatedAt, Converter={StaticResource DateConverter}}"
+                                                   Foreground="Black"
+                                                   FontSize="{StaticResource FontSizeSmall}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                                            
                             <!-- Edit -->
                             <GridViewColumn Width="32">
                                 <GridViewColumn.CellTemplate>

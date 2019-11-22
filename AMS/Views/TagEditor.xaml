@@ -4,14 +4,14 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-      xmlns:viewModelHelper1="clr-namespace:AMS.ViewModels.ViewModelHelper"
+      xmlns:local="clr-namespace:AMS.Views"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
       Title="NewTag">
 
     <Page.Resources>
-        <viewModelHelper1:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+        <local:FieldDesignSelector x:Key="MyFieldDesignSelector" />
     </Page.Resources>
     
     <Grid>
