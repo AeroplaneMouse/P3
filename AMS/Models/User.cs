@@ -55,20 +55,20 @@ namespace AMS.Models
 
         #region ITagable
 
-        ulong ITagable.TagId => ID;
-        Type ITagable.TagType => GetType();
-        public string TagLabel { get => Username; }
+        public ulong TagId => ID;
+        public Type TagType => GetType();
+        public string TagLabel => Username;
         public List<ITagable> Children { get; set; }
         public string TagColor
         {
             get => (_tagRepository ?? new TagRepository()).GetById(1).TagColor;
             set => TagColor = value;
         }
-        public SolidColorBrush TagFontColor { get => Notification.GetForegroundColor(TagColor); }
+        public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
 
         #endregion
 
-        
+
 
         /* Constructor used by DB */
         private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)

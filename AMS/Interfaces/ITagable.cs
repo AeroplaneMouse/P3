@@ -12,6 +12,5 @@ namespace AMS.Interfaces
         List<ITagable> Children { get; set; }
         public string TagColor { get; set; }
         public SolidColorBrush TagFontColor { get; }
-
     }
 }

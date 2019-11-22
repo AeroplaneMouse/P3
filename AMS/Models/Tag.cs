@@ -39,12 +39,14 @@ namespace AMS.Models
         public override string ToString() => Name;
 
         #region From ITagable
+
         public ulong TagId { get; }
         public Type TagType => this.GetType();
         public string TagLabel => Name;
         public List<ITagable> Children { get; set; }
         public string TagColor { get; set; }
-        public SolidColorBrush TagFontColor { get => Notification.GetForegroundColor(TagColor); }
+        public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
+
         #endregion
     }
 }
