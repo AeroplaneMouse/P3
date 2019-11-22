@@ -34,7 +34,7 @@ namespace AMS.ViewModels.Commands
             }
             catch (Exception)
             {
-                Features.AddNotification(new Notification("Error! An unknown error occurred. Unable to remove department.", Notification.ERROR),
+                Features.AddNotification(new Notification("An unknown error occurred. Unable to remove department.", Notification.ERROR),
                     3500);
                 return;
             }
@@ -52,11 +52,11 @@ namespace AMS.ViewModels.Commands
                     Features.DisplayPrompt(new Confirm($"Are you sure you want to delete { _department.Name }?", PromptElapsed));
                 }
                 else
-                    Features.AddNotification(new Notification("Error! You cannot remove your current department. Please change your department and then try again.", Notification.ERROR),
+                    Features.AddNotification(new Notification("You cannot remove your current department. Please change your department and then try again.", Notification.ERROR),
                         3500);
             }
             else
-                Features.AddNotification(new Notification("Error! Removing department failed. Department not found!",
+                Features.AddNotification(new Notification("Removing department failed. Department not found!",
                     Notification.ERROR));
         }
 
@@ -74,7 +74,7 @@ namespace AMS.ViewModels.Commands
                 }
                 else
                     Features.AddNotification(new Notification(
-                        "Error! An unknown error occurred. Unable to remove department.", Notification.ERROR));
+                        "An unknown error occurred. Unable to remove department.", Notification.ERROR));
             }
         }
     }

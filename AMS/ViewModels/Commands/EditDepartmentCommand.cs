@@ -35,7 +35,7 @@ namespace AMS.ViewModels.Commands
             catch (Exception)
             {
                 Features.AddNotification(new Models.Notification(
-                    $"Error! An unknown occured. Unable to edit department with id: { parameter.ToString() }",
+                    $"An unknown occured. Unable to edit department with id: { parameter.ToString() }",
                     Models.Notification.ERROR));
                 return;
             }
@@ -47,7 +47,7 @@ namespace AMS.ViewModels.Commands
                 Features.DisplayPrompt(new TextInput("Enter new name", _department.Name, PromptElapsed));
             else
                 Features.AddNotification(
-                    new Notification("Error! Editing department failed. Department not found!", Notification.ERROR),
+                    new Notification("Editing department failed. Department not found!", Notification.ERROR),
                     3500);
         }
 
@@ -72,7 +72,7 @@ namespace AMS.ViewModels.Commands
                 }
                 else
                     _main.AddNotification(
-                        new Notification("ERROR! Department name cannot be empty. Please enter a name.", Notification.ERROR), 
+                        new Notification("Department name cannot be empty. Please enter a name.", Notification.ERROR), 
                         3500);
             }
         }

@@ -52,15 +52,21 @@ namespace AMS.ViewModels
         {
             // Connecting to database
             LoadingText = "Establishing connection...";
-            CurrentActionText = "An excellent connection to the database is being established...";
+
+            // TODO: Er den her nødvendig?
+            CurrentActionText = "A connection to the database is being established...";
             AdditionalText = "";
+
+            // TODO: Putter vi med vilje et delay ind?
             Thread.Sleep(_delay);
 
             if (new MySqlHandler().IsAvailable())
             {
                 // Authorizing user
                 LoadingText = "Connection established...";
-                CurrentActionText = "The excellent connection to the database was succesfully established...";
+
+                // TODO: Er den her nødvendig?
+                CurrentActionText = "The connection to the database was succesfully established...";
                 Thread.Sleep(_delay);
 
                 Session t = new Session(_userRepository);
@@ -79,6 +85,7 @@ namespace AMS.ViewModels
                     CurrentActionText = $"User \"{Session.GetIdentity()}\" is not authorized to access the application.";
                 }
 
+                // Reconnect is not required
                 return false;
             }
             else
@@ -86,9 +93,10 @@ namespace AMS.ViewModels
                 LoadingText = "ERROR!";
                 CurrentActionText = "Unfortunately the excellent connection to the database was not established...";
                 Reconnect();
-            }
 
-            return true;
+                // Reconnect is required
+                return true;
+            }
         }
 
         private void Reconnect()
