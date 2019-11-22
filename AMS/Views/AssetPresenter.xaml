@@ -8,6 +8,10 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AssetPresenter">
 
+    <Page.Resources>
+        <local:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+    </Page.Resources>
+
     <Grid>
         <!-- Header -->
         <Grid.RowDefinitions>
