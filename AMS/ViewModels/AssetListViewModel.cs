@@ -78,6 +78,9 @@ namespace AMS.ViewModels
             _listController = listController;
             _commentListController = commentListController;
             Items = _listController.AssetList;
+            
+            _tagHelper = new TagHelper(new TagRepository(), new UserRepository(), new ObservableCollection<ITagable>());
+            _tagHelper.CanApplyParentTags = true;
 
             // Admin only functions
             if (_main.CurrentSession.IsAdmin())
@@ -239,15 +242,6 @@ namespace AMS.ViewModels
 
         private void EnteringTagMode()
         {
-            try
-            {
-                _tagHelper = new TagHelper(new TagRepository(), new UserRepository(), new ObservableCollection<ITagable>());
-                _tagHelper.CanApplyParentTags = true;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
             CurrentGroup = "#";
             CurrentGroupVisibility = Visibility.Visible;
         }
