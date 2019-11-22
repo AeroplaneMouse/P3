@@ -10,6 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Page Remove="Resources\Styles\Fonts.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="3.6.0" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0" />
     <PackageReference Include="MySql.Data" Version="8.0.18" />
@@ -35,6 +39,7 @@
     <Resource Include="Resources\Images\Logos\Edit\edit_white.png" />
     <Resource Include="Resources\Images\Logos\Edit\edit_gray.png" />
     <Resource Include="Resources\Images\Logos\Edit\edit_black.png" />
+    <Resource Include="Resources\Styles\Fonts.xaml" />
   </ItemGroup>
 
   <ItemGroup>

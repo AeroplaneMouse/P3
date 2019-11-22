@@ -3,16 +3,17 @@
                     xmlns:system="clr-namespace:System;assembly=System.Runtime">
     
     <FontFamily x:Key="SegoeRegular">pack://application;,,,/Resources/Fonts/#Segoe UI</FontFamily>
-    <FontFamily x:Key="SegoeBold">pack://application;,,,/Resources/Fonts/#Segoe UI Bold</FontFamily>
+    <FontFamily x:Key="SegoeBold">/Resources/Fonts/#Segoe UI Bold</FontFamily>
+    <FontFamily x:Key="BillionStars">pack://application;,,,/Resources/Fonts/#Billion Stars Personal Use</FontFamily>
 
     <!-- Everything that inherits Control in the application defaults to this font -->
     <Style TargetType="{x:Type Control}" x:Key="BaseStyle">
-        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}" />
+        <!--<Setter Property="FontFamily" Value="{StaticResource BillionStars}" />-->
     </Style>
 
     <!-- TextBlock styles -->
     <Style TargetType="{x:Type TextBlock}" x:Key="BaseTextBlockStyle">
-        <Setter Property="FontFamily" Value="{StaticResource SegoeRegular}" />
+        <!--<Setter Property="FontFamily" Value="{StaticResource BillionStars}" />-->
         <Setter Property="FontWeight" Value="UltraLight"/>
     </Style>
     
@@ -35,6 +36,11 @@
 
     <Style TargetType="TextBlock" x:Key="HeaderStyle" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+    </Style>
+
+    <Style TargetType="TextBlock" x:Key="SmallHeaderStyle" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        <Setter Property="FontWeight" Value="SemiBold" />
     </Style>
 
     <Style TargetType="TextBlock" x:Key="ParagraphStyle" BasedOn="{StaticResource BaseTextBlockStyle}">
