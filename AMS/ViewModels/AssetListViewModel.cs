@@ -87,10 +87,10 @@ namespace AMS.ViewModels
                 RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
                 RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
                 EditBySelectionCommand = new RelayCommand(EditBySelection);
+                PrintCommand = new RelayCommand(Export);
             }
 
             // Other functions
-            PrintCommand = new RelayCommand(Export);
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
             RemoveTagCommand = new RelayCommand<object>((parameter) => 
