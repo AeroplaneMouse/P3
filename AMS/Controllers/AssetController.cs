@@ -26,7 +26,7 @@ namespace AMS.Controllers
             DeSerializeFields();
             FieldList = asset.FieldList.ToList<Field>();
             _assetRepository = assetRepository;
-            logger = new Log(new LogRepository());
+            //logger = new Log(new LogRepository());
         }
 
         /// <summary>
