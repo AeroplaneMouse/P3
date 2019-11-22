@@ -39,9 +39,11 @@ namespace AMS.Models
 
         #region From ITagable
 
-        public ulong TagId { get; }
+        public ulong TagId => ID;
         public Type TagType => this.GetType();
         public string TagLabel => Name;
+        public ulong ParentId => ParentID;
+        public int ChildrenCount => NumOfChildren;
         public List<ITagable> Children { get; set; }
         public string TagColor { get; set; }
         public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
