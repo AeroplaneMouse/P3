@@ -21,8 +21,8 @@ namespace AMS.ViewModels
     public class AssetEditorViewModel : BaseViewModel
     {
         private MainViewModel _main;
-        private AssetController _assetController;
-        private TagListController _tagListController;
+        private IAssetController _assetController;
+        private ITagListController _tagListController;
         private bool _isEditing;
 
         public ICommand AddFieldCommand { get; set; }
@@ -62,7 +62,7 @@ namespace AMS.ViewModels
 
         public string Title { get; set; }
 
-        public AssetEditorViewModel(Asset asset, IAssetRepository assetRepository, TagListController tagListController,MainViewModel main)
+        public AssetEditorViewModel(Asset asset, IAssetRepository assetRepository, ITagListController tagListController, MainViewModel main)
         {
             _main = main;
             _isEditing = (asset != null);
