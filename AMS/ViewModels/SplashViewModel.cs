@@ -13,7 +13,7 @@ namespace AMS.ViewModels
     {
         private MainViewModel _main;
         private IUserRepository _userRepository;
-        private const int _delay = 300;
+        private const int _delay = 0;
         private const int _reconnectWaitingTime = 5;
 
         public string LoadingText { get; set; }
