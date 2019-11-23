@@ -20,9 +20,7 @@ namespace AMS.Models
         public string Domain { get; set; }
 
         private List<Department> _departmentList { get; set; }
-
         private IDepartmentRepository _departmentRep { get; set; }
-
         private ITagRepository _tagRepository { get; set; }
 
         // Index of the default department in the list of departments
@@ -65,15 +63,12 @@ namespace AMS.Models
         public List<ITagable> Children { get; set; }
         public string TagColor
         {            // TODO: Ingen new repositories!
-            get => (_tagRepository ?? new TagRepository()).GetById(1).TagColor;
+            get => (_tagRepository ?? new TagRepository()).GetById(1).TagColor;
             set => TagColor = value;
         }
         public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
-
         #endregion
-
-
-
+
         /* Constructor used by DB */
         private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
         {

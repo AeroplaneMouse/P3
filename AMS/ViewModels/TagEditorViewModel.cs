@@ -15,15 +15,15 @@ namespace AMS.ViewModels
 {
     class TagEditorViewModel : Base.BaseViewModel
     {
-        #region Properties
-
-        ITagController _controller;
+        #region Public Properties
 
         public ObservableCollection<Field> NonHiddenFieldList =>
             new ObservableCollection<Field>(_controller.NonHiddenFieldList);
 
         public ObservableCollection<Field> HiddenFieldList =>
             new ObservableCollection<Field>(_controller.HiddenFieldList);
+
+        public List<Tag> ParentTagList => _controller.ParentTagList;
 
         public Tag _tag
         {
@@ -43,10 +43,7 @@ namespace AMS.ViewModels
             set => _controller.Tag.TagColor = value;
         }
 
-        public ulong ParentID
-        {
-            get => _controller.Tag.ParentID;
-        }
+        public ulong ParentID => _controller.Tag.ParentID;
 
         public ulong DepartmentID
         {
@@ -55,13 +52,13 @@ namespace AMS.ViewModels
         }
 
         public string PageTitle { get; set; }
-
-        public List<Tag> ParentTagList
-        {
-            get => _controller.ParentTagList;
-        }
-        
         public int SelectedParentTagIndex { get; set; }
+
+        #endregion
+
+        #region Private Methods
+
+        private ITagController _controller;
 
         #endregion
 

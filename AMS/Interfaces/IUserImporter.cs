@@ -12,14 +12,8 @@ namespace AMS.Interfaces
         #region Methods
 
         string GetUsersFile();
-
         List<UserWithStatus> ImportUsersFromFile(string filePath);
-
         List<UserWithStatus> ImportUsersFromDatabase();
-
-        //List<UserWithStatus> CombineLists(List<UserWithStatus> imported, List<UserWithStatus> existing);
-
-        //bool UserIsInList(List<UserWithStatus> list, User user);
 
         #endregion
     }
