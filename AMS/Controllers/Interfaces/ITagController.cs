@@ -13,7 +13,7 @@ namespace AMS.Controllers.Interfaces
 
         Tag Tag { get; set; }
 
-        string PageTitle { get; set; }
+        bool IsEditing { get; set; }
 
         List<Tag> ParentTagList { get; }
 

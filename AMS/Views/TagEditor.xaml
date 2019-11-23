@@ -68,7 +68,7 @@
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Parent tag ID"/>
                     <ComboBox ItemsSource="{Binding ParentTagList}" 
-                              SelectedIndex="{Binding SelectedParentIndex}"
+                              SelectedIndex="{Binding SelectedParentTagIndex}"
                               Margin="0 0 0 10">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
@@ -103,15 +103,31 @@
                                 Height="20"/>
                     </StackPanel>
 
-                    <!-- The list of added fields -->
-                    <ItemsControl ItemsSource="{Binding FieldList}"
-                                  ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel />
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                    </ItemsControl>
+                    <!-- FieldList -->
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding NonHiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Hidden fields"
+                               Margin="10 20 10 0" />
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding HiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </ScrollViewer>

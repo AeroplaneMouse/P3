@@ -4,15 +4,17 @@ using AMS.Logging;
 using AMS.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AMS.Controllers
 {
-    public class TagController : FieldListController, ITagController, ILoggableValues
+    public class TagController : FieldListController, ITagController, ILoggableValues, IFieldListController
     {
         public Tag Tag { get; set; }
-        public string PageTitle { get; set; }
+        public bool IsEditing { get; set; }
 
         public ulong tagID;
+        
 
         ITagRepository _tagRepository { get; set; }
 
@@ -41,32 +43,44 @@ namespace AMS.Controllers
             Tag = tag;
 
             _tagRepository = tagRep;
-
+            
+            Tag = tag;
+            DeSerializeFields();
+            NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
             if (Tag != null)
             {
-                PageTitle = "Edit tag";
+                IsEditing = true;
             }
             else
             {
                 Tag = new Tag();
                 Tag.TagColor = CreateRandomColor();
-                PageTitle = "Add tag";
+                IsEditing = false;
             }
         }
 
         public void Save()
         {
+            List<Field> fieldList = NonHiddenFieldList;
+            fieldList.AddRange(HiddenFieldList);
+            Tag.FieldList = fieldList;
+            SerializeFields();
             _tagRepository.Insert(Tag, out tagID);
+        }
+        
+        public void Update()
+        {
+            List<Field> fieldList = NonHiddenFieldList;
+            fieldList.AddRange(HiddenFieldList);
+            Tag.FieldList = fieldList;
+            SerializeFields();
+            _tagRepository.Update(Tag);
         }
 
         public void Remove()
         {
             _tagRepository.Delete(Tag);
-        }
-
-        public void Update()
-        {
-            _tagRepository.Update(Tag);
         }
 
         public string CreateRandomColor()
