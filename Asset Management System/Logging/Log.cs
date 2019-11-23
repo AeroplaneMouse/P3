@@ -14,7 +14,7 @@ namespace Asset_Management_System.Logging
     {
         //TODO: Get Repository via Dependency Injection
         private static IAssetRepository _assetRep = new AssetRepository();
-        private static  ILogRepository _logRep = new LogRepository();
+        private static ILogRepository _logRep = new LogRepository();
         /// <summary>
         /// Logs the changes made to a subject from an old entry
         /// </summary>

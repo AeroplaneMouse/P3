@@ -73,8 +73,6 @@ namespace AMS.ViewModels
 
         private IUserListController _userListController { get; set; }
 
-        private MainViewModel _main { get; set; }
-
         #endregion
 
         #region Commands
@@ -93,13 +91,8 @@ namespace AMS.ViewModels
 
         #region Constructor
 
-        public UserListViewModel(MainViewModel main, IUserListController userListController)
+        public UserListViewModel(IUserListController userListController)
         {
-            if (main != null)
-            {
-                _main = main;
-            }
-
             Title = "Users";
 
             _userListController = userListController;
@@ -134,7 +127,7 @@ namespace AMS.ViewModels
         {
             _userListController.CancelChanges();
             
-            _main.AddNotification(new Notification("Changes cancelled", Notification.ERROR));
+            Features.AddNotification(new Notification("Changes cancelled", Notification.ERROR));
 
             OnPropertyChanged(nameof(ShownUsersList));
         }
@@ -142,10 +135,10 @@ namespace AMS.ViewModels
         private void Apply()
         {
             if (_userListController.ApplyChanges())
-                _main.AddNotification(new Notification("Changes applied", Notification.APPROVE));
+                Features.AddNotification(new Notification("Changes applied", Notification.APPROVE));
 
             else
-                _main.AddNotification(new Notification("Not all conflicts solved", Notification.WARNING));
+                Features.AddNotification(new Notification("Not all conflicts solved", Notification.WARNING));
 
             OnPropertyChanged(nameof(ShownUsersList));
         }

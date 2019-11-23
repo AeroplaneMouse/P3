@@ -7,6 +7,7 @@ using System.Collections;
 using AMS.Models;
 using System.Windows;
 using AMS.Controllers.Interfaces;
+using AMS.Helpers;
 
 namespace AMS.Views
 {
@@ -15,10 +16,10 @@ namespace AMS.Views
     /// </summary>
     public partial class AssetList : Page
     {
-        public AssetList(MainViewModel main, IAssetRepository assetRepository, IExporter exporter, ICommentListController commentListController)
+        public AssetList(IAssetListController controller, TagHelper tagHelper)
         {
             InitializeComponent();
-            DataContext = new AssetListViewModel(main, new AssetListController(assetRepository, exporter), commentListController);
+            DataContext = new AssetListViewModel(controller, tagHelper);
         }
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)

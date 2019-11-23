@@ -74,9 +74,8 @@ namespace AMS.ViewModels
 
         #endregion
 
-        public TagEditorViewModel(MainViewModel main, ITagController tagController)
+        public TagEditorViewModel(ITagController tagController)
         {
-            _main = main;
             _controller = tagController;
 
             if (_controller.IsEditing)
@@ -110,6 +109,7 @@ namespace AMS.ViewModels
 
         private void SaveTag()
         {
+
             _controller.Tag.ParentID = ParentTagList[SelectedParentTagIndex].ID;
             
             if (_controller.IsEditing)
@@ -129,11 +129,13 @@ namespace AMS.ViewModels
             {
                 _main.ContentFrame.Navigate(new TagList(_main,new TagRepository()));
             }
+
         }
 
         private void AddField()
         {
             _main.DisplayPrompt(new Views.Prompts.CustomField(null, AddNewFieldConfirmed));
+
         }
 
         private void AddNewFieldConfirmed(object sender, PromptEventArgs e)
@@ -143,6 +145,7 @@ namespace AMS.ViewModels
                 _controller.AddField(args.Field);
                 OnPropertyChanged(nameof(NonHiddenFieldList));
                 OnPropertyChanged(nameof(HiddenFieldList));
+
             }
         }
 

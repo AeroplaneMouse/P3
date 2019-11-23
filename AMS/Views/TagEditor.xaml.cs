@@ -7,10 +7,10 @@ namespace AMS.Views
 {
     public partial class TagEditor : Page
     {
-        public TagEditor(MainViewModel main, ITagController controller)
+        public TagEditor(ITagController controller)
         {
             InitializeComponent();
-            DataContext = new TagEditorViewModel(main, controller);
+            DataContext = new TagEditorViewModel(controller);
         }
     }
 }

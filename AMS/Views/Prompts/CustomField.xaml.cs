@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using AMS.Events;
+using AMS.ViewModels.Prompts;
 
 namespace AMS.Views.Prompts
 {
@@ -11,7 +12,7 @@ namespace AMS.Views.Prompts
         public CustomField(string message, PromptEventHandler handler, bool isCustom = false)
         {
             InitializeComponent();
-            DataContext = new ViewModels.Prompts.CustomFieldViewModel(message, handler, isCustom);
+            DataContext = new CustomFieldViewModel(message, handler, isCustom);
         }
     }
 }

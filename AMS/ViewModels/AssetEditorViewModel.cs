@@ -20,7 +20,6 @@ namespace AMS.ViewModels
 {
     public class AssetEditorViewModel : BaseViewModel
     {
-        private MainViewModel _main;
         private IAssetController _assetController;
         private ITagListController _tagListController;
         private bool _isEditing;
@@ -56,20 +55,21 @@ namespace AMS.ViewModels
 
         public string Title { get; set; }
 
-        public AssetEditorViewModel(Asset asset, IAssetRepository assetRepository, ITagListController tagListController, MainViewModel main)
+        public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController)
         {
-            _main = main;
-            _isEditing = (asset != null);
+            _assetController = assetController;
+            _tagListController = tagListController;
+
+            _isEditing = (_assetController.Asset != null);
             if (_isEditing)
                 Title = "Edit asset";
             else
             {
                 Title = "Add asset";
-                asset = new Asset();
+                _assetController.Asset = new Asset();
             }
 
-            _assetController = new AssetController(asset, assetRepository);
-            _tagListController = tagListController;
+            
 
 
             //Commands
@@ -83,13 +83,10 @@ namespace AMS.ViewModels
         public void SaveAndExist()
         {
             SaveAsset(false);
-            if (_main.ContentFrame.CanGoBack)
+
+            if (Features.NavigateBack() == false)
             {
-                _main.ContentFrame.GoBack();
-            }
-            else
-            {
-                _main.ContentFrame.Navigate(new AssetList(_main, new AssetRepository(), new PrintHelper(), new CommentListController(_main.CurrentSession, new CommentRepository())));
+                Features.NavigatePage(PageMaker.CreateAssetList());
             }
         }
 
@@ -100,24 +97,24 @@ namespace AMS.ViewModels
                 if (!multiAdd)
                 {
                     _assetController.Update();
-                    _main.AddNotification(new Notification("Asset updated", Notification.APPROVE));
+                    Features.AddNotification(new Notification("Asset updated", Notification.APPROVE));
                 }
                 else
                 {
                     _assetController.Save();
-                    _main.AddNotification(new Notification("Asset added", Notification.APPROVE));
+                    Features.AddNotification(new Notification("Asset added", Notification.APPROVE));
                 }
             }
             else
             {
                 _assetController.Save();
-                _main.AddNotification(new Notification("Asset added", Notification.APPROVE));
+                Features.AddNotification(new Notification("Asset added", Notification.APPROVE));
             }
         }
 
         public void PromptForCustomField()
         {
-            _main.DisplayPrompt(new CustomField("Add field", AddCustomField, true));
+            Features.DisplayPrompt(new CustomField("Add field", AddCustomField, true));
         }
 
         public void AddCustomField(object sender, PromptEventArgs e)
@@ -142,13 +139,9 @@ namespace AMS.ViewModels
 
         public void Cancel()
         {
-            if (_main.ContentFrame.CanGoBack)
+            if (Features.NavigateBack() == false)
             {
-                _main.ContentFrame.GoBack();
-            }
-            else
-            {
-                _main.ContentFrame.Navigate(new AssetList(_main, new AssetRepository(), new PrintHelper(), new CommentListController(_main.CurrentSession, new CommentRepository())));
+                Features.NavigatePage(PageMaker.CreateAssetList());
             }
         }
     }

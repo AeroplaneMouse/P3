@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using AMS.Events;
+using AMS.ViewModels.Prompts;
 
 namespace AMS.Views.Prompts
 {
@@ -14,7 +15,7 @@ namespace AMS.Views.Prompts
         public TextInput(string message, string startingText, PromptEventHandler handler )
         {
             InitializeComponent();
-            DataContext = new ViewModels.Prompts.TextInputViewModel(message, startingText, handler);
+            DataContext = new TextInputViewModel(message, startingText, handler);
         }
     }
 }
