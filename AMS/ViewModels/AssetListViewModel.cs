@@ -21,6 +21,21 @@ namespace AMS.ViewModels
 
         public ObservableCollection<Asset> Items { get; set; }
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
+        public ObservableCollection<List<ITagable>> Tagables
+        {
+            get
+            {
+                return new ObservableCollection<List<ITagable>>(_listController.TagList);
+            }
+        }
+
+        public Dictionary<ulong, List<ITagable>> TagablesDict
+        {
+            get
+            {
+                return _listController.TagDict;
+            }
+        }
 
         public string SearchQuery
         {

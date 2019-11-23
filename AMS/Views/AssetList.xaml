@@ -9,6 +9,8 @@
       Title="AssetList">
     <Page.Resources>
         <converter:DateValueConverter x:Key="DateConverter"/>
+        <converter:AssetToTagListConverter x:Key="AssetToTagListConverter" />
+        <converter:DictionaryToTagListConverter x:Key="DictToListConverter" />
     </Page.Resources>
 
     <Grid>
@@ -202,7 +204,97 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+
+                            <GridViewColumn Header="Tags">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ListBox ItemsSource="{Binding ., Converter={StaticResource AssetToTagListConverter}}"
+                                                 BorderThickness="0"
+                                                 Background="Transparent">
+                                            <ListBox.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel Orientation="Horizontal"
+                                                               ItemHeight="Auto"
+                                                               VerticalAlignment="Top"
+                                                               HorizontalAlignment="Left"
+                                                               OverridesDefaultStyle="True"/>
+                                                </ItemsPanelTemplate>
+                                            </ListBox.ItemsPanel>
                                             
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Label Foreground="{Binding Path=TagFontColor}" 
+                                                               Content="{Binding Path=TagLabel}" 
+                                                               Style="{StaticResource TagLabelOnlyShow}"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <!--<GridViewColumn Header="Tags">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ListBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.TagablesDict, Converter={StaticResource DictToListConverter}}">
+
+                                            <ListBox.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel Orientation="Horizontal"
+                                                               ItemHeight="Auto"
+                                                               VerticalAlignment="Top"
+                                                               HorizontalAlignment="Left"
+                                                               OverridesDefaultStyle="True"/>
+                                                </ItemsPanelTemplate>
+                                            </ListBox.ItemsPanel>
+
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Label Foreground="{Binding Path=TagFontColor}" 
+                                                               Content="{Binding Path=TagLabel}" 
+                                                               Style="{StaticResource TagLabelOnlyShow}"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                                
+                                        </ListBox>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>-->
+
+                            <!--<GridViewColumn Header="Tags">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ListBox ItemsSource="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.TagablesDict}">
+
+                                            <ListBox.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <WrapPanel Orientation="Horizontal"
+                                                               ItemHeight="Auto"
+                                                               VerticalAlignment="Top"
+                                                               HorizontalAlignment="Left"
+                                                               OverridesDefaultStyle="True"/>
+                                                </ItemsPanelTemplate>
+                                            </ListBox.ItemsPanel>
+
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <Label Foreground="{Binding Path=TagFontColor}" 
+                                                               Content="{Binding Path=TagLabel}" 
+                                                               Style="{StaticResource TagLabelOnlyShow}"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+
+                                        </ListBox>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>-->
+
                             <!-- Edit -->
                             <GridViewColumn Width="32">
                                 <GridViewColumn.CellTemplate>

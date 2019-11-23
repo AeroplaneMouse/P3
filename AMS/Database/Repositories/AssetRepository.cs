@@ -460,7 +460,9 @@ namespace AMS.Database.Repositories
             taggedWith.AddRange(tagRepository.GetTagsForAsset(asset.ID));
             taggedWith.AddRange(userRepository.GetUsersForAsset(asset.ID));
 
-            return taggedWith;
+            // TODO: OrderBy så brugere kommer først
+            return taggedWith
+                .OrderBy(p => p.TagLabel);
         }
 
         private bool ClearTags(Asset asset)

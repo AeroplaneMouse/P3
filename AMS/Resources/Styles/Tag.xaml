@@ -14,8 +14,15 @@
                             Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" FontWeight="DemiBold">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" BorderBrush="{Binding TagColor}" BorderThickness="2" CornerRadius="10"
-                                        Background="{Binding TagColor}" FocusVisualStyle="{x:Null}" RenderOptions.EdgeMode="Aliased">
+                                <Border Margin="{TemplateBinding Margin}" 
+                                        Padding="{TemplateBinding Padding}" 
+                                        BorderBrush="{Binding TagColor}" 
+                                        BorderThickness="2" 
+                                        CornerRadius="10"
+                                        Background="{Binding TagColor}" 
+                                        FocusVisualStyle="{x:Null}" 
+                                        RenderOptions.EdgeMode="Aliased">
+                                    
                                     <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
@@ -56,8 +63,10 @@
                                             <Button.Template>
                                                 <ControlTemplate>
                                                     <Grid Height="10" Width="10" Background="Transparent" >
-                                                        <TextBlock Foreground="{Binding FontColor}" FontFamily="{StaticResource SegoeBold}"
-                                                                   VerticalAlignment="Center" Text="X"/>
+                                                        <TextBlock Foreground="{Binding FontColor}" 
+                                                                   VerticalAlignment="Center" 
+                                                                   Text="X"
+                                                                   FontWeight="Bold"/>
                                                     </Grid>
                                                 </ControlTemplate>
                                             </Button.Template>
@@ -104,7 +113,6 @@
                                         <!-- set command to delete the tag from the search query -->
                                         <TextBlock Foreground="{Binding FontColor}"
                                                    Padding="0 0 5 0"
-                                                   FontFamily="{StaticResource SegoeBold}"
                                                    x:Name="PART_DeleteTagText"
                                                    Grid.Column="1"
                                                    Visibility="Collapsed"

@@ -17,7 +17,50 @@ namespace AMS.Controllers
         //public Tagging _tags;
 
         public ObservableCollection<Asset> AssetList { get; set; }
-        public List<Tag> TagList { get; set; } 
+
+        private List<List<ITagable>> _tagables;
+
+        private Dictionary<ulong, List<ITagable>> _tagDict;
+
+        public List<List<ITagable>> TagList
+        {
+            get
+            {
+                if (_tagables == null)
+                {
+                    for (int i = 0; i < AssetList.Count; i++)
+                    {
+                        _tagables[i].AddRange(GetTags(AssetList[i]));
+                    }
+                }
+
+                return _tagables;
+            }
+
+            set => _tagables = value;
+        }
+
+        public Dictionary<ulong, List<ITagable>> TagDict
+        {
+            get
+            {
+                if (_tagDict == null)
+                {
+                    Dictionary<ulong, List<ITagable>> dict = new Dictionary<ulong, List<ITagable>>();
+
+                    for (int i = 0; i < AssetList.Count; i++)
+                    {
+                        dict.Add(AssetList[i].ID, GetTags(AssetList[i]));
+                    }
+
+                    _tagDict = dict;
+                }
+
+                return _tagDict;
+            }
+
+            set => _tagDict = value;
+        }
 
         public AssetListController(IAssetRepository assetRepository, IExporter exporter)
         {
@@ -64,15 +107,8 @@ namespace AMS.Controllers
         /// Using an IExporter
         /// </summary>
         /// <param name="assets"></param>
-        public void Export(List<Asset> assets)
-        {
-            //TODO: Implement printHelper
-            _exporter.Print(assets);
-        }
+        public void Export(List<Asset> assets) => _exporter.Print(assets);
 
-        public List<ITagable> GetTags(Asset asset)
-        {
-            return _assetRepository.GetTags(asset).ToList();
-        }
+        public List<ITagable> GetTags(Asset asset) => _assetRepository.GetTags(asset).ToList();
     }
 }
