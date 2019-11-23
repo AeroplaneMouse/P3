@@ -74,6 +74,8 @@ namespace AMS.ViewModels
 
         #endregion
 
+        #region Constructor
+
         public TagEditorViewModel(ITagController tagController)
         {
             _controller = tagController;
@@ -86,7 +88,7 @@ namespace AMS.ViewModels
             {
                 PageTitle = "Add asset";
             }
-            
+
             //Set the selected parent to the parent of the chosen tag
             int i = ParentTagList.Count;
             while (i > 0 && ParentTagList[i - 1].ID != _controller.Tag.ParentID)
@@ -100,10 +102,11 @@ namespace AMS.ViewModels
             // Initialize commands
             SaveTagCommand = new Base.RelayCommand(SaveTag);
             AddFieldCommand = new Base.RelayCommand(AddField);
-            RemoveFieldCommand = new Base.RelayCommand<object>((parameter ) => RemoveField(parameter));
-
+            RemoveFieldCommand = new Base.RelayCommand<object>((parameter) => RemoveField(parameter));
             CancelCommand = new Base.RelayCommand(Cancel);
         }
+
+        #endregion
 
         #region Methods
 

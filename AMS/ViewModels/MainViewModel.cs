@@ -24,17 +24,9 @@ namespace AMS.ViewModels
 {
     public class MainViewModel : Base.BaseViewModel
     {
-        // The window this view model controls
-        private readonly Window _window;
+        #region Public Properties
 
-        // Margin around the window to allow a drop shadow
-        private int _outerMarginSize;
-
-        private Department _currentDepartment;
-        private bool _hasConnectionFailedBeenRaised = false;
-
-        private IUserRepository _userRep;
-        private IDepartmentRepository _departmentRep;
+        #region Window Properties
 
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
@@ -52,14 +44,18 @@ namespace AMS.ViewModels
         public int TitleHeight { get; set; }
         public GridLength TitleHeightGridLength { get => new GridLength(TitleHeight + ResizeBorder); }
         public int NavigationHeight { get; set; }
-        public String CurrentUser { get; set; }
+
+        #endregion
+
+        public string CurrentUser { get; set; }
+        public Session CurrentSession { get; private set; }
         public Department CurrentDepartment
         {
             get => _currentDepartment;
             set
             {
                 _currentDepartment = value;
-               
+
                 // Update default department for user
                 if (_currentDepartment != null)
                 {
@@ -70,26 +66,76 @@ namespace AMS.ViewModels
                 OnPropertyChanged(nameof(CurrentDepartment));
             }
         }
-        public Frame ContentFrame { get; set; } = new Frame();
 
+        public Frame ContentFrame { get; set; } = new Frame();
         public Page SplashPage { get; set; }
         public Page PopupPage { get; set; }
+
         public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
         public Visibility OnlyVisibleForAdmin { get; set; }
+
         public List<Department> Departments { get => GetDepartments(); }
-        public Session CurrentSession { get; private set; }
         public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
 
+        #endregion
+
+        #region Private Properties
+
+        // The window this view model controls
+        private readonly Window _window;
+
+        // Margin around the window to allow a drop shadow
+        private int _outerMarginSize;
+
+        private Department _currentDepartment;
+        private bool _hasConnectionFailedBeenRaised = false;
+
+        private IUserRepository _userRep;
+        private IDepartmentRepository _departmentRep;
+
+        #endregion
+
+        #region Commands
+
+        // Window commands
+        public ICommand MinimizeCommand { get; set; }
+        public ICommand MaximizeCommand { get; set; }
+        public ICommand CloseCommand { get; set; }
+        public ICommand SystemMenuCommand { get; set; }
+
+        // Change page commands
+        public ICommand ShowHomePageCommand { get; set; }
+        public ICommand ShowAssetListPageCommand { get; set; }
+        public ICommand ShowTagListPageCommand { get; set; }
+        public ICommand ShowLogPageCommand { get; set; }
+        public ICommand ShowUserListPageCommand { get; set; }
+
+        // Department commands
+        public ICommand SelectDepartmentCommand { get; set; }
+        public ICommand RemoveDepartmentCommand { get; set; }
+        public ICommand EditDepartmentCommand { get; set; }
+        public ICommand AddDepartmentCommand { get; set; }
+
+        // Notification commands
+        public ICommand AddFieldTestCommand { get; set; }
+        public ICommand RemoveNotificationCommand { get; set; }
+
+        public ICommand ReloadCommand { get; set; }
+
+        #endregion
+
+        #region Constructor
 
         /// <summary>
         /// Default constructor
         /// </summary>
         public MainViewModel(Window window, IUserRepository userRepository, IDepartmentRepository departmentRepository)
         {
+            #region Window Properties
+
             // Setting private fields
             _window = window;
             _outerMarginSize = 10;
-            Features.Main = this;
 
             WindowMinWidth = 300;
             WindowMinHeight = 400;
@@ -107,7 +153,21 @@ namespace AMS.ViewModels
                 OnPropertyChanged(nameof(OuterMarginThicknessSize));
             };
 
+            // Fixes window sizing issues at maximized
+            var resizer = new Resources.Window.WindowResizer(_window);
+
+            #endregion
+
+            Features.Main = this;
+
+            _userRep = userRepository;
+            _departmentRep = departmentRepository;
+
             // Initialize commands
+            RemoveNotificationCommand = new Base.RelayCommand<object>((parameter) => RemoveNotification(parameter as Notification));
+            ReloadCommand = new Base.RelayCommand(Reload);
+
+            // Window commands
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
             MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
             CloseCommand = new Base.RelayCommand(() => _window.Close());
@@ -117,54 +177,27 @@ namespace AMS.ViewModels
                     OuterMarginSize + ResizeBorder + TitleHeight
                 )
             )));
-
-            // Dependencies that should be the same for the entire application
-            _userRep = userRepository;
-            _departmentRep = departmentRepository;
-
+            
+            // Change page commands
             ShowHomePageCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateHome()));
             ShowAssetListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateAssetList()));
             ShowTagListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateTagList()));
             ShowLogPageCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateLogList()));
             ShowUserListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateUserList()));
 
-            RemoveNotificationCommand = new Base.RelayCommand<object>((parameter) => RemoveNotification(parameter as Notification));
-
-            ReloadCommand = new Base.RelayCommand(Reload);
-
+            // Department commands
             SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
             EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
             AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)));
 
-            // Fixes window sizing issues at maximized
-            var resizer = new Resources.Window.WindowResizer(_window);
-
             // Display splash page
             SplashPage = PageMaker.CreateSplash(this);
         }
 
-        /// <summary>
-        /// Selects a new department where parameter is the id of the department to be selected
-        /// </summary>
-        private void SelectDepartment(object parameter)
-        {
-            try
-            {
-                ulong id = ulong.Parse(parameter.ToString());
-                Department selectedDepartment = _departmentRep.GetById(id);
-                if (selectedDepartment == null)
-                    selectedDepartment = Department.GetDefault();
+        #endregion
 
-                AddNotification(new Notification(
-                    $"{selectedDepartment.Name} is now the current department.", Notification.APPROVE));
-                CurrentDepartment = selectedDepartment;
-            }
-            catch (Exception e)
-            {
-                AddNotification(new Notification(e.Message, Notification.ERROR), 5000);
-            }
-        }
+        #region Public Methods
 
         /// <summary>
         /// Displays the given prompt and attaches a remove delegate to remove it
@@ -175,20 +208,6 @@ namespace AMS.ViewModels
             PopupPage = promptPage;
             (promptPage.DataContext as Prompts.PromptViewModel).PromptElapsed += RemovePrompt;
         }
-
-        /// <summary>
-        /// Removes the prompt view
-        /// </summary>
-        private void RemovePrompt(object sender, PromptEventArgs e)
-        {
-            PopupPage = null;
-        }
-
-        /// <summary>
-        /// Adds a notification to the list of active notifications, with a displayTime of 2500 milliseconds.
-        /// </summary>
-        public void AddNotification(Notification n)
-            => AddNotification(n, 2500);
 
         /// <summary>
         /// Adds a notification to the list of active notifications, and removes is after the specified displayTime.
@@ -208,12 +227,9 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
-        /// Removes an active notification by notification object
+        /// Adds a notification to the list of active notifications, with a displayTime of 2500 milliseconds.
         /// </summary>
-        private bool RemoveNotification(Notification n)
-        {
-            return ActiveNotifications.Remove(n);
-        }
+        public void AddNotification(Notification n) => AddNotification(n, 2500);
 
         /// <summary>
         /// Used when the application has connected to the database and other external services,
@@ -244,9 +260,24 @@ namespace AMS.ViewModels
 
             // Setting the current department, from the default department of the current user.
             CurrentDepartment = _departmentRep.GetById(session.user.DefaultDepartment);
+
             if (CurrentDepartment == null)
                 CurrentDepartment = Department.GetDefault();
         }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Removes the prompt view
+        /// </summary>
+        private void RemovePrompt(object sender, PromptEventArgs e) => PopupPage = null;
+
+        /// <summary>
+        /// Removes an active notification by notification object
+        /// </summary>
+        private bool RemoveNotification(Notification n) => ActiveNotifications.Remove(n);
 
         /// <summary>
         /// Calls the reload method, if it has not been called and sets a flag to prevent
@@ -279,14 +310,41 @@ namespace AMS.ViewModels
             SplashPage = PageMaker.CreateSplash(this);
         }
 
+        /// <summary>
+        /// Selects a new department where parameter is the id of the department to be selected
+        /// </summary>
+        private void SelectDepartment(object parameter)
+        {
+            try
+            {
+                ulong id = ulong.Parse(parameter.ToString());
+                Department selectedDepartment = _departmentRep.GetById(id);
+
+                if (selectedDepartment == null)
+                    selectedDepartment = Department.GetDefault();
+
+                AddNotification(new Notification($"{selectedDepartment.Name} is now the current department.", Notification.APPROVE));
+
+                CurrentDepartment = selectedDepartment;
+            }
+            catch (Exception e)
+            {
+                AddNotification(new Notification(e.Message, Notification.ERROR), 5000);
+            }
+        }
+
+        /// <summary>
+        /// Returns the list of deparments
+        /// </summary>
+        /// <returns></returns>
         private List<Department> GetDepartments()
         {
             if (CurrentDepartmentVisibility == Visibility.Visible)
                 return (List<Department>)_departmentRep.GetAll();
+
             else
                 return new List<Department>();
         }
-
 
         /// <summary>
         /// Adds a new department to the system if the given prompt resulted accept with the name specified
@@ -307,36 +365,12 @@ namespace AMS.ViewModels
                         Notification.APPROVE));
                 }
                 else
-                    AddNotification(
-                        new Notification(
+                    AddNotification(new Notification(
                             $"An unknown error stopped the department {department.Name} from beeing added.",
                             Notification.ERROR), 3000);
             }
         }
 
-        // Window commands
-        public ICommand MinimizeCommand { get; set; }
-        public ICommand MaximizeCommand { get; set; }
-        public ICommand CloseCommand { get; set; }
-        public ICommand SystemMenuCommand { get; set; }
-
-        // Change page commands
-        public ICommand ShowHomePageCommand { get; set; }
-        public ICommand ShowAssetListPageCommand { get; set; }
-        public ICommand ShowTagListPageCommand { get; set; }
-        public ICommand ShowLogPageCommand { get; set; }
-        public ICommand ShowUserListPageCommand { get; set; }
-
-        // Department commands
-        public ICommand SelectDepartmentCommand { get; set; }
-        public ICommand RemoveDepartmentCommand { get; set; }
-        public ICommand EditDepartmentCommand { get; set; }
-        public ICommand AddDepartmentCommand { get; set; }
-
-        // Notification commands
-        public ICommand AddFieldTestCommand { get; set; }
-        public ICommand RemoveNotificationCommand { get; set; }
-
-        public ICommand ReloadCommand { get; set; }
+        #endregion
     }
 }
