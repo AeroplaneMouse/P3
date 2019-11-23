@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using AMS.Database.Repositories;
 using AMS.Views;
+using AMS.Helpers;
 
 namespace AMS.ViewModels
 {
@@ -17,7 +18,6 @@ namespace AMS.ViewModels
         #region Properties
 
         ITagController _controller;
-        MainViewModel _main;
 
         public ObservableCollection<Field> NonHiddenFieldList =>
             new ObservableCollection<Field>(_controller.NonHiddenFieldList);
@@ -121,20 +121,15 @@ namespace AMS.ViewModels
                 _controller.Save();
             }
 
-            if (_main.ContentFrame.CanGoBack)
+            if (Features.NavigateBack() == false)
             {
-                _main.ContentFrame.GoBack();
+                Features.NavigatePage(PageMaker.CreateTagList());
             }
-            else
-            {
-                _main.ContentFrame.Navigate(new TagList(_main,new TagRepository()));
-            }
-
         }
 
         private void AddField()
         {
-            _main.DisplayPrompt(new Views.Prompts.CustomField(null, AddNewFieldConfirmed));
+            Features.DisplayPrompt(new Views.Prompts.CustomField(null, AddNewFieldConfirmed));
 
         }
 
@@ -162,13 +157,9 @@ namespace AMS.ViewModels
 
         private void Cancel()
         {
-            if (_main.ContentFrame.CanGoBack)
+            if (Features.NavigateBack() == false)
             {
-                _main.ContentFrame.GoBack();
-            }
-            else
-            {
-                _main.ContentFrame.Navigate(new TagList(_main,new TagRepository()));
+                Features.NavigatePage(PageMaker.CreateTagList());
             }
         }
 
