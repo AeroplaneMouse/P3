@@ -18,6 +18,7 @@ namespace AMS.Controllers
 
         ITagRepository _tagRepository { get; set; }
 
+
         public List<Tag> ParentTagList
         {
             get
@@ -38,16 +39,29 @@ namespace AMS.Controllers
             }
         }
 
+        public Tag Tag { get; set; }
+        public bool IsEditing { get; set; }
+        public ulong TagID;
+
+        #region Private Properties
+
+        private ITagRepository _tagRepository { get; set; }
+
+        #endregion
+
+        #region Constructor
+
         public TagController(Tag tag, ITagRepository tagRep) : base(tag)
         {
             Tag = tag;
-
             _tagRepository = tagRep;
 
-            Tag = tag;
+
+            DeSerializeFields();
 
             NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
+
             if (Tag != null)
             {
                 IsEditing = true;
@@ -60,13 +74,17 @@ namespace AMS.Controllers
             }
         }
 
+        #endregion
+
+        #region Public Methods
+
         public void Save()
         {
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
             Tag.FieldList = fieldList;
             SerializeFields();
-            _tagRepository.Insert(Tag, out tagID);
+            _tagRepository.Insert(Tag, out TagID);
         }
 
         public void Update()
@@ -78,10 +96,7 @@ namespace AMS.Controllers
             _tagRepository.Update(Tag);
         }
 
-        public void Remove()
-        {
-            _tagRepository.Delete(Tag);
-        }
+        public void Remove() => _tagRepository.Delete(Tag);
 
         public string CreateRandomColor()
         {
@@ -134,6 +149,7 @@ namespace AMS.Controllers
             SerializeFields();
             props.Add("Created at", Tag.CreatedAt.ToString());
             props.Add("Last updated at", Tag.UpdatedAt.ToString());
+
             return props;
         }
 
@@ -142,5 +158,7 @@ namespace AMS.Controllers
         /// </summary>
         /// <returns>The name of the tag</returns>
         public string GetLoggableTypeName() => Tag.Name;
+
+        #endregion
     }
 }

@@ -14,7 +14,7 @@ namespace AMS.Controllers
     public class AssetController : FieldListController, IAssetController, ILoggableValues
     {
         public Asset Asset { get; set; }
-        public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
+        public List<ITagable> CurrentlyAddedTags { get; set; }
         private ILogger logger;
         private IAssetRepository _assetRepository;
         
@@ -25,6 +25,7 @@ namespace AMS.Controllers
             NonHiddenFieldList = asset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = asset.FieldList.Where(f => f.IsHidden == true).ToList();
             _assetRepository = assetRepository;
+            CurrentlyAddedTags = _assetRepository.GetTags(Asset).ToList();
         }
 
         /// <summary>
@@ -90,8 +91,10 @@ namespace AMS.Controllers
             SerializeFields();
             ulong id = 0;
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
-            _assetRepository.Insert(Asset, out id);
-            logger.LogCreate(this);
+            // Log creation of an asset if repository insert was successful
+            bool success = _assetRepository.Insert(Asset, out id);
+            if(success)
+                logger.LogCreate(this);
             return id != 0;
         }
 
@@ -140,9 +143,9 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Returns the name of the asset
+        /// Returns the name of the type asset
         /// </summary>
-        /// <returns>Name of the asset</returns>
-        public string GetLoggableTypeName() => Asset.Name;
+        /// <returns>Name of the asset type</returns>
+        public string GetLoggableTypeName() => "Asset";
     }
 }

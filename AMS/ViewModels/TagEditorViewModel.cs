@@ -11,21 +11,21 @@ using AMS.Controllers;
 using AMS.Database.Repositories;
 using AMS.Helpers;
 using AMS.Views;
+using AMS.Helpers;
 
 namespace AMS.ViewModels
 {
     class TagEditorViewModel : Base.BaseViewModel
     {
-        #region Properties
-
-        ITagController _controller;
-        MainViewModel _main;
+        #region Public Properties
 
         public ObservableCollection<Field> NonHiddenFieldList =>
             new ObservableCollection<Field>(_controller.NonHiddenFieldList);
 
         public ObservableCollection<Field> HiddenFieldList =>
             new ObservableCollection<Field>(_controller.HiddenFieldList);
+
+        public List<Tag> ParentTagList => _controller.ParentTagList;
 
         public Tag _tag
         {
@@ -45,10 +45,7 @@ namespace AMS.ViewModels
             set => _controller.Tag.TagColor = value;
         }
 
-        public ulong ParentID
-        {
-            get => _controller.Tag.ParentID;
-        }
+        public ulong ParentID => _controller.Tag.ParentID;
 
         public ulong DepartmentID
         {
@@ -88,6 +85,12 @@ namespace AMS.ViewModels
 
         #endregion
 
+        #region Private Methods
+
+        private ITagController _controller;
+
+        #endregion
+
         #region Commands
 
         public ICommand SaveTagCommand { get; set; }
@@ -96,6 +99,8 @@ namespace AMS.ViewModels
         public ICommand CancelCommand { get; set; }
 
         #endregion
+
+        #region Constructor
 
         public TagEditorViewModel(ITagController tagController)
         {
@@ -120,6 +125,12 @@ namespace AMS.ViewModels
             }
 
 
+            //Set the selected parent to the parent of the chosen tag
+            int i = ParentTagList.Count;
+            while (i > 0 && ParentTagList[i - 1].ID != _controller.Tag.ParentID)
+                i--;
+
+
 
             // Initialize commands
             SaveTagCommand = new Base.RelayCommand(SaveTag);
@@ -128,6 +139,8 @@ namespace AMS.ViewModels
 
             CancelCommand = new Base.RelayCommand(Cancel);
         }
+
+        #endregion
 
         #region Methods
 
@@ -144,6 +157,7 @@ namespace AMS.ViewModels
             }
 
             Features.NavigateBack();
+
         }
 
         private void AddField()
@@ -175,6 +189,7 @@ namespace AMS.ViewModels
         private void Cancel()
         {
             Features.NavigateBack();
+
         }
 
         #endregion

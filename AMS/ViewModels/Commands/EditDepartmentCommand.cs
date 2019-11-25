@@ -67,11 +67,11 @@ namespace AMS.ViewModels.Commands
                         _main.CurrentDepartment = _department;
                         _main.OnPropertyChanged(nameof(_main.CurrentDepartment));
                         _main.OnPropertyChanged(nameof(_main.Departments));
-                        _main.AddNotification(new Notification("Name change success", Notification.APPROVE));
+                        Features.AddNotification(new Notification("Name change success", Notification.APPROVE));
                     }
                 }
                 else
-                    _main.AddNotification(
+                    Features.AddNotification(
                         new Notification("Department name cannot be empty. Please enter a name.", Notification.ERROR), 
                         3500);
             }

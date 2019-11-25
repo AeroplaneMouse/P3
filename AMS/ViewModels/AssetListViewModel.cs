@@ -17,9 +17,7 @@ namespace AMS.ViewModels
 {
     public class AssetListViewModel : BaseViewModel
     {
-        private IAssetListController _listController;
-        private string _searchQuery;
-        private TagHelper _tagHelper;
+        #region Public Properties
 
         public ObservableCollection<Asset> Items { get; set; }
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
@@ -44,17 +42,30 @@ namespace AMS.ViewModels
                 }
             }
         }
-
         public string CurrentGroup { get; set; }
+
         public Visibility CurrentGroupVisibility { get; set; } = Visibility.Collapsed;
         public Visibility TagSuggestionsVisibility { get; set; } = Visibility.Collapsed;
         public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
         public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
+
         public bool TagSuggestionIsOpen { get; set; } = false;
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
-        public ITagable TagParent;
-        public bool inTagMode = false;
+        public ITagable TagParent { get; set; }
+        public bool inTagMode { get; set; } = false;
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
+
+        #endregion
+
+        #region Private Properties
+
+        private IAssetListController _listController { get; set; }
+        private string _searchQuery { get; set; }
+        private TagHelper _tagHelper { get; set; }
+
+        #endregion
+
+        #region Commands
 
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
@@ -69,6 +80,10 @@ namespace AMS.ViewModels
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
 
+        #endregion
+
+        #region Constructor
+
         public AssetListViewModel(IAssetListController listController, TagHelper tagHelper)
         {
             _listController = listController;
@@ -76,6 +91,8 @@ namespace AMS.ViewModels
 
             _tagHelper = tagHelper;
             _tagHelper.CanApplyParentTags = true;
+
+            // Initialize commands
 
             // Admin only functions
             if (Features.GetCurrentSession().IsAdmin())
@@ -104,13 +121,17 @@ namespace AMS.ViewModels
             ClearInputCommand = new RelayCommand(ClearInput);
         }
 
+        #endregion
+
+        #region Methods
+
         /// <summary>
         /// Changes the content to AssetEditor with the selected asset
         /// if asset is null, a new asset will be created.
         /// </summary>
         private void EditAsset(Asset asset)
         {
-            Features.NavigatePage(PageMaker.CreateAssetEditor(asset));
+            Features.Navigate.To(Features.Create.AssetEditor(asset));
         }
 
         private void EditBySelection()
@@ -292,9 +313,8 @@ namespace AMS.ViewModels
         private void ViewAsset()
         {
             if (SelectedItems.Count == 1)
-            {
-                Features.NavigatePage(PageMaker.CreateAssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First())));
-            }
+                Features.Navigate.To(Features.Create.AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First())));
+
             else
                 Features.AddNotification(new Notification("Can only view one asset", Notification.ERROR));
         }
@@ -324,7 +344,9 @@ namespace AMS.ViewModels
             if (SelectedItems.Count > 0)
             {
                 // Prompt user for approval for the removal of x assets 
-                string message = $"Are you sure you want to remove { ((SelectedItems.Count == 1) ? SelectedItems[0].Name : (SelectedItems.Count.ToString()) + " assets")}?";
+                string message = $"Are you sure you want to remove " +
+                                 $"{ ((SelectedItems.Count == 1) ? SelectedItems[0].Name : (SelectedItems.Count.ToString()) + " assets")}?";
+
                 Features.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
                 {
                     // Check if the user approved
@@ -339,8 +361,10 @@ namespace AMS.ViewModels
                             _listController.Remove(asset);
 
                         Features.AddNotification(
-                            new Notification($"{ ((items.Count == 1) ? items[0].Name : (items.Count + " assets")) } { (items.Count > 1 ? "have" : "has") } been removed from the system", Notification.INFO),
-                            3000);
+                            new Notification($"" +
+                            $"{ ((items.Count == 1) ? items[0].Name : (items.Count + " assets")) } " +
+                            $"{ (items.Count > 1 ? "have" : "has") } been removed from the system", 
+                            Notification.INFO), 3000);
                     }
                 }));
             }
@@ -358,5 +382,7 @@ namespace AMS.ViewModels
                 // Export all items found by search
                 _listController.Export(Items.ToList());
         }
+
+        #endregion
     }
 }

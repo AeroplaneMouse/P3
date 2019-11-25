@@ -7,6 +7,7 @@ using System.Linq;
 using AMS.Authentication;
 using Moq;
 using AMS.Database.Repositories.Interfaces;
+using System.Collections.Generic;
 
 namespace UnitTests
 {
@@ -72,7 +73,7 @@ namespace UnitTests
             ulong id = 47;
             string content = "Test";
             ulong assetId = 1;
-            _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new ObservableCollection<Comment>());
+            _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new List<Comment>());
 
             // Act
             ulong commentId = _controller.AddNewComment(content, assetId);
@@ -144,8 +145,8 @@ namespace UnitTests
             Comment comment2 = new Comment {AssetID = assetId, Content = "Comment2"};
             Comment comment3 = new Comment {AssetID = assetId, Content = "Comment3"};
             _commentRepMock.Setup(p => p.Delete(It.IsAny<Comment>())).Returns(true);
-            _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new ObservableCollection<Comment> {comment1, comment2});
-            _controller.CommentList = new ObservableCollection<Comment> {comment1, comment2, comment3};
+            _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new List<Comment> {comment1, comment2});
+            _controller.CommentList = new List<Comment> {comment1, comment2, comment3};
             
             // Act
             _controller.RemoveComment(comment3, assetId);

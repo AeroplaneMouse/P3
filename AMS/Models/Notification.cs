@@ -20,7 +20,9 @@ namespace AMS.Models
         public SolidColorBrush Background { get; set; }
         public SolidColorBrush Foreground { get; set; }
 
-        public Notification(string message) : this(message, RandomColor()) { } 
+        #region Constructor
+
+        public Notification(string message) : this(message, RandomColor()) { }
 
         public Notification(string message, SolidColorBrush background)
         {
@@ -29,6 +31,8 @@ namespace AMS.Models
             Foreground = GetForegroundColor(background.Color);
             Background = background;
         }
+
+        #endregion
 
         public new bool Equals(object x, object y)
         {
@@ -71,16 +75,8 @@ namespace AMS.Models
         /// <returns>Brightness of the color</returns>
         private static int Brightness(Color c) => (int)Math.Sqrt(c.R * c.R * 0.241 + c.G * c.G * 0.691 + c.B * c.B * 0.068);
 
-        public static SolidColorBrush GetForegroundColor(Color c)
-        {
-            return Brightness(c) < 130 ? Brushes.White : Brushes.Black;
-        }
+        public static SolidColorBrush GetForegroundColor(Color c) => Brightness(c) < 140 ? Brushes.White : Brushes.Black;
 
-        public static SolidColorBrush GetForegroundColor(string colorString)
-        {
-            Color c = (Color)ColorConverter.ConvertFromString(colorString);
-
-            return Brightness(c) < 140 ? Brushes.White : Brushes.Black;
-        }
+        public static SolidColorBrush GetForegroundColor(string colorString) => Brightness((Color) ColorConverter.ConvertFromString(colorString)) < 140 ? Brushes.White : Brushes.Black;
     }
 }
