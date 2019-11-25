@@ -2,7 +2,6 @@ using AMS.Authentication;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Models;
-using AMS.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -22,16 +21,11 @@ namespace AMS.IO
 
         #region Constructor
 
-        public UserImporter(IUserRepository repository)
-        {
-            _userRep = repository;
-        }
+        public UserImporter(IUserRepository repository) => _userRep = repository;
 
         #endregion
 
         #region Public Methods
-
-        
 
         public List<UserWithStatus> ImportUsersFromDatabase()
         {

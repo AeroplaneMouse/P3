@@ -81,7 +81,10 @@ namespace AMS.Controllers
                     else
                     {
                         field.IsHidden = true;
-                        HiddenFieldList.Add(field);
+                        if (!(_fieldContainer is Tag && field.TagIDs.Count == 1 && field.TagIDs.Contains(_fieldContainer.ID)))
+                        {
+                            HiddenFieldList.Add(field);    
+                        }
                         NonHiddenFieldList.Remove(field);
                         return true;
                     }

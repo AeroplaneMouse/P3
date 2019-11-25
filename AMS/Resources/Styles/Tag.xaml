@@ -56,7 +56,10 @@
                                             <Button.Template>
                                                 <ControlTemplate>
                                                     <Grid Height="10" Width="10" Background="Transparent" >
-                                                        <TextBlock Foreground="{Binding FontColor}" VerticalAlignment="Center" Text="X"/>
+                                                        <TextBlock Foreground="{Binding FontColor}" 
+                                                                   FontWeight="Bold"
+                                                                   VerticalAlignment="Center" 
+                                                                   Text="X"/>
                                                     </Grid>
                                                 </ControlTemplate>
                                             </Button.Template>
@@ -103,23 +106,12 @@
                                         <!-- set command to delete the tag from the search query -->
                                         <TextBlock Foreground="{Binding FontColor}"
                                                    Padding="0 0 5 0"
+                                                   FontWeight="Bold"
                                                    x:Name="PART_DeleteTagText"
                                                    Grid.Column="1"
                                                    Visibility="Collapsed"
                                                    VerticalAlignment="Center" 
                                                    Text="X"/>
-                                        <!--<Button OverridesDefaultStyle="True" x:Name="PART_DeleteTagButton"
-                                                Grid.Column="1" Margin="0" VerticalAlignment="Center"
-                                                Visibility="Collapsed" 
-                                                CommandParameter="{Binding Path=.}"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveTagCommand}">
-                                            <Button.Template>
-                                                <ControlTemplate>
-                                                    <Grid Background="Transparent" >
-                                                    </Grid>
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                        </Button>-->
                                     </Grid>
                                 </Border>
                                 <ControlTemplate.Triggers>
