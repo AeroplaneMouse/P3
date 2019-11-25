@@ -32,7 +32,7 @@ namespace AMS.ViewModels
         public ICommand RemoveTagCommand { get; set; }
         public ICommand AddTagCommand { get; set; }
 
-        public List<ITagable> CurrentlyAddedTags => _assetController.CurrentlyAddedTags;
+        public ObservableCollection<ITagable> CurrentlyAddedTags => new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags);
 
         public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
         public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.HiddenFieldList);
@@ -86,8 +86,6 @@ namespace AMS.ViewModels
             }
 
             
-
-
             //Commands
             SaveCommand = new RelayCommand(() => SaveAndExist());
             SaveMultipleCommand = new RelayCommand(() => SaveAsset());
@@ -95,6 +93,7 @@ namespace AMS.ViewModels
             CancelCommand = new Base.RelayCommand(() => Cancel());
             RemoveFieldCommand = new RelayCommand<object>((parameter) => RemoveField(parameter));
             RemoveTagCommand = new RelayCommand<object>((parameter) => RemoveTag(parameter));
+            AddTagCommand = new RelayCommand<object>((parameter) => AddTag(parameter));
         }
 
         public void SaveAndExist()
@@ -163,7 +162,7 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
-        /// Attach a tag to the asset
+        /// Attach given tag to the asset
         /// </summary>
         /// <param name="tag"></param>
         public void AddTag(object tag)
@@ -198,6 +197,7 @@ namespace AMS.ViewModels
             // Display notification if tag was not removed
             if(!_assetController.DetachTag(tag))
                 Features.AddNotification(new Notification("Could not remove tag", Notification.ERROR));
+            OnPropertyChanged(nameof(CurrentlyAddedTags));
         }
     }
 }

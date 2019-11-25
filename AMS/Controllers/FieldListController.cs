@@ -17,7 +17,7 @@ namespace AMS.Controllers
         {
             _fieldContainer = element;
         }
-        
+
         /// <summary>
         /// Saves the fields to the Serialized fields property.
         /// </summary>
@@ -28,69 +28,96 @@ namespace AMS.Controllers
             return !string.IsNullOrEmpty(_fieldContainer.SerializedFields);
         }
 
-        /// <summary>
-        /// Loads the fields from the serialized fields property.
-        /// </summary>
-        /// <returns>Load successfull</returns>
-        public bool DeSerializeFields()
-        {
-            if (!string.IsNullOrEmpty(_fieldContainer.SerializedFields))
-            {
-                _fieldContainer.FieldList =
-                    JsonConvert.DeserializeObject<List<Field>>(_fieldContainer.SerializedFields);
-                return true;
-            }
-
-            return false;
-        }
 
         /// <summary>
         /// Add a field to the field list.
         /// </summary>
         /// <param name="field"></param>
+        /// <param name="fieldContainer"></param>
         /// <returns></returns>
-        public bool AddField(Field field)
+        public bool AddField(Field field, FieldContainer fieldContainer = null)
         {
-            NonHiddenFieldList.Add(field);
+            //Checks whether the field is present in HiddenFieldList, if not, checks NonHiddenFieldList.
+            Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(field)) ??
+                                NonHiddenFieldList.FirstOrDefault(p => p.Equals(field));
+
+            if (fieldInList == null)
+            {
+                if (fieldContainer != null)
+                {
+                    field.TagIDs.Add(fieldContainer.ID);
+                }
+
+                NonHiddenFieldList.Add(field);
+            }
+            else
+            {
+                if (fieldContainer != null && !fieldInList.TagIDs.Contains(fieldContainer.ID))
+                {
+                    fieldInList.TagIDs.Add(fieldContainer.ID);
+                }
+            }
+
             return _fieldContainer.FieldList.Contains(field);
         }
 
         /// <summary>
         /// Remove a field, or its relation to a tag, from the fields list.
         /// </summary>
-        /// <param name="inputField">The field to update/remove</param>
+        /// <param name="field">The field to update/remove</param>
+        /// <param name="fieldContainer"></param>
         /// <returns>Rather the field was removed</returns>
-        public bool RemoveField(Field field)
+        public bool RemoveField(Field field, FieldContainer fieldContainer = null)
         {
-            if (field != null)
+            if (field == null) return false;
+            
+            if (field.IsCustom)
             {
-                if (field.IsCustom)
+                NonHiddenFieldList.Remove(field);
+                return true;
+            }
+
+            if (field.IsHidden)
+            {
+                field.IsHidden = false;
+                NonHiddenFieldList.Add(field);
+                HiddenFieldList.Remove(field);
+                return true;
+            }
+
+            field.IsHidden = true;
+            if (fieldContainer != null)
+            {
+                if (!(_fieldContainer is Tag) && field.TagIDs.Count > 0)
                 {
-                    NonHiddenFieldList.Remove(field);
-                    return true;
-                }
-                else
-                {
-                    if (field.IsHidden)
-                    {
-                        field.IsHidden = false;
-                        NonHiddenFieldList.Add(field);
-                        HiddenFieldList.Remove(field);
-                        return true;
-                    }
-                    else
-                    {
-                        field.IsHidden = true;
-                        if (!(_fieldContainer is Tag && field.TagIDs.Count == 1 && field.TagIDs.Contains(_fieldContainer.ID)))
-                        {
-                            HiddenFieldList.Add(field);    
-                        }
-                        NonHiddenFieldList.Remove(field);
-                        return true;
-                    }
+                    HiddenFieldList.Add(field);
                 }
             }
-            return false;
+
+
+            return NonHiddenFieldList.Remove(field);
+        }
+
+
+        public bool RemoveFieldRelations(ulong TagId)
+        {
+            foreach (var field in HiddenFieldList)
+            {
+                if (field.TagIDs.Contains(TagId))
+                {
+                    field.TagIDs.Remove(TagId);
+                }
+            }
+
+            foreach (var field in NonHiddenFieldList)
+            {
+                if (field.TagIDs.Contains(TagId))
+                {
+                    field.TagIDs.Remove(TagId);
+                }
+            }
+
+            return true;
         }
     }
 }

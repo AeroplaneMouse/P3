@@ -9,7 +9,5 @@ namespace AMS.Database.Repositories.Interfaces
         List<Comment> GetByAssetId(ulong assetId);
 
         List<Comment> GetAll();
-
-
     }
 }
