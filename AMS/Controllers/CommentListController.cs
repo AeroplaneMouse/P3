@@ -5,6 +5,7 @@ using AMS.Authentication;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Logging;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AMS.Controllers 
 {
@@ -47,7 +48,7 @@ namespace AMS.Controllers
                 _commentRep.Insert(newComment, out ulong id);
 
                 // Updates the CommentList, so it contains all the comments on the chosen asset
-                CommentList = _commentRep.GetByAssetId(assetId);
+                CommentList = new ObservableCollection<Comment>(_commentRep.GetByAssetId(assetId));
 
                 return id;
             }
@@ -66,7 +67,7 @@ namespace AMS.Controllers
                 _commentRep.Delete(comment);
             }
 
-            CommentList = _commentRep.GetByAssetId(assetId);
+            CommentList = new ObservableCollection<Comment>(_commentRep.GetByAssetId(assetId));
         }
     }
 }

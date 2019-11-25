@@ -86,8 +86,6 @@ namespace AMS.ViewModels
             }
 
             
-
-
             //Commands
             SaveCommand = new RelayCommand(() => SaveAndExist());
             SaveMultipleCommand = new RelayCommand(() => SaveAsset());
@@ -95,6 +93,7 @@ namespace AMS.ViewModels
             CancelCommand = new Base.RelayCommand(() => Cancel());
             RemoveFieldCommand = new RelayCommand<object>((parameter) => RemoveField(parameter));
             RemoveTagCommand = new RelayCommand<object>((parameter) => RemoveTag(parameter));
+            AddTagCommand = new RelayCommand<object>((parameter) => AddTag(parameter));
         }
 
         public void SaveAndExist()
@@ -163,7 +162,7 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
-        /// Attach a tag to the asset
+        /// Attach given tag to the asset
         /// </summary>
         /// <param name="tag"></param>
         public void AddTag(object tag)
