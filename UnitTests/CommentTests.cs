@@ -42,7 +42,7 @@ namespace UnitTests
             _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new List<Comment>());
 
             // Act
-            ulong commentId = _controller.AddNewComment(content, assetId);
+            ulong commentId = _controller.AddNewComment(content);
 
             // Assert
             _commentRepMock.Verify(p => p.Insert(It.IsAny<Comment>(), out id), Times.Once);
@@ -61,7 +61,7 @@ namespace UnitTests
             _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new List<Comment>());
 
             // Act
-            ulong commentId = _controller.AddNewComment(content, assetId);
+            ulong commentId = _controller.AddNewComment(content);
 
             // Assert
             _commentRepMock.Verify(p => p.Insert(It.IsAny<Comment>(), out id), Times.Once);
@@ -77,7 +77,7 @@ namespace UnitTests
             _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new List<Comment>());
 
             // Act
-            ulong commentId = _controller.AddNewComment(content, assetId);
+            ulong commentId = _controller.AddNewComment(content);
 
             // Assert
             _commentRepMock.Verify(p => p.GetByAssetId(It.IsAny<ulong>()), Times.Once);
@@ -93,7 +93,7 @@ namespace UnitTests
             ulong expected = 0;
 
             // Act
-            ulong commentId = _controller.AddNewComment(content, assetId);
+            ulong commentId = _controller.AddNewComment(content);
 
             // Assert
             Assert.AreEqual(expected, commentId);
@@ -132,7 +132,7 @@ namespace UnitTests
             _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new List<Comment>());
 
             // Act
-            _controller.RemoveComment(comment, assetId);
+            _controller.RemoveComment(comment);
 
             // Assert
             _commentRepMock.Verify(p => p.Delete(It.IsAny<Comment>()), Times.Once);
@@ -151,7 +151,7 @@ namespace UnitTests
             _controller.CommentList = new List<Comment> {comment1, comment2, comment3};
             
             // Act
-            _controller.RemoveComment(comment3, assetId);
+            _controller.RemoveComment(comment3);
 
             // Assert
             Assert.IsFalse(_controller.CommentList.Contains(comment3));

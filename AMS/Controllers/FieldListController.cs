@@ -70,7 +70,7 @@ namespace AMS.Controllers
         public bool RemoveField(Field field, FieldContainer fieldContainer = null)
         {
             if (field == null) return false;
-            
+
             if (field.IsCustom)
             {
                 NonHiddenFieldList.Remove(field);
@@ -86,12 +86,10 @@ namespace AMS.Controllers
             }
 
             field.IsHidden = true;
-            if (fieldContainer != null)
+
+            if (!(_fieldContainer is Tag) && field.TagIDs.Count > 0)
             {
-                if (!(_fieldContainer is Tag) && field.TagIDs.Count > 0)
-                {
-                    HiddenFieldList.Add(field);
-                }
+                HiddenFieldList.Add(field);
             }
 
 

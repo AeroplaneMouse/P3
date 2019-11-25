@@ -47,17 +47,9 @@ namespace AMS.Controllers
             {
                 foreach (var tagField in currentTag.FieldList)
                 {
-                    if (Asset.FieldList.SingleOrDefault(assetField => assetField.Hash == tagField.Hash) == null)
-                    {
-                        Asset.FieldList.Add(tagField);
-                    }
-                    else
-                    {
-                        Asset.FieldList.Single(assetField => assetField.Hash == tagField.Hash).TagIDs.Add(currentTag.ID);
-                    }
+                    AddField(tagField,currentTag);
                 }
             }
-            logger.LogCreate(this);
             return CurrentlyAddedTags.Contains(tag);
         }
 
@@ -104,8 +96,6 @@ namespace AMS.Controllers
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
             // Log creation of an asset if repository insert was successful
             bool success = _assetRepository.Insert(Asset, out id);
-            if(success)
-                logger.LogCreate(this);
             return id != 0;
         }
 
@@ -120,7 +110,6 @@ namespace AMS.Controllers
             Asset.FieldList = fieldList;
             SerializeFields();
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
-            logger.LogCreate(this);
             return _assetRepository.Update(Asset);
         }
 
@@ -130,7 +119,6 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Remove()
         {
-            logger.LogCreate(this);
             return _assetRepository.Delete(Asset);
         }
 
