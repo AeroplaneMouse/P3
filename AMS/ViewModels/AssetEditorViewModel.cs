@@ -29,6 +29,8 @@ namespace AMS.ViewModels
         public ICommand SaveCommand { get; set; }
         public ICommand SaveMultipleCommand { get; set; }
         public ICommand CancelCommand { get; set; }
+        public ICommand RemoveTagCommand { get; set; }
+        public ICommand AddTagCommand { get; set; }
 
         public List<ITagable> CurrentlyAddedTags => _assetController.CurrentlyAddedTags;
 
@@ -55,6 +57,20 @@ namespace AMS.ViewModels
 
         public string Title { get; set; }
 
+        private string _tagString;
+        public string TagString
+        {
+            get => _tagString;
+            set
+            {
+                _tagString = value;
+                _tagListController.Search(_tagString);
+                TagList = _tagListController.TagsList;
+            }
+        }
+
+        public List<Tag> TagList { get; set; }
+        
         public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController)
         {
             _assetController = assetController;
@@ -78,6 +94,7 @@ namespace AMS.ViewModels
             AddFieldCommand = new Base.RelayCommand(() => PromptForCustomField());
             CancelCommand = new Base.RelayCommand(() => Cancel());
             RemoveFieldCommand = new RelayCommand<object>((parameter) => RemoveField(parameter));
+            RemoveTagCommand = new RelayCommand<object>((parameter) => RemoveTag(parameter));
         }
 
         public void SaveAndExist()
@@ -149,17 +166,37 @@ namespace AMS.ViewModels
         /// Attach a tag to the asset
         /// </summary>
         /// <param name="tag"></param>
-        public void AddTag(Tag tag)
+        public void AddTag(object tag)
         {
-            bool success = _assetController.AttachTag(tag);
-            if (!success)
+            // Display notification if given tag is not ITagable
+            if (!(tag is ITagable))
+            {
+                Features.AddNotification(new Notification("Invalid Tag", Notification.ERROR));
+                return;
+            }
+            
+            // Attach Tag or display notification on failure
+            if (!_assetController.AttachTag((ITagable)tag))
                 Features.AddNotification(new Notification("Could not add tag", Notification.ERROR));
         }
 
-        public void RemoveTag(Tag tag)
+        /// <summary>
+        /// Detach tag with given tagID from asset
+        /// </summary>
+        /// <param name="tagID"></param>
+        public void RemoveTag(object tagID)
         {
-            bool success = _assetController.DetachTag(tag);
-            if(!success)
+            // Display notification if given ID is not ulong
+            if (!ulong.TryParse(tagID.ToString(), out var id))
+            {
+                Features.AddNotification(new Notification("Invalid Tag ID", Notification.ERROR));
+                return;
+            }
+            
+            ITagable tag = _assetController.CurrentlyAddedTags.Find(T => T.TagId == id);
+            
+            // Display notification if tag was not removed
+            if(!_assetController.DetachTag(tag))
                 Features.AddNotification(new Notification("Could not remove tag", Notification.ERROR));
         }
     }
