@@ -57,7 +57,6 @@ namespace AMS.ViewModels
             CurrentActionText = "A connection to the database is being established...";
             AdditionalText = "";
 
-            // TODO: Putter vi med vilje et delay ind?
             Thread.Sleep(_delay);
 
             if (new MySqlHandler().IsAvailable())

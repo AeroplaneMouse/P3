@@ -41,7 +41,7 @@ namespace AMS.Views.ValueConverters
                     h += 12;
 
                 // Setting formated output
-                output = $"{date} {month} {year} - "
+                output = $"{date} {month} {year} "
                     + $"{ (h < 10 ? $"0{h}" : h.ToString()) }"
                     + ":"
                     + $"{ (m < 10 ? $"0{m}" : m.ToString()) }";

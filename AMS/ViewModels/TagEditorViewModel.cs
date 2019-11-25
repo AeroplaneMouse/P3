@@ -121,9 +121,9 @@ namespace AMS.ViewModels
                 _controller.Save();
             }
 
-            if (Features.NavigateBack() == false)
+            if (Features.Navigate.Back() == false)
             {
-                Features.NavigatePage(PageMaker.CreateTagList());
+                Features.Navigate.To(Features.Create.TagList());
             }
         }
 
@@ -157,9 +157,9 @@ namespace AMS.ViewModels
 
         private void Cancel()
         {
-            if (Features.NavigateBack() == false)
+            if (Features.Navigate.Back() == false)
             {
-                Features.NavigatePage(PageMaker.CreateTagList());
+                Features.Navigate.To(Features.Create.TagList());
             }
         }
 
