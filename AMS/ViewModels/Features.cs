@@ -21,17 +21,12 @@ namespace AMS.ViewModels
 
         #region Repositories
 
-        private static IUserRepository _userRepository = new UserRepository();
-
-        private static IAssetRepository _assetRepository = new AssetRepository();
-
-        private static ITagRepository _tagRepository = new TagRepository();
-
-        private static IDepartmentRepository _departmentRepository = new DepartmentRepository();
-
-        private static ICommentRepository _commentRepository = new CommentRepository();
-
-        private static ILogRepository _logRepository = new LogRepository();
+        private static IUserRepository _userRepository { get; } = new UserRepository();
+        private static IAssetRepository _assetRepository { get; } = new AssetRepository();
+        private static ITagRepository _tagRepository { get; } = new TagRepository();
+        private static IDepartmentRepository _departmentRepository { get; } = new DepartmentRepository();
+        private static ICommentRepository _commentRepository { get; } = new CommentRepository();
+        private static ILogRepository _logRepository { get; } = new LogRepository();
 
         #endregion
 
@@ -95,7 +90,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetPresenter(Asset asset, List<ITagable> tagables)
             {
-                return new AssetPresenter(asset, tagables, new CommentListController(Features.GetCurrentSession(), _commentRepository));
+                return new AssetPresenter(asset, tagables, new CommentListController(GetCurrentSession(), _commentRepository));
             }
 
             /// <summary>
