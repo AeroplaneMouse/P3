@@ -224,5 +224,10 @@ namespace AMS.Database.Repositories
                 BindingFlags.Instance | BindingFlags.NonPublic, null, 
                 new object[] { rowId, rowUsername, rowContent, rowAssetId, rowCreatedAt, rowUpdatedAt }, null, null);
         }
+
+        public List<Comment> GetAll()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
