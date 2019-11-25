@@ -94,7 +94,6 @@ namespace AMS.ViewModels
                 _tagHelper.RemoveTag(tag);
                 AppliedTags = _tagHelper.GetAppliedTags(true);
                 SearchAssets();
-                OnPropertyChanged(nameof(AppliedTags));
             });
 
             AutoTagCommand = new RelayCommand(AutoTag);
@@ -137,7 +136,6 @@ namespace AMS.ViewModels
             }
 
             _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)));
-          
             Items = _listController.AssetList;
         }
 
@@ -149,12 +147,11 @@ namespace AMS.ViewModels
             if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
             {
                 ITagable tag = TagSearchSuggestions[0];
-                
+
                 if (_tagHelper.IsParentSet() && (tag.ChildrenCount == 0 || tag.TagId != 1)){
                     _tagHelper.ApplyTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(true);
                     TagSearchProcess();
-                    SearchAssets();
                 }else{
                     // So we need to switch to a group of tags.
                     Tag taggedItem = (Tag)tag;
@@ -162,6 +159,7 @@ namespace AMS.ViewModels
                     CurrentGroup = "#"+taggedItem.Name;
                 }
                 
+                SearchAssets();
                 SearchQuery = "";
             }
         }

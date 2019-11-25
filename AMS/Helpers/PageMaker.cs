@@ -144,7 +144,5 @@ namespace AMS.Helpers
         }
 
         #endregion
-
-
     }
 }

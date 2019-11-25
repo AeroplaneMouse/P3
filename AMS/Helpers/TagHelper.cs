@@ -41,16 +41,41 @@ namespace AMS.Helpers
         public List<ITagable> Suggest(string input)
         {
             List<ITagable> result = new List<ITagable>();
-            
-            if (_parent != null && _parent.ID == 1)
+
+            if (IsParentSet())
             {
-                result.AddRange(_users.Where(u => u.Username.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
-                                                  && !AppliedTags.Contains(u)).ToList());
+                if (_parent.TagId == 1)
+                {
+                    result.AddRange(_users.Where(u => u.Username.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
+                                                      && !AppliedTags.Contains(u)).ToList());
+                }else{
+                    result.AddRange(SuggestedTags.Where(t => t.TagLabel.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
+                                                      && !AppliedTags.Contains(t)).ToList());
+                }
             }
             else
             {
-                result.AddRange(SuggestedTags.Where(t => t.TagLabel.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)
-                                                  && (!AppliedTags.Contains(t))).ToList());
+                List<ITagable> tagsToRemove = new List<ITagable>();
+                
+                foreach (var item in SuggestedTags)
+                {
+                    if ((item.TagId == 1 || item.ChildrenCount > 0) && AppliedTags.Contains(item) && ContainsAllChildrenOfParent(item))
+                    {
+                        tagsToRemove.Add(item);
+                    }else if (item.ChildrenCount == 0 && AppliedTags.Contains(item))
+                    {
+                        tagsToRemove.Add(item);
+                    }
+                }
+
+                foreach (var remove in tagsToRemove)
+                {
+                    SuggestedTags.Remove(remove);
+                }
+                
+                tagsToRemove.Clear();
+                
+                result.AddRange(SuggestedTags.Where(t => t.TagLabel.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)).ToList());
             }
 
             _hasSuggestions = result.Any();
@@ -144,11 +169,55 @@ namespace AMS.Helpers
             return false;
         }
 
+        private bool ContainsAllChildrenOfParent(ITagable tag)
+        {
+            if (tag.ParentId > 0)
+                return false;
+            
+            if (tag.TagId == 1)
+            {
+                // Users
+                return AppliedTags.Count(u => u.TagType == typeof(User)) == _users.Count;
+            }
+
+            return AppliedTags.Count(t => t.ParentId == tag.TagId) == tag.ChildrenCount;
+        }
+
         public void Parent(Tag tag=null)
         {
             SuggestedTags.Clear();
             SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentID == tag.ID).ToList() : _tags.Where(a => a.ParentID == 0).ToList());
+            
+                /*
+                var parents = _tags.Where(t => t.ParentID == 0);
+                
+                foreach (var parent in parents)
+                {
+                    if (parent.TagId == 1 && (!ContainsAllChildrenOfParent(parent) || !AppliedTags.Contains(parent)))
+                    {
+                        // Users
+                        SuggestedTags.Add(parent);
+                    }else if (parent.ChildrenCount > 0 && !ContainsAllChildrenOfParent(parent) || !AppliedTags.Contains(parent))
+                    {
+                        SuggestedTags.Add(parent);
+                    }
+                    else if(parent.ChildrenCount == 0)
+                    {
+                        SuggestedTags.Add(parent);
+                    }
+                }
+                */
             _parent = tag;
+        }
+
+        public bool AllParentChildrenTagged()
+        {
+            if (IsParentSet())
+            {
+                return AppliedTags.Count(t => t.ParentId == _parent.ID) == _parent.ChildrenCount;
+            }
+
+            return false;
         }
 
         public ObservableCollection<ITagable> GetAppliedTags(bool includeParents=false)
@@ -165,6 +234,16 @@ namespace AMS.Helpers
         }
 
         public bool IsParentSet() => _parent != null;
+
+        public bool ContainsAllChildrenFromParent()
+        {
+            if (IsParentSet())
+            {
+                return ContainsAllChildrenOfParent(_parent);
+            }
+
+            return true;
+        }
 
         public Tag GetParent() => _parent;
     }
