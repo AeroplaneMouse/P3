@@ -106,7 +106,7 @@ namespace AMS.ViewModels
                 SearchAssets();
             });
 
-            AutoTagCommand = new RelayCommand(AutoTag);
+            AutoTagCommand = new RelayCommand<object>((parameter) => AutoTag(parameter as ITagable));
             ClearInputCommand = new RelayCommand(ClearInput);
         }
 
@@ -163,20 +163,28 @@ namespace AMS.ViewModels
             Items = _listController.AssetList;
         }
 
-        private void AutoTag()
+        private void AutoTag(ITagable input = null)
         {
             if (!inTagMode)
                     return;
 
-            if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
-            {
-                ITagable tag = TagSearchSuggestions[0];
+            // Use the given input
+            ITagable tag = input;
 
+            // If the input is null, use the suggestion if possible
+            if (tag == null && TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+                tag = TagSearchSuggestions[0];
+
+            // If there is something to apply, do it
+            if (tag != null)
+            {
                 if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1)){
                     _tagHelper.ApplyTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(true);
                     TagSearchProcess();
-                }else{
+                }
+                else
+                {
                     // So we need to switch to a group of tags.
                     Tag taggedItem = (Tag)tag;
                     _tagHelper.Parent(taggedItem);
