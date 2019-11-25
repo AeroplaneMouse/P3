@@ -32,7 +32,7 @@ namespace AMS.ViewModels
         public ICommand RemoveTagCommand { get; set; }
         public ICommand AddTagCommand { get; set; }
 
-        public List<ITagable> CurrentlyAddedTags => _assetController.CurrentlyAddedTags;
+        public ObservableCollection<ITagable> CurrentlyAddedTags => new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags);
 
         public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
         public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.HiddenFieldList);

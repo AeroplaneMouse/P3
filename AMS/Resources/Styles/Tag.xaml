@@ -57,7 +57,7 @@
                                             <Button.Template>
                                                 <ControlTemplate>
                                                     <Grid Height="10" Width="10" Background="Transparent" >
-                                                        <TextBlock Foreground="{Binding FontColor}" 
+                                                        <TextBlock Foreground="{Binding TagFontColor}" 
                                                                    FontWeight="Bold"
                                                                    VerticalAlignment="Center" 
                                                                    Text="X"/>
