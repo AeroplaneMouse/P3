@@ -137,18 +137,21 @@ namespace AMS.ViewModels
         /// </summary>
         private void SearchAssets()
         {
-            Console.WriteLine("This is super stupid!");
-
             if (SearchQuery == null)
                 return;
             
-            if (SearchQuery == "." && _tagHelper.IsParentSet()){
+            if (SearchQuery == "" && _tagHelper.IsParentSet()){
                 _tagHelper.ApplyTag(_tagHelper.GetParent());
                 _tagHelper.Parent(null);
                 CurrentGroup = "#";
                 AppliedTags = _tagHelper.GetAppliedTags(true);
             }
+            
+            RefreshList();
+        }
 
+        private void RefreshList()
+        {
             _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)));
             Items = _listController.AssetList;
         }
@@ -172,8 +175,8 @@ namespace AMS.ViewModels
                     _tagHelper.Parent(taggedItem);
                     CurrentGroup = "#"+taggedItem.Name;
                 }
-                
-                SearchAssets();
+
+                RefreshList();
                 SearchQuery = "";
             }
         }
