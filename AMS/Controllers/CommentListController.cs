@@ -51,7 +51,7 @@ namespace AMS.Controllers
                 _commentRep.Insert(newComment, out ulong id);
 
                 // Updates the CommentList, so it contains all the comments on the chosen asset
-                CommentList = new ObservableCollection<Comment>(_commentRep.GetByAssetId(assetId));
+                CommentList = new List<Comment>(_commentRep.GetByAssetId(assetId));
 
                 return id;
             }
@@ -70,7 +70,7 @@ namespace AMS.Controllers
                 _commentRep.Delete(comment);
             }
 
-            CommentList = new ObservableCollection<Comment>(_commentRep.GetByAssetId(assetId));
+            CommentList = new List<Comment>(_commentRep.GetByAssetId(assetId));
         }
     }
 }
