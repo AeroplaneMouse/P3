@@ -29,6 +29,7 @@ namespace AMS.ViewModels
 
         private void SaveComment()
         {
+            NewComment = NewComment.Trim();
             if (!string.IsNullOrEmpty(NewComment))
                 _controller.AddNewComment(NewComment);
             NewComment = string.Empty;
