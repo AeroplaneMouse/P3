@@ -14,7 +14,7 @@ namespace AMS.Controllers
     public class AssetController : FieldListController, IAssetController, ILoggableValues
     {
         public Asset Asset { get; set; }
-        public List<ITagable> CurrentlyAddedTags { get; set; }
+        public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
         private ILogger logger;
         private IAssetRepository _assetRepository;
         
@@ -68,6 +68,10 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool DetachTag(ITagable tag)
         {
+            if(tag == null)
+            {
+                return false;
+            }
             if (CurrentlyAddedTags.Contains(tag))
             {
                 CurrentlyAddedTags.Remove(tag);
