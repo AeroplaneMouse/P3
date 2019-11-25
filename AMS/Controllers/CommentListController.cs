@@ -11,20 +11,34 @@ namespace AMS.Controllers
 {
     public class CommentListController : ICommentListController
     {
-        public List<Comment> CommentList { get; set; }
+        public List<Comment> CommentList
+        {
+            get
+            {
+                if (_commentList == null)
+                {
+                    if (_asset != null)
+                        _commentList = _commentRep.GetByAssetId(_asset.ID);
+                    else
+                        _commentList = _commentRep.GetAll();
+                }
+                return _commentList.OrderByDescending(p => p.CreatedAt).ToList();
+            }
+            set => _commentList = value;
+        }
 
+        private List<Comment> _commentList;
         Session _session;
+
+        Asset _asset { get; set; }
 
         ICommentRepository _commentRep;
 
-        public CommentListController(Session session, ICommentRepository commentRepository)
+        public CommentListController(Session session, ICommentRepository commentRepository, Asset asset = null)
         {
             _session = session;
             _commentRep = commentRepository;
-            CommentList = new List<Comment>();
-
-
-            var n = _commentRep.GetAll();
+            _asset = asset;
         }
 
         /// <summary>
@@ -34,7 +48,7 @@ namespace AMS.Controllers
         /// <param name="contentInput"></param>
         /// <param name="assetId"></param>
         /// <returns> The id of the new comment </returns>
-        public ulong AddNewComment(string contentInput, ulong assetId)
+        public ulong AddNewComment(string contentInput)
         {
             // Checks that the string containing the content of the comment isn't empty
             if (!string.IsNullOrEmpty(contentInput))
@@ -44,18 +58,19 @@ namespace AMS.Controllers
                 {
                     Username = _session.Username,
                     Content = contentInput,
-                    AssetID = assetId
+                    AssetID = _asset.ID
                 };
 
                 // Adds that comment to the database and gets its id in return
                 _commentRep.Insert(newComment, out ulong id);
 
                 // Updates the CommentList, so it contains all the comments on the chosen asset
-                CommentList = new List<Comment>(_commentRep.GetByAssetId(assetId));
+                CommentList = _commentRep.GetByAssetId(_asset.ID);
 
                 return id;
             }
-            else return 0;
+            
+            return 0;
         }
 
         /// <summary>
@@ -63,14 +78,14 @@ namespace AMS.Controllers
         /// </summary>
         /// <param name="comment"></param>
         /// <param name="assetId"></param>
-        public void RemoveComment(Comment comment, ulong assetId)
+        public void RemoveComment(Comment comment)
         {
             if (comment != null)
             {
                 _commentRep.Delete(comment);
             }
 
-            CommentList = new List<Comment>(_commentRep.GetByAssetId(assetId));
+            CommentList = _commentRep.GetByAssetId(_asset.ID);
         }
     }
 }

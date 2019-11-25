@@ -8,8 +8,8 @@ namespace AMS.Controllers.Interfaces
     {
         List<Comment> CommentList { get; set; }
 
-        ulong AddNewComment(string contentInput, ulong assetId);
+        ulong AddNewComment(string contentInput);
 
-        void RemoveComment(Comment comment, ulong assetId);
+        void RemoveComment(Comment comment);
     }
 }
