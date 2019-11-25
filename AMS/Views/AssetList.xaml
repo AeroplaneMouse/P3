@@ -109,11 +109,15 @@
                                    MaxHeight="100"
                                    Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
                                    Placement="Bottom">
-                            
+
                                 <ListBox x:Name="TagSuggestionList"    
                                          Visibility="{Binding TagSuggestionsVisibility}"    
                                          Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
-                                         ItemsSource="{ Binding TagSearchSuggestions }"/>
+                                         ItemsSource="{ Binding TagSearchSuggestions }">
+                                    <ListBox.InputBindings>
+                                        <KeyBinding Key="Return" Command="{Binding AutoTagCommand}" CommandParameter="{Binding ElementName=TagSuggestionList, Path=SelectedItem}"/>
+                                    </ListBox.InputBindings>
+                                </ListBox>
                             </Popup>
                         </StackPanel>
                     </StackPanel>
