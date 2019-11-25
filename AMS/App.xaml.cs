@@ -1,4 +1,4 @@
-﻿using AMS.Helpers;
+﻿using AMS.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,7 +16,7 @@ namespace AMS
     {
         void App_Startup(object sender, StartupEventArgs e)
         {
-            Window main = PageMaker.CreateMain();
+            Window main = Features.Create.Main();
             main.Show();
         }
     }

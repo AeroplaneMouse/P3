@@ -86,7 +86,7 @@ namespace AMS.ViewModels
 
             if (Features.NavigateBack() == false)
             {
-                Features.NavigatePage(PageMaker.CreateAssetList());
+                Features.NavigatePage(Features.Create.AssetList());
             }
         }
 
@@ -141,7 +141,7 @@ namespace AMS.ViewModels
         {
             if (Features.NavigateBack() == false)
             {
-                Features.NavigatePage(PageMaker.CreateAssetList());
+                Features.NavigatePage(Features.Create.AssetList());
             }
         }
     }

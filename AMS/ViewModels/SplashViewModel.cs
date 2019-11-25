@@ -13,7 +13,7 @@ namespace AMS.ViewModels
     {
         private MainViewModel _main;
         private IUserRepository _userRepository;
-        private const int _delay = 300;
+        private const int _delay = 0;
         private const int _reconnectWaitingTime = 5;
 
         public string LoadingText { get; set; }
@@ -57,7 +57,6 @@ namespace AMS.ViewModels
             CurrentActionText = "A connection to the database is being established...";
             AdditionalText = "";
 
-            // TODO: Putter vi med vilje et delay ind?
             Thread.Sleep(_delay);
 
             if (new MySqlHandler().IsAvailable())

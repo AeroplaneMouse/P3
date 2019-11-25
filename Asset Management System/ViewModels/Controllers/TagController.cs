@@ -38,14 +38,14 @@ namespace Asset_Management_System.ViewModels.Controllers
         
         public int SelectedParentIndex { get; set; }
 
-        
+
         public TagController(Tag inputTag, ITagService service)
         {
             //Tag = tag;
             _service = service;
             _rep = (ITagRepository) _service.GetSearchableRepository();
             _color = CreateRandomColor();
-            
+
             FieldsList = new ObservableCollection<ShownField>();
             
             if (inputTag != null)

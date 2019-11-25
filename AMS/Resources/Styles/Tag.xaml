@@ -56,8 +56,10 @@
                                             <Button.Template>
                                                 <ControlTemplate>
                                                     <Grid Height="10" Width="10" Background="Transparent" >
-                                                        <TextBlock Foreground="{Binding FontColor}" FontFamily="{StaticResource SegoeBold}"
-                                                                   VerticalAlignment="Center" Text="X"/>
+                                                        <TextBlock Foreground="{Binding FontColor}" 
+                                                                   FontWeight="Bold"
+                                                                   VerticalAlignment="Center" 
+                                                                   Text="X"/>
                                                     </Grid>
                                                 </ControlTemplate>
                                             </Button.Template>
@@ -104,7 +106,7 @@
                                         <!-- set command to delete the tag from the search query -->
                                         <TextBlock Foreground="{Binding FontColor}"
                                                    Padding="0 0 5 0"
-                                                   FontFamily="{StaticResource SegoeBold}"
+                                                   FontWeight="Bold"
                                                    x:Name="PART_DeleteTagText"
                                                    Grid.Column="1"
                                                    Visibility="Collapsed"

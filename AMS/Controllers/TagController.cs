@@ -4,17 +4,13 @@ using AMS.Logging;
 using AMS.Models;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AMS.Controllers
 {
-    public class TagController : FieldListController, ITagController, ILoggableValues
+    public class TagController : FieldListController, ITagController, ILoggableValues, IFieldListController
     {
-        public Tag Tag { get; set; }
-        public string PageTitle { get; set; }
-
-        public ulong tagID;
-
-        ITagRepository _tagRepository { get; set; }
+        #region Public Properties
 
         public List<Tag> ParentTagList
         {
@@ -36,38 +32,65 @@ namespace AMS.Controllers
             }
         }
 
+        public Tag Tag { get; set; }
+        public bool IsEditing { get; set; }
+        public ulong TagID;
+
+        #endregion
+
+        #region Private Properties
+
+        private ITagRepository _tagRepository { get; set; }
+
+        #endregion
+
+        #region Constructor
+
         public TagController(Tag tag, ITagRepository tagRep) : base(tag)
         {
             Tag = tag;
-
             _tagRepository = tagRep;
+
+            DeSerializeFields();
+
+            NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
 
             if (Tag != null)
             {
-                PageTitle = "Edit tag";
+                IsEditing = true;
             }
             else
             {
                 Tag = new Tag();
                 Tag.TagColor = CreateRandomColor();
-                PageTitle = "Add tag";
+                IsEditing = false;
             }
         }
 
+        #endregion
+
+        #region Public Methods
+
         public void Save()
         {
-            _tagRepository.Insert(Tag, out tagID);
+            List<Field> fieldList = NonHiddenFieldList;
+            fieldList.AddRange(HiddenFieldList);
+            Tag.FieldList = fieldList;
+            SerializeFields();
+            _tagRepository.Insert(Tag, out TagID);
         }
-
-        public void Remove()
-        {
-            _tagRepository.Delete(Tag);
-        }
-
+        
         public void Update()
         {
+            List<Field> fieldList = NonHiddenFieldList;
+            fieldList.AddRange(HiddenFieldList);
+            Tag.FieldList = fieldList;
+            SerializeFields();
             _tagRepository.Update(Tag);
         }
+
+        public void Remove() => _tagRepository.Delete(Tag);
 
         public string CreateRandomColor()
         {
@@ -96,6 +119,7 @@ namespace AMS.Controllers
             SerializeFields();
             props.Add("Created at", Tag.CreatedAt.ToString());
             props.Add("Last updated at", Tag.UpdatedAt.ToString());
+
             return props;
 
         }
@@ -105,5 +129,7 @@ namespace AMS.Controllers
         /// </summary>
         /// <returns>The name of the tag</returns>
         public string GetLoggableTypeName() => Tag.Name;
+
+        #endregion
     }
 }
