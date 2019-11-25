@@ -55,27 +55,26 @@ namespace AMS.Helpers
             }
             else
             {
-                List<ITagable> tagsToRemove = new List<ITagable>();
-                
                 foreach (var item in SuggestedTags)
                 {
-                    if ((item.TagId == 1 || item.ChildrenCount > 0) && AppliedTags.Contains(item) && ContainsAllChildrenOfParent(item))
-                    {
-                        tagsToRemove.Add(item);
-                    }else if (item.ChildrenCount == 0 && AppliedTags.Contains(item))
-                    {
-                        tagsToRemove.Add(item);
-                    }
+                    if ((item.ChildrenCount > 0 || item.TagId == 1) 
+                        && (!AppliedTags.Contains(item) || !ContainsAllChildrenOfParent(item)))
+                        result.Add(item);
+
+                    else if (item.ChildrenCount == 0 && !AppliedTags.Contains(item))
+                        result.Add(item);
+
                 }
 
-                foreach (var remove in tagsToRemove)
-                {
-                    SuggestedTags.Remove(remove);
-                }
-                
-                tagsToRemove.Clear();
-                
-                result.AddRange(SuggestedTags.Where(t => t.TagLabel.StartsWith(input, StringComparison.InvariantCultureIgnoreCase)).ToList());
+                result = result.Where(t => t.TagLabel.Contains(input, StringComparison.InvariantCultureIgnoreCase)).ToList();
+
+
+                //result.AddRange(SuggestedTags
+                //    .Where(t => t.ChildrenCount > 0)
+                //    .Where(t => t.TagId != 1 && t.ChildrenCount == 0 && !AppliedTags.Contains(t))
+                //    .Where(t => (t.TagId == 1 || t.ChildrenCount > 0) && (!AppliedTags.Contains(t) || !ContainsAllChildrenOfParent(t)))
+                //    .Where(t => t.TagLabel.Contains(input, StringComparison.InvariantCultureIgnoreCase))
+                //    .ToList());
             }
 
             _hasSuggestions = result.Any();
@@ -238,9 +237,7 @@ namespace AMS.Helpers
         public bool ContainsAllChildrenFromParent()
         {
             if (IsParentSet())
-            {
                 return ContainsAllChildrenOfParent(_parent);
-            }
 
             return true;
         }
