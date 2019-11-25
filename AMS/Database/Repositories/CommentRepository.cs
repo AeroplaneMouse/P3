@@ -4,6 +4,7 @@ using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Collections.ObjectModel;
 using AMS.Database.Repositories.Interfaces;
+using System.Collections.Generic;
 
 namespace AMS.Database.Repositories
 {
@@ -169,10 +170,10 @@ namespace AMS.Database.Repositories
             return comment;
         }
 
-        public ObservableCollection<Comment> GetByAssetId(ulong assetId)
+        public List<Comment> GetByAssetId(ulong assetId)
         {
             var con = new MySqlHandler().GetConnection();
-            ObservableCollection<Comment> comments = new ObservableCollection<Comment>();
+            List<Comment> comments = new List<Comment>();
 
             // Opening connection
             if (MySqlHandler.Open(ref con))
