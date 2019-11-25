@@ -165,7 +165,7 @@ namespace AMS.ViewModels
             {
                 ITagable tag = TagSearchSuggestions[0];
 
-                if (_tagHelper.IsParentSet() || tag.ChildrenCount == 0){
+                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1)){
                     _tagHelper.ApplyTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(true);
                     TagSearchProcess();
