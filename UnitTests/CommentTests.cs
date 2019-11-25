@@ -146,7 +146,7 @@ namespace UnitTests
             Comment comment3 = new Comment {AssetID = assetId, Content = "Comment3"};
             _commentRepMock.Setup(p => p.Delete(It.IsAny<Comment>())).Returns(true);
             _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new List<Comment> {comment1, comment2});
-            _controller.CommentList = new ObservableCollection<Comment> {comment1, comment2, comment3};
+            _controller.CommentList = new List<Comment> {comment1, comment2, comment3};
             
             // Act
             _controller.RemoveComment(comment3, assetId);

@@ -227,7 +227,40 @@ namespace AMS.Database.Repositories
 
         public List<Comment> GetAll()
         {
-            throw new NotImplementedException();
+            var con = new MySqlHandler().GetConnection();
+            List<Comment> comments = new List<Comment>();
+
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
+            {
+                // Sending sql query
+                try
+                {
+                    string query = "SELECT * FROM comments";
+
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                comments.Add(DataMapper(reader));
+                            }
+                            reader.Close();
+                        }
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+
+            return comments;
         }
     }
 }

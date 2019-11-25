@@ -10,7 +10,7 @@ namespace AMS.Controllers
 {
     public class CommentListController : ICommentListController
     {
-        public ObservableCollection<Comment> CommentList { get; set; }
+        public List<Comment> CommentList { get; set; }
 
         Session _session;
 
@@ -20,7 +20,10 @@ namespace AMS.Controllers
         {
             _session = session;
             _commentRep = commentRepository;
-            CommentList = new ObservableCollection<Comment>();
+            CommentList = new List<Comment>();
+
+
+            var n = _commentRep.GetAll();
         }
 
         /// <summary>
