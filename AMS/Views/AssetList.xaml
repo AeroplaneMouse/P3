@@ -7,6 +7,21 @@
       xmlns:converter="clr-namespace:AMS.Views.ValueConverters"
       mc:Ignorable="d" 
       Title="AssetList">
+    <Page.Resources>
+        <DataTemplate x:Key="AssetListItem">
+            <Grid Background="Black">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/> <!-- CheckBox -->
+                    <ColumnDefinition Width="*"/> <!-- Name -->
+                    <ColumnDefinition Width="*"/> <!-- Identifier -->
+                    <ColumnDefinition Width="Auto"/> <!-- Updated -->
+                    <ColumnDefinition Width="Auto"/> <!-- Edit -->
+                    <ColumnDefinition Width="Auto"/> <!-- Trash -->
+                </Grid.ColumnDefinitions>
+                
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -162,11 +177,10 @@
                           SelectionMode="Extended"
                           SelectionChanged="ListView_SelectionChanged"
                           Grid.Row="2">
-
                     <ListView.View>
                         <GridView>
                             <!-- Checkbox -->
-                            <GridViewColumn Header="[  ]">
+                            <GridViewColumn Header="[  ]" x:Name="PART_CheckBox">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
@@ -175,12 +189,13 @@
                             </GridViewColumn>
                             
                             <!-- Name -->
-                            <GridViewColumn Header="Name">
+                            <GridViewColumn Header="Name"
+                                            Width="Auto">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Name}"
                                                    Style="{StaticResource ParagraphStyle}"
-                                                   Foreground="Black"/>
+                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -191,24 +206,24 @@
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Identifier}"
                                                    Style="{StaticResource ParagraphStyle}"
-                                                   Foreground="Black"/>
+                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <!-- Created -->
-                            <GridViewColumn Header="Updated">
+                            <!-- Updated -->
+                            <GridViewColumn Header="Updated" x:Name="PART_Updated">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=UpdatedAtString}"
-                                                   Foreground="Black"
-                                                   FontSize="{StaticResource FontSizeSmall}"/>
+                                                   FontSize="{StaticResource FontSizeSmall}"
+                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                                             
                             <!-- Edit -->
-                            <GridViewColumn Width="32">
+                            <GridViewColumn Width="32" x:Name="PART_Edit">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{StaticResource EditButton}"
@@ -220,7 +235,7 @@
                             </GridViewColumn>
                             
                             <!-- Remove -->
-                            <GridViewColumn Width="32">
+                            <GridViewColumn Width="32" x:Name="PART_Trash">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{StaticResource TrashButton}"
@@ -240,6 +255,18 @@
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
                     </ListView.InputBindings>
                 </ListView>
+                
+                <!-- Resizing the gridView -->
+                <Grid Visibility="Hidden">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="{Binding ElementName=PART_CheckBox, Path=ActualWidth}"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="{Binding ElementName=PART_Updated, Path=ActualWidth}"/>
+                        <ColumnDefinition Width="{Binding ElementName=PART_Edit, Path=ActualWidth}"/>
+                        <ColumnDefinition Width="{Binding ElementName=PART_Trash, Path=ActualWidth}"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
             </Grid>
         </Border>
     </Grid>
