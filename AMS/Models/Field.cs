@@ -71,7 +71,7 @@ namespace AMS.Models
         private Field(string label, string content, FieldType type, bool required = false,
             bool isCustom = false,List<ulong> fieldPresentIn = null)
         {
-            this.HashId = CalculateMd5Hash(false);
+            this.HashId = CalculateMd5Hash(true);
             this.Label = label;
             this.Content = content;
             Type = type;

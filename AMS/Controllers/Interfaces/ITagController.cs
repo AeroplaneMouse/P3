@@ -29,6 +29,8 @@ namespace AMS.Controllers.Interfaces
 
         string CreateRandomColor();
 
+        void ConnectTag(Tag tag, Tag oldTag);
+
         #endregion
     }
 }

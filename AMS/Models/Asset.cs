@@ -44,7 +44,7 @@ namespace AMS.Models
             DepartmentID = departmentId;
             Identifier = identifier;
             SerializedFields = options;
-            FieldList = JsonConvert.DeserializeObject<List<Field>>(SerializedFields);
+            DeSerializeFields();
             CreatedAt = created_at;
             UpdatedAt = updated_at;
         }
@@ -87,6 +87,18 @@ namespace AMS.Models
             }
 
             return true;
+        }
+        
+        public bool DeSerializeFields()
+        {
+            if (!string.IsNullOrEmpty(this.SerializedFields))
+            {
+                this.FieldList =
+                    JsonConvert.DeserializeObject<List<Field>>(this.SerializedFields);
+                return true;
+            }
+
+            return false;
         }
 
     }

@@ -22,7 +22,6 @@ namespace AMS.Controllers
         public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset)
         {
             Asset = asset;
-            DeSerializeFields();
             NonHiddenFieldList = asset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = asset.FieldList.Where(f => f.IsHidden == true).ToList();
             _assetRepository = assetRepository;

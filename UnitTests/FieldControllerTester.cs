@@ -90,23 +90,5 @@ namespace UnitTests
             //Assert
             Assert.IsTrue(otherAssetController.NonHiddenFieldList.Contains(_thirdField));
         }
-        
-        [TestMethod]
-        public void DeserializeField_WithNullField()
-        {
-            //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), new AssetRepository())
-            {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
-            };
-            otherAsset.SerializeFields();
-            
-            //Act
-            //Done in assert.
-            
-            
-            //Assert
-            Assert.IsTrue(otherAsset.DeSerializeFields());
-        }
     }
 }

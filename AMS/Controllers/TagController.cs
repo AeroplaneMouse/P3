@@ -14,7 +14,7 @@ namespace AMS.Controllers
         public bool IsEditing { get; set; }
 
         public ulong tagID;
-        
+
 
         ITagRepository _tagRepository { get; set; }
 
@@ -31,7 +31,7 @@ namespace AMS.Controllers
                         TagColor = Tag.TagColor
                     }
                 };
-                foreach (Tag parentTag in (List<Tag>)_tagRepository.GetParentTags())
+                foreach (Tag parentTag in (List<Tag>) _tagRepository.GetParentTags())
                     parentTagsList.Add(parentTag);
 
                 return parentTagsList;
@@ -43,9 +43,9 @@ namespace AMS.Controllers
             Tag = tag;
 
             _tagRepository = tagRep;
-            
+
             Tag = tag;
-            DeSerializeFields();
+
             NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
             if (Tag != null)
@@ -68,7 +68,7 @@ namespace AMS.Controllers
             SerializeFields();
             _tagRepository.Insert(Tag, out tagID);
         }
-        
+
         public void Update()
         {
             List<Field> fieldList = NonHiddenFieldList;
@@ -89,10 +89,34 @@ namespace AMS.Controllers
             Random random = new Random();
 
             //Creates a hex values from three random ints converted to bytes and then to string
-            string hex = "#" + ((byte)random.Next(25, 230)).ToString("X2") +
-                         ((byte)random.Next(25, 230)).ToString("X2") + ((byte)random.Next(25, 230)).ToString("X2");
+            string hex = "#" + ((byte) random.Next(25, 230)).ToString("X2") +
+                         ((byte) random.Next(25, 230)).ToString("X2") + ((byte) random.Next(25, 230)).ToString("X2");
 
             return hex;
+        }
+
+        public void ConnectTag(Tag newTag, Tag oldTag)
+        {
+            foreach (var field in newTag.FieldList)
+            {
+                AddField(field, newTag);
+            }
+
+            foreach (var field in NonHiddenFieldList)
+            {
+                if (field.TagIDs.Count == 1 && field.TagIDs.Contains(oldTag.ID))
+                {
+                    RemoveField(field);
+                }
+            }
+
+            foreach (var field in HiddenFieldList)
+            {
+                if (field.TagIDs.Count == 1 && field.TagIDs.Contains(oldTag.ID))
+                {
+                    RemoveField(field);
+                }
+            }
         }
 
         /// <summary>
@@ -111,7 +135,6 @@ namespace AMS.Controllers
             props.Add("Created at", Tag.CreatedAt.ToString());
             props.Add("Last updated at", Tag.UpdatedAt.ToString());
             return props;
-
         }
 
         /// <summary>

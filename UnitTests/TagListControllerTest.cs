@@ -28,7 +28,7 @@ namespace UnitTests
             _tagRepMock = new Mock<ITagRepository>();
             _tagRepMock.Setup(p => p.Delete(It.IsAny<Tag>())).Returns(true);
             // This creates a new instance of the class for each test
-            _tagListController = new TagListController(new PrintHelper());
+            _tagListController = new TagListController(_tagRepository,new PrintHelper());
             _tagOne = new Tag {Name = "TagOne", TagColor = "#f2f2f2f2"};
             _tagTwo = new Tag {Name = "TagTwo", TagColor = "#f2f2f2f2"};
             _tagThree = new Tag {Name = "TagThree", TagColor = "#f2f2f2f2"};
