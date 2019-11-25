@@ -197,6 +197,7 @@ namespace AMS.ViewModels
             // Display notification if tag was not removed
             if(!_assetController.DetachTag(tag))
                 Features.AddNotification(new Notification("Could not remove tag", Notification.ERROR));
+            OnPropertyChanged(nameof(CurrentlyAddedTags));
         }
     }
 }
