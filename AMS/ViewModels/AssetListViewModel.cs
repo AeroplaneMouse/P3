@@ -142,7 +142,7 @@ namespace AMS.ViewModels
             if (SearchQuery == null)
                 return;
             
-            if (SearchQuery == "" && _tagHelper.IsParentSet()){
+            if (SearchQuery == "." && _tagHelper.IsParentSet()){
                 _tagHelper.ApplyTag(_tagHelper.GetParent());
                 _tagHelper.Parent(null);
                 CurrentGroup = "#";
@@ -196,9 +196,9 @@ namespace AMS.ViewModels
         private void EnteringTagMode()
         {
             inTagMode = true;
-            SearchQuery = "";
             CurrentGroup = "#";
             CurrentGroupVisibility = Visibility.Visible;
+            SearchQuery = "";
         }
 
         private void TagSearchProcess()
