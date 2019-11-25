@@ -39,7 +39,7 @@ namespace UnitTests
             string content = "Test";
             ulong assetId = 1;
             _commentRepMock.Setup(p => p.Insert(It.IsAny<Comment>(), out id));
-            _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>()));
+            _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new List<Comment>());
 
             // Act
             ulong commentId = _controller.AddNewComment(content, assetId);
@@ -58,6 +58,7 @@ namespace UnitTests
             string content = "Test";
             ulong assetId = 1;
             _commentRepMock.Setup(p => p.Insert(It.IsAny<Comment>(), out id)).Returns(true);
+            _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new List<Comment>());
 
             // Act
             ulong commentId = _controller.AddNewComment(content, assetId);
@@ -128,6 +129,7 @@ namespace UnitTests
             ulong assetId = 1;
             Comment comment = new Comment();
             _commentRepMock.Setup(p => p.Delete(It.IsAny<Comment>())).Returns(true);
+            _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new List<Comment>());
 
             // Act
             _controller.RemoveComment(comment, assetId);
