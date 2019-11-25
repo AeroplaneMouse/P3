@@ -100,6 +100,10 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetEditor(Asset asset = null)
             {
+                // Create a new asset if null
+                if (asset == null)
+                    asset = new Asset();
+
                 return new AssetEditor(new AssetController(asset, _assetRepository), new TagListController(_tagRepository, _printHelper));
             }
 
