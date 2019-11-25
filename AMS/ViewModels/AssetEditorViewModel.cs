@@ -84,9 +84,9 @@ namespace AMS.ViewModels
         {
             SaveAsset(false);
 
-            if (Features.NavigateBack() == false)
+            if (Features.Navigate.Back() == false)
             {
-                Features.NavigatePage(Features.Create.AssetList());
+                Features.Navigate.To(Features.Create.AssetList());
             }
         }
 
@@ -139,9 +139,9 @@ namespace AMS.ViewModels
 
         public void Cancel()
         {
-            if (Features.NavigateBack() == false)
+            if (Features.Navigate.Back() == false)
             {
-                Features.NavigatePage(Features.Create.AssetList());
+                Features.Navigate.To(Features.Create.AssetList());
             }
         }
     }

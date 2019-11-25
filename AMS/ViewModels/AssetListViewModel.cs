@@ -131,7 +131,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset(Asset asset)
         {
-            Features.NavigatePage(Features.Create.AssetEditor(asset));
+            Features.Navigate.To(Features.Create.AssetEditor(asset));
         }
 
         private void EditBySelection()
@@ -313,7 +313,7 @@ namespace AMS.ViewModels
         private void ViewAsset()
         {
             if (SelectedItems.Count == 1)
-                Features.NavigatePage(Features.Create.AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First())));
+                Features.Navigate.To(Features.Create.AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First())));
 
             else
                 Features.AddNotification(new Notification("Can only view one asset", Notification.ERROR));
