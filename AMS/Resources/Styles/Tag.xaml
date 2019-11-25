@@ -11,18 +11,12 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
                     <Button OverridesDefaultStyle="True" x:Name="PART_TagButton"
-                            Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}">
+                            Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" FontWeight="DemiBold">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" BorderBrush="{Binding TagColor}" BorderThickness="2" CornerRadius="10"
                                         Background="{Binding TagColor}" FocusVisualStyle="{x:Null}" RenderOptions.EdgeMode="Aliased">
-                                    <Grid >
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                                    </Grid>
+                                    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>

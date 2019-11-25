@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AMS.Database.Repositories;
+using AMS.Database.Repositories.Interfaces;
 
 namespace AMS.ViewModels
 {
@@ -14,14 +15,13 @@ namespace AMS.ViewModels
         /// <summary>
         /// Default contructor
         /// </summary>
-        public HomeViewModel()
+        public HomeViewModel(IUserRepository userRepository, IAssetRepository assetRepository, ITagRepository tagRepository, IDepartmentRepository departmentRepository)
         {
             // Get the number of stored assets, tags and departments
-            NumberOfUsers = (ulong) new UserRepository().GetAll().Count(p => p.IsEnabled);
-            //TODO: fix so it uses Dependency Injection
-            NumberOfAssets = new AssetRepository().GetCount();
-            NumberOfTags = new TagRepository().GetCount();
-            NumberOfDepartments = new DepartmentRepository().GetCount();
+            NumberOfUsers = (ulong)userRepository.GetAll().Count(p => p.IsEnabled);
+            NumberOfAssets = assetRepository.GetCount();
+            NumberOfTags = tagRepository.GetCount();
+            NumberOfDepartments = departmentRepository.GetCount();
 
             // Notify view
             OnPropertyChanged(nameof(NumberOfUsers));

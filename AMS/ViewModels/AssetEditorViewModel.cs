@@ -20,13 +20,11 @@ namespace AMS.ViewModels
 {
     public class AssetEditorViewModel : BaseViewModel
     {
-        private MainViewModel _main;
         private IAssetController _assetController;
         private ITagListController _tagListController;
         private bool _isEditing;
 
         public ICommand AddFieldCommand { get; set; }
-        
         public ICommand RemoveFieldCommand { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand SaveMultipleCommand { get; set; }
@@ -34,9 +32,8 @@ namespace AMS.ViewModels
 
         public List<ITagable> CurrentlyAddedTags => _assetController.CurrentlyAddedTags;
 
-        public ObservableCollection<Field> NonHiddenFieldList { get; set; }
-        
-        public ObservableCollection<Field> HiddenFieldList { get; set; }
+        public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
+        public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.HiddenFieldList);
 
         public string Name
         {
@@ -58,22 +55,21 @@ namespace AMS.ViewModels
 
         public string Title { get; set; }
 
-        public AssetEditorViewModel(Asset asset, IAssetRepository assetRepository, ITagListController tagListController, MainViewModel main)
+        public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController)
         {
-            _main = main;
-            _isEditing = (asset != null);
+            _assetController = assetController;
+            _tagListController = tagListController;
+
+            _isEditing = (_assetController.Asset != null);
             if (_isEditing)
                 Title = "Edit asset";
             else
             {
                 Title = "Add asset";
-                asset = new Asset();
+                _assetController.Asset = new Asset();
             }
 
-            _assetController = new AssetController(asset, assetRepository);
-            NonHiddenFieldList = new ObservableCollection<Field>(_assetController.FieldList.Where(f => f.IsHidden == false));
-            HiddenFieldList = new ObservableCollection<Field>(_assetController.FieldList.Where(f => f.IsHidden == true));
-            _tagListController = tagListController;
+            
 
 
             //Commands
@@ -87,52 +83,47 @@ namespace AMS.ViewModels
         public void SaveAndExist()
         {
             SaveAsset(false);
-            if (_main.ContentFrame.CanGoBack)
+
+            if (Features.NavigateBack() == false)
             {
-                _main.ContentFrame.GoBack();
-            }
-            else
-            {
-                _main.ContentFrame.Navigate(new AssetList(_main, new AssetRepository(), new PrintHelper(), new CommentListController(_main.CurrentSession, new CommentRepository())));
+                Features.NavigatePage(PageMaker.CreateAssetList());
             }
         }
 
         public void SaveAsset(bool multiAdd = true)
         {
-            _assetController.FieldList = NonHiddenFieldList.ToList<Field>();
-            _assetController.FieldList.AddRange(HiddenFieldList.ToList<Field>());
             if (_isEditing)
             {
                 if (!multiAdd)
                 {
                     _assetController.Update();
-                    _main.AddNotification(new Notification("Asset updated", Notification.APPROVE));
+                    Features.AddNotification(new Notification("Asset updated", Notification.APPROVE));
                 }
                 else
                 {
                     _assetController.Save();
-                    _main.AddNotification(new Notification("Asset added", Notification.APPROVE));
+                    Features.AddNotification(new Notification("Asset added", Notification.APPROVE));
                 }
             }
             else
             {
                 _assetController.Save();
-                _main.AddNotification(new Notification("Asset added", Notification.APPROVE));
+                Features.AddNotification(new Notification("Asset added", Notification.APPROVE));
             }
         }
 
         public void PromptForCustomField()
         {
-            _main.DisplayPrompt(new CustomField("Add field", AddCustomField, true));
+            Features.DisplayPrompt(new CustomField("Add field", AddCustomField, true));
         }
 
         public void AddCustomField(object sender, PromptEventArgs e)
         {
-            if(e is FieldInputPromptEventArgs)
+            if(e is FieldInputPromptEventArgs args)
             {
-                Field returnedField = ((FieldInputPromptEventArgs)e).Field;
-                returnedField.Content = returnedField.DefaultValue;
-                NonHiddenFieldList.Add(returnedField);
+                _assetController.AddField(args.Field);
+                OnPropertyChanged(nameof(NonHiddenFieldList));
+                OnPropertyChanged(nameof(HiddenFieldList));
             }
         }
         
@@ -140,37 +131,17 @@ namespace AMS.ViewModels
         {
             if (sender is Field field)
             {
-                if (!field.IsCustom)
-                {
-                    if (field.IsHidden)
-                    {
-                        field.IsHidden = false;
-                        NonHiddenFieldList.Add(field);
-                        HiddenFieldList.Remove(field);
-                    }
-                    else
-                    {
-                        field.IsHidden = true;
-                        HiddenFieldList.Add(field);
-                        NonHiddenFieldList.Remove(field);
-                    }
-                }
-                else
-                {
-                    NonHiddenFieldList.Remove(field);
-                }
+                _assetController.RemoveField(field);
+                OnPropertyChanged(nameof(NonHiddenFieldList));
+                OnPropertyChanged(nameof(HiddenFieldList));
             }
         }
 
         public void Cancel()
         {
-            if (_main.ContentFrame.CanGoBack)
+            if (Features.NavigateBack() == false)
             {
-                _main.ContentFrame.GoBack();
-            }
-            else
-            {
-                _main.ContentFrame.Navigate(new AssetList(_main, new AssetRepository(), new PrintHelper(), new CommentListController(_main.CurrentSession, new CommentRepository())));
+                Features.NavigatePage(PageMaker.CreateAssetList());
             }
         }
     }

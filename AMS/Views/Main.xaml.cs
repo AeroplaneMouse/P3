@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using AMS.Database.Repositories.Interfaces;
+using AMS.ViewModels;
+using System.Windows;
 
 namespace AMS.Views
 {
@@ -7,10 +9,10 @@ namespace AMS.Views
     /// </summary>
     public partial class Main : Window
     {
-        public Main()
+        public Main(IUserRepository userRepository, IDepartmentRepository departmentRepository)
         {
             InitializeComponent();
-            DataContext = new ViewModels.MainViewModel(this);
+            DataContext = new MainViewModel(this, userRepository, departmentRepository);
         }
     }
 }

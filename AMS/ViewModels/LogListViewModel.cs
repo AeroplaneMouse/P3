@@ -13,7 +13,6 @@ namespace AMS.ViewModels
 {
     public class LogListViewModel
     {
-        private readonly MainViewModel _main;
         private ILogListController _logListController;
 
         public ObservableCollection<Entry> Entries { get; set; }
@@ -27,9 +26,8 @@ namespace AMS.ViewModels
         public ICommand PrintCommand { get; set; }
         
 
-        public LogListViewModel(MainViewModel main, ILogListController logListController)
+        public LogListViewModel(ILogListController logListController)
         {
-            _main = main;
             _logListController = logListController;
             Entries = _logListController.EntryList;
 

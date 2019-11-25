@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using AMS.Events;
+using AMS.ViewModels.Prompts;
 
 namespace AMS.Views.Prompts
 {
@@ -11,7 +12,7 @@ namespace AMS.Views.Prompts
         public Confirm(string message, PromptEventHandler handler)
         {
             InitializeComponent();
-            DataContext = new ViewModels.Prompts.ConfirmViewModel(message, handler);
+            DataContext = new ConfirmViewModel(message, handler);
         }
     }
 }

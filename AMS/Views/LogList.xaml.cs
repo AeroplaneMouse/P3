@@ -5,16 +5,16 @@ using AMS.Interfaces;
 using AMS.Logging;
 using AMS.ViewModels;
 using System.Windows;
-
+using AMS.Controllers.Interfaces;
 
 namespace AMS.Views
 {
     public partial class LogList : Page
     {
-        public LogList(MainViewModel main, ILogRepository logRepository, IExporter exporter)
+        public LogList(ILogListController logListController)
         {
             InitializeComponent();
-            DataContext = new LogListViewModel(main, new LogListController(logRepository, exporter));
+            DataContext = new LogListViewModel(logListController);
         }
         
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
