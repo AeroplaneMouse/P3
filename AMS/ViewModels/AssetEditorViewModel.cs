@@ -144,5 +144,23 @@ namespace AMS.ViewModels
                 Features.NavigatePage(PageMaker.CreateAssetList());
             }
         }
+
+        /// <summary>
+        /// Attach a tag to the asset
+        /// </summary>
+        /// <param name="tag"></param>
+        public void AddTag(Tag tag)
+        {
+            bool success = _assetController.AttachTag(tag);
+            if (!success)
+                Features.AddNotification(new Notification("Could not add tag", Notification.ERROR));
+        }
+
+        public void RemoveTag(Tag tag)
+        {
+            bool success = _assetController.DetachTag(tag);
+            if(!success)
+                Features.AddNotification(new Notification("Could not remove tag", Notification.ERROR));
+        }
     }
 }

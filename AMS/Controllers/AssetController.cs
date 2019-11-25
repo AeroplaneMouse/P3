@@ -14,7 +14,7 @@ namespace AMS.Controllers
     public class AssetController : FieldListController, IAssetController, ILoggableValues
     {
         public Asset Asset { get; set; }
-        public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
+        public List<ITagable> CurrentlyAddedTags { get; set; }
         private ILogger logger;
         private IAssetRepository _assetRepository;
         
@@ -26,6 +26,7 @@ namespace AMS.Controllers
             NonHiddenFieldList = asset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = asset.FieldList.Where(f => f.IsHidden == true).ToList();
             _assetRepository = assetRepository;
+            CurrentlyAddedTags = _assetRepository.GetTags(Asset).ToList();
         }
 
         /// <summary>
