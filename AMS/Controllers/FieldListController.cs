@@ -69,41 +69,33 @@ namespace AMS.Controllers
         /// <returns>Rather the field was removed</returns>
         public bool RemoveField(Field field, FieldContainer fieldContainer = null)
         {
-            if (field != null)
+            if (field == null) return false;
+            
+            if (field.IsCustom)
             {
-                if (field.IsCustom)
-                {
-                    NonHiddenFieldList.Remove(field);
-                    return true;
-                }
-                else
-                {
-                    if (field.IsHidden)
-                    {
-                        field.IsHidden = false;
-                        NonHiddenFieldList.Add(field);
-                        HiddenFieldList.Remove(field);
-                        return true;
-                    }
-                    else
-                    {
-                        field.IsHidden = true;
-                        if (fieldContainer != null)
-                        {
-                            if (!(_fieldContainer is Tag) && field.TagIDs.Count > 0)
-                            {
-                                HiddenFieldList.Add(field);
-                            }
-                        }
+                NonHiddenFieldList.Remove(field);
+                return true;
+            }
 
+            if (field.IsHidden)
+            {
+                field.IsHidden = false;
+                NonHiddenFieldList.Add(field);
+                HiddenFieldList.Remove(field);
+                return true;
+            }
 
-                        NonHiddenFieldList.Remove(field);
-                        return true;
-                    }
+            field.IsHidden = true;
+            if (fieldContainer != null)
+            {
+                if (!(_fieldContainer is Tag) && field.TagIDs.Count > 0)
+                {
+                    HiddenFieldList.Add(field);
                 }
             }
 
-            return false;
+
+            return NonHiddenFieldList.Remove(field);
         }
 
 

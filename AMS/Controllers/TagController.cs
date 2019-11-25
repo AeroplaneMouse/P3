@@ -106,23 +106,30 @@ namespace AMS.Controllers
             foreach (var field in newTag.FieldList)
             {
                 AddField(field, newTag);
+                Console.WriteLine("Added field " + field.Label);
             }
 
+            List<Field> fieldsToRemove = new List<Field>();
             foreach (var field in NonHiddenFieldList)
             {
                 if (field.TagIDs.Count == 1 && field.TagIDs.Contains(oldTag.ID))
                 {
-                    RemoveField(field);
+                    fieldsToRemove.Add(field);
                 }
             }
-
             foreach (var field in HiddenFieldList)
             {
                 if (field.TagIDs.Count == 1 && field.TagIDs.Contains(oldTag.ID))
                 {
-                    RemoveField(field);
+                    fieldsToRemove.Add(field);
                 }
             }
+
+            foreach (var field in fieldsToRemove)
+            {
+                RemoveField(field);
+            }
+            
         }
 
         /// <summary>

@@ -64,20 +64,19 @@ namespace AMS.ViewModels
             get => _selectedParentTagIndex;
             set
             {
-                if (value != _selectedParentTagIndex)
-                {
-                    int oldValue = _selectedParentTagIndex;
-                    _selectedParentTagIndex = value;
-                    
-                    _controller.ConnectTag(ParentTagList[_selectedParentTagIndex],ParentTagList[oldValue]);
-                    //_controller.RemoveFieldRelations(ParentTagList[oldValue].ID);
-                   
-                    OnPropertyChanged(nameof(HiddenFieldList));
-                    OnPropertyChanged(nameof(NonHiddenFieldList));
-
-                    int bob = 0;
-                }
+                if (value == _selectedParentTagIndex) return;
                 
+                int oldValue = _selectedParentTagIndex;
+                _selectedParentTagIndex = value;
+                    
+                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex],ParentTagList[oldValue]);
+                //_controller.RemoveFieldRelations(ParentTagList[oldValue].ID);
+                   
+                OnPropertyChanged(nameof(HiddenFieldList));
+                OnPropertyChanged(nameof(NonHiddenFieldList));
+
+                int bob = 0;
+
             }
         }
 
