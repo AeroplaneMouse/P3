@@ -179,11 +179,11 @@ namespace AMS.ViewModels
             )));
             
             // Change page commands
-            ShowHomePageCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateHome()));
-            ShowAssetListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateAssetList()));
-            ShowTagListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateTagList()));
-            ShowLogPageCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateLogList()));
-            ShowUserListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(PageMaker.CreateUserList()));
+            ShowHomePageCommand = new Base.RelayCommand(() => Features.NavigatePage(Features.Create.Home()));
+            ShowAssetListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(Features.Create.AssetList()));
+            ShowTagListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(Features.Create.TagList()));
+            ShowLogPageCommand = new Base.RelayCommand(() => Features.NavigatePage(Features.Create.LogList()));
+            ShowUserListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(Features.Create.UserList()));
 
             // Department commands
             SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
@@ -192,7 +192,7 @@ namespace AMS.ViewModels
             AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)));
 
             // Display splash page
-            SplashPage = PageMaker.CreateSplash(this);
+            SplashPage = Features.Create.Splash(this);
         }
 
         #endregion
@@ -241,7 +241,7 @@ namespace AMS.ViewModels
             MySqlHandler.ConnectionFailed += ConnectionFailed;
 
             // Loads homepage and other stuff from the UI-thread.
-            SplashPage.Dispatcher.Invoke(() => ContentFrame.Navigate(PageMaker.CreateHome()));
+            SplashPage.Dispatcher.Invoke(() => ContentFrame.Navigate(Features.Create.Home()));
 
             // Remove splash page
             SplashPage = null;
@@ -307,7 +307,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(CurrentUser));
 
             // Load splash screen
-            SplashPage = PageMaker.CreateSplash(this);
+            SplashPage = Features.Create.Splash(this);
         }
 
         /// <summary>

@@ -123,7 +123,7 @@ namespace AMS.ViewModels
 
             if (Features.NavigateBack() == false)
             {
-                Features.NavigatePage(PageMaker.CreateTagList());
+                Features.NavigatePage(Features.Create.TagList());
             }
         }
 
@@ -159,7 +159,7 @@ namespace AMS.ViewModels
         {
             if (Features.NavigateBack() == false)
             {
-                Features.NavigatePage(PageMaker.CreateTagList());
+                Features.NavigatePage(Features.Create.TagList());
             }
         }
 
