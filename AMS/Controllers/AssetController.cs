@@ -21,9 +21,16 @@ namespace AMS.Controllers
 
         public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset)
         {
-            Asset = asset;
-            NonHiddenFieldList = asset.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = asset.FieldList.Where(f => f.IsHidden == true).ToList();
+            if(asset == null)
+            {
+                Asset = new Asset();
+            }
+            else
+            {
+                Asset = asset;
+            }
+            NonHiddenFieldList = Asset.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = Asset.FieldList.Where(f => f.IsHidden == true).ToList();
             _assetRepository = assetRepository;
             CurrentlyAddedTags = _assetRepository.GetTags(Asset).ToList();
         }
