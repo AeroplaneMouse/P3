@@ -25,8 +25,6 @@ namespace AMS.ViewModels
         public ObservableCollection<Field> HiddenFieldList =>
             new ObservableCollection<Field>(_controller.HiddenFieldList);
 
-        public List<Tag> ParentTagList => _controller.ParentTagList;
-
         public Tag _tag
         {
             get => _controller.Tag;
@@ -125,12 +123,6 @@ namespace AMS.ViewModels
             }
 
 
-            //Set the selected parent to the parent of the chosen tag
-            int i = ParentTagList.Count;
-            while (i > 0 && ParentTagList[i - 1].ID != _controller.Tag.ParentID)
-                i--;
-
-
 
             // Initialize commands
             SaveTagCommand = new Base.RelayCommand(SaveTag);
@@ -156,7 +148,7 @@ namespace AMS.ViewModels
                 _controller.Save();
             }
 
-            Features.NavigateBack();
+            Features.Navigate.Back();
 
         }
 
@@ -188,7 +180,7 @@ namespace AMS.ViewModels
 
         private void Cancel()
         {
-            Features.NavigateBack();
+            Features.Navigate.Back();
 
         }
 

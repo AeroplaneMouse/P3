@@ -12,11 +12,15 @@ namespace AMS.Controllers
     {
         public Tag Tag { get; set; }
         public bool IsEditing { get; set; }
+        public ulong TagID;
 
-        public ulong tagID;
+        #region Private Properties
 
+        private ITagRepository _tagRepository { get; set; }
 
-        ITagRepository _tagRepository { get; set; }
+        #endregion
+
+        #region Constructor
 
 
         public List<Tag> ParentTagList
@@ -39,26 +43,13 @@ namespace AMS.Controllers
             }
         }
 
-        public Tag Tag { get; set; }
-        public bool IsEditing { get; set; }
-        public ulong TagID;
 
-        #region Private Properties
-
-        private ITagRepository _tagRepository { get; set; }
-
-        #endregion
-
-        #region Constructor
 
         public TagController(Tag tag, ITagRepository tagRep) : base(tag)
         {
             Tag = tag;
             _tagRepository = tagRep;
-
-
-            DeSerializeFields();
-
+            
             NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
 
