@@ -21,10 +21,8 @@ namespace AMS.ViewModels
         private string _searchQuery;
         private TagHelper _tagHelper;
         private ICommentListController _commentListController;
-
         public ObservableCollection<Asset> Items { get; set; }
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
-
         private MainViewModel _main { get; set; }
 
         public string SearchQuery
@@ -36,8 +34,6 @@ namespace AMS.ViewModels
 
                 if (!inTagMode && _searchQuery == "#")
                 {
-                    inTagMode = true;
-                    _searchQuery = "";
                     EnteringTagMode();
                 }
 
@@ -140,86 +136,42 @@ namespace AMS.ViewModels
 
             if (SearchQuery == null)
                 return;
-
-            if (!inTagMode)
-            {
-                _listController.Search(SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)));
-            }
-            else
-            {
-                if (SearchQuery == "" && _tagHelper.IsParentSet())
-                {
-                    _tagHelper.ApplyTag(_tagHelper.GetParent());
-                    _tagHelper.Parent(null);
-                    CurrentGroup = "#";
-                    AppliedTags = _tagHelper.GetAppliedTags(true);
-                }
-
-                _listController.Search("", _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)));
+            
+            if (SearchQuery == "" && _tagHelper.IsParentSet()){
+                _tagHelper.ApplyTag(_tagHelper.GetParent());
+                _tagHelper.Parent(null);
+                CurrentGroup = "#";
+                AppliedTags = _tagHelper.GetAppliedTags(true);
             }
 
+            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)));
+          
             Items = _listController.AssetList;
-            /*
-            if (SearchQuery == null) return;
-            _listController.Search(SearchQuery);
-            Items = _listController.AssetList;
-            */
         }
 
         private void AutoTag()
         {
-            Console.WriteLine("Tap clicked!");
-            try
-            {
-                if (!inTagMode)
+            if (!inTagMode)
                     return;
 
-                if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
-                {
-                    ITagable tag = TagSearchSuggestions[0];
-
-                    if (_tagHelper.IsParentSet())
-                    {
-                        try
-                        {
-                            _tagHelper.ApplyTag(tag);
-                            AppliedTags = _tagHelper.GetAppliedTags(true);
-                            TagSearchProcess();
-                            SearchAssets();
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
-                        }
-                    }
-                    else
-                    {
-                        // Only tag can be parent
-                        Tag taggedItem = (Tag)tag;
-                    
-                        if (taggedItem.NumOfChildren > 0 || tag.TagId == 1)
-                        {
-                            // So we need to switch to a group of tags.
-                            _tagHelper.Parent(taggedItem);
-                            CurrentGroup = "#"+taggedItem.Name;
-                        }
-                        else
-                        {
-                            _tagHelper.ApplyTag(tag);
-                            AppliedTags = _tagHelper.GetAppliedTags(true);
-                            TagSearchProcess();
-                            SearchAssets();
-                        }
-                    }
-                    
-                    SearchQuery = "";
-                }
-            }
-            catch (Exception e)
+            if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
             {
-                Console.WriteLine(e);
+                ITagable tag = TagSearchSuggestions[0];
+                
+                if (_tagHelper.IsParentSet() && (tag.ChildrenCount == 0 || tag.TagId != 1)){
+                    _tagHelper.ApplyTag(tag);
+                    AppliedTags = _tagHelper.GetAppliedTags(true);
+                    TagSearchProcess();
+                    SearchAssets();
+                }else{
+                    // So we need to switch to a group of tags.
+                    Tag taggedItem = (Tag)tag;
+                    _tagHelper.Parent(taggedItem);
+                    CurrentGroup = "#"+taggedItem.Name;
+                }
+                
+                SearchQuery = "";
             }
-
         }
 
         private void ClearInput()
@@ -227,61 +179,37 @@ namespace AMS.ViewModels
             if (!inTagMode)
                 return;
 
-            if (_tagHelper.IsParentSet())
-            {
+            if (_tagHelper.IsParentSet()){
                 _tagHelper.Parent(null);
                 CurrentGroup = "#";
                 SearchQuery = "";
                 TagSearchProcess();
-            }
-            else
-            {
+            }else{
                 LeavingTagMode();
             }
         }
 
         private void EnteringTagMode()
         {
+            inTagMode = true;
+            SearchQuery = "";
             CurrentGroup = "#";
             CurrentGroupVisibility = Visibility.Visible;
         }
 
         private void TagSearchProcess()
         {
-            try
-            {
-                //Console.WriteLine("Hest!");
-                if (_searchQuery == "exit")
-                {
-                    LeavingTagMode();
-                    
-                }
-                else
-                {
-                    try
-                    {
-                        TagSearchSuggestions = new ObservableCollection<ITagable>(_tagHelper.Suggest(_searchQuery));
+            TagSearchSuggestions = new ObservableCollection<ITagable>(_tagHelper.Suggest(_searchQuery));
 
-                        if (_tagHelper.HasSuggestions())
-                        {
-                            TagSuggestionsVisibility = Visibility.Visible;
-                            TagSuggestionIsOpen = true;
-                        }
-                        else
-                        {
-                            TagSuggestionsVisibility = Visibility.Collapsed;
-                            TagSuggestionIsOpen = false;
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                    }
-                }
-            }
-            catch (Exception e)
+            if (_tagHelper.HasSuggestions())
             {
-                Console.WriteLine(e);
+                TagSuggestionsVisibility = Visibility.Visible;
+                TagSuggestionIsOpen = true;
+            }
+            else
+            {
+                TagSuggestionsVisibility = Visibility.Collapsed;
+                TagSuggestionIsOpen = false;
             }
         }
 
@@ -302,9 +230,7 @@ namespace AMS.ViewModels
         {
             // TODO: Redirect to viewAsset page
             if (SelectedItems.Count == 1)
-            {
                 _main.ContentFrame.Navigate(new AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First()), _commentListController));
-            }
             else
                 _main.AddNotification(new Notification("Error! Could not view asset", Notification.ERROR));
         }
