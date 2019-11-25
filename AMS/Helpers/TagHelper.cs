@@ -89,8 +89,18 @@ namespace AMS.Helpers
 
         public void ApplyTag(ITagable tag)
         {
-            ApplyParentIfNeeded(tag);
-            AppliedTags.Add(tag);
+            if (tag.ParentId == 0 && tag.ChildrenCount > 0)
+            {
+                if (CanApplyParentTags)
+                {
+                    AppliedTags.Add(tag);
+                }
+            }
+            else
+            {
+                ApplyParentIfNeeded(tag);
+                AppliedTags.Add(tag);
+            }
         }
 
         public void RemoveTag(ITagable tag)
