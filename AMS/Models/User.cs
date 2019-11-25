@@ -61,15 +61,20 @@ namespace AMS.Models
         public ulong ParentId => 1;
         public int ChildrenCount => 0;
         public List<ITagable> Children { get; set; }
-        public string TagColor
-        {            // TODO: Ingen new repositories!
+        public string TagColor
+
+        {
+            // TODO: Ingen new repositories!
             get => (_tagRepository ?? new TagRepository()).GetById(1).TagColor;
-            set => TagColor = value;
+            set => TagColor = value;
+
         }
-        public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
+        public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
+
         #endregion
 
-        /* Constructor used by DB */
+        /* Constructor used by DB */
+
         private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
         {
             ID = id;
@@ -108,7 +113,8 @@ namespace AMS.Models
             if (objAsPart == null)
                 return false;
 
-            return ID.Equals(objAsPart.TagId);
+            return ID == objAsPart.TagId 
+                   && ParentId == objAsPart.ParentId;
         }
     }
 }

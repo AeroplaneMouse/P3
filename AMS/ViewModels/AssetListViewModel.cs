@@ -137,14 +137,21 @@ namespace AMS.ViewModels
         /// </summary>
         private void SearchAssets()
         {
-            if (SearchQuery == null)
-                return;
-            
-            if (SearchQuery == "" && _tagHelper.IsParentSet()){
-                _tagHelper.ApplyTag(_tagHelper.GetParent());
-                _tagHelper.Parent(null);
-                CurrentGroup = "#";
-                AppliedTags = _tagHelper.GetAppliedTags(true);
+            if (inTagMode)
+            {
+                if (SearchQuery == "" && _tagHelper.IsParentSet()){
+                    _tagHelper.ApplyTag(_tagHelper.GetParent());
+                    _tagHelper.Parent(null);
+                    CurrentGroup = "#";
+                    AppliedTags = _tagHelper.GetAppliedTags(true);
+                }
+                
+                AutoTag();
+            }
+            else
+            {
+                if (SearchQuery == null)
+                    return;
             }
             
             RefreshList();
