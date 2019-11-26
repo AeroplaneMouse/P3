@@ -69,7 +69,7 @@
                                             <MenuItem Header="_Help" Style="{StaticResource MenuItemButton}">
                                                 <MenuItem Header="_About"/>
                                                 <MenuItem Header="_Reload" Command="{Binding ReloadCommand}"/>
-                                                <MenuItem Header="_Exit"/>
+                                                <MenuItem Header="_Exit" Command="{Binding CloseCommand}"/>
                                             </MenuItem>
                                         </Menu>
 
