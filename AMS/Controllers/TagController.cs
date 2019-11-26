@@ -1,9 +1,10 @@
-using AMS.Controllers.Interfaces;
+﻿using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Logging;
 using AMS.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 
 namespace AMS.Controllers
@@ -61,8 +62,8 @@ namespace AMS.Controllers
                 IsEditing = false;
             }
 
-            NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
+            NonHiddenFieldList = Tag.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = Tag.FieldList.Where(f => f.IsHidden == true).ToList();
         }
 
         #endregion
@@ -95,8 +96,9 @@ namespace AMS.Controllers
             Random random = new Random();
 
             //Creates a hex values from three random ints converted to bytes and then to string
-            string hex = "#" + ((byte) random.Next(25, 230)).ToString("X2") +
-                         ((byte) random.Next(25, 230)).ToString("X2") + ((byte) random.Next(25, 230)).ToString("X2");
+            string hex = "#" + ((byte) random.Next(100, 230)).ToString("X2") +
+                               ((byte) random.Next(100, 230)).ToString("X2") + 
+                               ((byte) random.Next(100, 230)).ToString("X2");
 
             return hex;
         }
