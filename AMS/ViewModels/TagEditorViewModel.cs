@@ -58,6 +58,8 @@ namespace AMS.ViewModels
             get => _controller.ParentTagList;
         }
 
+        public List<Department> DepartmentList { get => _controller.DepartmentList; }
+
         private int _selectedParentTagIndex;
         public int SelectedParentTagIndex
         {
@@ -76,6 +78,8 @@ namespace AMS.ViewModels
                 OnPropertyChanged(nameof(NonHiddenFieldList));
             }
         }
+
+        public int SelectedDepartmentIndex { get; set; }
 
         #endregion
 
@@ -109,13 +113,30 @@ namespace AMS.ViewModels
                 _selectedParentTagIndex = i - 1;
 
             OnPropertyChanged(nameof(SelectedParentTagIndex));
+            
+            
+            Department currentDepartment;
+
             if (_controller.IsEditing)
             {
-                PageTitle = "Edit asset";
+                PageTitle = "Edit tag";
+
+                // Use the department of the tag
+                currentDepartment = _controller.DepartmentList.Find(d => d.ID == _controller.Tag.DepartmentID);
             }
             else
             {
-                PageTitle = "Add asset";
+                PageTitle = "Add tag";
+                currentDepartment = Features.Main.CurrentDepartment;
+            }
+
+            // Setting the selected department
+            int index = 0;
+            foreach (Department d in _controller.DepartmentList)
+            {
+                if (d.ID == currentDepartment.ID)
+                    SelectedDepartmentIndex = index;
+                index++;
             }
 
 
@@ -135,6 +156,7 @@ namespace AMS.ViewModels
         private void SaveTag()
         {
             _controller.Tag.ParentID = ParentTagList[SelectedParentTagIndex].ID;
+            _controller.Tag.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
             if (_controller.IsEditing)
             {
                 _controller.Update();
@@ -176,7 +198,10 @@ namespace AMS.ViewModels
 
         private void Cancel()
         {
-            Features.Navigate.Back();
+            if (Features.Navigate.Back())
+                Console.WriteLine("Going back dude...");
+            else
+                Console.WriteLine("Naaa... it is not possible to go back at the point in time.");
 
         }
 

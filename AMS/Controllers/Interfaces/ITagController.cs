@@ -20,6 +20,7 @@ namespace AMS.Controllers.Interfaces
         bool IsEditing { get; set; }
 
         List<Tag> ParentTagList { get; }
+        List<Department> DepartmentList { get; }
 
         #endregion
 
