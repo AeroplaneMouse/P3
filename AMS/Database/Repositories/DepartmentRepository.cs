@@ -6,6 +6,7 @@ using System.Reflection;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Logging.Interfaces;
 using AMS.ViewModels;
+using AMS.Logging;
 
 namespace AMS.Database.Repositories
 {
