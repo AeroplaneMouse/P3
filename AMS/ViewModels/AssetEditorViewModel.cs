@@ -105,9 +105,10 @@ namespace AMS.ViewModels
         {
             _assetController = assetController;
             _tagListController = tagListController;
-            
+
             _tagHelper = tagHelper;
             _tagHelper.CanApplyParentTags = false;
+            _tagHelper.SetCurrentTags(CurrentlyAddedTags);
 
             _isEditing = (_assetController.Asset.ID != 0);
             if (_isEditing)
