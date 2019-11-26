@@ -2,6 +2,7 @@
 using AMS.Database.Repositories.Interfaces;
 using AMS.Logging;
 using AMS.Models;
+using AMS.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,6 +12,10 @@ namespace AMS.Controllers
 {
     public class TagController : FieldListController, ITagController, IFieldListController
     {
+        private ITagRepository _tagRepository { get; set; }
+        private IDepartmentRepository _departmentRepository { get; set; }
+
+
         public Tag Tag { get; set; }
         public bool IsEditing { get; set; }
         public ulong TagID;
@@ -19,14 +24,6 @@ namespace AMS.Controllers
         public string Color { get; set; }
         public ulong ParentID { get; set; }
         public ulong DepartmentID { get; set; }
-
-        #region Private Properties
-
-        private ITagRepository _tagRepository { get; set; }
-
-        #endregion
-
-        #region Constructor
 
 
         public List<Tag> ParentTagList
@@ -42,18 +39,40 @@ namespace AMS.Controllers
                         TagColor = Tag.TagColor
                     }
                 };
-                foreach (Tag parentTag in (List<Tag>) _tagRepository.GetParentTags())
+                foreach (Tag parentTag in (List<Tag>) _tagRepository.GetParentTags()
+                    .Where(t => t.ID != 1 && t.ID != Tag.ID)
+                    .ToList())
+                {
                     parentTagsList.Add(parentTag);
+                }
 
                 return parentTagsList;
             }
         }
 
-        public TagController(Tag tag, ITagRepository tagRep) : base(tag)
+        public List<Department> DepartmentList
+        {
+            get
+            {
+                List<Department> departments = new List<Department>()
+                {
+                    new Department()
+                    {
+                        Name = "All departments"
+                    }
+                };
+
+                _departmentRepository.GetAll().ToList().ForEach(d => departments.Add(d));
+
+                return departments;
+            }
+        }
+
+        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) : base(tag)
         {
             Tag = tag;
             _tagRepository = tagRep;
-
+            _departmentRepository = departmentRepository;
 
             Name = tag.Name;
             Color = tag.TagColor;
@@ -77,8 +96,6 @@ namespace AMS.Controllers
             NonHiddenFieldList = Tag.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = Tag.FieldList.Where(f => f.IsHidden == true).ToList();
         }
-
-        #endregion
 
         #region Public Methods
 

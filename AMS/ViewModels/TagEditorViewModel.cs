@@ -58,6 +58,8 @@ namespace AMS.ViewModels
             get => _controller.ParentTagList;
         }
 
+        public List<Department> DepartmentList { get => _controller.DepartmentList; }
+
         private int _selectedParentTagIndex;
         public int SelectedParentTagIndex
         {
@@ -76,6 +78,8 @@ namespace AMS.ViewModels
                 OnPropertyChanged(nameof(NonHiddenFieldList));
             }
         }
+
+        public int SelectedDepartmentIndex { get; set; }
 
         #endregion
 
@@ -108,6 +112,21 @@ namespace AMS.ViewModels
             if (i > 0)
                 _selectedParentTagIndex = i - 1;
 
+            // Setting the selected department
+            Department current = Features.Main.CurrentDepartment;
+            if (current.ID == 0)
+                SelectedDepartmentIndex = 0;
+            else
+            {
+                int index = 0;
+                foreach(Department d in _controller.DepartmentList)
+                {
+                    if (d.ID == current.ID)
+                        SelectedDepartmentIndex = index;
+                    index++;
+                }
+            }
+
             OnPropertyChanged(nameof(SelectedParentTagIndex));
             if (_controller.IsEditing)
             {
@@ -135,6 +154,7 @@ namespace AMS.ViewModels
         private void SaveTag()
         {
             _controller.Tag.ParentID = ParentTagList[SelectedParentTagIndex].ID;
+            _controller.Tag.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
             if (_controller.IsEditing)
             {
                 _controller.Update();

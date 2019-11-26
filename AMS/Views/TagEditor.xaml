@@ -80,7 +80,21 @@
                     <!-- Color -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Color"/>
-                    <xctk:ColorPicker SelectedColor="{Binding Color}" Name="ColorPicker" />
+                    <xctk:ColorPicker SelectedColor="{Binding Color}" 
+                                      Name="ColorPicker"
+                                      Margin="0 0 0 10"/>
+
+                    <!-- Department -->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Department"/>
+                    <ComboBox ItemsSource="{Binding DepartmentList}"
+                              SelectedIndex="{Binding SelectedDepartmentIndex, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
 
                 </StackPanel>
 

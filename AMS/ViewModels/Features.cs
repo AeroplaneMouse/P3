@@ -155,7 +155,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page TagEditor(Tag tag)
             {
-                return new TagEditor(new TagController(tag, _tagRepository));
+                return new TagEditor(new TagController(tag, _tagRepository, _departmentRepository));
             }
 
             /// <summary>
