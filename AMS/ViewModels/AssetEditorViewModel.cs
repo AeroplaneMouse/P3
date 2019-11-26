@@ -24,10 +24,6 @@ namespace AMS.ViewModels
         private ITagListController _tagListController;
         private bool _isEditing;
 
-        private string _name;
-        private string _identifier;
-        private string _description;
-
         public ICommand AddFieldCommand { get; set; }
         public ICommand RemoveFieldCommand { get; set; }
         public ICommand SaveCommand { get; set; }
@@ -41,19 +37,22 @@ namespace AMS.ViewModels
         public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
         public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.HiddenFieldList);
 
-        public string Name {
-            get => _name;
-            set => _name = value;
+        public string Name
+        {
+            get => _assetController.Asset.Name;
+            set => _assetController.Asset.Name = value;
         }
 
-        public string Identifier {
-            get => _identifier;
-            set => _identifier = value;
+        public string Identifier
+        {
+            get => _assetController.Asset.Identifier;
+            set => _assetController.Asset.Identifier = value;
         }
 
-        public string Description {
-            get => _description;
-            set => _description = value;
+        public string Description
+        {
+            get => _assetController.Asset.Identifier;
+            set => _assetController.Asset.Description = value;
         }
 
         public string Title { get; set; }
@@ -86,10 +85,7 @@ namespace AMS.ViewModels
                 _assetController.Asset = new Asset();
             }
 
-            Name = _assetController.Asset.Name;
-            Identifier = _assetController.Asset.Identifier;
-            Description = _assetController.Asset.Description;
-
+            
             //Commands
             SaveCommand = new RelayCommand(() => SaveAndExist());
             SaveMultipleCommand = new RelayCommand(() => SaveAsset());
