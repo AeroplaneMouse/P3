@@ -69,9 +69,6 @@ namespace AMS.ViewModels
                 _assetController.Asset = new Asset();
             }
 
-            
-
-
             //Commands
             SaveCommand = new RelayCommand(() => SaveAndExist());
             SaveMultipleCommand = new RelayCommand(() => SaveAsset());
