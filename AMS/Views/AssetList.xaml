@@ -229,7 +229,7 @@
                             </GridViewColumn>
 
                             <!-- View -->
-                            <GridViewColumn Width="40" x:Name="PART_View">
+                            <GridViewColumn Width="32" x:Name="PART_View">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{StaticResource ViewButton}"

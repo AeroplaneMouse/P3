@@ -79,7 +79,7 @@ namespace AMS.Database.Repositories
                         id = (ulong)cmd.LastInsertedId;
                     }
 
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
                 }
                 catch (MySqlException e)
                 {
