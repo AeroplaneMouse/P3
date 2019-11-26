@@ -11,6 +11,7 @@ using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Logging.Interfaces;
 using AMS.ViewModels;
+using AMS.Logging;
 
 namespace AMS.Database.Repositories
 {
@@ -18,7 +19,7 @@ namespace AMS.Database.Repositories
     {
         private QueryGenerator _query;
         
-        private ILogger logger { get; set; }
+        private ILogger logger { get; set; } = new Logger(new CWRep());
 
         public AssetRepository()
         {
