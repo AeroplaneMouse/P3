@@ -1,4 +1,4 @@
-﻿using AMS.Controllers.Interfaces;
+using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Logging;
 using AMS.Models;
@@ -49,9 +49,6 @@ namespace AMS.Controllers
         {
             Tag = tag;
             _tagRepository = tagRep;
-            
-            NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
 
             if (Tag != null)
             {
@@ -63,6 +60,9 @@ namespace AMS.Controllers
                 Tag.TagColor = CreateRandomColor();
                 IsEditing = false;
             }
+
+            NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
         }
 
         #endregion
