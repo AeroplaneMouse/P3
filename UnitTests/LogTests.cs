@@ -5,6 +5,8 @@ using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Logging;
 using AMS.Logging.Interfaces;
+using AMS.Models;
+using Asset_Management_System.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -13,9 +15,7 @@ namespace UnitTests
     [TestClass]
     public class LogTests
     {
-        /*private Mock<ILogRepository> _logRepMock;
-        private Mock<ILoggableValues> _newItemMock;
-        private Mock<ILoggableValues> _prevItemMock;
+        private Mock<ILogRepository> _logRepMock;
         private ILogger _Log;
         private Dictionary<string, string> _testDict;
         private Dictionary<string, string> _prevValuesTestDict;
@@ -25,30 +25,28 @@ namespace UnitTests
         {
             // Create Mocks of dependencies
             _logRepMock = new Mock<ILogRepository>();
-            _newItemMock = new Mock<ILoggableValues>();
-            _prevItemMock = new Mock<ILoggableValues>();
             
             _testDict = new Dictionary<string, string> {{"ID", "1"}, {"Name", "NewValue"}};
             _prevValuesTestDict = new Dictionary<string, string>{{"ID", "1"}, {"Name", "PrevValue"}};
             
             // This creates a new instance of the class for each test
-            _Log = new Log(_logRepMock.Object);
+            _Log = new Logger(_logRepMock.Object);
         }
         
         [TestMethod]
         public void LogCreate_CallsRepositoryInsert_ReturnsTrue()
         {
             //Arrange
-            _logRepMock.Setup(p => p.Insert(It.IsAny<Entry>())).Returns(true);
-            _newItemMock.Setup(p => p.GetLoggableValues()).Returns(_testDict);
+            _logRepMock.Setup(p => p.Insert(It.IsAny<LogEntry>())).Returns(true);
+            Asset asset = new Asset();
             
             //Act
-            _Log.LogCreate(_newItemMock.Object);
+            _Log.AddEntry(asset, 1);
 
             //Assert
-            _logRepMock.Verify((p => p.Insert(It.IsAny<Entry>())), Times.Once);
+            _logRepMock.Verify((p => p.Insert(It.IsAny<LogEntry>())), Times.Once);
         }
-        
+        /*
         [TestMethod]
         public void LogDelete_CallsRepositoryInsert_ReturnsTrue()
         {

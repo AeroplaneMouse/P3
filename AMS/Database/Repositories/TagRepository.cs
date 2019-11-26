@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Collections.ObjectModel;
 using AMS.Database.Repositories.Interfaces;
 using AMS.ViewModels;
+using AMS.Logging.Interfaces;
 
 namespace AMS.Database.Repositories
 {

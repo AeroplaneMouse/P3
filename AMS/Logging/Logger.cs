@@ -32,18 +32,21 @@ namespace AMS.Logging
                     description = entity.GetType().ToString().Split('.').Last() + " with id " + entity.ID;
                     changes = this.GetChanges(entity);
                     entryType = "Update";
+                    Console.WriteLine(entryType);
                 }
                 else if (entity.ID == 0)
                 {
                     description = entity.GetType().ToString().Split('.').Last() + " with id " + entity.ID;
                     changes = this.GetPropertiesAndValues(entity);
                     entryType = "Create";
+                    Console.WriteLine(entryType);
                 }
                 else
                 {
                     description = entity.GetType().ToString().Split('.').Last() + " with id " + entity.ID;
                     changes = this.GetPropertiesAndValues(entity);
                     entryType = "Delete";
+                    Console.WriteLine(entryType);
                 }
 
                 this.Write(entryType, description, userId, changes);
