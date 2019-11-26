@@ -6,11 +6,10 @@
 
         <!-- So it can be clicked -->
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
-
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Padding" Value="8" />
+        <Setter Property="Padding" Value="12 0 12 3" />
         <Setter Property="Foreground" Value="{StaticResource BackgroundDarkBrush}" />
-        <Setter Property="FontSize" Value="{StaticResource FontSizeXSmall}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         
         <!-- Stretches the buttons so they are bigger. Remove when changing to icon! -->
         <Setter Property="LayoutTransform">
@@ -27,6 +26,7 @@
                         <TextBlock VerticalAlignment="Center" 
                                    HorizontalAlignment="Center" 
                                    Text="{TemplateBinding Content}"
+                                   SnapsToDevicePixels="True"
                                    TextBlock.FontWeight="Light"
                                    Foreground="{StaticResource BackgroundLightBrush}"/>
                     </Border>

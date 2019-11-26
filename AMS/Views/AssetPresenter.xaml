@@ -28,7 +28,7 @@
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="10">
-            
+
             <!--Edit Button-->
             <Button Style="{StaticResource RegularButton}"
                     Command="{Binding EditCommand}"
@@ -67,28 +67,31 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem DataContext="{Binding Children[0]}" Header="Details">
+            <TabItem DataContext="{Binding Children[0]}" 
+                     Header="Details"
+                     FontSize="{StaticResource FontSizeSmall}">
                 <Grid>
                     <!-- Content of the page -->
                     <ScrollViewer Grid.Row="1" Margin="10">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="350" />
+                                <ColumnDefinition Width="15.052" />
+                                <ColumnDefinition Width="334.948"/>
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="400" />
                             </Grid.ColumnDefinitions>
 
                             <!-- Details -->
-                            <StackPanel Grid.Column="0">
+                            <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
                                 <!-- Name -->
                                 <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                            Text="Name" />
-                                
+
                                 <TextBlock Style="{StaticResource ParagraphStyle}"
                                            Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                                            Margin="0 5 0 15" 
                                            TextWrapping="Wrap"/>
-                                
+
                                 <!-- Identifier -->
                                 <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                            Text="Identifier"/>
@@ -97,7 +100,7 @@
                                            Text="{Binding Identifier}"
                                            Margin="0 5 0 15"
                                            TextWrapping="Wrap"/>
-                                
+
                                 <!-- Desription -->
                                 <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                            Text="Description"/>
@@ -110,7 +113,7 @@
                                 <!-- Tags -->
                                 <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                            Text="Tags"/>
-                                
+
                                 <ListView ItemsSource="{Binding TagList}"
                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                           ItemContainerStyle="{StaticResource ListViewWithTags}"
@@ -142,13 +145,13 @@
 
                             </StackPanel>
 
-                            <!--Separator--> 
+                            <!--Separator-->
                             <Rectangle Style="{StaticResource VerticalSeparator}"
-                                       Grid.Column="1"
-                                       Margin="10 0 10 0"/>
+                                       Grid.Column="2"
+                                       Margin="10,0,10,0"/>
 
                             <!-- Fields -->
-                            <StackPanel Grid.Column="2">
+                            <StackPanel Grid.Column="3">
                                 <ListView ItemsSource="{Binding FieldList}"
                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                           ItemContainerStyle="{StaticResource ListViewWithTags}"
@@ -185,12 +188,14 @@
                                     </ListView.ItemTemplate>
                                 </ListView>
                             </StackPanel>
-                            
+
                         </Grid>
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem DataContext="{Binding Children[1]}" Header="Comments">
+            <TabItem DataContext="{Binding Children[1]}" 
+                     Header="Comments" 
+                     FontSize="{StaticResource FontSizeSmall}">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -215,7 +220,7 @@
                                 <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding SaveCommand}"/>
                             </TextBox.InputBindings>
                         </TextBox>
-                            <Button Grid.Column="1" 
+                        <Button Grid.Column="1" 
                                     Content="Save" 
                                     Command="{Binding SaveCommand}" 
                                     Style="{StaticResource RegularAcceptButton}"
@@ -275,16 +280,20 @@
                     </ScrollViewer>
                     <!--<ListView ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Margin="10 0">
                         <ListView.Resources>
-                            --><!--<Style TargetType="GridViewColumnHeader">
+                            -->
+                    <!--<Style TargetType="GridViewColumnHeader">
                                 <Setter Property="Visibility" Value="Collapsed" />
-                            </Style>--><!--
+                            </Style>-->
+                    <!--
                             <Style TargetType="ListViewItem">
                                 <Setter Property="Background" Value="Transparent"/>
                             </Style>
                         </ListView.Resources>
                         <ListView.View>
                             <GridView>
-                                --><!--Comment information--><!--
+                                -->
+                    <!--Comment information-->
+                    <!--
                                 <GridViewColumn>
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
@@ -298,7 +307,9 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                         <ColumnDefinition Width="*"/>
                                                     </Grid.ColumnDefinitions>
-                                                    --><!--Comment information--><!--
+                                                    -->
+                    <!--Comment information-->
+                    <!--
                                                     <StackPanel Grid.Column="0" Margin="0 0 30 0">
                                                         <TextBlock Text="{Binding Path=Username}" 
                                                                Style="{StaticResource ParagraphStyle}" 
@@ -307,7 +318,9 @@
                                                                Style="{StaticResource ParagraphStyle}"
                                                                Foreground="Black"/>
                                                     </StackPanel>
-                                                    --><!--Comment content--><!--
+                                                    -->
+                    <!--Comment content-->
+                    <!--
                                                     <TextBlock Grid.Column="1"
                                                            Text="{Binding Path=Content}" 
                                                            Style="{StaticResource ParagraphStyle}" 
@@ -323,7 +336,8 @@
                     </ListView>-->
                 </Grid>
             </TabItem>
-            <TabItem DataContext="{Binding Children[2]}" Header="Log">
+
+            <TabItem DataContext="{Binding Children[2]}" Header="Log" FontSize="{StaticResource FontSizeSmall}">
                 <!--Style="{StaticResource RegularList}"-->
                 <ListView x:Name="listViewWithItems"
                         SelectionMode="Extended"

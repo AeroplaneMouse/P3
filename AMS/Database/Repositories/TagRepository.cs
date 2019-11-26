@@ -364,9 +364,12 @@ namespace AMS.Database.Repositories
             {
                 try 
                 {
-                    const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
+                    string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
                                      "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
                                      "FROM tags AS t WHERE t.label LIKE @keyword";
+
+                    if (Features.Main.CurrentDepartment.ID > 0)
+                        query += $" AND t.department_id={ Features.Main.CurrentDepartment.ID.ToString() } OR t.department_id=0";
 
                     if (!keyword.Contains('%'))
                         keyword = $"%{keyword}%";
