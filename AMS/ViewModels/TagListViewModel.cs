@@ -12,7 +12,7 @@ using AMS.Views.Prompts;
 
 namespace AMS.ViewModels
 {
-    public class TagListViewModel
+    public class TagListViewModel : Base.BaseViewModel
     {
         public List<Tag> Tags { get; set; }
         private readonly ITagListController _tagListController;
@@ -20,9 +20,7 @@ namespace AMS.ViewModels
         public Tag SelectedItem { get; set; }
         
         public ICommand RemoveCommand { get; set; }
-
         public ICommand EditCommand { get; set; }
-
         public ICommand AddNewCommand { get; set; }
 
 
@@ -31,7 +29,7 @@ namespace AMS.ViewModels
             _tagListController = controller;
             Tags = _tagListController.TagsList;
             Tags.AddRange(_tagListController.GetParentTags());
-            RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Delete the selected tag, cannot be recovered?",RemoveTag)));
+            RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Deleting selected tag. This action cannot be undone. Proceed?", RemoveTag)));
             EditCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(SelectedItem)));
             AddNewCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(null)));
 
@@ -52,6 +50,8 @@ namespace AMS.ViewModels
             {
                 _tagListController.Remove(SelectedItem);
             }
+
+            OnPropertyChanged(nameof(Tags));
         }
     }
 }
