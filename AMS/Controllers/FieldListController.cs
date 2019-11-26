@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,7 +16,14 @@ namespace AMS.Controllers
 
         protected FieldListController(FieldContainer element)
         {
-            _fieldContainer = element;
+            if(element == null)
+            {
+                throw new NullReferenceException();
+            }
+            else
+            {
+                _fieldContainer = element;
+            }
         }
 
         /// <summary>
