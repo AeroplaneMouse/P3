@@ -60,10 +60,9 @@
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Left" Grid.Row="0">
                     
-                    <StackPanel Orientation="Horizontal"    
-                                VerticalAlignment="Center"    
-                                HorizontalAlignment="Center"
-                                ><!--ToolTip="Enter '#' to start tag mode. Here you can search on tags and add them to the list of things, to care about when searching."-->
+                    <StackPanel Orientation="Horizontal"  
+                                HorizontalAlignment="Left">
+                        <!--ToolTip="Enter '#' to start tag mode. Here you can search on tags and add them to the list of things, to care about when searching."-->
                         <Border x:Name="CurrentTagGroup" Background="LightGray"
                                 BorderThickness="0"
                                 Visibility="{Binding CurrentGroupVisibility}">
@@ -84,15 +83,14 @@
                             </Border.Style>
                         </Border>
                         
-                        <StackPanel Orientation="Vertical"    
-                                    VerticalAlignment="Center">
+                        <StackPanel Orientation="Vertical">
                             <!-- Search bar -->
                             <TextBox FontSize="{StaticResource FontSizeSmall}"
                                      Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
                                      VerticalContentAlignment="Center"
                                      MinWidth="200"
                                      MaxWidth="350"
-                                     Height="30"
+                                     MinHeight="35"
                                      x:Name="SearchElement"
                                      TabIndex="0">
                                 
