@@ -93,7 +93,8 @@
                 <ControlTemplate TargetType="MenuItem">
                     <Border Padding="{TemplateBinding Padding}"
                             Background="{TemplateBinding Background}">
-                        <Image Source="{TemplateBinding Header}"/>
+                        <Image Source="{TemplateBinding Header}"
+                               Visibility="{x:Static v:Features.OnlyVisibleForAdmin}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -143,14 +144,14 @@
                             <ContentPresenter Content="{TemplateBinding Header}"
                                               Margin="0 3 40 3"
                                               Grid.Column="1"/>
-                                <MenuItem Grid.Column="2" 
-                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.EditDepartmentCommand}" 
-                                        CommandParameter="{TemplateBinding CommandParameter}" 
-                                        Style="{StaticResource DepartmentEdit}"/> 
-                                <MenuItem Grid.Column="4" 
-                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RemoveDepartmentCommand}" 
-                                        CommandParameter="{TemplateBinding CommandParameter}" 
-                                        Style="{StaticResource DepartmentRemove}"/> 
+                            <MenuItem Grid.Column="2" 
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.EditDepartmentCommand}" 
+                                    CommandParameter="{TemplateBinding CommandParameter}" 
+                                    Style="{StaticResource DepartmentEdit}"/> 
+                            <MenuItem Grid.Column="4" 
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RemoveDepartmentCommand}" 
+                                    CommandParameter="{TemplateBinding CommandParameter}" 
+                                    Style="{StaticResource DepartmentRemove}"/> 
                         </Grid>
                     </Border>
                 </ControlTemplate>
