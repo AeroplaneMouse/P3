@@ -196,7 +196,10 @@ namespace AMS.ViewModels
 
         private void Cancel()
         {
-            Features.Navigate.Back();
+            if (Features.Navigate.Back())
+                Console.WriteLine("Going back dude...");
+            else
+                Console.WriteLine("Naaa... it is not possible to go back at the point in time.");
 
         }
 

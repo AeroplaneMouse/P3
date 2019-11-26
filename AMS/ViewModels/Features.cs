@@ -66,14 +66,21 @@ namespace AMS.ViewModels
         {
             public static bool To(Page page)
             {
-                return Main.ContentFrame.Navigate(page);
+                if (Main.ContentFrame.Navigate(page))
+                {
+                    Main.History.Push(page);
+                    return true;
+                }
+                else
+                    return false;
             }
 
             public static bool Back()
             {
-                if (Main.ContentFrame.CanGoBack)
+                if (Main.History.Count > 0)
                 {
-                    Main.ContentFrame.GoBack();
+                    Main.History.Pop();
+                    Main.ContentFrame.Navigate(Main.History.Pop());
                     return true;
                 }
                 else
