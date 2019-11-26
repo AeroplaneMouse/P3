@@ -76,13 +76,12 @@ namespace AMS.ViewModels
             _assetController = assetController;
             _tagListController = tagListController;
 
-            _isEditing = (_assetController.Asset != null);
+            _isEditing = (_assetController.Asset.ID != 0);
             if (_isEditing)
                 Title = "Edit asset";
             else
             {
                 Title = "Add asset";
-                _assetController.Asset = new Asset();
             }
 
             

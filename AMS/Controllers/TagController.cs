@@ -51,7 +51,7 @@ namespace AMS.Controllers
             Tag = tag;
             _tagRepository = tagRep;
 
-            if (Tag != null)
+            if (Tag.ID != 0)
             {
                 IsEditing = true;
             }
