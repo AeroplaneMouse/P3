@@ -20,7 +20,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type MenuItem}">
                     <Border Background="{TemplateBinding Background}"
-                            Padding="15, 2, 15, 2">
+                            Padding="15, 5, 15, 5">
                         <Grid>
                             <ContentPresenter
                                 Margin="6,4,6,4"
@@ -28,7 +28,7 @@
                                 RecognizesAccessKey="True"/>
                             <Popup
                                 Placement="Bottom"
-                                VerticalOffset="2"
+                                VerticalOffset="5"
                                 HorizontalOffset="-15"
                                 IsOpen="{TemplateBinding IsSubmenuOpen}"
                                 AllowsTransparency="True"
@@ -170,7 +170,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type MenuItem}">
                     <Border Background="{TemplateBinding Background}"
-                            Padding="15, 2, 15, 2">
+                            Padding="15, 5, 15, 5">
                         <Grid>
                             <ContentPresenter
                                 Margin="6,4,6,4"
@@ -179,7 +179,7 @@
                             <Popup Placement="Bottom"
                                    x:Name="PART_Popup"
                                    PopupAnimation="Fade"
-                                   VerticalOffset="2"
+                                   VerticalOffset="5"
                                    HorizontalOffset="-15"
                                    AllowsTransparency="True"
                                    IsOpen="{TemplateBinding IsSubmenuOpen}">
