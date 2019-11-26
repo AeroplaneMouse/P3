@@ -9,6 +9,77 @@ namespace AMS.Models
 {
     public class Tag :FieldContainer, ITagable
     {
+        private string _name;
+        private string _color;
+        private ulong _parentID;
+        private ulong _departmentID;
+        private int _numOfChildren;
+
+        public string Name {
+            get {
+                return this._name;
+            }
+            set {
+                if (this.Name != null)
+                {
+                    this.Changes["Name"] = this.Name;
+                }
+                this._name = value;
+            }
+        }
+
+        public string Color {
+            get {
+                return this._color;
+            }
+            set {
+                if (this.Color != null)
+                {
+                    this.Changes["Color"] = this.Color;
+                }
+                this._color = value;
+            }
+        }
+
+        public ulong ParentID {
+            get {
+                return this._parentID;
+            }
+            set {
+                if (this.ParentID > 0)
+                {
+                    this.Changes["ParentID"] = this.ParentID;
+                }
+                this._parentID = value;
+            }
+        }
+
+        public ulong DepartmentID {
+            get {
+                return this._departmentID;
+            }
+            set {
+                if (this.DepartmentID > 0)
+                {
+                    this.Changes["DepartmentID"] = this.DepartmentID;
+                }
+                this._departmentID = value;
+            }
+        }
+
+        public int NumOfChildren {
+            get {
+                return this._numOfChildren;
+            }
+            set {
+                if (this.NumOfChildren >= 0)
+                {
+                    this.Changes["Color"] = this.NumOfChildren;
+                }
+                this._numOfChildren = value;
+            }
+        }
+
         public Tag()
         {
             
@@ -29,14 +100,6 @@ namespace AMS.Models
             DeSerializeFields();
         }
         
-        public string Name { get; set; }
-
-        public ulong ParentID { get; set; }
-
-        public ulong DepartmentID { get; set; }
-
-        public int NumOfChildren { get; set; }
-
         public override string ToString() => Name;
         
         /// <summary>

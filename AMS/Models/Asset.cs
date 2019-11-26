@@ -7,12 +7,61 @@ namespace AMS.Models
 {
     public class Asset : FieldContainer
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
+        private string _name;
+        private string _description;
+        private string _identifier;
+        private ulong _departmentID;
 
-        public string Identifier { get; set; }
+        public string Name {
+            get {
+                return this._name;
+            }
+            set {
+                if (this.Name != null)
+                {
+                    this.Changes["Name"] = this.Name;
+                }
+                this._name = value;
+            }
+        }
+        public string Description {
+            get {
+                return this._description;
+            }
+            set {
+                if (this.Description != null)
+                {
+                    this.Changes["Description"] = this.Description;
+                }
+                this._description = value;
+            }
+        }
 
-        public ulong DepartmentID { get; set; }
+        public string Identifier {
+            get {
+                return this._identifier;
+            }
+            set {
+                if (this.Identifier != null)
+                {
+                    this.Changes["Identifier"] = this.Identifier;
+                }
+                this._identifier = value;
+            }
+        }
+
+        public ulong DepartmentID {
+            get {
+                return this._departmentID;
+            }
+            set {
+                if (this.DepartmentID > 0)
+                {
+                    this.Changes["DepartmentID"] = this.DepartmentID;
+                }
+                this._departmentID = value;
+            }
+        }
 
         public Asset()
         {
