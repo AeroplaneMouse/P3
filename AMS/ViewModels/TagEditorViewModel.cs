@@ -74,9 +74,6 @@ namespace AMS.ViewModels
                    
                 OnPropertyChanged(nameof(HiddenFieldList));
                 OnPropertyChanged(nameof(NonHiddenFieldList));
-
-                int bob = 0;
-
             }
         }
 
