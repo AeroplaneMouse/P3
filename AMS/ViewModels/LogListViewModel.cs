@@ -15,9 +15,9 @@ namespace AMS.ViewModels
     {
         private ILogListController _logListController;
 
-        public ObservableCollection<Entry> Entries { get; set; }
+        public ObservableCollection<LogEntry> Entries { get; set; }
         public string SearchQuery { get; set; }
-        public List<Entry> SelectedItems { get; set; } = new List<Entry>();
+        public List<LogEntry> SelectedItems { get; set; } = new List<LogEntry>();
         public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
         public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
 

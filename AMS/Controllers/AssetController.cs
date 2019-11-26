@@ -11,16 +11,16 @@ using AMS.Models;
 
 namespace AMS.Controllers
 {
-    public class AssetController : FieldListController, IAssetController, ILoggableValues
+    public class AssetController : FieldListController, IAssetController
     {
         public Asset Asset { get; set; }
         public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
-        private ILogger logger;
-        private IAssetRepository _assetRepository;
+        
+        public string Name { get; set; }
+        public string Identifier { get; set; }
+        public string Description { get; set; }
 
-        public string name;
-        public string identifier;
-        public string description;
+        private IAssetRepository _assetRepository;
 
         public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset ?? new Asset())
         {
@@ -32,6 +32,10 @@ namespace AMS.Controllers
             {
                 Asset = asset;
             }
+            
+            Name = Asset.Name;
+            Identifier = Asset.Identifier;
+            Description = Asset.Description;
             NonHiddenFieldList = Asset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = Asset.FieldList.Where(f => f.IsHidden == true).ToList();
             _assetRepository = assetRepository;
@@ -91,6 +95,10 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Save()
         {
+            if (Name != Asset.Name) { Asset.Name = Name; }
+            if (Asset.Identifier != Identifier) { Asset.Identifier = Identifier; }
+            if (Asset.Description != Description) { Asset.Description = Description; }
+
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
             Asset.FieldList = fieldList;
@@ -108,6 +116,10 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Update()
         {
+            if (Asset.Name != Name) { Asset.Name = Name; }
+            if (Asset.Identifier != Identifier) { Asset.Identifier = Identifier; }
+            if (Asset.Description != Description) { Asset.Description = Description; }
+
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
             Asset.FieldList = fieldList;
@@ -124,30 +136,5 @@ namespace AMS.Controllers
         {
             return _assetRepository.Delete(Asset);
         }
-
-        /// <summary>
-        /// Makes a loggable dictionary from the asset
-        /// </summary>
-        /// <returns>The asset formatted as a loggable dictionary</returns>
-        public Dictionary<string, string> GetLoggableValues()
-        {
-            Dictionary<string, string> props = new Dictionary<string, string>();
-            props.Add("ID", Asset.ID.ToString());
-            props.Add("Name", Asset.Name);
-            props.Add("Description", Asset.Description);
-            props.Add("Department ID", Asset.DepartmentID.ToString());
-            SerializeFields();
-            props.Add("Options", Asset.SerializedFields);
-            props.Add("Created at", Asset.CreatedAt.ToString());
-            props.Add("Last updated at", Asset.UpdatedAt.ToString());
-            return props;
-
-        }
-
-        /// <summary>
-        /// Returns the name of the type asset
-        /// </summary>
-        /// <returns>Name of the asset type</returns>
-        public string GetLoggableTypeName() => "Asset";
     }
 }

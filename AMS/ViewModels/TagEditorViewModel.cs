@@ -33,22 +33,22 @@ namespace AMS.ViewModels
 
         public string Name
         {
-            get => _controller.Tag.Name;
-            set => _controller.Tag.Name = value;
+            get => _controller.Name;
+            set => _controller.Name = value;
         }
 
         public string Color
         {
-            get => _controller.Tag.TagColor;
-            set => _controller.Tag.TagColor = value;
+            get => _controller.Color;
+            set => _controller.Color = value;
         }
 
-        public ulong ParentID => _controller.Tag.ParentID;
+        public ulong ParentID => _controller.ParentID;
 
         public ulong DepartmentID
         {
-            get => _controller.Tag.DepartmentID;
-            set => _controller.Tag.DepartmentID = value;
+            get => _controller.DepartmentID;
+            set => _controller.DepartmentID = value;
         }
 
         public string PageTitle { get; set; }
