@@ -74,7 +74,6 @@
                     
                      <i:Interaction.Triggers> 
                          <i:EventTrigger EventName="MouseDoubleClick"> 
-                             <!--~1~ViewCommand@1@-->
                             <i:InvokeCommandAction Command="{Binding ViewCommand}" CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}"/> 
                          </i:EventTrigger> 
                      </i:Interaction.Triggers> 
@@ -118,11 +117,6 @@
                         <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding ViewCommand}" />
                         <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ViewCommand}" />
                     </ListView.InputBindings>
-                    <!--
-                    <ListView.Resources>
-                        <Style TargetType="ListViewItem" BasedOn="{StaticResource RegularListItem}"/>
-                    </ListView.Resources>
-                    -->
                 </ListView>
             </Grid>
         </Border>
