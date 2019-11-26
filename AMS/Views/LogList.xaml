@@ -85,17 +85,7 @@
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=DateToStringConverter}"
                                                    Style="{StaticResource ParagraphStyle}"
-                                                   Foreground="Black"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-
-                            <GridViewColumn Header="Event">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Description}"
-                                                   Style="{StaticResource ParagraphStyle}"
-                                                   Foreground="Black"/>
+                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -105,10 +95,32 @@
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Username}"
                                                    Style="{StaticResource ParagraphStyle}"
-                                                   Foreground="Black"/>
+                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+
+                            <GridViewColumn Header="Type">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=EntryType}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+
+                            <GridViewColumn Header="Description">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Description}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
                         </GridView>
                     </ListView.View>
 
