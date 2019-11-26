@@ -134,7 +134,7 @@
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Username}"
                                                    Style="{StaticResource ParagraphStyle}"
-                                                   Foreground="Black"/>
+                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -147,6 +147,7 @@
                                                  BorderBrush="Transparent"
                                                  Background="Transparent"
                                                  Style="{StaticResource ParagraphTextBox}"
+                                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"
                                                  MinWidth="150"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -162,19 +163,21 @@
                                                  MinWidth="200"
                                                  Height="Auto" 
                                                  Style="{StaticResource ParagraphTextBox}"
+                                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"
                                                  TextWrapping="Wrap"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
                             <!-- Department -->
-                            <GridViewColumn Header="Department" Width="150">
+                            <GridViewColumn Header="Department" Width="170">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox ItemsSource="{Binding DataContext.DepartmentList, UpdateSourceTrigger=PropertyChanged, ElementName=UserListView}"
                                                   SelectedIndex="{Binding Path=DepartmentIndex}"
-                                                  MinWidth="130"
-                                                  Template="{StaticResource UserListDepartmentComboBoxTemplate}">
+                                                  MinWidth="150"
+                                                  Template="{StaticResource UserListDepartmentComboBoxTemplate}"
+                                                  Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}">
                                             <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding Name}"
