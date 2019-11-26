@@ -141,7 +141,7 @@ namespace AMS.ViewModels
             WindowMinHeight = 400;
 
             ResizeBorder = 4;
-            TitleHeight = 35;
+            TitleHeight = 28;
             InnerContentPaddingSize = 6;
 
             // Listen out for the window resizing
