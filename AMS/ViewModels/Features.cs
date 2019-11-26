@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 namespace AMS.ViewModels
 {
-    static class Features
+    public static class Features
     {
         public static MainViewModel Main;
         public static Visibility OnlyVisibleForAdmin => Main.OnlyVisibleForAdmin;
@@ -49,23 +49,6 @@ namespace AMS.ViewModels
             Main.AddNotification(n, displayTime);
         }
 
-        // Navigation
-        public static bool NavigatePage(Page page)
-        {
-            return Main.ContentFrame.Navigate(page);
-        }
-
-        public static bool NavigateBack()
-        {
-            if (Main.ContentFrame.CanGoBack)
-            {
-                Main.ContentFrame.GoBack();
-                return true;
-            }
-            else
-                return false;
-        }
-
         // Prompts
         public static void DisplayPrompt(Page prompt)
         {
@@ -78,6 +61,27 @@ namespace AMS.ViewModels
             return Main.CurrentSession;
         }
 
+        // Navigation
+        public static class Navigate
+        {
+            public static bool To(Page page)
+            {
+                return Main.ContentFrame.Navigate(page);
+            }
+
+            public static bool Back()
+            {
+                if (Main.ContentFrame.CanGoBack)
+                {
+                    Main.ContentFrame.GoBack();
+                    return true;
+                }
+                else
+                    return false;
+            }
+        }
+
+        // Page and window creation
         public static class Create
         {
             #region Pages
@@ -90,7 +94,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetPresenter(Asset asset, List<ITagable> tagables)
             {
-                return new AssetPresenter(asset, tagables, new CommentListController(GetCurrentSession(), _commentRepository));
+                return new AssetPresenter(asset, tagables, new CommentListController(GetCurrentSession(), _commentRepository, asset), new LogListController(_logRepository, _printHelper));
             }
 
             /// <summary>
@@ -187,5 +191,5 @@ namespace AMS.ViewModels
 
             #endregion
         }
-    }
+    }    
 }

@@ -7,7 +7,9 @@ using System.Text;
 using System.Windows.Input;
 using System.Linq;
 using System.Collections.ObjectModel;
+using AMS.Controllers;
 using AMS.Database.Repositories;
+using AMS.Helpers;
 using AMS.Views;
 using AMS.Helpers;
 
@@ -22,8 +24,6 @@ namespace AMS.ViewModels
 
         public ObservableCollection<Field> HiddenFieldList =>
             new ObservableCollection<Field>(_controller.HiddenFieldList);
-
-        public List<Tag> ParentTagList => _controller.ParentTagList;
 
         public Tag _tag
         {
@@ -52,7 +52,33 @@ namespace AMS.ViewModels
         }
 
         public string PageTitle { get; set; }
-        public int SelectedParentTagIndex { get; set; }
+
+        public List<Tag> ParentTagList
+        {
+            get => _controller.ParentTagList;
+        }
+
+        private int _selectedParentTagIndex;
+        public int SelectedParentTagIndex
+        {
+            get => _selectedParentTagIndex;
+            set
+            {
+                if (value == _selectedParentTagIndex) return;
+                
+                int oldValue = _selectedParentTagIndex;
+                _selectedParentTagIndex = value;
+                    
+                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex],ParentTagList[oldValue]);
+                //_controller.RemoveFieldRelations(ParentTagList[oldValue].ID);
+                   
+                OnPropertyChanged(nameof(HiddenFieldList));
+                OnPropertyChanged(nameof(NonHiddenFieldList));
+
+                int bob = 0;
+
+            }
+        }
 
         #endregion
 
@@ -77,6 +103,15 @@ namespace AMS.ViewModels
         {
             _controller = tagController;
 
+            //Set the selected parent to the parent of the chosen tag
+            int i = ParentTagList.Count;
+            while (i > 0 && ParentTagList[i - 1].ID != _controller.Tag.ParentID)
+                i--;
+
+            if (i > 0)
+                _selectedParentTagIndex = i - 1;
+
+            OnPropertyChanged(nameof(SelectedParentTagIndex));
             if (_controller.IsEditing)
             {
                 PageTitle = "Edit asset";
@@ -86,20 +121,13 @@ namespace AMS.ViewModels
                 PageTitle = "Add asset";
             }
 
-            //Set the selected parent to the parent of the chosen tag
-            int i = ParentTagList.Count;
-            while (i > 0 && ParentTagList[i - 1].ID != _controller.Tag.ParentID)
-                i--;
 
-            if (i > 0)
-                SelectedParentTagIndex = i - 1;
-
-            OnPropertyChanged(nameof(SelectedParentTagIndex));
 
             // Initialize commands
             SaveTagCommand = new Base.RelayCommand(SaveTag);
             AddFieldCommand = new Base.RelayCommand(AddField);
             RemoveFieldCommand = new Base.RelayCommand<object>((parameter) => RemoveField(parameter));
+
             CancelCommand = new Base.RelayCommand(Cancel);
         }
 
@@ -109,9 +137,7 @@ namespace AMS.ViewModels
 
         private void SaveTag()
         {
-
             _controller.Tag.ParentID = ParentTagList[SelectedParentTagIndex].ID;
-            
             if (_controller.IsEditing)
             {
                 _controller.Update();
@@ -121,16 +147,13 @@ namespace AMS.ViewModels
                 _controller.Save();
             }
 
-            if (Features.NavigateBack() == false)
-            {
-                Features.NavigatePage(Features.Create.TagList());
-            }
+            Features.Navigate.Back();
+
         }
 
         private void AddField()
         {
             Features.DisplayPrompt(new Views.Prompts.CustomField(null, AddNewFieldConfirmed));
-
         }
 
         private void AddNewFieldConfirmed(object sender, PromptEventArgs e)
@@ -140,7 +163,6 @@ namespace AMS.ViewModels
                 _controller.AddField(args.Field);
                 OnPropertyChanged(nameof(NonHiddenFieldList));
                 OnPropertyChanged(nameof(HiddenFieldList));
-
             }
         }
 
@@ -157,10 +179,8 @@ namespace AMS.ViewModels
 
         private void Cancel()
         {
-            if (Features.NavigateBack() == false)
-            {
-                Features.NavigatePage(Features.Create.TagList());
-            }
+            Features.Navigate.Back();
+
         }
 
         #endregion

@@ -112,7 +112,7 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <ListView ItemsSource="{Binding CurrentlyAddedTags}"
+                    <ListView ItemsSource="{Binding CurrentlyAddedTags, UpdateSourceTrigger=PropertyChanged}"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                               ItemContainerStyle="{StaticResource ListViewWithTags}">
                         <ListView.ItemsPanel>
@@ -128,7 +128,7 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelWithDelete}"></Label>
+                                    <Label Foreground="{Binding TagFontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelWithDelete}"></Label>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -149,11 +149,10 @@
 
                         <Button Style="{StaticResource RegularButton}"
                                 Command="{Binding AddFieldCommand}"
-                                Content="+"
-                                Width="Auto"
-                                Height="20"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"/>
+                                Padding="0 0 0 5"
+                                Width="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ActualHeight}" 
+                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                Content="+"/>
                     </StackPanel>
 
                     <!-- FieldList -->

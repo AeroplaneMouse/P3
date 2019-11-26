@@ -168,9 +168,9 @@ namespace AMS.ViewModels
             ReloadCommand = new Base.RelayCommand(Reload);
 
             // Window commands
-            MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
-            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
-            CloseCommand = new Base.RelayCommand(() => _window.Close());
+            MinimizeCommand   = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
+            MaximizeCommand   = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
+            CloseCommand      = new Base.RelayCommand(() => _window.Close());
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, _window.PointToScreen(
                 new Point(
                     OuterMarginSize,
@@ -179,17 +179,17 @@ namespace AMS.ViewModels
             )));
             
             // Change page commands
-            ShowHomePageCommand = new Base.RelayCommand(() => Features.NavigatePage(Features.Create.Home()));
-            ShowAssetListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(Features.Create.AssetList()));
-            ShowTagListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(Features.Create.TagList()));
-            ShowLogPageCommand = new Base.RelayCommand(() => Features.NavigatePage(Features.Create.LogList()));
-            ShowUserListPageCommand = new Base.RelayCommand(() => Features.NavigatePage(Features.Create.UserList()));
+            ShowHomePageCommand      = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.Home()));
+            ShowAssetListPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.AssetList()));
+            ShowTagListPageCommand   = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagList()));
+            ShowLogPageCommand       = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.LogList()));
+            ShowUserListPageCommand  = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.UserList()));
 
             // Department commands
             SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
-            EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
-            AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)));
+            EditDepartmentCommand   = new Commands.EditDepartmentCommand(this);
+            AddDepartmentCommand    = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)));
 
             // Display splash page
             SplashPage = Features.Create.Splash(this);

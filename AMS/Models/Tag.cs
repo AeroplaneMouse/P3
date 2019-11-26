@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Media;
 using System.Text;
 using AMS.Interfaces;
+using Newtonsoft.Json;
 
 namespace AMS.Models
 {
@@ -25,6 +26,7 @@ namespace AMS.Models
             this.SerializedFields = SerializedField;
             CreatedAt = created_at;
             UpdatedAt = updated_at;
+            DeSerializeFields();
         }
         
         public string Name { get; set; }
@@ -36,7 +38,22 @@ namespace AMS.Models
         public int NumOfChildren { get; set; }
 
         public override string ToString() => Name;
+        
+        /// <summary>
+        /// Loads the fields from the serialized fields property.
+        /// </summary>
+        /// <returns>Load successfull</returns>
+        public bool DeSerializeFields()
+        {
+            if (!string.IsNullOrEmpty(this.SerializedFields))
+            {
+                this.FieldList =
+                    JsonConvert.DeserializeObject<List<Field>>(this.SerializedFields);
+                return true;
+            }
 
+            return false;
+        }
         #region From ITagable
 
         public ulong TagId => ID;

@@ -1,14 +1,15 @@
 ﻿using AMS.Models;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace AMS.Controllers.Interfaces
 {
     public interface ICommentListController
     {
-        ObservableCollection<Comment> CommentList { get; set; }
+        List<Comment> CommentList { get; set; }
 
-        ulong AddNewComment(string contentInput, ulong assetId);
+        ulong AddNewComment(string contentInput);
 
-        void RemoveComment(Comment comment, ulong assetId);
+        void RemoveComment(Comment comment);
     }
 }

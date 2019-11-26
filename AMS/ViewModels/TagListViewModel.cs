@@ -32,8 +32,8 @@ namespace AMS.ViewModels
             Tags = _tagListController.TagsList;
             Tags.AddRange(_tagListController.GetParentTags());
             RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Delete the selected tag, cannot be recovered?",RemoveTag)));
-            EditCommand = new Base.RelayCommand(() => Features.NavigatePage(Features.Create.TagEditor(SelectedItem)));
-            AddNewCommand = new Base.RelayCommand(() => Features.NavigatePage(Features.Create.TagEditor(null)));
+            EditCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(SelectedItem)));
+            AddNewCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(null)));
 
 
             foreach (var tag in Tags)

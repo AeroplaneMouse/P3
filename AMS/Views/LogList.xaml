@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:local="clr-namespace:AMS.Views"
       mc:Ignorable="d"
       Title="LogList">
@@ -71,24 +72,51 @@
                         SelectionChanged="ListView_SelectionChanged"
                         Grid.Row="2">
                     
-                    <!-- <i:Interaction.Triggers> -->
-                    <!--     <i:EventTrigger EventName="MouseDoubleClick"> -->
-                    <!--         ~1~ViewCommand@1@ -->
-                    <!--         <i:InvokeCommandAction Command="{Binding EditCommand}" CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}"/> -->
-                    <!--     </i:EventTrigger> -->
-                    <!-- </i:Interaction.Triggers> -->
+                     <i:Interaction.Triggers> 
+                         <i:EventTrigger EventName="MouseDoubleClick"> 
+                             <!--~1~ViewCommand@1@-->
+                            <i:InvokeCommandAction Command="{Binding ViewCommand}" CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}"/> 
+                         </i:EventTrigger> 
+                     </i:Interaction.Triggers> 
 
                     <ListView.View>
                         <GridView>
-                            <!--<GridViewColumn DisplayMemberBinding="{Binding Path=Id}" Header="ID" />-->
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=DateToStringConverter}" Header="Date" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Header="Event" />
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=Username}" Header="User" />
+                            <GridViewColumn Header="Date" Width="130">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=DateToStringConverter}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Event">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Description}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Username">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Username}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                         </GridView>
                     </ListView.View>
 
                     <ListView.InputBindings>
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
+                        <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding ViewCommand}" />
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ViewCommand}" />
                     </ListView.InputBindings>
                     <!--
                     <ListView.Resources>

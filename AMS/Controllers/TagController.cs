@@ -10,7 +10,18 @@ namespace AMS.Controllers
 {
     public class TagController : FieldListController, ITagController, ILoggableValues, IFieldListController
     {
-        #region Public Properties
+        public Tag Tag { get; set; }
+        public bool IsEditing { get; set; }
+        public ulong TagID;
+
+        #region Private Properties
+
+        private ITagRepository _tagRepository { get; set; }
+
+        #endregion
+
+        #region Constructor
+
 
         public List<Tag> ParentTagList
         {
@@ -25,34 +36,20 @@ namespace AMS.Controllers
                         TagColor = Tag.TagColor
                     }
                 };
-                foreach (Tag parentTag in (List<Tag>)_tagRepository.GetParentTags())
+                foreach (Tag parentTag in (List<Tag>) _tagRepository.GetParentTags())
                     parentTagsList.Add(parentTag);
 
                 return parentTagsList;
             }
         }
 
-        public Tag Tag { get; set; }
-        public bool IsEditing { get; set; }
-        public ulong TagID;
 
-        #endregion
-
-        #region Private Properties
-
-        private ITagRepository _tagRepository { get; set; }
-
-        #endregion
-
-        #region Constructor
 
         public TagController(Tag tag, ITagRepository tagRep) : base(tag)
         {
             Tag = tag;
             _tagRepository = tagRep;
-
-            DeSerializeFields();
-
+            
             NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
 
@@ -80,7 +77,7 @@ namespace AMS.Controllers
             SerializeFields();
             _tagRepository.Insert(Tag, out TagID);
         }
-        
+
         public void Update()
         {
             List<Field> fieldList = NonHiddenFieldList;
@@ -98,10 +95,41 @@ namespace AMS.Controllers
             Random random = new Random();
 
             //Creates a hex values from three random ints converted to bytes and then to string
-            string hex = "#" + ((byte)random.Next(25, 230)).ToString("X2") +
-                         ((byte)random.Next(25, 230)).ToString("X2") + ((byte)random.Next(25, 230)).ToString("X2");
+            string hex = "#" + ((byte) random.Next(25, 230)).ToString("X2") +
+                         ((byte) random.Next(25, 230)).ToString("X2") + ((byte) random.Next(25, 230)).ToString("X2");
 
             return hex;
+        }
+
+        public void ConnectTag(Tag newTag, Tag oldTag)
+        {
+            foreach (var field in newTag.FieldList)
+            {
+                AddField(field, newTag);
+                Console.WriteLine("Added field " + field.Label);
+            }
+
+            List<Field> fieldsToRemove = new List<Field>();
+            foreach (var field in NonHiddenFieldList)
+            {
+                if (field.TagIDs.Count == 1 && field.TagIDs.Contains(oldTag.ID))
+                {
+                    fieldsToRemove.Add(field);
+                }
+            }
+            foreach (var field in HiddenFieldList)
+            {
+                if (field.TagIDs.Count == 1 && field.TagIDs.Contains(oldTag.ID))
+                {
+                    fieldsToRemove.Add(field);
+                }
+            }
+
+            foreach (var field in fieldsToRemove)
+            {
+                RemoveField(field);
+            }
+            
         }
 
         /// <summary>
@@ -121,7 +149,6 @@ namespace AMS.Controllers
             props.Add("Last updated at", Tag.UpdatedAt.ToString());
 
             return props;
-
         }
 
         /// <summary>

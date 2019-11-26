@@ -212,7 +212,7 @@
             </DataTrigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Content" Value="{StaticResource Trash_Red}"/>
-            </Trigger>
+            </Trigger>  
         </Style.Triggers>
     </Style>
     

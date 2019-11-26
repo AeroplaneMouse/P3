@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using AMS.Models;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
+using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using Moq;
@@ -17,15 +18,10 @@ namespace UnitTests
         private IAssetController _assetController;
 
         private Mock<IAssetRepository> _assetRepMock;
-        private TestingTag _tagOne;
-        private TestingTag _tagTwo;
+        private Tag _tagOne;
+        private Tag _tagTwo;
         private Field _fieldOne;
         private Field _fieldTwo;
-
-        public class TestingTag : Tag
-        {
-            public new ulong ID;
-        }
 
         [TestInitialize]
         public void InitiateAsset()
@@ -42,7 +38,7 @@ namespace UnitTests
             _fieldOne = new Field("Label of first field", "content of first field",
                 Field.FieldType.TextBox);
             _fieldTwo = new Field("Label of second field", "content of second field",
-                Field.FieldType.Checkbox, false,true);
+                Field.FieldType.Checkbox, false, true);
 
 
             //Asset controller setup
@@ -54,13 +50,10 @@ namespace UnitTests
             _assetController.AddField(_fieldTwo);
 
             //Tags setup
-            _tagOne = new TestingTag();
+            _tagOne = new Tag();
             _tagOne.Name = "First tag";
-            _tagOne.ID = 1;
-            _tagTwo = new TestingTag();
+            _tagTwo = new Tag();
             _tagTwo.Name = "Second tag";
-            _tagTwo.ID = 2;
-            
         }
 
         [TestMethod]
@@ -73,7 +66,8 @@ namespace UnitTests
             otherAsset.Asset.DepartmentID = 1;
 
             otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.TextBox));
-            otherAsset.AddField(new Field("Label of second field", "content of second field", Field.FieldType.Checkbox));
+            otherAsset.AddField(new Field("Label of second field", "content of second field",
+                Field.FieldType.Checkbox));
 
             //Act
             bool result = _assetController.Asset.Equals(otherAsset.Asset);
@@ -177,7 +171,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void AttatchTag_WithField_TagInCurrentlyAddedTagsList()
+        public void AttatchTag_WithField_Returns_FieldInFieldsList()
         {
             //Arrange 
             AssetController otherAssetController = new AssetController(new Asset(), _assetRepMock.Object);
@@ -185,9 +179,9 @@ namespace UnitTests
             otherAssetController.Asset.Description = "Desription";
             otherAssetController.Asset.DepartmentID = 4;
             Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox);
-            TestingTag localTag = new TestingTag();
+
+            Tag localTag = new Tag();
             localTag.Name = "First tag";
-            localTag.ID = 1;
             localTag.FieldList.Add(localField);
 
             otherAssetController.AttachTag(_tagOne);
@@ -197,7 +191,9 @@ namespace UnitTests
             otherAssetController.AttachTag(localTag);
 
             //Assert
-            Assert.IsTrue(otherAssetController.CurrentlyAddedTags.Contains(localTag) && _assetController.Asset.FieldList.Contains(localField));
+            Assert.IsTrue(
+                _assetController.NonHiddenFieldList.SingleOrDefault(field => field.Equals(localField)) != null ||
+                _assetController.HiddenFieldList.SingleOrDefault(field => field.Equals(localField)) != null);
         }
 
         [TestMethod]
@@ -210,9 +206,7 @@ namespace UnitTests
             otherAssetController.Asset.DepartmentID = 4;
             Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox);
             otherAssetController.AddField(localField);
-            TestingTag localTag = new TestingTag();
-            localTag.Name = "First tag";
-            localTag.ID = 3;
+            Tag localTag = new Tag();
             localTag.FieldList.Add(localField);
 
 
@@ -223,8 +217,7 @@ namespace UnitTests
             otherAssetController.AttachTag(localTag);
 
             //Assert
-            Assert.IsTrue(otherAssetController.CurrentlyAddedTags.Contains(localTag) &&
-                          _assetController.Asset.FieldList.Contains(localField));
+            Assert.IsTrue(otherAssetController.CurrentlyAddedTags.Contains(localTag));
         }
 
         [TestMethod]
@@ -235,10 +228,10 @@ namespace UnitTests
             otherAssetController.Asset.Name = "AssetTests_Asset";
             otherAssetController.Asset.Description = "Desription";
             otherAssetController.Asset.DepartmentID = 4;
-            Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox,true,true);
-            TestingTag localTag = new TestingTag();
+            Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox,
+                true, true);
+            Tag localTag = new Tag();
             localTag.Name = "First tag";
-            localTag.ID = 1;
             localTag.FieldList.Add(localField);
 
 
@@ -269,7 +262,7 @@ namespace UnitTests
                 Field.FieldType.TextBox);
             otherAssetController.AddField(localField);
 
-            TestingTag localTag = new TestingTag {Name = "First tag"};
+            Tag localTag = new Tag {Name = "First tag"};
             localTag.FieldList.Add(localField);
 
 
