@@ -238,7 +238,6 @@ namespace AMS.ViewModels
                 }
             }
             
-            //TagSearchQuery = "";
             TagSearchProcess();
         }
         
@@ -268,8 +267,7 @@ namespace AMS.ViewModels
                 TagSuggestionIsOpen = false;
             }
         }
-
-
+        
         /// <summary>
         /// Detach tag with given tagID from asset
         /// </summary>
