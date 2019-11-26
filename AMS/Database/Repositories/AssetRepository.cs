@@ -9,12 +9,16 @@ using System.Collections.ObjectModel;
 
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
+using AMS.Logging.Interfaces;
+using AMS.ViewModels;
 
 namespace AMS.Database.Repositories
 {
     public class AssetRepository : IAssetRepository
     {
         private QueryGenerator _query;
+        
+        private ILogger logger { get; set; }
 
         public AssetRepository()
         {
@@ -99,6 +103,8 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                         id = (ulong)cmd.LastInsertedId;
                     }
+                    
+                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -124,7 +130,7 @@ namespace AMS.Database.Repositories
             bool querySuccess = false;
 
             // Opening connection
-            if (MySqlHandler.Open(ref con))
+            if (MySqlHandler.Open(ref con) && entity.IsDirty())
             {
                 try
                 {
@@ -150,6 +156,8 @@ namespace AMS.Database.Repositories
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
+                    
+                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -188,6 +196,8 @@ namespace AMS.Database.Repositories
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
+                    
+                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -405,6 +415,8 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
+                    string tagLabels = "\"" + String.Join("\", \"", tags);
+
                     StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users VALUES ");
                     int counter = users.Count;
 
@@ -436,6 +448,11 @@ namespace AMS.Database.Repositories
                     {
                         querySuccess = cmd.ExecuteNonQuery() > 0 && querySuccess;
                     }
+
+                    logger.AddEntry(tagLabels + " was attached to the asset with ID: "
+                        + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.",
+                        "Tag attached", Features.GetCurrentSession().user.ID);
+
                 }
                 catch (MySqlException e)
                 {

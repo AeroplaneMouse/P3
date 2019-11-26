@@ -6,10 +6,10 @@ namespace AMS.Controllers.Interfaces
 {
     public interface ILogListController
     {
-        ObservableCollection<Entry> EntryList { get; set; }
+        ObservableCollection<LogEntry> EntryList { get; set; }
 
         void Search(string query);
 
-        void Export(List<Entry> entries);
+        void Export(List<LogEntry> entries);
     }
 }

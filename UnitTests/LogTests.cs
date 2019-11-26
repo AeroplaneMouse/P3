@@ -13,10 +13,10 @@ namespace UnitTests
     [TestClass]
     public class LogTests
     {
-        private Mock<ILogRepository> _logRepMock;
+        /*private Mock<ILogRepository> _logRepMock;
         private Mock<ILoggableValues> _newItemMock;
         private Mock<ILoggableValues> _prevItemMock;
-        private Ilogger _Log;
+        private ILogger _Log;
         private Dictionary<string, string> _testDict;
         private Dictionary<string, string> _prevValuesTestDict;
 
@@ -107,6 +107,6 @@ namespace UnitTests
 
             //Assert
             Assert.IsFalse(result);
-        }
+        }*/
     }
 }

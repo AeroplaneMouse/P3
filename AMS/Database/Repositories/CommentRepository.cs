@@ -5,12 +5,16 @@ using System.Reflection;
 using System.Collections.ObjectModel;
 using AMS.Database.Repositories.Interfaces;
 using System.Collections.Generic;
+using AMS.ViewModels;
+using AMS.Logging.Interfaces;
 
 namespace AMS.Database.Repositories
 {
     public class CommentRepository : ICommentRepository
     {
-        public bool Insert(Comment comment, out ulong id)
+        public ILogger logger { get; set; }
+
+        public bool Insert(Comment entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
             var querySuccess = false;
@@ -27,17 +31,19 @@ namespace AMS.Database.Repositories
                     using (var cmd = new MySqlCommand(query, con))
                     {
                         cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@asset_id"].Value = comment.AssetID;
+                        cmd.Parameters["@asset_id"].Value = entity.AssetID;
 
                         cmd.Parameters.Add("@username", MySqlDbType.String);
-                        cmd.Parameters["@username"].Value = comment.Username;
+                        cmd.Parameters["@username"].Value = entity.Username;
 
                         cmd.Parameters.Add("@content", MySqlDbType.String);
-                        cmd.Parameters["@content"].Value = comment.Content;
+                        cmd.Parameters["@content"].Value = entity.Content;
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                         id = (ulong)cmd.LastInsertedId;
                     }
+
+                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -53,13 +59,13 @@ namespace AMS.Database.Repositories
             return querySuccess;
         }
 
-        public bool Update(Comment comment)
+        public bool Update(Comment entity)
         {
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
             // Opening connection
-            if (MySqlHandler.Open(ref con))
+            if (MySqlHandler.Open(ref con) && entity.IsDirty())
             {
                 try
                 {
@@ -69,19 +75,21 @@ namespace AMS.Database.Repositories
                     using (var cmd = new MySqlCommand(query, con))
                     {
                         cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@asset_id"].Value = comment.AssetID;
+                        cmd.Parameters["@asset_id"].Value = entity.AssetID;
 
                         cmd.Parameters.Add("@username", MySqlDbType.String);
-                        cmd.Parameters["@username"].Value = comment.Username;
+                        cmd.Parameters["@username"].Value = entity.Username;
 
                         cmd.Parameters.Add("@content", MySqlDbType.String);
-                        cmd.Parameters["@content"].Value = comment.Content;
+                        cmd.Parameters["@content"].Value = entity.Content;
 
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = comment.ID;
+                        cmd.Parameters["@id"].Value = entity.ID;
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
+                    
+                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -96,7 +104,7 @@ namespace AMS.Database.Repositories
             return querySuccess;
         }
 
-        public bool Delete(Comment comment)
+        public bool Delete(Comment entity)
         {
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
@@ -111,10 +119,12 @@ namespace AMS.Database.Repositories
                     using (var cmd = new MySqlCommand(query, con))
                     {
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = comment.ID;
+                        cmd.Parameters["@id"].Value = entity.ID;
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
+
+                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {

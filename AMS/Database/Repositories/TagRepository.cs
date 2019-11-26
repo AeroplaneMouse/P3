@@ -5,11 +5,14 @@ using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Collections.ObjectModel;
 using AMS.Database.Repositories.Interfaces;
+using AMS.ViewModels;
 
 namespace AMS.Database.Repositories
 {
     public class TagRepository : ITagRepository
     {
+        public ILogger logger { get; set; }
+
         public ulong GetCount()
         {
             var con = new MySqlHandler().GetConnection();
@@ -87,6 +90,8 @@ namespace AMS.Database.Repositories
 
                         id = (ulong)cmd.LastInsertedId;
                     }
+
+                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -112,7 +117,7 @@ namespace AMS.Database.Repositories
             bool querySuccess = false;
 
             // Opening connection
-            if (MySqlHandler.Open(ref con))
+            if (MySqlHandler.Open(ref con) && entity.IsDirty())
             {
                 try
                 {
@@ -137,6 +142,8 @@ namespace AMS.Database.Repositories
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
+
+                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -178,6 +185,8 @@ namespace AMS.Database.Repositories
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
+
+                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {

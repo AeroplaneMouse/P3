@@ -12,7 +12,7 @@ namespace AMS.Controllers
         private readonly ILogRepository _logRepository;
         private readonly IExporter _exporter;
 
-        public ObservableCollection<Entry> EntryList { get; set; }
+        public ObservableCollection<LogEntry> EntryList { get; set; }
 
         public LogListController(ILogRepository logRepository, IExporter exporter)
         {
@@ -34,7 +34,7 @@ namespace AMS.Controllers
         /// Exports the selected entries to a .csv file
         /// </summary>
         /// <param name="entries"></param>
-        public void Export(List<Entry> entries)
+        public void Export(List<LogEntry> entries)
         {
             _exporter.Print(entries);
         }

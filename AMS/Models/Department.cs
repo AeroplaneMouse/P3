@@ -5,8 +5,22 @@ namespace AMS.Models
 {
     public class Department : Model
     {
+        private string _name;
+
         public event PropertyChangedEventHandler PropertyChanged;
-        public string Name { get; set; }
+
+        public string Name {
+            get {
+                return this._name;
+            }
+            set {
+                if (this.Name != null)
+                {
+                    this.Changes["Name"] = this.Name;
+                }
+                this._name = value;
+            }
+        }
 
         private Department(ulong id, string name, DateTime created_at, DateTime updated_at)
         {

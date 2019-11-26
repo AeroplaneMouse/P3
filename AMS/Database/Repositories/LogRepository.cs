@@ -10,10 +10,7 @@ namespace AMS.Database.Repositories
 {
     public class LogRepository : ILogRepository
     {
-        // Used to avoid implementing members from IRepository
-        private ILogRepository _logRepositoryImplementation;
-
-        public bool Insert(Entry entity)
+        public bool Insert(LogEntry entity)
         {
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
@@ -23,25 +20,22 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "INSERT INTO log (username, description, options, logable_id, logable_type) " +
-                                         "VALUES (@username, @description, @options, @logable_id, @logable_type)";
+                    const string query = "INSERT INTO log (user_id, entry_type, description, changes) " +
+                                         "VALUES (@user_id, @entry_type, @description, @changes)";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
-                        cmd.Parameters.Add("@username", MySqlDbType.String);
-                        cmd.Parameters["@username"].Value = entity.Username;
+                        cmd.Parameters.Add("@userId", MySqlDbType.String);
+                        cmd.Parameters["@userId"].Value = entity.UserId;
+
+                        cmd.Parameters.Add("@entry_type", MySqlDbType.String);
+                        cmd.Parameters["@entry_type"].Value = entity.EntryType;
 
                         cmd.Parameters.Add("@description", MySqlDbType.Text);
                         cmd.Parameters["@description"].Value = entity.Description;
 
-                        cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                        cmd.Parameters["@options"].Value = entity.Options;
-
-                        cmd.Parameters.Add("@logable_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@logable_id"].Value = entity.LogableId;
-
-                        cmd.Parameters.Add("@logable_type", MySqlDbType.String);
-                        cmd.Parameters["@logable_type"].Value = entity.LogableType;
+                        cmd.Parameters.Add("@changes", MySqlDbType.JSON);
+                        cmd.Parameters["@changes"].Value = entity.Changes;
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
@@ -59,15 +53,15 @@ namespace AMS.Database.Repositories
             return querySuccess;
         }
 
-        public IEnumerable<Entry> GetLogEntries(ulong logableId, Type logableType)
+        public IEnumerable<LogEntry> GetLogEntries(ulong logableId, Type logableType)
         {
             return GetLogEntries(logableId, logableType, null);
         }
 
-        public IEnumerable<Entry> GetLogEntries(ulong logableId, Type logableType, string username)
+        public IEnumerable<LogEntry> GetLogEntries(ulong logableId, Type logableType, string username)
         {
             var con = new MySqlHandler().GetConnection();
-            List<Entry> entries = new List<Entry>();
+            List<LogEntry> entries = new List<LogEntry>();
 
             // Opening connection
             if (MySqlHandler.Open(ref con))
@@ -115,10 +109,10 @@ namespace AMS.Database.Repositories
             return entries;
         }
 
-        public ObservableCollection<Entry> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
+        public ObservableCollection<LogEntry> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
         {
             var con = new MySqlHandler().GetConnection();
-            ObservableCollection<Entry> entries = new ObservableCollection<Entry>();
+            ObservableCollection<LogEntry> entries = new ObservableCollection<LogEntry>();
             int limit = 100;
 
             // Opening connection
@@ -166,7 +160,7 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public Entry DBOToModelConvert(MySqlDataReader reader)
+        public LogEntry DBOToModelConvert(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
             ulong rowLogableId = reader.GetUInt64("logable_id");
@@ -176,31 +170,10 @@ namespace AMS.Database.Repositories
             string rowOptions = reader.GetString("options");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
 
-            return (Entry) Activator.CreateInstance(typeof(Entry), 
+            return (LogEntry) Activator.CreateInstance(typeof(LogEntry), 
                 BindingFlags.Instance | BindingFlags.NonPublic, null, 
                 new object[] { rowId, rowLogableId, rowLogableType, rowDescription, rowUsername, rowOptions, rowCreatedAt }, 
                 null, null);
-        }
-
-        // This is just implementation of IRepository and is to avoid an error
-        public bool Insert(Entry entity, out ulong id)
-        {
-            return _logRepositoryImplementation.Insert(entity, out id);
-        }
-
-        public bool Update(Entry entity)
-        {
-            return _logRepositoryImplementation.Update(entity);
-        }
-
-        public bool Delete(Entry entity)
-        {
-            return _logRepositoryImplementation.Delete(entity);
-        }
-
-        public Entry GetById(ulong id)
-        {
-            return _logRepositoryImplementation.GetById(id);
         }
     }
 }
