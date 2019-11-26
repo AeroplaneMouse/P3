@@ -6,7 +6,7 @@ namespace AMS.Logging.Interfaces
 {
     public interface Ilogger
     {
-        bool AddEntry(Model entity, ulong userId);
+        bool AddEntry(Model entity, ulong userId, ulong entityId = 0);
         bool AddEntry(string inputEntryType, string inputDescription, ulong userId = 0, string changes = "[]", Exception e = null);
     }
 }

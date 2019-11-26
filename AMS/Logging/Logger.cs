@@ -25,34 +25,38 @@ namespace AMS.Logging
         /// <param name="entity">The model being handled</param>
         /// <param name="userId">The id of the related user</param>
         /// <returns>Rather the entry was successfully added or not</returns>
-        public bool AddEntry(Model entity, ulong userId)
+        public bool AddEntry(Model entity, ulong userId, ulong entityId = 0)
         {
             string description;
             string changes;
             string entryType;
+            ulong id;
 
             if (entity != null)
             {
                 if (entity.Changes.Any())
                 {
-                    description = entity.GetType().ToString().Split('.').Last() + " with id " + entity.ID;
+                    id = entity.ID;
+                    description = entity.GetType().ToString().Split('.').Last() + " with id " + id;
                     changes = this.GetChanges(entity);
                     entryType = "Update";
                 }
                 else if (entity.ID == 0)
                 {
-                    description = entity.GetType().ToString().Split('.').Last() + " with id " + entity.ID;
+                    id = entityId;
+                    description = entity.GetType().ToString().Split('.').Last() + " with id " + id;
                     changes = this.GetPropertiesAndValues(entity);
                     entryType = "Create";
                 }
                 else
                 {
-                    description = entity.GetType().ToString().Split('.').Last() + " with id " + entity.ID;
+                    id = entity.ID;
+                    description = entity.GetType().ToString().Split('.').Last() + " with id " + id;
                     changes = this.GetPropertiesAndValues(entity);
                     entryType = "Delete";
                 }
 
-                this.Write(entryType, description, userId, entity.ID, entity.GetType(), changes);
+                this.Write(entryType, description, userId, id, entity.GetType(), changes);
 
             }
             else
