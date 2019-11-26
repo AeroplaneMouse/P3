@@ -203,7 +203,19 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                                            
+
+                            <!-- View -->
+                            <GridViewColumn Width="32">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Style="{StaticResource ViewButton}"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.ViewWithParameterCommand}"
+                                                CommandParameter="{Binding Path=.}"
+                                                Visibility="Visible"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            
                             <!-- Edit -->
                             <GridViewColumn Width="32">
                                 <GridViewColumn.CellTemplate>
