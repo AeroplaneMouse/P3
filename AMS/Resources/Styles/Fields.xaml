@@ -72,7 +72,6 @@
                 <ItemsPanelTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="20" />
                             <ColumnDefinition />
                             <ColumnDefinition />
                         </Grid.ColumnDefinitions>
@@ -93,7 +92,7 @@
     <!-- Style for tag part of added field -->
     <Style x:Key="AddedFieldTags" TargetType="ItemsControl">
         <Setter Property="Grid.Row" Value="3"/>
-        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="Grid.Column" Value="0"/>
         <Setter Property="ItemsSource" Value="{Binding FieldTags, UpdateSourceTrigger=PropertyChanged}"/>
         <Setter Property="ItemsPanel">
             <Setter.Value>
@@ -117,15 +116,15 @@
     <Style x:Key="FieldOriginatingFromTagsTextblock" TargetType="TextBlock" BasedOn="{StaticResource ParagraphStyle}">
         <Setter Property="Margin" Value="0, 2, 0, 0"/>
         <Setter Property="Grid.Row" Value="2"/>
-        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="Grid.Column" Value="0"/>
         <Setter Property="Text" Value="Tag references in:"/>
     </Style>
 
     <!-- Textareafield style -->
     <DataTemplate x:Key="TextBoxFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
-            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Content}" MinHeight="50" TextWrapping="Wrap"
+            <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Content}" MinHeight="50" TextWrapping="Wrap"
                      BorderThickness="1.5" AcceptsReturn="True" AcceptsTab="True" />
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
@@ -135,8 +134,8 @@
     <!-- Textboxfield style -->
     <DataTemplate x:Key="StringFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
-            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <TextBox Grid.Row="1" Grid.Column="1" BorderThickness="1.5" Text="{Binding Content}" />
+            <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
+            <TextBox Grid.Row="1" Grid.Column="0" BorderThickness="1.5" Text="{Binding Content}" />
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
@@ -145,8 +144,8 @@
     <!-- Numberboxfield style -->
     <DataTemplate x:Key="IntegerFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
-            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <TextBox Grid.Row="1" Grid.Column="1" BorderThickness="1.5" Text="{Binding Content}" />
+            <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
+            <TextBox Grid.Row="1" Grid.Column="0" BorderThickness="1.5" Text="{Binding Content}" />
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
@@ -155,8 +154,8 @@
     <!-- Dateboxfield style -->
     <DataTemplate x:Key="DateFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
-            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <DatePicker Grid.Row="1" Grid.Column="1" BorderThickness="1.5" SelectedDate="{Binding Content}" />
+            <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
+            <DatePicker Grid.Row="1" Grid.Column="0" BorderThickness="1.5" SelectedDate="{Binding Content}" />
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
@@ -165,8 +164,8 @@
     <!-- Checkboxfield style -->
     <DataTemplate x:Key="BooleanFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
-            <Label Grid.Row="0" Grid.Column="1" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding Content}" Name="CheckBox" />
+            <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
+            <CheckBox Grid.Row="1" Grid.Column="0" IsChecked="{Binding Content}" Name="CheckBox" />
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
