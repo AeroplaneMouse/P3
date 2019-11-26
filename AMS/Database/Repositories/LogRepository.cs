@@ -38,10 +38,10 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@changes"].Value = entity.Changes;
 
                         cmd.Parameters.Add("@logged_item_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@logged_item_id"].Value = entity.LoggedItemId;
+                        cmd.Parameters["@logged_item_id"].Value = entity.LoggedItemType == null ? 0 : entity.LoggedItemId;
 
                         cmd.Parameters.Add("@logged_item_type", MySqlDbType.String);
-                        cmd.Parameters["@logged_item_type"].Value = entity.LoggedItemType.ToString();
+                        cmd.Parameters["@logged_item_type"].Value = entity.LoggedItemType == null ? null : entity.LoggedItemType.ToString();
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }

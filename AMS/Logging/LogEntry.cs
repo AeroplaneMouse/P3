@@ -19,6 +19,15 @@ namespace AMS.Logging
         public string UserName { get; set; }
         public string UserDomain { get; set; }
 
+        /// <summary>
+        /// Constructor to construct a new LogEntry
+        /// </summary>
+        /// <param name="userId">The id of the related user</param>
+        /// <param name="entryType">The entry type of the LogEntry</param>
+        /// <param name="description">A description of the entry</param>
+        /// <param name="loggedItemId">The id of the item to be logged</param>
+        /// <param name="loggedItemType">The type of the item to be logged</param>
+        /// <param name="changes">The changes made</param>
         public LogEntry(ulong userId, string entryType, string description, ulong loggedItemId = 0, Type loggedItemType = null, string changes = "[]")
         {
             UserId = userId;
@@ -30,12 +39,17 @@ namespace AMS.Logging
         }
 
         /// <summary>
-        /// Default constructor for initiating a new Logger object.
+        /// Default constructor for initiating a new Logger object from the database
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="entryType"></param>
         /// <param name="description"></param>
-        /// <param name="userId"></param>
+        /// <param name="loggedItemId"></param>
+        /// <param name="loggedItemType"></param>
+        /// <param name="changes"></param>
         /// <param name="createdAt"></param>
+        /// <param name="userDomain"></param>
+        /// <param name="userName"></param>
         private LogEntry(ulong id, string entryType, string description, ulong loggedItemId, Type loggedItemType, string changes, DateTime createdAt, string userDomain, string userName)
         {
             ID = id;
@@ -49,7 +63,9 @@ namespace AMS.Logging
             UserName = userName;
         }
 
-        //Used for formatting the DateTimeOutput when showing the elements within a database.
+        /// <summary>
+        /// Used for formatting the DateTimeOutput when showing the elements within a database.
+        /// </summary>
         public string DateToStringConverter => CreatedAt.ToString("dd/MM/yyyy HH:mm");
     }
 }
