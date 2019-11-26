@@ -28,7 +28,7 @@
                                 RecognizesAccessKey="True"/>
                             <Popup
                                 Placement="Bottom"
-                                VerticalOffset="2"
+                                VerticalOffset="6"
                                 HorizontalOffset="-15"
                                 IsOpen="{TemplateBinding IsSubmenuOpen}"
                                 AllowsTransparency="True"
@@ -179,7 +179,7 @@
                             <Popup Placement="Bottom"
                                    x:Name="PART_Popup"
                                    PopupAnimation="Fade"
-                                   VerticalOffset="2"
+                                   VerticalOffset="6"
                                    HorizontalOffset="-15"
                                    AllowsTransparency="True"
                                    IsOpen="{TemplateBinding IsSubmenuOpen}">
