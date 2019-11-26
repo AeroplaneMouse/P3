@@ -50,7 +50,7 @@ namespace AMS.Helpers
                                                       && !AppliedTags.Contains(u)).ToList());
                 }else{
                     result.AddRange(SuggestedTags.Where(t => t.TagLabel.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
-                                                      && !AppliedTags.Contains(t)).ToList());
+                                                             && !AppliedTags.Contains(t)).ToList());
                 }
             }
             else
@@ -173,8 +173,16 @@ namespace AMS.Helpers
 
                 if (count <= 1)
                 {
-                    AppliedTags.Remove(AppliedTags.Single(u => u.TagId == 1 && u.TagType == typeof(User)));
+                    try
+                    {
+                        var parentUserTag = AppliedTags.Single(u => u.TagId == 1 && u.TagType == typeof(Tag));
+                        AppliedTags.Remove(parentUserTag);
                         return true;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
                 }
             }
 
@@ -199,26 +207,6 @@ namespace AMS.Helpers
         {
             SuggestedTags.Clear();
             SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentID == tag.ID).ToList() : _tags.Where(a => a.ParentID == 0).ToList());
-            
-                /*
-                var parents = _tags.Where(t => t.ParentID == 0);
-                
-                foreach (var parent in parents)
-                {
-                    if (parent.TagId == 1 && (!ContainsAllChildrenOfParent(parent) || !AppliedTags.Contains(parent)))
-                    {
-                        // Users
-                        SuggestedTags.Add(parent);
-                    }else if (parent.ChildrenCount > 0 && !ContainsAllChildrenOfParent(parent) || !AppliedTags.Contains(parent))
-                    {
-                        SuggestedTags.Add(parent);
-                    }
-                    else if(parent.ChildrenCount == 0)
-                    {
-                        SuggestedTags.Add(parent);
-                    }
-                }
-                */
             _parent = tag;
         }
 
@@ -237,7 +225,7 @@ namespace AMS.Helpers
             if (includeParents)
                 return AppliedTags;
             
-            return new ObservableCollection<ITagable>(AppliedTags.Where(t => t.ParentId > 0 || (t.ParentId == 0 && t.ChildrenCount == 0)));
+            return new ObservableCollection<ITagable>(AppliedTags.Where(t => t.ParentId > 0 || (t.ParentId == 0 && t.ChildrenCount == 0 && (t.TagId != 1 && t.TagType == typeof(Tag)))));
         }
 
         public List<ulong> GetAppliedTagIds(Type type)
