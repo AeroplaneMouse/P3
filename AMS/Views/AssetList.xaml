@@ -205,7 +205,7 @@
                             </GridViewColumn>
 
                             <!-- View -->
-                            <GridViewColumn Width="32">
+                            <GridViewColumn Width="40">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{StaticResource ViewButton}"
