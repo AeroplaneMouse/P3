@@ -17,7 +17,10 @@ namespace AMS.Controllers
         public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
         private ILogger logger;
         private IAssetRepository _assetRepository;
-        
+
+        public string name;
+        public string identifier;
+        public string description;
 
         public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset ?? new Asset())
         {
