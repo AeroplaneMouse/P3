@@ -33,9 +33,9 @@ namespace AMS.Controllers
                 Asset = asset;
             }
             
-            Name = asset.Name;
-            Identifier = asset.Identifier;
-            Description = asset.Description;
+            Name = Asset.Name;
+            Identifier = Asset.Identifier;
+            Description = Asset.Description;
             NonHiddenFieldList = Asset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = Asset.FieldList.Where(f => f.IsHidden == true).ToList();
             _assetRepository = assetRepository;

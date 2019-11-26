@@ -403,6 +403,11 @@ namespace AMS.Database.Repositories
 
         public bool AttachTags(Asset asset, List<ITagable> tagged)
         {
+            if (!tagged.Any())
+            {
+                return true;
+            }
+
             List<User> users = tagged.OfType<User>().ToList();
             List<Tag> tags = tagged.OfType<Tag>().ToList();
 

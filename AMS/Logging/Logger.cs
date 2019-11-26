@@ -49,7 +49,7 @@ namespace AMS.Logging
                     Console.WriteLine(entryType);
                 }
 
-                this.Write(entryType, description, userId, changes);
+                this.Write(entryType, description, userId, entity.ID, entity.GetType(), changes);
 
             }
             else
@@ -73,7 +73,7 @@ namespace AMS.Logging
 
             string description = inputDescription + error;
 
-            return Write(inputEntryType, description, userId, changes);
+            return this.Write(inputEntryType, description, userId, 0, null, changes);
         }
 
         private string GetPropertiesAndValues(Model entity)
@@ -117,9 +117,9 @@ namespace AMS.Logging
             return keyValuePairs;
         }
        
-        private bool Write(string entryType, string description, ulong userId = 0, string changes = "[]")
+        private bool Write(string entryType, string description, ulong userId = 0, ulong loggedItemId = 0, Type loggedItemType = null, string changes = "[]")
         {
-            LogEntry entry = new LogEntry(userId, entryType, description, changes);
+            LogEntry entry = new LogEntry(userId, entryType, description, loggedItemId, loggedItemType, changes);
 
             Console.WriteLine("UserID: " + entry.UserId.ToString() + "\nEntry Type: " + entry.EntryType + "\nDescription: " + entry.Description + "\nChanges: " + changes);
 
