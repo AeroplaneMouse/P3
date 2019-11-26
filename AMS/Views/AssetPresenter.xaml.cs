@@ -22,10 +22,10 @@ namespace AMS.Views
     /// </summary>
     public partial class AssetPresenter : Page
     {
-        public AssetPresenter(Asset asset, List<ITagable> tagList, ICommentListController commentListController, ILogListController logListController)
+        public AssetPresenter(List<ITagable> tagList, IAssetController assetController, ICommentListController commentListController, ILogListController logListController)
         {
             InitializeComponent();
-            DataContext = new AssetPresenterViewModel(asset, tagList, commentListController, logListController);
+            DataContext = new AssetPresenterViewModel(tagList, assetController, commentListController, logListController);
         }
     }
 }

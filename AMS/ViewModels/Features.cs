@@ -101,7 +101,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetPresenter(Asset asset, List<ITagable> tagables)
             {
-                return new AssetPresenter(asset, tagables, new CommentListController(GetCurrentSession(), _commentRepository, asset), new LogListController(_logRepository, _printHelper));
+                return new AssetPresenter(tagables, new AssetController(asset, _assetRepository), new CommentListController(GetCurrentSession(), _commentRepository, asset), new LogListController(_logRepository, _printHelper));
             }
 
             /// <summary>
