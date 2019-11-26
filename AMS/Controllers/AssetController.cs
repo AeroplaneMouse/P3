@@ -22,7 +22,7 @@ namespace AMS.Controllers
         public string identifier;
         public string description;
 
-        public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset)
+        public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset ?? new Asset())
         {
             if(asset == null)
             {
