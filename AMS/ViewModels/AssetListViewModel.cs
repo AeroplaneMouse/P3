@@ -12,6 +12,7 @@ using AMS.Database.Repositories;
 using AMS.Controllers.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Controls;
 
 namespace AMS.ViewModels
 {
@@ -69,6 +70,7 @@ namespace AMS.ViewModels
         public ICommand EditBySelectionCommand { get; set; }
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
+        public ICommand EnterSuggestionListCommand { get; set; }
 
         #endregion
 
@@ -95,6 +97,8 @@ namespace AMS.ViewModels
                 PrintCommand = new RelayCommand(Export);
             }
 
+            EnterSuggestionListCommand = new RelayCommand<object>((parameter) => test(parameter));
+
             // Other functions
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
@@ -108,6 +112,18 @@ namespace AMS.ViewModels
 
             AutoTagCommand = new RelayCommand<object>((parameter) => AutoTag(parameter as ITagable));
             ClearInputCommand = new RelayCommand(ClearInput);
+        }
+
+        private void test(object parameter)
+        {
+            var list = parameter as ListBox;
+            Keyboard.Focus(list);
+            var item = list.SelectedItem = TagSearchSuggestions[0];
+
+
+
+            //Keyboard.Focus(item);
+            //throw new NotImplementedException();
         }
 
         #endregion

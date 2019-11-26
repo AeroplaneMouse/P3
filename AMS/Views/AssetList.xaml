@@ -6,7 +6,9 @@
       xmlns:viewModel="clr-namespace:AMS.ViewModels"
       xmlns:converter="clr-namespace:AMS.Views.ValueConverters"
       mc:Ignorable="d" 
-      Title="AssetList">
+      Title="AssetList"
+      x:Name="ThePage"
+      FocusManager.FocusedElement="{Binding ElementName=TagSuggestionList}">
     <Page.Resources>
         <DataTemplate x:Key="AssetListItem">
             <Grid Background="Black">
@@ -61,7 +63,7 @@
                     <StackPanel Orientation="Horizontal"    
                                 VerticalAlignment="Center"    
                                 HorizontalAlignment="Center"
-                                ToolTip="Enter '#' to start tag mode. Here you can search on tags and add them to the list of things, to care about when searching.">
+                                ><!--ToolTip="Enter '#' to start tag mode. Here you can search on tags and add them to the list of things, to care about when searching."-->
                         <Border x:Name="CurrentTagGroup" Background="LightGray"
                                 BorderThickness="0"
                                 Visibility="{Binding CurrentGroupVisibility}">
@@ -97,7 +99,8 @@
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                                     <KeyBinding Key="Escape" Command="{Binding ClearInputCommand}"/>
-                                    <KeyBinding Key="Tab" Command="{Binding AutoTagCommand}" />
+                                    <KeyBinding Key="Tab" Command="{Binding AutoTagCommand}"/>
+                                    <KeyBinding Key="Down" Command="{Binding EnterSuggestionListCommand}" CommandParameter="{Binding ElementName=TagSuggestionList}"/>
                                 </TextBox.InputBindings>
                             </TextBox>
                                 
