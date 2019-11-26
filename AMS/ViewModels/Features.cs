@@ -36,9 +36,9 @@ namespace AMS.ViewModels
 
         private static IUserImporter _userImporter = new UserImporter(_userRepository);
 
-        private static TagHelper CreateTagHelper(ObservableCollection<ITagable> tags = null)
+        private static TagHelper CreateTagHelper()
         {
-            return new TagHelper(_tagRepository, _userRepository, tags ?? new ObservableCollection<ITagable>());
+            return new TagHelper(_tagRepository, _userRepository);
         }
 
         #endregion

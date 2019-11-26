@@ -233,6 +233,9 @@
     <Style TargetType="Button" x:Key="ViewButton" BasedOn="{StaticResource ImageButton}">
         <Setter Property="Content" Value="{StaticResource View_Gray}"/>
         <Style.Triggers>
+            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected}" Value="True">
+                <Setter Property="Content" Value="{StaticResource View_White}"/>
+            </DataTrigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Content" Value="{StaticResource View_Black}"/>
             </Trigger>

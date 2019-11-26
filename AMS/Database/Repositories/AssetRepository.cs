@@ -19,7 +19,7 @@ namespace AMS.Database.Repositories
     {
         private QueryGenerator _query;
         
-        private ILogger logger { get; set; } = new Logger(new LogRepository());
+        private Ilogger logger { get; set; } = new Logger(new LogRepository());
 
         public AssetRepository()
         {
@@ -456,9 +456,8 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0 && querySuccess;
                     }
 
-                    logger.AddEntry(tagLabels + " was attached to the asset with ID: "
-                        + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.",
-                        "Tag attached", Features.GetCurrentSession().user.ID);
+                    logger.AddEntry("Tag attached", tagLabels + " was attached to the asset with ID: "
+                        + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.", Features.GetCurrentSession().user.ID);
 
                 }
                 catch (MySqlException e)

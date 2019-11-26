@@ -7,12 +7,13 @@ using AMS.Database.Repositories.Interfaces;
 using System.Collections.Generic;
 using AMS.ViewModels;
 using AMS.Logging.Interfaces;
+using AMS.Logging;
 
 namespace AMS.Database.Repositories
 {
     public class CommentRepository : ICommentRepository
     {
-        public ILogger logger { get; set; }
+        private Ilogger logger { get; set; } = new Logger(new LogRepository());
 
         public bool Insert(Comment entity, out ulong id)
         {

@@ -12,10 +12,10 @@ namespace AMS.Controllers.Interfaces
 
         Tag Tag { get; set; }
 
-        public string Name { get; set; }
-        public string Color { get; set; }
-        public ulong ParentID { get; set; }
-        public ulong DepartmentID { get; set; }
+        string Name { get; set; }
+        string Color { get; set; }
+        ulong ParentID { get; set; }
+        ulong DepartmentID { get; set; }
 
         bool IsEditing { get; set; }
 

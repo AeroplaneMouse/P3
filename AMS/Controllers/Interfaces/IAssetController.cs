@@ -11,9 +11,9 @@ namespace AMS.Controllers.Interfaces
         Asset Asset { get; set; }
         List<ITagable> CurrentlyAddedTags { get; set; }
 
-        public string Name { get; set; }
-        public string Identifier { get; set; }
-        public string Description { get; set; }
+        string Name { get; set; }
+        string Identifier { get; set; }
+        string Description { get; set; }
 
         bool AttachTag(ITagable tag);
 
@@ -23,6 +23,5 @@ namespace AMS.Controllers.Interfaces
         bool Update();
 
         bool Remove();
-
     }
 }
