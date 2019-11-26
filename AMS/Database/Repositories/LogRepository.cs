@@ -74,7 +74,7 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    string query = "SELECT l.id, u.username, u.domain, l.entry_type, l.description, l.changes, l.created_at " +
+                    string query = "SELECT l.id, u.username, u.domain, l.entry_type, l.description, l.logged_item_id, l.logged_item_type, l.changes, l.created_at " +
                                    "FROM log AS l INNER JOIN users AS u ON(l.user_id = u.id) " +
                                    "WHERE logged_item_id=@logged_item_id AND logged_item_type=@logged_item_type" +
                                    (userId != null ? " AND user_id=@user_id" : "");
@@ -127,9 +127,10 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    string query = "SELECT id, user_id, entry_type, description, changes, logged_item_id, logged_item_type, created_at " +
-                                   "FROM log WHERE user_id LIKE @keyword OR description LIKE @keyword " +
-                                   "ORDER BY id desc LIMIT " + limit;
+                    string query = "SELECT l.id, u.username, u.domain, l.entry_type, l.description, l.logged_item_id, l.logged_item_type, l.changes, l.created_at " +
+                                   "FROM log AS l INNER JOIN users AS u ON(l.user_id = u.id) " +
+                                   "WHERE l.user_id LIKE @keyword OR l.description LIKE @keyword " +
+                                   "ORDER BY l.id desc LIMIT " + limit;
 
                     if (!keyword.Contains("%"))
                         keyword = "%" + keyword + "%";
@@ -171,7 +172,18 @@ namespace AMS.Database.Repositories
         {
             ulong rowId = reader.GetUInt64("id");
             ulong rowLoggedItemId = reader.GetUInt64("logged_item_id");
-            Type rowLoggedItemType = Type.GetType(reader.GetString("logged_item_type"));
+
+            Type rowLoggedItemType;
+            var ordinal = reader.GetOrdinal("logged_item_type");
+            if (reader.IsDBNull(ordinal))
+            {
+                rowLoggedItemType = null;
+            }
+            else
+            {
+                rowLoggedItemType = Type.GetType(reader.GetString("logged_item_type"));
+            }
+
             string rowEntryType = reader.GetString("entry_type");
             string rowDescription = reader.GetString("description");
             string rowChanges = reader.GetString("changes");
