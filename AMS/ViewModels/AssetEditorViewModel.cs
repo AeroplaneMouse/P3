@@ -23,6 +23,7 @@ namespace AMS.ViewModels
         private IAssetController _assetController;
         private ITagListController _tagListController;
         private bool _isEditing;
+        private TagHelper _tagHelper;
 
         public ICommand AddFieldCommand { get; set; }
         public ICommand RemoveFieldCommand { get; set; }
@@ -71,10 +72,13 @@ namespace AMS.ViewModels
 
         public List<Tag> TagList { get; set; }
         
-        public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController)
+        public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController, TagHelper tagHelper)
         {
             _assetController = assetController;
             _tagListController = tagListController;
+            
+            _tagHelper = tagHelper;
+            _tagHelper.CanApplyParentTags = false;
 
             _isEditing = (_assetController.Asset != null);
             if (_isEditing)

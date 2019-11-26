@@ -43,8 +43,7 @@
                    VerticalAlignment="Bottom" />
 
         <!-- Page content -->
-        <ScrollViewer Grid.Row="1"
-                      Margin="10">
+        <ScrollViewer Grid.Row="1" Margin="10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -94,6 +93,70 @@
                     <TextBlock Style="{StaticResource HeaderStyle}"
                                Margin="0 0 0 10"
                                Text="Tags" />
+                    
+                    <StackPanel Orientation="Horizontal">
+                        
+                    
+                    
+                        <Border x:Name="CurrentTagGroup" Background="LightGray"
+                            BorderThickness="0"
+                            Visibility="{Binding CurrentGroupVisibility}">
+                        
+                            <!-- Current parent tag -->
+                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                       Text="{Binding CurrentGroup}"
+                                       VerticalAlignment="Center"/>
+                            
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsVisible" Value="True">
+                                            <Setter Property="Padding" Value="5 0 5 0"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+                    
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center">
+                            <!-- Search bar -->
+                            <TextBox FontSize="{StaticResource FontSizeSmall}"
+                                     Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                     VerticalContentAlignment="Center"
+                                     Height="30"
+                                     x:Name="SearchElement"
+                                     TabIndex="0">
+                                
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                                    <KeyBinding Key="Escape" Command="{Binding ClearInputCommand}"/>
+                                    <KeyBinding Key="Tab" Command="{Binding AutoTagCommand}"/>
+                                    <KeyBinding Key="Down" Command="{Binding EnterSuggestionListCommand}" CommandParameter="{Binding ElementName=TagSuggestionList}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
+                                
+                            <!-- Suggestion dropdown -->
+                            <Popup x:Name="TagSuggestionPopup"    
+                                   Visibility="{Binding TagSuggestionsVisibility}"                    
+                                   IsOpen="{Binding TagSuggestionIsOpen}"
+                                   StaysOpen="False"
+                                   MaxHeight="100"
+                                   Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
+                                   Placement="Bottom">
+
+                                <ListBox x:Name="TagSuggestionList"    
+                                         Visibility="{Binding TagSuggestionsVisibility}"    
+                                         Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
+                                         ItemsSource="{ Binding TagSearchSuggestions }">
+                                    <ListBox.InputBindings>
+                                        <KeyBinding Key="Return" Command="{Binding AutoTagCommand}" CommandParameter="{Binding ElementName=TagSuggestionList, Path=SelectedItem}"/>
+                                    </ListBox.InputBindings>
+                                </ListBox>
+                            </Popup>
+                        </StackPanel>
+                    </StackPanel>
+                    
+                    <!--
                     <TextBox Style="{StaticResource ParagraphTextBox}"
                              x:Name="InputBox"
                              Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}">
@@ -133,6 +196,7 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
+                    -->
                 </StackPanel>
                 
                 <Rectangle Style="{StaticResource VerticalSeparator}"

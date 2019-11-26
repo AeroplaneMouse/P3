@@ -108,7 +108,7 @@ namespace AMS.ViewModels
                 if (asset == null)
                     asset = new Asset();
 
-                return new AssetEditor(new AssetController(asset, _assetRepository), new TagListController(_tagRepository, _printHelper));
+                return new AssetEditor(new AssetController(asset, _assetRepository), new TagListController(_tagRepository, _printHelper), CreateTagHelper());
             }
 
             /// <summary>
