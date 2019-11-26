@@ -4,11 +4,11 @@ using AMS.Logging;
 
 namespace AMS.Database.Repositories.Interfaces
 {
-    public interface ILogRepository : ISearchableRepository<Entry>
+    public interface ILogRepository : ISearchableRepository<LogEntry>
     {    
-        bool Insert(Entry entity);
+        bool Insert(LogEntry entity);
         
-        IEnumerable<Entry> GetLogEntries(ulong logableId, Type logableType);
-        IEnumerable<Entry> GetLogEntries(ulong logableId, Type logableType, string username);
+        IEnumerable<LogEntry> GetLogEntries(ulong logableId, Type logableType);
+        IEnumerable<LogEntry> GetLogEntries(ulong logableId, Type logableType, string username);
     }
 }

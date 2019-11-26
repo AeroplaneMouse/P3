@@ -4,6 +4,7 @@ using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Logging;
+using AMS.Models;
 
 namespace AMS.Controllers
 {
@@ -12,13 +13,17 @@ namespace AMS.Controllers
         private readonly ILogRepository _logRepository;
         private readonly IExporter _exporter;
 
-        public ObservableCollection<Entry> EntryList { get; set; }
+        public ObservableCollection<LogEntry> EntryList { get; set; }
 
-        public LogListController(ILogRepository logRepository, IExporter exporter)
+        public LogListController(ILogRepository logRepository, IExporter exporter, Asset asset = null)
         {
             _logRepository = logRepository;
             _exporter = exporter;
-            Search("");
+            if (asset == null)
+                Search("");
+            else
+                //TODO Lav search for asset logs
+                Search("");
         }
         
         /// <summary>
@@ -34,7 +39,7 @@ namespace AMS.Controllers
         /// Exports the selected entries to a .csv file
         /// </summary>
         /// <param name="entries"></param>
-        public void Export(List<Entry> entries)
+        public void Export(List<LogEntry> entries)
         {
             _exporter.Print(entries);
         }

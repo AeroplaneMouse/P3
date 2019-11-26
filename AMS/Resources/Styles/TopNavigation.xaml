@@ -28,13 +28,13 @@
                                 RecognizesAccessKey="True"/>
                             <Popup
                                 Placement="Bottom"
-                                VerticalOffset="2"
+                                VerticalOffset="6"
                                 HorizontalOffset="-15"
                                 IsOpen="{TemplateBinding IsSubmenuOpen}"
                                 AllowsTransparency="True"
                                 PopupAnimation="Fade">
                                 <Border Name="PopupContainer"
-                                        Background="{StaticResource NavigationBackgroundBrush}">
+                                        Background="{StaticResource NavigationSelectedBrush}">
                                     <ItemsPresenter/>
                                 </Border>
                             </Popup>
@@ -46,10 +46,10 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
             </Trigger>
             <Trigger Property="IsSubmenuOpen" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -181,11 +181,11 @@
                             <Popup Placement="Bottom"
                                    x:Name="PART_Popup"
                                    PopupAnimation="Fade"
-                                   VerticalOffset="2"
+                                   VerticalOffset="6"
                                    HorizontalOffset="-15"
                                    AllowsTransparency="True"
                                    IsOpen="{TemplateBinding IsSubmenuOpen}">
-                                <Border Background="{StaticResource NavigationBackgroundBrush}"
+                                <Border Background="{StaticResource NavigationSelectedBrush}"
                                         x:Name="Border_Popup">
                                     <StackPanel x:Name="StackPanel_Popup">
                                         <MenuItem Header="All departments"
@@ -242,10 +242,10 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
             </Trigger>
             <Trigger Property="IsSubmenuOpen" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>

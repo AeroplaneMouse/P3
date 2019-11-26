@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:converter="clr-namespace:AMS.Views.ValueConverters"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:local="clr-namespace:AMS.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -40,6 +41,32 @@
         </StackPanel>
 
         <TabControl Grid.Row="1">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="0,0">
+                                    <TextBlock x:Name="ContentSite"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               Text="{TemplateBinding Header}"
+                                               Margin="10,2"
+                                               FontSize="{StaticResource FontSizeSmall}"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="LightGray" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter TargetName="Border" Property="Background" Value="White" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
             <TabItem DataContext="{Binding Children[0]}" 
                      Header="Details"
                      FontSize="{StaticResource FontSizeSmall}">
@@ -309,10 +336,62 @@
                     </ListView>-->
                 </Grid>
             </TabItem>
-            <TabItem DataContext="{Binding Children[2]}" 
-                     Header="Log"
-                     FontSize="{StaticResource FontSizeSmall}">
-                
+
+            <TabItem DataContext="{Binding Children[2]}" Header="Log" FontSize="{StaticResource FontSizeSmall}">
+                <!--Style="{StaticResource RegularList}"-->
+                <ListView x:Name="listViewWithItems"
+                        SelectionMode="Extended"
+                        ItemsSource="{Binding Entries, UpdateSourceTrigger=PropertyChanged}"
+                        SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                        Grid.Row="2">
+
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <!--~1~ViewCommand@1@-->
+                            <i:InvokeCommandAction Command="{Binding ViewCommand}" CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Date" Width="130">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=DateToStringConverter}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Event">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Description}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <GridViewColumn Header="Username">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=Username}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+
+                    <ListView.InputBindings>
+                        <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
+                        <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding ViewCommand}" />
+                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ViewCommand}" />
+                    </ListView.InputBindings>
+                </ListView>
             </TabItem>
         </TabControl>
     </Grid>

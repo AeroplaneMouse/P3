@@ -22,7 +22,7 @@ namespace AMS.Views
             LogListViewModel viewModel = (DataContext as LogListViewModel);
             viewModel.SelectedItems.Clear();
 
-            foreach (Entry entry in (sender as ListView).SelectedItems)
+            foreach (LogEntry entry in (sender as ListView).SelectedItems)
                 viewModel.SelectedItems.Add(entry);
 
             // Only change visibility if current user if admin

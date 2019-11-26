@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace AMS.Models
 {
@@ -9,5 +11,10 @@ namespace AMS.Models
         public DateTime UpdatedAt { get; protected set; }
         public string CreatedAtString => CreatedAt.ToString("dd/MMM/yyyy HH:mm");
         public string UpdatedAtString => UpdatedAt.ToString("dd/MMM/yyyy HH:mm");
+        public Dictionary<string, object> Changes { get; set; } = new Dictionary<string, object>();
+        public bool IsDirty()
+        {
+            return Changes.Any();
+        }
     }
 }

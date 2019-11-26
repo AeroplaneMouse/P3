@@ -19,7 +19,7 @@
     <Color x:Key="NaviationBackground">#3d5266</Color>
     <SolidColorBrush x:Key="NavigationBackgroundBrush" Color="{StaticResource NaviationBackground}"/>
 
-    <Color x:Key="NavigationSelected">#263340</Color>
+    <Color x:Key="NavigationSelected">#2a3846</Color>
     <SolidColorBrush x:Key="NavigationSelectedBrush" Color="{StaticResource NavigationSelected}"/>
 
     <!-- 32cd56-->

@@ -6,9 +6,22 @@ namespace AMS.Models
 {
     public class Comment : Model
     {
+        private string _content;
+
         public ulong AssetID;
         public string Username { get; set; }
-        public string Content { get; set; }
+        public string Content {
+            get {
+                return this._content;
+            }
+            set {
+                if (this.Content != null)
+                {
+                    this.Changes["Content"] = this.Content;
+                }
+                this._content = value;
+            }
+        }
 
         public Comment()
         {
