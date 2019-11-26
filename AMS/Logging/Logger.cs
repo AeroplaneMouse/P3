@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace AMS.Logging
 {
-    public class Logger : ILogger
+    public class Logger : Ilogger
     {
         public ILogRepository _logRepository;
 

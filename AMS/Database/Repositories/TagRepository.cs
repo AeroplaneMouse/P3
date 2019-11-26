@@ -7,12 +7,13 @@ using System.Collections.ObjectModel;
 using AMS.Database.Repositories.Interfaces;
 using AMS.ViewModels;
 using AMS.Logging.Interfaces;
+using AMS.Logging;
 
 namespace AMS.Database.Repositories
 {
     public class TagRepository : ITagRepository
     {
-        public ILogger logger { get; set; }
+        private Ilogger logger { get; set; } = new Logger(new LogRepository());
 
         public ulong GetCount()
         {
