@@ -11,7 +11,7 @@ namespace AMS.Database.Repositories
 {
     public class DepartmentRepository : IDepartmentRepository
     {
-        public ILogger logger { get; set; }
+        private Ilogger logger { get; set; } = new Logger(new LogRepository());
 
         public ulong GetCount()
         {
