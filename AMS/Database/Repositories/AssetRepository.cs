@@ -19,7 +19,7 @@ namespace AMS.Database.Repositories
     {
         private QueryGenerator _query;
         
-        private ILogger logger { get; set; } = new Logger(new CWRep());
+        private ILogger logger { get; set; } = new Logger(new LogRepository());
 
         public AssetRepository()
         {
