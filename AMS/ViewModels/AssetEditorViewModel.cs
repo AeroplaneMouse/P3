@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
@@ -59,6 +60,7 @@ namespace AMS.ViewModels
         public string Title { get; set; }
 
         private string _tagString;
+        /*
         public string TagString
         {
             get => _tagString;
@@ -69,7 +71,25 @@ namespace AMS.ViewModels
                 TagList = _tagListController.TagsList;
             }
         }
+        */
 
+        private string _tagSearchQuery;
+        public string TagSearchQuery
+        {
+            get => _tagSearchQuery;
+            set { _tagSearchQuery = value; }
+        }
+
+        public string CurrentGroup { get; set; }
+        public Visibility CurrentGroupVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility TagSuggestionsVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
+        public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
+        public bool TagSuggestionIsOpen { get; set; } = false;
+        public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
+        public ITagable TagParent { get; set; }
+        public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
+        
         public List<Tag> TagList { get; set; }
         
         public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController, TagHelper tagHelper)
@@ -96,7 +116,7 @@ namespace AMS.ViewModels
             CancelCommand = new Base.RelayCommand(() => Cancel());
             RemoveFieldCommand = new RelayCommand<object>((parameter) => RemoveField(parameter));
             RemoveTagCommand = new RelayCommand<object>((parameter) => RemoveTag(parameter));
-            AddTagCommand = new RelayCommand<object>((parameter) => AddTag(parameter));
+            AddTagCommand = new RelayCommand(() => AddTag());
         }
 
         public void SaveAndExist()
@@ -168,9 +188,13 @@ namespace AMS.ViewModels
         /// Attach given tag to the asset
         /// </summary>
         /// <param name="tag"></param>
-        public void AddTag(object tag)
+        public void AddTag()
         {
             // Display notification if given tag is not ITagable
+            
+            Console.WriteLine("Changes");
+            
+            /*
             if (!(tag is ITagable))
             {
                 Features.AddNotification(new Notification("Invalid Tag", Notification.ERROR));
@@ -180,6 +204,7 @@ namespace AMS.ViewModels
             // Attach Tag or display notification on failure
             if (!_assetController.AttachTag((ITagable)tag))
                 Features.AddNotification(new Notification("Could not add tag", Notification.ERROR));
+                */
         }
 
         /// <summary>

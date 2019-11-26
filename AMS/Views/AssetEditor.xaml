@@ -121,7 +121,7 @@
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
                             <!-- Search bar -->
                             <TextBox FontSize="{StaticResource FontSizeSmall}"
-                                     Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                     Text="{Binding TagSearchQuery, UpdateSourceTrigger=PropertyChanged}"
                                      VerticalContentAlignment="Center"
                                      Height="30"
                                      x:Name="SearchElement"
