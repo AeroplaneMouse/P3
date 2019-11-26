@@ -90,16 +90,16 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@name"].Value = entity.Name;
 
                         cmd.Parameters.Add("@description", MySqlDbType.String);
-                        cmd.Parameters["@description"].Value = entity.Description;
+                        cmd.Parameters["@description"].Value = entity.Description == null ? "" : entity.Description;
 
                         cmd.Parameters.Add("@identifier", MySqlDbType.String);
-                        cmd.Parameters["@identifier"].Value = entity.Identifier;
+                        cmd.Parameters["@identifier"].Value = entity.Identifier == null ? "" : entity.Identifier;
 
                         cmd.Parameters.Add("@department", MySqlDbType.UInt64);
                         cmd.Parameters["@department"].Value = entity.DepartmentID;
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                        cmd.Parameters["@options"].Value = entity.SerializedFields;
+                        cmd.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                         id = (ulong)cmd.LastInsertedId;
@@ -337,7 +337,8 @@ namespace AMS.Database.Repositories
 
                 try
                 {
-                    _query.Where("a.department_id", "1");
+                    if (Features.Main.CurrentDepartment.ID > 0)
+                        _query.Where("a.department_id", Features.Main.CurrentDepartment.ID.ToString());
                     _query.Where("a.deleted_at", "IS NULL", "");
 
                     if (keyword.Length > 0)
@@ -543,188 +544,5 @@ namespace AMS.Database.Repositories
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
                 new object[] { rowId, rowName, rowDescription, rowIdentifier, rowDepartmentId, rowOptions, rowCreatedAt, rowUpdatedAt }, null, null);
         }
-        
-        /*
-        /// <summary>
-        /// Adds a list of tags to an asset
-        /// </summary>
-        /// <param name="asset"></param>
-        /// <param name="tags"></param>
-        /// <returns></returns>
-        public bool AttachTagsToAsset(Asset asset, List<Tag> tags)
-        {
-            return RemoveTags(asset, tags) && AddTags(asset, tags);
-        }
-        
-        /// <summary>
-        /// Removes the tags on the asset that are not in teh list of tags to be added
-        /// </summary>
-        /// <param name="asset"></param>
-        /// <param name="tags"></param>
-        /// <returns></returns>
-        private bool RemoveTags(Asset asset, List<Tag> tags)
-        {
-            var con = new MySqlHandler().GetConnection();
-            bool querySuccess = false;
-
-            // Opening connection
-            if (MySqlHandler.Open(ref con))
-            {
-                // Makes a list of the ids of the tags to be added to the asset
-                List<ulong> tagIds = tags.Select(p => p.ID).ToList();
-
-                // Makes a list of the ids of the tags already on the asset
-                List<ulong> assetTagIds = GetAssetTags(asset).Select(p => p.ID).ToList();
-
-                // Removes the ids of the tags that are supposed to still be on the asset
-                // resulting in a list of ids og tags to be removed from the asset
-                assetTagIds = assetTagIds.Except(tagIds).ToList();
-
-                StringBuilder query = new StringBuilder("DELETE FROM asset_tags WHERE asset_id = ");
-                List<string> inserts = new List<string>();
-
-                query.Append(asset.ID);
-                query.Append(" AND tag_id IN (");
-
-                foreach (var tagId in assetTagIds)
-                {
-                    inserts.Add(tagId.ToString());
-                }
-
-                query.Append(string.Join(",", inserts));
-                query.Append(")");
-
-                try
-                {
-                    if (assetTagIds.Count > 0)
-                    {
-                        using (var cmd = new MySqlCommand(query.ToString(), con))
-                        {
-                            Console.WriteLine(cmd.CommandText);
-                            querySuccess = cmd.ExecuteNonQuery() > 0;
-                        }
-                    }
-                    else
-                        querySuccess = true;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    con.Close();
-                }
-            }
-
-            return querySuccess;
-        }
-        
-        /// <summary>
-        /// Adds the tags that are not already on the asset
-        /// </summary>
-        /// <param name="asset"></param>
-        /// <param name="tags"></param>
-        /// <returns></returns>
-        private bool AddTags(Asset asset, List<Tag> tags)
-        {
-            var con = new MySqlHandler().GetConnection();
-            bool querySuccess = false;
-
-            // Opening connection
-            if (MySqlHandler.Open(ref con))
-            {
-                // Makes a list of the ids of the tags to be added to the asset
-                List<ulong> tagIds = tags.Select(p => p.ID).ToList();
-
-                // Makes a list of the ids of the tags already on the asset
-                List<ulong> assetTagIds = GetAssetTags(asset).Select(p => p.ID).ToList();
-
-                // Removes the ids of the tags that are already on the asset
-                // resulting in a list of ids of tags to still to be added to the asset
-                tagIds = tagIds.Except(assetTagIds).ToList();
-
-                StringBuilder query = new StringBuilder("INSERT INTO asset_tags (asset_id, tag_id) VALUES ");
-                List<string> inserts = new List<string>();
-
-                foreach (var tagId in tagIds)
-                {
-                    inserts.Add($"({asset.ID},{tagId})");
-                }
-
-                query.Append(string.Join(",", inserts));
-
-                try
-                {
-                    if (tagIds.Count > 0)
-                    {
-                        using (var cmd = new MySqlCommand(query.ToString(), con))
-                        {
-                            Console.WriteLine(cmd.CommandText);
-                            querySuccess = cmd.ExecuteNonQuery() > 0;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    con.Close();
-                }
-            }
-
-            return querySuccess;
-        }
-
-        /// <summary>
-        /// Gets a list of all tags on an asset
-        /// </summary>
-        /// <param name="asset"></param>
-        /// <returns></returns>
-        public List<Tag> GetAssetTags(Asset asset)
-        {
-            var con = new MySqlHandler().GetConnection();
-            List<Tag> tags = new List<Tag>();
-            TagRepository tagRep = new TagRepository();
-
-            // Opening connection
-            if (MySqlHandler.Open(ref con))
-            {
-                try
-                {
-                    string query = "SELECT * FROM tags AS t " +
-                                   "INNER JOIN asset_tags ON tag_id = t.id " +
-                                   "WHERE asset_id = @asset_id";
-
-                    using (var cmd = new MySqlCommand(query, con))
-                    {
-                        cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@asset_id"].Value = asset.ID;
-
-                        using (var reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                tags.Add(tagRep.DBOToModelConvert(reader));
-                            }
-                            reader.Close();
-                        }
-                    }
-                }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    con.Close();
-                }
-            }
-
-            return tags;
-        }
-        */
     }
 }

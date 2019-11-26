@@ -64,6 +64,7 @@ namespace AMS.ViewModels
         public ICommand PrintCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
+        public ICommand ViewWithParameterCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
         public ICommand RemoveTagCommand { get; set; }
         public ICommand RemoveBySelectionCommand { get; set; }
@@ -102,6 +103,7 @@ namespace AMS.ViewModels
             // Other functions
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
+            ViewWithParameterCommand = new RelayCommand<object>(ViewAsset);
             RemoveTagCommand = new RelayCommand<object>((parameter) => 
             {
                 ITagable tag = parameter as ITagable;
@@ -270,6 +272,11 @@ namespace AMS.ViewModels
                 Features.Navigate.To(Features.Create.AssetPresenter(SelectedItems.First(), _listController.GetTags(SelectedItems.First())));
             else
                 Features.AddNotification(new Notification("Can only view one asset", Notification.ERROR));
+        }
+
+        private void ViewAsset(object asset)
+        {
+            Features.Navigate.To(Features.Create.AssetPresenter(asset as Asset, _listController.GetTags(asset as Asset)));
         }
 
         /// <summary>

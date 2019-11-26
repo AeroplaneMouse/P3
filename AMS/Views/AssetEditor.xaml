@@ -45,14 +45,15 @@
                    VerticalAlignment="Bottom" />
 
         <!-- Page content -->
-        <ScrollViewer Grid.Row="1" Margin="10">
+        <ScrollViewer Grid.Row="1" Margin="10"
+                      VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Details -->
@@ -227,7 +228,8 @@
                            Grid.Column="3" />
 
                 <!-- Fields -->
-                <StackPanel Grid.Column="4">
+                <StackPanel Grid.Column="4"
+                            Margin="0 0 10 0">
                     <!-- Title -->
                     <StackPanel Orientation="Horizontal"
                                 Margin="0 0 0 10">
@@ -247,17 +249,13 @@
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding NonHiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
                                       ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
                         </ItemsControl>
                     </StackPanel>
 
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Hidden fields"
                                Margin="0 20 10 0" />
+                    
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding HiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
                             ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">

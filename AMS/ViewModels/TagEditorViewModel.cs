@@ -111,11 +111,11 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(SelectedParentTagIndex));
             if (_controller.IsEditing)
             {
-                PageTitle = "Edit asset";
+                PageTitle = "Edit tag";
             }
             else
             {
-                PageTitle = "Add asset";
+                PageTitle = "Add tag";
             }
 
 
