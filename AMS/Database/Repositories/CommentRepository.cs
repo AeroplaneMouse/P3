@@ -12,7 +12,7 @@ namespace AMS.Database.Repositories
 {
     public class CommentRepository : ICommentRepository
     {
-        public ILogger logger { get; set; }
+        private Ilogger logger { get; set; } = new Logger(new LogRepository());
 
         public bool Insert(Comment entity, out ulong id)
         {

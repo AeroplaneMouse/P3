@@ -19,5 +19,6 @@
     <!-- Edit -->
     <BitmapImage x:Key="View_Gray" UriSource="/Resources/Images/Logos/View/view_gray.png"/>
     <BitmapImage x:Key="View_Black" UriSource="/Resources/Images/Logos/View/view_black.png"/>
+    <BitmapImage x:Key="View_White" UriSource="/Resources/Images/Logos/View/view_white.png"/>
     
 </ResourceDictionary>

@@ -16,7 +16,7 @@ namespace AMS.Logging
         public Type LoggedItemType { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Changes { get; set; }
-        public string UserName { get; set; }
+        public string Username { get; set; }
         public string UserDomain { get; set; }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace AMS.Logging
             LoggedItemId = loggedItemId;
             LoggedItemType = loggedItemType;
             UserDomain = userDomain;
-            UserName = userName;
+            Username = userName;
         }
 
         /// <summary>
