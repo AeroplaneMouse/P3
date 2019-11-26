@@ -70,7 +70,6 @@
                         <Trigger Property="IsKeyboardFocused" Value="True">
                             <Setter Property="Visibility" Value="Visible" />
                         </Trigger>
-
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
 

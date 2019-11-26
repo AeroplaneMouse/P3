@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Input;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
@@ -23,6 +24,7 @@ namespace AMS.ViewModels
         private IAssetController _assetController;
         private ITagListController _tagListController;
         private bool _isEditing;
+        private TagHelper _tagHelper;
 
         public ICommand AddFieldCommand { get; set; }
         public ICommand RemoveFieldCommand { get; set; }
@@ -31,6 +33,11 @@ namespace AMS.ViewModels
         public ICommand CancelCommand { get; set; }
         public ICommand RemoveTagCommand { get; set; }
         public ICommand AddTagCommand { get; set; }
+        
+        public ICommand AutoTagCommand { get; set; }
+        public ICommand ClearInputCommand { get; set; }
+        public ICommand EnterSuggestionListCommand { get; set; }
+        
 
         public ObservableCollection<ITagable> CurrentlyAddedTags => new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags);
 
@@ -58,6 +65,7 @@ namespace AMS.ViewModels
         public string Title { get; set; }
 
         private string _tagString;
+        /*
         public string TagString
         {
             get => _tagString;
@@ -68,13 +76,38 @@ namespace AMS.ViewModels
                 TagList = _tagListController.TagsList;
             }
         }
+        */
 
+        private string _tagSearchQuery;
+        public string TagSearchQuery
+        {
+            get => _tagSearchQuery;
+            set
+            {
+                _tagSearchQuery = value;
+                TagSearch();
+            }
+        }
+
+        public string CurrentGroup { get; set; }
+        public Visibility CurrentGroupVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility TagSuggestionsVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
+        public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
+        public bool TagSuggestionIsOpen { get; set; } = false;
+        public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
+        public ITagable TagParent { get; set; }
+        public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
+        
         public List<Tag> TagList { get; set; }
         
-        public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController)
+        public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController, TagHelper tagHelper)
         {
             _assetController = assetController;
             _tagListController = tagListController;
+            
+            _tagHelper = tagHelper;
+            _tagHelper.CanApplyParentTags = false;
 
             _isEditing = (_assetController.Asset.ID != 0);
             if (_isEditing)
@@ -84,15 +117,24 @@ namespace AMS.ViewModels
                 Title = "Add asset";
             }
 
-            
             //Commands
             SaveCommand = new RelayCommand(() => SaveAndExist());
             SaveMultipleCommand = new RelayCommand(() => SaveAsset());
             AddFieldCommand = new Base.RelayCommand(() => PromptForCustomField());
             CancelCommand = new Base.RelayCommand(() => Cancel());
             RemoveFieldCommand = new RelayCommand<object>((parameter) => RemoveField(parameter));
-            RemoveTagCommand = new RelayCommand<object>((parameter) => RemoveTag(parameter));
-            AddTagCommand = new RelayCommand<object>((parameter) => AddTag(parameter));
+            //RemoveTagCommand = new RelayCommand<object>((parameter) => RemoveTag(parameter));
+            AddTagCommand = new RelayCommand(() => TagSearch());
+            
+            RemoveTagCommand = new RelayCommand<object>((parameter) => 
+            {
+                ITagable tag = parameter as ITagable;
+                _tagHelper.RemoveTag(tag);
+                AppliedTags = _tagHelper.GetAppliedTags(false);
+            });
+
+            AutoTagCommand = new RelayCommand(() => AutoTag());
+            ClearInputCommand = new RelayCommand(ClearInput);
         }
 
         public void SaveAndExist()
@@ -160,24 +202,72 @@ namespace AMS.ViewModels
             }
         }
 
+        private void TagSearch()
+        {
+            TagSearchProcess();
+        }
+
         /// <summary>
         /// Attach given tag to the asset
         /// </summary>
         /// <param name="tag"></param>
-        public void AddTag(object tag)
+        public void AutoTag()
         {
-            // Display notification if given tag is not ITagable
-            if (!(tag is ITagable))
+            Console.WriteLine("Tab clicked!");
+            
+            if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
             {
-                Features.AddNotification(new Notification("Invalid Tag", Notification.ERROR));
-                return;
+                ITagable tag = TagSearchSuggestions[0];
+                
+                Console.WriteLine("Found: "+tag.TagLabel);
+            
+                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1)){
+                    _tagHelper.ApplyTag(tag);
+                    AppliedTags = _tagHelper.GetAppliedTags(false);
+                    TagSearchQuery = "";
+                    //TagSearchProcess();
+                }
+                else
+                {
+                    // So we need to switch to a group of tags.
+                    Tag taggedItem = (Tag)tag;
+                    _tagHelper.Parent(taggedItem);
+                    CurrentGroup = taggedItem.Name;
+                    CurrentGroupVisibility = Visibility.Visible;
+                    TagSearchQuery = "";
+                }
             }
             
-            // Attach Tag or display notification on failure
-            if (!_assetController.AttachTag((ITagable)tag))
-                Features.AddNotification(new Notification("Could not add tag", Notification.ERROR));
+            TagSearchProcess();
+        }
+        
+        private void ClearInput()
+        {
+            if (_tagHelper.IsParentSet()){
+                _tagHelper.Parent(null);
+                CurrentGroup = "";
+                CurrentGroupVisibility = Visibility.Collapsed;
+                TagSearchQuery = "";
+                TagSearchProcess();
+            }
         }
 
+        private void TagSearchProcess()
+        {
+            TagSearchSuggestions = new ObservableCollection<ITagable>(_tagHelper.Suggest(_tagSearchQuery));
+
+            if (_tagHelper.HasSuggestions())
+            {
+                TagSuggestionsVisibility = Visibility.Visible;
+                TagSuggestionIsOpen = true;
+            }
+            else
+            {
+                TagSuggestionsVisibility = Visibility.Collapsed;
+                TagSuggestionIsOpen = false;
+            }
+        }
+        
         /// <summary>
         /// Detach tag with given tagID from asset
         /// </summary>

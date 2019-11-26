@@ -113,18 +113,6 @@
                                                    Visibility="Collapsed"
                                                    VerticalAlignment="Center" 
                                                    Text="X"/>
-                                        <!--<Button OverridesDefaultStyle="True" x:Name="PART_DeleteTagButton"
-                                                Grid.Column="1" Margin="0" VerticalAlignment="Center"
-                                                Visibility="Collapsed" 
-                                                CommandParameter="{Binding Path=.}"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveTagCommand}">
-                                            <Button.Template>
-                                                <ControlTemplate>
-                                                    <Grid Background="Transparent" >
-                                                    </Grid>
-                                                </ControlTemplate>
-                                            </Button.Template>
-                                        </Button>-->
                                     </Grid>
                                 </Border>
                                 <ControlTemplate.Triggers>

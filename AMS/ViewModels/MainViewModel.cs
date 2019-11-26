@@ -72,7 +72,7 @@ namespace AMS.ViewModels
         public Page PopupPage { get; set; }
 
         public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
-        public Visibility OnlyVisibleForAdmin { get; set; }
+        public Visibility OnlyVisibleForAdmin { get; private set; } = Visibility.Collapsed;
 
         public List<Department> Departments { get => GetDepartments(); }
         public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
