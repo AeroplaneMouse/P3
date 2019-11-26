@@ -176,13 +176,9 @@ namespace AMS.Database.Repositories
             Type rowLoggedItemType;
             var ordinal = reader.GetOrdinal("logged_item_type");
             if (reader.IsDBNull(ordinal))
-            {
                 rowLoggedItemType = null;
-            }
             else
-            {
                 rowLoggedItemType = Type.GetType(reader.GetString("logged_item_type"));
-            }
 
             string rowEntryType = reader.GetString("entry_type");
             string rowDescription = reader.GetString("description");

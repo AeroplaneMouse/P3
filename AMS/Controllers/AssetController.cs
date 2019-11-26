@@ -8,6 +8,7 @@ using AMS.Interfaces;
 using AMS.Logging;
 using AMS.Logging.Interfaces;
 using AMS.Models;
+using AMS.ViewModels;
 
 namespace AMS.Controllers
 {
@@ -98,6 +99,7 @@ namespace AMS.Controllers
             if (Name != Asset.Name) { Asset.Name = Name; }
             if (Asset.Identifier != Identifier) { Asset.Identifier = Identifier; }
             if (Asset.Description != Description) { Asset.Description = Description; }
+            Asset.DepartmentID = Features.GetCurrentSession().user.DefaultDepartment;
 
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
@@ -105,7 +107,6 @@ namespace AMS.Controllers
             SerializeFields();
             ulong id = 0;
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
-            // Log creation of an asset if repository insert was successful
             bool success = _assetRepository.Insert(Asset, out id);
             return id != 0;
         }
