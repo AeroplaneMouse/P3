@@ -6,11 +6,13 @@ using System.Reflection;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Logging.Interfaces;
 using AMS.ViewModels;
+using AMS.Logging;
 
 namespace AMS.Database.Repositories
 {
     public class DepartmentRepository : IDepartmentRepository
     {
+        //TODO: Ingen new repos
         private Ilogger logger { get; set; } = new Logger(new LogRepository());
 
         public ulong GetCount()
