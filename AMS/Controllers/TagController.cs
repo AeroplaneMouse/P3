@@ -45,7 +45,7 @@ namespace AMS.Controllers
 
 
 
-        public TagController(Tag tag, ITagRepository tagRep) : base(tag)
+        public TagController(Tag tag, ITagRepository tagRep) :  base(tag ?? new Tag())
         {
             Tag = tag;
             _tagRepository = tagRep;
