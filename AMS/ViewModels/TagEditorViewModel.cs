@@ -112,29 +112,31 @@ namespace AMS.ViewModels
             if (i > 0)
                 _selectedParentTagIndex = i - 1;
 
-            // Setting the selected department
-            Department current = Features.Main.CurrentDepartment;
-            if (current.ID == 0)
-                SelectedDepartmentIndex = 0;
-            else
-            {
-                int index = 0;
-                foreach(Department d in _controller.DepartmentList)
-                {
-                    if (d.ID == current.ID)
-                        SelectedDepartmentIndex = index;
-                    index++;
-                }
-            }
-
             OnPropertyChanged(nameof(SelectedParentTagIndex));
+            
+            
+            Department currentDepartment;
+
             if (_controller.IsEditing)
             {
                 PageTitle = "Edit tag";
+
+                // Use the department of the tag
+                currentDepartment = _controller.DepartmentList.Find(d => d.ID == _controller.Tag.DepartmentID);
             }
             else
             {
                 PageTitle = "Add tag";
+                currentDepartment = Features.Main.CurrentDepartment;
+            }
+
+            // Setting the selected department
+            int index = 0;
+            foreach (Department d in _controller.DepartmentList)
+            {
+                if (d.ID == currentDepartment.ID)
+                    SelectedDepartmentIndex = index;
+                index++;
             }
 
 
