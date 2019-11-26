@@ -456,9 +456,8 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0 && querySuccess;
                     }
 
-                    logger.AddEntry(tagLabels + " was attached to the asset with ID: "
-                        + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.",
-                        "Tag attached", Features.GetCurrentSession().user.ID);
+                    logger.AddEntry("Tag attached", tagLabels + " was attached to the asset with ID: "
+                        + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.", Features.GetCurrentSession().user.ID);
 
                 }
                 catch (MySqlException e)
