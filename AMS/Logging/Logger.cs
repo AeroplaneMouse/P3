@@ -118,7 +118,7 @@ namespace AMS.Logging
             PropertyInfo[] properties = entity.GetType().GetProperties();
             foreach (PropertyInfo property in properties)
             {
-                keyValuePairs.Add(property.Name, property.GetValue(entity).ToString());
+                keyValuePairs.Add(property.Name, property.GetValue(entity)?.ToString());
             }
 
             return keyValuePairs;
