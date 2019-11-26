@@ -16,7 +16,7 @@ namespace UnitTests
         private Mock<ILogRepository> _logRepMock;
         private Mock<ILoggableValues> _newItemMock;
         private Mock<ILoggableValues> _prevItemMock;
-        private ILogger _Log;
+        private Ilogger _Log;
         private Dictionary<string, string> _testDict;
         private Dictionary<string, string> _prevValuesTestDict;
 
