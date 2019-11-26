@@ -12,6 +12,7 @@
   <ItemGroup>
     <None Remove="Resources\Images\Logos\View\view_black.png" />
     <None Remove="Resources\Images\Logos\View\view_gray.png" />
+    <None Remove="Resources\Images\Logos\View\view_white.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +47,7 @@
     <Resource Include="Resources\Images\Logos\Edit\edit_black.png" />
     <Resource Include="Resources\Images\Logos\View\view_black.png" />
     <Resource Include="Resources\Images\Logos\View\view_gray.png" />
+    <Resource Include="Resources\Images\Logos\View\view_white.png" />
     <Resource Include="Resources\Styles\Fonts.xaml" />
   </ItemGroup>
 
