@@ -143,14 +143,16 @@
                             <ContentPresenter Content="{TemplateBinding Header}"
                                               Margin="0 3 40 3"
                                               Grid.Column="1"/>
-                                <MenuItem Grid.Column="2" 
-                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.EditDepartmentCommand}" 
-                                        CommandParameter="{TemplateBinding CommandParameter}" 
-                                        Style="{StaticResource DepartmentEdit}"/> 
-                                <MenuItem Grid.Column="4" 
-                                        Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RemoveDepartmentCommand}" 
-                                        CommandParameter="{TemplateBinding CommandParameter}" 
-                                        Style="{StaticResource DepartmentRemove}"/> 
+                            <MenuItem Grid.Column="2" 
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.EditDepartmentCommand}" 
+                                    CommandParameter="{TemplateBinding CommandParameter}" 
+                                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.OnlyVisibleForAdmin}"
+                                    Style="{StaticResource DepartmentEdit}"/> 
+                            <MenuItem Grid.Column="4" 
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RemoveDepartmentCommand}" 
+                                    CommandParameter="{TemplateBinding CommandParameter}"
+                                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.OnlyVisibleForAdmin}"
+                                    Style="{StaticResource DepartmentRemove}"/> 
                         </Grid>
                     </Border>
                 </ControlTemplate>
@@ -196,8 +198,10 @@
                                         <ItemsPresenter x:Name="DepartmentsPresenter_Popup"/>
 
                                         <Rectangle Style="{StaticResource HorizontalSeparator}" Fill="White"
-                                                   x:Name="Separator2_Popup"/>
+                                                   x:Name="Separator2_Popup"
+                                                   Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.OnlyVisibleForAdmin}"/>
                                         <MenuItem Header="Add new"
+                                                  Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.OnlyVisibleForAdmin}"
                                                   x:Name="AddDepartment_Popup"
                                                   Style="{StaticResource Department}"
                                                   Command="{Binding AddDepartmentCommand}"/>
