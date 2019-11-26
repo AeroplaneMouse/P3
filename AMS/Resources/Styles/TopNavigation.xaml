@@ -20,7 +20,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type MenuItem}">
                     <Border Background="{TemplateBinding Background}"
-                            Padding="15, 2, 15, 2">
+                            Padding="15, 4, 15, 6">
                         <Grid>
                             <ContentPresenter
                                 Margin="6,4,6,4"
@@ -183,7 +183,7 @@
                                    HorizontalOffset="-15"
                                    AllowsTransparency="True"
                                    IsOpen="{TemplateBinding IsSubmenuOpen}">
-                                <Border Background="{StaticResource NavigationBackgroundBrush}"
+                                <Border Background="{StaticResource NavigationSelectedBrush}"
                                         x:Name="Border_Popup">
                                     <StackPanel x:Name="StackPanel_Popup">
                                         <MenuItem Header="All departments"
@@ -238,10 +238,10 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
             </Trigger>
             <Trigger Property="IsSubmenuOpen" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
