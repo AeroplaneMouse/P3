@@ -16,6 +16,8 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
+        <!-- Title -->
         <TextBlock Style="{StaticResource TitleStyle}"
                    VerticalAlignment="Center"
                    Margin="10 0 0 0"
@@ -43,57 +45,142 @@
                    VerticalAlignment="Bottom" />
 
         <!-- Page content -->
-        <ScrollViewer Grid.Row="1"
-                      Margin="10">
+        <ScrollViewer Grid.Row="1" Margin="10"
+                      VerticalScrollBarVisibility="Auto">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Details -->
                 <StackPanel Grid.Column="0">
-                    <TextBlock Style="{StaticResource HeaderStyle}"
-                               Margin="0 0 0 10"
+                    <TextBlock Style="{StaticResource HeaderStyleWithSpace}"
                                Text="Details" />
                     <!-- Name -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Name" />
-                    <TextBox Style="{StaticResource ParagraphTextBox}"
-                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0 0 0 10" />
+                    <TextBox Style="{StaticResource ParagraphTextBoxWithSpace}"
+                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <!-- Identifier -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Identifier" />
-                    <TextBox Style="{StaticResource ParagraphTextBox}"
-                             Text="{Binding Identifier, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0 0 0 10" />
+                    <TextBox Style="{StaticResource ParagraphTextBoxWithSpace}"
+                             Text="{Binding Identifier, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <!-- Description-->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Description" />
-                    <TextBox Style="{StaticResource ParagraphTextBox}"
+                    <TextBox Style="{StaticResource ParagraphTextBoxWithSpace}"
                              Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                              TextWrapping="Wrap"
                              AcceptsReturn="True"
                              AcceptsTab="True"
-                             MinHeight="80"
-                             Margin="0 0 0 10" />
+                             MinHeight="80" />
                 </StackPanel>
                 
                 <Rectangle Style="{StaticResource VerticalSeparator}"
                            Margin="10 0 10 0"
                            Grid.Column="1" />
-
+                
+                <!-- Tags -->
                 <StackPanel Grid.Column="2">
-                    <!-- Tags -->
-                    <TextBlock Style="{StaticResource HeaderStyle}"
-                               Margin="0 0 0 10"
+                    <!-- Title -->
+                    <TextBlock Style="{StaticResource HeaderStyleWithSpace}"
                                Text="Tags" />
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- Current parent tag -->
+                        <Border x:Name="CurrentTagGroup" 
+                                Background="LightGray"
+                                BorderThickness="0"
+                                Visibility="{Binding CurrentGroupVisibility}"
+                                Grid.Column="0">
+
+                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                       Text="{Binding CurrentGroup}"
+                                       VerticalAlignment="Center"/>
+
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsVisible" Value="True">
+                                            <Setter Property="Padding" Value="5 0 5 0"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+
+                        <!-- Search container -->
+                        <StackPanel Grid.Column="1">
+                            <!-- Search bar -->
+                            <TextBox FontSize="{StaticResource FontSizeSmall}"
+                                     Text="{Binding TagSearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                     VerticalContentAlignment="Center"
+                                     Height="30"
+                                     x:Name="SearchElement"
+                                     TabIndex="0">
+
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                                    <KeyBinding Key="Escape" Command="{Binding ClearInputCommand}"/>
+                                    <KeyBinding Key="Tab" Command="{Binding AutoTagCommand}"/>
+                                    <KeyBinding Key="Down" Command="{Binding EnterSuggestionListCommand}" CommandParameter="{Binding ElementName=TagSuggestionList}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
+
+                            <!-- Suggestion dropdown -->
+                            <Popup x:Name="TagSuggestionPopup"    
+                                   Visibility="{Binding TagSuggestionsVisibility}"                    
+                                   IsOpen="{Binding TagSuggestionIsOpen}"
+                                   StaysOpen="False"
+                                   MaxHeight="100"
+                                   Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
+                                   Placement="Bottom">
+
+                                <ListBox x:Name="TagSuggestionList"    
+                                         Visibility="{Binding TagSuggestionsVisibility}"    
+                                         Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
+                                         ItemsSource="{ Binding TagSearchSuggestions }">
+                                    <ListBox.InputBindings>
+                                        <KeyBinding Key="Return" Command="{Binding AutoTagCommand}" CommandParameter="{Binding ElementName=TagSuggestionList, Path=SelectedItem}"/>
+                                    </ListBox.InputBindings>
+                                </ListBox>
+                            </Popup>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Current tags -->
+                    <ListView ItemsSource="{Binding AppliedTags, UpdateSourceTrigger=PropertyChanged}"
+                              ItemContainerStyle="{StaticResource ListViewWithTags}"
+                              Style="{StaticResource HideIfEmpty}"
+                              Grid.Row="1" Margin="0 5 0 -4">
+                        <ListView.Template>
+                            <ControlTemplate>
+                                <WrapPanel IsItemsHost="True"/>
+                            </ControlTemplate>
+                        </ListView.Template>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Left">
+                                    <Label Foreground="{Binding FontColor}" Content="{Binding TagLabel}" Style="{StaticResource TagAddedToSearch}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ListView>
+                    
+                    
+                    <!--
                     <TextBox Style="{StaticResource ParagraphTextBox}"
                              x:Name="InputBox"
                              Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}">
@@ -133,6 +220,7 @@
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
+                    -->
                 </StackPanel>
                 
                 <Rectangle Style="{StaticResource VerticalSeparator}"
@@ -140,7 +228,9 @@
                            Grid.Column="3" />
 
                 <!-- Fields -->
-                <StackPanel Grid.Column="4">
+                <StackPanel Grid.Column="4"
+                            Margin="0 0 10 0">
+                    <!-- Title -->
                     <StackPanel Orientation="Horizontal"
                                 Margin="0 0 0 10">
                         <TextBlock Style="{StaticResource HeaderStyle}"
@@ -159,17 +249,13 @@
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding NonHiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
                                       ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
                         </ItemsControl>
                     </StackPanel>
 
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Hidden fields"
-                               Margin="10 20 10 0" />
+                               Margin="0 20 10 0" />
+                    
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding HiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
                             ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">

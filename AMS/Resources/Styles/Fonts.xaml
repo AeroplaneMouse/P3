@@ -31,6 +31,9 @@
     <Style TargetType="TextBlock" x:Key="HeaderStyle" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
     </Style>
+    <Style TargetType="TextBlock" x:Key="HeaderStyleWithSpace" BasedOn="{StaticResource HeaderStyle}">
+        <Setter Property="Margin" Value="0 0 0 10"/>
+    </Style>
 
     <Style TargetType="TextBlock" x:Key="SmallHeaderStyle" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
@@ -54,6 +57,9 @@
 
     <Style TargetType="TextBox" x:Key="ParagraphTextBox" BasedOn="{StaticResource BaseTextBoxStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+    </Style>
+    <Style TargetType="TextBox" x:Key="ParagraphTextBoxWithSpace" BasedOn="{StaticResource ParagraphTextBox}">
+        <Setter Property="Margin" Value="0 0 0 10"/>
     </Style>
     
 </ResourceDictionary>

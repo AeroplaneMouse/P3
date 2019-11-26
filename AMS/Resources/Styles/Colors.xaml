@@ -46,5 +46,8 @@
     
     <Color x:Key="AlternatingColorDark">#e6e6e6</Color>
     <SolidColorBrush x:Key="AlternatingColorDarkBrush" Color="{StaticResource AlternatingColorDark}"/>
-    
+
+    <Color x:Key="ListItemHighlightColor">#3578e3</Color>
+    <SolidColorBrush x:Key="ListItemHighlightColorBrush" Color="{StaticResource ListItemHighlightColor}"/>
+
 </ResourceDictionary>
