@@ -33,7 +33,7 @@ namespace UnitTests
         public void Search_CallsRepositorySearch_ReturnsTrue()
         {
             //Arrange
-            _logRepMock.Setup(p => p.Search(It.IsAny<string>(), null, null, false)).Returns(new ObservableCollection<Entry>());
+            _logRepMock.Setup(p => p.Search(It.IsAny<string>(), null, null, false)).Returns(new ObservableCollection<LogEntry>());
 
             //Act
             _logListController.Search("");
@@ -46,13 +46,13 @@ namespace UnitTests
         public void Export_CallsExporterPrintMethod_ReturnsTrue()
         {
             //Arrange
-            _exporterMock.Setup(p => p.Print(It.IsAny<List<Entry>>()));
+            _exporterMock.Setup(p => p.Print(It.IsAny<List<LogEntry>>()));
 
             //Act
-            _logListController.Export(new List<Entry>());
+            _logListController.Export(new List<LogEntry>());
 
             //Assert
-            _exporterMock.Verify((p => p.Print(It.IsAny<List<Entry>>())), Times.Once);
+            _exporterMock.Verify((p => p.Print(It.IsAny<List<LogEntry>>())), Times.Once);
         }
         
     }

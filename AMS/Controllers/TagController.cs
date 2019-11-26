@@ -14,6 +14,11 @@ namespace AMS.Controllers
         public bool IsEditing { get; set; }
         public ulong TagID;
 
+        public string Name { get; set; }
+        public string Color { get; set; }
+        public ulong ParentID { get; set; }
+        public ulong DepartmentID { get; set; }
+
         #region Private Properties
 
         private ITagRepository _tagRepository { get; set; }
@@ -43,14 +48,18 @@ namespace AMS.Controllers
             }
         }
 
-
-
         public TagController(Tag tag, ITagRepository tagRep) : base(tag)
         {
             Tag = tag;
             _tagRepository = tagRep;
-            
-            NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
+
+
+            Name = tag.Name;
+            Color = tag.TagColor;
+            ParentID = tag.ParentID;
+            DepartmentID = tag.ParentID;
+
+        NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
 
             if (Tag != null)

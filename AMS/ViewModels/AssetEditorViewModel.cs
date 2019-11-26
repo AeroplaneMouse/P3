@@ -39,20 +39,20 @@ namespace AMS.ViewModels
 
         public string Name
         {
-            get => _assetController.Asset.Name;
-            set => _assetController.Asset.Name = value;
+            get => _assetController.Name;
+            set => _assetController.Name = value;
         }
 
         public string Identifier
         {
-            get => _assetController.Asset.Identifier;
-            set => _assetController.Asset.Identifier = value;
+            get => _assetController.Identifier;
+            set => _assetController.Identifier = value;
         }
 
         public string Description
         {
-            get => _assetController.Asset.Identifier;
-            set => _assetController.Asset.Description = value;
+            get => _assetController.Description;
+            set => _assetController.Description = value;
         }
 
         public string Title { get; set; }

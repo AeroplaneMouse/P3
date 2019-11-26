@@ -15,14 +15,14 @@ namespace AMS.Controllers
     {
         public Asset Asset { get; set; }
         public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
-        private ILogger logger;
+        
+        public string Name { get; set; }
+        public string Identifier { get; set; }
+        public string Description { get; set; }
+
         private IAssetRepository _assetRepository;
 
-        public string name;
-        public string identifier;
-        public string description;
-
-        public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset)
+        public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset ?? new Asset())
         {
             if(asset == null)
             {
@@ -32,6 +32,10 @@ namespace AMS.Controllers
             {
                 Asset = asset;
             }
+            
+            Name = asset.Name;
+            Identifier = asset.Identifier;
+            Description = asset.Description;
             NonHiddenFieldList = Asset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = Asset.FieldList.Where(f => f.IsHidden == true).ToList();
             _assetRepository = assetRepository;
@@ -91,6 +95,10 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Save()
         {
+            if (Name != Asset.Name) { Asset.Name = Name; }
+            if (Asset.Identifier != Identifier) { Asset.Identifier = Identifier; }
+            if (Asset.Description != Description) { Asset.Description = Description; }
+
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
             Asset.FieldList = fieldList;
@@ -108,6 +116,10 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Update()
         {
+            if (Asset.Name != Name) { Asset.Name = Name; }
+            if (Asset.Identifier != Identifier) { Asset.Identifier = Identifier; }
+            if (Asset.Description != Description) { Asset.Description = Description; }
+
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
             Asset.FieldList = fieldList;

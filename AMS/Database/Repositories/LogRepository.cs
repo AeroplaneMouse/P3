@@ -20,13 +20,13 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "INSERT INTO log (user_id, entry_type, description, changes) " +
-                                         "VALUES (@user_id, @entry_type, @description, @changes)";
+                    const string query = "INSERT INTO log (user_id, entry_type, description, logged_item_id, logged_item_type, changes) " +
+                                         "VALUES (@user_id, @entry_type, @description, @logged_item_id, @logged_item_type, @changes)";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
-                        cmd.Parameters.Add("@userId", MySqlDbType.String);
-                        cmd.Parameters["@userId"].Value = entity.UserId;
+                        cmd.Parameters.Add("@user_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@user_id"].Value = entity.UserId;
 
                         cmd.Parameters.Add("@entry_type", MySqlDbType.String);
                         cmd.Parameters["@entry_type"].Value = entity.EntryType;
@@ -36,6 +36,12 @@ namespace AMS.Database.Repositories
 
                         cmd.Parameters.Add("@changes", MySqlDbType.JSON);
                         cmd.Parameters["@changes"].Value = entity.Changes;
+
+                        cmd.Parameters.Add("@logged_item_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@logged_item_id"].Value = entity.LoggedItemId;
+
+                        cmd.Parameters.Add("@logged_item_type", MySqlDbType.String);
+                        cmd.Parameters["@logged_item_type"].Value = entity.LoggedItemType.ToString();
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
@@ -58,7 +64,7 @@ namespace AMS.Database.Repositories
             return GetLogEntries(logableId, logableType, null);
         }
 
-        public IEnumerable<LogEntry> GetLogEntries(ulong logableId, Type logableType, string username)
+        public IEnumerable<LogEntry> GetLogEntries(ulong loggedItemId, Type loggedItemType, string userId)
         {
             var con = new MySqlHandler().GetConnection();
             List<LogEntry> entries = new List<LogEntry>();
@@ -68,22 +74,23 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    string query = "SELECT id, logable_id, logable_type, username, description, options, created_at " +
-                                   "FROM log WHERE logable_id=@logable_id AND logable_type=@logable_type" +
-                                   (username != null ? " AND username=@username" : "");
+                    string query = "SELECT l.id, u.username, u.domain, l.entry_type, l.description, l.changes, l.created_at " +
+                                   "FROM log AS l INNER JOIN users AS u ON(l.user_id = u.id) " +
+                                   "WHERE logged_item_id=@logged_item_id AND logged_item_type=@logged_item_type" +
+                                   (userId != null ? " AND user_id=@user_id" : "");
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
-                        cmd.Parameters.Add("@logable_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@logable_id"].Value = logableId;
+                        cmd.Parameters.Add("@logged_item_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@logged_item_id"].Value = loggedItemId;
 
                         cmd.Parameters.Add("@logable_type", MySqlDbType.String);
-                        cmd.Parameters["@logable_type"].Value = logableType.ToString();
+                        cmd.Parameters["@logable_type"].Value = loggedItemType.ToString();
 
-                        if (username != null)
+                        if (userId != null)
                         {
                             cmd.Parameters.Add("@username", MySqlDbType.String);
-                            cmd.Parameters["@username"].Value = username;
+                            cmd.Parameters["@username"].Value = userId;
                         }
 
                         using (var reader = cmd.ExecuteReader())
@@ -120,8 +127,8 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    string query = "SELECT id, logable_id, logable_type, username, description, options, created_at " +
-                                   "FROM log WHERE username LIKE @keyword OR description LIKE @keyword " +
+                    string query = "SELECT id, user_id, entry_type, description, changes, logged_item_id, logged_item_type, created_at " +
+                                   "FROM log WHERE user_id LIKE @keyword OR description LIKE @keyword " +
                                    "ORDER BY id desc LIMIT " + limit;
 
                     if (!keyword.Contains("%"))
@@ -163,16 +170,18 @@ namespace AMS.Database.Repositories
         public LogEntry DBOToModelConvert(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
-            ulong rowLogableId = reader.GetUInt64("logable_id");
-            Type rowLogableType = Type.GetType(reader.GetString("logable_type"));
-            string rowUsername = reader.GetString("username");
+            ulong rowLoggedItemId = reader.GetUInt64("logged_item_id");
+            Type rowLoggedItemType = Type.GetType(reader.GetString("logged_item_type"));
+            string rowEntryType = reader.GetString("entry_type");
             string rowDescription = reader.GetString("description");
-            string rowOptions = reader.GetString("options");
+            string rowChanges = reader.GetString("changes");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
+            string rowUserDoamin = reader.GetString("domain");
+            string rowUserName = reader.GetString("username");
 
             return (LogEntry) Activator.CreateInstance(typeof(LogEntry), 
                 BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { rowId, rowLogableId, rowLogableType, rowDescription, rowUsername, rowOptions, rowCreatedAt }, 
+                new object[] { rowId, rowEntryType, rowDescription, rowLoggedItemId, rowLoggedItemType, rowChanges, rowCreatedAt, rowUserDoamin, rowUserName },
                 null, null);
         }
     }
