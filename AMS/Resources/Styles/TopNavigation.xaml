@@ -34,7 +34,7 @@
                                 AllowsTransparency="True"
                                 PopupAnimation="Fade">
                                 <Border Name="PopupContainer"
-                                        Background="{StaticResource NavigationBackgroundBrush}">
+                                        Background="{StaticResource NavigationSelectedBrush}">
                                     <ItemsPresenter/>
                                 </Border>
                             </Popup>
@@ -46,10 +46,10 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
             </Trigger>
             <Trigger Property="IsSubmenuOpen" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationBackgroundBrush}"/>
+                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>

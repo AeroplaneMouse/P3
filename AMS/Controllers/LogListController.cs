@@ -4,6 +4,7 @@ using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Logging;
+using AMS.Models;
 
 namespace AMS.Controllers
 {
@@ -14,11 +15,15 @@ namespace AMS.Controllers
 
         public ObservableCollection<LogEntry> EntryList { get; set; }
 
-        public LogListController(ILogRepository logRepository, IExporter exporter)
+        public LogListController(ILogRepository logRepository, IExporter exporter, Asset asset = null)
         {
             _logRepository = logRepository;
             _exporter = exporter;
-            Search("");
+            if (asset == null)
+                Search("");
+            else
+                //TODO Lav search for asset logs
+                Search("");
         }
         
         /// <summary>
