@@ -20,12 +20,12 @@ namespace AMS.Helpers
         private List<ITagable> SuggestedTags;
         private ObservableCollection<ITagable> AppliedTags { get; set; }
 
-        public TagHelper(ITagRepository tagRepository, IUserRepository userRepository, ObservableCollection<ITagable> tags=null)
+        public TagHelper(ITagRepository tagRepository, IUserRepository userRepository)
         {
             _tagRepository = tagRepository;
             _userRepository = userRepository;
 
-            AppliedTags = tags ?? new ObservableCollection<ITagable>();
+            AppliedTags = new ObservableCollection<ITagable>();
             SuggestedTags = new List<ITagable>();
 
             Reload();
@@ -241,6 +241,11 @@ namespace AMS.Helpers
                 return ContainsAllChildrenOfParent(_parent);
 
             return true;
+        }
+
+        public void SetCurrentTags(ObservableCollection<ITagable> tags)
+        {
+            AppliedTags = tags;
         }
 
         public Tag GetParent() => _parent;

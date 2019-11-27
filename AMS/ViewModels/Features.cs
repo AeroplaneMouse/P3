@@ -36,9 +36,9 @@ namespace AMS.ViewModels
 
         private static IUserImporter _userImporter = new UserImporter(_userRepository);
 
-        private static TagHelper CreateTagHelper(ObservableCollection<ITagable> tags = null)
+        private static TagHelper CreateTagHelper()
         {
-            return new TagHelper(_tagRepository, _userRepository, tags ?? new ObservableCollection<ITagable>());
+            return new TagHelper(_tagRepository, _userRepository);
         }
 
         #endregion
@@ -66,14 +66,21 @@ namespace AMS.ViewModels
         {
             public static bool To(Page page)
             {
-                return Main.ContentFrame.Navigate(page);
+                if (Main.ContentFrame.Navigate(page))
+                {
+                    Main.History.Push(page);
+                    return true;
+                }
+                else
+                    return false;
             }
 
             public static bool Back()
             {
-                if (Main.ContentFrame.CanGoBack)
+                if (Main.History.Count > 0)
                 {
-                    Main.ContentFrame.GoBack();
+                    Main.History.Pop();
+                    Main.ContentFrame.Navigate(Main.History.Pop());
                     return true;
                 }
                 else
@@ -94,7 +101,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetPresenter(Asset asset, List<ITagable> tagables)
             {
-                return new AssetPresenter(asset, tagables, new CommentListController(GetCurrentSession(), _commentRepository, asset), new LogListController(_logRepository, _printHelper));
+                return new AssetPresenter(tagables, new AssetController(asset, _assetRepository), new CommentListController(GetCurrentSession(), _commentRepository, asset), new LogListController(_logRepository, _printHelper));
             }
 
             /// <summary>
@@ -155,7 +162,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page TagEditor(Tag tag)
             {
-                return new TagEditor(new TagController(tag, _tagRepository));
+                return new TagEditor(new TagController(tag, _tagRepository, _departmentRepository));
             }
 
             /// <summary>

@@ -22,25 +22,37 @@
         </Grid.RowDefinitions>
         <TextBlock Style="{StaticResource TitleStyle}"
                    VerticalAlignment="Center"
-                   Margin="10 0 0 0"
+                   Margin="10 11 0 11"
                    Text="{Binding Name}" />
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="10">
 
-            <!--Edit Button-->
+            <!-- Edit button -->
             <Button Style="{StaticResource RegularButton}"
                     Command="{Binding EditCommand}"
                     Content="Edit" />
-            <!--Cancel Button-->
+            
+            <!-- Remove button -->
+            <Button Style="{StaticResource RegularCancelButton}"
+                    Command="{Binding RemoveCommand}"
+                    Margin="10 0 0 0"
+                    Content="Remove"/>
+
+            <!-- Cancel button -->
             <Button Style="{StaticResource RegularCancelButton}"
                     Command="{Binding CancelCommand}"
                     Margin="10 0 0 0"
                     Content="Cancel" />
         </StackPanel>
 
-        <TabControl Grid.Row="1">
+        <Rectangle Style="{StaticResource HorizontalSeparator}"
+                   Margin="10 0 10 0"
+                   VerticalAlignment="Bottom"/>
+
+        <TabControl Grid.Row="1"
+                    Margin="10">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Template">

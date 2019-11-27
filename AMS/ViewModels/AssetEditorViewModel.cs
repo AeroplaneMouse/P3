@@ -91,9 +91,10 @@ namespace AMS.ViewModels
         {
             _assetController = assetController;
             _tagListController = tagListController;
-            
+
             _tagHelper = tagHelper;
             _tagHelper.CanApplyParentTags = false;
+            _tagHelper.SetCurrentTags(CurrentlyAddedTags);
 
             AppliedTags = new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags);
 

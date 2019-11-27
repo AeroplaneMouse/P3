@@ -47,6 +47,8 @@ namespace AMS.ViewModels
 
         #endregion
 
+        public Stack<Page> History = new Stack<Page>();
+
         public string CurrentUser { get; set; }
         public Session CurrentSession { get; private set; }
         public Department CurrentDepartment

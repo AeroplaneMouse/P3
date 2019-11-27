@@ -26,9 +26,9 @@
 
         <Grid Grid.Row="0">
             <TextBlock Style="{StaticResource TitleStyle}"
-                   VerticalAlignment="Center"
-                   Margin="10 0 0 0"
-                   Text="{Binding Title}" />
+                       VerticalAlignment="Center"
+                       Margin="10, 11, 0, 11"
+                       Text="{Binding Title}"/>
 
             <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
@@ -134,6 +134,7 @@
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Username}"
                                                    Style="{StaticResource ParagraphStyle}"
+                                                   Padding="0"
                                                    Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -146,6 +147,7 @@
                                         <TextBox Text="{Binding Path=Domain, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                  BorderBrush="Transparent"
                                                  Background="Transparent"
+                                                 Padding="0"
                                                  Style="{StaticResource ParagraphTextBox}"
                                                  Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"
                                                  MinWidth="150"/>
@@ -160,6 +162,7 @@
                                         <TextBox Text="{Binding Path=Description, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                                  BorderBrush="Transparent"
                                                  Background="Transparent"
+                                                 Padding="0"
                                                  MinWidth="200"
                                                  Height="Auto" 
                                                  Style="{StaticResource ParagraphTextBox}"
@@ -175,7 +178,8 @@
                                     <DataTemplate>
                                         <ComboBox ItemsSource="{Binding DataContext.DepartmentList, UpdateSourceTrigger=PropertyChanged, ElementName=UserListView}"
                                                   SelectedIndex="{Binding Path=DepartmentIndex}"
-                                                  MinWidth="150"
+                                                  MinWidth="160"
+                                                  Height="25"
                                                   Template="{StaticResource UserListDepartmentComboBoxTemplate}"
                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}">
                                             <ComboBox.ItemTemplate>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using AMS.Models;
 using System.Reflection;
 using AMS.Database.Repositories.Interfaces;
+using AMS.Logging;
 using AMS.Logging.Interfaces;
 using AMS.ViewModels;
 using AMS.Logging;
