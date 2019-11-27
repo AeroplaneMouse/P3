@@ -18,12 +18,10 @@ namespace AMS.ViewModels
         private readonly ITagListController _tagListController;
         
         public Tag SelectedItem { get; set; }
-        
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand AddNewCommand { get; set; }
-
-
+        
         public TagListViewModel(ITagListController controller)
         {
             _tagListController = controller;
@@ -32,14 +30,13 @@ namespace AMS.ViewModels
             RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Deleting selected tag. This action cannot be undone. Proceed?", RemoveTag)));
             EditCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(SelectedItem)));
             AddNewCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(null)));
-
-
+            
             foreach (var tag in Tags)
             {
                 if (tag.NumOfChildren <= 0) continue;
-                List<Tag> offspring = _tagListController.GetChildTags(tag.ID);
+                List<Tag> children = _tagListController.GetChildTags(tag.ID);
                 tag.Children = new List<ITagable>();
-                tag.Children.AddRange(offspring);
+                tag.Children.AddRange(children);
             }
         }
 

@@ -440,9 +440,12 @@ namespace AMS.Database.Repositories
                 // Sending sql query
                 try
                 {
-                    const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, t.options, " +
+                    string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, t.options, " +
                                      "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
                                      "FROM tags AS t";
+                    
+                    if (Features.Main.CurrentDepartment.ID > 0)
+                        query += $" WHERE t.department_id={ Features.Main.CurrentDepartment.ID.ToString() } OR t.department_id IS NULL";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
