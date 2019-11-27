@@ -16,7 +16,7 @@ namespace AMS.Controllers
 
         protected FieldListController(FieldContainer element)
         {
-            if(element == null)
+            if (element == null)
             {
                 throw new NullReferenceException();
             }
@@ -78,6 +78,10 @@ namespace AMS.Controllers
         public bool RemoveField(Field field, FieldContainer fieldContainer = null)
         {
             if (field == null) return false;
+            Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(field)) ??
+                                NonHiddenFieldList.FirstOrDefault(p => p.Equals(field));
+            if (fieldInList == null) return true;
+                
 
             if (field.IsCustom)
             {
@@ -87,19 +91,21 @@ namespace AMS.Controllers
 
             if (field.IsHidden)
             {
-                field.IsHidden = false;
-                NonHiddenFieldList.Add(field);
+                if (!(_fieldContainer is Tag) && field.TagIDs.Count > 0)
+                {
+                    field.IsHidden = false;
+                    NonHiddenFieldList.Add(field);
+                }
+
                 HiddenFieldList.Remove(field);
                 return true;
             }
 
-            field.IsHidden = true;
-
             if (!(_fieldContainer is Tag) && field.TagIDs.Count > 0)
             {
+                field.IsHidden = true;
                 HiddenFieldList.Add(field);
             }
-
 
             return NonHiddenFieldList.Remove(field);
         }

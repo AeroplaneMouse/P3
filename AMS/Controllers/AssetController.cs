@@ -16,7 +16,7 @@ namespace AMS.Controllers
     {
         public Asset Asset { get; set; }
         public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
-        
+
         public string Name { get; set; }
         public string Identifier { get; set; }
         public string Description { get; set; }
@@ -25,7 +25,7 @@ namespace AMS.Controllers
 
         public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset ?? new Asset())
         {
-            if(asset == null)
+            if (asset == null)
             {
                 Asset = new Asset();
             }
@@ -33,7 +33,7 @@ namespace AMS.Controllers
             {
                 Asset = asset;
             }
-            
+
             Name = Asset.Name;
             Identifier = Asset.Identifier;
             Description = Asset.Description;
@@ -55,9 +55,10 @@ namespace AMS.Controllers
             {
                 foreach (var tagField in currentTag.FieldList)
                 {
-                    AddField(tagField,currentTag);
+                    AddField(tagField, currentTag);
                 }
             }
+
             return CurrentlyAddedTags.Contains(tag);
         }
 
@@ -68,23 +69,31 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool DetachTag(ITagable tag)
         {
-            if(tag == null)
+            if (tag == null)
             {
                 return false;
             }
+
             if (CurrentlyAddedTags.Contains(tag))
             {
+                List<Field> removeFields = new List<Field>();
                 CurrentlyAddedTags.Remove(tag);
                 if (tag is Tag currentTag)
                 {
                     foreach (var field in currentTag.FieldList)
                     {
-                        if(field.TagIDs.Count == 1 && field.TagIDs.Contains(currentTag.ID))
-                        {
-                            RemoveField(field);
-                        }
+                        removeFields.Add(field);
+                    }
+                    
+                    foreach (var field in removeFields)
+                    {
+                        RemoveFieldRelations(currentTag.ID);
+                        RemoveFieldRelations(currentTag.ParentID);
+                        RemoveField(field);
                     }
                 }
+
+
             }
 
             return !CurrentlyAddedTags.Contains(tag);
@@ -96,9 +105,21 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Save()
         {
-            if (Name != Asset.Name) { Asset.Name = Name; }
-            if (Asset.Identifier != Identifier) { Asset.Identifier = Identifier; }
-            if (Asset.Description != Description) { Asset.Description = Description; }
+            if (Name != Asset.Name)
+            {
+                Asset.Name = Name;
+            }
+
+            if (Asset.Identifier != Identifier)
+            {
+                Asset.Identifier = Identifier;
+            }
+
+            if (Asset.Description != Description)
+            {
+                Asset.Description = Description;
+            }
+
             Asset.DepartmentID = Features.GetCurrentSession().user.DefaultDepartment;
 
             List<Field> fieldList = NonHiddenFieldList;
@@ -117,9 +138,20 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Update()
         {
-            if (Asset.Name != Name) { Asset.Name = Name; }
-            if (Asset.Identifier != Identifier) { Asset.Identifier = Identifier; }
-            if (Asset.Description != Description) { Asset.Description = Description; }
+            if (Asset.Name != Name)
+            {
+                Asset.Name = Name;
+            }
+
+            if (Asset.Identifier != Identifier)
+            {
+                Asset.Identifier = Identifier;
+            }
+
+            if (Asset.Description != Description)
+            {
+                Asset.Description = Description;
+            }
 
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);

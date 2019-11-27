@@ -7,6 +7,17 @@ namespace AMS.Models
     {
         public List<Field> FieldList = new List<Field>();
 
-        public string SerializedFields;
+        private string _serializedFields;
+
+        public string SerializedFields{
+            get => this._serializedFields;
+            set {
+                if (this.SerializedFields != null)
+                {
+                    this.Changes["SerializedFields"] = this.SerializedFields;
+                }
+                this._serializedFields = value;
+            }
+        }
     }
 }

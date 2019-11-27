@@ -33,7 +33,6 @@ namespace AMS.ViewModels
         public ICommand CancelCommand { get; set; }
         public ICommand RemoveTagCommand { get; set; }
         public ICommand AddTagCommand { get; set; }
-        
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
         
@@ -94,10 +93,9 @@ namespace AMS.ViewModels
 
             _tagHelper = tagHelper;
             _tagHelper.CanApplyParentTags = false;
-            _tagHelper.SetCurrentTags(CurrentlyAddedTags);
-
-            AppliedTags = new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags);
-
+            _tagHelper.SetCurrentTags(new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags));
+            AppliedTags = _tagHelper.GetAppliedTags(false);
+            
             _isEditing = (_assetController.Asset.ID != 0);
             if (_isEditing)
                 Title = "Edit asset";
@@ -121,20 +119,20 @@ namespace AMS.ViewModels
                 _tagHelper.RemoveTag(tag);
                 _assetController.DetachTag(tag);
                 AppliedTags = _tagHelper.GetAppliedTags(false);
+                UpdateAll();
             });
 
             AutoTagCommand = new RelayCommand(() => AutoTag());
             ClearInputCommand = new RelayCommand(ClearInput);
+            UpdateAll();
         }
 
         public void SaveAndExist()
         {
             SaveAsset(false);
 
-            if (Features.Navigate.Back() == false)
-            {
-                Features.Navigate.To(Features.Create.AssetList());
-            }
+            Features.Navigate.Back();
+
         }
 
         public void SaveAsset(bool multiAdd = true)
@@ -169,8 +167,7 @@ namespace AMS.ViewModels
             if(e is FieldInputPromptEventArgs args)
             {
                 _assetController.AddField(args.Field);
-                OnPropertyChanged(nameof(NonHiddenFieldList));
-                OnPropertyChanged(nameof(HiddenFieldList));
+                UpdateAll();
             }
         }
         
@@ -179,8 +176,8 @@ namespace AMS.ViewModels
             if (sender is Field field)
             {
                 _assetController.RemoveField(field);
-                OnPropertyChanged(nameof(NonHiddenFieldList));
-                OnPropertyChanged(nameof(HiddenFieldList));
+                UpdateAll();
+                
             }
         }
 
@@ -216,6 +213,7 @@ namespace AMS.ViewModels
                     _assetController.AttachTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(false);
                     TagSearchQuery = "";
+                    UpdateAll();
                     //TagSearchProcess();
                 }
                 else
@@ -277,7 +275,14 @@ namespace AMS.ViewModels
             // Display notification if tag was not removed
             if(!_assetController.DetachTag(tag))
                 Features.AddNotification(new Notification("Could not remove tag", Notification.ERROR));
+            UpdateAll();
+        }
+
+        private void UpdateAll()
+        {
             OnPropertyChanged(nameof(AppliedTags));
+            OnPropertyChanged(nameof(NonHiddenFieldList));
+            OnPropertyChanged(nameof(HiddenFieldList));
         }
     }
 }

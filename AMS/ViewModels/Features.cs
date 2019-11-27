@@ -77,7 +77,7 @@ namespace AMS.ViewModels
 
             public static bool Back()
             {
-                if (Main.History.Count > 0)
+                if (Main.History.Count > 1)
                 {
                     Main.History.Pop();
                     Main.ContentFrame.Navigate(Main.History.Pop());
