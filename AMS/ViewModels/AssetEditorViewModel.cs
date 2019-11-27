@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -66,7 +67,7 @@ namespace AMS.ViewModels
         }
 
         public string Title { get; set; }
-        
+
         public string TagSearchQuery
         {
             get => _tagSearchQuery;
@@ -100,8 +101,8 @@ namespace AMS.ViewModels
             AppliedTags = _tagHelper.GetAppliedTags(false);
 
             _isEditing = (_assetController.Asset.ID != 0);
-            
-            
+
+
             Title = _isEditing ? "Edit asset" : "Add asset";
 
             // Commands
@@ -128,6 +129,8 @@ namespace AMS.ViewModels
 
         public void SaveAndExit()
         {
+            if (!VerifyFields()) return;
+            
             SaveAsset(false);
 
             Features.Navigate.Back();
@@ -135,6 +138,7 @@ namespace AMS.ViewModels
 
         public void SaveAsset(bool multiAdd = true)
         {
+
             if (_isEditing)
             {
                 if (!multiAdd)
@@ -287,6 +291,7 @@ namespace AMS.ViewModels
 
         private void UpdateTagRelations(ObservableCollection<ITagable> tagsList)
         {
+            // Runs through the list of tagID's, and adds the tag with the same tagID to the TagList on the field.
             foreach (var field in HiddenFieldList)
             {
                 field.TagList = new List<Tag>();
@@ -296,9 +301,9 @@ namespace AMS.ViewModels
                     {
                         field.TagList.Add(tag);
                     }
-                   
                 }
             }
+
             foreach (var field in NonHiddenFieldList)
             {
                 field.TagList = new List<Tag>();
@@ -311,5 +316,40 @@ namespace AMS.ViewModels
                 }
             }
         }
+
+        private bool VerifyFields()
+        {
+            //Verifies whether fields contains correct information, or the required information.
+            List<Field> completeList = HiddenFieldList.ToList();
+            completeList.AddRange(NonHiddenFieldList.ToList());
+            
+            foreach (var field in completeList)
+            {
+                if (field.Required && string.IsNullOrEmpty(field.Content))
+                {
+                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",Notification.WARNING));
+                    return false;
+                }
+
+                if (field.Type == Field.FieldType.NumberField)
+                {
+                    bool check = field.Content.All(char.IsDigit);
+                    if (check)
+                    {
+                        Features.AddNotification(
+                            new Notification("The field " + field.Label + " cannot contain letters",Notification.WARNING));
+                        return false;
+                    }
+                }
+
+                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"today"))
+                {
+                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+                }
+            }
+
+            return true;
+        }
+        
     }
 }
