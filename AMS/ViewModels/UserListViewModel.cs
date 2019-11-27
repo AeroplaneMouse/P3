@@ -1,5 +1,7 @@
 ﻿using AMS.Controllers.Interfaces;
+using AMS.Events;
 using AMS.Models;
+using AMS.Views.Prompts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -98,7 +100,7 @@ namespace AMS.ViewModels
             _userListController = userListController;
 
             CancelCommand = new Base.RelayCommand(Cancel);
-            ApplyCommand = new Base.RelayCommand(Apply);
+            ApplyCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Are you sure you want to these changes?", Apply)));
             KeepUserCommand = new Base.RelayCommand<object>(KeepUser);
             ImportUsersCommand = new Base.RelayCommand(Import);
 
@@ -132,13 +134,16 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(ShownUsersList));
         }
 
-        private void Apply()
+        private void Apply(object sender, PromptEventArgs e)
         {
-            if (_userListController.ApplyChanges())
-                Features.AddNotification(new Notification("Changes applied", Notification.APPROVE));
+            if (e.Result)
+            {
+                if (_userListController.ApplyChanges())
+                    Features.AddNotification(new Notification("Changes applied", Notification.APPROVE));
 
-            else
-                Features.AddNotification(new Notification("Not all conflicts solved", Notification.WARNING));
+                else
+                    Features.AddNotification(new Notification("Not all conflicts solved", Notification.WARNING));
+            }
 
             OnPropertyChanged(nameof(ShownUsersList));
         }
