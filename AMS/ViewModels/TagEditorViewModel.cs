@@ -20,6 +20,8 @@ namespace AMS.ViewModels
         #region Public Properties
 
         private bool _dropdownsEnabled = true;
+        private bool _parentComboEnabled = true;
+        private bool _departmentComboEnabled = true;
 
         public ObservableCollection<Field> NonHiddenFieldList =>
             new ObservableCollection<Field>(_controller.NonHiddenFieldList);
@@ -82,11 +84,17 @@ namespace AMS.ViewModels
         }
 
         public int SelectedDepartmentIndex { get; set; }
-
-        public bool DropdownsEnabled
+        
+        public bool ParentComboEnabled
         {
-            get => _dropdownsEnabled;
-            set => _dropdownsEnabled = value;
+            get => _parentComboEnabled;
+            set => _parentComboEnabled = value;
+        }
+
+        public bool DepartmentComboEnabled
+        {
+            get => _departmentComboEnabled;
+            set => _departmentComboEnabled = value;
         }
 
         #endregion
@@ -112,8 +120,13 @@ namespace AMS.ViewModels
         {
             _controller = tagController;
 
-            if (_controller.Id == 1)
-                _dropdownsEnabled = false;
+            if (_controller.Id == 1){
+                _parentComboEnabled = false;
+                _departmentComboEnabled = false;
+            }
+
+            if (_controller.ParentID > 0)
+                _departmentComboEnabled = false;
 
             //Set the selected parent to the parent of the chosen tag
             int i = ParentTagList.Count;
@@ -124,9 +137,6 @@ namespace AMS.ViewModels
                 _selectedParentTagIndex = i - 1;
 
             OnPropertyChanged(nameof(SelectedParentTagIndex));
-
-           
-
 
             Department currentDepartment;
 
