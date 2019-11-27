@@ -191,7 +191,8 @@
                                 <GridViewColumn.Header>
                                     <CheckBox IsChecked="{Binding CheckAll, UpdateSourceTrigger=PropertyChanged}"
                                               Command="{Binding CheckAllChangedCommand}"
-                                              CommandParameter="{Binding ElementName=ListOfAssets, Path=.}"/>
+                                              CommandParameter="{Binding ElementName=ListOfAssets, Path=.}"
+                                              Margin="4 0 5 0"/>
                                 </GridViewColumn.Header>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
