@@ -36,11 +36,9 @@ namespace AMS.ViewModels
         
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
+        
         public ICommand EnterSuggestionListCommand { get; set; }
         
-
-        public ObservableCollection<ITagable> CurrentlyAddedTags => new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags);
-
         public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
         public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.HiddenFieldList);
 
@@ -65,18 +63,6 @@ namespace AMS.ViewModels
         public string Title { get; set; }
 
         private string _tagString;
-        /*
-        public string TagString
-        {
-            get => _tagString;
-            set
-            {
-                _tagString = value;
-                _tagListController.Search(_tagString);
-                TagList = _tagListController.TagsList;
-            }
-        }
-        */
 
         private string _tagSearchQuery;
         public string TagSearchQuery
@@ -97,8 +83,8 @@ namespace AMS.ViewModels
         public bool TagSuggestionIsOpen { get; set; } = false;
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
         public ITagable TagParent { get; set; }
-        public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
-        
+        public ObservableCollection<ITagable> AppliedTags { get; set; }
+
         public List<Tag> TagList { get; set; }
         
         public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController, TagHelper tagHelper)
@@ -108,6 +94,8 @@ namespace AMS.ViewModels
             
             _tagHelper = tagHelper;
             _tagHelper.CanApplyParentTags = false;
+
+            AppliedTags = new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags);
 
             _isEditing = (_assetController.Asset.ID != 0);
             if (_isEditing)
@@ -130,6 +118,7 @@ namespace AMS.ViewModels
             {
                 ITagable tag = parameter as ITagable;
                 _tagHelper.RemoveTag(tag);
+                _assetController.DetachTag(tag);
                 AppliedTags = _tagHelper.GetAppliedTags(false);
             });
 
@@ -223,6 +212,7 @@ namespace AMS.ViewModels
             
                 if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1)){
                     _tagHelper.ApplyTag(tag);
+                    _assetController.AttachTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(false);
                     TagSearchQuery = "";
                     //TagSearchProcess();
@@ -286,7 +276,7 @@ namespace AMS.ViewModels
             // Display notification if tag was not removed
             if(!_assetController.DetachTag(tag))
                 Features.AddNotification(new Notification("Could not remove tag", Notification.ERROR));
-            OnPropertyChanged(nameof(CurrentlyAddedTags));
+            OnPropertyChanged(nameof(AppliedTags));
         }
     }
 }
