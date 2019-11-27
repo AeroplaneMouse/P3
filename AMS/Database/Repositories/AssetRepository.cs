@@ -339,6 +339,7 @@ namespace AMS.Database.Repositories
                 {
                     if (Features.Main.CurrentDepartment.ID > 0)
                         _query.Where("a.department_id", Features.Main.CurrentDepartment.ID.ToString());
+                        
                     _query.Where("a.deleted_at", "IS NULL", "");
 
                     if (keyword.Length > 0)

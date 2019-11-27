@@ -6,7 +6,7 @@
       mc:Ignorable="d" 
       Height="Auto" d:DesignWidth="800"
       Title="Confirm"
-      FocusManager.FocusedElement="{Binding ElementName=Cancel}">
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
     <Grid>
         <Canvas Style="{StaticResource PromptBackground}"/>
         <Border Style="{StaticResource PromptBorder}">
@@ -31,13 +31,13 @@
                             Command="{Binding AcceptCommand}"
                             Content="Accept"
                             Name="Accept"
-                            TabIndex="1"/>
+                            TabIndex="0"/>
                     <Button Style="{StaticResource RegularCancelButton}"
                             Command="{Binding CancelCommand}"
                             Content="Cancel"
                             Margin="15 0 0 0"
-                            TabIndex="2"
-                            Name="Cancel"/>
+                            TabIndex="1"
+                            x:Name="StartElement"/>
                 </StackPanel>
             </Grid>
         </Border>

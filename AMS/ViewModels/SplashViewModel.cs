@@ -46,6 +46,7 @@ namespace AMS.ViewModels
             {
                 reconnectRequired = await Task.Run(Authenticate);
             } while (reconnectRequired);
+
         }
 
         private bool Authenticate()
@@ -90,7 +91,7 @@ namespace AMS.ViewModels
             else
             {
                 LoadingText = "ERROR!";
-                CurrentActionText = "Unfortunately the excellent connection to the database was not established...";
+                CurrentActionText = "Unfortunately the connection to the database was not established...";
                 Reconnect();
 
                 // Reconnect is required

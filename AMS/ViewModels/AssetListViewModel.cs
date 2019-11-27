@@ -20,12 +20,18 @@ namespace AMS.ViewModels
     {
         private IAssetListController _listController;
         private string _searchQuery;
-        private TagHelper _tagHelper;
-
+        private TagHelper _tagHelper;        private bool _isStrict = true;
+        
         public ObservableCollection<Asset> Items { get; set; }
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
-
-        public string SearchQuery
+        public bool IsStrict { 
+            get => _isStrict; 
+            set {
+                _isStrict = value; 
+                SearchAssets();
+            }
+        }
+        public bool CheckAll { get; set; }        public string SearchQuery
         {
             get => _searchQuery;
             set
@@ -41,15 +47,16 @@ namespace AMS.ViewModels
                 {
                     TagSearchProcess();
                 }
+
+                if (!inTagMode)
+                    RefreshList();
             }
         }
         public string CurrentGroup { get; set; }
-
         public Visibility CurrentGroupVisibility { get; set; } = Visibility.Collapsed;
         public Visibility TagSuggestionsVisibility { get; set; } = Visibility.Collapsed;
         public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
         public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
-
         public bool TagSuggestionIsOpen { get; set; } = false;
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
         public ITagable TagParent { get; set; }
@@ -57,25 +64,19 @@ namespace AMS.ViewModels
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
 
 
-        #region Commands
-
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand PrintCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
         public ICommand ViewWithParameterCommand { get; set; }
-        public ICommand RemoveCommand { get; set; }
         public ICommand RemoveTagCommand { get; set; }
         public ICommand RemoveBySelectionCommand { get; set; }
         public ICommand EditBySelectionCommand { get; set; }
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
         public ICommand EnterSuggestionListCommand { get; set; }
-
-        #endregion
-
-        #region Constructor
+        public ICommand CheckAllChangedCommand { get; set; }
 
         public AssetListViewModel(IAssetListController listController, TagHelper tagHelper)
         {
@@ -92,19 +93,18 @@ namespace AMS.ViewModels
             {
                 AddNewCommand = new RelayCommand(() => EditAsset(null));
                 EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
-                RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
                 RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
                 EditBySelectionCommand = new RelayCommand(EditBySelection);
                 PrintCommand = new RelayCommand(Export);
             }
 
-            EnterSuggestionListCommand = new RelayCommand<object>((parameter) => test(parameter));
+            EnterSuggestionListCommand = new RelayCommand<object>((parameter) => FocusSuggestion(parameter));
 
             // Other functions
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
             ViewWithParameterCommand = new RelayCommand<object>(ViewAsset);
-            RemoveTagCommand = new RelayCommand<object>((parameter) => 
+            RemoveTagCommand = new RelayCommand<object>((parameter) =>
             {
                 ITagable tag = parameter as ITagable;
                 _tagHelper.RemoveTag(tag);
@@ -114,21 +114,29 @@ namespace AMS.ViewModels
 
             AutoTagCommand = new RelayCommand<object>((parameter) => AutoTag(parameter as ITagable));
             ClearInputCommand = new RelayCommand(ClearInput);
-        }
-
-        private void test(object parameter)
+            CheckAllChangedCommand = new RelayCommand<object>((parameter) => CheckAllChanged(parameter as ListView));
+        }
+        private void CheckAllChanged(ListView list)        {            if (SelectedItems.Count == 0)
+            {
+                // None selected. Select all.
+                CheckAll = true;
+                list.SelectAll();
+            }
+            else if (SelectedItems.Count <= Items.Count)
+            {
+                // Some selected or all selected. Unselect all
+                CheckAll = false;
+                list.UnselectAll();
+            }
+        }
+        private void FocusSuggestion(object parameter)
         {
             var list = parameter as ListBox;
             Keyboard.Focus(list);
             var item = list.SelectedItem = TagSearchSuggestions[0];
-
-
-
             //Keyboard.Focus(item);
             //throw new NotImplementedException();
         }
-
-        #endregion
 
         #region Methods
 
@@ -150,6 +158,40 @@ namespace AMS.ViewModels
                 Features.AddNotification(new Notification("Please select only one asset.", Notification.ERROR), 3500);
         }
 
+        private void CheckAllChanged(bool newValue, ListView list)
+        {
+            if (newValue && SelectedItems.Count == 0)
+            {
+                // Nothing seleted. Check all items
+                foreach (Asset asset in Items)
+                    SelectedItems.Add(asset);
+
+                Console.WriteLine("Checking all...");
+            }
+            else if (newValue && SelectedItems.Count < Items.Count)
+            {
+                // Some selected. Remove selectionsw.
+                List<Asset> removeSelection = new List<Asset>();
+                SelectedItems.ForEach(a => removeSelection.Add(a));
+
+                removeSelection.ForEach(a => SelectedItems.Remove(a));
+
+                Console.WriteLine("Unchecking all...");
+            }
+            else if (newValue && SelectedItems.Count == Items.Count)
+            {
+                // All selected. Remove selections
+
+                Console.WriteLine("unChecking all... ");
+            }
+            else
+            {
+                // Hmm.. Error, unexspected situation.
+
+                Console.WriteLine("Dafuq dude.. you have entered an unexspected selection state.");
+            }
+        }
+
         /// <summary>
         /// Searches the list for Assets matching the searchQuery
         /// </summary>
@@ -157,34 +199,35 @@ namespace AMS.ViewModels
         {
             if (inTagMode)
             {
-                if (SearchQuery == "" && _tagHelper.IsParentSet()){
+                if (SearchQuery == "" && _tagHelper.IsParentSet())
+                {
                     _tagHelper.ApplyTag(_tagHelper.GetParent());
                     _tagHelper.Parent(null);
                     CurrentGroup = "#";
                     AppliedTags = _tagHelper.GetAppliedTags(true);
-                }
-                
+                }
+
                 AutoTag();
             }
             else
             {
                 if (SearchQuery == null)
                     return;
-            }
-            
+            }
+
             RefreshList();
         }
 
         private void RefreshList()
         {
-            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)));
+            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict);
             Items = _listController.AssetList;
         }
 
         private void AutoTag(ITagable input = null)
         {
-            if (!inTagMode)
-                    return;
+            if (!inTagMode)
+                return;
 
             // Use the given input
             ITagable tag = input;
@@ -196,7 +239,8 @@ namespace AMS.ViewModels
             // If there is something to apply, do it
             if (tag != null)
             {
-                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1)){
+                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
+                {
                     _tagHelper.ApplyTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(true);
                     TagSearchProcess();
@@ -206,7 +250,7 @@ namespace AMS.ViewModels
                     // So we need to switch to a group of tags.
                     Tag taggedItem = (Tag)tag;
                     _tagHelper.Parent(taggedItem);
-                    CurrentGroup = "#"+taggedItem.Name;
+                    CurrentGroup = "#" + taggedItem.Name;
                 }
 
                 RefreshList();
@@ -219,12 +263,15 @@ namespace AMS.ViewModels
             if (!inTagMode)
                 return;
 
-            if (_tagHelper.IsParentSet()){
+            if (_tagHelper.IsParentSet())
+            {
                 _tagHelper.Parent(null);
                 CurrentGroup = "#";
                 SearchQuery = "";
                 TagSearchProcess();
-            }else{
+            }
+            else
+            {
                 LeavingTagMode();
             }
         }
@@ -280,23 +327,6 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
-        /// Removes the given asset and displays a prompt
-        /// </summary>
-        /// <param name="asset"></param>
-        private void RemoveAsset(Asset asset)
-        {
-            // Prompt user for confirmation of removal
-            Features.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
-            {
-                if (e.Result)
-                {
-                    Features.AddNotification(new Notification(asset.Name + " has been removed from the system", Notification.INFO));
-                    _listController.Remove(asset);
-                }
-            }));
-        }
-
-        /// <summary>
         /// Removes all the selected items
         /// </summary>
         private void RemoveSelected()
@@ -323,7 +353,7 @@ namespace AMS.ViewModels
                         Features.AddNotification(
                             new Notification($"" +
                             $"{ ((items.Count == 1) ? items[0].Name : (items.Count + " assets")) } " +
-                            $"{ (items.Count > 1 ? "have" : "has") } been removed from the system", 
+                            $"{ (items.Count > 1 ? "have" : "has") } been removed from the system",
                             Notification.INFO), 3000);
                     }
                 }));

@@ -33,6 +33,7 @@
                                 IsOpen="{TemplateBinding IsSubmenuOpen}"
                                 AllowsTransparency="True"
                                 PopupAnimation="Fade">
+                                
                                 <Border Name="PopupContainer"
                                         Background="{StaticResource NavigationSelectedBrush}">
                                     <ItemsPresenter/>

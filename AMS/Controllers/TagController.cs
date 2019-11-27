@@ -20,6 +20,7 @@ namespace AMS.Controllers
         public bool IsEditing { get; set; }
         public ulong TagID;
 
+        public ulong Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
         public ulong ParentID { get; set; }
@@ -74,6 +75,7 @@ namespace AMS.Controllers
             _tagRepository = tagRep;
             _departmentRepository = departmentRepository;
 
+            Id = tag.ID;
             Name = tag.Name;
             Color = tag.TagColor;
             ParentID = tag.ParentID;

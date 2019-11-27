@@ -8,12 +8,19 @@
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
-      Title="NewTag">
+      Title="NewTag"
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
 
     <Page.Resources>
         <local:FieldDesignSelector x:Key="MyFieldDesignSelector" />
     </Page.Resources>
-    
+
+    <Page.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding SaveTagCommand}"/>
+    </Page.InputBindings>
+
     <Grid>
         <!-- Header -->
         <Grid.RowDefinitions>
@@ -62,14 +69,16 @@
                                Text="Label" />
                     <TextBox Style="{StaticResource ParagraphTextBox}"
                              Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0 0 0 10" />
+                             Margin="0 0 0 10"
+                             x:Name="StartElement"/>
 
                     <!-- Parent tag id -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Parent tag ID"/>
                     <ComboBox ItemsSource="{Binding ParentTagList}" 
                               SelectedIndex="{Binding SelectedParentTagIndex}"
-                              Margin="0 0 0 10">
+                              Margin="0 0 0 10"
+                              IsEnabled="{Binding ParentComboEnabled}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}" />
@@ -88,7 +97,8 @@
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Department"/>
                     <ComboBox ItemsSource="{Binding DepartmentList}"
-                              SelectedIndex="{Binding SelectedDepartmentIndex, UpdateSourceTrigger=PropertyChanged}">
+                              SelectedIndex="{Binding SelectedDepartmentIndex, UpdateSourceTrigger=PropertyChanged}"
+                              IsEnabled="{Binding DepartmentComboEnabled}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}"/>

@@ -1,18 +1,27 @@
-﻿<Page x:Class="AMS.Views.AssetPresenter"
+<Page x:Class="AMS.Views.AssetPresenter"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:converter="clr-namespace:AMS.Views.ValueConverters"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:viewModel="clr-namespace:AMS.ViewModels"
       xmlns:local="clr-namespace:AMS.Views"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AssetPresenter">
+      Title="AssetPresenter"
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
 
     <Page.Resources>
         <converter:UsernameToVisibilityConverter x:Key="UsernameConverter" />
     </Page.Resources>
+
+    <Page.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CancelCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
+        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
+    </Page.InputBindings>
 
     <Grid>
         <!-- Header -->
@@ -32,13 +41,15 @@
             <!-- Edit button -->
             <Button Style="{StaticResource RegularButton}"
                     Command="{Binding EditCommand}"
-                    Content="Edit" />
-
+                    Content="Edit" 
+                    Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
+            
             <!-- Remove button -->
             <Button Style="{StaticResource RegularCancelButton}"
                     Command="{Binding RemoveCommand}"
                     Margin="10 0 0 0"
-                    Content="Remove" />
+                    Content="Remove"
+                    Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
 
             <!-- Cancel button -->
             <Button Style="{StaticResource RegularCancelButton}"
@@ -52,7 +63,8 @@
                    VerticalAlignment="Bottom" />
 
         <TabControl Grid.Row="1"
-                    Margin="10">
+                    Margin="10"
+                    x:Name="StartElement">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Template">
@@ -80,7 +92,10 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabItem DataContext="{Binding Children[0]}"
+
+            
+            <!-- Details -->
+            <TabItem DataContext="{Binding Children[0]}" 
                      Header="Details"
                      FontSize="{StaticResource FontSizeSmall}">
                 <Grid>
@@ -218,8 +233,10 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem DataContext="{Binding Children[1]}"
-                     Header="Comments"
+            
+            <!-- Comments -->
+            <TabItem DataContext="{Binding Children[1]}" 
+                     Header="Comments" 
                      FontSize="{StaticResource FontSizeSmall}">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -307,7 +324,8 @@
                 </Grid>
             </TabItem>
 
-            <TabItem DataContext="{Binding Children[2]}" Header="Log" FontSize="{StaticResource FontSizeSmall}">
+            <!-- Log -->
+            <TabItem DataContext="{Binding Children[2]}" Header="Log" FontSize="{StaticResource FontSizeSmall}" Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}">
                 <!--Style="{StaticResource RegularList}"-->
                 <ListView x:Name="listViewWithItems"
                           SelectionMode="Extended"

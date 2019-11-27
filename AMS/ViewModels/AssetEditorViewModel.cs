@@ -24,7 +24,10 @@ namespace AMS.ViewModels
         private IAssetController _assetController;
         private ITagListController _tagListController;
         private bool _isEditing;
+        private string _tagString;
+        private string _tagSearchQuery;
         private TagHelper _tagHelper;
+
 
         public ICommand AddFieldCommand { get; set; }
         public ICommand RemoveFieldCommand { get; set; }
@@ -68,6 +71,7 @@ namespace AMS.ViewModels
 
         private string _tagSearchQuery;
 
+
         public string TagSearchQuery
         {
             get => _tagSearchQuery;
@@ -86,8 +90,7 @@ namespace AMS.ViewModels
         public bool TagSuggestionIsOpen { get; set; } = false;
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
         public ITagable TagParent { get; set; }
-        public ObservableCollection<ITagable> AppliedTags { get; set; }
-
+        public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
         public List<Tag> TagList { get; set; }
 
         public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController,
@@ -106,13 +109,12 @@ namespace AMS.ViewModels
             
             Title = _isEditing ? "Edit asset" : "Add asset";
 
-            //Commands
-            SaveCommand = new RelayCommand(() => SaveAndExist());
+            // Commands
+            SaveCommand = new RelayCommand(() => SaveAndExit());
             SaveMultipleCommand = new RelayCommand(() => SaveAsset());
             AddFieldCommand = new Base.RelayCommand(() => PromptForCustomField());
             CancelCommand = new Base.RelayCommand(() => Cancel());
             RemoveFieldCommand = new RelayCommand<object>((parameter) => RemoveField(parameter));
-            //RemoveTagCommand = new RelayCommand<object>((parameter) => RemoveTag(parameter));
             AddTagCommand = new RelayCommand(() => TagSearch());
 
             RemoveTagCommand = new RelayCommand<object>((parameter) =>
@@ -129,7 +131,7 @@ namespace AMS.ViewModels
             UpdateAll();
         }
 
-        public void SaveAndExist()
+        public void SaveAndExit()
         {
             SaveAsset(false);
 
