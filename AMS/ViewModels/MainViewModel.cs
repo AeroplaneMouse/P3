@@ -119,10 +119,9 @@ namespace AMS.ViewModels
         public ICommand AddDepartmentCommand { get; set; }
 
         // Notification commands
-        public ICommand AddFieldTestCommand { get; set; }
         public ICommand RemoveNotificationCommand { get; set; }
-
         public ICommand ReloadCommand { get; set; }
+        public ICommand ShowShortcutsCommand { get; set; }
 
         #endregion
 
@@ -165,41 +164,44 @@ namespace AMS.ViewModels
             _userRep = userRepository;
             _departmentRep = departmentRepository;
 
-            // Initialize commands
-            RemoveNotificationCommand = new Base.RelayCommand<object>((parameter) => RemoveNotification(parameter as Notification));
-            ReloadCommand = new Base.RelayCommand(Reload);
-
-            // Window commands
-            MinimizeCommand   = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
-            MaximizeCommand   = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
-            CloseCommand      = new Base.RelayCommand(() => _window.Close());
-            SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, _window.PointToScreen(
-                new Point(
-                    OuterMarginSize,
-                    OuterMarginSize + ResizeBorder + TitleHeight
-                )
-            )));
-            
-            // Change page commands
-            ShowHomePageCommand      = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.Home()));
-            ShowAssetListPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.AssetList()));
-            ShowTagListPageCommand   = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagList()));
-            ShowLogPageCommand       = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.LogList()));
-            ShowUserListPageCommand  = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.UserList()));
-
-            // Department commands
-            SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
-            RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
-            EditDepartmentCommand   = new Commands.EditDepartmentCommand(this);
-            AddDepartmentCommand    = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)));
-
-            // Display splash page
             SplashPage = Features.Create.Splash(this);
         }
 
         #endregion
 
         #region Public Methods
+
+        public void LoadSystem(Session session)
+        {
+            // Attaching notification
+            MySqlHandler.ConnectionFailed += ConnectionFailed;
+
+            // Loads homepage and other stuff from the UI-thread.
+            SplashPage.Dispatcher.Invoke(() => ContentFrame.Navigate(Features.Create.Home()));
+
+            // Remove splash page
+            SplashPage = null;
+
+            // Resetting connection failed
+            _hasConnectionFailedBeenRaised = false;
+
+            // Show department and username
+            CurrentDepartmentVisibility = Visibility.Visible;
+            CurrentSession = session;
+            CurrentUser = CurrentSession.Username;
+            OnPropertyChanged(nameof(CurrentUser));
+
+            // Sets the visibility of WPF elements binding to this, based on whether or not the current user is an admin
+            OnlyVisibleForAdmin = CurrentSession.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
+
+            // Setting the current department, from the default department of the current user.
+            CurrentDepartment = _departmentRep.GetById(session.user.DefaultDepartment);
+
+            if (CurrentDepartment == null)
+                CurrentDepartment = Department.GetDefault();
+
+            InitializeCommands();
+        }
 
         /// <summary>
         /// Displays the given prompt and attaches a remove delegate to remove it
@@ -237,39 +239,41 @@ namespace AMS.ViewModels
         /// Used when the application has connected to the database and other external services,
         /// to remove the splash page and shows the navigation menu's and homepage.
         /// </summary>
-        public void LoadSystem(Session session)
-        {
-            // Attaching notification
-            MySqlHandler.ConnectionFailed += ConnectionFailed;
-
-            // Loads homepage and other stuff from the UI-thread.
-            SplashPage.Dispatcher.Invoke(() => ContentFrame.Navigate(Features.Create.Home()));
-
-            // Remove splash page
-            SplashPage = null;
-
-            // Resetting connection failed
-            _hasConnectionFailedBeenRaised = false;
-
-            // Show department and username
-            CurrentDepartmentVisibility = Visibility.Visible;
-            CurrentSession = session;
-            CurrentUser = CurrentSession.Username;
-            OnPropertyChanged(nameof(CurrentUser));
-
-            // Sets the visibility of WPF elements binding to this, based on whether or not the current user is an admin
-            OnlyVisibleForAdmin = CurrentSession.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
-
-            // Setting the current department, from the default department of the current user.
-            CurrentDepartment = _departmentRep.GetById(session.user.DefaultDepartment);
-
-            if (CurrentDepartment == null)
-                CurrentDepartment = Department.GetDefault();
-        }
-
+        
         #endregion
 
         #region Private Methods
+
+        private void InitializeCommands()
+        {
+            RemoveNotificationCommand = new Base.RelayCommand<object>((parameter) => RemoveNotification(parameter as Notification));
+            ReloadCommand = new Base.RelayCommand(Reload);
+            ShowShortcutsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.ShortcutsList()));
+
+            // Window commands
+            MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
+            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
+            CloseCommand = new Base.RelayCommand(() => _window.Close());
+            SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, _window.PointToScreen(
+                new Point(
+                    OuterMarginSize,
+                    OuterMarginSize + ResizeBorder + TitleHeight
+                )
+            )));
+
+            // Change page commands
+            ShowHomePageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.Home()));
+            ShowAssetListPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.AssetList()));
+            ShowTagListPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagList()), () => Features.GetCurrentSession().IsAdmin());
+            ShowLogPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.LogList()), () => Features.GetCurrentSession().IsAdmin());
+            ShowUserListPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.UserList()), () => Features.GetCurrentSession().IsAdmin());
+
+            // Department commands
+            SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
+            RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, () => Features.GetCurrentSession().IsAdmin());
+            EditDepartmentCommand = new Commands.EditDepartmentCommand(this, () => Features.GetCurrentSession().IsAdmin());
+            AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)), () => Features.GetCurrentSession().IsAdmin());
+        }
 
         /// <summary>
         /// Removes the prompt view

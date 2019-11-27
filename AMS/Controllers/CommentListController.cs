@@ -6,6 +6,7 @@ using AMS.Database.Repositories.Interfaces;
 using AMS.Logging;
 using System.Collections.Generic;
 using System.Linq;
+using AMS.Database.Repositories;
 
 namespace AMS.Controllers 
 {
@@ -38,7 +39,8 @@ namespace AMS.Controllers
         {
             _session = session;
             _commentRep = commentRepository;
-            _asset = asset;
+            // Create new asset if optional parameter not given
+            _asset = asset ?? new Asset();
         }
 
         /// <summary>

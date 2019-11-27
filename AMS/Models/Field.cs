@@ -68,8 +68,8 @@ namespace AMS.Models
         }
         
         [JsonConstructor]
-        private Field(string label, string content, FieldType type, bool required = false,
-            bool isCustom = false,List<ulong> fieldPresentIn = null)
+        private Field(string label, string content, FieldType type, bool required,
+            bool isCustom,List<ulong> tagIDs)
         {
             this.HashId = CalculateMd5Hash(true);
             this.Label = label;
@@ -77,7 +77,7 @@ namespace AMS.Models
             Type = type;
             this.Required = required;
             this.Hash = CalculateMd5Hash();
-            this.TagIDs = fieldPresentIn;
+            this.TagIDs = tagIDs ?? new List<ulong>();
         }
 
         /// <summary>

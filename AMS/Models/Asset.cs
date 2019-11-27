@@ -13,9 +13,7 @@ namespace AMS.Models
         private ulong _departmentID;
 
         public string Name {
-            get {
-                return this._name;
-            }
+            get => this._name;
             set {
                 if (this.Name != null)
                 {
@@ -25,9 +23,7 @@ namespace AMS.Models
             }
         }
         public string Description {
-            get {
-                return this._description;
-            }
+            get => this._description;
             set {
                 if (this.Description != null)
                 {
@@ -38,9 +34,7 @@ namespace AMS.Models
         }
 
         public string Identifier {
-            get {
-                return this._identifier;
-            }
+            get => this._identifier;
             set {
                 if (this.Identifier != null)
                 {

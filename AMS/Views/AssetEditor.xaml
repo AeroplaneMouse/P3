@@ -5,18 +5,26 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AMS.Views"
       mc:Ignorable="d"
-      Title="AssetEditor">
+      Title="AssetEditor"
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
     
     <Page.Resources>
         <local:FieldDesignSelector x:Key="MyFieldDesignSelector" />
     </Page.Resources>
+
+    <Page.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding SaveCommand}"/>
+        <KeyBinding Modifiers="Ctrl+Shift" Key="S" Command="{Binding SaveMultipleCommand}"/>
+    </Page.InputBindings>
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <!-- Title -->
         <TextBlock Style="{StaticResource TitleStyle}"
                    VerticalAlignment="Center"
@@ -61,10 +69,16 @@
                     <TextBlock Style="{StaticResource HeaderStyleWithSpace}"
                                Text="Details" />
                     <!-- Name -->
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
-                               Text="Name" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="Name" />
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Foreground="Red"
+                                   Text="*"/>
+                    </StackPanel>
                     <TextBox Style="{StaticResource ParagraphTextBoxWithSpace}"
-                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                             x:Name="StartElement"/>
 
                     <!-- Identifier -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
@@ -82,11 +96,11 @@
                              AcceptsTab="True"
                              MinHeight="80" />
                 </StackPanel>
-                
+
                 <Rectangle Style="{StaticResource VerticalSeparator}"
                            Margin="10 0 10 0"
                            Grid.Column="1" />
-                
+
                 <!-- Tags -->
                 <StackPanel Grid.Column="2">
                     <!-- Title -->
@@ -98,7 +112,7 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        
+
                         <!-- Current parent tag -->
                         <Border x:Name="CurrentTagGroup" 
                                 Background="LightGray"
@@ -178,8 +192,8 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ListView>
-                    
-                    
+
+
                     <!--
                     <TextBox Style="{StaticResource ParagraphTextBox}"
                              x:Name="InputBox"
@@ -222,7 +236,7 @@
                     </ListView>
                     -->
                 </StackPanel>
-                
+
                 <Rectangle Style="{StaticResource VerticalSeparator}"
                            Margin="10 0 10 0"
                            Grid.Column="3" />
@@ -255,7 +269,7 @@
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Hidden fields"
                                Margin="0 20 10 0" />
-                    
+
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding HiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
                             ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
@@ -271,7 +285,4 @@
 
         </ScrollViewer>
     </Grid>
-    <Page.InputBindings>
-        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
-    </Page.InputBindings>
 </Page>

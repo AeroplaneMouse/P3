@@ -38,10 +38,9 @@ namespace AMS.ViewModels
         public ICommand AddTagCommand { get; set; }
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
+        
         public ICommand EnterSuggestionListCommand { get; set; }
         
-
-        public ObservableCollection<ITagable> CurrentlyAddedTags => new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags);
         public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
         public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.HiddenFieldList);
 
@@ -64,20 +63,6 @@ namespace AMS.ViewModels
         }
 
         public string Title { get; set; }
-
-        /*
-        public string TagString
-        {
-            get => _tagString;
-            set
-            {
-                _tagString = value;
-                _tagListController.Search(_tagString);
-                TagList = _tagListController.TagsList;
-            }
-        }
-        */
-
         public string TagSearchQuery
         {
             get => _tagSearchQuery;
@@ -106,8 +91,9 @@ namespace AMS.ViewModels
 
             _tagHelper = tagHelper;
             _tagHelper.CanApplyParentTags = false;
-            _tagHelper.SetCurrentTags(CurrentlyAddedTags);
-
+            _tagHelper.SetCurrentTags(new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags));
+            AppliedTags = _tagHelper.GetAppliedTags(false);
+            
             _isEditing = (_assetController.Asset.ID != 0);
             if (_isEditing)
                 Title = "Edit asset";
@@ -129,21 +115,22 @@ namespace AMS.ViewModels
             {
                 ITagable tag = parameter as ITagable;
                 _tagHelper.RemoveTag(tag);
+                _assetController.DetachTag(tag);
                 AppliedTags = _tagHelper.GetAppliedTags(false);
+                UpdateAll();
             });
 
             AutoTagCommand = new RelayCommand(() => AutoTag());
             ClearInputCommand = new RelayCommand(ClearInput);
+            UpdateAll();
         }
 
         public void SaveAndExist()
         {
             SaveAsset(false);
 
-            if (Features.Navigate.Back() == false)
-            {
-                Features.Navigate.To(Features.Create.AssetList());
-            }
+            Features.Navigate.Back();
+
         }
 
         public void SaveAsset(bool multiAdd = true)
@@ -178,8 +165,7 @@ namespace AMS.ViewModels
             if(e is FieldInputPromptEventArgs args)
             {
                 _assetController.AddField(args.Field);
-                OnPropertyChanged(nameof(NonHiddenFieldList));
-                OnPropertyChanged(nameof(HiddenFieldList));
+                UpdateAll();
             }
         }
         
@@ -188,8 +174,8 @@ namespace AMS.ViewModels
             if (sender is Field field)
             {
                 _assetController.RemoveField(field);
-                OnPropertyChanged(nameof(NonHiddenFieldList));
-                OnPropertyChanged(nameof(HiddenFieldList));
+                UpdateAll();
+                
             }
         }
 
@@ -222,8 +208,10 @@ namespace AMS.ViewModels
             
                 if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1)){
                     _tagHelper.ApplyTag(tag);
+                    _assetController.AttachTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(false);
                     TagSearchQuery = "";
+                    UpdateAll();
                     //TagSearchProcess();
                 }
                 else
@@ -285,7 +273,14 @@ namespace AMS.ViewModels
             // Display notification if tag was not removed
             if(!_assetController.DetachTag(tag))
                 Features.AddNotification(new Notification("Could not remove tag", Notification.ERROR));
-            OnPropertyChanged(nameof(CurrentlyAddedTags));
+            UpdateAll();
+        }
+
+        private void UpdateAll()
+        {
+            OnPropertyChanged(nameof(AppliedTags));
+            OnPropertyChanged(nameof(NonHiddenFieldList));
+            OnPropertyChanged(nameof(HiddenFieldList));
         }
     }
 }

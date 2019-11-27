@@ -11,16 +11,21 @@ namespace AMS.ViewModels.Commands
     {
         private MainViewModel _main;
         private Department _department;
+        private readonly Func<bool> _func;
 
         public event EventHandler CanExecuteChanged;
 
-        public EditDepartmentCommand(MainViewModel main)
+        public EditDepartmentCommand(MainViewModel main, Func<bool> func)
         {
             _main = main;
+            _func = func;
         }
 
         public bool CanExecute(object parameter)
         {
+            if (_func != null)
+                return _func();
+
             return true;
         }
 
