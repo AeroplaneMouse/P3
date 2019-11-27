@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using AMS.Models;
 using System.Reflection;
 using AMS.Database.Repositories.Interfaces;
+using AMS.Helpers.Features;
 using AMS.Logging;
 using AMS.Logging.Interfaces;
 using AMS.ViewModels;
@@ -79,7 +80,7 @@ namespace AMS.Database.Repositories
                         id = (ulong)cmd.LastInsertedId;
                     }
 
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
+                    logger.AddEntry(entity, Features.Instance.GetCurrentSession().user.ID, id);
                 }
                 catch (MySqlException e)
                 {
@@ -121,7 +122,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
 
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    logger.AddEntry(entity, Features.Instance.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -160,7 +161,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
 
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    logger.AddEntry(entity, Features.Instance.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {

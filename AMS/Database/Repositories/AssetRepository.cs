@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Collections.ObjectModel;
 
 using AMS.Database.Repositories.Interfaces;
+using AMS.Helpers.Features;
 using AMS.Interfaces;
 using AMS.Logging.Interfaces;
 using AMS.ViewModels;
@@ -105,7 +106,7 @@ namespace AMS.Database.Repositories
                         id = (ulong)cmd.LastInsertedId;
                     }
 
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
+                    logger.AddEntry(entity, Features.Instance.GetCurrentSession().user.ID, id);
                 }
                 catch (MySqlException e)
                 {
@@ -158,7 +159,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
                     
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    logger.AddEntry(entity, Features.Instance.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -198,7 +199,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
                     
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID, entity.ID);
+                    logger.AddEntry(entity, Features.Instance.GetCurrentSession().user.ID, entity.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -337,8 +338,8 @@ namespace AMS.Database.Repositories
 
                 try
                 {
-                    if (Features.Main.CurrentDepartment.ID > 0)
-                        _query.Where("a.department_id", Features.Main.CurrentDepartment.ID.ToString());
+                    if (Features.Instance.Main.CurrentDepartment.ID > 0)
+                        _query.Where("a.department_id", Features.Instance.Main.CurrentDepartment.ID.ToString());
                     _query.Where("a.deleted_at", "IS NULL", "");
 
                     if (keyword.Length > 0)
@@ -457,7 +458,7 @@ namespace AMS.Database.Repositories
                     }
 
                     logger.AddEntry("Tag attached", tagLabels + " was attached to the asset with ID: "
-                        + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.", Features.GetCurrentSession().user.ID);
+                        + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.", Features.Instance.GetCurrentSession().user.ID);
 
                 }
                 catch (MySqlException e)

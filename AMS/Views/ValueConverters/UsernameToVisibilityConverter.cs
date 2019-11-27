@@ -5,11 +5,13 @@ using System.Globalization;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
+using AMS.Helpers.Features;
 
 namespace AMS.Views.ValueConverters
 {
     public class UsernameToVisibilityConverter : IValueConverter
     {
+        private Features Features = Features.Instance;
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             string user = value as string;

@@ -12,6 +12,7 @@ using AMS.Database.Repositories;
 using AMS.Helpers;
 using AMS.Views;
 using AMS.Helpers;
+using AMS.Helpers.Features;
 
 namespace AMS.ViewModels
 {
@@ -83,9 +84,10 @@ namespace AMS.ViewModels
 
         #endregion
 
-        #region Private Methods
+        #region Private properties
 
         private ITagController _controller;
+        private Features Features = Features.Instance;
 
         #endregion
 

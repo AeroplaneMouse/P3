@@ -6,6 +6,7 @@
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:viewModel="clr-namespace:AMS.ViewModels"
       xmlns:converter="clr-namespace:AMS.Views.ValueConverters"
+      xmlns:features="clr-namespace:AMS.Helpers.Features"
       mc:Ignorable="d" 
       Title="AssetList"
       x:Name="ThePage"
@@ -41,7 +42,7 @@
             <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding AddNewCommand}"
                     Content="Add"
-                    Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
+                    Visibility="{Binding Features.Instance.OnlyVisibleForAdmin}"/>
         </StackPanel>
 
         <Rectangle Style="{StaticResource HorizontalSeparator}"
@@ -151,7 +152,7 @@
                             Visibility="{Binding SingleSelected}"/>
 
                     <Button Style="{StaticResource RegularButton}" 
-                            Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"
+                            Visibility="{Binding Features.Instance.OnlyVisibleForAdmin}"
                             Margin="10 0 0 0 " 
                             Content="Export selected items" 
                             Width="Auto" 
@@ -247,7 +248,7 @@
                                         <Button Style="{StaticResource EditButton}"
                                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.EditCommand}"
                                                 CommandParameter="{Binding Path=.}"
-                                                Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
+                                                Visibility="{Binding Features.Instance.OnlyVisibleForAdmin}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -259,7 +260,7 @@
                                         <Button Style="{StaticResource TrashButton}"
                                                 Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveCommand}"
                                                 CommandParameter="{Binding Path=.}"
-                                                Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
+                                                Visibility="{Binding Features.Instance.OnlyVisibleForAdmin}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

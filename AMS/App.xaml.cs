@@ -6,6 +6,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using AMS.Helpers;
+using Features = AMS.Helpers.Features.Features;
 
 namespace AMS
 {
@@ -16,7 +18,7 @@ namespace AMS
     {
         void App_Startup(object sender, StartupEventArgs e)
         {
-            Window main = Features.Create.Main();
+            Window main = Features.Instance.Create.MainWindow();
             main.Show();
         }
     }

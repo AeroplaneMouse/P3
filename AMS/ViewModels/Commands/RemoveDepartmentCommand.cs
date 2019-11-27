@@ -4,6 +4,7 @@ using AMS.Models;
 using AMS.Views.Prompts;
 using System.Windows.Input;
 using AMS.Database.Repositories;
+using AMS.Helpers.Features;
 
 namespace AMS.ViewModels.Commands
 {
@@ -34,7 +35,7 @@ namespace AMS.ViewModels.Commands
             }
             catch (Exception)
             {
-                Features.AddNotification(new Notification("An unknown error occurred. Unable to remove department.", Notification.ERROR),
+                Features.Instance.AddNotification(new Notification("An unknown error occurred. Unable to remove department.", Notification.ERROR),
                     3500);
                 return;
             }
@@ -49,14 +50,14 @@ namespace AMS.ViewModels.Commands
                     // TODO: Add check for assets and tags conneced to the department.
 
                     // Prompting user for confirmation
-                    Features.DisplayPrompt(new Confirm($"Are you sure you want to delete { _department.Name }?", PromptElapsed));
+                    Features.Instance.DisplayPrompt(new Confirm($"Are you sure you want to delete { _department.Name }?", PromptElapsed));
                 }
                 else
-                    Features.AddNotification(new Notification("You cannot remove your current department. Please change your department and then try again.", Notification.ERROR),
+                    Features.Instance.AddNotification(new Notification("You cannot remove your current department. Please change your department and then try again.", Notification.ERROR),
                         3500);
             }
             else
-                Features.AddNotification(new Notification("Removing department failed. Department not found!",
+                Features.Instance.AddNotification(new Notification("Removing department failed. Department not found!",
                     Notification.ERROR));
         }
 
@@ -69,11 +70,11 @@ namespace AMS.ViewModels.Commands
                 if (new DepartmentRepository().Delete(_department))
                 {
                     _main.OnPropertyChanged(nameof(_main.Departments));
-                    Features.AddNotification(new Notification(
+                    Features.Instance.AddNotification(new Notification(
                         $"{ _department.Name } has now been removed from the system.", Notification.APPROVE));
                 }
                 else
-                    Features.AddNotification(new Notification(
+                    Features.Instance.AddNotification(new Notification(
                         "An unknown error occurred. Unable to remove department.", Notification.ERROR));
             }
         }

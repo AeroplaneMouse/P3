@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Input;
+using AMS.Helpers.Features;
 
 namespace AMS.ViewModels
 {
@@ -72,6 +73,7 @@ namespace AMS.ViewModels
         #region Private Properties
 
         private IUserListController _userListController { get; set; }
+        private Features Features = Features.Instance;
 
         #endregion
 

@@ -4,6 +4,7 @@ using AMS.Models;
 using AMS.Views.Prompts;
 using System.Windows.Input;
 using AMS.Database.Repositories;
+using AMS.Helpers.Features;
 
 namespace AMS.ViewModels.Commands
 {
@@ -34,7 +35,7 @@ namespace AMS.ViewModels.Commands
             }
             catch (Exception)
             {
-                Features.AddNotification(new Models.Notification(
+                Features.Instance.AddNotification(new Models.Notification(
                     $"An unknown occured. Unable to edit department with id: { parameter.ToString() }",
                     Models.Notification.ERROR));
                 return;
@@ -44,9 +45,9 @@ namespace AMS.ViewModels.Commands
             // TODO: Ingen new repositories!
             _department = new DepartmentRepository().GetById(id);
             if (_department != null)
-                Features.DisplayPrompt(new TextInput("Enter new name", _department.Name, PromptElapsed));
+                Features.Instance.DisplayPrompt(new TextInput("Enter new name", _department.Name, PromptElapsed));
             else
-                Features.AddNotification(
+                Features.Instance.AddNotification(
                     new Notification("Editing department failed. Department not found!", Notification.ERROR),
                     3500);
         }
@@ -67,11 +68,11 @@ namespace AMS.ViewModels.Commands
                         _main.CurrentDepartment = _department;
                         _main.OnPropertyChanged(nameof(_main.CurrentDepartment));
                         _main.OnPropertyChanged(nameof(_main.Departments));
-                        Features.AddNotification(new Notification("Name change success", Notification.APPROVE));
+                        Features.Instance.AddNotification(new Notification("Name change success", Notification.APPROVE));
                     }
                 }
                 else
-                    Features.AddNotification(
+                    Features.Instance.AddNotification(
                         new Notification("Department name cannot be empty. Please enter a name.", Notification.ERROR), 
                         3500);
             }

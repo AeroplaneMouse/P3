@@ -4,6 +4,8 @@ using System.Linq;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
+using AMS.Helpers;
+using AMS.Helpers.Features;
 using AMS.Interfaces;
 using AMS.Logging;
 using AMS.Logging.Interfaces;
@@ -25,14 +27,7 @@ namespace AMS.Controllers
 
         public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset ?? new Asset())
         {
-            if(asset == null)
-            {
-                Asset = new Asset();
-            }
-            else
-            {
-                Asset = asset;
-            }
+            Asset = asset ?? new Asset();
             
             Name = Asset.Name;
             Identifier = Asset.Identifier;
@@ -99,7 +94,7 @@ namespace AMS.Controllers
             if (Name != Asset.Name) { Asset.Name = Name; }
             if (Asset.Identifier != Identifier) { Asset.Identifier = Identifier; }
             if (Asset.Description != Description) { Asset.Description = Description; }
-            Asset.DepartmentID = Features.GetCurrentSession().user.DefaultDepartment;
+            Asset.DepartmentID = Features.Instance.GetCurrentSession().user.DefaultDepartment;
 
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);

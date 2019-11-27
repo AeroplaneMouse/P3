@@ -19,6 +19,7 @@ using AMS.Database.Repositories.Interfaces;
 using AMS.Helpers;
 using AMS.IO;
 using System.Windows.Navigation;
+using AMS.Helpers.Features;
 
 namespace AMS.ViewModels
 {
@@ -94,6 +95,7 @@ namespace AMS.ViewModels
 
         private IUserRepository _userRep;
         private IDepartmentRepository _departmentRep;
+        private Features Features = Features.Instance;
 
         #endregion
 
@@ -160,7 +162,7 @@ namespace AMS.ViewModels
 
             #endregion
 
-            Features.Main = this;
+            Features.Instance.Main = this;
 
             _userRep = userRepository;
             _departmentRep = departmentRepository;

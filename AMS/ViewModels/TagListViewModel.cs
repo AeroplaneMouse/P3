@@ -5,6 +5,7 @@ using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Events;
 using AMS.Helpers;
+using AMS.Helpers.Features;
 using AMS.Interfaces;
 using AMS.Models;
 using AMS.Views;
@@ -16,6 +17,7 @@ namespace AMS.ViewModels
     {
         public List<Tag> Tags { get; set; }
         private readonly ITagListController _tagListController;
+        private Features Features = Features.Instance;
         
         public Tag SelectedItem { get; set; }
         

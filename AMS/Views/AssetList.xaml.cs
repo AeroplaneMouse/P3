@@ -8,6 +8,7 @@ using AMS.Models;
 using System.Windows;
 using AMS.Controllers.Interfaces;
 using AMS.Helpers;
+using AMS.Helpers.Features;
 
 namespace AMS.Views
 {
@@ -31,7 +32,7 @@ namespace AMS.Views
                 viewModel.SelectedItems.Add(asset);
 
             // Only change visibility if current user if admin
-            if (Features.Main.CurrentSession.IsAdmin())
+            if (Features.Instance.Main.CurrentSession.IsAdmin())
             {
                 // Setting single item selected visibility
                 viewModel.SingleSelected = viewModel.SelectedItems.Count == 1 ?

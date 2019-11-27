@@ -8,12 +8,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
+using AMS.Helpers.Features;
 
 namespace AMS.ViewModels
 {
     class AssetPresenterViewModel : Base.BaseViewModel
     {
         private IAssetController _assetController;
+        private Features Features = Features.Instance;
 
         public string Name { get; set; }
         public ICommand RemoveCommand { get; set; }

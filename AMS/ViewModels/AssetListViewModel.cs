@@ -13,6 +13,7 @@ using AMS.Controllers.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
+using AMS.Helpers.Features;
 
 namespace AMS.ViewModels
 {
@@ -21,6 +22,7 @@ namespace AMS.ViewModels
         private IAssetListController _listController;
         private string _searchQuery;
         private TagHelper _tagHelper;
+        private Features Features = Features.Instance;
 
         public ObservableCollection<Asset> Items { get; set; }
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();

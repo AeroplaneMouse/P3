@@ -6,6 +6,7 @@ using AMS.Logging;
 using AMS.ViewModels;
 using System.Windows;
 using AMS.Controllers.Interfaces;
+using AMS.Helpers.Features;
 
 namespace AMS.Views
 {
@@ -26,7 +27,7 @@ namespace AMS.Views
                 viewModel.SelectedItems.Add(entry);
 
             // Only change visibility if current user if admin
-            if (Features.Main.CurrentSession.IsAdmin())
+            if (Features.Instance.Main.CurrentSession.IsAdmin())
             {
                 // Setting single item selected visibility
                 viewModel.SingleSelected = viewModel.SelectedItems.Count == 1 ?
