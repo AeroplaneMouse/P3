@@ -24,7 +24,10 @@ namespace AMS.ViewModels
         private IAssetController _assetController;
         private ITagListController _tagListController;
         private bool _isEditing;
+        private string _tagString;
+        private string _tagSearchQuery;
         private TagHelper _tagHelper;
+
 
         public ICommand AddFieldCommand { get; set; }
         public ICommand RemoveFieldCommand { get; set; }
@@ -33,7 +36,6 @@ namespace AMS.ViewModels
         public ICommand CancelCommand { get; set; }
         public ICommand RemoveTagCommand { get; set; }
         public ICommand AddTagCommand { get; set; }
-        
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
         public ICommand EnterSuggestionListCommand { get; set; }
@@ -63,7 +65,6 @@ namespace AMS.ViewModels
 
         public string Title { get; set; }
 
-        private string _tagString;
         /*
         public string TagString
         {
@@ -77,7 +78,6 @@ namespace AMS.ViewModels
         }
         */
 
-        private string _tagSearchQuery;
         public string TagSearchQuery
         {
             get => _tagSearchQuery;
@@ -97,7 +97,6 @@ namespace AMS.ViewModels
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
         public ITagable TagParent { get; set; }
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
-        
         public List<Tag> TagList { get; set; }
         
         public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController, TagHelper tagHelper)
