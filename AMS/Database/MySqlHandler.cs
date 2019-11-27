@@ -11,16 +11,24 @@ namespace AMS.Database
     public class MySqlHandler
     {
         private readonly MySqlConnection _connection;
+
         //private static MySqlConnection _con;
         private FileConfigurationHandler _fileConfigurationHandler;
-        
+        private static bool fileExists;
         public static event SqlConnectionEventHandler ConnectionFailed;
 
         public MySqlHandler()
         {
             // "Server=192.38.49.9; database=ds303e19_dev; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5"
             _fileConfigurationHandler = new FileConfigurationHandler(Features.GetCurrentSession());
-            _connection = new MySqlConnection(_fileConfigurationHandler.GetConfigValue());
+            string getConfigValue = _fileConfigurationHandler.GetConfigValue(out fileExists);
+            if (fileExists)
+            {
+                _connection = new MySqlConnection(getConfigValue);
+            }
+            else
+            {
+            }
         }
 
         public static bool Open(ref MySqlConnection con)
@@ -38,6 +46,7 @@ namespace AMS.Database
                 if (e.Message == "Something connection failed...")
                     ConnectionFailed?.Invoke();
             }
+
             return false;
             //_con = con;
             //return await Task.Run(_open);
@@ -64,11 +73,14 @@ namespace AMS.Database
 
         public bool IsAvailable()
         {
-            var con = GetConnection();
-            if (Open(ref con))
+            if (fileExists)
             {
-                con.Close();
-                return true;
+                var con = GetConnection();
+                if (Open(ref con))
+                {
+                    con.Close();
+                    return true;
+                }
             }
 
             return false;
@@ -103,7 +115,7 @@ namespace AMS.Database
             {
                 con.Close();
             }
-            
+
             return result;
         }
     }

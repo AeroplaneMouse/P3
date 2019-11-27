@@ -16,9 +16,9 @@ namespace AMS.ConfigurationHandler
             _session = session;
             
         }
-        public string GetConfigValue()
+        public string GetConfigValue(out bool exists)
         {
-            string configuration = FileEncryption.UserDataDecrypt(ComputeSha256Hash(Domain), Path);
+            string configuration = FileEncryption.UserDataDecrypt(ComputeSha256Hash(Domain), Path, out exists);
 
             return configuration;
         }

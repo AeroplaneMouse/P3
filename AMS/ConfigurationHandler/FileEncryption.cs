@@ -12,20 +12,27 @@ namespace AMS.ConfigurationHandler
         private string Path{ get; set; }
 
         private string Extension{ get; set; }
-        
-        
+
+
         /// <summary>
         /// Decrypt the Userdata file so it is readable by the program
         /// </summary>
         /// <param name="encryptionKey">The user's password</param>
         /// <param name="path">Where the Userdata file is stored</param>
+        /// <param name="FileExists"></param>
         /// <returns></returns>
-        public static string UserDataDecrypt(string encryptionKey, string path){
+        public static string UserDataDecrypt(string encryptionKey, string path, out bool FileExists){
             //Setup to read the salt from the start of the file
             byte[] passwordBytes = Encoding.UTF8.GetBytes(encryptionKey);
             byte[] salt = new byte[64];
             string output = null;
 
+            if (!File.Exists(path))
+            {
+                FileExists = false;
+            }
+
+            FileExists = true;
             //Reading through the file
             using (FileStream fsCrypt =
                 new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)){
