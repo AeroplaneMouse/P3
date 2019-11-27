@@ -86,6 +86,8 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
+            
+            <!-- Details -->
             <TabItem DataContext="{Binding Children[0]}" 
                      Header="Details"
                      FontSize="{StaticResource FontSizeSmall}">
@@ -212,6 +214,8 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
+            
+            <!-- Comments -->
             <TabItem DataContext="{Binding Children[1]}" 
                      Header="Comments" 
                      FontSize="{StaticResource FontSizeSmall}">
@@ -356,7 +360,8 @@
                 </Grid>
             </TabItem>
 
-            <TabItem DataContext="{Binding Children[2]}" Header="Log" FontSize="{StaticResource FontSizeSmall}">
+            <!-- Log -->
+            <TabItem DataContext="{Binding Children[2]}" Header="Log" FontSize="{StaticResource FontSizeSmall}" Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}">
                 <!--Style="{StaticResource RegularList}"-->
                 <ListView x:Name="listViewWithItems"
                         SelectionMode="Extended"
