@@ -181,19 +181,25 @@
                 <!-- List of assets -->
                 <ListView ItemsSource="{Binding Items}"
                           SelectionMode="Extended"
+                          x:Name="ListOfAssets"
                           SelectionChanged="ListView_SelectionChanged"
                           Grid.Row="2">
                     <ListView.View>
                         <GridView>
                             <!-- Checkbox -->
-                            <GridViewColumn Header="[  ]" x:Name="PART_CheckBox">
+                            <GridViewColumn x:Name="PART_CheckBox">
+                                <GridViewColumn.Header>
+                                    <CheckBox IsChecked="{Binding CheckAll, UpdateSourceTrigger=PropertyChanged}"
+                                              Command="{Binding CheckAllChangedCommand}"
+                                              CommandParameter="{Binding ElementName=ListOfAssets, Path=.}"/>
+                                </GridViewColumn.Header>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            
+
                             <!-- Name -->
                             <GridViewColumn Header="Name"
                                             Width="Auto">
