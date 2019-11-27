@@ -78,10 +78,6 @@ namespace AMS.Controllers
         public bool RemoveField(Field field, FieldContainer fieldContainer = null)
         {
             if (field == null) return false;
-            Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(field)) ??
-                                NonHiddenFieldList.FirstOrDefault(p => p.Equals(field));
-            if (fieldInList == null) return true;
-                
 
             if (field.IsCustom)
             {

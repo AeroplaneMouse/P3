@@ -62,24 +62,25 @@ namespace AMS.ViewModels
             get => _controller.ParentTagList;
         }
 
-        public List<Department> DepartmentList { get => _controller.DepartmentList; }
+        public List<Department> DepartmentList
+        {
+            get => _controller.DepartmentList;
+        }
 
         private int _selectedParentTagIndex;
+
         public int SelectedParentTagIndex
         {
             get => _selectedParentTagIndex;
             set
             {
                 if (value == _selectedParentTagIndex) return;
-                
+
                 int oldValue = _selectedParentTagIndex;
                 _selectedParentTagIndex = value;
-                    
-                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex],ParentTagList[oldValue]);
-                //_controller.RemoveFieldRelations(ParentTagList[oldValue].ID);
-                   
-                OnPropertyChanged(nameof(HiddenFieldList));
-                OnPropertyChanged(nameof(NonHiddenFieldList));
+
+                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex], ParentTagList[oldValue]);
+                UpdateAll();
             }
         }
 
@@ -136,7 +137,9 @@ namespace AMS.ViewModels
             if (i > 0)
                 _selectedParentTagIndex = i - 1;
 
-            OnPropertyChanged(nameof(SelectedParentTagIndex));
+            UpdateAll();
+
+
 
             Department currentDepartment;
 
@@ -161,7 +164,6 @@ namespace AMS.ViewModels
                     SelectedDepartmentIndex = index;
                 index++;
             }
-
 
 
             // Initialize commands
@@ -190,7 +192,6 @@ namespace AMS.ViewModels
             }
 
             Features.Navigate.Back();
-
         }
 
         private void AddField()
@@ -203,8 +204,7 @@ namespace AMS.ViewModels
             if (e is FieldInputPromptEventArgs args)
             {
                 _controller.AddField(args.Field);
-                OnPropertyChanged(nameof(NonHiddenFieldList));
-                OnPropertyChanged(nameof(HiddenFieldList));
+                UpdateAll();
             }
         }
 
@@ -214,8 +214,7 @@ namespace AMS.ViewModels
             {
                 inputField.TagIDs.Add(_controller.Tag.ID);
                 _controller.RemoveField(inputField);
-                OnPropertyChanged(nameof(NonHiddenFieldList));
-                OnPropertyChanged(nameof(HiddenFieldList));
+                UpdateAll();
             }
         }
 
@@ -225,7 +224,42 @@ namespace AMS.ViewModels
                 Console.WriteLine("Going back dude...");
             else
                 Console.WriteLine("Naaa... it is not possible to go back at the point in time.");
+        }
 
+        private void UpdateAll()
+        {
+            OnPropertyChanged(nameof(NonHiddenFieldList));
+            OnPropertyChanged(nameof(HiddenFieldList));
+            OnPropertyChanged(nameof(SelectedParentTagIndex));
+            UpdateTagRelations();
+        }
+
+        private void UpdateTagRelations()
+        {
+            Tag ParentTag = ParentTagList[_selectedParentTagIndex];
+            foreach (var field in HiddenFieldList)
+            {
+                field.TagList = new List<Tag>();
+                foreach (var id in field.TagIDs)
+                {
+                    if (field.TagIDs.Contains(id))
+                    {
+                        field.TagList.Add(ParentTag);
+                    }
+                }
+            }
+
+            foreach (var field in NonHiddenFieldList)
+            {
+                field.TagList = new List<Tag>();
+                foreach (var id in field.TagIDs)
+                {
+                    if (field.TagIDs.Contains(id))
+                    {
+                        field.TagList.Add(ParentTag);
+                    }
+                }
+            }
         }
 
         #endregion

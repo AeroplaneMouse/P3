@@ -41,6 +41,7 @@ namespace AMS.Controllers
             HiddenFieldList = Asset.FieldList.Where(f => f.IsHidden == true).ToList();
             _assetRepository = assetRepository;
             CurrentlyAddedTags = _assetRepository.GetTags(Asset).ToList();
+            LoadTags();
         }
 
         /// <summary>
@@ -78,22 +79,25 @@ namespace AMS.Controllers
             {
                 List<Field> removeFields = new List<Field>();
                 CurrentlyAddedTags.Remove(tag);
+                
                 if (tag is Tag currentTag)
                 {
+                    RemoveFieldRelations(currentTag.ID);
+                    RemoveFieldRelations(currentTag.ParentID);
+                    
                     foreach (var field in currentTag.FieldList)
                     {
-                        removeFields.Add(field);
+                        Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(field)) ??
+                                            NonHiddenFieldList.FirstOrDefault(p => p.Equals(field));
+                        if (fieldInList != null)
+                            removeFields.Add(fieldInList);
                     }
-                    
+
                     foreach (var field in removeFields)
                     {
-                        RemoveFieldRelations(currentTag.ID);
-                        RemoveFieldRelations(currentTag.ParentID);
                         RemoveField(field);
                     }
                 }
-
-
             }
 
             return !CurrentlyAddedTags.Contains(tag);
@@ -168,6 +172,20 @@ namespace AMS.Controllers
         public bool Remove()
         {
             return _assetRepository.Delete(Asset);
+        }
+
+        private void LoadTags()
+        {
+            foreach (var tag in CurrentlyAddedTags)
+            {
+                if (tag is Tag currentTag)
+                {
+                    foreach (var tagField in currentTag.FieldList)
+                    {
+                        AddField(tagField, currentTag);
+                    }
+                }
+            }
         }
     }
 }

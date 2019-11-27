@@ -19,11 +19,27 @@ namespace AMS.ViewModels
         public List<ITagable> TagList { get; set; }
 
         public ObservableCollection<Field> FieldList =>
-            new ObservableCollection<Field>(_asset.FieldList.Where(p => p.IsHidden == false).ToList());
+            new ObservableCollection<Field>(_asset.FieldList.Where(p => p.IsHidden == false && !string.IsNullOrEmpty(p.Content)).ToList());
         public AssetDetailsViewModel(Asset asset, List<ITagable> tagList)
         {
             TagList = tagList;
             _asset = asset;
+            UpdateTagRelations();
+        }
+        
+        private void UpdateTagRelations()
+        {
+            foreach (var field in FieldList)
+            {
+                field.TagList = new List<Tag>();
+                foreach (var id in field.TagIDs)
+                {
+                    if (TagList.SingleOrDefault(p => p.TagId == id) is Tag tag)
+                    {
+                        field.TagList.Add(tag);
+                    }
+                }
+            }
         }
     }
 }
