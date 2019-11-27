@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
@@ -340,9 +341,15 @@ namespace AMS.ViewModels
                         return false;
                     }
                 }
+
+                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"today"))
+                {
+                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+                }
             }
 
             return true;
         }
+        
     }
 }
