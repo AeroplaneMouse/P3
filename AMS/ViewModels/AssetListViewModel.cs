@@ -47,6 +47,9 @@ namespace AMS.ViewModels
                 {
                     TagSearchProcess();
                 }
+
+                if (!inTagMode)
+                    RefreshList();
             }
         }
         public string CurrentGroup { get; set; }
