@@ -99,8 +99,8 @@ namespace AMS.ViewModels
 
             _userListController = userListController;
 
-            CancelCommand = new Base.RelayCommand(Cancel);
-            ApplyCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Are you sure you want to these changes?", Apply)));
+            CancelCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Are you sure you want to cancel these changes?", Cancel)));
+            ApplyCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Are you sure you want to apply these changes?", Apply)));
             KeepUserCommand = new Base.RelayCommand<object>(KeepUser);
             ImportUsersCommand = new Base.RelayCommand(Import);
 
@@ -125,13 +125,16 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(ShownUsersList));
         }
 
-        private void Cancel()
+        private void Cancel(object sender, PromptEventArgs e)
         {
-            _userListController.CancelChanges();
-            
-            Features.AddNotification(new Notification("Changes cancelled", Notification.ERROR));
+            if (e.Result)
+            {
+                _userListController.CancelChanges();
 
-            OnPropertyChanged(nameof(ShownUsersList));
+                Features.AddNotification(new Notification("Changes cancelled", Notification.ERROR));
+
+                OnPropertyChanged(nameof(ShownUsersList));
+            }
         }
 
         private void Apply(object sender, PromptEventArgs e)
@@ -143,9 +146,9 @@ namespace AMS.ViewModels
 
                 else
                     Features.AddNotification(new Notification("Not all conflicts solved", Notification.WARNING));
-            }
 
-            OnPropertyChanged(nameof(ShownUsersList));
+                OnPropertyChanged(nameof(ShownUsersList));
+            }
         }
 
         private void KeepUser(object user)
