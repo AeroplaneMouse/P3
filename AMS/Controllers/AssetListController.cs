@@ -16,12 +16,12 @@ namespace AMS.Controllers
         //TODO: Create tagging class
         //public Tagging _tags;
 
-        public ObservableCollection<Asset> AssetList { get; set; }
+        public List<Asset> AssetList { get; set; }
         public List<Tag> TagList { get; set; } 
 
         public AssetListController(IAssetRepository assetRepository, IExporter exporter)
         {
-            AssetList = new ObservableCollection<Asset>();
+            AssetList = new List<Asset>();
             _assetRepository = assetRepository;
             _exporter = exporter;
             Search("");
@@ -34,7 +34,7 @@ namespace AMS.Controllers
         public void Search(string query, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
         {
             //TODO: Filter list based on search query, also search by tags
-            ObservableCollection<Asset> searchResult = _assetRepository.Search(query, tags, users, strict);
+            List<Asset> searchResult = _assetRepository.Search(query, tags, users, strict);
             AssetList = searchResult;
             //TODO: Determine if search should be on assets or by tags
             /* Remove comment when tagging class is implementet

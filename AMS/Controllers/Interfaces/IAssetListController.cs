@@ -10,7 +10,7 @@ namespace AMS.Controllers.Interfaces
     public interface IAssetListController
     {
         // Main asset list
-        ObservableCollection<Asset> AssetList { get; set; }
+        List<Asset> AssetList { get; set; }
 
         // List of tags that can be searched
         List<Tag> TagList { get; set; }

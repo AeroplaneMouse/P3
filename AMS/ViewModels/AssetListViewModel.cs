@@ -22,7 +22,10 @@ namespace AMS.ViewModels
         private string _searchQuery;
         private TagHelper _tagHelper;        private bool _isStrict = true;
         
-        public ObservableCollection<Asset> Items { get; set; }
+        public ObservableCollection<Asset> Items
+        {
+            get => new ObservableCollection<Asset>(_listController.AssetList);
+        }
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
         public bool IsStrict { 
             get => _isStrict; 
@@ -81,7 +84,6 @@ namespace AMS.ViewModels
         public AssetListViewModel(IAssetListController listController, TagHelper tagHelper)
         {
             _listController = listController;
-            Items = _listController.AssetList;
 
             _tagHelper = tagHelper;
             _tagHelper.CanApplyParentTags = true;
@@ -221,7 +223,7 @@ namespace AMS.ViewModels
         private void RefreshList()
         {
             _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict);
-            Items = _listController.AssetList;
+            OnPropertyChanged(nameof(Items));
         }
 
         private void AutoTag(ITagable input = null)

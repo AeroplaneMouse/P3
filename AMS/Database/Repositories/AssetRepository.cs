@@ -264,10 +264,10 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="tagsIds">A list of IDs of the tags</param>
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
-        public ObservableCollection<Asset> SearchByTags(List<int> tagsIds)
+        public List<Asset> SearchByTags(List<int> tagsIds)
         {
             var con = new MySqlHandler().GetConnection();
-            ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
+            List<Asset> assets = new List<Asset>();
 
             // Opening connection
             if (MySqlHandler.Open(ref con))
@@ -307,7 +307,7 @@ namespace AMS.Database.Repositories
             return assets;
         }
 
-        public ObservableCollection<Asset> Search(string keyword)
+        public List<Asset> Search(string keyword)
         {
             List<ulong> tags = new List<ulong>();
             tags.Add(9);
@@ -323,10 +323,10 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="keyword">The search query to search by</param>
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
-        public ObservableCollection<Asset> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
+        public List<Asset> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
         {
             var con = new MySqlHandler().GetConnection();
-            ObservableCollection<Asset> assets = new ObservableCollection<Asset>();
+            List<Asset> assets = new List<Asset>();
 
             // Opening connection
             if (MySqlHandler.Open(ref con))
