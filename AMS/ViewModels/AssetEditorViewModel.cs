@@ -102,13 +102,12 @@ namespace AMS.ViewModels
                 Title = "Add asset";
             }
 
-            //Commands
-            SaveCommand = new RelayCommand(() => SaveAndExist());
+            // Commands
+            SaveCommand = new RelayCommand(() => SaveAndExit());
             SaveMultipleCommand = new RelayCommand(() => SaveAsset());
             AddFieldCommand = new Base.RelayCommand(() => PromptForCustomField());
             CancelCommand = new Base.RelayCommand(() => Cancel());
             RemoveFieldCommand = new RelayCommand<object>((parameter) => RemoveField(parameter));
-            //RemoveTagCommand = new RelayCommand<object>((parameter) => RemoveTag(parameter));
             AddTagCommand = new RelayCommand(() => TagSearch());
             
             RemoveTagCommand = new RelayCommand<object>((parameter) => 
@@ -125,7 +124,7 @@ namespace AMS.ViewModels
             UpdateAll();
         }
 
-        public void SaveAndExist()
+        public void SaveAndExit()
         {
             SaveAsset(false);
 
