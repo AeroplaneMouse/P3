@@ -8,7 +8,8 @@
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
-      Title="NewTag">
+      Title="NewTag"
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
 
     <Page.Resources>
         <local:FieldDesignSelector x:Key="MyFieldDesignSelector" />
@@ -68,7 +69,8 @@
                                Text="Label" />
                     <TextBox Style="{StaticResource ParagraphTextBox}"
                              Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                             Margin="0 0 0 10" />
+                             Margin="0 0 0 10"
+                             x:Name="StartElement"/>
 
                     <!-- Parent tag id -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
