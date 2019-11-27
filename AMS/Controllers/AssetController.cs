@@ -79,12 +79,12 @@ namespace AMS.Controllers
             {
                 List<Field> removeFields = new List<Field>();
                 CurrentlyAddedTags.Remove(tag);
-                
+
                 if (tag is Tag currentTag)
                 {
                     RemoveFieldRelations(currentTag.ID);
                     RemoveFieldRelations(currentTag.ParentID);
-                    
+
                     foreach (var field in currentTag.FieldList)
                     {
                         Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(field)) ??
@@ -134,6 +134,8 @@ namespace AMS.Controllers
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
             bool success = _assetRepository.Insert(Asset, out id);
             return id != 0;
+
+            return false;
         }
 
         /// <summary>
