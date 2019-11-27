@@ -11,6 +11,7 @@ namespace AMS.Helpers.Features
         public static readonly Features Instance = new Features();
         public Create Create { get; }
         public Navigate Navigate { get; }
+        // TODO: This needs to be set when the constructor is run.
         public MainViewModel Main { get; set; }
         public Visibility OnlyVisibleForAdmin => Main.OnlyVisibleForAdmin;
 
