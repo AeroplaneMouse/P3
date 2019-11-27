@@ -21,9 +21,17 @@ namespace AMS.ViewModels
         private IAssetListController _listController;
         private string _searchQuery;
         private TagHelper _tagHelper;
+        private bool _isStrict = false;
 
         public ObservableCollection<Asset> Items { get; set; }
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
+        public bool IsStrict { 
+            get => _isStrict; 
+            set { _isStrict = value; 
+                SearchAssets(); 
+                Console.WriteLine("Strict toggled: "+value.ToString());
+            }
+        }
 
         public string SearchQuery
         {
@@ -177,7 +185,7 @@ namespace AMS.ViewModels
 
         private void RefreshList()
         {
-            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)));
+            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict);
             Items = _listController.AssetList;
         }
 
