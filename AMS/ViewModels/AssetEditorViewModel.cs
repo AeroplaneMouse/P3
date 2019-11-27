@@ -11,6 +11,7 @@ using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Events;
 using AMS.Helpers;
+using AMS.Helpers.Features;
 using AMS.Interfaces;
 using AMS.Models;
 using AMS.ViewModels.Base;
@@ -87,6 +88,8 @@ namespace AMS.ViewModels
 
         public List<Tag> TagList { get; set; }
         
+        private Features Features = Features.Instance;
+        
         public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController, TagHelper tagHelper)
         {
             _assetController = assetController;
@@ -94,7 +97,7 @@ namespace AMS.ViewModels
 
             _tagHelper = tagHelper;
             _tagHelper.CanApplyParentTags = false;
-            _tagHelper.SetCurrentTags(CurrentlyAddedTags);
+            //_tagHelper.SetCurrentTags(CurrentlyAddedTags);
 
             AppliedTags = new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags);
 
