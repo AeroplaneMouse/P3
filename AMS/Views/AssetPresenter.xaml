@@ -29,10 +29,16 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <TextBlock Style="{StaticResource TitleStyle}"
-                   VerticalAlignment="Center"
-                   Margin="10 11 0 11"
-                   Text="{Binding Name}" />
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Style="{StaticResource TitleStyle}"
+                       VerticalAlignment="Center"
+                       Margin="10 11 0 11"
+                       Text="{Binding Name}"/>
+            <TextBlock Style="{StaticResource TitleStyle}"
+                       VerticalAlignment="Center"
+                       Text="{Binding ID}"/>
+        </StackPanel>
 
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
