@@ -183,16 +183,6 @@
                                           ItemContainerStyle="{StaticResource ListViewWithTags}"
                                           BorderBrush="Transparent"
                                           Margin="0 0 0 0">
-                                    <!--<ListView.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <WrapPanel
-                                                Orientation="Vertical"
-                                                ItemHeight="40"
-                                                VerticalAlignment="Top"
-                                                HorizontalAlignment="Left"
-                                                OverridesDefaultStyle="True"/>
-                                        </ItemsPanelTemplate>
-                                    </ListView.ItemsPanel>-->
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
@@ -214,7 +204,6 @@
                                     </ListView.ItemTemplate>
                                 </ListView>
                             </StackPanel>
-
                         </Grid>
                     </ScrollViewer>
                 </Grid>
