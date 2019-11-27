@@ -20,6 +20,8 @@
                          AcceptsReturn="True"
                          AcceptsTab="True"
                          MinHeight="70"
+                         MaxHeight="180"
+                         VerticalScrollBarVisibility="Auto"
                          Text="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.DefaultValue, UpdateSourceTrigger=PropertyChanged}" 
                          Grid.Row="1" />
             </Grid>
@@ -66,10 +68,9 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />
-                    <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock  Grid.Row="0" Text="This is a checkbox." />
-                <CheckBox Grid.Row="1" IsChecked="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.DefaultBool, UpdateSourceTrigger=PropertyChanged}" />
+                <CheckBox Grid.Row="0" 
+                          IsChecked="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.DefaultBool, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </DataTemplate>
 
@@ -81,73 +82,87 @@
         <Canvas Style="{StaticResource PromptBackground}" />
         <Border Style="{StaticResource PromptBorder}"
                 Width="400"
-                Height="400">
+                Height="Auto">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Border CornerRadius="3 3 0 0"
-                        Background="{StaticResource BackgroundDarkBrush}">
-                    <Grid>
-                        <TextBlock Text="Add new field"
-                                   Style="{StaticResource TitleStyle}"
-                                   Foreground="White"
-                                   Margin="10 10 0 10" />
 
-                        <Button Style="{StaticResource RegularCancelButton}"
-                                Width="Auto"
-                                Foreground="White"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Right"
-                                Command="{Binding CancelCommand}"
-                                Content="X"
-                                Margin="0 0 10 0"
-                                FontWeight="Bold" />
-                    </Grid>
-                </Border>
+                <StackPanel>
+                    <!-- Title -->
+                    <Border CornerRadius="3 3 0 0"
+                            Background="{StaticResource BackgroundDarkBrush}">
+                        <Grid>
+                            <TextBlock Text="Add new field"
+                                       Style="{StaticResource HeaderStyle}"
+                                       Foreground="White"
+                                       Margin="10 0 0 0"
+                                       VerticalAlignment="Center"/>
 
-                <!-- Content -->
-                <Grid Margin="10"
-                      Grid.Row="1">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="Auto" />
-                    </Grid.RowDefinitions>
-                    <StackPanel>
-                        <TextBlock Style="{StaticResource ParagraphStyle}"
-                                   Text="Field type:" />
-                        <ComboBox Margin="0 0 0 10"
-                                  Name="FieldTypeSelector"
-                                  ItemsSource="{Binding FieldTypes}"
-                                  SelectedItem="{Binding SelectedFieldType, UpdateSourceTrigger=PropertyChanged}" />
+                            <Button Style="{StaticResource RegularCancelButton}"
+                                    Width="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ActualHeight}" 
+                                    Foreground="White"
+                                    Height="25"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding CancelCommand}"
+                                    Content="X"
+                                    Margin="0 5 10 5"
+                                    FontWeight="Bold" />
+                        </Grid>
+                    </Border>
 
-                        <TextBlock Style="{StaticResource ParagraphStyle}"
-                                   Text="Field name:" />
-                        <TextBox Style="{StaticResource ParagraphTextBox}"
-                                 Margin="0 0 0 10"
-                                 Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                    <!-- Content -->
+                    <Grid Margin="10"
+                            Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                        Text="Field type:" />
+                            <ComboBox Margin="0 0 0 10"
+                                        Name="FieldTypeSelector"
+                                        ItemsSource="{Binding FieldTypes}"
+                                        SelectedItem="{Binding SelectedFieldType, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <TextBlock Text="Default Value:"
-                                   Style="{StaticResource ParagraphStyle}" DataContext="{Binding}" />
+                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                        Text="Field name:" />
+                            <TextBox Style="{StaticResource ParagraphTextBox}"
+                                        Margin="0 0 0 10"
+                                        Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
 
-                        <ContentPresenter Margin="0 0 0 10"
-                                          ContentTemplateSelector="{StaticResource MyDefaultValueDesignSelector}"
-                                          Content="{Binding SelectedFieldType}" />
+                            <TextBlock Text="Default Value:"
+                                        Style="{StaticResource ParagraphStyle}" DataContext="{Binding}" />
 
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Required: "
-                                       Style="{StaticResource ParagraphStyle}" />
-                            <CheckBox IsChecked="{Binding IsRequired, UpdateSourceTrigger=PropertyChanged}" />
+                            <ContentPresenter Margin="0 0 0 10"
+                                                ContentTemplateSelector="{StaticResource MyDefaultValueDesignSelector}"
+                                                Content="{Binding SelectedFieldType}" />
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Required: "
+                                           Style="{StaticResource ParagraphStyle}"/>
+                                <CheckBox IsChecked="{Binding IsRequired, UpdateSourceTrigger=PropertyChanged}"
+                                          VerticalAlignment="Center"
+                                          Margin="0 4 0 0"/>
+                            </StackPanel>
                         </StackPanel>
-                    </StackPanel>
 
+                    </Grid>
+
+                    <Rectangle Style="{StaticResource HorizontalSeparator}"
+                               Margin="10"/>
+
+                    <!-- Accept button -->
                     <Button Style="{StaticResource RegularAcceptButton}"
+                            Margin="0 0 10 10"
                             Command="{Binding AcceptCommand}"
                             Grid.Row="1"
                             HorizontalAlignment="Right"
                             Content="Add field" />
-                </Grid>
+                </StackPanel>
             </Grid>
         </Border>
     </Grid>

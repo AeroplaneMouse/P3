@@ -1,4 +1,4 @@
-<Page x:Class="AMS.Views.UserList"
+﻿<Page x:Class="AMS.Views.UserList"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -21,7 +21,7 @@
 
     <Page.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CancelCommand}"/>
-        <KeyBinding Key="Esc" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
         <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding ApplyCommand}"/>
     </Page.InputBindings>
 

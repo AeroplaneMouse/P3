@@ -69,8 +69,13 @@
                     <TextBlock Style="{StaticResource HeaderStyleWithSpace}"
                                Text="Details" />
                     <!-- Name -->
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
-                               Text="Name"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="Name" />
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Foreground="Red"
+                                   Text="*"/>
+                    </StackPanel>
                     <TextBox Style="{StaticResource ParagraphTextBoxWithSpace}"
                              Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                              x:Name="StartElement"/>

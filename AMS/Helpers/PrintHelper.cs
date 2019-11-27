@@ -10,6 +10,8 @@ namespace AMS.Helpers
 {
     public class PrintHelper : IExporter
     {
+        // A list of the properties that should not be exported 
+        private List<string> _excludedProperties = new List<string> {{"FieldsList"}, {"CreatedAt"}, {"UpdatedAt"}, {"Changes"}};
         public void Print(IEnumerable<object> items)
         {
             Type objectType = items.FirstOrDefault().GetType();
@@ -74,7 +76,7 @@ namespace AMS.Helpers
                     {
                         string key = prop.Name;
                         // Condition to exclude the property fieldslist, as it requires special formatting, and all the data is already contained in serializedFields
-                        if (!prop.Name.Equals("FieldsList"))
+                        if (!_excludedProperties.Contains(prop.Name))
                             fileEntry += objectType.GetProperty(key)
                                              ?.GetValue(item, null)
                                              ?.ToString()
@@ -98,8 +100,10 @@ namespace AMS.Helpers
             foreach (PropertyInfo prop in objectType.GetProperties())
             {
                 // This condition applies only to assets, so the list of fields is not added to the file.
-                if (!prop.Name.Equals("FieldsList"))
-                    if (prop.Name.Equals("DateToStringConverter"))
+                if (!_excludedProperties.Contains(prop.Name))
+                    if (prop.Name.Equals("CreatedAtString") || prop.Name.Equals("UpdatedAtString"))
+                        fileHeader += prop.Name.TrimEnd("AtString".ToCharArray()) + ",";
+                    else if (prop.Name.Equals("DateToStringConverter"))
                         fileHeader += "Time,";
                     else
                         fileHeader += prop.Name + ",";
