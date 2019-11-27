@@ -18,6 +18,12 @@
         <local:StatusToToolTipConverter x:Key="toolTipConverter" />
     </Page.Resources>
 
+    <Page.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Esc" Command="{Binding CancelCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding ApplyCommand}"/>
+    </Page.InputBindings>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -173,13 +179,12 @@
                             </GridViewColumn>
 
                             <!-- Department -->
-                            <GridViewColumn Header="Department" Width="170">
+                            <GridViewColumn Header="Department" Width="180">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox ItemsSource="{Binding DataContext.DepartmentList, UpdateSourceTrigger=PropertyChanged, ElementName=UserListView}"
                                                   SelectedIndex="{Binding Path=DepartmentIndex}"
                                                   MinWidth="160"
-                                                  Height="25"
                                                   Template="{StaticResource UserListDepartmentComboBoxTemplate}"
                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}">
                                             <ComboBox.ItemTemplate>

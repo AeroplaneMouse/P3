@@ -13,7 +13,13 @@
     <Page.Resources>
         <local:FieldDesignSelector x:Key="MyFieldDesignSelector" />
     </Page.Resources>
-    
+
+    <Page.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding SaveTagCommand}"/>
+    </Page.InputBindings>
+
     <Grid>
         <!-- Header -->
         <Grid.RowDefinitions>
