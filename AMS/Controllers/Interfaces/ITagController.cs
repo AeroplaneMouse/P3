@@ -12,6 +12,7 @@ namespace AMS.Controllers.Interfaces
 
         Tag Tag { get; set; }
 
+        ulong Id { get; set; }
         string Name { get; set; }
         string Color { get; set; }
         ulong ParentID { get; set; }

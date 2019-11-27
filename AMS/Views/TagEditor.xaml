@@ -69,7 +69,8 @@
                                Text="Parent tag ID"/>
                     <ComboBox ItemsSource="{Binding ParentTagList}" 
                               SelectedIndex="{Binding SelectedParentTagIndex}"
-                              Margin="0 0 0 10">
+                              Margin="0 0 0 10"
+                              IsEnabled="{Binding DropdownsEnabled}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}" />
@@ -88,7 +89,8 @@
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Department"/>
                     <ComboBox ItemsSource="{Binding DepartmentList}"
-                              SelectedIndex="{Binding SelectedDepartmentIndex, UpdateSourceTrigger=PropertyChanged}">
+                              SelectedIndex="{Binding SelectedDepartmentIndex, UpdateSourceTrigger=PropertyChanged}"
+                              IsEnabled="{Binding DropdownsEnabled}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}"/>

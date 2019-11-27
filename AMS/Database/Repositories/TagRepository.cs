@@ -370,7 +370,7 @@ namespace AMS.Database.Repositories
                                      "FROM tags AS t WHERE t.label LIKE @keyword";
 
                     if (Features.Main.CurrentDepartment.ID > 0)
-                        query += $" AND t.department_id={ Features.Main.CurrentDepartment.ID.ToString() } OR t.department_id=0";
+                        query += $" AND t.department_id={ Features.Main.CurrentDepartment.ID.ToString() } OR t.department_id IS NULL";
 
                     if (!keyword.Contains('%'))
                         keyword = $"%{keyword}%";
@@ -453,7 +453,8 @@ namespace AMS.Database.Repositories
             ulong rowId = reader.GetUInt64("id");
             String rowLabel = reader.GetString("label");
             ulong rowParentId = reader.GetUInt64("parent_id");
-            ulong rowDepartmentId = reader.GetUInt64("department_id");
+            var ordinal = reader.GetOrdinal("department_id");
+            ulong rowDepartmentId = (reader.IsDBNull(ordinal) ? 0 : reader.GetUInt64("department_id"));
             string rowColor = reader.GetString("color");
             int rowNumOfChildren = reader.GetInt32("countChildren");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");

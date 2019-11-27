@@ -21,15 +21,15 @@ namespace AMS.ViewModels
         private IAssetListController _listController;
         private string _searchQuery;
         private TagHelper _tagHelper;
-        private bool _isStrict = false;
+        private bool _isStrict = true;
 
         public ObservableCollection<Asset> Items { get; set; }
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
         public bool IsStrict { 
             get => _isStrict; 
-            set { _isStrict = value; 
-                SearchAssets(); 
-                Console.WriteLine("Strict toggled: "+value.ToString());
+            set { 
+                _isStrict = value; 
+                SearchAssets();
             }
         }
 
