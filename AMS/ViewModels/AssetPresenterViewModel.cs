@@ -16,6 +16,7 @@ namespace AMS.ViewModels
         private IAssetController _assetController;
 
         public string Name { get; set; }
+        public string ID { get; set; }
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand CancelCommand { get; set; }
@@ -26,6 +27,7 @@ namespace AMS.ViewModels
         public AssetPresenterViewModel(List<ITagable> tagList, IAssetController assetController, ICommentListController commentListController, ILogListController logListController)
         {
             Name = assetController.Asset.Name;
+            ID = $" (id: { assetController.Asset.ID })";
             CommentListController = commentListController;
             _assetController = assetController;
 
