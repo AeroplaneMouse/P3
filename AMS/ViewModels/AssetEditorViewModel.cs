@@ -66,12 +66,7 @@ namespace AMS.ViewModels
         }
 
         public string Title { get; set; }
-
-        private string _tagString;
-
-        private string _tagSearchQuery;
-
-
+        
         public string TagSearchQuery
         {
             get => _tagSearchQuery;
