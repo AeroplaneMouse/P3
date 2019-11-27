@@ -8,10 +8,10 @@ namespace AMS.ConfigurationHandler
     public class FileEncryption
     {
         private const int BufferSize = 100048576;
-        
-        private string Path{ get; set; }
 
-        private string Extension{ get; set; }
+        private string Path { get; set; }
+
+        private string Extension { get; set; }
 
 
         /// <summary>
@@ -21,7 +21,8 @@ namespace AMS.ConfigurationHandler
         /// <param name="path">Where the Userdata file is stored</param>
         /// <param name="FileExists"></param>
         /// <returns></returns>
-        public static string UserDataDecrypt(string encryptionKey, string path, out bool FileExists){
+        public static string UserDataDecrypt(string encryptionKey, string path, out bool FileExists)
+        {
             //Setup to read the salt from the start of the file
             byte[] passwordBytes = Encoding.UTF8.GetBytes(encryptionKey);
             byte[] salt = new byte[64];
@@ -30,12 +31,14 @@ namespace AMS.ConfigurationHandler
             if (!File.Exists(path))
             {
                 FileExists = false;
+                return "empty";
             }
 
             FileExists = true;
             //Reading through the file
             using (FileStream fsCrypt =
-                new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)){
+                new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+            {
                 //Reads the random salt of the file.
                 fsCrypt.Read(salt, 0, salt.Length);
 
@@ -57,24 +60,31 @@ namespace AMS.ConfigurationHandler
                 aes.Mode = CipherMode.CBC;
 
                 //Runs through the encrypted files, and decrypts it using AES.
-                using (CryptoStream cs = new CryptoStream(fsCrypt, aes.CreateDecryptor(), CryptoStreamMode.Read)){
+                using (CryptoStream cs = new CryptoStream(fsCrypt, aes.CreateDecryptor(), CryptoStreamMode.Read))
+                {
                     //Creates the output file
                     byte[] buffer = new byte[BufferSize];
 
-                    using (var fileRead = new MemoryStream()){
+                    using (var fileRead = new MemoryStream())
+                    {
                         //Outputs the read file into the output file.
-                        try{int read;
-                            while ((read = cs.Read(buffer, 0, buffer.Length)) > 0){
+                        try
+                        {
+                            int read;
+                            while ((read = cs.Read(buffer, 0, buffer.Length)) > 0)
+                            {
                                 fileRead.Write(buffer, 0, read);
                             }
 
                             var result = Encoding.UTF8.GetString(fileRead.ToArray());
                             output = result;
                         }
-                        catch (Exception e){
+                        catch (Exception e)
+                        {
                             Console.WriteLine(e);
                         }
-                        finally{
+                        finally
+                        {
                             cs.Flush();
                         }
                     }
@@ -92,18 +102,20 @@ namespace AMS.ConfigurationHandler
         /// <param name="encryptionKey">User password</param>
         /// <param name="fileInformation">Is the data in the userfile</param>
         /// <param name="path">Path to where the userdata is located</param>
-        public static void UserDataEncrypt(string encryptionKey, string fileInformation, string path){
+        public static void UserDataEncrypt(string encryptionKey, string fileInformation, string path)
+        {
             //Uses the GetSalt function to create the salt for the encryption.
             var salt = GetSalt();
 
 
             //The encrypted output file.
-            using (FileStream fsCrypt = new FileStream(path, FileMode.Create)){
+            using (FileStream fsCrypt = new FileStream(path, FileMode.Create))
+            {
                 //Converts password into bytes
                 byte[] passwordBytes = Encoding.UTF8.GetBytes(encryptionKey);
 
                 //Set up AES for encryption
-                RijndaelManaged aes = new RijndaelManaged{KeySize = 256, BlockSize = 128, Padding = PaddingMode.PKCS7};
+                RijndaelManaged aes = new RijndaelManaged {KeySize = 256, BlockSize = 128, Padding = PaddingMode.PKCS7};
 
 
                 //Password, used for encryption key of the file.
@@ -118,13 +130,16 @@ namespace AMS.ConfigurationHandler
                 fsCrypt.Write(salt, 0, salt.Length);
 
                 //Runs through the file using CryptoStream
-                using (CryptoStream cs = new CryptoStream(fsCrypt, aes.CreateEncryptor(), CryptoStreamMode.Write)){
-                    try{
+                using (CryptoStream cs = new CryptoStream(fsCrypt, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                {
+                    try
+                    {
                         var buffer = Encoding.UTF8.GetBytes(fileInformation);
                         //Tries and catches regarding opening and reading file
                         cs.Write(buffer, 0, buffer.Length);
                     }
-                    catch (Exception e){
+                    catch (Exception e)
+                    {
                         Console.WriteLine(e);
                     }
 
@@ -140,10 +155,13 @@ namespace AMS.ConfigurationHandler
         /// Fetches the salt from the log
         /// </summary>
         /// <returns></returns>
-        private static byte[] GetSalt(){
+        private static byte[] GetSalt()
+        {
             byte[] data = new byte[64];
-            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider()){
-                for (int i = 0; i < 10; i++){
+            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            {
+                for (int i = 0; i < 10; i++)
+                {
                     rng.GetBytes(data);
                 }
             }
