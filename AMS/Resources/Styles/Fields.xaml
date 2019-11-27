@@ -49,6 +49,8 @@
                         
                         <Button OverridesDefaultStyle="True" 
                                 x:Name="PART_FieldButton"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveFieldCommand}"
+                                CommandParameter="{Binding Path=.}"
                                 Grid.Column="2">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
