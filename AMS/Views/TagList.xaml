@@ -71,7 +71,7 @@
                     <Button Style="{StaticResource RegularCancelButton}"
                             Command="{Binding RemoveCommand}"
                             Content="Remove"
-                            Visibility="{Binding IsRemoveVisible}"/>
+                            Visibility="{x:Static VM:Features.OnlyVisibleForAdmin}"/>
                 </StackPanel>
 
                 <!--Style="{StaticResource RegularList}"-->

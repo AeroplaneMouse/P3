@@ -22,17 +22,16 @@ namespace AMS.ViewModels
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand AddNewCommand { get; set; }
-
-        // TODO: Viewet bruger den her, men den bliver ikke sat!
-        public Visibility IsRemoveVisible { get; set; }
-
-        public TagListViewModel(ITagListController controller)
+        public TagListViewModel(ITagListController controller)
         {
             _tagListController = controller;
             Tags = _tagListController.TagsList;
             Tags.AddRange(_tagListController.GetParentTags());
             RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Deleting selected tag. This action cannot be undone. Proceed?", RemoveTag)));
-            EditCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(SelectedItem)));
+            EditCommand = new Base.RelayCommand(() => {
+                if (SelectedItem != null)
+                    Features.Navigate.To(Features.Create.TagEditor(SelectedItem));
+            });
             AddNewCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(null)));
             
             foreach (var tag in Tags)
