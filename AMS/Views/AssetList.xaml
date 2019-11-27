@@ -26,7 +26,11 @@
         </DataTemplate>
     </Page.Resources>
 
-    <Grid>
+    <Page.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding AddNewCommand}"/>
+    </Page.InputBindings>
+
+    <Grid FocusManager.FocusedElement="{Binding ElementName=SearchElement}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -274,9 +278,11 @@
 
                     <ListView.InputBindings>
                         <KeyBinding Key="Delete" Command="{Binding RemoveBySelectionCommand}"/>
-                        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
+                        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveBySelectionCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
+                        <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding PrintCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
+                        <KeyBinding Key="Return" Command="{Binding ViewCommand}"/>
                     </ListView.InputBindings>
                 </ListView>
                 

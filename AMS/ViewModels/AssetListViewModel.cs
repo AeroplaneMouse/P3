@@ -65,7 +65,6 @@ namespace AMS.ViewModels
         public ICommand SearchCommand { get; set; }
         public ICommand ViewCommand { get; set; }
         public ICommand ViewWithParameterCommand { get; set; }
-        public ICommand RemoveCommand { get; set; }
         public ICommand RemoveTagCommand { get; set; }
         public ICommand RemoveBySelectionCommand { get; set; }
         public ICommand EditBySelectionCommand { get; set; }
@@ -92,7 +91,6 @@ namespace AMS.ViewModels
             {
                 AddNewCommand = new RelayCommand(() => EditAsset(null));
                 EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
-                RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
                 RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
                 EditBySelectionCommand = new RelayCommand(EditBySelection);
                 PrintCommand = new RelayCommand(Export);
@@ -277,23 +275,6 @@ namespace AMS.ViewModels
         private void ViewAsset(object asset)
         {
             Features.Navigate.To(Features.Create.AssetPresenter(asset as Asset, _listController.GetTags(asset as Asset)));
-        }
-
-        /// <summary>
-        /// Removes the given asset and displays a prompt
-        /// </summary>
-        /// <param name="asset"></param>
-        private void RemoveAsset(Asset asset)
-        {
-            // Prompt user for confirmation of removal
-            Features.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { asset.Name }?", (sender, e) =>
-            {
-                if (e.Result)
-                {
-                    Features.AddNotification(new Notification(asset.Name + " has been removed from the system", Notification.INFO));
-                    _listController.Remove(asset);
-                }
-            }));
         }
 
         /// <summary>
