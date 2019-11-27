@@ -178,49 +178,6 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ListView>
-                    
-                    
-                    <!--
-                    <TextBox Style="{StaticResource ParagraphTextBox}"
-                             x:Name="InputBox"
-                             Text="{Binding TagString, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Return" Command="{Binding EnterKeyCommand}" />
-                            <KeyBinding Key="Tab" Command="{Binding TabKeyCommand}" />
-                            <KeyBinding Key="Space" Command="{Binding SpaceKeyCommand}" />
-                            <KeyBinding Key="Escape" Command="{Binding EscapeKeyCommand}" />
-                            <KeyBinding Key="Back" Command="{Binding BackspaceKeyCommand}" />
-                        </TextBox.InputBindings>
-                    </TextBox>
-                    <ListBox ItemsSource="{Binding TagList, UpdateSourceTrigger=PropertyChanged}">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
-                    <ListView ItemsSource="{Binding CurrentlyAddedTags, UpdateSourceTrigger=PropertyChanged}"
-                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                              ItemContainerStyle="{StaticResource ListViewWithTags}">
-                        <ListView.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <WrapPanel
-                                    Orientation="Horizontal"
-                                    ItemHeight="40"
-                                    VerticalAlignment="Top"
-                                    HorizontalAlignment="Left"
-                                    OverridesDefaultStyle="True"/>
-                            </ItemsPanelTemplate>
-                        </ListView.ItemsPanel>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Label Foreground="{Binding TagFontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelWithDelete}"></Label>
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    -->
                 </StackPanel>
                 
                 <Rectangle Style="{StaticResource VerticalSeparator}"

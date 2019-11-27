@@ -35,11 +35,14 @@ namespace AMS.ViewModels
         public ICommand AddTagCommand { get; set; }
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
-        
+
         public ICommand EnterSuggestionListCommand { get; set; }
-        
-        public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
-        public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.HiddenFieldList);
+
+        public ObservableCollection<Field> NonHiddenFieldList =>
+            new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
+
+        public ObservableCollection<Field> HiddenFieldList =>
+            new ObservableCollection<Field>(_assetController.HiddenFieldList);
 
         public string Name
         {
@@ -64,6 +67,7 @@ namespace AMS.ViewModels
         private string _tagString;
 
         private string _tagSearchQuery;
+
         public string TagSearchQuery
         {
             get => _tagSearchQuery;
@@ -85,8 +89,9 @@ namespace AMS.ViewModels
         public ObservableCollection<ITagable> AppliedTags { get; set; }
 
         public List<Tag> TagList { get; set; }
-        
-        public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController, TagHelper tagHelper)
+
+        public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController,
+            TagHelper tagHelper)
         {
             _assetController = assetController;
             _tagListController = tagListController;
@@ -95,14 +100,11 @@ namespace AMS.ViewModels
             _tagHelper.CanApplyParentTags = false;
             _tagHelper.SetCurrentTags(new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags));
             AppliedTags = _tagHelper.GetAppliedTags(false);
-            
+
             _isEditing = (_assetController.Asset.ID != 0);
-            if (_isEditing)
-                Title = "Edit asset";
-            else
-            {
-                Title = "Add asset";
-            }
+            
+            
+            Title = _isEditing ? "Edit asset" : "Add asset";
 
             //Commands
             SaveCommand = new RelayCommand(() => SaveAndExist());
@@ -112,8 +114,8 @@ namespace AMS.ViewModels
             RemoveFieldCommand = new RelayCommand<object>((parameter) => RemoveField(parameter));
             //RemoveTagCommand = new RelayCommand<object>((parameter) => RemoveTag(parameter));
             AddTagCommand = new RelayCommand(() => TagSearch());
-            
-            RemoveTagCommand = new RelayCommand<object>((parameter) => 
+
+            RemoveTagCommand = new RelayCommand<object>((parameter) =>
             {
                 ITagable tag = parameter as ITagable;
                 _tagHelper.RemoveTag(tag);
@@ -132,7 +134,6 @@ namespace AMS.ViewModels
             SaveAsset(false);
 
             Features.Navigate.Back();
-
         }
 
         public void SaveAsset(bool multiAdd = true)
@@ -164,20 +165,19 @@ namespace AMS.ViewModels
 
         public void AddCustomField(object sender, PromptEventArgs e)
         {
-            if(e is FieldInputPromptEventArgs args)
+            if (e is FieldInputPromptEventArgs args)
             {
                 _assetController.AddField(args.Field);
                 UpdateAll();
             }
         }
-        
+
         public void RemoveField(object sender)
         {
             if (sender is Field field)
             {
                 _assetController.RemoveField(field);
                 UpdateAll();
-                
             }
         }
 
@@ -201,14 +201,15 @@ namespace AMS.ViewModels
         public void AutoTag()
         {
             Console.WriteLine("Tab clicked!");
-            
+
             if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
             {
                 ITagable tag = TagSearchSuggestions[0];
-                
-                Console.WriteLine("Found: "+tag.TagLabel);
-            
-                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1)){
+
+                Console.WriteLine("Found: " + tag.TagLabel);
+
+                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
+                {
                     _tagHelper.ApplyTag(tag);
                     _assetController.AttachTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(false);
@@ -219,20 +220,21 @@ namespace AMS.ViewModels
                 else
                 {
                     // So we need to switch to a group of tags.
-                    Tag taggedItem = (Tag)tag;
+                    Tag taggedItem = (Tag) tag;
                     _tagHelper.Parent(taggedItem);
                     CurrentGroup = taggedItem.Name;
                     CurrentGroupVisibility = Visibility.Visible;
                     TagSearchQuery = "";
                 }
             }
-            
+
             TagSearchProcess();
         }
-        
+
         private void ClearInput()
         {
-            if (_tagHelper.IsParentSet()){
+            if (_tagHelper.IsParentSet())
+            {
                 _tagHelper.Parent(null);
                 CurrentGroup = "";
                 CurrentGroupVisibility = Visibility.Collapsed;
@@ -256,7 +258,7 @@ namespace AMS.ViewModels
                 TagSuggestionIsOpen = false;
             }
         }
-        
+
         /// <summary>
         /// Detach tag with given tagID from asset
         /// </summary>
@@ -269,20 +271,48 @@ namespace AMS.ViewModels
                 Features.AddNotification(new Notification("Invalid Tag ID", Notification.ERROR));
                 return;
             }
-            
+
             ITagable tag = _assetController.CurrentlyAddedTags.Find(T => T.TagId == id);
-            
+
             // Display notification if tag was not removed
-            if(!_assetController.DetachTag(tag))
+            if (!_assetController.DetachTag(tag))
                 Features.AddNotification(new Notification("Could not remove tag", Notification.ERROR));
             UpdateAll();
         }
 
         private void UpdateAll()
         {
+            UpdateTagRelations(AppliedTags);
             OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(NonHiddenFieldList));
             OnPropertyChanged(nameof(HiddenFieldList));
+        }
+
+        private void UpdateTagRelations(ObservableCollection<ITagable> tagsList)
+        {
+            foreach (var field in HiddenFieldList)
+            {
+                field.TagList = new List<Tag>();
+                foreach (var id in field.TagIDs)
+                {
+                    if (tagsList.SingleOrDefault(p => p.TagId == id) is Tag tag)
+                    {
+                        field.TagList.Add(tag);
+                    }
+                   
+                }
+            }
+            foreach (var field in NonHiddenFieldList)
+            {
+                field.TagList = new List<Tag>();
+                foreach (var id in field.TagIDs)
+                {
+                    if (tagsList.SingleOrDefault(p => p.TagId == id) is Tag tag)
+                    {
+                        field.TagList.Add(tag);
+                    }
+                }
+            }
         }
     }
 }

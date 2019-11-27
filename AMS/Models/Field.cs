@@ -30,6 +30,9 @@ namespace AMS.Models
         }
         
         public List<ulong> TagIDs { get; set; }
+        
+        [JsonIgnore]
+        public List<Tag> TagList { get; set; }
 
         public string HashId { get; set; }
 

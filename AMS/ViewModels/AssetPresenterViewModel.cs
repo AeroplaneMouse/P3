@@ -66,5 +66,7 @@ namespace AMS.ViewModels
         }
 
         public ObservableCollection<object> Children { get { return _children; } }
+        
+
     }
 }
