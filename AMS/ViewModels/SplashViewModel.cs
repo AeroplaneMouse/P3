@@ -46,6 +46,7 @@ namespace AMS.ViewModels
             {
                 reconnectRequired = await Task.Run(Authenticate);
             } while (reconnectRequired);
+
         }
 
         private bool Authenticate()

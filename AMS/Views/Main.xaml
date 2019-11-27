@@ -18,6 +18,7 @@
         Width="1200">
 
     <Window.Resources>
+
         <!-- Style of the window -->
         <Style TargetType="{x:Type local:Main}">
             <Setter Property="Template">
@@ -68,6 +69,7 @@
                                             </MenuItem>
                                             <MenuItem Header="_Help" Style="{StaticResource MenuItemButton}">
                                                 <MenuItem Header="_About"/>
+                                                <MenuItem Header="_Shortcuts" Command="{Binding ShowShortcutsCommand}"/>
                                                 <MenuItem Header="_Reload" Command="{Binding ReloadCommand}"/>
                                                 <MenuItem Header="_Exit" Command="{Binding CloseCommand}"/>
                                             </MenuItem>
@@ -89,7 +91,8 @@
                                                        Foreground="White"
                                                        Style="{StaticResource ParagraphStyle}"
                                                        VerticalAlignment="Center"
-                                                       Margin="15, 0, 15, 0"/>
+                                                       Margin="15, 0, 15, 0">
+                                            </TextBlock>
 
                                             <!-- Window buttons -->
                                             <Button Content="-" Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}"/>
@@ -106,15 +109,22 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
+                                        <!--<Grid.InputBindings>
+                                            <KeyBinding Modifiers="Alt" Key="D1" Command="{Binding ShowHomePageCommand}"/>
+                                            <KeyBinding Modifiers="Alt" Key="D2" Command="{Binding ShowAssetListPageCommand}"/>
+                                            <KeyBinding Modifiers="Alt" Key="D3" Command="{Binding ShowTagListPageCommand}"/>
+                                            <KeyBinding Modifiers="Alt" Key="D4" Command="{Binding ShowUserListPageCommand}"/>
+                                            <KeyBinding Modifiers="Alt" Key="D5" Command="{Binding ShowLogPageCommand}"/>
+                                        </Grid.InputBindings>-->
+
                                         <!-- Navigation menu -->
                                         <Border Background="{StaticResource NavigationBackgroundBrush}">
                                             <StackPanel Orientation="Vertical">
                                                 <Button Content="Home" Command="{Binding ShowHomePageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Assets" Command="{Binding ShowAssetListPageCommand}" Style="{StaticResource NavigationButton}"/>
-
                                                 <Button Content="Tags" Command="{Binding ShowTagListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
-                                                <Button Content="Log" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
                                                 <Button Content="Users" Command="{Binding ShowUserListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
+                                                <Button Content="Log" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
                                             </StackPanel>
                                         </Border>
 
@@ -147,6 +157,14 @@
             </Setter>
         </Style>
     </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Alt" Key="D1" Command="{Binding ShowHomePageCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="D2" Command="{Binding ShowAssetListPageCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="D3" Command="{Binding ShowTagListPageCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="D4" Command="{Binding ShowUserListPageCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="D5" Command="{Binding ShowLogPageCommand}"/>
+    </Window.InputBindings>
 
     <WindowChrome.WindowChrome>
         <WindowChrome ResizeBorderThickness="{Binding ResizeBorderThickness}"

@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:converter="clr-namespace:AMS.Views.ValueConverters"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:viewModel="clr-namespace:AMS.ViewModels"
       xmlns:local="clr-namespace:AMS.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
@@ -13,6 +14,10 @@
     <Page.Resources>
         <converter:UsernameToVisibilityConverter x:Key="UsernameConverter"/>
     </Page.Resources>
+
+    <!--<Page.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="D1" Command=""
+    </Page.InputBindings>-->
 
     <Grid>
         <!-- Header -->
@@ -32,13 +37,15 @@
             <!-- Edit button -->
             <Button Style="{StaticResource RegularButton}"
                     Command="{Binding EditCommand}"
-                    Content="Edit" />
+                    Content="Edit" 
+                    Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
             
             <!-- Remove button -->
             <Button Style="{StaticResource RegularCancelButton}"
                     Command="{Binding RemoveCommand}"
                     Margin="10 0 0 0"
-                    Content="Remove"/>
+                    Content="Remove"
+                    Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
 
             <!-- Cancel button -->
             <Button Style="{StaticResource RegularCancelButton}"

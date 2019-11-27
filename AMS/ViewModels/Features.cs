@@ -136,6 +136,11 @@ namespace AMS.ViewModels
                 return new Home(_userRepository, _assetRepository, _tagRepository, _departmentRepository);
             }
 
+            public static Page ShortcutsList()
+            {
+                return new ShortcutsList();
+            }
+
             /// <summary>
             /// Returns a new Splash page
             /// </summary>
