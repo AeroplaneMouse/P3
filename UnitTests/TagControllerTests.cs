@@ -22,7 +22,7 @@ namespace UnitTests
             var mockRepository = new Mock<ITagRepository>();
             mockRepository.Setup(repository => repository.Insert(tag, out id)).Returns(true);
 
-            ITagController tagController = new TagController(tag, mockRepository.Object);
+            ITagController tagController = new TagController(tag, mockRepository.Object, new DepartmentRepository());
             tagController.Tag = tag;
 
 
