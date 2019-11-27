@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Input;
 
 namespace AMS.ViewModels.Base
@@ -7,15 +7,17 @@ namespace AMS.ViewModels.Base
     {
         // The action to run
         private readonly Action _action;
+        private readonly Func<bool> _func;
 
         /// <summary>
         /// The event that is fired when the <see cref="CanExecute(object)"/> value has changed
         /// </summary>
         public event EventHandler CanExecuteChanged = (sender, e) => { };
 
-        public RelayCommand(Action action)
+        public RelayCommand(Action action, Func<bool> func = null)
         {
             _action = action;
+            _func = func;
         }
 
         /// <summary>
@@ -25,6 +27,9 @@ namespace AMS.ViewModels.Base
         /// <returns></returns>
         public bool CanExecute(object parameter)
         {
+            if (_func != null)
+                return _func();
+
             return true;
         }
 

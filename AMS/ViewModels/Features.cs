@@ -77,7 +77,7 @@ namespace AMS.ViewModels
 
             public static bool Back()
             {
-                if (Main.History.Count > 0)
+                if (Main.History.Count > 1)
                 {
                     Main.History.Pop();
                     Main.ContentFrame.Navigate(Main.History.Pop());
@@ -134,6 +134,11 @@ namespace AMS.ViewModels
             public static Page Home()
             {
                 return new Home(_userRepository, _assetRepository, _tagRepository, _departmentRepository);
+            }
+
+            public static Page ShortcutsList()
+            {
+                return new ShortcutsList();
             }
 
             /// <summary>

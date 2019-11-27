@@ -9,7 +9,7 @@
       mc:Ignorable="d" 
       Title="AssetList"
       x:Name="ThePage"
-      FocusManager.FocusedElement="{Binding ElementName=TagSuggestionList}">
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
     <Page.Resources>
         <DataTemplate x:Key="AssetListItem">
             <Grid Background="Black">
@@ -25,6 +25,10 @@
             </Grid>
         </DataTemplate>
     </Page.Resources>
+
+    <Page.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding AddNewCommand}"/>
+    </Page.InputBindings>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -92,7 +96,7 @@
                                      MinWidth="200"
                                      MaxWidth="350"
                                      MinHeight="35"
-                                     x:Name="SearchElement"
+                                     x:Name="StartElement"
                                      TabIndex="0">
                                 
                                 <TextBox.InputBindings>
@@ -109,12 +113,12 @@
                                    IsOpen="{Binding TagSuggestionIsOpen}"
                                    StaysOpen="False"
                                    MaxHeight="100"
-                                   Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
+                                   Width="{Binding ElementName=StartElement, Path=ActualWidth}"
                                    Placement="Bottom">
 
                                 <ListBox x:Name="TagSuggestionList"    
                                          Visibility="{Binding TagSuggestionsVisibility}"    
-                                         Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
+                                         Width="{Binding ElementName=StartElement, Path=ActualWidth}"
                                          ItemsSource="{ Binding TagSearchSuggestions }">
                                     <ListBox.InputBindings>
                                         <KeyBinding Key="Return" Command="{Binding AutoTagCommand}" CommandParameter="{Binding ElementName=TagSuggestionList, Path=SelectedItem}"/>
@@ -183,7 +187,8 @@
                           SelectionMode="Extended"
                           x:Name="ListOfAssets"
                           SelectionChanged="ListView_SelectionChanged"
-                          Grid.Row="2">
+                          Grid.Row="2"
+                          TabIndex="1">
                     <ListView.View>
                         <GridView>
                             <!-- Checkbox -->
@@ -281,9 +286,11 @@
 
                     <ListView.InputBindings>
                         <KeyBinding Key="Delete" Command="{Binding RemoveBySelectionCommand}"/>
-                        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
+                        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveBySelectionCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
+                        <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding PrintCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
+                        <KeyBinding Key="Return" Command="{Binding ViewCommand}"/>
                     </ListView.InputBindings>
                 </ListView>
                 

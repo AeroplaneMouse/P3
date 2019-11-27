@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
@@ -21,7 +22,10 @@ namespace AMS.ViewModels
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand AddNewCommand { get; set; }
-        
+
+        // TODO: Viewet bruger den her, men den bliver ikke sat!
+        public Visibility IsRemoveVisible { get; set; }
+
         public TagListViewModel(ITagListController controller)
         {
             _tagListController = controller;

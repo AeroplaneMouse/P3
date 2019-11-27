@@ -6,7 +6,12 @@
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       xmlns:local="clr-namespace:AMS.Views"
       mc:Ignorable="d"
-      Title="LogList">
+      Title="LogList"
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
+    
+    <Page.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding PrintCommand}" CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItems}"/>
+    </Page.InputBindings>
     
     <Grid>
         <Grid.RowDefinitions>
@@ -42,7 +47,7 @@
                         Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
                         VerticalContentAlignment="Center"
                         MinWidth="200"
-                        Name="StartElement">
+                        x:Name="StartElement">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                         </TextBox.InputBindings>
