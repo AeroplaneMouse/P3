@@ -50,20 +50,16 @@ namespace AMS.ViewModels
             }
         }
         public string CurrentGroup { get; set; }
-
         public Visibility CurrentGroupVisibility { get; set; } = Visibility.Collapsed;
         public Visibility TagSuggestionsVisibility { get; set; } = Visibility.Collapsed;
         public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
         public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
-
         public bool TagSuggestionIsOpen { get; set; } = false;
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
         public ITagable TagParent { get; set; }
         public bool inTagMode { get; set; } = false;
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
 
-
-        #region Commands
 
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
@@ -79,8 +75,6 @@ namespace AMS.ViewModels
         public ICommand ClearInputCommand { get; set; }
         public ICommand EnterSuggestionListCommand { get; set; }
         public ICommand CheckAllChangedCommand { get; set; }
-
-        #endregion
 
         public AssetListViewModel(IAssetListController listController, TagHelper tagHelper)
         {
@@ -103,7 +97,7 @@ namespace AMS.ViewModels
                 PrintCommand = new RelayCommand(Export);
             }
 
-            EnterSuggestionListCommand = new RelayCommand<object>((parameter) => test(parameter));
+            EnterSuggestionListCommand = new RelayCommand<object>((parameter) => FocusSuggestion(parameter));
 
             // Other functions
             SearchCommand = new RelayCommand(SearchAssets);
@@ -134,7 +128,7 @@ namespace AMS.ViewModels
                 list.UnselectAll();
             }
         }
-        private void test(object parameter)
+        private void FocusSuggestion(object parameter)
         {
             var list = parameter as ListBox;
             Keyboard.Focus(list);
