@@ -34,6 +34,8 @@ namespace AMS.Controllers
                 Asset = asset;
             }
 
+            Asset.DeSerializeFields();
+
             Name = Asset.Name;
             Identifier = Asset.Identifier;
             Description = Asset.Description;
@@ -54,6 +56,7 @@ namespace AMS.Controllers
             CurrentlyAddedTags.Add(tag);
             if (tag is Tag currentTag)
             {
+                currentTag.DeSerializeFields();
                 foreach (var tagField in currentTag.FieldList)
                 {
                     AddField(tagField, currentTag);
@@ -182,6 +185,7 @@ namespace AMS.Controllers
             {
                 if (tag is Tag currentTag)
                 {
+                    currentTag.DeSerializeFields();
                     foreach (var tagField in currentTag.FieldList)
                     {
                         AddField(tagField, currentTag);

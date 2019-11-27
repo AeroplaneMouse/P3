@@ -75,6 +75,8 @@ namespace AMS.Controllers
             _tagRepository = tagRep;
             _departmentRepository = departmentRepository;
 
+            Tag.DeSerializeFields();
+
             Id = tag.ID;
             Name = tag.Name;
             Color = tag.TagColor;

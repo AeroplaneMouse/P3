@@ -97,7 +97,6 @@ namespace AMS.Models
             this.SerializedFields = SerializedField;
             CreatedAt = created_at;
             UpdatedAt = updated_at;
-            DeSerializeFields();
         }
         
         public override string ToString() => Name;
