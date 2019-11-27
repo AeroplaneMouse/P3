@@ -2,7 +2,9 @@
 using MySql.Data.MySqlClient;
 using AMS.Models;
 using System.Threading.Tasks;
+using AMS.ConfigurationHandler;
 using AMS.Events;
+using AMS.ViewModels;
 
 namespace AMS.Database
 {
@@ -10,12 +12,15 @@ namespace AMS.Database
     {
         private readonly MySqlConnection _connection;
         //private static MySqlConnection _con;
+        private FileConfigurationHandler _fileConfigurationHandler;
         
         public static event SqlConnectionEventHandler ConnectionFailed;
 
         public MySqlHandler()
         {
-            _connection = new MySqlConnection("Server=192.38.49.9; database=ds303e19_dev; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5");
+            // "Server=192.38.49.9; database=ds303e19_dev; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5"
+            _fileConfigurationHandler = new FileConfigurationHandler(Features.GetCurrentSession());
+            _connection = new MySqlConnection(_fileConfigurationHandler.GetConfigValue());
         }
 
         public static bool Open(ref MySqlConnection con)
