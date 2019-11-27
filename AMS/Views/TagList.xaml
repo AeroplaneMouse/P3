@@ -1,21 +1,22 @@
 <Page x:Class="AMS.Views.TagList"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-    xmlns:VM="clr-namespace:AMS.ViewModels"
-    xmlns:models="clr-namespace:AMS.Models"
-    mc:Ignorable="d"
-    d:DesignHeight="450" d:DesignWidth="800"
-    ShowsNavigationUI="False"
-    Title="Tags">
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:VM="clr-namespace:AMS.ViewModels"
+      xmlns:models="clr-namespace:AMS.Models"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800"
+      ShowsNavigationUI="False"
+      Title="Tags"
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
 
     <Page.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="N" Command="{Binding AddNewCommand}"/>
     </Page.InputBindings>
 
-    <Grid FocusManager.FocusedElement="{Binding ElementName=StartElement}">
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />

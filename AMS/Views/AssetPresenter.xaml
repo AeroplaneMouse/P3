@@ -9,15 +9,19 @@
       xmlns:local="clr-namespace:AMS.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="AssetPresenter">
+      Title="AssetPresenter"
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
 
     <Page.Resources>
         <converter:UsernameToVisibilityConverter x:Key="UsernameConverter"/>
     </Page.Resources>
 
-    <!--<Page.InputBindings>
-        <KeyBinding Modifiers="Ctrl" Key="D1" Command=""
-    </Page.InputBindings>-->
+    <Page.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CancelCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
+        <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
+    </Page.InputBindings>
 
     <Grid>
         <!-- Header -->
@@ -59,7 +63,8 @@
                    VerticalAlignment="Bottom"/>
 
         <TabControl Grid.Row="1"
-                    Margin="10">
+                    Margin="10"
+                    x:Name="StartElement">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Template">

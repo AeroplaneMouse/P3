@@ -5,7 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AMS.Views"
       mc:Ignorable="d"
-      Title="AssetEditor">
+      Title="AssetEditor"
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
     
     <Page.Resources>
         <local:FieldDesignSelector x:Key="MyFieldDesignSelector" />
@@ -69,9 +70,10 @@
                                Text="Details" />
                     <!-- Name -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
-                               Text="Name" />
+                               Text="Name"/>
                     <TextBox Style="{StaticResource ParagraphTextBoxWithSpace}"
-                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                             x:Name="StartElement"/>
 
                     <!-- Identifier -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
