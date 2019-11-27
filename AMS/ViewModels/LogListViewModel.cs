@@ -36,10 +36,13 @@ namespace AMS.ViewModels
             PrintCommand = new RelayCommand(Export);
         }
 
+        /// <summary>
+        /// View log
+        /// </summary>
         private void View()
         {
-            //TODO: Create Entry view page
-            throw new NotImplementedException();
+            if (SelectedItems.Count == 1)
+                Features.Navigate.To(Features.Create.LogPresenter(SelectedItems.First()));
         }
 
         /// <summary>

@@ -77,11 +77,11 @@
                         SelectionChanged="ListView_SelectionChanged"
                         Grid.Row="2">
                     
-                     <i:Interaction.Triggers> 
-                         <i:EventTrigger EventName="MouseDoubleClick"> 
-                            <i:InvokeCommandAction Command="{Binding ViewCommand}" CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}"/> 
-                         </i:EventTrigger> 
-                     </i:Interaction.Triggers> 
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding ViewCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
 
                     <ListView.View>
                         <GridView>
