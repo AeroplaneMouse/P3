@@ -84,8 +84,8 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@logged_item_id", MySqlDbType.UInt64);
                         cmd.Parameters["@logged_item_id"].Value = loggedItemId;
 
-                        cmd.Parameters.Add("@logable_type", MySqlDbType.String);
-                        cmd.Parameters["@logable_type"].Value = loggedItemType.ToString();
+                        cmd.Parameters.Add("@logged_item_type", MySqlDbType.String);
+                        cmd.Parameters["@logged_item_type"].Value = loggedItemType.ToString();
 
                         if (userId != null)
                         {
@@ -116,10 +116,10 @@ namespace AMS.Database.Repositories
             return entries;
         }
 
-        public ObservableCollection<LogEntry> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
+        public List<LogEntry> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
         {
             var con = new MySqlHandler().GetConnection();
-            ObservableCollection<LogEntry> entries = new ObservableCollection<LogEntry>();
+            List<LogEntry> entries = new List<LogEntry>();
             int limit = 100;
 
             // Opening connection

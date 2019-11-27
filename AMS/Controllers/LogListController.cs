@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
@@ -13,17 +14,32 @@ namespace AMS.Controllers
         private readonly ILogRepository _logRepository;
         private readonly IExporter _exporter;
 
-        public ObservableCollection<LogEntry> EntryList { get; set; }
+        private List<LogEntry> _entryList;
+
+        public List<LogEntry> EntryList
+        {
+            get
+            {
+                if (_entryList == null)
+                {
+                    _entryList = _logRepository.Search("");
+                }
+
+                return _entryList;
+            }
+
+            set => _entryList = value;
+        }
 
         public LogListController(ILogRepository logRepository, IExporter exporter, Asset asset = null)
         {
             _logRepository = logRepository;
             _exporter = exporter;
+
             if (asset == null)
                 Search("");
             else
-                //TODO Lav search for asset logs
-                Search("");
+                EntryList = _logRepository.GetLogEntries(asset.ID, typeof(Asset)).ToList();
         }
         
         /// <summary>

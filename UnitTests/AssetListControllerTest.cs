@@ -29,7 +29,7 @@ namespace UnitTests
             // This creates a new instance of the class for each test
             _assetListController = new AssetListController(assetRepMock.Object, exporterMock.Object)
             {
-                AssetList = new ObservableCollection<Asset>()
+                AssetList = new List<Asset>()
             };
         }
 
@@ -163,7 +163,7 @@ namespace UnitTests
             //Arrange
             Asset asset1 = new Asset {Name = "asset1"};
             _assetListController.AssetList.Add(asset1);
-            assetRepMock.Setup(p => p.Search(It.IsAny<string>(), null, null, false)).Returns(() => new ObservableCollection<Asset>());
+            assetRepMock.Setup(p => p.Search(It.IsAny<string>(), null, null, false)).Returns(() => new List<Asset>());
 
             //Act
             _assetListController.Search("asset", null);

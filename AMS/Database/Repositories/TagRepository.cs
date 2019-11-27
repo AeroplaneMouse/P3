@@ -381,10 +381,10 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public ObservableCollection<Tag> Search(string keyword,List<ulong> tag_list=null, List<ulong> users=null, bool strict=false)
+        public List<Tag> Search(string keyword,List<ulong> tag_list=null, List<ulong> users=null, bool strict=false)
         {
             var con = new MySqlHandler().GetConnection();
-            ObservableCollection<Tag> tags = new ObservableCollection<Tag>();
+            List<Tag> tags = new List<Tag>();
 
             // Opening connection
             if (MySqlHandler.Open(ref con))
