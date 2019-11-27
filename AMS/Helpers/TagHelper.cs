@@ -175,7 +175,7 @@ namespace AMS.Helpers
                 {
                     try
                     {
-                        var parentUserTag = AppliedTags.Single(u => u.TagId == 1 && u.TagType == typeof(Tag));
+                        var parentUserTag = AppliedTags.SingleOrDefault(u => u.TagId == 1 && u.TagType == typeof(Tag));
                         AppliedTags.Remove(parentUserTag);
                         return true;
                     }
