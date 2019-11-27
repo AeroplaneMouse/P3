@@ -8,6 +8,7 @@ using AMS.Database.Repositories.Interfaces;
 using AMS.ViewModels;
 using AMS.Logging.Interfaces;
 using AMS.Logging;
+using Org.BouncyCastle.Utilities;
 
 namespace AMS.Database.Repositories
 {
@@ -123,7 +124,23 @@ namespace AMS.Database.Repositories
         public bool Update(Tag entity)
         {
             var con = new MySqlHandler().GetConnection();
+            //MySqlTransaction trans = con.BeginTransaction();
+            
             bool querySuccess = false;
+            
+            // Check if current tag is a child and changed parent
+            if (entity.ParentId > 0 && entity.Changes.ContainsKey("ParentID"))
+            {
+                // Is child and parent_id changed
+                Tag newParent = GetById((ulong) entity.Changes["ParentID"]);
+                entity.Color = newParent.Color;
+
+                if (newParent.DepartmentID != entity.DepartmentID)
+                {
+                    entity.DepartmentID = newParent.DepartmentID;
+                    ClearConnections(entity);
+                }
+            }
 
             // Opening connection
             if (MySqlHandler.Open(ref con) && entity.IsDirty())
@@ -499,6 +516,36 @@ namespace AMS.Database.Repositories
                         
                         cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
                         cmd.Parameters["@parent_id"].Value = tag.ID;
+                        
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+        }
+
+        private void ClearConnections(Tag tag)
+        {
+            var con = new MySqlHandler().GetConnection();
+
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
+            {
+                try
+                {
+                    const string query = "DELETE FROM asset_tags WHERE tag_id=@id";
+
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = tag.ID;
                         
                         cmd.ExecuteNonQuery();
                     }

@@ -21,7 +21,7 @@
 
     <Page.InputBindings>
         <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CancelCommand}"/>
-        <KeyBinding Key="Esc" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
         <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding ApplyCommand}"/>
     </Page.InputBindings>
 
