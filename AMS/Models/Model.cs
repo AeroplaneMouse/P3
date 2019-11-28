@@ -9,8 +9,8 @@ namespace AMS.Models
         public ulong ID { get; protected set; }
         public DateTime CreatedAt { get; protected set; }
         public DateTime UpdatedAt { get; protected set; }
-        public string CreatedAtString => CreatedAt.ToString("u").TrimEnd('Z');
-        public string UpdatedAtString => UpdatedAt.ToString("u").TrimEnd('Z');
+        public string CreatedAtString => CreatedAt.ToString("dd/MMM/yyyy HH:mm");
+        public string UpdatedAtString => UpdatedAt.ToString("dd/MMM/yyyy HH:mm");
         public Dictionary<string, object> Changes { get; set; } = new Dictionary<string, object>();
         public bool IsDirty()
         {
