@@ -62,7 +62,6 @@ namespace AMS.Models
         public int ChildrenCount => 0;
         public List<ITagable> Children { get; set; }
         public string TagColor
-
         {
             // TODO: Ingen new repositories!
             get => (_tagRepository ?? new TagRepository()).GetById(1).TagColor;
@@ -74,7 +73,6 @@ namespace AMS.Models
         #endregion
 
         /* Constructor used by DB */
-
         private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
         {
             ID = id;
@@ -88,10 +86,7 @@ namespace AMS.Models
             UpdatedAt = updated_at;
         }
 
-        public User()
-        {
-
-        }
+        public User() { }
 
         public override string ToString() => Username;
 
@@ -102,9 +97,6 @@ namespace AMS.Models
 
             if (obj is UserWithStatus)
             {
-                var a = this.GetHashCode();
-                var b = (obj as UserWithStatus).GetHashCode();
-
                 return base.Equals(obj);
             }
 

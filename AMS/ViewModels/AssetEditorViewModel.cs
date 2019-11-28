@@ -103,8 +103,8 @@ namespace AMS.ViewModels
             // Commands
             SaveCommand = new RelayCommand(() => SaveAndExit());
             SaveMultipleCommand = new RelayCommand(() => SaveAsset());
-            AddFieldCommand = new Base.RelayCommand(() => PromptForCustomField());
-            CancelCommand = new Base.RelayCommand(() => Cancel());
+            AddFieldCommand = new RelayCommand(() => PromptForCustomField());
+            CancelCommand = new RelayCommand(() => Cancel());
             RemoveFieldCommand = new RelayCommand<object>((parameter) => RemoveField(parameter));
             AddTagCommand = new RelayCommand(() => TagSearch());
 
@@ -127,7 +127,8 @@ namespace AMS.ViewModels
         /// </summary>
         public void SaveAndExit()
         {
-            if (!VerifyAssetAndFields()) return;
+            if (!VerifyAssetAndFields()) 
+                return;
             
             SaveAsset(false);
 
@@ -222,13 +223,10 @@ namespace AMS.ViewModels
         /// <param name="tag"></param>
         public void AutoTag()
         {
-            Console.WriteLine("Tab clicked!");
 
             if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
             {
                 ITagable tag = TagSearchSuggestions[0];
-
-                Console.WriteLine("Found: " + tag.TagLabel);
 
                 if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
                 {
@@ -337,7 +335,7 @@ namespace AMS.ViewModels
         /// <returns></returns>
         private bool VerifyAssetAndFields()
         {
-            if (string.IsNullOrEmpty(_assetController.ControlledAsset.Name))
+            if (string.IsNullOrEmpty(Name))
             {
                 Features.AddNotification(new Notification("The field " + "Name" + " is required and empty",Notification.WARNING));
                 return false;

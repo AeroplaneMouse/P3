@@ -149,13 +149,18 @@ namespace AMS.ViewModels
         private void EditAsset(Asset asset)
         {
             Features.Navigate.To(Features.Create.AssetEditor(asset));
+            OnPropertyChanged(nameof(Items));
         }
 
         private void EditBySelection()
         {
             // Only ONE item can be edited
             if (SelectedItems.Count == 1)
+            {
                 EditAsset(SelectedItems.First());
+                OnPropertyChanged(nameof(Items));
+            }
+                
             else
                 Features.AddNotification(new Notification("Please select only one asset.", Notification.ERROR), 3500);
         }
@@ -167,26 +172,21 @@ namespace AMS.ViewModels
                 // Nothing seleted. Check all items
                 foreach (Asset asset in Items)
                     SelectedItems.Add(asset);
-
-                Console.WriteLine("Checking all...");
             }
             else if (newValue && SelectedItems.Count < Items.Count)
             {
                 // Some selected. Remove selectionsw.
                 List<Asset> removeSelection = new List<Asset>();
                 SelectedItems.ForEach(a => removeSelection.Add(a));
-                removeSelection.ForEach(a => SelectedItems.Remove(a));
-                Console.WriteLine("Unchecking all...");
+                removeSelection.ForEach(a => SelectedItems.Remove(a));
             }
             else if (newValue && SelectedItems.Count == Items.Count)
             {
-                // All selected. Remove selections
-                Console.WriteLine("unChecking all... ");
+                //TODO: All selected. Remove selections
             }
             else
             {
-                // Hmm.. Error, unexspected situation.
-                Console.WriteLine("Dafuq dude.. you have entered an unexspected selection state.");
+                //TODO Hmm.. Error, unexspected situation.
             }
         }
 

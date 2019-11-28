@@ -73,7 +73,6 @@
                         CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItems}"/>
                 </StackPanel>
 
-                <!--Style="{StaticResource RegularList}"-->
                 <ListView x:Name="listViewWithItems"
                         SelectionMode="Extended"
                         ItemsSource="{Binding Entries, UpdateSourceTrigger=PropertyChanged}"
@@ -135,8 +134,7 @@
 
                     <ListView.InputBindings>
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
-                        <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding ViewCommand}" />
-                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ViewCommand}" />
+                        <KeyBinding Key="Return" Command="{Binding ViewCommand}" />
                     </ListView.InputBindings>
                 </ListView>
             </Grid>
