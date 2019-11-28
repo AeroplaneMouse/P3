@@ -10,7 +10,14 @@ namespace AMS.Helpers.Features
     {
         public static readonly Features Instance = new Features();
         public Create Create { get; }
-        public Navigate Navigate { get; }
+
+        private Navigate _navigate;
+        public Navigate Navigate
+        {
+            get => _navigate ?? new Navigate(Main);
+            set => _navigate = value;
+        }
+
         // TODO: This needs to be set when the constructor is run.
         public MainViewModel Main { get; set; }
         public Visibility OnlyVisibleForAdmin => Main.OnlyVisibleForAdmin;
@@ -24,7 +31,6 @@ namespace AMS.Helpers.Features
         private Features()
         {
             Create = new Create();
-            Navigate = new Navigate(Main);
         }
         
         // Notifications

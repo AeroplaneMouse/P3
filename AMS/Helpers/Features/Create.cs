@@ -158,6 +158,16 @@ namespace AMS.Helpers.Features
                 return new Main(_userRepository, _departmentRepository);
             }
 
+            /// <summary>
+            /// Creates and returns a new MainViewModel with the given window
+            /// </summary>
+            /// <param name="window"></param>
+            /// <returns></returns>
+            public MainViewModel CreateMainViewModel(Window window)
+            {
+                return new MainViewModel(window, _userRepository, _departmentRepository);
+            }
+
             #endregion
         }
 }

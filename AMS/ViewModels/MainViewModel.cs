@@ -162,8 +162,6 @@ namespace AMS.ViewModels
 
             #endregion
 
-            Features.Instance.Main = this;
-
             _userRep = userRepository;
             _departmentRep = departmentRepository;
 
