@@ -108,7 +108,6 @@ namespace AMS.ViewModels
 
             _isEditing = (_assetController.ControlledAsset.ID != 0);
 
-
             Title = _isEditing ? "Edit asset" : "Add asset";
 
             // Commands
