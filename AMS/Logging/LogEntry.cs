@@ -1,8 +1,4 @@
-﻿using AMS.Authentication;
-using AMS.Models;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace AMS.Logging
 {

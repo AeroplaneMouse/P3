@@ -46,6 +46,9 @@
     <Style TargetType="TextBlock" x:Key="ParagraphStyle" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
     </Style>
+    <Style TargetType="TextBlock" x:Key="ParagraphStyleWithSpace" BasedOn="{StaticResource ParagraphStyle}">
+        <Setter Property="Margin" Value="0 0 0 10"/>
+    </Style>
 
     <Style x:Key="BaseLabelStyle" TargetType="Label">
         <Setter Property="FontWeight" Value="UltraLight"/>
