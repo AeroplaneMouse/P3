@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using AMS.Controllers;
 using AMS.Views;
 using System.Collections.Generic;
+using AMS.Logging;
 
 namespace AMS.ViewModels
 {
@@ -158,6 +159,16 @@ namespace AMS.ViewModels
             public static Page LogList()
             {
                 return new LogList(new LogListController(_logRepository, _printHelper));
+            }
+
+            /// <summary>
+            /// Returns a new LogPresenter page
+            /// </summary>
+            /// <param name="entry"></param>
+            /// <returns></returns>
+            public static Page LogPresenter(LogEntry entry)
+            {
+                return new LogPresenter(entry);
             }
 
             /// <summary>
