@@ -14,8 +14,8 @@ namespace AMS.ConfigurationHandler
         public FileConfigurationHandler(Session session)
         {
             _session = session;
-            
         }
+        
         public string GetConfigValue()
         {
             string configuration = FileEncryption.UserDataDecrypt(ComputeSha256Hash(Domain), Path);
