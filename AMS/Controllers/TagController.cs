@@ -85,7 +85,7 @@ namespace AMS.Controllers
                 Color = tag.TagColor;
                 ParentID = tag.ParentID;
                 DepartmentID = tag.ParentID;
-                
+
 
                 NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
                 HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
@@ -93,6 +93,7 @@ namespace AMS.Controllers
             else
             {
                 ControlledTag = new Tag {TagColor = CreateRandomColor()};
+                ControlledTag.FieldList = new List<Field>();
                 IsEditing = false;
             }
 
