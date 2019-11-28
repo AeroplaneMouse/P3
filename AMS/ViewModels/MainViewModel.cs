@@ -83,6 +83,7 @@ namespace AMS.ViewModels
         public Frame ContentFrame { get; set; } = new Frame();
         public Page SplashPage { get; set; }
         public Page PopupPage { get; set; }
+        public int SelectedNavigationItem { get; set; }
 
         public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
         public Visibility OnlyVisibleForAdmin { get; private set; } = Visibility.Collapsed;
@@ -229,17 +230,40 @@ namespace AMS.ViewModels
             ShowShortcutsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.ShortcutsList()));
 
             // Change page commands
-            ShowHomePageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.Home()));
-            ShowAssetListPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.AssetList()));
-            ShowTagListPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagList()), () => Features.GetCurrentSession().IsAdmin());
-            ShowLogPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.LogList()), () => Features.GetCurrentSession().IsAdmin());
-            ShowUserListPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.UserList()), () => Features.GetCurrentSession().IsAdmin());
+            ShowHomePageCommand = new Base.RelayCommand(() => GoToPage(0));
+            ShowAssetListPageCommand = new Base.RelayCommand(() => GoToPage(1));
+            ShowTagListPageCommand = new Base.RelayCommand(() => GoToPage(2), () => Features.GetCurrentSession().IsAdmin());
+            ShowUserListPageCommand = new Base.RelayCommand(() => GoToPage(3), () => Features.GetCurrentSession().IsAdmin());
+            ShowLogPageCommand = new Base.RelayCommand(() => GoToPage(4), () => Features.GetCurrentSession().IsAdmin());
 
             // Department commands
             SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, () => Features.GetCurrentSession().IsAdmin());
             EditDepartmentCommand = new Commands.EditDepartmentCommand(this, () => Features.GetCurrentSession().IsAdmin());
             AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)), () => Features.GetCurrentSession().IsAdmin());
+        }
+
+        private void GoToPage(int pageNumber)
+        {
+            SelectedNavigationItem = pageNumber;
+            switch (pageNumber)
+            {
+                case 0:
+                    Features.Navigate.To(Features.Create.Home());
+                    break;
+                case 1:
+                    Features.Navigate.To(Features.Create.AssetList());
+                    break;
+                case 2:
+                    Features.Navigate.To(Features.Create.TagList());
+                    break;
+                case 3:
+                    Features.Navigate.To(Features.Create.UserList());
+                    break;
+                case 4:
+                    Features.Navigate.To(Features.Create.LogList());
+                    break;
+            }
         }
 
         private void InitializeWindowsCommands()
