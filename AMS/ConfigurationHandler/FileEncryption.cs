@@ -10,11 +10,6 @@ namespace AMS.ConfigurationHandler
     {
         private const int BufferSize = 100048576;
 
-        private string Path { get; set; }
-
-        private string Extension { get; set; }
-
-
         /// <summary>
         /// Decrypt the Userdata file so it is readable by the program
         /// </summary>
