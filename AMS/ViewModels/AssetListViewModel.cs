@@ -19,7 +19,7 @@ namespace AMS.ViewModels
     public class AssetListViewModel : BaseViewModel
     {
         private IAssetListController _listController;
-        private string _searchQuery;
+        private string _searchQuery = String.Empty;
         private TagHelper _tagHelper;        private bool _isStrict = true;
         
         public ObservableCollection<Asset> Items
