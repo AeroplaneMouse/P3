@@ -155,12 +155,21 @@
                             Content="Edit"
                             Visibility="{Binding SingleSelected}"/>
 
-                    <Button Style="{StaticResource RegularButton}" 
-                            Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"
+                    <Button Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"
                             Margin="10 0 0 0 " 
-                            Content="Export selected items" 
                             Width="Auto" 
-                            Command="{Binding PrintCommand}"/>
+                            Command="{Binding PrintCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource RegularButton}">
+                                <Setter Property="Content" Value="Export all"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CheckAll}" Value="True">
+                                        <Setter Property="Content" Value="Export selected"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </StackPanel>
 
                 <!-- Current tags -->

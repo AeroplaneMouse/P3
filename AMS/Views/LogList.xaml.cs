@@ -25,6 +25,12 @@ namespace AMS.Views
             foreach (LogEntry entry in (sender as ListView).SelectedItems)
                 viewModel.SelectedItems.Add(entry);
 
+            // Setting check all checkbox
+            if (viewModel.SelectedItems.Count > 0)
+                viewModel.CheckAll = true;
+            else
+                viewModel.CheckAll = false;
+
             // Only change visibility if current user if admin
             if (Features.Main.CurrentSession.IsAdmin())
             {

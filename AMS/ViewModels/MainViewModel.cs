@@ -38,9 +38,9 @@ namespace AMS.ViewModels
         private IDepartmentRepository _departmentRep;
 
         #region Window Properties
-        
-        public double WindowMinWidth { get; set; }
-        public double WindowMinHeight { get; set; }
+
+        public double WindowMinWidth { get; set; } = 700;
+        public double WindowMinHeight { get; set; } = 500;
         public int InnerContentPaddingSize { get; set; }
         public Thickness InnerContentPadding { get => new Thickness(0); }
         public int ResizeBorder { get; set; }

@@ -11,8 +11,6 @@
         WindowStyle="None"
         AllowsTransparency="True"
         Icon="{StaticResource ApplicationIcon}"
-        MinHeight="{Binding WindowMinHeight}"
-        MinWidth="{Binding WindowMinWidth}"
         Title="Asset Management System"
         Height="600" 
         Width="1200">
