@@ -36,8 +36,8 @@ namespace AMS.ViewModels
             _children.Add(new CommentViewModel(assetController.Asset, commentListController));
             _children.Add(new LogListViewModel(logListController));
 
-            EditCommand = new Base.RelayCommand(Edit);
-            RemoveCommand = new Base.RelayCommand(Remove);
+            EditCommand = new Base.RelayCommand(() => Edit(), () => Features.GetCurrentSession().IsAdmin());
+            RemoveCommand = new Base.RelayCommand(() => Remove(), () => Features.GetCurrentSession().IsAdmin());
             CancelCommand = new Base.RelayCommand(Cancel);
         }
 
