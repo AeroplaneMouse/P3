@@ -16,6 +16,7 @@ namespace AMS.ViewModels
     public class TagListViewModel : Base.BaseViewModel
     {
         public List<Tag> Tags { get; set; }
+
         private readonly ITagListController _tagListController;
         
         public Tag SelectedItem { get; set; }
@@ -27,7 +28,7 @@ namespace AMS.ViewModels
             _tagListController = controller;
             Tags = _tagListController.TagsList;
             Tags.AddRange(_tagListController.GetParentTags());
-            RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Deleting selected tag. This action cannot be undone. Proceed?", RemoveTag)));
+            RemoveCommand = new Base.RelayCommand(RemoveTag);
             EditCommand = new Base.RelayCommand(() => {
                 if (SelectedItem != null)
                     Features.Navigate.To(Features.Create.TagEditor(SelectedItem));
@@ -43,15 +44,29 @@ namespace AMS.ViewModels
             }
         }
 
-        private void RemoveTag(object sender, PromptEventArgs e)
+        private void RemoveTag()
         {
-            // If the prompt returns true, delete the item
-            if (e.Result)
+            if (SelectedItem != null)
             {
-                _tagListController.Remove(SelectedItem);
-            }
+                if (SelectedItem.ID != 1)
+                {
+                    Features.DisplayPrompt(new Confirm("Deleting selected tag. This action cannot be undone. Proceed?", (object sender, PromptEventArgs e) =>
+                    {
+                        // If the prompt returns true, delete the item
+                        if (e.Result)
+                        {
+                            _tagListController.Remove(SelectedItem);
+                        }
+                    }));
 
-            OnPropertyChanged(nameof(Tags));
+                    OnPropertyChanged(nameof(Tags));
+                }
+
+                else
+                {
+                    Features.AddNotification(new Notification($"{SelectedItem.Name} tag is essential and cannot be deleted", Notification.WARNING));
+                }
+            }
         }
     }
 }
