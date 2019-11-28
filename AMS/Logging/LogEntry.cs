@@ -66,6 +66,6 @@ namespace AMS.Logging
         /// <summary>
         /// Used for formatting the DateTimeOutput when showing the elements within a database.
         /// </summary>
-        public string DateToStringConverter => CreatedAt.ToString("dd/MM/yyyy HH:mm");
+        public string DateToStringConverter => CreatedAt.ToString("u").TrimEnd('Z');
     }
 }
