@@ -32,8 +32,8 @@ namespace AMS.ViewModels
 
         public Tag _tag
         {
-            get => _controller.Tag;
-            set => _controller.Tag = value;
+            get => _controller.ControlledTag;
+            set => _controller.ControlledTag = value;
         }
 
         public string Name
@@ -133,7 +133,7 @@ namespace AMS.ViewModels
 
             //Set the selected parent to the parent of the chosen tag
             int i = ParentTagList.Count;
-            while (i > 0 && ParentTagList[i - 1].ID != _controller.Tag.ParentID)
+            while (i > 0 && ParentTagList[i - 1].ID != _controller.ControlledTag.ParentID)
                 i--;
 
             if (i > 0)
@@ -149,7 +149,7 @@ namespace AMS.ViewModels
                 PageTitle = "Edit tag";
 
                 // Use the department of the tag
-                currentDepartment = _controller.DepartmentList.Find(d => d.ID == _controller.Tag.DepartmentID);
+                currentDepartment = _controller.DepartmentList.Find(d => d.ID == _controller.ControlledTag.DepartmentID);
             }
             else
             {
@@ -179,11 +179,14 @@ namespace AMS.ViewModels
 
         #region Methods
 
+        /// <summary>
+        /// Saves the tag.
+        /// </summary>
         private void SaveTag()
         {
-            _controller.Tag.ParentID = ParentTagList[SelectedParentTagIndex].ID;
-            _controller.Tag.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
-            if (VerifyFields())
+            _controller.ControlledTag.ParentID = ParentTagList[SelectedParentTagIndex].ID;
+            _controller.ControlledTag.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
+            if (VerifyTagAndFields())
             {
                 if (_controller.IsEditing)
                 {
@@ -217,7 +220,7 @@ namespace AMS.ViewModels
         {
             if (field is Field inputField)
             {
-                inputField.TagIDs.Add(_controller.Tag.ID);
+                inputField.TagIDs.Add(_controller.ControlledTag.ID);
                 _controller.RemoveField(inputField);
                 UpdateAll();
             }
@@ -266,14 +269,19 @@ namespace AMS.ViewModels
                 }
             }
         }
-
-        private bool VerifyFields()
+        
+        /// <summary>
+        /// Verifies tag and its fields.
+        /// </summary>
+        /// <returns></returns>
+        private bool VerifyTagAndFields()
         {
             //Verifies whether fields contains correct information, or the required information.
             List<Field> completeList = HiddenFieldList.ToList();
             completeList.AddRange(NonHiddenFieldList.ToList());
 
-            if (string.IsNullOrEmpty(_controller.Tag.Name))
+            //Checks whether the name is null
+            if (string.IsNullOrEmpty(_controller.ControlledTag.Name))
             {
                 Features.AddNotification(new Notification("Label is required and empty",
                     Notification.WARNING));
