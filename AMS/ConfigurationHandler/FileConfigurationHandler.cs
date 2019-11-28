@@ -27,8 +27,7 @@ namespace AMS.ConfigurationHandler
         {
             FileEncryption.UserDataEncrypt(ComputeSha256Hash(Domain), newValue, Path);
         }
-
-
+        
         private string ComputeSha256Hash(string rawData)
         {
             // Create a SHA256   
