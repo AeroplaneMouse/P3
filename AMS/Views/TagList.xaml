@@ -83,17 +83,17 @@
                         <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type models:Tag}">
                             <!-- Parent tag -->
                             <Label Content="{Binding}" 
-                                   Padding="4" 
-                                   Margin="3"
-                                   FontSize="{StaticResource FontSizeRegular}"/>
+                                   Padding="1" 
+                                   Margin="1.5"
+                                   FontSize="16"/>
                             
                             <!-- Child tags / Offspring-->
                             <HierarchicalDataTemplate.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding}" DataType="{x:Type models:Tag}">
                                     <Label Content="{Binding}" 
-                                           Padding="3"
-                                           Margin="0"
-                                           FontSize="{StaticResource FontSizeRegular}"/>
+                                           Padding="1"
+                                           Margin="1"
+                                           FontSize="14"/>
                                 </HierarchicalDataTemplate>
                             </HierarchicalDataTemplate.ItemTemplate>
                             
