@@ -69,6 +69,15 @@
         <Setter Property="Margin" Value="0 0 0 10"/>
     </Style>
 
+    <Style TargetType="PasswordBox" x:Key="ParagraphPasswordBox">
+        <Setter Property="FontWeight" Value="UltraLight"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+    </Style>
+    <Style TargetType="PasswordBox" x:Key="ParagraphPasswordBoxWithSpace" BasedOn="{StaticResource ParagraphPasswordBox}">
+        <Setter Property="Margin" Value="0 0 0 10"/>
+    </Style>
+
     <!-- Datepicker styles -->
     <Style TargetType="{x:Type DatePicker}" x:Key="BaseDatePickerStyle">
         <Setter Property="FontWeight" Value="UltraLight"/>

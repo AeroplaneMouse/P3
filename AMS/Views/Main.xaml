@@ -60,9 +60,8 @@
                                         <!-- Menu bar -->
                                         <Menu Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource MenuContainer}">
                                             <MenuItem Header="_Settings" Style="{StaticResource MenuItemButton}">
-                                                <MenuItem Header="_Save"/>
-                                                <MenuItem Header="_Load"/>
-                                                <MenuItem Header="_Clear"/>
+                                                <MenuItem Header="_Change" Command="{Binding ChangeSettingsCommand}"/>
+                                                <MenuItem Header="_Clear" Command="{Binding ClearSettingsCommand}"/>
                                             </MenuItem>
                                             <MenuItem Header="_Help" Style="{StaticResource MenuItemButton}">
                                                 <MenuItem Header="_About"/>

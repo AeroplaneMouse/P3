@@ -115,6 +115,10 @@ namespace AMS.ViewModels
         public ICommand ReloadCommand { get; set; }
         public ICommand ShowShortcutsCommand { get; set; }
 
+        // Settings command
+        public ICommand ChangeSettingsCommand { get; set; }
+        public ICommand ClearSettingsCommand { get; set; }
+
         /// <summary>
         /// Default constructor
         /// </summary>
@@ -245,6 +249,11 @@ namespace AMS.ViewModels
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, () => Features.GetCurrentSession().IsAdmin());
             EditDepartmentCommand = new Commands.EditDepartmentCommand(this, () => Features.GetCurrentSession().IsAdmin());
             AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)), () => Features.GetCurrentSession().IsAdmin());
+
+            // Settings command
+            if (CurrentSession.IsAdmin())
+                ChangeSettingsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.SettingsEditor()));
+            //ClearSettingsCommand = new Base.RelayCommand();
         }
 
         private void InitializeWindowsCommands()

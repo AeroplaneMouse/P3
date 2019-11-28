@@ -198,6 +198,15 @@ namespace AMS.ViewModels
             {
                 return new UserList(new UserListController(_userImporter, _userRepository, _departmentRepository));
             }
+            
+            /// <summary>
+            /// Returns a new settings editor page
+            /// </summary>
+            /// <returns></returns>
+            public static Page SettingsEditor()
+            {
+                return new SettingsEditor();
+            }
 
             #endregion
 
