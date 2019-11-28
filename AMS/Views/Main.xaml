@@ -16,7 +16,6 @@
         Title="Asset Management System"
         Height="600" 
         Width="1200">
-
     <Window.Resources>
 
         <!-- Style of the window -->
