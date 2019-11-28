@@ -50,7 +50,7 @@ namespace AMS.Logging
                     entryType = "Delete";
                 }
 
-                string name = entity is Asset ? ((Asset)entity).Name : (entity is Tag ? ((Tag)entity).Name : null);
+                string name = entity is Asset ? ((Asset)entity).Name : (entity is Tag ? ((Tag)entity).Name : (entity is Department ? ((Department)entity).Name : null));
 
                 if (name == null)
                 {
