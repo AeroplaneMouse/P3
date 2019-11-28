@@ -123,7 +123,7 @@ namespace AMS.Models
         public string TagLabel => Name;
         public ulong ParentId => ParentID;
         public int ChildrenCount => NumOfChildren;
-        public List<ITagable> Children { get; set; }
+        public List<ITagable> Children { get; set; } = new List<ITagable>();
         public string TagColor { get; set; }
         public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
 

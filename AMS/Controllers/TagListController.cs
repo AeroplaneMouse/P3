@@ -57,5 +57,10 @@ namespace AMS.Controllers
         {
             return _rep.GetChildTags(id).ToList();
         }
+
+        public void GetTreeviewData(string keyword="")
+        {
+            TagsList = _rep.GetTreeViewDataList(keyword).ToList();
+        }
     }
 }

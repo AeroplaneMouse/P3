@@ -19,6 +19,7 @@ namespace AMS.ViewModels
         {
             get => new ObservableCollection<LogEntry>(_logListController.EntryList);
         }
+        
         public string SearchQuery { get; set; }
         public List<LogEntry> SelectedItems { get; set; } = new List<LogEntry>();
         public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
@@ -28,7 +29,6 @@ namespace AMS.ViewModels
         public ICommand SearchCommand { get; set; }
         public ICommand PrintCommand { get; set; }
         
-
         public LogListViewModel(ILogListController logListController)
         {
             _logListController = logListController;
@@ -54,6 +54,8 @@ namespace AMS.ViewModels
         {
             if (SearchQuery == null)
                 return;
+            
+            Console.WriteLine(SearchQuery);
             
             _logListController.Search(SearchQuery);
             OnPropertyChanged(nameof(Entries));
