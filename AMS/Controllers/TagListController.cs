@@ -31,7 +31,6 @@ namespace AMS.Controllers
         public void Search(string query)
         {
             TagsList = _rep.Search("").ToList();
-
         }
 
         public void Remove(Tag tag)

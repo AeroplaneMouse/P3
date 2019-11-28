@@ -17,31 +17,20 @@ namespace AMS.ViewModels
 {
     public class AssetEditorViewModel : BaseViewModel
     {
-        private IAssetController _assetController;
-        private ITagListController _tagListController;
-        private bool _isEditing;
-        private string _tagString;
-        private string _tagSearchQuery;
-        private TagHelper _tagHelper;
-
-
-        public ICommand AddFieldCommand { get; set; }
-        public ICommand RemoveFieldCommand { get; set; }
-        public ICommand SaveCommand { get; set; }
-        public ICommand SaveMultipleCommand { get; set; }
-        public ICommand CancelCommand { get; set; }
-        public ICommand RemoveTagCommand { get; set; }
-        public ICommand AddTagCommand { get; set; }
-        public ICommand AutoTagCommand { get; set; }
-        public ICommand ClearInputCommand { get; set; }
-
-        public ICommand EnterSuggestionListCommand { get; set; }
+        #region Public Properties
 
         public ObservableCollection<Field> NonHiddenFieldList =>
             new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
 
         public ObservableCollection<Field> HiddenFieldList =>
             new ObservableCollection<Field>(_assetController.HiddenFieldList);
+
+        // TODO: Skal fjernes?
+        //public List<Tag> TagList { get; set; }
+
+        public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
+
+        public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
 
         public string Name
         {
@@ -72,23 +61,45 @@ namespace AMS.ViewModels
                 TagSearch();
             }
         }
-
         public string CurrentGroup { get; set; }
         public Visibility CurrentGroupVisibility { get; set; } = Visibility.Collapsed;
         public Visibility TagSuggestionsVisibility { get; set; } = Visibility.Collapsed;
         public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
         public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
         public bool TagSuggestionIsOpen { get; set; } = false;
-        public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
         public ITagable TagParent { get; set; }
-        public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
-        public List<Tag> TagList { get; set; }
 
-        public AssetEditorViewModel(IAssetController assetController, ITagListController tagListController,
-            TagHelper tagHelper)
+        #endregion
+
+        #region Private Properties
+
+        private IAssetController _assetController { get; set; }
+        private bool _isEditing { get; set; }
+        private string _tagSearchQuery { get; set; }
+        private TagHelper _tagHelper { get; set; }
+
+        #endregion
+
+        #region Comands
+
+        public ICommand AddFieldCommand { get; set; }
+        public ICommand RemoveFieldCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
+        public ICommand SaveMultipleCommand { get; set; }
+        public ICommand CancelCommand { get; set; }
+        public ICommand RemoveTagCommand { get; set; }
+        public ICommand AddTagCommand { get; set; }
+        public ICommand AutoTagCommand { get; set; }
+        public ICommand ClearInputCommand { get; set; }
+        public ICommand EnterSuggestionListCommand { get; set; }
+
+        #endregion
+
+        #region Constructor
+
+        public AssetEditorViewModel(IAssetController assetController, TagHelper tagHelper)
         {
             _assetController = assetController;
-            _tagListController = tagListController;
 
             _tagHelper = tagHelper;
             _tagHelper.CanApplyParentTags = false;
@@ -96,7 +107,6 @@ namespace AMS.ViewModels
             AppliedTags = _tagHelper.GetAppliedTags(false);
 
             _isEditing = (_assetController.ControlledAsset.ID != 0);
-
 
             Title = _isEditing ? "Edit asset" : "Add asset";
 
@@ -122,14 +132,18 @@ namespace AMS.ViewModels
             UpdateAll();
         }
 
+        #endregion
+
+        #region Public Methods
+
         /// <summary>
         /// Saves and leaves the page
         /// </summary>
         public void SaveAndExit()
         {
-            if (!VerifyAssetAndFields()) 
+            if (!VerifyAssetAndFields())
                 return;
-            
+
             SaveAsset(false);
 
             Features.Navigate.Back();
@@ -197,7 +211,7 @@ namespace AMS.ViewModels
                 UpdateAll();
             }
         }
-        
+
         /// <summary>
         /// Runs the cancel command, and returns.
         /// </summary>
@@ -207,14 +221,6 @@ namespace AMS.ViewModels
             {
                 Features.Navigate.To(Features.Create.AssetList());
             }
-        }
-
-        /// <summary>
-        /// Runs the tagsearch process.
-        /// </summary>
-        private void TagSearch()
-        {
-            TagSearchProcess();
         }
 
         /// <summary>
@@ -240,7 +246,7 @@ namespace AMS.ViewModels
                 else
                 {
                     // So we need to switch to a group of tags.
-                    Tag taggedItem = (Tag) tag;
+                    Tag taggedItem = (Tag)tag;
                     _tagHelper.Parent(taggedItem);
                     CurrentGroup = taggedItem.Name;
                     CurrentGroupVisibility = Visibility.Visible;
@@ -248,6 +254,18 @@ namespace AMS.ViewModels
                 }
             }
 
+            TagSearchProcess();
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>
+        /// Runs the tagsearch process.
+        /// </summary>
+        private void TagSearch()
+        {
             TagSearchProcess();
         }
 
@@ -372,6 +390,7 @@ namespace AMS.ViewModels
 
             return true;
         }
-        
+
+        #endregion
     }
 }

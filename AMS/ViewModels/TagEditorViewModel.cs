@@ -228,11 +228,10 @@ namespace AMS.ViewModels
 
         private void Cancel()
         {
-            /*if (Features.Navigate.Back())
-                //TODO: Skal det her håndteres?
-            else
-                //TODO: Skal det her håndteres?
-                */
+            if (Features.Navigate.Back() == false)
+            {
+                Features.Navigate.To(Features.Create.TagList());
+            }
         }
 
         private void UpdateAll()

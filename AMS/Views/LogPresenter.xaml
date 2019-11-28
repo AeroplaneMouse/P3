@@ -7,7 +7,13 @@
       xmlns:local="clr-namespace:AMS.Views"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="LogPresenter">
+      Title="LogPresenter"
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
+
+    <Page.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Esc" Command="{Binding CancelCommand}"/>
+    </Page.InputBindings>
 
     <Grid>
         <!-- Header -->
@@ -33,7 +39,8 @@
             <Button Style="{StaticResource RegularCancelButton}"
                     Command="{Binding CancelCommand}"
                     Margin="10 0 0 0"
-                    Content="Cancel" />
+                    Content="Cancel"
+                    x:Name="StartElement"/>
         </StackPanel>
 
         <Rectangle Style="{StaticResource HorizontalSeparator}"
@@ -94,21 +101,21 @@
                                     Margin="0 0 10 0">
                             <!-- User -->
                             <TextBlock Style="{StaticResource SmallHeaderStyle}"
-                                   Text="User"/>
+                                       Text="User"/>
                             <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
-                                   Text="ID"/>
+                                       Text="ID"/>
                             <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
-                                   Text="Name"/>
+                                       Text="Name"/>
                             <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
-                                   Text="Domain"/>
+                                       Text="Domain"/>
 
                             <!-- Item -->
                             <TextBlock Style="{StaticResource SmallHeaderStyle}"
-                                   Text="Item"/>
+                                       Text="Item"/>
                             <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
-                                   Text="ID"/>
+                                       Text="ID"/>
                             <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
-                                   Text="Type"/>
+                                       Text="Type"/>
 
                         </StackPanel>
 
@@ -117,11 +124,11 @@
                             <!-- User -->
                             <TextBlock Style="{StaticResource ParagraphStyle}"/>
                             <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
-                                   Text="{Binding Entry.UserId}"/>
+                                       Text="{Binding Entry.UserId}"/>
                             <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
-                                   Text="{Binding Entry.Username}"/>
+                                       Text="{Binding Entry.Username}"/>
                             <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
-                                   Text="{Binding Entry.UserDomain}"/>
+                                       Text="{Binding Entry.UserDomain}"/>
                             
                             <!-- Item -->
                             <TextBlock Style="{StaticResource ParagraphStyle}"/>
