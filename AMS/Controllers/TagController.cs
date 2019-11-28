@@ -69,26 +69,25 @@ namespace AMS.Controllers
             }
         }
 
-        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) : base(tag)
+        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) : base(tag ?? new Tag())
         {
-            Tag = tag;
+            Tag = tag ?? new Tag();
             _tagRepository = tagRep;
             _departmentRepository = departmentRepository;
-
-            Tag.DeSerializeFields();
-
-            Id = tag.ID;
-            Name = tag.Name;
-            Color = tag.TagColor;
-            ParentID = tag.ParentID;
-            DepartmentID = tag.ParentID;
-
-            NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
 
             if (Tag.ID != 0)
             {
                 IsEditing = true;
+                Tag.DeSerializeFields();
+
+                Id = tag.ID;
+                Name = tag.Name;
+                Color = tag.TagColor;
+                ParentID = tag.ParentID;
+                DepartmentID = tag.ParentID;
+
+                NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
+                HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
             }
             else
             {
