@@ -8,7 +8,7 @@ namespace AMS.Controllers.Interfaces
 {
     public interface IAssetController : IFieldListController
     {
-        Asset Asset { get; set; }
+        Asset ControlledAsset { get; set; }
         List<ITagable> CurrentlyAddedTags { get; set; }
 
         string Name { get; set; }

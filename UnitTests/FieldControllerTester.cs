@@ -30,7 +30,7 @@ namespace UnitTests
             //Arrange
             AssetController otherAssetController = new AssetController(new Asset(), new AssetRepository())
             {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             //Act
             otherAssetController.AddField(_thirdField);
@@ -47,7 +47,7 @@ namespace UnitTests
             //Arrange
             AssetController otherAsset = new AssetController(new Asset(), new AssetRepository())
             {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             otherAsset.AddField(_thirdField);
             otherAsset.AddField(_fourthField);
@@ -66,7 +66,7 @@ namespace UnitTests
             //Arrange
             AssetController otherAsset = new AssetController(new Asset(), new AssetRepository())
             {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             otherAsset.AddField(_thirdField);
             otherAsset.AddField(_thirdField);
@@ -84,7 +84,7 @@ namespace UnitTests
             //Arrange
             AssetController otherAssetController = new AssetController(new Asset(), new AssetRepository())
             {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             otherAssetController.AddField(_fourthField);
 
@@ -101,7 +101,7 @@ namespace UnitTests
             //Arrange
             AssetController otherAssetController = new AssetController(new Asset(), new AssetRepository())
             {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             otherAssetController.AddField(_fourthField);
             otherAssetController.AddField(_thirdField);
@@ -118,7 +118,7 @@ namespace UnitTests
             //Arrange
             AssetController otherAssetController = new AssetController(new Asset(), new AssetRepository())
             {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             otherAssetController.AddField(_fourthField);
             otherAssetController.AddField(_thirdField);

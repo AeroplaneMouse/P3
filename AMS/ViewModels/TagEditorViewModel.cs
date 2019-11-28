@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Input;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using AMS.Controllers;
 using AMS.Database.Repositories;
 using AMS.Helpers;
@@ -31,8 +32,8 @@ namespace AMS.ViewModels
 
         public Tag _tag
         {
-            get => _controller.Tag;
-            set => _controller.Tag = value;
+            get => _controller.ControlledTag;
+            set => _controller.ControlledTag = value;
         }
 
         public string Name
@@ -85,7 +86,7 @@ namespace AMS.ViewModels
         }
 
         public int SelectedDepartmentIndex { get; set; }
-        
+
         public bool ParentComboEnabled
         {
             get => _parentComboEnabled;
@@ -121,7 +122,8 @@ namespace AMS.ViewModels
         {
             _controller = tagController;
 
-            if (_controller.Id == 1){
+            if (_controller.Id == 1)
+            {
                 _parentComboEnabled = false;
                 _departmentComboEnabled = false;
             }
@@ -131,14 +133,13 @@ namespace AMS.ViewModels
 
             //Set the selected parent to the parent of the chosen tag
             int i = ParentTagList.Count;
-            while (i > 0 && ParentTagList[i - 1].ID != _controller.Tag.ParentID)
+            while (i > 0 && ParentTagList[i - 1].ID != _controller.ControlledTag.ParentID)
                 i--;
 
             if (i > 0)
                 _selectedParentTagIndex = i - 1;
 
             UpdateAll();
-
 
 
             Department currentDepartment;
@@ -148,7 +149,7 @@ namespace AMS.ViewModels
                 PageTitle = "Edit tag";
 
                 // Use the department of the tag
-                currentDepartment = _controller.DepartmentList.Find(d => d.ID == _controller.Tag.DepartmentID);
+                currentDepartment = _controller.DepartmentList.Find(d => d.ID == _controller.ControlledTag.DepartmentID);
             }
             else
             {
@@ -178,20 +179,27 @@ namespace AMS.ViewModels
 
         #region Methods
 
+        /// <summary>
+        /// Saves the tag.
+        /// </summary>
         private void SaveTag()
         {
-            _controller.Tag.ParentID = ParentTagList[SelectedParentTagIndex].ID;
-            _controller.Tag.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
-            if (_controller.IsEditing)
+            _controller.ControlledTag.ParentID = ParentTagList[SelectedParentTagIndex].ID;
+            _controller.ControlledTag.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
+            if (VerifyTagAndFields())
             {
-                _controller.Update();
-            }
-            else
-            {
-                _controller.Save();
-            }
+                if (_controller.IsEditing)
+                {
+                    _controller.Update();
+                }
+                else
+                {
+                    _controller.Save();
+                }
 
-            Features.Navigate.Back();
+                Features.Navigate.Back();
+            }
+            
         }
 
         private void AddField()
@@ -212,7 +220,7 @@ namespace AMS.ViewModels
         {
             if (field is Field inputField)
             {
-                inputField.TagIDs.Add(_controller.Tag.ID);
+                inputField.TagIDs.Add(_controller.ControlledTag.ID);
                 _controller.RemoveField(inputField);
                 UpdateAll();
             }
@@ -261,6 +269,49 @@ namespace AMS.ViewModels
                     }
                 }
             }
+        }
+        
+        /// <summary>
+        /// Verifies tag and its fields.
+        /// </summary>
+        /// <returns></returns>
+        private bool VerifyTagAndFields()
+        {
+            //Verifies whether fields contains correct information, or the required information.
+            List<Field> completeList = HiddenFieldList.ToList();
+            completeList.AddRange(NonHiddenFieldList.ToList());
+
+            //Checks whether the name is null
+            if (string.IsNullOrEmpty(_controller.ControlledTag.Name))
+            {
+                Features.AddNotification(new Notification("Label is required and empty",
+                    Notification.WARNING));
+                return false;
+            }
+            
+            foreach (var field in completeList)
+            {
+                if (field.Required && string.IsNullOrEmpty(field.Content))
+                {
+                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
+                        Notification.WARNING));
+                    return false;
+                }
+
+                if (field.Type == Field.FieldType.NumberField)
+                {
+                    bool check = field.Content.All(char.IsDigit);
+                    if (check)
+                    {
+                        Features.AddNotification(
+                            new Notification("The field " + field.Label + " cannot contain letters",
+                                Notification.WARNING));
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         #endregion
