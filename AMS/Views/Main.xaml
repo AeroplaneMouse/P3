@@ -16,8 +16,8 @@
         Title="Asset Management System"
         Height="600" 
         Width="1200">
+    
     <Window.Resources>
-
         <!-- Style of the window -->
         <Style TargetType="{x:Type local:Main}">
             <Setter Property="Template">
