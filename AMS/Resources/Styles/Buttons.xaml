@@ -87,7 +87,7 @@
         <!-- Adds the hover effect -->
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                <Setter Property="Background" Value="{StaticResource NavigationHoverBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -101,7 +101,7 @@
         <Setter Property="Width" Value="100"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         <Setter Property="Padding" Value="6"/>
-        <Setter Property="BorderBrush" Value="{StaticResource NavigationSelectedBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource NavigationHoverBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <!-- Makes the content of the button a textblock -->
@@ -125,9 +125,9 @@
         <!-- Adds the hover effect -->
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
+                <Setter Property="Background" Value="{StaticResource NavigationHoverBrush}"/>
                 <Setter Property="Foreground" Value="White"/>
-                <Setter Property="BorderBrush" Value="{StaticResource NavigationSelectedBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource NavigationHoverBrush}"/>
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
                 <Setter Property="BorderThickness" Value="1"/>

@@ -120,11 +120,61 @@
                                         <!-- Navigation menu -->
                                         <Border Background="{StaticResource NavigationBackgroundBrush}">
                                             <StackPanel Orientation="Vertical">
-                                                <Button Content="Home" Command="{Binding ShowHomePageCommand}" Style="{StaticResource NavigationButton}"/>
-                                                <Button Content="Assets" Command="{Binding ShowAssetListPageCommand}" Style="{StaticResource NavigationButton}"/>
-                                                <Button Content="Tags" Command="{Binding ShowTagListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
-                                                <Button Content="Users" Command="{Binding ShowUserListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
-                                                <Button Content="Log" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
+                                                <Button Content="Home" Command="{Binding ShowHomePageCommand}">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding SelectedNavigationItem}" Value="0">
+                                                                    <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                                <Button Content="Assets" Command="{Binding ShowAssetListPageCommand}">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding SelectedNavigationItem}" Value="1">
+                                                                    <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                                <Button Content="Tags" Command="{Binding ShowTagListPageCommand}" Visibility="{Binding OnlyVisibleForAdmin}">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding SelectedNavigationItem}" Value="2">
+                                                                    <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                                <Button Content="Users" Command="{Binding ShowUserListPageCommand}" Visibility="{Binding OnlyVisibleForAdmin}">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding SelectedNavigationItem}" Value="3">
+                                                                    <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
+                                                <Button Content="Log" Command="{Binding ShowLogPageCommand}" Visibility="{Binding OnlyVisibleForAdmin}">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding SelectedNavigationItem}" Value="4">
+                                                                    <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                </Button>
                                             </StackPanel>
                                         </Border>
 

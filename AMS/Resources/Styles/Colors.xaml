@@ -22,6 +22,9 @@
     <Color x:Key="NavigationSelected">#2a3846</Color>
     <SolidColorBrush x:Key="NavigationSelectedBrush" Color="{StaticResource NavigationSelected}"/>
 
+    <Color x:Key="NavigationHover">#000000</Color>
+    <SolidColorBrush x:Key="NavigationHoverBrush" Color="{StaticResource NavigationHover}"/>
+
     <!-- 32cd56-->
     <!-- 5FCF80 -->
     <Color x:Key="AcceptGreen">#32cd56</Color>
