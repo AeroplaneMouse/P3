@@ -37,24 +37,30 @@ namespace AMS.Logging
                 if (entity.Changes.Any())
                 {
                     id = entity.ID;
-                    description = entity.GetType().ToString().Split('.').Last() + " with id " + id;
-                    changes = this.GetChanges(entity);
                     entryType = "Update";
                 }
                 else if (entity.ID == 0)
                 {
                     id = entityId;
-                    description = entity.GetType().ToString().Split('.').Last() + " with id " + id;
-                    changes = this.GetPropertiesAndValues(entity);
                     entryType = "Create";
                 }
                 else
                 {
                     id = entity.ID;
-                    description = entity.GetType().ToString().Split('.').Last() + " with id " + id;
-                    changes = this.GetPropertiesAndValues(entity);
                     entryType = "Delete";
                 }
+
+                string name = entity is Asset ? ((Asset)entity).Name : (entity is Tag ? ((Tag)entity).Name : null);
+
+                if (name == null)
+                {
+                    description = entity.GetType().ToString().Split('.').Last() + " with ID: " + id + " connected to asset with ID: " + ((Comment)entity).AssetID;
+                }
+                else
+                {
+                    description = entity.GetType().ToString().Split('.').Last() + ": '" + name + "' with ID: " + id;
+                }
+                changes = this.GetPropertiesAndValues(entity);
 
                 this.Write(entryType, description, userId, id, entity.GetType(), changes);
 
