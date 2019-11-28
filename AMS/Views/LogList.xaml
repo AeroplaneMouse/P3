@@ -44,10 +44,14 @@
                 <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Left">
                     <TextBox FontSize="{StaticResource FontSizeSmall}"
-                        Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                        VerticalContentAlignment="Center"
-                        MinWidth="200"
-                        x:Name="StartElement">
+                             Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                             VerticalAlignment="Bottom"
+                             MinWidth="300"
+                             MaxWidth="500"
+                             x:Name="StartElement"
+                             Tag="Start writing..."
+                             Padding="5 10 5 10"
+                             Style="{StaticResource TextBoxWithPlaceholder}">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                         </TextBox.InputBindings>
@@ -79,7 +83,6 @@
                     
                 </StackPanel>
 
-                <!--Style="{StaticResource RegularList}"-->
                 <ListView x:Name="listViewWithItems"
                         SelectionMode="Extended"
                         ItemsSource="{Binding Entries, UpdateSourceTrigger=PropertyChanged}"
@@ -157,8 +160,7 @@
 
                     <ListView.InputBindings>
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
-                        <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding ViewCommand}" />
-                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ViewCommand}" />
+                        <KeyBinding Key="Return" Command="{Binding ViewCommand}" />
                     </ListView.InputBindings>
                 </ListView>
             </Grid>

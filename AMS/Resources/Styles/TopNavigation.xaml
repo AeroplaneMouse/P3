@@ -212,30 +212,13 @@
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
-                        </Trigger>
-                        <Trigger SourceName="Border_Popup" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
-                        </Trigger>
-                        <Trigger SourceName="StackPanel_Popup" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
-                        </Trigger>
-                        <Trigger SourceName="AllDepartments_Popup" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
-                        </Trigger>
-                        <Trigger SourceName="AddDepartment_Popup" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
-                        </Trigger>
-                        <Trigger SourceName="DepartmentsPresenter_Popup" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
-                        </Trigger>
-                        <Trigger SourceName="Separator1_Popup" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
-                        </Trigger>
-                        <Trigger SourceName="Separator2_Popup" Property="IsMouseOver" Value="True">
-                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
-                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="IsSubmenuOpen" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="{Binding Path=!IsOpen}"/>
+                        </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>

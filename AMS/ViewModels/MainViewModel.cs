@@ -84,6 +84,7 @@ namespace AMS.ViewModels
         public Frame ContentFrame { get; set; } = new Frame();
         public Page SplashPage { get; set; }
         public Page PopupPage { get; set; }
+        public int SelectedNavigationItem { get; set; }
 
         public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
         public Visibility OnlyVisibleForAdmin { get; private set; } = Visibility.Collapsed;
@@ -238,11 +239,11 @@ namespace AMS.ViewModels
             ShowShortcutsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.ShortcutsList()));
 
             // Change page commands
-            ShowHomePageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.Home()));
-            ShowAssetListPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.AssetList()));
-            ShowTagListPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagList()), () => Features.GetCurrentSession().IsAdmin());
-            ShowLogPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.LogList()), () => Features.GetCurrentSession().IsAdmin());
-            ShowUserListPageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.UserList()), () => Features.GetCurrentSession().IsAdmin());
+            ShowHomePageCommand = new Base.RelayCommand(() => GoToPage(0));
+            ShowAssetListPageCommand = new Base.RelayCommand(() => GoToPage(1));
+            ShowTagListPageCommand = new Base.RelayCommand(() => GoToPage(2), () => Features.GetCurrentSession().IsAdmin());
+            ShowUserListPageCommand = new Base.RelayCommand(() => GoToPage(3), () => Features.GetCurrentSession().IsAdmin());
+            ShowLogPageCommand = new Base.RelayCommand(() => GoToPage(4), () => Features.GetCurrentSession().IsAdmin());
 
             // Department commands
             SelectDepartmentCommand = new Base.RelayCommand<object>(SelectDepartment);
@@ -254,6 +255,29 @@ namespace AMS.ViewModels
             if (CurrentSession.IsAdmin())
                 ChangeSettingsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.SettingsEditor()));
             //ClearSettingsCommand = new Base.RelayCommand();
+        }
+
+        private void GoToPage(int pageNumber)
+        {
+            SelectedNavigationItem = pageNumber;
+            switch (pageNumber)
+            {
+                case 0:
+                    Features.Navigate.To(Features.Create.Home());
+                    break;
+                case 1:
+                    Features.Navigate.To(Features.Create.AssetList());
+                    break;
+                case 2:
+                    Features.Navigate.To(Features.Create.TagList());
+                    break;
+                case 3:
+                    Features.Navigate.To(Features.Create.UserList());
+                    break;
+                case 4:
+                    Features.Navigate.To(Features.Create.LogList());
+                    break;
+            }
         }
 
         private void InitializeWindowsCommands()
@@ -298,8 +322,6 @@ namespace AMS.ViewModels
         /// </summary>
         private void Reload()
         {
-            Console.WriteLine("Reloading...");
-
             // Clearing memory
             MySqlHandler.ConnectionFailed -= ConnectionFailed;
             CurrentDepartmentVisibility = Visibility.Hidden;
@@ -344,7 +366,8 @@ namespace AMS.ViewModels
                 return (List<Department>)_departmentRep.GetAll();
 
             else
-                return new List<Department>();
+                //TODO: Find a better solution
+                return new List<Department>() { new Department() { Name = "- Please add a department to the system -" } };
         }
 
         /// <summary>

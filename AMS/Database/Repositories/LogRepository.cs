@@ -59,9 +59,9 @@ namespace AMS.Database.Repositories
             return querySuccess;
         }
 
-        public IEnumerable<LogEntry> GetLogEntries(ulong logableId, Type logableType)
+        public IEnumerable<LogEntry> GetLogEntries(ulong loggedItemId, Type loggedItemType)
         {
-            return GetLogEntries(logableId, logableType, null);
+            return GetLogEntries(loggedItemId, loggedItemType, null);
         }
 
         public IEnumerable<LogEntry> GetLogEntries(ulong loggedItemId, Type loggedItemType, string userId)

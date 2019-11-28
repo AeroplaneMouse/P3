@@ -92,14 +92,17 @@
                             <!-- Search bar -->
                             <TextBox FontSize="{StaticResource FontSizeSmall}"
                                      Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                                     VerticalContentAlignment="Center"
-                                     MinWidth="200"
-                                     MaxWidth="350"
+                                     MinWidth="300"
+                                     MaxWidth="500"
                                      MinHeight="35"
                                      x:Name="StartElement"
                                      TabIndex="0"
-                                     ToolTip="%s: Keyword must end with s. b%: Keyword must start with s. #: Enter tag mode">
-                                
+                                     ToolTip="%s: Keyword must end with s. b%: Keyword must start with s. #: Enter tag mode"
+                                     VerticalAlignment="Bottom"
+                                     Tag="Start writing..."
+                                     Padding="5 10 5 10"
+                                     Style="{StaticResource TextBoxWithPlaceholder}">
+
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                                     <KeyBinding Key="Escape" Command="{Binding ClearInputCommand}"/>
@@ -261,7 +264,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            
+
                             <!-- Edit -->
                             <GridViewColumn Width="32" x:Name="PART_Edit">
                                 <GridViewColumn.CellTemplate>
@@ -273,13 +276,13 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            
+
                             <!-- Remove -->
                             <GridViewColumn Width="32" x:Name="PART_Trash">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{StaticResource TrashButton}"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveCommand}"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveBySelectionCommand}"
                                                 CommandParameter="{Binding Path=.}"
                                                 Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
                                     </DataTemplate>
@@ -297,7 +300,7 @@
                     <ListView.InputBindings>
                         <KeyBinding Key="Delete" Command="{Binding RemoveBySelectionCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveBySelectionCommand}"/>
-                        <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditCommand}"/>
+                        <KeyBinding Modifiers="Ctrl" Key="E" Command="{Binding EditBySelectionCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="P" Command="{Binding PrintCommand}"/>
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}"/>
                         <KeyBinding Key="Return" Command="{Binding ViewCommand}"/>

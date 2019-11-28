@@ -16,7 +16,7 @@ namespace AMS.Controllers
         private IDepartmentRepository _departmentRepository { get; set; }
 
 
-        public Tag Tag { get; set; }
+        public Tag ControlledTag { get; set; }
         public bool IsEditing { get; set; }
         public ulong TagID;
 
@@ -37,11 +37,11 @@ namespace AMS.Controllers
                     {
                         Name = "[No Parent Tag]",
                         ParentID = 0,
-                        TagColor = Tag.TagColor
+                        TagColor = ControlledTag.TagColor
                     }
                 };
                 foreach (Tag parentTag in (List<Tag>) _tagRepository.GetParentTags()
-                    .Where(t => t.ID != 1 && t.ID != Tag.ID)
+                    .Where(t => t.ID != 1 && t.ID != ControlledTag.ID)
                     .ToList())
                 {
                     parentTagsList.Add(parentTag);
@@ -50,7 +50,7 @@ namespace AMS.Controllers
                 return parentTagsList;
             }
         }
-
+        
         public List<Department> DepartmentList
         {
             get
@@ -69,58 +69,65 @@ namespace AMS.Controllers
             }
         }
 
-        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) : base(tag)
+        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) : base(tag ?? new Tag())
         {
-            Tag = tag;
+            ControlledTag = tag ?? new Tag();
             _tagRepository = tagRep;
             _departmentRepository = departmentRepository;
 
-            Tag.DeSerializeFields();
-
-            Id = tag.ID;
-            Name = tag.Name;
-            Color = tag.TagColor;
-            ParentID = tag.ParentID;
-            DepartmentID = tag.ParentID;
-
-            NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
-
-            if (Tag.ID != 0)
+            if (ControlledTag.ID != 0)
             {
                 IsEditing = true;
+                ControlledTag.DeSerializeFields();
+
+                Id = tag.ID;
+                Name = tag.Name;
+                Color = tag.TagColor;
+                ParentID = tag.ParentID;
+                DepartmentID = tag.ParentID;
+
+
+                NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
+                HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
             }
             else
             {
-                Tag = new Tag {TagColor = CreateRandomColor()};
+                ControlledTag = new Tag {TagColor = CreateRandomColor()};
+                ControlledTag.FieldList = new List<Field>();
                 IsEditing = false;
             }
 
-            NonHiddenFieldList = Tag.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = Tag.FieldList.Where(f => f.IsHidden == true).ToList();
+            NonHiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == true).ToList();
         }
 
         #region Public Methods
 
+        /// <summary>
+        /// Saves the tag.
+        /// </summary>
         public void Save()
         {
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
-            Tag.FieldList = fieldList;
+            ControlledTag.FieldList = fieldList;
             SerializeFields();
-            _tagRepository.Insert(Tag, out TagID);
+            _tagRepository.Insert(ControlledTag, out TagID);
         }
 
+        /// <summary>
+        /// Updates the tag.
+        /// </summary>
         public void Update()
         {
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
-            Tag.FieldList = fieldList;
+            ControlledTag.FieldList = fieldList;
             SerializeFields();
-            _tagRepository.Update(Tag);
+            _tagRepository.Update(ControlledTag);
         }
 
-        public void Remove() => _tagRepository.Delete(Tag);
+        public void Remove() => _tagRepository.Delete(ControlledTag);
 
         public string CreateRandomColor()
         {
@@ -134,15 +141,21 @@ namespace AMS.Controllers
 
             return hex;
         }
-
+        
+        /// <summary>
+        /// Connects a parentTag, and removes the relation to the old parent tag.
+        /// </summary>
+        /// <param name="newTag"></param>
+        /// <param name="oldTag"></param>
         public void ConnectTag(Tag newTag, Tag oldTag)
         {
+            //Adds the fields
             foreach (var field in newTag.FieldList)
             {
                 AddField(field, newTag);
-                Console.WriteLine("Added field " + field.Label);
             }
 
+            //Removes the fields needed to be removed (Both in hidden and non hidden list)
             List<Field> fieldsToRemove = new List<Field>();
             foreach (var field in NonHiddenFieldList)
             {

@@ -10,7 +10,7 @@ namespace AMS.Controllers.Interfaces
     {
         #region Properties
 
-        Tag Tag { get; set; }
+        Tag ControlledTag { get; set; }
 
         ulong Id { get; set; }
         string Name { get; set; }

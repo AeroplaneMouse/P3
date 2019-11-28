@@ -65,27 +65,57 @@ namespace AMS.ViewModels
         // Navigation
         public static class Navigate
         {
+            private static Page _currentPage;
+
             public static bool To(Page page)
             {
                 if (Main.ContentFrame.Navigate(page))
                 {
-                    Main.History.Push(page);
+                    if (_currentPage == null)
+                    {
+                        _currentPage = page;
+
+                        return true;
+                    }
+
+                    if (page.GetType() == typeof(Home) || 
+                        page.GetType() == typeof(AssetList) || 
+                        page.GetType() == typeof(TagList) ||
+                        page.GetType() == typeof(UserList) ||
+                        page.GetType() == typeof(LogList))
+                    {
+                        Main.History.Clear();
+                    }
+
+                    Main.History.Push(_currentPage);
+                    _currentPage = page;
+
                     return true;
                 }
-                else
-                    return false;
+
+                return false;
             }
 
             public static bool Back()
             {
-                if (Main.History.Count > 1)
+                if (Main.History.Count > 0)
                 {
-                    Main.History.Pop();
-                    Main.ContentFrame.Navigate(Main.History.Pop());
+                    _currentPage = Main.History.Pop();
+
+                    if (_currentPage.GetType() == typeof(Home) ||
+                        _currentPage.GetType() == typeof(AssetList) ||
+                        _currentPage.GetType() == typeof(TagList) ||
+                        _currentPage.GetType() == typeof(UserList) ||
+                        _currentPage.GetType() == typeof(LogList))
+                    {
+                        Main.History.Clear();
+                    }
+
+                    Main.ContentFrame.Navigate(_currentPage);
                     return true;
                 }
-                else
-                    return false;
+
+                return false;
             }
         }
 
@@ -116,7 +146,7 @@ namespace AMS.ViewModels
                 if (asset == null)
                     asset = new Asset();
 
-                return new AssetEditor(new AssetController(asset, _assetRepository), new TagListController(_tagRepository, _printHelper), CreateTagHelper());
+                return new AssetEditor(new AssetController(asset, _assetRepository), CreateTagHelper());
             }
 
             /// <summary>

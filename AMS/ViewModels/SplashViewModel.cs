@@ -24,7 +24,6 @@ namespace AMS.ViewModels
 
         public SplashViewModel(MainViewModel main, IUserRepository userRepository)
         {
-            Console.WriteLine("Showing splash screen");
             _main = main;
             _userRepository = userRepository;
 

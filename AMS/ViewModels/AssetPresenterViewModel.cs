@@ -26,29 +26,29 @@ namespace AMS.ViewModels
 
         public AssetPresenterViewModel(List<ITagable> tagList, IAssetController assetController, ICommentListController commentListController, ILogListController logListController)
         {
-            Name = assetController.Asset.Name;
-            ID = $" (id: { assetController.Asset.ID })";
+            Name = assetController.ControlledAsset.Name;
+            ID = $" (id: { assetController.ControlledAsset.ID })";
             CommentListController = commentListController;
             _assetController = assetController;
 
             _children = new ObservableCollection<object>();
-            _children.Add(new AssetDetailsViewModel(assetController.Asset, tagList));
-            _children.Add(new CommentViewModel(assetController.Asset, commentListController));
+            _children.Add(new AssetDetailsViewModel(assetController.ControlledAsset, tagList));
+            _children.Add(new CommentViewModel(assetController.ControlledAsset, commentListController));
             _children.Add(new LogListViewModel(logListController));
 
-            EditCommand = new Base.RelayCommand(Edit);
-            RemoveCommand = new Base.RelayCommand(Remove);
+            EditCommand = new Base.RelayCommand(() => Edit(), () => Features.GetCurrentSession().IsAdmin());
+            RemoveCommand = new Base.RelayCommand(() => Remove(), () => Features.GetCurrentSession().IsAdmin());
             CancelCommand = new Base.RelayCommand(Cancel);
         }
 
         private void Remove()
         {
-            Features.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { _assetController.Asset.Name }?", (sender, e) =>
+            Features.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { _assetController.ControlledAsset.Name }?", (sender, e) =>
             {
                 if (e.Result)
                 {
                     _assetController.Remove();
-                    Features.AddNotification(new Notification($"{ _assetController.Asset.Name } has been deleted", Notification.INFO));
+                    Features.AddNotification(new Notification($"{ _assetController.ControlledAsset.Name } has been deleted", Notification.INFO));
                     Features.Navigate.Back();
                 }
             }));
@@ -56,7 +56,7 @@ namespace AMS.ViewModels
 
         private void Edit ()
         {
-            Features.Navigate.To(Features.Create.AssetEditor(_assetController.Asset));
+            Features.Navigate.To(Features.Create.AssetEditor(_assetController.ControlledAsset));
         }
 
         private void Cancel()

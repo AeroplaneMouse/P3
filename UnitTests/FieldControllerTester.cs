@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using System.Linq;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
-using AMS.Database.Repositories;
+using AMS.Database.Repositories.Interfaces;
+using AMS.Interfaces;
 using AMS.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace UnitTests
 {
@@ -12,7 +15,7 @@ namespace UnitTests
     {
         private Field _thirdField;
         private Field _fourthField;
-
+        private Mock<IAssetRepository> _mockedReppository;
         [TestInitialize]
         public void InitiateFieldsList()
         {
@@ -22,15 +25,18 @@ namespace UnitTests
 
             _fourthField = new Field("Label of fourth field", "content of fourth field",
                 Field.FieldType.Textarea, true, true);
+            
+            _mockedReppository = new Mock<IAssetRepository>();
+            _mockedReppository.Setup(p=>p.GetTags(It.IsAny<Asset>())).Returns(new List<ITagable>());
         }
 
         [TestMethod]
         public void AddField_ChecksFieldsContains()
         {
             //Arrange
-            AssetController otherAssetController = new AssetController(new Asset(), new AssetRepository())
+            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object)
             {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             //Act
             otherAssetController.AddField(_thirdField);
@@ -45,9 +51,9 @@ namespace UnitTests
         public void RemoveField_CheckFieldDoesNotContain()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), new AssetRepository())
+            AssetController otherAsset = new AssetController(new Asset(), _mockedReppository.Object)
             {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             otherAsset.AddField(_thirdField);
             otherAsset.AddField(_fourthField);
@@ -64,9 +70,9 @@ namespace UnitTests
         public void RemoveField_UsingInheritedField_CheckFieldIsHidden()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), new AssetRepository())
+            AssetController otherAsset = new AssetController(new Asset(), _mockedReppository.Object)
             {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             otherAsset.AddField(_thirdField);
             otherAsset.AddField(_thirdField);
@@ -82,9 +88,9 @@ namespace UnitTests
         public void AddField_UsingInheritedField_CheckFieldsContains()
         {
             //Arrange
-            AssetController otherAssetController = new AssetController(new Asset(), new AssetRepository())
+            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object)
             {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             otherAssetController.AddField(_fourthField);
 
@@ -99,9 +105,9 @@ namespace UnitTests
         public void RemoveFieldRelations_Returns_IdInField_NonHiddenFieldList()
         {
             //Arrange
-            AssetController otherAssetController = new AssetController(new Asset(), new AssetRepository())
+            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object)
             {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             otherAssetController.AddField(_fourthField);
             otherAssetController.AddField(_thirdField);
@@ -116,9 +122,9 @@ namespace UnitTests
         public void RemoveFieldRelations_Returns_IdInField_HiddenFieldList()
         {
             //Arrange
-            AssetController otherAssetController = new AssetController(new Asset(), new AssetRepository())
+            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object)
             {
-                Asset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
+                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             otherAssetController.AddField(_fourthField);
             otherAssetController.AddField(_thirdField);

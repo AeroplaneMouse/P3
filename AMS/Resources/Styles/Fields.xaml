@@ -128,7 +128,7 @@
     <DataTemplate x:Key="TextBoxFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
             <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Content}" MinHeight="70" TextWrapping="Wrap"
+            <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" MinHeight="70" TextWrapping="Wrap"
                      AcceptsReturn="True" AcceptsTab="True" Style="{StaticResource ParagraphTextBox}"/>
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
@@ -139,7 +139,7 @@
     <DataTemplate x:Key="StringFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
             <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Content}" Style="{StaticResource ParagraphTextBox}"/>
+            <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ParagraphTextBox}"/>
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
@@ -149,7 +149,7 @@
     <DataTemplate x:Key="IntegerFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
             <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Content}" Style="{StaticResource ParagraphTextBox}"/>
+            <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ParagraphTextBox}"/>
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
@@ -159,7 +159,7 @@
     <DataTemplate x:Key="DateFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
             <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <DatePicker Grid.Row="1" Grid.ColumnSpan="3" SelectedDate="{Binding Content}" Style="{StaticResource BaseDatePickerStyle}"/>
+            <DatePicker Grid.Row="1" Grid.ColumnSpan="3" SelectedDate="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseDatePickerStyle}"/>
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
@@ -169,7 +169,7 @@
     <DataTemplate x:Key="BooleanFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
             <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <CheckBox Grid.Row="1" Grid.ColumnSpan="3" IsChecked="{Binding Content}" Name="CheckBox" />
+            <CheckBox Grid.Row="1" Grid.ColumnSpan="3" IsChecked="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Name="CheckBox" />
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>

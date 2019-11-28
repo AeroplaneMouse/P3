@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Windows;
-
 using System.Windows.Input;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
@@ -21,12 +20,10 @@ namespace AMS.ViewModels
         public List<Tag> Tags { get; set; }
         private readonly ITagListController _tagListController;
         private string _searchQuery = "";
-        
         public Tag SelectedItem { get; set; }
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand AddNewCommand { get; set; }
-
         public ICommand SearchCommand { get; set; }
         public string SearchQuery
         {
@@ -37,34 +34,19 @@ namespace AMS.ViewModels
             }
         }
         
-
         public TagListViewModel(ITagListController controller)
         {
             _tagListController = controller;
             _tagListController.GetTreeviewData(_searchQuery);
             Tags = _tagListController.TagsList;
-            
-            
-            //Tags.AddRange(_tagListController.GetParentTags());
-            
+
             RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Deleting selected tag. This action cannot be undone. Proceed?", RemoveTag)));
             AddNewCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(null)));
             EditCommand = new Base.RelayCommand(() => {
                 if (SelectedItem != null)
                     Features.Navigate.To(Features.Create.TagEditor(SelectedItem));
             });
-            
-            
-            /*
-            foreach (var tag in Tags)
-            {
-                if (tag.NumOfChildren <= 0) continue;
-                List<Tag> children = _tagListController.GetChildTags(tag.ID);
-                tag.Children = new List<ITagable>();
-                tag.Children.AddRange(children);
-            }
-            */
-            
+
             SearchCommand = new RelayCommand(() => Search());
         }
 

@@ -14,7 +14,7 @@ namespace AMS.Controllers
 {
     public class AssetController : FieldListController, IAssetController
     {
-        public Asset Asset { get; set; }
+        public Asset ControlledAsset { get; set; }
         public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
 
         public string Name { get; set; }
@@ -27,22 +27,22 @@ namespace AMS.Controllers
         {
             if (asset == null)
             {
-                Asset = new Asset();
+                ControlledAsset = new Asset();
             }
             else
             {
-                Asset = asset;
+                ControlledAsset = asset;
             }
 
-            Asset.DeSerializeFields();
+            ControlledAsset.DeSerializeFields();
 
-            Name = Asset.Name;
-            Identifier = Asset.Identifier;
-            Description = Asset.Description;
-            NonHiddenFieldList = Asset.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = Asset.FieldList.Where(f => f.IsHidden == true).ToList();
+            Name = ControlledAsset.Name;
+            Identifier = ControlledAsset.Identifier;
+            Description = ControlledAsset.Description;
+            NonHiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == true).ToList();
             _assetRepository = assetRepository;
-            CurrentlyAddedTags = _assetRepository.GetTags(Asset).ToList();
+            CurrentlyAddedTags = _assetRepository.GetTags(ControlledAsset).ToList();
             LoadTags();
         }
 
@@ -56,6 +56,7 @@ namespace AMS.Controllers
             CurrentlyAddedTags.Add(tag);
             if (tag is Tag currentTag)
             {
+                //DeSerialize the fields, so the fieldList is instantiated
                 currentTag.DeSerializeFields();
                 foreach (var tagField in currentTag.FieldList)
                 {
@@ -73,21 +74,31 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool DetachTag(ITagable tag)
         {
+            //If no tag was given, return.
             if (tag == null)
             {
                 return false;
             }
 
+            //Check if the tag is in the list.
             if (CurrentlyAddedTags.Contains(tag))
             {
                 List<Field> removeFields = new List<Field>();
                 CurrentlyAddedTags.Remove(tag);
 
+                //Checks if the ITagable is a Tag.
                 if (tag is Tag currentTag)
                 {
+                    //Remove relations to the field.
                     RemoveFieldRelations(currentTag.ID);
-                    RemoveFieldRelations(currentTag.ParentID);
-
+                    
+                    //Remove a fields relation to the parent tag, if no other tag with the same parent tag exists in CurrentlyAddedTags.
+                    if (CurrentlyAddedTags.SingleOrDefault(p => p.ParentId == currentTag.ParentID && p.TagId != currentTag.ID) == null)
+                    {
+                        RemoveFieldRelations(currentTag.ParentID);
+                    }
+                   
+                    //Checks if the field is in the fieldList on the asset, and the tag, if so, remove it.
                     foreach (var field in currentTag.FieldList)
                     {
                         Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(field)) ??
@@ -96,6 +107,7 @@ namespace AMS.Controllers
                             removeFields.Add(fieldInList);
                     }
 
+                    //Remove the fields.
                     foreach (var field in removeFields)
                     {
                         RemoveField(field);
@@ -112,30 +124,36 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Save()
         {
-            if (Name != Asset.Name)
+            //Updates the fields on the asset
+            if (Name != ControlledAsset.Name)
             {
-                Asset.Name = Name;
+                ControlledAsset.Name = Name;
             }
 
-            if (Asset.Identifier != Identifier)
+            if (ControlledAsset.Identifier != Identifier)
             {
-                Asset.Identifier = Identifier;
+                ControlledAsset.Identifier = Identifier;
             }
 
-            if (Asset.Description != Description)
+            if (ControlledAsset.Description != Description)
             {
-                Asset.Description = Description;
+                ControlledAsset.Description = Description;
             }
 
-            Asset.DepartmentID = Features.GetCurrentSession().user.DefaultDepartment;
+            ControlledAsset.DepartmentID = Features.GetCurrentSession().user.DefaultDepartment;
 
+            //Combines the two lists
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
-            Asset.FieldList = fieldList;
+            ControlledAsset.FieldList = fieldList;
             SerializeFields();
+            
+            //Database saving
             ulong id = 0;
-            _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
-            _assetRepository.Insert(Asset, out id);
+            _assetRepository.AttachTags(ControlledAsset, CurrentlyAddedTags);
+            _assetRepository.Insert(ControlledAsset, out id);
+            
+            //Asset saved verification
             return id != 0;
         }
 
@@ -145,27 +163,27 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Update()
         {
-            if (Asset.Name != Name)
+            if (ControlledAsset.Name != Name)
             {
-                Asset.Name = Name;
+                ControlledAsset.Name = Name;
             }
 
-            if (Asset.Identifier != Identifier)
+            if (ControlledAsset.Identifier != Identifier)
             {
-                Asset.Identifier = Identifier;
+                ControlledAsset.Identifier = Identifier;
             }
 
-            if (Asset.Description != Description)
+            if (ControlledAsset.Description != Description)
             {
-                Asset.Description = Description;
+                ControlledAsset.Description = Description;
             }
 
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
-            Asset.FieldList = fieldList;
+            ControlledAsset.FieldList = fieldList;
             SerializeFields();
-            _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
-            return _assetRepository.Update(Asset);
+            _assetRepository.AttachTags(ControlledAsset, CurrentlyAddedTags);
+            return _assetRepository.Update(ControlledAsset);
         }
 
         /// <summary>
@@ -174,9 +192,13 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Remove()
         {
-            return _assetRepository.Delete(Asset);
+            //Deletes the asset from the database.
+            return _assetRepository.Delete(ControlledAsset);
         }
 
+        /// <summary>
+        /// Loads the tags when opening the page, and adds any fields added to the tag since the editor was last opened.
+        /// </summary>
         private void LoadTags()
         {
             foreach (var tag in CurrentlyAddedTags)

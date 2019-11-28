@@ -37,7 +37,11 @@
                        Text="{Binding Name}"/>
             <TextBlock Style="{StaticResource TitleStyle}"
                        VerticalAlignment="Center"
-                       Text="{Binding ID}"/>
+                       Foreground="Gray"
+                       FontWeight="Light"
+                       Margin="0 2 0 0"
+                       Text="{Binding ID}"
+                       FontSize="{StaticResource FontSizeRegular}"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal"
@@ -217,8 +221,9 @@
                                                                 <DataTemplate>
                                                                     <Grid MaxWidth="100" HorizontalAlignment="Left">
                                                                         <Label Foreground="{Binding FontColor}"
-                                                                           Content="{Binding Name}"
-                                                                           Style="{StaticResource TagLabelOnlyShow}" />
+                                                                               Content="{Binding Name}"
+                                                                               Style="{StaticResource TagLabelOnlyShow}"
+                                                                               FontSize="{StaticResource FontSizeXSmall}"/>
                                                                     </Grid>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>
@@ -260,8 +265,10 @@
                                  MaxHeight="250"
                                  Tag="Write a comment..."
                                  VerticalScrollBarVisibility="Visible"
+                                 VerticalAlignment="Top"
                                  Style="{StaticResource TextBoxWithPlaceholder}"
-                                 Margin="0 0 10 0">
+                                 Margin="0 0 10 0"
+                                 Padding="10">
                             <TextBox.InputBindings>
                                 <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding SaveCommand}" />
                             </TextBox.InputBindings>
@@ -333,7 +340,7 @@
                      Header="Log" 
                      FontSize="{StaticResource FontSizeSmall}" 
                      Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}">
-                <!--Style="{StaticResource RegularList}"-->
+                
                 <ListView x:Name="listViewWithItems"
                           SelectionMode="Extended"
                           ItemsSource="{Binding Entries, UpdateSourceTrigger=PropertyChanged}"
@@ -343,7 +350,6 @@
 
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
-                            <!--~1~ViewCommand@1@-->
                             <i:InvokeCommandAction Command="{Binding ViewCommand}"
                                                    CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItem}" />
                         </i:EventTrigger>
@@ -361,7 +367,7 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Header="Username">
+                            <GridViewColumn Header="Username" Width="150">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Username}"
@@ -382,7 +388,7 @@
                             </GridViewColumn>
 
 
-                            <!--<GridViewColumn Header="Description">
+                            <GridViewColumn Header="Description">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Description}"
@@ -390,15 +396,14 @@
                                                    Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
-                            </GridViewColumn>-->
+                            </GridViewColumn>
 
                         </GridView>
                     </ListView.View>
 
                     <ListView.InputBindings>
                         <KeyBinding Modifiers="Ctrl" Key="W" Command="{Binding ViewCommand}" />
-                        <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding ViewCommand}" />
-                        <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ViewCommand}" />
+                        <KeyBinding Key="Return" Command="{Binding ViewCommand}" />
                     </ListView.InputBindings>
                 </ListView>
             </TabItem>

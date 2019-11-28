@@ -6,7 +6,8 @@
       xmlns:helper="clr-namespace:AMS.ViewModels.Prompts"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="CustomField">
+      Title="CustomField"
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
     <Page.Resources>
         <DataTemplate x:Key="Area">
             <Grid>
@@ -77,6 +78,10 @@
         <helper:DefaultValueDesignSelector x:Key="MyDefaultValueDesignSelector" />
     </Page.Resources>
 
+    <Page.InputBindings>
+        <KeyBinding Key="Return" Command="{Binding AcceptCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding AcceptCommand}" />
+    </Page.InputBindings>
 
     <Grid>
         <Canvas Style="{StaticResource PromptBackground}" />
@@ -161,7 +166,8 @@
                             Command="{Binding AcceptCommand}"
                             Grid.Row="1"
                             HorizontalAlignment="Right"
-                            Content="Add field" />
+                            Content="Add field"
+                            x:Name="StartElement"/>
                 </StackPanel>
             </Grid>
         </Border>

@@ -10,10 +10,10 @@ namespace AMS.Views
 {
     public partial class AssetEditor : Page
     {
-        public AssetEditor(IAssetController assetController, ITagListController tagListController, TagHelper tagHelper)
+        public AssetEditor(IAssetController assetController, TagHelper tagHelper)
         {
             InitializeComponent();
-            DataContext = new AssetEditorViewModel(assetController, tagListController, tagHelper);
+            DataContext = new AssetEditorViewModel(assetController, tagHelper);
         }
     }
 }
