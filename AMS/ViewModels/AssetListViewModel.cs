@@ -160,38 +160,34 @@ namespace AMS.ViewModels
                 Features.AddNotification(new Notification("Please select only one asset.", Notification.ERROR), 3500);
         }
 
-        private void CheckAllChanged(bool newValue, ListView list)
-        {
-            if (newValue && SelectedItems.Count == 0)
-            {
-                // Nothing seleted. Check all items
-                foreach (Asset asset in Items)
-                    SelectedItems.Add(asset);
-
-                Console.WriteLine("Checking all...");
+        private void CheckAllChanged(bool newValue, ListView list)
+        {
+            if (newValue && SelectedItems.Count == 0)
+            {
+                // Nothing seleted. Check all items
+                foreach (Asset asset in Items)
+                    SelectedItems.Add(asset);
+
+                Console.WriteLine("Checking all...");
             }
-            else if (newValue && SelectedItems.Count < Items.Count)
-            {
-                // Some selected. Remove selectionsw.
+            else if (newValue && SelectedItems.Count < Items.Count)
+            {
+                // Some selected. Remove selectionsw.
                 List<Asset> removeSelection = new List<Asset>();
                 SelectedItems.ForEach(a => removeSelection.Add(a));
-
                 removeSelection.ForEach(a => SelectedItems.Remove(a));
-
-                Console.WriteLine("Unchecking all...");
+                Console.WriteLine("Unchecking all...");
             }
-            else if (newValue && SelectedItems.Count == Items.Count)
-            {
-                // All selected. Remove selections
-
-                Console.WriteLine("unChecking all... ");
+            else if (newValue && SelectedItems.Count == Items.Count)
+            {
+                // All selected. Remove selections
+                Console.WriteLine("unChecking all... ");
             }
-            else
-            {
-                // Hmm.. Error, unexspected situation.
-
-                Console.WriteLine("Dafuq dude.. you have entered an unexspected selection state.");
-            }
+            else
+            {
+                // Hmm.. Error, unexspected situation.
+                Console.WriteLine("Dafuq dude.. you have entered an unexspected selection state.");
+            }
         }
 
         /// <summary>
@@ -208,15 +204,14 @@ namespace AMS.ViewModels
                     CurrentGroup = "#";
                     AppliedTags = _tagHelper.GetAppliedTags(true);
                 }
-
                 AutoTag();
             }
+
             else
             {
                 if (SearchQuery == null)
                     return;
             }
-
             RefreshList();
         }
 
@@ -265,14 +260,14 @@ namespace AMS.ViewModels
             if (!inTagMode)
                 return;
 
-            if (_tagHelper.IsParentSet())
+            if (_tagHelper.IsParentSet())
             {
                 _tagHelper.Parent(null);
                 CurrentGroup = "#";
                 SearchQuery = "";
                 TagSearchProcess();
             }
-            else
+            else
             {
                 LeavingTagMode();
             }
@@ -359,6 +354,8 @@ namespace AMS.ViewModels
                             Notification.INFO), 3000);
                     }
                 }));
+
+                OnPropertyChanged(nameof(Items));
             }
         }
 
