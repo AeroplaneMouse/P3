@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style TargetType="{x:Type TextBox}" x:Key="TextBoxWithPlaceholder">
-        <Setter Property="Padding" Value="10" />
+        <!--<Setter Property="Padding" Value="10" />-->
         <!--<Setter Property="Margin" Value="0 5 0 5" />
         <Setter Property="BorderThickness" Value="0 0 0 1" />-->
 
@@ -29,7 +29,7 @@
 
                         <TextBlock IsHitTestVisible="False" 
                                    Text="{TemplateBinding Tag}"
-                                   VerticalAlignment="Top"
+                                   VerticalAlignment="{TemplateBinding VerticalAlignment}"
                                    x:Name="placeholder"
                                    Padding="{TemplateBinding Padding}"
                                    Margin="3 0 0 0"
