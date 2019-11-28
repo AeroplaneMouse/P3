@@ -38,9 +38,9 @@ namespace AMS.ViewModels
         private IDepartmentRepository _departmentRep;
 
         #region Window Properties
-        
-        public double WindowMinWidth { get; set; }
-        public double WindowMinHeight { get; set; }
+
+        public double WindowMinWidth { get; set; } = 700;
+        public double WindowMinHeight { get; set; } = 500;
         public int InnerContentPaddingSize { get; set; }
         public Thickness InnerContentPadding { get => new Thickness(0); }
         public int ResizeBorder { get; set; }
@@ -114,6 +114,10 @@ namespace AMS.ViewModels
         public ICommand RemoveNotificationCommand { get; set; }
         public ICommand ReloadCommand { get; set; }
         public ICommand ShowShortcutsCommand { get; set; }
+
+        // Settings command
+        public ICommand ChangeSettingsCommand { get; set; }
+        public ICommand ClearSettingsCommand { get; set; }
 
         /// <summary>
         /// Default constructor
@@ -245,6 +249,11 @@ namespace AMS.ViewModels
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, () => Features.GetCurrentSession().IsAdmin());
             EditDepartmentCommand = new Commands.EditDepartmentCommand(this, () => Features.GetCurrentSession().IsAdmin());
             AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)), () => Features.GetCurrentSession().IsAdmin());
+
+            // Settings command
+            if (CurrentSession.IsAdmin())
+                ChangeSettingsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.SettingsEditor()));
+            //ClearSettingsCommand = new Base.RelayCommand();
         }
 
         private void InitializeWindowsCommands()
