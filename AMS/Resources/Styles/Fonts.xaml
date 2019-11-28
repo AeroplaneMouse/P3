@@ -19,7 +19,7 @@
     <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlockStyle}" />
     <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource BaseStyle}" />
 
-    <system:Double x:Key="FontSizeXSmall">13</system:Double>
+    <system:Double x:Key="FontSizeXSmall">11</system:Double>
     <system:Double x:Key="FontSizeSmall">16</system:Double>
     <system:Double x:Key="FontSizeRegular">21</system:Double>
     <system:Double x:Key="FontSizeLarge">27</system:Double>

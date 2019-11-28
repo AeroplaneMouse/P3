@@ -13,7 +13,7 @@
         Icon="{StaticResource ApplicationIcon}"
         MinHeight="{Binding WindowMinHeight}"
         MinWidth="{Binding WindowMinWidth}"
-        Title="Asset Management System" 
+        Title="Asset Management System"
         Height="600" 
         Width="1200">
 
@@ -119,13 +119,29 @@
 
                                         <!-- Navigation menu -->
                                         <Border Background="{StaticResource NavigationBackgroundBrush}">
-                                            <StackPanel Orientation="Vertical">
-                                                <Button Content="Home" Command="{Binding ShowHomePageCommand}" Style="{StaticResource NavigationButton}"/>
-                                                <Button Content="Assets" Command="{Binding ShowAssetListPageCommand}" Style="{StaticResource NavigationButton}"/>
-                                                <Button Content="Tags" Command="{Binding ShowTagListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
-                                                <Button Content="Users" Command="{Binding ShowUserListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
-                                                <Button Content="Log" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
-                                            </StackPanel>
+                                            <Grid>
+                                                <StackPanel Orientation="Vertical">
+                                                    <Button Content="Home" Command="{Binding ShowHomePageCommand}" Style="{StaticResource NavigationButton}"/>
+                                                    <Button Content="Assets" Command="{Binding ShowAssetListPageCommand}" Style="{StaticResource NavigationButton}"/>
+                                                    <Button Content="Tags" Command="{Binding ShowTagListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
+                                                    <Button Content="Users" Command="{Binding ShowUserListPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
+                                                    <Button Content="Log" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding OnlyVisibleForAdmin}"/>
+                                                </StackPanel>
+                                                <StackPanel VerticalAlignment="Bottom">
+                                                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                                                               FontSize="{StaticResource FontSizeXSmall}"
+                                                               Foreground="White"
+                                                               FontWeight="Bold"
+                                                               Text="Current database"
+                                                               HorizontalAlignment="Center"/>
+                                                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                                                               FontSize="{StaticResource FontSizeXSmall}"
+                                                               Foreground="White"
+                                                               Text="{Binding CurrentDatabase}"
+                                                               HorizontalAlignment="Center"
+                                                               Margin="10 0 10 10"/>
+                                                </StackPanel>
+                                            </Grid>
                                         </Border>
 
                                         <!-- Main content -->

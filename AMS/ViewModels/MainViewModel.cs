@@ -61,6 +61,7 @@ namespace AMS.ViewModels
         public Stack<Page> History = new Stack<Page>();
 
         public string CurrentUser { get; set; }
+        public string CurrentDatabase { get; set; }
         public Session CurrentSession { get; private set; }
         public Department CurrentDepartment
         {
@@ -169,6 +170,7 @@ namespace AMS.ViewModels
             // Show department and username
             CurrentDepartmentVisibility = Visibility.Visible;
             CurrentSession = session;
+            CurrentDatabase = new MySqlHandler().GetDatabaseName();
             CurrentUser = CurrentSession.Username;
             OnPropertyChanged(nameof(CurrentUser));
 
