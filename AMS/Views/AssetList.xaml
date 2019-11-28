@@ -273,7 +273,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{StaticResource TrashButton}"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveCommand}"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveBySelectionCommand}"
                                                 CommandParameter="{Binding Path=.}"
                                                 Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
                                     </DataTemplate>

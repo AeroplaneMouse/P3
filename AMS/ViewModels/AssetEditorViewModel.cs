@@ -103,8 +103,8 @@ namespace AMS.ViewModels
             // Commands
             SaveCommand = new RelayCommand(() => SaveAndExit());
             SaveMultipleCommand = new RelayCommand(() => SaveAsset());
-            AddFieldCommand = new Base.RelayCommand(() => PromptForCustomField());
-            CancelCommand = new Base.RelayCommand(() => Cancel());
+            AddFieldCommand = new RelayCommand(() => PromptForCustomField());
+            CancelCommand = new RelayCommand(() => Cancel());
             RemoveFieldCommand = new RelayCommand<object>((parameter) => RemoveField(parameter));
             AddTagCommand = new RelayCommand(() => TagSearch());
 
@@ -127,7 +127,8 @@ namespace AMS.ViewModels
         /// </summary>
         public void SaveAndExit()
         {
-            if (!VerifyAssetAndFields()) return;
+            if (!VerifyAssetAndFields()) 
+                return;
             
             SaveAsset(false);
 
@@ -337,7 +338,7 @@ namespace AMS.ViewModels
         /// <returns></returns>
         private bool VerifyAssetAndFields()
         {
-            if (string.IsNullOrEmpty(_assetController.ControlledAsset.Name))
+            if (string.IsNullOrEmpty(Name))
             {
                 Features.AddNotification(new Notification("The field " + "Name" + " is required and empty",Notification.WARNING));
                 return false;

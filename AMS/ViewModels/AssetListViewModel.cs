@@ -149,13 +149,18 @@ namespace AMS.ViewModels
         private void EditAsset(Asset asset)
         {
             Features.Navigate.To(Features.Create.AssetEditor(asset));
+            OnPropertyChanged(nameof(Items));
         }
 
         private void EditBySelection()
         {
             // Only ONE item can be edited
             if (SelectedItems.Count == 1)
+            {
                 EditAsset(SelectedItems.First());
+                OnPropertyChanged(nameof(Items));
+            }
+                
             else
                 Features.AddNotification(new Notification("Please select only one asset.", Notification.ERROR), 3500);
         }
