@@ -120,9 +120,6 @@ namespace AMS.ViewModels
         public MainViewModel(Window window, IUserRepository userRepository, IDepartmentRepository departmentRepository)
         {
             InitializeWindowsCommands();
-            
-            //FileConfigurationHandler _configurationhandler = new FileConfigurationHandler(CurrentSession);
-            //_configurationhandler.SetConfigValue();
 
             // Setting private fields
             _window = window;
@@ -331,7 +328,8 @@ namespace AMS.ViewModels
                 return (List<Department>)_departmentRep.GetAll();
 
             else
-                return new List<Department>();
+                //TODO: Find a better solution
+                return new List<Department>() { new Department() { Name = "- Please add a department to the system -" } };
         }
 
         /// <summary>
