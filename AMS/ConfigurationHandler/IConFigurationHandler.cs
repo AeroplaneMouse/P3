@@ -2,7 +2,7 @@ namespace AMS.ConfigurationHandler
 {
     public interface IConFigurationHandler
     {
-        string GetConfigValue(out bool exists);
+        string GetConfigValue();
         void SetConfigValue(string newValue);
         
     }

@@ -92,8 +92,7 @@ namespace AMS.Controllers
             }
             else
             {
-                Tag = new Tag();
-                Tag.TagColor = CreateRandomColor();
+                Tag = new Tag {TagColor = CreateRandomColor()};
                 IsEditing = false;
             }
 

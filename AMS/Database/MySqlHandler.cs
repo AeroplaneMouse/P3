@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using AMS.Models;
 using System.Threading.Tasks;
+using AMS.Authentication;
 using AMS.ConfigurationHandler;
 using AMS.Events;
 using AMS.ViewModels;
@@ -20,15 +21,7 @@ namespace AMS.Database
         public MySqlHandler()
         {
             // "Server=192.38.49.9; database=ds303e19_dev; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5"
-            _fileConfigurationHandler = new FileConfigurationHandler(Features.GetCurrentSession());
-            string getConfigValue = _fileConfigurationHandler.GetConfigValue(out fileExists);
-            if (fileExists)
-            {
-                _connection = new MySqlConnection(getConfigValue);
-            }
-            else
-            {
-            }
+            _connection = new MySqlConnection(Session.GetDBKey());
         }
 
         public static bool Open(ref MySqlConnection con)
@@ -73,14 +66,11 @@ namespace AMS.Database
 
         public bool IsAvailable()
         {
-            if (fileExists)
+            var con = GetConnection();
+            if (Open(ref con))
             {
-                var con = GetConnection();
-                if (Open(ref con))
-                {
-                    con.Close();
-                    return true;
-                }
+                con.Close();
+                return true;
             }
 
             return false;

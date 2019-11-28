@@ -135,10 +135,8 @@ namespace AMS.Controllers
             SerializeFields();
             ulong id = 0;
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
-            bool success = _assetRepository.Insert(Asset, out id);
+            _assetRepository.Insert(Asset, out id);
             return id != 0;
-
-            return false;
         }
 
         /// <summary>
