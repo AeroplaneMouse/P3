@@ -11,11 +11,14 @@ using AMS.ViewModels.Base;
 
 namespace AMS.ViewModels
 {
-    public class LogListViewModel
+    public class LogListViewModel : Base.BaseViewModel
     {
         private ILogListController _logListController;
 
-        public ObservableCollection<LogEntry> Entries { get; set; }
+        public ObservableCollection<LogEntry> Entries
+        {
+            get => new ObservableCollection<LogEntry>(_logListController.EntryList);
+        }
         public string SearchQuery { get; set; }
         public List<LogEntry> SelectedItems { get; set; } = new List<LogEntry>();
         public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
@@ -29,7 +32,6 @@ namespace AMS.ViewModels
         public LogListViewModel(ILogListController logListController)
         {
             _logListController = logListController;
-            Entries = _logListController.EntryList;
 
             ViewCommand = new RelayCommand(View);
             SearchCommand = new RelayCommand(Search);
@@ -54,7 +56,7 @@ namespace AMS.ViewModels
                 return;
             
             _logListController.Search(SearchQuery);
-            Entries = _logListController.EntryList;
+            OnPropertyChanged(nameof(Entries));
         }
 
         /// <summary>

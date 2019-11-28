@@ -97,7 +97,7 @@
     <Style x:Key="AddedFieldTags" TargetType="ItemsControl">
         <Setter Property="Grid.Row" Value="3"/>
         <Setter Property="Grid.Column" Value="0"/>
-        <Setter Property="ItemsSource" Value="{Binding FieldTags, UpdateSourceTrigger=PropertyChanged}"/>
+        <Setter Property="ItemsSource" Value="{Binding TagList, UpdateSourceTrigger=PropertyChanged}"/>
         <Setter Property="ItemsPanel">
             <Setter.Value>
                 <ItemsPanelTemplate>

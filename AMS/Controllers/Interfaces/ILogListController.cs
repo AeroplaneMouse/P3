@@ -6,7 +6,7 @@ namespace AMS.Controllers.Interfaces
 {
     public interface ILogListController
     {
-        ObservableCollection<LogEntry> EntryList { get; set; }
+        List<LogEntry> EntryList { get; set; }
 
         void Search(string query);
 

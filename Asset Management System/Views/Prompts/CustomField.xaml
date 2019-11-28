@@ -69,7 +69,7 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock  Grid.Row="0" Text="This is a checkbox." />
+                <TextBlock  Grid.Row="0" Text="" />
                 <CheckBox Grid.Row="1" IsChecked="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.DefaultBool, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </DataTemplate>

@@ -97,7 +97,8 @@
                                      MaxWidth="350"
                                      MinHeight="35"
                                      x:Name="StartElement"
-                                     TabIndex="0">
+                                     TabIndex="0"
+                                     ToolTip="%s: Keyword must end with s. b%: Keyword must start with s. #: Enter tag mode">
                                 
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>

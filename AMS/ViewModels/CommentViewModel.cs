@@ -39,6 +39,7 @@ namespace AMS.ViewModels
         private void DeleteComment(object comment)
         {
             _controller.RemoveComment(comment as Comment);
+            Features.AddNotification(new Notification("Comment was removed", Notification.INFO));
             OnPropertyChanged(nameof(CommentList));
         }
     }

@@ -74,8 +74,7 @@ namespace AMS.Models
             CreatedAt = created_at;
             UpdatedAt = updated_at;
             Identifier = identifier;
-            FieldList = JsonConvert.DeserializeObject<List<Field>>(SerializedFields);
-            
+
         }
         
         private Asset(ulong id, string name, string description, string identifier, ulong departmentId, string options,
@@ -87,7 +86,6 @@ namespace AMS.Models
             DepartmentID = departmentId;
             Identifier = identifier;
             SerializedFields = options;
-            DeSerializeFields();
             CreatedAt = created_at;
             UpdatedAt = updated_at;
         }

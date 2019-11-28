@@ -34,6 +34,8 @@ namespace AMS.Controllers
                 Asset = asset;
             }
 
+            Asset.DeSerializeFields();
+
             Name = Asset.Name;
             Identifier = Asset.Identifier;
             Description = Asset.Description;
@@ -41,6 +43,7 @@ namespace AMS.Controllers
             HiddenFieldList = Asset.FieldList.Where(f => f.IsHidden == true).ToList();
             _assetRepository = assetRepository;
             CurrentlyAddedTags = _assetRepository.GetTags(Asset).ToList();
+            LoadTags();
         }
 
         /// <summary>
@@ -53,6 +56,7 @@ namespace AMS.Controllers
             CurrentlyAddedTags.Add(tag);
             if (tag is Tag currentTag)
             {
+                currentTag.DeSerializeFields();
                 foreach (var tagField in currentTag.FieldList)
                 {
                     AddField(tagField, currentTag);
@@ -78,22 +82,25 @@ namespace AMS.Controllers
             {
                 List<Field> removeFields = new List<Field>();
                 CurrentlyAddedTags.Remove(tag);
+
                 if (tag is Tag currentTag)
                 {
+                    RemoveFieldRelations(currentTag.ID);
+                    RemoveFieldRelations(currentTag.ParentID);
+
                     foreach (var field in currentTag.FieldList)
                     {
-                        removeFields.Add(field);
+                        Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(field)) ??
+                                            NonHiddenFieldList.FirstOrDefault(p => p.Equals(field));
+                        if (fieldInList != null)
+                            removeFields.Add(fieldInList);
                     }
-                    
+
                     foreach (var field in removeFields)
                     {
-                        RemoveFieldRelations(currentTag.ID);
-                        RemoveFieldRelations(currentTag.ParentID);
                         RemoveField(field);
                     }
                 }
-
-
             }
 
             return !CurrentlyAddedTags.Contains(tag);
@@ -130,6 +137,8 @@ namespace AMS.Controllers
             _assetRepository.AttachTags(Asset, CurrentlyAddedTags);
             bool success = _assetRepository.Insert(Asset, out id);
             return id != 0;
+
+            return false;
         }
 
         /// <summary>
@@ -168,6 +177,21 @@ namespace AMS.Controllers
         public bool Remove()
         {
             return _assetRepository.Delete(Asset);
+        }
+
+        private void LoadTags()
+        {
+            foreach (var tag in CurrentlyAddedTags)
+            {
+                if (tag is Tag currentTag)
+                {
+                    currentTag.DeSerializeFields();
+                    foreach (var tagField in currentTag.FieldList)
+                    {
+                        AddField(tagField, currentTag);
+                    }
+                }
+            }
         }
     }
 }

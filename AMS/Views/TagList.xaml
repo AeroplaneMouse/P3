@@ -74,20 +74,29 @@
                             Visibility="{x:Static VM:Features.OnlyVisibleForAdmin}"/>
                 </StackPanel>
 
-                <!--Style="{StaticResource RegularList}"-->
-                <TreeView Margin="0 10 0 0" x:Name="TagAbleList" Grid.Row="2" ItemsSource="{Binding Tags}" SelectedItemChanged="TagAbleList_OnSelectedItemChanged">
+                <TreeView Margin="0 10 0 0" 
+                          x:Name="TagAbleList" 
+                          Grid.Row="2" 
+                          ItemsSource="{Binding Tags}" 
+                          SelectedItemChanged="TagAbleList_OnSelectedItemChanged">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type models:Tag}">
-                            <Label Content="{Binding}" Padding="1 2 1 2" 
-                                   FontSize="{StaticResource FontSizeSmall}"
-                                   MouseDoubleClick="TreeView_MouseDoubleClick"/>
+                            <!-- Parent tag -->
+                            <Label Content="{Binding}" 
+                                   Padding="4" 
+                                   Margin="3"
+                                   FontSize="{StaticResource FontSizeRegular}"/>
+                            
+                            <!-- Child tags / Offspring-->
                             <HierarchicalDataTemplate.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding}" DataType="{x:Type models:Tag}">
-                                    <Label Content="{Binding}" Padding="1 2 1 2" 
-                                           FontSize="{StaticResource FontSizeSmall}"
-                                           MouseDoubleClick="TreeView_MouseDoubleClick"/>
+                                    <Label Content="{Binding}" 
+                                           Padding="3"
+                                           Margin="0"
+                                           FontSize="{StaticResource FontSizeRegular}"/>
                                 </HierarchicalDataTemplate>
                             </HierarchicalDataTemplate.ItemTemplate>
+                            
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
 
@@ -97,6 +106,23 @@
                         <KeyBinding Modifiers="Ctrl" Key="D" Command="{Binding RemoveCommand}"/>
                         <KeyBinding Key="Delete" Command="{Binding RemoveCommand}"/>
                     </TreeView.InputBindings>
+
+                    <TreeView.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                         Color="LightGray" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                                         Color="Black" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}"
+                                         Color="LightGray" />
+                        <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
+                                         Color="Black" />
+                    </TreeView.Resources>
+
+                    <!--<TreeView.Resources>
+                        <Style TargetType="TreeViewItem">
+                            <Setter 
+                        </Style>
+                    </TreeView.Resources>-->
 
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">

@@ -19,6 +19,7 @@ using AMS.Database.Repositories.Interfaces;
 using AMS.Helpers;
 using AMS.IO;
 using System.Windows.Navigation;
+using AMS.ConfigurationHandler;
 
 namespace AMS.ViewModels
 {
@@ -27,7 +28,7 @@ namespace AMS.ViewModels
         #region Public Properties
 
         #region Window Properties
-
+        
         public double WindowMinWidth { get; set; }
         public double WindowMinHeight { get; set; }
         public int InnerContentPaddingSize { get; set; }
@@ -133,7 +134,7 @@ namespace AMS.ViewModels
         public MainViewModel(Window window, IUserRepository userRepository, IDepartmentRepository departmentRepository)
         {
             #region Window Properties
-
+            
             // Setting private fields
             _window = window;
             _outerMarginSize = 10;

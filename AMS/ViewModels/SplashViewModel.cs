@@ -91,7 +91,7 @@ namespace AMS.ViewModels
             else
             {
                 LoadingText = "ERROR!";
-                CurrentActionText = "Unfortunately the excellent connection to the database was not established...";
+                CurrentActionText = "Configuration file not loaded for database DO OPEN CONFIG THINGY";
                 Reconnect();
 
                 // Reconnect is required

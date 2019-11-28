@@ -8,7 +8,7 @@ namespace AMS.Database.Repositories.Interfaces
 {
     public interface IAssetRepository : IMysqlRepository<Asset>, ISearchableRepository<Asset>
     {
-        ObservableCollection<Asset> SearchByTags(List<int> tagsIds);
+        List<Asset> SearchByTags(List<int> tagsIds);
         //bool AttachTagsToAsset(Asset asset, List<Tag> tags);
         //List<Tag> GetAssetTags(Asset asset);
         ulong GetCount();
