@@ -284,8 +284,6 @@ namespace AMS.ViewModels
         /// </summary>
         private void Reload()
         {
-            Console.WriteLine("Reloading...");
-
             // Clearing memory
             MySqlHandler.ConnectionFailed -= ConnectionFailed;
             CurrentDepartmentVisibility = Visibility.Hidden;

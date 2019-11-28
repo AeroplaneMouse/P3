@@ -139,7 +139,6 @@ namespace AMS.Controllers
             foreach (var field in newTag.FieldList)
             {
                 AddField(field, newTag);
-                Console.WriteLine("Added field " + field.Label);
             }
 
             List<Field> fieldsToRemove = new List<Field>();

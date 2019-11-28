@@ -220,10 +220,11 @@ namespace AMS.ViewModels
 
         private void Cancel()
         {
-            if (Features.Navigate.Back())
-                Console.WriteLine("Going back dude...");
+            /*if (Features.Navigate.Back())
+                //TODO: Skal det her håndteres?
             else
-                Console.WriteLine("Naaa... it is not possible to go back at the point in time.");
+                //TODO: Skal det her håndteres?
+                */
         }
 
         private void UpdateAll()

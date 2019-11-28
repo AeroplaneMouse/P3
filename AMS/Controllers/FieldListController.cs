@@ -18,7 +18,7 @@ namespace AMS.Controllers
         {
             if (element == null)
             {
-                Console.WriteLine("FieldsListController: element was null");
+                //TODO: handle null
             }
             else
             {

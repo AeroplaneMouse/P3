@@ -201,13 +201,10 @@ namespace AMS.ViewModels
         /// <param name="tag"></param>
         public void AutoTag()
         {
-            Console.WriteLine("Tab clicked!");
 
             if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
             {
                 ITagable tag = TagSearchSuggestions[0];
-
-                Console.WriteLine("Found: " + tag.TagLabel);
 
                 if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
                 {
