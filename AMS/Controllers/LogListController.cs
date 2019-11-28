@@ -25,7 +25,7 @@ namespace AMS.Controllers
                     _entryList = _logRepository.Search("");
                 }
 
-                return _entryList;
+                return _entryList.OrderByDescending(p => p.CreatedAt).ToList();
             }
 
             set => _entryList = value;

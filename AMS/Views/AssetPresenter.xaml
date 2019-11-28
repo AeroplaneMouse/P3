@@ -1,4 +1,4 @@
-<Page x:Class="AMS.Views.AssetPresenter"
+﻿<Page x:Class="AMS.Views.AssetPresenter"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -37,7 +37,11 @@
                        Text="{Binding Name}"/>
             <TextBlock Style="{StaticResource TitleStyle}"
                        VerticalAlignment="Center"
-                       Text="{Binding ID}"/>
+                       Foreground="Gray"
+                       FontWeight="Light"
+                       Margin="0 2 0 0"
+                       Text="{Binding ID}"
+                       FontSize="{StaticResource FontSizeRegular}"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal"
@@ -217,8 +221,9 @@
                                                                 <DataTemplate>
                                                                     <Grid MaxWidth="100" HorizontalAlignment="Left">
                                                                         <Label Foreground="{Binding FontColor}"
-                                                                           Content="{Binding Name}"
-                                                                           Style="{StaticResource TagLabelOnlyShow}" />
+                                                                               Content="{Binding Name}"
+                                                                               Style="{StaticResource TagLabelOnlyShow}"
+                                                                               FontSize="{StaticResource FontSizeXSmall}"/>
                                                                     </Grid>
                                                                 </DataTemplate>
                                                             </ItemsControl.ItemTemplate>
@@ -226,8 +231,6 @@
                                                     </StackPanel>
                                                 </Grid>
                                             </Border>
-                                            
-                                            
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>
@@ -262,8 +265,10 @@
                                  MaxHeight="250"
                                  Tag="Write a comment..."
                                  VerticalScrollBarVisibility="Visible"
+                                 VerticalAlignment="Top"
                                  Style="{StaticResource TextBoxWithPlaceholder}"
-                                 Margin="0 0 10 0">
+                                 Margin="0 0 10 0"
+                                 Padding="10">
                             <TextBox.InputBindings>
                                 <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding SaveCommand}" />
                             </TextBox.InputBindings>

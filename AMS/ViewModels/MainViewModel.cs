@@ -25,7 +25,17 @@ namespace AMS.ViewModels
 {
     public class MainViewModel : Base.BaseViewModel
     {
-        #region Public Properties
+        // The window this view model controls
+        private readonly Window _window;
+
+        // Margin around the window to allow a drop shadow
+        private int _outerMarginSize;
+
+        private Department _currentDepartment;
+        private bool _hasConnectionFailedBeenRaised = false;
+
+        private IUserRepository _userRep;
+        private IDepartmentRepository _departmentRep;
 
         #region Window Properties
         
@@ -80,26 +90,6 @@ namespace AMS.ViewModels
         public List<Department> Departments { get => GetDepartments(); }
         public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
 
-        #endregion
-
-        #region Private Properties
-
-        // The window this view model controls
-        private readonly Window _window;
-
-        // Margin around the window to allow a drop shadow
-        private int _outerMarginSize;
-
-        private Department _currentDepartment;
-        private bool _hasConnectionFailedBeenRaised = false;
-
-        private IUserRepository _userRep;
-        private IDepartmentRepository _departmentRep;
-
-        #endregion
-
-        #region Commands
-
         // Window commands
         public ICommand MinimizeCommand { get; set; }
         public ICommand MaximizeCommand { get; set; }
@@ -124,17 +114,13 @@ namespace AMS.ViewModels
         public ICommand ReloadCommand { get; set; }
         public ICommand ShowShortcutsCommand { get; set; }
 
-        #endregion
-
-        #region Constructor
-
         /// <summary>
         /// Default constructor
         /// </summary>
         public MainViewModel(Window window, IUserRepository userRepository, IDepartmentRepository departmentRepository)
         {
-            #region Window Properties
-            
+            InitializeWindowsCommands();
+
             // Setting private fields
             _window = window;
             _outerMarginSize = 10;
@@ -158,8 +144,6 @@ namespace AMS.ViewModels
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
 
-            #endregion
-
             Features.Main = this;
 
             _userRep = userRepository;
@@ -167,10 +151,6 @@ namespace AMS.ViewModels
 
             SplashPage = Features.Create.Splash(this);
         }
-
-        #endregion
-
-        #region Public Methods
 
         public void LoadSystem(Session session)
         {
@@ -241,26 +221,12 @@ namespace AMS.ViewModels
         /// to remove the splash page and shows the navigation menu's and homepage.
         /// </summary>
         
-        #endregion
-
-        #region Private Methods
 
         private void InitializeCommands()
         {
             RemoveNotificationCommand = new Base.RelayCommand<object>((parameter) => RemoveNotification(parameter as Notification));
             ReloadCommand = new Base.RelayCommand(Reload);
             ShowShortcutsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.ShortcutsList()));
-
-            // Window commands
-            MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
-            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
-            CloseCommand = new Base.RelayCommand(() => _window.Close());
-            SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, _window.PointToScreen(
-                new Point(
-                    OuterMarginSize,
-                    OuterMarginSize + ResizeBorder + TitleHeight
-                )
-            )));
 
             // Change page commands
             ShowHomePageCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.Home()));
@@ -274,6 +240,20 @@ namespace AMS.ViewModels
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, () => Features.GetCurrentSession().IsAdmin());
             EditDepartmentCommand = new Commands.EditDepartmentCommand(this, () => Features.GetCurrentSession().IsAdmin());
             AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)), () => Features.GetCurrentSession().IsAdmin());
+        }
+
+        private void InitializeWindowsCommands()
+        {
+            // Window commands
+            MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
+            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
+            CloseCommand = new Base.RelayCommand(() => _window.Close());
+            SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, _window.PointToScreen(
+                new Point(
+                    OuterMarginSize,
+                    OuterMarginSize + ResizeBorder + TitleHeight
+                )
+            )));
         }
 
         /// <summary>
@@ -377,7 +357,5 @@ namespace AMS.ViewModels
                             Notification.ERROR), 3000);
             }
         }
-
-        #endregion
     }
 }
