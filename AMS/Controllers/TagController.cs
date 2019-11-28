@@ -153,7 +153,6 @@ namespace AMS.Controllers
             foreach (var field in newTag.FieldList)
             {
                 AddField(field, newTag);
-                Console.WriteLine("Added field " + field.Label);
             }
 
             //Removes the fields needed to be removed (Both in hidden and non hidden list)
