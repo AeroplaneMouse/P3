@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -21,7 +22,7 @@ namespace AMS.ConfigurationHandler
         /// <param name="path">Where the Userdata file is stored</param>
         /// <param name="FileExists"></param>
         /// <returns></returns>
-        public static string UserDataDecrypt(string encryptionKey, string path, out bool FileExists)
+        public static string UserDataDecrypt(string encryptionKey, string path)
         {
             //Setup to read the salt from the start of the file
             byte[] passwordBytes = Encoding.UTF8.GetBytes(encryptionKey);
@@ -30,11 +31,8 @@ namespace AMS.ConfigurationHandler
 
             if (!File.Exists(path))
             {
-                FileExists = false;
-                return "empty";
+                File.Create(path);
             }
-
-            FileExists = true;
             //Reading through the file
             using (FileStream fsCrypt =
                 new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
