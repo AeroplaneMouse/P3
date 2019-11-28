@@ -4,6 +4,5 @@ namespace AMS.ConfigurationHandler
     {
         string GetConfigValue();
         void SetConfigValue(string newValue);
-        
     }
 }
