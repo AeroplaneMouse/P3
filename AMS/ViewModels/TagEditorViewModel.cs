@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Input;
 using System.Linq;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using AMS.Controllers;
 using AMS.Database.Repositories;
 using AMS.Helpers;
@@ -85,7 +86,7 @@ namespace AMS.ViewModels
         }
 
         public int SelectedDepartmentIndex { get; set; }
-        
+
         public bool ParentComboEnabled
         {
             get => _parentComboEnabled;
@@ -121,7 +122,8 @@ namespace AMS.ViewModels
         {
             _controller = tagController;
 
-            if (_controller.Id == 1){
+            if (_controller.Id == 1)
+            {
                 _parentComboEnabled = false;
                 _departmentComboEnabled = false;
             }
@@ -138,7 +140,6 @@ namespace AMS.ViewModels
                 _selectedParentTagIndex = i - 1;
 
             UpdateAll();
-
 
 
             Department currentDepartment;
@@ -182,16 +183,20 @@ namespace AMS.ViewModels
         {
             _controller.Tag.ParentID = ParentTagList[SelectedParentTagIndex].ID;
             _controller.Tag.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
-            if (_controller.IsEditing)
+            if (VerifyFields())
             {
-                _controller.Update();
-            }
-            else
-            {
-                _controller.Save();
-            }
+                if (_controller.IsEditing)
+                {
+                    _controller.Update();
+                }
+                else
+                {
+                    _controller.Save();
+                }
 
-            Features.Navigate.Back();
+                Features.Navigate.Back();
+            }
+            
         }
 
         private void AddField()
@@ -260,6 +265,44 @@ namespace AMS.ViewModels
                     }
                 }
             }
+        }
+
+        private bool VerifyFields()
+        {
+            //Verifies whether fields contains correct information, or the required information.
+            List<Field> completeList = HiddenFieldList.ToList();
+            completeList.AddRange(NonHiddenFieldList.ToList());
+
+            if (string.IsNullOrEmpty(_controller.Tag.Name))
+            {
+                Features.AddNotification(new Notification("Label is required and empty",
+                    Notification.WARNING));
+                return false;
+            }
+            
+            foreach (var field in completeList)
+            {
+                if (field.Required && string.IsNullOrEmpty(field.Content))
+                {
+                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
+                        Notification.WARNING));
+                    return false;
+                }
+
+                if (field.Type == Field.FieldType.NumberField)
+                {
+                    bool check = field.Content.All(char.IsDigit);
+                    if (check)
+                    {
+                        Features.AddNotification(
+                            new Notification("The field " + field.Label + " cannot contain letters",
+                                Notification.WARNING));
+                        return false;
+                    }
+                }
+            }
+
+            return true;
         }
 
         #endregion
