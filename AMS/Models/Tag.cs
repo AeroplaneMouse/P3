@@ -24,7 +24,7 @@ namespace AMS.Models
                 {
                     this.Changes["Name"] = this.Name;
                 }
-                this._name = value;
+                this._name = value.ToLower();
             }
         }
 

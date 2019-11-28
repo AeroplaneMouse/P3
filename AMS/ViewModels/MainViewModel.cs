@@ -121,7 +121,10 @@ namespace AMS.ViewModels
         public MainViewModel(Window window, IUserRepository userRepository, IDepartmentRepository departmentRepository)
         {
             InitializeWindowsCommands();
-
+            
+            //FileConfigurationHandler _configurationhandler = new FileConfigurationHandler(CurrentSession);
+            //_configurationhandler.SetConfigValue("Server=192.38.49.9; database=ds303e19_utf16; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5");
+            
             // Setting private fields
             _window = window;
             _outerMarginSize = 10;
