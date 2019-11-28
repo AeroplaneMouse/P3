@@ -74,6 +74,7 @@ namespace AMS.ViewModels
         public ICommand ViewCommand { get; set; }
         public ICommand ViewWithParameterCommand { get; set; }
         public ICommand RemoveTagCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
         public ICommand RemoveBySelectionCommand { get; set; }
         public ICommand EditBySelectionCommand { get; set; }
         public ICommand AutoTagCommand { get; set; }
@@ -95,6 +96,7 @@ namespace AMS.ViewModels
             {
                 AddNewCommand = new RelayCommand(() => EditAsset(null));
                 EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
+                RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
                 RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
                 EditBySelectionCommand = new RelayCommand(EditBySelection);
                 PrintCommand = new RelayCommand(Export);
@@ -216,7 +218,6 @@ namespace AMS.ViewModels
                 if (SearchQuery == null)
                     return;
             }
-
             RefreshList();
         }
 
@@ -329,6 +330,26 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
+        /// Remove an asset with prompt
+        /// </summary>
+        /// <param name="asset"></param>
+        private void RemoveAsset(Asset asset)
+        {
+            if (asset != null)
+            {
+                Features.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete\n{ asset.Name }?", (sender, e) =>
+                {
+                    if (e.Result)
+                    {
+                        _listController.Remove(asset);
+                        Features.AddNotification(new Notification($"{ asset.Name } has been removed", Notification.APPROVE));
+                        SearchAssets();
+                    }
+                }));
+            }
+        }
+
+        /// <summary>
         /// Removes all the selected items
         /// </summary>
         private void RemoveSelected()
@@ -357,6 +378,7 @@ namespace AMS.ViewModels
                             $"{ ((items.Count == 1) ? items[0].Name : (items.Count + " assets")) } " +
                             $"{ (items.Count > 1 ? "have" : "has") } been removed from the system",
                             Notification.INFO), 3000);
+                        SearchAssets();
                     }
                 }));
             }
