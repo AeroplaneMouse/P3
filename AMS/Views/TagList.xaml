@@ -85,7 +85,7 @@
                             <Label Content="{Binding}" 
                                    Padding="4" 
                                    Margin="3"
-                                   FontSize="{StaticResource FontSizeRegular}"/>
+                                   FontSize="16"/>
                             
                             <!-- Child tags / Offspring-->
                             <HierarchicalDataTemplate.ItemTemplate>
@@ -93,7 +93,7 @@
                                     <Label Content="{Binding}" 
                                            Padding="3"
                                            Margin="0"
-                                           FontSize="{StaticResource FontSizeRegular}"/>
+                                           FontSize="14"/>
                                 </HierarchicalDataTemplate>
                             </HierarchicalDataTemplate.ItemTemplate>
                             
