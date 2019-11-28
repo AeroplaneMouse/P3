@@ -77,6 +77,11 @@ namespace AMS.Database
             return false;
         }
 
+        public string GetDatabaseName()
+        {
+            return _connection.Database;
+        }
+
         public bool RawQuery(string rawQuery, MySqlParameterCollection par = null)
         {
             var con = GetConnection();
