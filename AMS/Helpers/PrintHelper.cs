@@ -42,7 +42,8 @@ namespace AMS.Helpers
         {
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
             string reportTitle = objectType.Name + "_report_";
-            dlg.FileName = reportTitle + DateTime.Now.ToString("MM/dd/yy HH:mm:ss")
+            dlg.FileName = reportTitle + DateTime.Now.ToString("u")
+                               .TrimEnd('Z')
                                .Replace(":", "")
                                .Replace("/", "")
                                .Replace(" ", "-"); // Default file name
