@@ -29,12 +29,6 @@
         <StackPanel Orientation="Horizontal"
                     HorizontalAlignment="Right"
                     Margin="10">
-            <!-- Remove button -->
-            <Button Style="{StaticResource RegularCancelButton}"
-                    Command="{Binding RemoveCommand}"
-                    Margin="10 0 0 0"
-                    Content="Remove"/>
-
             <!-- Cancel button -->
             <Button Style="{StaticResource RegularCancelButton}"
                     Command="{Binding CancelCommand}"
@@ -54,14 +48,30 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
 
-                <StackPanel>
-                    <!-- Date -->
-                    <TextBlock Style="{StaticResource SmallHeaderStyle}"
-                           Text="Date"/>
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
-                           Text="{Binding Entry.CreatedAt}"/>
-                </StackPanel>
+                <StackPanel Margin="0 0 0 10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
+                        <!-- Header -->
+                        <StackPanel Margin="0 0 10 0">
+                            <TextBlock Style="{StaticResource SmallHeaderStyle}"
+                                       Text="Date"/>
+                            <TextBlock Style="{StaticResource SmallHeaderStyle}"
+                                       Text="Action"/>
+                        </StackPanel>
+
+                        <!-- Content -->
+                        <StackPanel Grid.Column="1">
+                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                       Text="{Binding Entry.CreatedAt}"/>
+                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                       Text="{Binding Entry.EntryType}"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
 
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
@@ -70,21 +80,27 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Grid Grid.Column="0">
+                    <Grid Grid.Column="0"
+                          Margin="0 0 10 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <!-- headers -->
-                        <StackPanel Grid.Column="0">
+                        <!-- Users -->
+                        
+                        <!-- Headers -->
+                        <StackPanel Grid.Column="0"
+                                    Margin="0 0 10 0">
                             <!-- User -->
                             <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                    Text="User"/>
                             <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
                                    Text="ID"/>
                             <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
-                                   Text="Username"/>
+                                   Text="Name"/>
+                            <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
+                                   Text="Domain"/>
 
                             <!-- Item -->
                             <TextBlock Style="{StaticResource SmallHeaderStyle}"
@@ -96,15 +112,19 @@
 
                         </StackPanel>
 
-                        <!-- content -->
+                        <!-- Content -->
                         <StackPanel Grid.Column="1">
                             <!-- User -->
-                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                            <TextBlock Style="{StaticResource ParagraphStyle}"/>
+                            <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
                                    Text="{Binding Entry.UserId}"/>
-                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                            <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
                                    Text="{Binding Entry.Username}"/>
-
+                            <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
+                                   Text="{Binding Entry.UserDomain}"/>
+                            
                             <!-- Item -->
+                            <TextBlock Style="{StaticResource ParagraphStyle}"/>
                             <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
                                        Text="{Binding Entry.LoggedItemId}"/>
                             <TextBlock Style="{StaticResource ParagraphStyleWithSpace}"
@@ -113,7 +133,8 @@
                     </Grid>
 
                     <!-- Changes -->
-                    <StackPanel Grid.Column="1">
+                    <StackPanel Grid.Column="1"
+                                Margin="0 0 10 0">
                         <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                    Text="Changes"/>
                         <TextBlock Style="{StaticResource ParagraphStyle}"
