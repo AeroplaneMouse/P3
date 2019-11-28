@@ -33,6 +33,7 @@ namespace AMS.ConfigurationHandler
             {
                 File.Create(path);
             }
+
             //Reading through the file
             using (FileStream fsCrypt =
                 new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
@@ -104,7 +105,7 @@ namespace AMS.ConfigurationHandler
         {
             //Uses the GetSalt function to create the salt for the encryption.
             var salt = GetSalt();
-            
+
             //The encrypted output file.
             using (FileStream fsCrypt = new FileStream(path, FileMode.Create))
             {
