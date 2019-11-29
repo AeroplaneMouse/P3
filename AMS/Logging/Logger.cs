@@ -34,12 +34,12 @@ namespace AMS.Logging
 
             if (entity != null)
             {
-                if (entity.Changes.Any())
+                if (entity.IsDirty() && entityId == 0)
                 {
                     id = entity.ID;
                     entryType = "Update";
                 }
-                else if (entity.ID == 0)
+                else if (entity.ID == 0 || entityId != 0)
                 {
                     id = entityId;
                     entryType = "Create";

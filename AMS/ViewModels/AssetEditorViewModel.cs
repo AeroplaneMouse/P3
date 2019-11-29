@@ -268,8 +268,6 @@ namespace AMS.ViewModels
         {
             if (e is FieldEditPromptEventArgs args)
             {
-                Console.WriteLine(args.OldField.ToString());
-                Console.WriteLine(args.NewField.ToString());
                 _assetController.RemoveField(args.OldField);
                 _assetController.AddField(args.NewField);
                 UpdateAll();
