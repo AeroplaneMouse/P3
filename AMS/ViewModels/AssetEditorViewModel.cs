@@ -141,11 +141,7 @@ namespace AMS.ViewModels
         /// </summary>
         public void SaveAndExit()
         {
-            if (!VerifyAssetAndFields())
-                return;
-
             SaveAsset(false);
-
             Features.Navigate.Back();
         }
 
@@ -155,6 +151,8 @@ namespace AMS.ViewModels
         /// <param name="multiAdd"></param>
         public void SaveAsset(bool multiAdd = true)
         {
+            if (!VerifyAssetAndFields())
+                return;
 
             //Checks whether to save a new, or update an existing.
             if (_isEditing)
@@ -192,7 +190,7 @@ namespace AMS.ViewModels
         /// <param name="e"></param>
         public void AddCustomField(object sender, PromptEventArgs e)
         {
-            if (e is FieldInputPromptEventArgs args)
+            if (e.Result && e is FieldInputPromptEventArgs args)
             {
                 _assetController.AddField(args.Field);
                 UpdateAll();
@@ -217,10 +215,8 @@ namespace AMS.ViewModels
         /// </summary>
         public void Cancel()
         {
-            if (Features.Navigate.Back() == false)
-            {
+            if (!Features.Navigate.Back())
                 Features.Navigate.To(Features.Create.AssetList());
-            }
         }
 
         /// <summary>
