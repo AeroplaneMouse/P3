@@ -92,6 +92,7 @@ namespace AMS.ViewModels
         public ICommand AutoTagCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
         public ICommand EnterSuggestionListCommand { get; set; }
+        public ICommand ShowFieldEditPromptCommand { get; set; }
 
         #endregion
 
@@ -125,6 +126,16 @@ namespace AMS.ViewModels
                 _assetController.DetachTag(tag);
                 AppliedTags = _tagHelper.GetAppliedTags(false);
                 UpdateAll();
+            });
+
+            ShowFieldEditPromptCommand = new RelayCommand<object>((parameter) =>
+
+            {
+                if (parameter is Field field && field.IsCustom)
+                    Features.DisplayPrompt(new Views.Prompts.CustomField(null, EditFieldConfirmed, true, field));
+                else
+                    //TODO Handle not field event
+                    return;
             });
 
             AutoTagCommand = new RelayCommand(() => AutoTag());
@@ -251,6 +262,18 @@ namespace AMS.ViewModels
             }
 
             TagSearchProcess();
+        }
+
+        private void EditFieldConfirmed(object sender, PromptEventArgs e)
+        {
+            if (e is FieldEditPromptEventArgs args)
+            {
+                Console.WriteLine(args.OldField.ToString());
+                Console.WriteLine(args.NewField.ToString());
+                _assetController.RemoveField(args.OldField);
+                _assetController.AddField(args.NewField);
+                UpdateAll();
+            }
         }
 
         #endregion
