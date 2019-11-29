@@ -61,7 +61,7 @@ namespace AMS.Controllers
 
         public void UpdateEntries()
         {
-            _entryList = _logRepository.Search("");
+            _entryList = (List<LogEntry>)_logRepository.Search("");
         }
     }
 }
