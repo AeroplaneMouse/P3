@@ -77,6 +77,7 @@
                         SelectionMode="Extended"
                         ItemsSource="{Binding Entries, UpdateSourceTrigger=PropertyChanged}"
                         SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                        GridViewColumnHeader.Click="ColumnHeader_Click"
                         SelectionChanged="ListView_SelectionChanged"
                         Grid.Row="2">
                     
@@ -88,7 +89,8 @@
 
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Date" Width="130">
+                            <GridViewColumn Width="130">
+                                <GridViewColumnHeader Content="Date" Tag="DateToStringConverter"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=DateToStringConverter}"
@@ -98,7 +100,8 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Header="Username" Width="150">
+                            <GridViewColumn Width="150">
+                                <GridViewColumnHeader Content="Username" Tag="Username"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Username}"
@@ -108,7 +111,8 @@
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
 
-                            <GridViewColumn Header="Type">
+                            <GridViewColumn>
+                                <GridViewColumnHeader Content="Type" Tag="EntryType"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=EntryType}"
@@ -119,7 +123,8 @@
                             </GridViewColumn>
 
 
-                            <GridViewColumn Header="Description">
+                            <GridViewColumn>
+                                <GridViewColumnHeader Content="Description" Tag="Description"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Description}"

@@ -200,6 +200,7 @@
                           SelectionMode="Extended"
                           x:Name="ListOfAssets"
                           SelectionChanged="ListView_SelectionChanged"
+                          GridViewColumnHeader.Click="ColumnHeader_Click"
                           Grid.Row="2"
                           TabIndex="1">
                     <ListView.View>
@@ -220,8 +221,8 @@
                             </GridViewColumn>
 
                             <!-- Name -->
-                            <GridViewColumn Header="Name"
-                                            Width="Auto">
+                            <GridViewColumn Width="Auto">
+                                <GridViewColumnHeader Content="Name" Tag="Name"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Name}"
@@ -232,7 +233,8 @@
                             </GridViewColumn>
 
                             <!-- Identifier -->
-                            <GridViewColumn Header="Identifier">
+                            <GridViewColumn>
+                                <GridViewColumnHeader Content="Identifier" Tag="Identifier"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Identifier}"
@@ -243,7 +245,8 @@
                             </GridViewColumn>
 
                             <!-- Updated -->
-                            <GridViewColumn Header="Updated" x:Name="PART_Updated">
+                            <GridViewColumn x:Name="PART_Updated">
+                                <GridViewColumnHeader Content="Updated" Tag="UpdatedAt"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=UpdatedAtString}"

@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace AMS.Controllers
 {
-    public class TagController : FieldListController, ITagController, IFieldListController
+    public class TagController : FieldListController, ITagController
     {
         private ITagRepository _tagRepository { get; set; }
         private IDepartmentRepository _departmentRepository { get; set; }
