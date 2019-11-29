@@ -20,6 +20,7 @@ using AMS.Helpers;
 using AMS.IO;
 using System.Windows.Navigation;
 using AMS.ConfigurationHandler;
+using AMS.Interfaces;
 
 namespace AMS.ViewModels
 {
@@ -351,6 +352,8 @@ namespace AMS.ViewModels
                 AddNotification(new Notification($"{selectedDepartment.Name} is now the current department.", Notification.APPROVE));
 
                 CurrentDepartment = selectedDepartment;
+
+                ((ContentFrame.Content as Page).DataContext as IPageUpdateOnFocus).UpdateOnFocus();
             }
             catch (Exception e)
             {
