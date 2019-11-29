@@ -79,11 +79,11 @@
                 </StackPanel>
 
                 <ListView x:Name="listViewWithItems"
-                        SelectionMode="Extended"
-                        ItemsSource="{Binding Entries, UpdateSourceTrigger=PropertyChanged}"
-                        GridViewColumnHeader.Click="ColumnHeader_Click"
-                        SelectionChanged="ListView_SelectionChanged"
-                        Grid.Row="2">
+                          SelectionMode="Extended"
+                          ItemsSource="{Binding Entries, UpdateSourceTrigger=PropertyChanged}"
+                          GridViewColumnHeader.Click="ColumnHeader_Click"
+                          SelectionChanged="ListView_SelectionChanged"
+                          Grid.Row="2">
                     
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">

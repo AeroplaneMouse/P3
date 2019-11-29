@@ -92,7 +92,5 @@ namespace AMS.Views
             dataView.SortDescriptions.Add(sd);
             dataView.Refresh();
         }
-
-
     }
 }

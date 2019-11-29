@@ -339,11 +339,11 @@
                      Header="Log" 
                      FontSize="{StaticResource FontSizeSmall}" 
                      Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}">
-                
+
                 <ListView x:Name="listViewWithItems"
                           SelectionMode="Extended"
                           ItemsSource="{Binding Entries, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
+                          SelectionChanged="ListView_SelectionChanged"
                           Grid.Row="2"
                           Margin="10 10">
 
