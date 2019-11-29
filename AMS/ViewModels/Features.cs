@@ -12,6 +12,7 @@ using AMS.Controllers;
 using AMS.Views;
 using System.Collections.Generic;
 using AMS.Logging;
+using AMS.Controllers.Interfaces;
 
 namespace AMS.ViewModels
 {
@@ -151,6 +152,17 @@ namespace AMS.ViewModels
             }
 
             /// <summary>
+            /// Returns a new AssetEditor page
+            /// </summary>
+            /// <param name="asset"></param>
+            /// <returns></returns>
+            public static Page AssetEditor(IAssetController controller)
+            {
+                
+                return new AssetEditor(controller, CreateTagHelper());
+            }
+
+            /// <summary>
             /// Returns a new AssetList page
             /// </summary>
             /// <returns></returns>
@@ -228,6 +240,15 @@ namespace AMS.ViewModels
             public static Page UserList()
             {
                 return new UserList(new UserListController(_userImporter, _userRepository, _departmentRepository));
+            }
+            
+            /// <summary>
+            /// Returns a new settings editor page
+            /// </summary>
+            /// <returns></returns>
+            public static Page SettingsEditor()
+            {
+                return new SettingsEditor();
             }
 
             #endregion

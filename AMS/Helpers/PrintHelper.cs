@@ -11,7 +11,7 @@ namespace AMS.Helpers
     public class PrintHelper : IExporter
     {
         // A list of the properties that should not be exported 
-        private List<string> _excludedProperties = new List<string> {{"FieldsList"}, {"CreatedAtString"}, {"UpdatedAtString"}, {"Changes"}};
+        private List<string> _excludedProperties = new List<string> {{"FieldsList"}, {"CreatedAtString"}, {"UpdatedAtString"}, {"Changes"}, {"DateToStringConverter"} };
         public void Print(IEnumerable<object> items)
         {
             Type objectType = items.FirstOrDefault().GetType();
@@ -88,16 +88,17 @@ namespace AMS.Helpers
                                         : default)
                                     .ToString("u")
                                     .TrimEnd('Z')
-                                    + ", ";
+                                    + ",";
                             else
                                 fileEntry += objectType.GetProperty(key)
                                              ?.GetValue(item, null)
                                              ?.ToString()
                                              .Split('.')
                                              .Last()
-                                             .Replace(',', ' ') + ", ";
+                                             .Replace(',', ' ') + ",";
                         
                     }
+                    fileEntry = fileEntry.TrimEnd(',');
                     file.WriteLine(fileEntry);
                 }
             }
@@ -117,12 +118,11 @@ namespace AMS.Helpers
                 if (!_excludedProperties.Contains(prop.Name))
                     if (prop.Name.Equals("CreatedAt") || prop.Name.Equals("UpdatedAt"))
                         fileHeader += prop.Name.TrimEnd("At".ToCharArray()) + ",";
-                    else if (prop.Name.Equals("DateToStringConverter"))
-                        fileHeader += "Time,";
                     else
                         fileHeader += prop.Name + ",";
             }
 
+            fileHeader = fileHeader.TrimEnd(',');
             return fileHeader;
         }
     }

@@ -18,9 +18,9 @@ namespace AMS.ViewModels
 {
     public class AssetListViewModel : BaseViewModel
     {
-        private IAssetListController _listController { get; set; }
-        private string _searchQuery { get; set; }
-        private TagHelper _tagHelper { get; set; }        private bool _isStrict { get; set; } = true;
+        private IAssetListController _listController;
+        private string _searchQuery = String.Empty;
+        private TagHelper _tagHelper;        private bool _isStrict = true;
         
         public ObservableCollection<Asset> Items => new ObservableCollection<Asset>(_listController.AssetList);
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
@@ -58,7 +58,7 @@ namespace AMS.ViewModels
         public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
         public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
         public bool TagSuggestionIsOpen { get; set; } = false;
-        public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
+        public ObservableCollection<ITagable> TagSearchSuggestions { get; set; } = new ObservableCollection<ITagable>();
         public ITagable TagParent { get; set; }
         public bool inTagMode { get; set; } = false;
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
@@ -71,6 +71,7 @@ namespace AMS.ViewModels
         public ICommand ViewCommand { get; set; }
         public ICommand ViewWithParameterCommand { get; set; }
         public ICommand RemoveTagCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
         public ICommand RemoveBySelectionCommand { get; set; }
         public ICommand EditBySelectionCommand { get; set; }
         public ICommand AutoTagCommand { get; set; }
@@ -92,6 +93,7 @@ namespace AMS.ViewModels
             {
                 AddNewCommand = new RelayCommand(() => EditAsset(null));
                 EditCommand = new RelayCommand<object>((parameter) => EditAsset(parameter as Asset));
+                RemoveCommand = new RelayCommand<object>((parameter) => RemoveAsset(parameter as Asset));
                 RemoveBySelectionCommand = new RelayCommand(RemoveSelected);
                 EditBySelectionCommand = new RelayCommand(EditBySelection);
                 PrintCommand = new RelayCommand(Export);
@@ -144,7 +146,7 @@ namespace AMS.ViewModels
         {
             var list = parameter as ListBox;
             Keyboard.Focus(list);
-            var item = list.SelectedItem = TagSearchSuggestions[0];
+            //var item = list.SelectedItem = TagSearchSuggestions[0];
             //Keyboard.Focus(item);
             //throw new NotImplementedException();
         }
@@ -331,6 +333,26 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
+        /// Remove an asset with prompt
+        /// </summary>
+        /// <param name="asset"></param>
+        private void RemoveAsset(Asset asset)
+        {
+            if (asset != null)
+            {
+                Features.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete\n{ asset.Name }?", (sender, e) =>
+                {
+                    if (e.Result)
+                    {
+                        _listController.Remove(asset);
+                        Features.AddNotification(new Notification($"{ asset.Name } has been removed", Notification.APPROVE));
+                        SearchAssets();
+                    }
+                }));
+            }
+        }
+
+        /// <summary>
         /// Removes all the selected items
         /// </summary>
         private void RemoveSelected()
@@ -359,10 +381,10 @@ namespace AMS.ViewModels
                             $"{ ((items.Count == 1) ? items[0].Name : (items.Count + " assets")) } " +
                             $"{ (items.Count > 1 ? "have" : "has") } been removed from the system",
                             Notification.INFO), 3000);
+                        SearchAssets();
+                        OnPropertyChanged(nameof(Items));
                     }
                 }));
-
-                OnPropertyChanged(nameof(Items));
             }
         }
 

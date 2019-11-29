@@ -116,20 +116,21 @@ namespace AMS.Database.Repositories
             return entries;
         }
 
-        public List<LogEntry> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
+        public IEnumerable<LogEntry> Search(string keyword)
         {
             var con = new MySqlHandler().GetConnection();
             List<LogEntry> entries = new List<LogEntry>();
-            int limit = 100;
+            int limit = 1000;
 
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
                 try
                 {
-                    string query = "SELECT l.id, u.username, u.domain, l.entry_type, l.description, l.logged_item_id, l.logged_item_type, l.changes, l.created_at " +
+                    string query = "SELECT l.id, u.username, u.domain, l.entry_type, l.description, " +
+                                   "l.logged_item_id, l.logged_item_type, l.changes, l.created_at " +
                                    "FROM log AS l INNER JOIN users AS u ON(l.user_id = u.id) " +
-                                   "WHERE l.user_id LIKE @keyword OR l.description LIKE @keyword " +
+                                   "WHERE l.user_id LIKE @keyword OR l.description LIKE @keyword OR l.entry_type LIKE @keyword OR l.created_at LIKE @keyword " +
                                    "ORDER BY l.id desc LIMIT " + limit;
 
                     if (!keyword.Contains("%"))
@@ -175,11 +176,7 @@ namespace AMS.Database.Repositories
 
             Type rowLoggedItemType;
             var ordinal = reader.GetOrdinal("logged_item_type");
-            if (reader.IsDBNull(ordinal))
-                rowLoggedItemType = null;
-            else
-                rowLoggedItemType = Type.GetType(reader.GetString("logged_item_type"));
-
+            rowLoggedItemType = reader.IsDBNull(ordinal) ? null : Type.GetType(reader.GetString("logged_item_type"));
             string rowEntryType = reader.GetString("entry_type");
             string rowDescription = reader.GetString("description");
             string rowChanges = reader.GetString("changes");

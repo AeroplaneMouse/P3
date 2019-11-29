@@ -98,7 +98,8 @@
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
         <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="Black"/>
-        <Setter Property="Width" Value="100"/>
+        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="Height" Value="35"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         <Setter Property="Padding" Value="6"/>
         <Setter Property="BorderBrush" Value="{StaticResource NavigationHoverBrush}"/>
@@ -130,7 +131,7 @@
                 <Setter Property="BorderBrush" Value="{StaticResource NavigationHoverBrush}"/>
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="Lime"/>
             </Trigger>
         </Style.Triggers>
     </Style>

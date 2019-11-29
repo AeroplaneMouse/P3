@@ -38,9 +38,9 @@ namespace AMS.ViewModels
         private IDepartmentRepository _departmentRep;
 
         #region Window Properties
-        
-        public double WindowMinWidth { get; set; }
-        public double WindowMinHeight { get; set; }
+
+        public double WindowMinWidth { get; set; } = 700;
+        public double WindowMinHeight { get; set; } = 500;
         public int InnerContentPaddingSize { get; set; }
         public Thickness InnerContentPadding { get => new Thickness(0); }
         public int ResizeBorder { get; set; }
@@ -61,6 +61,7 @@ namespace AMS.ViewModels
         public Stack<Page> History = new Stack<Page>();
 
         public string CurrentUser { get; set; }
+        public string CurrentDatabase { get; set; }
         public Session CurrentSession { get; private set; }
         public Department CurrentDepartment
         {
@@ -115,13 +116,20 @@ namespace AMS.ViewModels
         public ICommand ReloadCommand { get; set; }
         public ICommand ShowShortcutsCommand { get; set; }
 
+        // Settings command
+        public ICommand ChangeSettingsCommand { get; set; }
+        public ICommand ClearSettingsCommand { get; set; }
+
         /// <summary>
         /// Default constructor
         /// </summary>
         public MainViewModel(Window window, IUserRepository userRepository, IDepartmentRepository departmentRepository)
         {
             InitializeWindowsCommands();
-
+            
+            //FileConfigurationHandler _configurationhandler = new FileConfigurationHandler(CurrentSession);
+            //_configurationhandler.SetConfigValue("Server=192.38.49.9; database=ds303e19_utf16; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5");
+            
             // Setting private fields
             _window = window;
             _outerMarginSize = 10;
@@ -130,7 +138,7 @@ namespace AMS.ViewModels
             WindowMinHeight = 400;
 
             ResizeBorder = 4;
-            TitleHeight = 35;
+            TitleHeight = 26;
             InnerContentPaddingSize = 6;
 
             // Listen out for the window resizing
@@ -172,6 +180,7 @@ namespace AMS.ViewModels
             // Show department and username
             CurrentDepartmentVisibility = Visibility.Visible;
             CurrentSession = session;
+            CurrentDatabase = new MySqlHandler().GetDatabaseName();
             CurrentUser = CurrentSession.Username;
             OnPropertyChanged(nameof(CurrentUser));
 
@@ -243,6 +252,11 @@ namespace AMS.ViewModels
             RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, () => Features.GetCurrentSession().IsAdmin());
             EditDepartmentCommand = new Commands.EditDepartmentCommand(this, () => Features.GetCurrentSession().IsAdmin());
             AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)), () => Features.GetCurrentSession().IsAdmin());
+
+            // Settings command
+            if (CurrentSession.IsAdmin())
+                ChangeSettingsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.SettingsEditor()));
+            //ClearSettingsCommand = new Base.RelayCommand();
         }
 
         private void GoToPage(int pageNumber)

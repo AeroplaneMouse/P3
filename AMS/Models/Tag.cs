@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace AMS.Models
 {
-    public class Tag :FieldContainer, ITagable
+    public class Tag : FieldContainer, ITagable
     {
         private string _name;
         private string _color;
@@ -22,8 +22,7 @@ namespace AMS.Models
             {
                 if (this.Name != null)
                     this.Changes["Name"] = this.Name;
-
-                this._name = value;
+                this._name = value.ToLower();
             }
         }
 
@@ -95,7 +94,7 @@ namespace AMS.Models
             Name = name;
             DepartmentID = department_id;
             ParentID = parent_id;
-            TagColor = color;
+            Color = color;
             NumOfChildren = numOfChildren;
             this.SerializedFields = SerializedField;
             CreatedAt = created_at;
@@ -126,8 +125,10 @@ namespace AMS.Models
         public string TagLabel => Name;
         public ulong ParentId => ParentID;
         public int ChildrenCount => NumOfChildren;
-        public List<ITagable> Children { get; set; }
-        public string TagColor { get; set; }
+        public List<ITagable> Children { get; set; } = new List<ITagable>();
+        public string TagColor { 
+            get => Color;
+            set => Color = value; }
         public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
 
         #endregion

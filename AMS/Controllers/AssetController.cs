@@ -15,7 +15,25 @@ namespace AMS.Controllers
     public class AssetController : FieldListController, IAssetController
     {
         public Asset ControlledAsset { get; set; }
-        public List<ITagable> CurrentlyAddedTags { get; set; } = new List<ITagable>();
+
+        private List<ITagable> _tags;
+
+        //public List<ITagable> CurrentlyAddedTags => _assetRepository.GetTags(ControlledAsset).ToList();
+
+        public List<ITagable> CurrentlyAddedTags
+        {
+            get
+            {
+                if (_tags == null)
+                {
+                    _tags = _assetRepository.GetTags(ControlledAsset).ToList();
+                }
+
+                return _tags;
+            }
+
+            set => _tags = value;
+        }
 
         public string Name { get; set; }
         public string Identifier { get; set; }
@@ -34,6 +52,8 @@ namespace AMS.Controllers
                 ControlledAsset = asset;
             }
 
+            _assetRepository = assetRepository;
+
             ControlledAsset.DeSerializeFields();
 
             Name = ControlledAsset.Name;
@@ -41,8 +61,7 @@ namespace AMS.Controllers
             Description = ControlledAsset.Description;
             NonHiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == true).ToList();
-            _assetRepository = assetRepository;
-            CurrentlyAddedTags = _assetRepository.GetTags(ControlledAsset).ToList();
+            
             LoadTags();
         }
 
