@@ -58,6 +58,9 @@ namespace AMS.Views
             if (sender == null) return;
 
             GridViewColumnHeader header = e.OriginalSource as GridViewColumnHeader;
+            
+            if (header?.Tag == null) return;
+            
             string sortBy = header?.Tag.ToString();
             ListSortDirection sortDirection;
 

@@ -11,5 +11,7 @@ namespace AMS.Controllers.Interfaces
         void Search(string query);
 
         void Export(List<LogEntry> entries);
+
+        void UpdateEntries();
     }
 }
