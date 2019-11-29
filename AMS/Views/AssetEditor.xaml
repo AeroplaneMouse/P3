@@ -233,6 +233,8 @@
                         <Button Style="{StaticResource RegularButton}"
                                 Command="{Binding AddFieldCommand}"
                                 Padding="0 0 0 5"
+                                Height="Auto"
+                                MinWidth="0"
                                 Width="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ActualHeight}" 
                                 HorizontalContentAlignment="Center" 
                                 VerticalContentAlignment="Center"

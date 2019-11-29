@@ -45,13 +45,8 @@
                     HorizontalAlignment="Left">
                     <TextBox FontSize="{StaticResource FontSizeSmall}"
                              Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                             VerticalAlignment="Bottom"
-                             MinWidth="300"
-                             MaxWidth="500"
                              x:Name="StartElement"
-                             Tag="Start writing..."
-                             Padding="5 10 5 10"
-                             Style="{StaticResource TextBoxWithPlaceholder}">
+                             Style="{StaticResource SearchTextBox}">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                         </TextBox.InputBindings>
@@ -65,18 +60,27 @@
 
                 <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right">
-                    <Button Style="{StaticResource RegularButton}"
-                        Margin="10 0 0 0 "
-                        Content="Export selected items"
-                        Width="Auto"
-                        Command="{Binding PrintCommand}"
-                        CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItems}"/>
+                    <Button Margin="10 0 0 0 "
+                            Width="Auto"
+                            Command="{Binding PrintCommand}"
+                            CommandParameter="{Binding ElementName=listViewWithItems, Path=SelectedItems}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource RegularButton}">
+                                <Setter Property="Content" Value="Export all"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CheckAll}" Value="True">
+                                        <Setter Property="Content" Value="Export selected"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    
                 </StackPanel>
 
                 <ListView x:Name="listViewWithItems"
                         SelectionMode="Extended"
                         ItemsSource="{Binding Entries, UpdateSourceTrigger=PropertyChanged}"
-                        SelectedIndex="{Binding SelectedItemIndex, UpdateSourceTrigger=PropertyChanged}"
                         GridViewColumnHeader.Click="ColumnHeader_Click"
                         SelectionChanged="ListView_SelectionChanged"
                         Grid.Row="2">
@@ -89,6 +93,22 @@
 
                     <ListView.View>
                         <GridView>
+                            <!-- Checkbox -->
+                            <GridViewColumn x:Name="PART_CheckBox">
+                                <GridViewColumn.Header>
+                                    <CheckBox IsChecked="{Binding CheckAll, UpdateSourceTrigger=PropertyChanged}"
+                                              Command="{Binding CheckAllChangedCommand}"
+                                              CommandParameter="{Binding ElementName=listViewWithItems, Path=.}"
+                                              Margin="4 0 5 0"/>
+                                </GridViewColumn.Header>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <CheckBox IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            
+                            <!-- Date -->
                             <GridViewColumn Width="130">
                                 <GridViewColumnHeader Content="Date" Tag="DateToStringConverter"/>
                                 <GridViewColumn.CellTemplate>
@@ -133,7 +153,6 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-
                         </GridView>
                     </ListView.View>
 

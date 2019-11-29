@@ -52,14 +52,9 @@
                             HorizontalAlignment="Left">
                     
                     <TextBox FontSize="{StaticResource FontSizeSmall}"
-                             Text="{Binding SearchQueryText, UpdateSourceTrigger=PropertyChanged}"
-                             VerticalAlignment="Bottom"
-                             MinWidth="300"
-                             MaxWidth="500"
+                             Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
                              x:Name="StartElement"
-                             Tag="Start writing..."
-                             Padding="5 10 5 10"
-                             Style="{StaticResource TextBoxWithPlaceholder}">
+                             Style="{StaticResource SearchTextBox}">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                         </TextBox.InputBindings>
@@ -88,20 +83,19 @@
                         <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type models:Tag}">
                             <!-- Parent tag -->
                             <Label Content="{Binding}" 
-                                   Padding="4" 
-                                   Margin="3"
-                                   FontSize="{StaticResource FontSizeRegular}"/>
+                                   Padding="1" 
+                                   Margin="1.5"
+                                   FontSize="16"/>
                             
                             <!-- Child tags / Offspring-->
                             <HierarchicalDataTemplate.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding}" DataType="{x:Type models:Tag}">
                                     <Label Content="{Binding}" 
-                                           Padding="3"
-                                           Margin="0"
-                                           FontSize="{StaticResource FontSizeSmall}"/>
+                                           Padding="1"
+                                           Margin="1"
+                                           FontSize="14"/>
                                 </HierarchicalDataTemplate>
                             </HierarchicalDataTemplate.ItemTemplate>
-                            
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
 
@@ -122,20 +116,13 @@
                         <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}"
                                          Color="Black" />
                     </TreeView.Resources>
-
-                    <!--<TreeView.Resources>
-                        <Style TargetType="TreeViewItem">
-                            <Setter 
-                        </Style>
-                    </TreeView.Resources>-->
-
+                    
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
                             <i:InvokeCommandAction Command="{Binding EditCommand}"/>
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                 </TreeView>
-
             </Grid>
         </Border>
     </Grid>

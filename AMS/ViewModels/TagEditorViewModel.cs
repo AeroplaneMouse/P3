@@ -12,7 +12,6 @@ using AMS.Controllers;
 using AMS.Database.Repositories;
 using AMS.Helpers;
 using AMS.Views;
-using AMS.Helpers;
 
 namespace AMS.ViewModels
 {
@@ -80,6 +79,12 @@ namespace AMS.ViewModels
                 int oldValue = _selectedParentTagIndex;
                 _selectedParentTagIndex = value;
 
+                if (_controller.Color == ParentTagList[oldValue].Color || oldValue == 0)
+                {
+                    _controller.Color = ParentTagList[value].Color;
+                    OnPropertyChanged(nameof(Color));
+                }
+
                 _controller.ConnectTag(ParentTagList[_selectedParentTagIndex], ParentTagList[oldValue]);
                 UpdateAll();
             }
@@ -138,7 +143,8 @@ namespace AMS.ViewModels
 
             if (i > 0)
                 _selectedParentTagIndex = i - 1;
-
+            
+            OnPropertyChanged(nameof(Color));
             UpdateAll();
 
 
@@ -293,7 +299,7 @@ namespace AMS.ViewModels
             completeList.AddRange(NonHiddenFieldList.ToList());
 
             //Checks whether the name is null
-            if (string.IsNullOrEmpty(_controller.ControlledTag.Name))
+            if (string.IsNullOrEmpty(_controller.Name))
             {
                 Features.AddNotification(new Notification("Label is required and empty",
                     Notification.WARNING));

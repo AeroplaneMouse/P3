@@ -4,6 +4,7 @@ using AMS.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Collections.ObjectModel;
+using System.Linq;
 using AMS.Database.Repositories.Interfaces;
 using AMS.ViewModels;
 using AMS.Logging.Interfaces;
@@ -66,7 +67,6 @@ namespace AMS.Database.Repositories
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
-
                 try
                 {
                     const string query = "INSERT INTO tags (label, color, options, department_id, parent_id, updated_at) " +
@@ -78,10 +78,10 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@label"].Value = entity;
 
                         cmd.Parameters.Add("@color", MySqlDbType.String);
-                        cmd.Parameters["@color"].Value = entity.TagColor;
+                        cmd.Parameters["@color"].Value = entity.Color;
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                        cmd.Parameters["@options"].Value = entity.SerializedFields;
+                        cmd.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;
 
                         if (entity.DepartmentID == 0)
                         {
@@ -133,7 +133,6 @@ namespace AMS.Database.Repositories
             {
                 // Is child and parent_id changed
                 Tag newParent = GetById((ulong) entity.Changes["ParentID"]);
-                entity.Color = newParent.Color;
 
                 if (newParent.DepartmentID != entity.DepartmentID)
                 {
@@ -155,7 +154,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@label"].Value = entity;
 
                         cmd.Parameters.Add("@color", MySqlDbType.String);
-                        cmd.Parameters["@color"].Value = entity.TagColor;
+                        cmd.Parameters["@color"].Value = entity.Color;
 
                         if (entity.DepartmentID == 0)
                         {
@@ -167,9 +166,9 @@ namespace AMS.Database.Repositories
                             cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
                             cmd.Parameters["@department_id"].Value = entity.DepartmentID;
                         }
-                        
+
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                        cmd.Parameters["@options"].Value = entity.SerializedFields;
+                        cmd.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;
 
                         cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
                         cmd.Parameters["@parent_id"].Value = entity.ParentID;
@@ -559,6 +558,78 @@ namespace AMS.Database.Repositories
                     con.Close();
                 }
             }
+        }
+
+        public IEnumerable<Tag> GetTreeViewDataList(string keyword="")
+        {
+            if (!keyword.Contains('%'))
+                keyword = $"%{keyword}%";
+            
+            var con = new MySqlHandler().GetConnection();
+            Dictionary<ulong, Tag> tags_placeholder = new Dictionary<ulong, Tag>();
+            
+            if (MySqlHandler.Open(ref con))
+            {
+                // Sending sql query
+                try
+                {
+                    string query = "SELECT DISTINCT tp.id AS id, tp.label, tp.parent_id, tp.department_id, tp.color, " +
+                                   "IF((SELECT COUNT(id) FROM tags WHERE parent_id = tp.id) OR tp.id = 1, 1, 0) AS contains_children " +
+                                   "FROM tags AS tp " +
+                                   "LEFT JOIN tags AS tc ON " +
+                                   "tp.id = tc.parent_id AND tc.label LIKE @keyword "+
+                                       "WHERE (tp.label LIKE @keyword OR tc.label LIKE @keyword) "+
+                                   "ORDER BY tp.parent_id ASC, contains_children DESC, tp.label ASC";
+
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@keyword", MySqlDbType.String);
+                        cmd.Parameters["@keyword"].Value = keyword;
+                        
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ulong rowId = reader.GetUInt64("id");
+                                String rowLabel = reader.GetString("label");
+                                ulong rowParentId = reader.GetUInt64("parent_id");
+                                var ordinal = reader.GetOrdinal("department_id");
+                                ulong rowDepartmentId = (reader.IsDBNull(ordinal) ? 0 : reader.GetUInt64("department_id"));
+                                string rowColor = reader.GetString("color");
+                                int rowContainsChildren = reader.GetInt32("contains_children");
+
+                                Tag tag = (Tag) Activator.CreateInstance(typeof(Tag),
+                                    BindingFlags.Instance | BindingFlags.NonPublic, null,
+                                    new object[] { rowId, rowLabel, rowDepartmentId, rowParentId, rowColor, rowContainsChildren, null, null, "[]" }, null,
+                                    null);
+
+                                if (tag.ParentId > 0 && tags_placeholder.ContainsKey(tag.ParentId))
+                                    tags_placeholder[tag.ParentId].Children.Add(tag);
+                                else
+                                    tags_placeholder.Add(tag.ID, tag);
+                            }
+                            reader.Close();
+                        }
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            
+            List<Tag> tags = new List<Tag>();
+
+            foreach (var item in tags_placeholder)
+            {
+                tags.Add(item.Value);
+            }
+
+            return tags;
         }
 
         /// <summary>

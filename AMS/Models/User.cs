@@ -66,7 +66,6 @@ namespace AMS.Models
             // TODO: Ingen new repositories!
             get => (_tagRepository ?? new TagRepository()).GetById(1).TagColor;
             set => TagColor = value;
-
         }
         public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
 

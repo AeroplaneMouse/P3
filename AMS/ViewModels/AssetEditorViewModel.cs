@@ -141,20 +141,18 @@ namespace AMS.ViewModels
         /// </summary>
         public void SaveAndExit()
         {
-            if (!VerifyAssetAndFields())
-                return;
-
-            SaveAsset(false);
-
-            Features.Navigate.Back();
+            if (SaveAsset(false))
+                Features.Navigate.Back();
         }
 
         /// <summary>
         /// Saves the asset.
         /// </summary>
         /// <param name="multiAdd"></param>
-        public void SaveAsset(bool multiAdd = true)
+        public bool SaveAsset(bool multiAdd = true)
         {
+            if (!VerifyAssetAndFields())
+                return false;
 
             //Checks whether to save a new, or update an existing.
             if (_isEditing)
@@ -175,6 +173,7 @@ namespace AMS.ViewModels
                 _assetController.Save();
                 Features.AddNotification(new Notification("Asset added", Notification.APPROVE));
             }
+            return true;
         }
 
         /// <summary>
@@ -192,7 +191,7 @@ namespace AMS.ViewModels
         /// <param name="e"></param>
         public void AddCustomField(object sender, PromptEventArgs e)
         {
-            if (e is FieldInputPromptEventArgs args)
+            if (e.Result && e is FieldInputPromptEventArgs args)
             {
                 _assetController.AddField(args.Field);
                 UpdateAll();
@@ -217,10 +216,8 @@ namespace AMS.ViewModels
         /// </summary>
         public void Cancel()
         {
-            if (Features.Navigate.Back() == false)
-            {
+            if (!Features.Navigate.Back())
                 Features.Navigate.To(Features.Create.AssetList());
-            }
         }
 
         /// <summary>
@@ -368,6 +365,11 @@ namespace AMS.ViewModels
             if (string.IsNullOrEmpty(Name))
             {
                 Features.AddNotification(new Notification("The field " + "Name" + " is required and empty",Notification.WARNING));
+                return false;
+            }
+            else if (Features.Main.CurrentDepartment.ID == 0)
+            {
+                Features.AddNotification(new Notification("Please select another department than \"All departments\"", Notification.WARNING));
                 return false;
             }
             

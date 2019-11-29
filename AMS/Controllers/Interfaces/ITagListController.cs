@@ -21,5 +21,7 @@ namespace AMS.Controllers.Interfaces
 
         List<Tag> GetChildTags(ulong id);
 
+        void GetTreeviewData(string keyword = "");
+
     }
 }
