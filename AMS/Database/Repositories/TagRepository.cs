@@ -67,7 +67,6 @@ namespace AMS.Database.Repositories
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
-
                 try
                 {
                     const string query = "INSERT INTO tags (label, color, options, department_id, parent_id, updated_at) " +

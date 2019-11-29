@@ -25,6 +25,7 @@ namespace AMS.ViewModels
         public ICommand EditCommand { get; set; }
         public ICommand AddNewCommand { get; set; }
         public ICommand SearchCommand { get; set; }
+        
         public string SearchQuery
         {
             get => _searchQuery;

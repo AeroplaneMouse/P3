@@ -15,7 +15,6 @@ namespace AMS.Controllers
         private ITagRepository _tagRepository { get; set; }
         private IDepartmentRepository _departmentRepository { get; set; }
 
-
         public Tag ControlledTag { get; set; }
         public bool IsEditing { get; set; }
         public ulong TagID;
