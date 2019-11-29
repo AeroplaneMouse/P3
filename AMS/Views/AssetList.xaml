@@ -100,7 +100,7 @@
                                      ToolTip="%s: Keyword must end with s. b%: Keyword must start with s. #: Enter tag mode"
                                      VerticalAlignment="Bottom"
                                      Tag="Start writing..."
-                                     Padding="5 10 5 10"
+                                     Padding="5 6 5 6"
                                      Style="{StaticResource TextBoxWithPlaceholder}">
 
                                 <TextBox.InputBindings>
