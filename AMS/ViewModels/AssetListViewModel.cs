@@ -375,10 +375,9 @@ namespace AMS.ViewModels
                             $"{ (items.Count > 1 ? "have" : "has") } been removed from the system",
                             Notification.INFO), 3000);
                         SearchAssets();
+                        OnPropertyChanged(nameof(Items));
                     }
                 }));
-
-                OnPropertyChanged(nameof(Items));
             }
         }
 
