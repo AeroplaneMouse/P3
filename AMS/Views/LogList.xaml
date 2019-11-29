@@ -45,13 +45,8 @@
                     HorizontalAlignment="Left">
                     <TextBox FontSize="{StaticResource FontSizeSmall}"
                              Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                             VerticalAlignment="Bottom"
-                             MinWidth="300"
-                             MaxWidth="500"
                              x:Name="StartElement"
-                             Tag="Start writing..."
-                             Padding="5 6 5 6"
-                             Style="{StaticResource TextBoxWithPlaceholder}">
+                             Style="{StaticResource SearchTextBox}">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
                         </TextBox.InputBindings>
