@@ -100,7 +100,7 @@
                                      ToolTip="%s: Keyword must end with s. b%: Keyword must start with s. #: Enter tag mode"
                                      VerticalAlignment="Bottom"
                                      Tag="Start writing..."
-                                     Padding="5 10 5 10"
+                                     Padding="5 6 5 6"
                                      Style="{StaticResource TextBoxWithPlaceholder}">
 
                                 <TextBox.InputBindings>
@@ -160,7 +160,6 @@
 
                     <Button Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"
                             Margin="10 0 0 0 " 
-                            Width="Auto" 
                             Command="{Binding PrintCommand}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource RegularButton}">

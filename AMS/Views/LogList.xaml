@@ -50,7 +50,7 @@
                              MaxWidth="500"
                              x:Name="StartElement"
                              Tag="Start writing..."
-                             Padding="5 10 5 10"
+                             Padding="5 6 5 6"
                              Style="{StaticResource TextBoxWithPlaceholder}">
                         <TextBox.InputBindings>
                             <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
