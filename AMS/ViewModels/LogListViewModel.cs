@@ -11,7 +11,7 @@ using AMS.ViewModels.Base;
 
 namespace AMS.ViewModels
 {
-    public class LogListViewModel : Base.BaseViewModel
+    public class LogListViewModel : BaseViewModel
     {
         private ILogListController _logListController;
 
@@ -36,6 +36,11 @@ namespace AMS.ViewModels
             ViewCommand = new RelayCommand(View);
             SearchCommand = new RelayCommand(Search);
             PrintCommand = new RelayCommand(Export);
+        }
+
+        public override void UpdateOnFocus()
+        {
+            OnPropertyChanged(nameof(Entries));
         }
 
         /// <summary>

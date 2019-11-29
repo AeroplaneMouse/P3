@@ -8,8 +8,6 @@ namespace AMS.ViewModels
     {
         public Dictionary<string, Dictionary<string, string>> ShortcutsList { get; set; }
 
-        // TODO: Gør mig pæn
-
         public ShortcutsListViewModel()
         {
             ShortcutsList = new Dictionary<string, Dictionary<string, string>>();
@@ -37,6 +35,11 @@ namespace AMS.ViewModels
             ShortcutsList.Add("Asset inspection", new Dictionary<string, string>());
             ShortcutsList["Asset inspection"].Add("Ctrl + Enter", "Save new comment");
 
+            OnPropertyChanged(nameof(ShortcutsList));
+        }
+
+        public override void UpdateOnFocus()
+        {
             OnPropertyChanged(nameof(ShortcutsList));
         }
     }

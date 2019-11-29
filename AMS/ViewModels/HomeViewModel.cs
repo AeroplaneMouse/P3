@@ -6,7 +6,6 @@ namespace AMS.ViewModels
 {
     public class HomeViewModel : Base.BaseViewModel
     {
-        
         public ulong NumberOfUsers { get; set; }
         public ulong NumberOfAssets { get; set; }
         public ulong NumberOfTags { get; set; }
@@ -24,6 +23,11 @@ namespace AMS.ViewModels
             NumberOfDepartments = departmentRepository.GetCount();
 
             // Notify view
+            UpdateOnFocus();
+        }
+
+        public override void UpdateOnFocus()
+        {
             OnPropertyChanged(nameof(NumberOfUsers));
             OnPropertyChanged(nameof(NumberOfAssets));
             OnPropertyChanged(nameof(NumberOfTags));

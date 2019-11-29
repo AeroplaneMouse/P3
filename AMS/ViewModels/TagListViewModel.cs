@@ -26,8 +26,10 @@ namespace AMS.ViewModels
         public TagListViewModel(ITagListController controller)
         {
             _tagListController = controller;
+
             Tags = _tagListController.TagsList;
             Tags.AddRange(_tagListController.GetParentTags());
+
             RemoveCommand = new Base.RelayCommand(RemoveTag);
             EditCommand = new Base.RelayCommand(() => {
                 if (SelectedItem != null)
@@ -42,6 +44,11 @@ namespace AMS.ViewModels
                 tag.Children = new List<ITagable>();
                 tag.Children.AddRange(children);
             }
+        }
+
+        public override void UpdateOnFocus()
+        {
+            OnPropertyChanged(nameof(Tags));
         }
 
         private void RemoveTag()

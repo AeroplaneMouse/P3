@@ -105,7 +105,7 @@
 
             
             <!-- Details -->
-            <TabItem DataContext="{Binding Children[0]}" 
+            <TabItem DataContext="{Binding Tabs[0]}" 
                      Header="Details"
                      FontSize="{StaticResource FontSizeSmall}">
                 <Grid>
@@ -240,7 +240,7 @@
             </TabItem>
             
             <!-- Comments -->
-            <TabItem DataContext="{Binding Children[1]}" 
+            <TabItem DataContext="{Binding Tabs[1]}" 
                      Header="Comments" 
                      FontSize="{StaticResource FontSizeSmall}">
                 <Grid>
@@ -335,7 +335,7 @@
             </TabItem>
 
             <!-- Log -->
-            <TabItem DataContext="{Binding Children[2]}" 
+            <TabItem DataContext="{Binding Tabs[2]}" 
                      Header="Log" 
                      FontSize="{StaticResource FontSizeSmall}" 
                      Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}">
