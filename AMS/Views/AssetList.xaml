@@ -92,16 +92,11 @@
                             <!-- Search bar -->
                             <TextBox FontSize="{StaticResource FontSizeSmall}"
                                      Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
-                                     MinWidth="300"
-                                     MaxWidth="500"
                                      MinHeight="35"
                                      x:Name="StartElement"
                                      TabIndex="0"
                                      ToolTip="%s: Keyword must end with s. b%: Keyword must start with s. #: Enter tag mode"
-                                     VerticalAlignment="Bottom"
-                                     Tag="Start writing..."
-                                     Padding="5 6 5 6"
-                                     Style="{StaticResource TextBoxWithPlaceholder}">
+                                     Style="{StaticResource SearchTextBox}">
 
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>

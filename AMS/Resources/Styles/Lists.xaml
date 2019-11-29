@@ -58,4 +58,14 @@
         </Style.Triggers>
     </Style>
     
+    <!-- Controls base style for search textbox on all list pages. -->
+    <Style x:Key="SearchTextBox" TargetType="TextBox" BasedOn="{StaticResource TextBoxWithPlaceholder}">
+        <Setter Property="Tag" Value="Start typing..."/>
+        <Setter Property="Padding" Value="5 6 5 6"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="MinWidth" Value="300"/>
+        <Setter Property="MaxWidth" Value="500"/>
+    </Style>
+    
 </ResourceDictionary>

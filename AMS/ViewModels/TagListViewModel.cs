@@ -31,6 +31,7 @@ namespace AMS.ViewModels
             set
             {
                 _searchQuery = value;
+                Search();
             }
         }
         
