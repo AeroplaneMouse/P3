@@ -570,6 +570,8 @@ namespace AMS.Database.Repositories
             
             if (MySqlHandler.Open(ref con))
             {
+                ulong department = Features.Main.CurrentDepartment.ID;
+                
                 // Sending sql query
                 try
                 {
@@ -577,15 +579,24 @@ namespace AMS.Database.Repositories
                                    "IF((SELECT COUNT(id) FROM tags WHERE parent_id = tp.id) OR tp.id = 1, 1, 0) AS contains_children " +
                                    "FROM tags AS tp " +
                                    "LEFT JOIN tags AS tc ON " +
-                                   "tp.id = tc.parent_id AND tc.label LIKE @keyword "+
-                                       "WHERE (tp.label LIKE @keyword OR tc.label LIKE @keyword) "+
+                                   "    tp.id = tc.parent_id " +
+                                   "    "+(department > 0 ? "AND (tc.department_id = @department OR tc.department_id IS NULL) " : "") +
+                                   "    AND tc.label LIKE @keyword "+
+                                   "WHERE (tp.label LIKE @keyword OR tc.label LIKE @keyword) " +
+                                   "    "+(department > 0 ? "AND (tp.department_id = @department OR tp.department_id IS NULL)" : "") +
                                    "ORDER BY tp.parent_id ASC, contains_children DESC, tp.label ASC";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
                         cmd.Parameters.Add("@keyword", MySqlDbType.String);
                         cmd.Parameters["@keyword"].Value = keyword;
-                        
+
+                        if (department > 0)
+                        {
+                            cmd.Parameters.Add("@department", MySqlDbType.UInt64);
+                            cmd.Parameters["@department"].Value = department;
+                        }
+
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
