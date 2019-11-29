@@ -281,7 +281,7 @@ namespace AMS.ViewModels
             completeList.AddRange(NonHiddenFieldList.ToList());
 
             //Checks whether the name is null
-            if (string.IsNullOrEmpty(_controller.ControlledTag.Name))
+            if (string.IsNullOrEmpty(_controller.Name))
             {
                 Features.AddNotification(new Notification("Label is required and empty",
                     Notification.WARNING));
