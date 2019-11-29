@@ -99,7 +99,7 @@
         <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="MinWidth" Value="100"/>
-        <Setter Property="Height" Value="42"/>
+        <Setter Property="Height" Value="35"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         <Setter Property="Padding" Value="6"/>
         <Setter Property="BorderBrush" Value="{StaticResource NavigationHoverBrush}"/>
