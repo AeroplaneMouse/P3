@@ -1,16 +1,9 @@
-using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Input;
-using AMS.Controllers;
 using AMS.Controllers.Interfaces;
-using AMS.Database.Repositories.Interfaces;
 using AMS.Events;
-using AMS.Helpers;
-using AMS.Interfaces;
 using AMS.Models;
 using AMS.ViewModels.Base;
-using AMS.Views;
 using AMS.Views.Prompts;
 
 namespace AMS.ViewModels
@@ -42,12 +35,12 @@ namespace AMS.ViewModels
 
             RemoveCommand = new RelayCommand(() => Features.DisplayPrompt(new Confirm("Deleting selected tag. This action cannot be undone. Proceed?", RemoveTag)));
             AddNewCommand = new RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(null)));
+            SearchCommand = new RelayCommand(() => Search());
             EditCommand = new RelayCommand(() => {
                 if (SelectedItem != null)
                     Features.Navigate.To(Features.Create.TagEditor(SelectedItem));
             });
-
-            SearchCommand = new RelayCommand(() => Search());
+            
             Search();
         }
 

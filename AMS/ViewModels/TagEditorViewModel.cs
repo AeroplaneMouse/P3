@@ -12,6 +12,7 @@ using AMS.Controllers;
 using AMS.Database.Repositories;
 using AMS.Helpers;
 using AMS.Views;
+using AMS.ViewModels.Base;
 
 namespace AMS.ViewModels
 {
@@ -118,6 +119,7 @@ namespace AMS.ViewModels
         public ICommand AddFieldCommand { get; set; }
         public ICommand RemoveFieldCommand { get; set; }
         public ICommand CancelCommand { get; set; }
+        public ICommand ShowFieldEditPromptCommand { get; set; }
 
         #endregion
 
@@ -179,6 +181,18 @@ namespace AMS.ViewModels
             RemoveFieldCommand = new Base.RelayCommand<object>((parameter) => RemoveField(parameter));
 
             CancelCommand = new Base.RelayCommand(Cancel);
+
+            ShowFieldEditPromptCommand = new RelayCommand<object>((parameter) =>
+
+            {
+                if (parameter is Field field)
+                {
+                    Features.DisplayPrompt(new Views.Prompts.CustomField(null, EditFieldConfirmed, false, field));
+                }
+                else
+                    //TODO Handle not field event
+                    return;
+            });
         }
 
         #endregion
@@ -329,6 +343,16 @@ namespace AMS.ViewModels
             }
 
             return true;
+        }
+
+        private void EditFieldConfirmed(object sender, PromptEventArgs e)
+        {
+            if (e is FieldEditPromptEventArgs args)
+            {
+                _controller.RemoveField(args.OldField);
+                _controller.AddField(args.NewField);
+                UpdateAll();
+            }
         }
 
         #endregion

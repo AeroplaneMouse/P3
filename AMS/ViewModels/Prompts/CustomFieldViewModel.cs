@@ -10,6 +10,7 @@ namespace AMS.ViewModels.Prompts
     public class CustomFieldViewModel : PromptViewModel
     {
         private Field _newField;
+        private Field _oldField;
         private bool _isCustom;
 
         public override event PromptEventHandler PromptElapsed;
@@ -21,13 +22,38 @@ namespace AMS.ViewModels.Prompts
         public bool IsRequired { get; set; } = false;
         public Field.FieldType SelectedFieldType { get; set; }
         public List<Field.FieldType> FieldTypes { get; set; } = (List<Field.FieldType>)Field.GetTypes();
+        public string PromptHeaderAndAcceptButtonText { get; set; }
 
 
-        public CustomFieldViewModel(string message, PromptEventHandler handler, bool isCustom = false)
+        public CustomFieldViewModel(string message, PromptEventHandler handler, bool isCustom = false, Field inputField = null)
             : base(message, handler)
         {
             _isCustom = isCustom;
-            SelectedFieldType = Field.FieldType.TextBox;
+            _oldField = inputField;
+            if (_oldField != null)
+            {
+                PromptHeaderAndAcceptButtonText = "Edit field";
+                Name = inputField.Label;
+                SelectedFieldType = inputField.Type;
+                IsRequired = inputField.Required;
+                if (SelectedFieldType == Field.FieldType.Checkbox)
+                {
+                    DefaultBool = inputField.Content == "True" ? true : false;
+                }
+                else if (SelectedFieldType == Field.FieldType.Date)
+                {
+                    SelectedDate = inputField.Content;
+                }
+                else
+                {
+                    DefaultValue = inputField.Content;
+                }
+            }
+            else
+            {
+                PromptHeaderAndAcceptButtonText = "Add field";
+                SelectedFieldType = Field.FieldType.TextBox;
+            }
         }
 
 
@@ -43,7 +69,12 @@ namespace AMS.ViewModels.Prompts
                 DefaultValue = SelectedDate;
 
             _newField = new Field(Name, DefaultValue, SelectedFieldType, IsRequired, _isCustom);
-            PromptElapsed?.Invoke(this, new FieldInputPromptEventArgs(true, _newField));
+
+            if (_oldField == null)
+            {
+                PromptElapsed?.Invoke(this, new FieldInputPromptEventArgs(true, _newField));
+            }
+            PromptElapsed?.Invoke(this, new FieldEditPromptEventArgs(true, _oldField, _newField));
         }
 
         protected override void Cancel()

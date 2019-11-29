@@ -36,6 +36,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="20" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <ContentPresenter VerticalAlignment="Center" 
@@ -46,18 +47,41 @@
                             HorizontalAlignment="Left" 
                             Style="{StaticResource RequiredNotation}"
                             Grid.Column="1"/>
-                        
+                        <Button OverridesDefaultStyle="True" 
+                                x:Name="PART_FieldEditButton"
+                                Grid.Column="2"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.ShowFieldEditPromptCommand}"
+                                CommandParameter="{Binding Path=.}">>
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Image Source="{StaticResource Edit_Black}" VerticalAlignment="Center"
+                                           Height="14"
+                                           Cursor="Hand">
+                                        <Image.Style>
+                                            <Style TargetType="Image">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsCustom}" Value="False">
+                                                        <Setter Property="Visibility" Value="Hidden" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
                         <Button OverridesDefaultStyle="True" 
                                 x:Name="PART_FieldButton"
                                 Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveFieldCommand}"
                                 CommandParameter="{Binding Path=.}"
-                                Grid.Column="2">
+                                Grid.Column="3">
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <TextBlock Foreground="Black" 
                                                Style="{StaticResource ParagraphStyle}" 
                                                VerticalAlignment="Center"
                                                Margin="0 0 3 0"
+                                               Cursor="Hand"
                                                Text="X"/>
                                 </ControlTemplate>
                             </Button.Template>

@@ -52,3 +52,25 @@ INNER JOIN asset_users AS au
     ON au.asset_id = a.id
 WHERE at.tag_id IN (12,14) AND au.user_id IN (1)
 GROUP BY a.id;
+
+/* Get tags for treeview */
+SET @keyword = '%%';
+SET @department = 6;
+
+SELECT DISTINCT tp.id,
+                tp.label,
+                tp.parent_id,
+                tp.department_id,
+                tp.color,
+                IF((SELECT COUNT(id) FROM tags WHERE parent_id = tp.id) OR tp.id = 1, 1, 0) AS contains_children
+FROM tags AS tp
+LEFT JOIN tags AS tc ON
+    tp.id = tc.parent_id
+    AND (tc.department_id = @department OR tc.department_id IS NULL)
+    AND tc.label LIKE @keyword
+WHERE (tp.department_id = @department OR tp.department_id IS NULL)
+    AND (tp.label LIKE @keyword OR tc.label LIKE @keyword)
+ORDER BY
+    tp.parent_id ASC,
+    contains_children DESC,
+    tp.label ASC;

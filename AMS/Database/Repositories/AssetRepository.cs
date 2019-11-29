@@ -198,7 +198,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
                     
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID, entity.ID);
+                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
