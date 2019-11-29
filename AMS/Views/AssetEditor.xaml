@@ -184,13 +184,26 @@
                                 <WrapPanel IsItemsHost="True"/>
                             </ControlTemplate>
                         </ListView.Template>
-                        <ItemsControl.ItemTemplate>
+
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"
+                                           ItemHeight="40"
+                                           VerticalAlignment="Top"
+                                           HorizontalAlignment="Left"
+                                           OverridesDefaultStyle="True" />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid HorizontalAlignment="Left">
-                                    <Label Foreground="{Binding FontColor}" Content="{Binding TagLabel}" Style="{StaticResource TagAddedToSearch}"/>
+                                <Grid>
+                                    <Label Foreground="{Binding TagFontColor}"
+                                           Content="{Binding TagLabel}"
+                                           Style="{StaticResource TagAddedToSearch}"
+                                           FontSize="{StaticResource FontSizeXSmall}"/>
                                 </Grid>
                             </DataTemplate>
-                        </ItemsControl.ItemTemplate>
+                        </ListView.ItemTemplate>
                     </ListView>
 
                 </StackPanel>

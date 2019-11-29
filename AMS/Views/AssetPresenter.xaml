@@ -161,7 +161,6 @@
                                         <ItemsPanelTemplate>
                                             <WrapPanel
                                                 Orientation="Horizontal"
-                                                ItemHeight="40"
                                                 VerticalAlignment="Top"
                                                 HorizontalAlignment="Left"
                                                 OverridesDefaultStyle="True" />
