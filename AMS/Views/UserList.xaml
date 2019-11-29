@@ -116,8 +116,8 @@
                         <GridView>
 
                             <!-- User status -->
-                            <GridViewColumn Width="30">
-                                <GridViewColumnHeader Tag="StatusColor"/>
+                            <GridViewColumn Width="50">
+                                <GridViewColumnHeader Tag="StatusColor" Content="Status"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Border Background="{Binding Path=StatusColor}"
@@ -126,6 +126,7 @@
                                                 BorderThickness="0.4"
                                                 BorderBrush="Black"
                                                 Height="15">
+                                            
                                             <Button Width="14" 
                                                     Opacity="0"
                                                     Command="{Binding DataContext.ChangeStatusCommand, ElementName=StartElement}"

@@ -353,6 +353,7 @@ namespace AMS.ViewModels
 
                 CurrentDepartment = selectedDepartment;
 
+                // Update the view, so it corresponds to the current department
                 ((ContentFrame.Content as Page).DataContext as IPageUpdateOnFocus).UpdateOnFocus();
             }
             catch (Exception e)

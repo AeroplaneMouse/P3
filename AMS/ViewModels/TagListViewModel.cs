@@ -15,7 +15,7 @@ using AMS.Views.Prompts;
 
 namespace AMS.ViewModels
 {
-    public class TagListViewModel : Base.BaseViewModel
+    public class TagListViewModel : BaseViewModel
     {
         public List<Tag> Tags { get; set; }
         private readonly ITagListController _tagListController;
@@ -39,21 +39,21 @@ namespace AMS.ViewModels
         public TagListViewModel(ITagListController controller)
         {
             _tagListController = controller;
-            Tags = _tagListController.TagsList;
 
-            RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Deleting selected tag. This action cannot be undone. Proceed?", RemoveTag)));
-            AddNewCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(null)));
-            Tags.AddRange(_tagListController.GetParentTags());
-            EditCommand = new Base.RelayCommand(() => {
+            RemoveCommand = new RelayCommand(() => Features.DisplayPrompt(new Confirm("Deleting selected tag. This action cannot be undone. Proceed?", RemoveTag)));
+            AddNewCommand = new RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(null)));
+            EditCommand = new RelayCommand(() => {
                 if (SelectedItem != null)
                     Features.Navigate.To(Features.Create.TagEditor(SelectedItem));
             });
 
             SearchCommand = new RelayCommand(() => Search());
+            Search();
         }
 
         public override void UpdateOnFocus()
         {
+            Search();
             OnPropertyChanged(nameof(Tags));
         }
 
@@ -65,6 +65,7 @@ namespace AMS.ViewModels
                 _tagListController.Remove(SelectedItem);
             }
 
+            Search();
             OnPropertyChanged(nameof(Tags));
         }
 
