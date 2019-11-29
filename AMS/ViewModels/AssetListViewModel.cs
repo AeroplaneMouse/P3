@@ -128,6 +128,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(IsStrict));
             OnPropertyChanged(nameof(SearchQuery));
             OnPropertyChanged(nameof(AppliedTags));
+            RefreshList();
         }
         private void CheckAllChanged(ListView list)        {            if (SelectedItems.Count == 0)
             {
