@@ -66,6 +66,12 @@ namespace AMS.ViewModels
             }
         }
 
+        public override void UpdateOnFocus()
+        {
+            _logListController.UpdateEntries();
+            OnPropertyChanged(nameof(Entries));
+        }
+
         /// <summary>
         /// View log
         /// </summary>

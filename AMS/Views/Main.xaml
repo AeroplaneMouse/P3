@@ -105,14 +105,6 @@
                                             <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
 
-                                        <!--<Grid.InputBindings>
-                                            <KeyBinding Modifiers="Alt" Key="D1" Command="{Binding ShowHomePageCommand}"/>
-                                            <KeyBinding Modifiers="Alt" Key="D2" Command="{Binding ShowAssetListPageCommand}"/>
-                                            <KeyBinding Modifiers="Alt" Key="D3" Command="{Binding ShowTagListPageCommand}"/>
-                                            <KeyBinding Modifiers="Alt" Key="D4" Command="{Binding ShowUserListPageCommand}"/>
-                                            <KeyBinding Modifiers="Alt" Key="D5" Command="{Binding ShowLogPageCommand}"/>
-                                        </Grid.InputBindings>-->
-
                                         <!-- Navigation menu -->
                                         <Border Background="{StaticResource NavigationBackgroundBrush}">
                                             <Grid>

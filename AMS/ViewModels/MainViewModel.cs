@@ -161,6 +161,8 @@ namespace AMS.ViewModels
             SplashPage = Features.Create.Splash(this);
         }
 
+        public override void UpdateOnFocus() { }
+
         public void LoadSystem(Session session)
         {
             // Attaching notification

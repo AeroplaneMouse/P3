@@ -68,17 +68,20 @@ namespace AMS.Helpers
                 // Write the column headers to the file
                 file.WriteLine(CreateFileHeader(objectType));
 
+                // Foreach object to be exported
                 foreach (var item in items)
                 {
+                    // Get the properties of the object
                     PropertyInfo[] props = objectType.GetProperties();
                     string fileEntry = "";
 
+                    // Foreach property in the object
                     foreach (PropertyInfo prop in props)
                     {
                         string key = prop.Name;
                         // Condition to exclude the property fieldslist, as it requires special formatting, and all the data is already contained in serializedFields
                         if (!_excludedProperties.Contains(key))
-                            if (key.Equals("CreatedAt") || key.Equals("UpdatedAt"))
+                            if (key.Equals("CreatedAt") || key.Equals("UpdatedAt")) // Special formatting for CreatedAt & UpdatedAt
                                 fileEntry +=
                                     (objectType.GetProperty(key)?.GetValue(item, null) is DateTime
                                         ? (DateTime) objectType.GetProperty(key)?.GetValue(item, null)

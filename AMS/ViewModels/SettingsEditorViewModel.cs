@@ -51,5 +51,10 @@ namespace AMS.ViewModels
             Features.AddNotification(new Models.Notification("Settings saved", Models.Notification.APPROVE));
             Features.Navigate.Back();
         }
+
+        public override void UpdateOnFocus()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

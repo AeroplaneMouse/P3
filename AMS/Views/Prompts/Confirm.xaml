@@ -29,12 +29,12 @@
                             Margin="15">
                     <Button Style="{StaticResource RegularAcceptButton}"
                             Command="{Binding AcceptCommand}"
-                            Content="Accept"
+                            Content="Yes"
                             Name="Accept"
                             TabIndex="0"/>
                     <Button Style="{StaticResource RegularCancelButton}"
                             Command="{Binding CancelCommand}"
-                            Content="Cancel"
+                            Content="No"
                             Margin="15 0 0 0"
                             TabIndex="1"
                             x:Name="StartElement"/>

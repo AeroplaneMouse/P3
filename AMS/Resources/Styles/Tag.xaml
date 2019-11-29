@@ -5,8 +5,7 @@
     <Style TargetType="{x:Type Label}" x:Key="TagLabelOnlyShow">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinWidth" Value="50" />
-        <Setter Property="Margin" Value="0,2,2,2" />
-        <Setter Property="Padding" Value="5,2,5,2" />
+        <Setter Property="Padding" Value="6 2 6 2" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
@@ -14,8 +13,15 @@
                             Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" FontWeight="DemiBold">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" BorderBrush="{Binding TagColor}" BorderThickness="2" CornerRadius="10"
-                                        Background="{Binding TagColor}" FocusVisualStyle="{x:Null}" RenderOptions.EdgeMode="Aliased">
+                                <Border Margin="{TemplateBinding Margin}" 
+                                        Padding="{TemplateBinding Padding}" 
+                                        BorderBrush="{Binding TagColor}"
+                                        BorderThickness="2" 
+                                        CornerRadius="10"
+                                        Background="{Binding TagColor}" 
+                                        FocusVisualStyle="{x:Null}" 
+                                        RenderOptions.EdgeMode="Aliased">
+                                    
                                     <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
@@ -30,32 +36,42 @@
     <Style TargetType="{x:Type Label}" x:Key="TagAddedToSearch">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinWidth" Value="50" />
-        <Setter Property="Padding" Value="2" />
+        <Setter Property="Padding" Value="6 2 6 2" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
-                    <Button OverridesDefaultStyle="True" x:Name="PART_TagButton"
-                            Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" VerticalAlignment="Center" Padding="{TemplateBinding Padding}"
+                    <Button OverridesDefaultStyle="True" 
+                            x:Name="PART_TagButton"
+                            Content="{TemplateBinding Content}" 
+                            Margin="{TemplateBinding Margin}" 
+                            VerticalAlignment="Center" 
+                            Padding="{TemplateBinding Padding}"
                             Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveTagCommand}"
                             CommandParameter="{Binding Path=.}">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <Grid>
-                                    <Border Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}"
-                                        BorderBrush="{Binding TagColor}" BorderThickness="2" CornerRadius="10"
-                                        Background="{Binding TagColor}" FocusVisualStyle="{x:Null}"
-                                        RenderOptions.EdgeMode="Aliased">
+                                    <Border Margin="{TemplateBinding Margin}" 
+                                            Padding="{TemplateBinding Padding}"
+                                            BorderBrush="{Binding TagColor}" 
+                                            BorderThickness="2" 
+                                            CornerRadius="10"
+                                            Background="{Binding TagColor}" 
+                                            FocusVisualStyle="{x:Null}"
+                                            RenderOptions.EdgeMode="Aliased">
                                         <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                     </Border>
+                                    
                                     <Border Background="Black"
                                             Padding="{TemplateBinding Padding}"
                                             CornerRadius="10"
                                             Opacity="0.6"
                                             x:Name="PART_DeleteTagBackground"
                                             Visibility="Collapsed"/>
-                                    <TextBlock Foreground="Red"
+                                    
+                                    <TextBlock Foreground="White"
                                                x:Name="PART_DeleteTagText"
-                                               FontWeight="Bold"
+                                               FontWeight="DemiBold"
                                                SnapsToDevicePixels="True"
                                                Visibility="Collapsed"
                                                VerticalAlignment="Center"

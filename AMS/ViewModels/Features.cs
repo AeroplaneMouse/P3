@@ -12,6 +12,7 @@ using AMS.Controllers;
 using AMS.Views;
 using System.Collections.Generic;
 using AMS.Logging;
+using AMS.Controllers.Interfaces;
 
 namespace AMS.ViewModels
 {
@@ -102,15 +103,16 @@ namespace AMS.ViewModels
                 {
                     _currentPage = Main.History.Pop();
 
-                    if (_currentPage.GetType() == typeof(Home) ||
+                    if (_currentPage.GetType() == typeof(Home)      ||
                         _currentPage.GetType() == typeof(AssetList) ||
-                        _currentPage.GetType() == typeof(TagList) ||
-                        _currentPage.GetType() == typeof(UserList) ||
+                        _currentPage.GetType() == typeof(TagList)   ||
+                        _currentPage.GetType() == typeof(UserList)  ||
                         _currentPage.GetType() == typeof(LogList))
                     {
                         Main.History.Clear();
                     }
 
+                    (_currentPage.DataContext as IPageUpdateOnFocus).UpdateOnFocus();
                     Main.ContentFrame.Navigate(_currentPage);
                     return true;
                 }
@@ -147,6 +149,17 @@ namespace AMS.ViewModels
                     asset = new Asset();
 
                 return new AssetEditor(new AssetController(asset, _assetRepository), CreateTagHelper());
+            }
+
+            /// <summary>
+            /// Returns a new AssetEditor page
+            /// </summary>
+            /// <param name="asset"></param>
+            /// <returns></returns>
+            public static Page AssetEditor(IAssetController controller)
+            {
+                
+                return new AssetEditor(controller, CreateTagHelper());
             }
 
             /// <summary>

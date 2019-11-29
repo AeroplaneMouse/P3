@@ -12,21 +12,31 @@ namespace AMS.ViewModels
 {
     public class AssetDetailsViewModel : Base.BaseViewModel
     {
-        private Asset _asset { get; set; }
-        public string Name => _asset.Name;
-        public string Identifier => _asset.Identifier;
-        public string Description => _asset.Description;
-        public List<ITagable> TagList { get; set; }
+        private IAssetController _assetController { get; set; }
+
+        public string Name => _assetController.ControlledAsset.Name;
+        public string Identifier => _assetController.ControlledAsset.Identifier;
+        public string Description => _assetController.ControlledAsset.Description;
+        public ObservableCollection<ITagable> TagList => new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags);
 
         public ObservableCollection<Field> FieldList =>
-            new ObservableCollection<Field>(_asset.FieldList.Where(p => p.IsHidden == false && !string.IsNullOrEmpty(p.Content)).ToList());
-        public AssetDetailsViewModel(Asset asset, List<ITagable> tagList)
+            new ObservableCollection<Field>(_assetController.ControlledAsset.FieldList.Where(p => p.IsHidden == false && !string.IsNullOrEmpty(p.Content)).ToList());
+        public AssetDetailsViewModel(IAssetController assetController)
         {
-            TagList = tagList;
-            _asset = asset;
+            _assetController = assetController;
             UpdateTagRelations();
         }
-        
+
+        public override void UpdateOnFocus()
+        {
+            UpdateTagRelations();
+            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(Identifier));
+            OnPropertyChanged(nameof(Description));
+            OnPropertyChanged(nameof(TagList));
+            OnPropertyChanged(nameof(FieldList));
+        }
+
         private void UpdateTagRelations()
         {
             foreach (var field in FieldList)

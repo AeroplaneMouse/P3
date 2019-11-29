@@ -131,7 +131,7 @@
                 <Setter Property="BorderBrush" Value="{StaticResource NavigationHoverBrush}"/>
             </Trigger>
             <Trigger Property="IsFocused" Value="True">
-                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="Lime"/>
             </Trigger>
         </Style.Triggers>
     </Style>

@@ -13,7 +13,6 @@ namespace AMS.Controllers
     {
         private readonly ILogRepository _logRepository;
         private readonly IExporter _exporter;
-
         private List<LogEntry> _entryList;
 
         public List<LogEntry> EntryList
@@ -22,7 +21,7 @@ namespace AMS.Controllers
             {
                 if (_entryList == null)
                 {
-                    _entryList = _logRepository.Search("");
+                    _entryList = _logRepository.Search("").ToList();
                 }
 
                 return _entryList.OrderByDescending(p => p.CreatedAt).ToList();
@@ -48,7 +47,7 @@ namespace AMS.Controllers
         /// <param name="query"></param>
         public void Search(string query)
         {
-            EntryList = _logRepository.Search(query);
+            EntryList = _logRepository.Search(query).ToList();
         }
 
         /// <summary>
@@ -58,6 +57,11 @@ namespace AMS.Controllers
         public void Export(List<LogEntry> entries)
         {
             _exporter.Print(entries);
+        }
+
+        public void UpdateEntries()
+        {
+            _entryList = (List<LogEntry>)_logRepository.Search("");
         }
     }
 }

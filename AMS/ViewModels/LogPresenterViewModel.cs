@@ -17,5 +17,7 @@ namespace AMS.ViewModels
 
             CancelCommand = new Base.RelayCommand(() => Features.Navigate.Back());
         }
+
+        public override void UpdateOnFocus() { }
     }
 }

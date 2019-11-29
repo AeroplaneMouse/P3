@@ -96,7 +96,8 @@
                                      x:Name="StartElement"
                                      TabIndex="0"
                                      ToolTip="%s: Keyword must end with s. b%: Keyword must start with s. #: Enter tag mode"
-                                     Style="{StaticResource SearchTextBox}">
+                                     Style="{StaticResource SearchTextBox}"
+                                     Tag="Start typing...">
 
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
@@ -112,13 +113,22 @@
                                    IsOpen="{Binding TagSuggestionIsOpen}"
                                    StaysOpen="False"
                                    MaxHeight="100"
+                                   AllowsTransparency="True"
                                    Width="{Binding ElementName=StartElement, Path=ActualWidth}"
                                    Placement="Bottom">
 
                                 <ListBox x:Name="TagSuggestionList"    
                                          Visibility="{Binding TagSuggestionsVisibility}"    
                                          Width="{Binding ElementName=StartElement, Path=ActualWidth}"
-                                         ItemsSource="{ Binding TagSearchSuggestions }">
+                                         ItemsSource="{ Binding TagSearchSuggestions }"
+                                         Opacity="0.9">
+                                    
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" FontSize="{StaticResource FontSizeSmall}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    
                                     <ListBox.InputBindings>
                                         <KeyBinding Key="Return" Command="{Binding AutoTagCommand}" CommandParameter="{Binding ElementName=TagSuggestionList, Path=SelectedItem}"/>
                                     </ListBox.InputBindings>
@@ -194,6 +204,7 @@
                           SelectionMode="Extended"
                           x:Name="ListOfAssets"
                           SelectionChanged="ListView_SelectionChanged"
+                          GridViewColumnHeader.Click="ColumnHeader_Click"
                           Grid.Row="2"
                           TabIndex="1">
                     <ListView.View>
@@ -214,8 +225,8 @@
                             </GridViewColumn>
 
                             <!-- Name -->
-                            <GridViewColumn Header="Name"
-                                            Width="Auto">
+                            <GridViewColumn Width="Auto">
+                                <GridViewColumnHeader Content="Name" Tag="Name"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Name}"
@@ -226,7 +237,8 @@
                             </GridViewColumn>
 
                             <!-- Identifier -->
-                            <GridViewColumn Header="Identifier">
+                            <GridViewColumn>
+                                <GridViewColumnHeader Content="Identifier" Tag="Identifier"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Identifier}"
@@ -237,7 +249,8 @@
                             </GridViewColumn>
 
                             <!-- Updated -->
-                            <GridViewColumn Header="Updated" x:Name="PART_Updated">
+                            <GridViewColumn x:Name="PART_Updated">
+                                <GridViewColumnHeader Content="Updated" Tag="UpdatedAt"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=UpdatedAtString}"

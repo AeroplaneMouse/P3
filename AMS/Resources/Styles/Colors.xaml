@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <!--24292e-->
     <Color x:Key="BackgroundDark">#24292e</Color>
     <SolidColorBrush x:Key="BackgroundDarkBrush" Color="{StaticResource BackgroundDark}"/>
 
@@ -16,13 +17,16 @@
     <Color x:Key="CloseRed">#d21414</Color>
     <SolidColorBrush x:Key="CloseRedBrush" Color="{StaticResource CloseRed}" />
 
+    <!--3d5266-->
     <Color x:Key="NaviationBackground">#3d5266</Color>
     <SolidColorBrush x:Key="NavigationBackgroundBrush" Color="{StaticResource NaviationBackground}"/>
 
-    <Color x:Key="NavigationSelected">#2a3846</Color>
+    <!--2a3846-->
+    <Color x:Key="NavigationSelected">#232f3b</Color>
     <SolidColorBrush x:Key="NavigationSelectedBrush" Color="{StaticResource NavigationSelected}"/>
 
-    <Color x:Key="NavigationHover">#000000</Color>
+    <!--000000-->
+    <Color x:Key="NavigationHover">#2a3846</Color>
     <SolidColorBrush x:Key="NavigationHoverBrush" Color="{StaticResource NavigationHover}"/>
 
     <!-- 32cd56-->

@@ -22,6 +22,8 @@ namespace AMS.ViewModels.Prompts
             CancelCommand = new Base.RelayCommand(Cancel);
         }
 
+        public override void UpdateOnFocus() { }
+
         protected abstract void Accept();
 
         protected abstract void Cancel();

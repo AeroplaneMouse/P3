@@ -152,18 +152,18 @@ namespace AMS.ViewModels
         /// </summary>
         public void SaveAndExit()
         {
-            SaveAsset(false);
-            Features.Navigate.Back();
+            if (SaveAsset(false))
+                Features.Navigate.Back();
         }
 
         /// <summary>
         /// Saves the asset.
         /// </summary>
         /// <param name="multiAdd"></param>
-        public void SaveAsset(bool multiAdd = true)
+        public bool SaveAsset(bool multiAdd = true)
         {
             if (!VerifyAssetAndFields())
-                return;
+                return false;
 
             //Checks whether to save a new, or update an existing.
             if (_isEditing)
@@ -184,6 +184,7 @@ namespace AMS.ViewModels
                 _assetController.Save();
                 Features.AddNotification(new Notification("Asset added", Notification.APPROVE));
             }
+            return true;
         }
 
         /// <summary>
@@ -272,6 +273,18 @@ namespace AMS.ViewModels
                 _assetController.AddField(args.NewField);
                 UpdateAll();
             }
+        }
+
+        public override void UpdateOnFocus()
+        {
+            OnPropertyChanged(nameof(NonHiddenFieldList));
+            OnPropertyChanged(nameof(HiddenFieldList));
+            OnPropertyChanged(nameof(AppliedTags));
+            OnPropertyChanged(nameof(TagSearchSuggestions));
+            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(Identifier));
+            OnPropertyChanged(nameof(Description));
+            OnPropertyChanged(nameof(TagSearchQuery));
         }
 
         #endregion
@@ -373,6 +386,11 @@ namespace AMS.ViewModels
             if (string.IsNullOrEmpty(Name))
             {
                 Features.AddNotification(new Notification("The field " + "Name" + " is required and empty",Notification.WARNING));
+                return false;
+            }
+            else if (Features.Main.CurrentDepartment.ID == 0)
+            {
+                Features.AddNotification(new Notification("Please select another department than \"All departments\"", Notification.WARNING));
                 return false;
             }
             

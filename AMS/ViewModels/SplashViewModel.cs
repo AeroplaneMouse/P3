@@ -33,6 +33,8 @@ namespace AMS.ViewModels
             Setup();
         }
 
+        public override void UpdateOnFocus() { }
+
         /// <summary>
         /// Establishing a connection to the database and authorizing the user. This function runs asynchronous
         /// meaning that it does not halt the UI-thread while doing this.

@@ -199,6 +199,18 @@ namespace AMS.ViewModels
 
         #region Methods
 
+        public override void UpdateOnFocus()
+        {
+            UpdateAll();
+
+            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(Color));
+            OnPropertyChanged(nameof(DepartmentID));
+            OnPropertyChanged(nameof(ParentID));
+            OnPropertyChanged(nameof(ParentTagList));
+            OnPropertyChanged(nameof(DepartmentList));
+        }
+
         /// <summary>
         /// Saves the tag.
         /// </summary>

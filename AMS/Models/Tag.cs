@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace AMS.Models
 {
-    public class Tag :FieldContainer, ITagable
+    public class Tag : FieldContainer, ITagable
     {
         private string _name;
         private string _color;
@@ -15,67 +15,69 @@ namespace AMS.Models
         private ulong _departmentID;
         private int _numOfChildren;
 
-        public string Name {
-            get {
-                return this._name;
-            }
-            set {
+        public string Name 
+        {
+            get => this._name;
+            set 
+            {
                 if (this.Name != null)
-                {
                     this.Changes["Name"] = this.Name;
-                }
                 this._name = value.ToLower();
             }
         }
 
-        public string Color {
-            get {
-                return this._color;
-            }
-            set {
+        public string Color 
+        {
+            get => this._color;
+            set 
+            {
                 if (this.Color != null)
                 {
                     this.Changes["Color"] = this.Color;
                 }
+
                 this._color = value;
             }
         }
 
-        public ulong ParentID {
-            get {
-                return this._parentID;
-            }
-            set {
+        public ulong ParentID 
+        {
+            get => this._parentID;
+            set 
+            {
                 if (this.ParentID > 0)
                 {
                     this.Changes["ParentID"] = this.ParentID;
                 }
+
                 this._parentID = value;
             }
         }
 
-        public ulong DepartmentID {
-            get {
-                return this._departmentID;
-            }
-            set {
+        public ulong DepartmentID 
+        {
+            get => this._departmentID;
+            set 
+            {
                 if (this.DepartmentID > 0)
                 {
                     this.Changes["DepartmentID"] = this.DepartmentID;
                 }
+
                 this._departmentID = value;
             }
         }
 
-        public int NumOfChildren {
-            get {
-                return this._numOfChildren;
-            }
-            set {
+        public int NumOfChildren 
+        {
+            get => this._numOfChildren;
+            set 
+            {
                 if (this.NumOfChildren >= 0)
                 {
                     this.Changes["Color"] = this.NumOfChildren;
                 }
+
                 this._numOfChildren = value;
             }
         }
@@ -109,13 +111,13 @@ namespace AMS.Models
         {
             if (!string.IsNullOrEmpty(this.SerializedFields))
             {
-                this.FieldList =
-                    JsonConvert.DeserializeObject<List<Field>>(this.SerializedFields);
+                this.FieldList = JsonConvert.DeserializeObject<List<Field>>(this.SerializedFields);
                 return true;
             }
 
             return false;
         }
+
         #region From ITagable
 
         public ulong TagId => ID;
