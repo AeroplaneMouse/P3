@@ -160,7 +160,6 @@
 
                     <Button Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"
                             Margin="10 0 0 0 " 
-                            Width="Auto" 
                             Command="{Binding PrintCommand}">
                         <Button.Style>
                             <Style TargetType="Button" BasedOn="{StaticResource RegularButton}">
