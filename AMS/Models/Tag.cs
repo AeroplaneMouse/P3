@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 
 namespace AMS.Models
 {
-    public class Tag :FieldContainer, ITagable
+    public class Tag : FieldContainer, ITagable
     {
         private string _name;
         private string _color;
@@ -22,7 +22,6 @@ namespace AMS.Models
             {
                 if (this.Name != null)
                     this.Changes["Name"] = this.Name;
-                }
                 this._name = value.ToLower();
             }
         }
