@@ -1,8 +1,9 @@
-﻿using System.ComponentModel;
+﻿using AMS.Interfaces;
+using System.ComponentModel;
 
 namespace AMS.ViewModels.Base
 {
-    public class BaseViewModel : INotifyPropertyChanged
+    public abstract class BaseViewModel : INotifyPropertyChanged, IPageUpdateOnFocus
     {
         // The event that is fired when any child property changes its value
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
@@ -15,5 +16,7 @@ namespace AMS.ViewModels.Base
         {
             PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
+
+        public abstract void UpdateOnFocus();
     }
 }

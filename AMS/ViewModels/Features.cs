@@ -102,15 +102,16 @@ namespace AMS.ViewModels
                 {
                     _currentPage = Main.History.Pop();
 
-                    if (_currentPage.GetType() == typeof(Home) ||
+                    if (_currentPage.GetType() == typeof(Home)      ||
                         _currentPage.GetType() == typeof(AssetList) ||
-                        _currentPage.GetType() == typeof(TagList) ||
-                        _currentPage.GetType() == typeof(UserList) ||
+                        _currentPage.GetType() == typeof(TagList)   ||
+                        _currentPage.GetType() == typeof(UserList)  ||
                         _currentPage.GetType() == typeof(LogList))
                     {
                         Main.History.Clear();
                     }
 
+                    (_currentPage.DataContext as IPageUpdateOnFocus).UpdateOnFocus();
                     Main.ContentFrame.Navigate(_currentPage);
                     return true;
                 }

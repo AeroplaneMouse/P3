@@ -26,7 +26,17 @@ namespace AMS.ViewModels
             _asset = asset;
             UpdateTagRelations();
         }
-        
+
+        public override void UpdateOnFocus()
+        {
+            UpdateTagRelations();
+            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(Identifier));
+            OnPropertyChanged(nameof(Description));
+            OnPropertyChanged(nameof(TagList));
+            OnPropertyChanged(nameof(FieldList));
+        }
+
         private void UpdateTagRelations()
         {
             foreach (var field in FieldList)

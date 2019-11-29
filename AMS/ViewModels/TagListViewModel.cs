@@ -39,17 +39,22 @@ namespace AMS.ViewModels
         public TagListViewModel(ITagListController controller)
         {
             _tagListController = controller;
-            _tagListController.GetTreeviewData(_searchQuery);
             Tags = _tagListController.TagsList;
 
             RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("Deleting selected tag. This action cannot be undone. Proceed?", RemoveTag)));
             AddNewCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(null)));
+            Tags.AddRange(_tagListController.GetParentTags());
             EditCommand = new Base.RelayCommand(() => {
                 if (SelectedItem != null)
                     Features.Navigate.To(Features.Create.TagEditor(SelectedItem));
             });
 
             SearchCommand = new RelayCommand(() => Search());
+        }
+
+        public override void UpdateOnFocus()
+        {
+            OnPropertyChanged(nameof(Tags));
         }
 
         private void RemoveTag(object sender, PromptEventArgs e)

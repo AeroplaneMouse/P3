@@ -27,6 +27,11 @@ namespace AMS.ViewModels
             DeleteCommand = new Base.RelayCommand<object>(DeleteComment);
         }
 
+        public override void UpdateOnFocus()
+        {
+            OnPropertyChanged(nameof(CommentList));
+        }
+
         private void SaveComment()
         {
             NewComment = NewComment.Trim();

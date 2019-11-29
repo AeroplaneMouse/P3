@@ -109,7 +109,11 @@
             <Setter.Value>
                 <DataTemplate>
                     <Grid MaxWidth="100" HorizontalAlignment="Left">
-                        <Label Foreground="{Binding FontColor}" Content="{Binding Name}" Style="{StaticResource TagLabelOnlyShow}"></Label>
+                        <Label Foreground="{Binding FontColor}" 
+                               Content="{Binding Name}" 
+                               Style="{StaticResource TagLabelOnlyShow}"
+                               FontSize="{StaticResource FontSizeXSmall}"
+                               Margin="0 2 0 0"/>
                     </Grid>
                 </DataTemplate>
             </Setter.Value>

@@ -13,32 +13,42 @@ namespace AMS.ViewModels
 {
     class AssetPresenterViewModel : Base.BaseViewModel
     {
-        private IAssetController _assetController;
+        private IAssetController _assetController { get; set; }
 
+        private ObservableCollection<object> _tabs;
+
+
+        public ObservableCollection<object> Tabs => _tabs;
         public string Name { get; set; }
         public string ID { get; set; }
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand CancelCommand { get; set; }
-        public ICommentListController CommentListController { get; set; }
+        
 
-        ObservableCollection<object> _children;
 
         public AssetPresenterViewModel(List<ITagable> tagList, IAssetController assetController, ICommentListController commentListController, ILogListController logListController)
         {
             Name = assetController.ControlledAsset.Name;
             ID = $" (id: { assetController.ControlledAsset.ID })";
-            CommentListController = commentListController;
             _assetController = assetController;
 
-            _children = new ObservableCollection<object>();
-            _children.Add(new AssetDetailsViewModel(assetController.ControlledAsset, tagList));
-            _children.Add(new CommentViewModel(assetController.ControlledAsset, commentListController));
-            _children.Add(new LogListViewModel(logListController));
+            // Tabs
+            _tabs = new ObservableCollection<object>();
+            _tabs.Add(new AssetDetailsViewModel(assetController.ControlledAsset, tagList));
+            _tabs.Add(new CommentViewModel(assetController.ControlledAsset, commentListController));
+            _tabs.Add(new LogListViewModel(logListController));
 
             EditCommand = new Base.RelayCommand(() => Edit(), () => Features.GetCurrentSession().IsAdmin());
             RemoveCommand = new Base.RelayCommand(() => Remove(), () => Features.GetCurrentSession().IsAdmin());
             CancelCommand = new Base.RelayCommand(Cancel);
+        }
+
+        public override void UpdateOnFocus()
+        {
+            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(ID));
+            OnPropertyChanged(nameof(Tabs));
         }
 
         private void Remove()
@@ -66,8 +76,6 @@ namespace AMS.ViewModels
                 Features.Navigate.To(Features.Create.AssetList());
             }
         }
-
-        public ObservableCollection<object> Children { get { return _children; } }
         
 
     }

@@ -66,6 +66,11 @@ namespace AMS.ViewModels
             }
         }
 
+        public override void UpdateOnFocus()
+        {
+            OnPropertyChanged(nameof(Entries));
+        }
+
         /// <summary>
         /// View log
         /// </summary>

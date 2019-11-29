@@ -80,13 +80,9 @@ namespace AMS.ViewModels
         #region Commands
 
         public ICommand CancelCommand { get; set; }
-
         public ICommand ApplyCommand { get; set; }
-
         public ICommand KeepUserCommand { get; set; }
-
         public ICommand ImportUsersCommand { get; set; }
-
         public ICommand ChangeStatusCommand { get; set; }
 
         #endregion
@@ -107,6 +103,20 @@ namespace AMS.ViewModels
             ChangeStatusCommand = new Base.RelayCommand<object>(ChangeStatus);
 
             OnPropertyChanged(nameof(ShownUsersList));
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public override void UpdateOnFocus()
+        {
+            OnPropertyChanged(nameof(ShownUsersList));
+            OnPropertyChanged(nameof(DepartmentList));
+            OnPropertyChanged(nameof(IsShowingAdded));
+            OnPropertyChanged(nameof(IsShowingConflicting));
+            OnPropertyChanged(nameof(IsShowingDisabled));
+            OnPropertyChanged(nameof(IsShowingRemoved));
         }
 
         #endregion

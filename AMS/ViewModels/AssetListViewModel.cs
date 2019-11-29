@@ -22,10 +22,7 @@ namespace AMS.ViewModels
         private string _searchQuery = String.Empty;
         private TagHelper _tagHelper;        private bool _isStrict = true;
         
-        public ObservableCollection<Asset> Items
-        {
-            get => new ObservableCollection<Asset>(_listController.AssetList);
-        }
+        public ObservableCollection<Asset> Items => new ObservableCollection<Asset>(_listController.AssetList);
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
         public bool IsStrict { 
             get => _isStrict; 
@@ -119,6 +116,18 @@ namespace AMS.ViewModels
             AutoTagCommand = new RelayCommand<object>((parameter) => AutoTag(parameter as ITagable));
             ClearInputCommand = new RelayCommand(ClearInput);
             CheckAllChangedCommand = new RelayCommand<object>((parameter) => CheckAllChanged(parameter as ListView));
+        }
+
+
+        #region Methods
+
+        public override void UpdateOnFocus()
+        {
+            OnPropertyChanged(nameof(Items));
+            OnPropertyChanged(nameof(SelectedItems));
+            OnPropertyChanged(nameof(IsStrict));
+            OnPropertyChanged(nameof(SearchQuery));
+            OnPropertyChanged(nameof(AppliedTags));
         }
         private void CheckAllChanged(ListView list)        {            if (SelectedItems.Count == 0)
             {
@@ -141,8 +150,6 @@ namespace AMS.ViewModels
             //Keyboard.Focus(item);
             //throw new NotImplementedException();
         }
-
-        #region Methods
 
         /// <summary>
         /// Changes the content to AssetEditor with the selected asset
