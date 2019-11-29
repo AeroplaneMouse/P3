@@ -81,7 +81,7 @@ namespace AMS.Controllers
 
                 Id = tag.ID;
                 Name = tag.Name;
-                Color = tag.TagColor;
+                Color = tag.Color;
                 ParentID = tag.ParentID;
                 DepartmentID = tag.ParentID;
 
@@ -91,7 +91,8 @@ namespace AMS.Controllers
             }
             else
             {
-                ControlledTag = new Tag {TagColor = CreateRandomColor()};
+                ControlledTag = new Tag {Color = CreateRandomColor()};
+                Color = ControlledTag.Color;
                 ControlledTag.FieldList = new List<Field>();
                 IsEditing = false;
             }
@@ -107,6 +108,32 @@ namespace AMS.Controllers
         /// </summary>
         public void Save()
         {
+            //Updates the fields on the tag
+            if (Name != ControlledTag.Name)
+            {
+                ControlledTag.Name = Name;
+            }
+
+            if (ControlledTag.ParentID != ParentID)
+            {
+                ControlledTag.ParentID = ParentID;
+            }
+
+            if (ControlledTag.DepartmentID != DepartmentID)
+            {
+                ControlledTag.DepartmentID = DepartmentID;
+            }
+
+            if (ControlledTag.DepartmentID != DepartmentID)
+            {
+                ControlledTag.DepartmentID = DepartmentID;
+            }
+
+            if (ControlledTag.Color != Color)
+            {
+                ControlledTag.Color = Color;
+            }
+
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
             ControlledTag.FieldList = fieldList;
@@ -119,6 +146,32 @@ namespace AMS.Controllers
         /// </summary>
         public void Update()
         {
+            //Updates the fields on the tag
+            if (Name != ControlledTag.Name)
+            {
+                ControlledTag.Name = Name;
+            }
+
+            if (ControlledTag.ParentID != ParentID)
+            {
+                ControlledTag.ParentID = ParentID;
+            }
+
+            if (ControlledTag.DepartmentID != DepartmentID)
+            {
+                ControlledTag.DepartmentID = DepartmentID;
+            }
+
+            if (ControlledTag.DepartmentID != DepartmentID)
+            {
+                ControlledTag.DepartmentID = DepartmentID;
+            }
+
+            if (ControlledTag.Color != Color)
+            {
+                ControlledTag.Color = Color;
+            }
+
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
             ControlledTag.FieldList = fieldList;

@@ -61,7 +61,7 @@ namespace AMS.ViewModels
         public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
         public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
         public bool TagSuggestionIsOpen { get; set; } = false;
-        public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
+        public ObservableCollection<ITagable> TagSearchSuggestions { get; set; } = new ObservableCollection<ITagable>();
         public ITagable TagParent { get; set; }
         public bool inTagMode { get; set; } = false;
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
@@ -137,7 +137,7 @@ namespace AMS.ViewModels
         {
             var list = parameter as ListBox;
             Keyboard.Focus(list);
-            var item = list.SelectedItem = TagSearchSuggestions[0];
+            //var item = list.SelectedItem = TagSearchSuggestions[0];
             //Keyboard.Focus(item);
             //throw new NotImplementedException();
         }
