@@ -79,10 +79,10 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@label"].Value = entity;
 
                         cmd.Parameters.Add("@color", MySqlDbType.String);
-                        cmd.Parameters["@color"].Value = entity.TagColor;
+                        cmd.Parameters["@color"].Value = entity.Color;
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                        cmd.Parameters["@options"].Value = entity.SerializedFields;
+                        cmd.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;
 
                         if (entity.DepartmentID == 0)
                         {
@@ -98,7 +98,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
                         cmd.Parameters["@parent_id"].Value = entity.ParentID;
 
-                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                        querySuccess = (cmd.ExecuteNonQuery() > 0);
                         id = (ulong)cmd.LastInsertedId;
                     }
 
@@ -156,7 +156,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@label"].Value = entity;
 
                         cmd.Parameters.Add("@color", MySqlDbType.String);
-                        cmd.Parameters["@color"].Value = entity.TagColor;
+                        cmd.Parameters["@color"].Value = entity.Color;
 
                         if (entity.DepartmentID == 0)
                         {
@@ -168,9 +168,9 @@ namespace AMS.Database.Repositories
                             cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
                             cmd.Parameters["@department_id"].Value = entity.DepartmentID;
                         }
-                        
+
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                        cmd.Parameters["@options"].Value = entity.SerializedFields;
+                        cmd.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;
 
                         cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
                         cmd.Parameters["@parent_id"].Value = entity.ParentID;
