@@ -58,5 +58,10 @@ namespace AMS.Controllers
         {
             _exporter.Print(entries);
         }
+
+        public void UpdateEntries()
+        {
+            _entryList = _logRepository.Search("");
+        }
     }
 }
