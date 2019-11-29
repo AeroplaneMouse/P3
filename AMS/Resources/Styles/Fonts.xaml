@@ -19,7 +19,7 @@
     <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlockStyle}" />
     <Style TargetType="{x:Type ListView}" BasedOn="{StaticResource BaseStyle}" />
 
-    <system:Double x:Key="FontSizeXSmall">13</system:Double>
+    <system:Double x:Key="FontSizeXSmall">11</system:Double>
     <system:Double x:Key="FontSizeSmall">16</system:Double>
     <system:Double x:Key="FontSizeRegular">21</system:Double>
     <system:Double x:Key="FontSizeLarge">27</system:Double>
@@ -66,6 +66,15 @@
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
     </Style>
     <Style TargetType="TextBox" x:Key="ParagraphTextBoxWithSpace" BasedOn="{StaticResource ParagraphTextBox}">
+        <Setter Property="Margin" Value="0 0 0 10"/>
+    </Style>
+
+    <Style TargetType="PasswordBox" x:Key="ParagraphPasswordBox">
+        <Setter Property="FontWeight" Value="UltraLight"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+    </Style>
+    <Style TargetType="PasswordBox" x:Key="ParagraphPasswordBoxWithSpace" BasedOn="{StaticResource ParagraphPasswordBox}">
         <Setter Property="Margin" Value="0 0 0 10"/>
     </Style>
 

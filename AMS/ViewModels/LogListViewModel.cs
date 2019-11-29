@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using AMS.Controllers.Interfaces;
 using AMS.Logging;
@@ -13,22 +14,32 @@ namespace AMS.ViewModels
 {
     public class LogListViewModel : BaseViewModel
     {
+        private string _searchQuery = "";
         private ILogListController _logListController;
 
         public ObservableCollection<LogEntry> Entries
         {
             get => new ObservableCollection<LogEntry>(_logListController.EntryList);
         }
-        public string SearchQuery { get; set; }
+
+        public bool CheckAll { get; set; }
+        public string SearchQuery { 
+            get => _searchQuery;
+            set
+            {
+                _searchQuery = value;
+                Search();
+            } 
+        }
+        
         public List<LogEntry> SelectedItems { get; set; } = new List<LogEntry>();
         public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
         public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
-
         public ICommand ViewCommand { get; set; }
         public ICommand SearchCommand { get; set; }
         public ICommand PrintCommand { get; set; }
+        public ICommand CheckAllChangedCommand { get; set; }
         
-
         public LogListViewModel(ILogListController logListController)
         {
             _logListController = logListController;
@@ -36,6 +47,23 @@ namespace AMS.ViewModels
             ViewCommand = new RelayCommand(View);
             SearchCommand = new RelayCommand(Search);
             PrintCommand = new RelayCommand(Export);
+            CheckAllChangedCommand = new RelayCommand<object>((parameter) => CheckAllChanged(parameter as ListView));
+        }
+
+        private void CheckAllChanged(ListView list)
+        {
+            if (SelectedItems.Count == 0)
+            {
+                // None selected. Select all.
+                CheckAll = true;
+                list.SelectAll();
+            }
+            else if (SelectedItems.Count <= Entries.Count)
+            {
+                // Some selected or all selected. Unselect all
+                CheckAll = false;
+                list.UnselectAll();
+            }
         }
 
         public override void UpdateOnFocus()
@@ -58,10 +86,12 @@ namespace AMS.ViewModels
         /// </summary>
         private void Search()
         {
-            if (SearchQuery == null)
+            if (_searchQuery == null)
                 return;
             
-            _logListController.Search(SearchQuery);
+            Console.WriteLine(SearchQuery);
+            
+            _logListController.Search(_searchQuery);
             OnPropertyChanged(nameof(Entries));
         }
 
