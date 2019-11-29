@@ -15,7 +15,6 @@ namespace AMS.Controllers
         private ITagRepository _tagRepository { get; set; }
         private IDepartmentRepository _departmentRepository { get; set; }
 
-
         public Tag ControlledTag { get; set; }
         public bool IsEditing { get; set; }
         public ulong TagID;
@@ -82,7 +81,7 @@ namespace AMS.Controllers
 
                 Id = tag.ID;
                 Name = tag.Name;
-                Color = tag.TagColor;
+                Color = tag.Color;
                 ParentID = tag.ParentID;
                 DepartmentID = tag.ParentID;
 
@@ -92,7 +91,8 @@ namespace AMS.Controllers
             }
             else
             {
-                ControlledTag = new Tag {TagColor = CreateRandomColor()};
+                ControlledTag = new Tag {Color = CreateRandomColor()};
+                Color = ControlledTag.Color;
                 ControlledTag.FieldList = new List<Field>();
                 IsEditing = false;
             }

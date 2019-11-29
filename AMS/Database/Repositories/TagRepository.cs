@@ -98,7 +98,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
                         cmd.Parameters["@parent_id"].Value = entity.ParentID;
 
-                        querySuccess = (cmd.ExecuteNonQuery() > 0);
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
                         id = (ulong)cmd.LastInsertedId;
                     }
 
@@ -134,7 +134,6 @@ namespace AMS.Database.Repositories
             {
                 // Is child and parent_id changed
                 Tag newParent = GetById((ulong) entity.Changes["ParentID"]);
-                entity.Color = newParent.Color;
 
                 if (newParent.DepartmentID != entity.DepartmentID)
                 {
