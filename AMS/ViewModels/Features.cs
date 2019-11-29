@@ -12,6 +12,7 @@ using AMS.Controllers;
 using AMS.Views;
 using System.Collections.Generic;
 using AMS.Logging;
+using AMS.Controllers.Interfaces;
 
 namespace AMS.ViewModels
 {
@@ -148,6 +149,17 @@ namespace AMS.ViewModels
                     asset = new Asset();
 
                 return new AssetEditor(new AssetController(asset, _assetRepository), CreateTagHelper());
+            }
+
+            /// <summary>
+            /// Returns a new AssetEditor page
+            /// </summary>
+            /// <param name="asset"></param>
+            /// <returns></returns>
+            public static Page AssetEditor(IAssetController controller)
+            {
+                
+                return new AssetEditor(controller, CreateTagHelper());
             }
 
             /// <summary>

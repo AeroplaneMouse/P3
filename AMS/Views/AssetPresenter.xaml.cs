@@ -25,7 +25,7 @@ namespace AMS.Views
         public AssetPresenter(List<ITagable> tagList, IAssetController assetController, ICommentListController commentListController, ILogListController logListController)
         {
             InitializeComponent();
-            DataContext = new AssetPresenterViewModel(tagList, assetController, commentListController, logListController);
+            DataContext = new AssetPresenterViewModel(assetController, commentListController, logListController);
         }
     }
 }

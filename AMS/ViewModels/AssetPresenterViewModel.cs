@@ -19,24 +19,22 @@ namespace AMS.ViewModels
 
 
         public ObservableCollection<object> Tabs => _tabs;
-        public string Name { get; set; }
-        public string ID { get; set; }
+        public string Name => _assetController.ControlledAsset.Name;
+        public string ID => $" (id: { _assetController.ControlledAsset.ID })";
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand CancelCommand { get; set; }
         
 
 
-        public AssetPresenterViewModel(List<ITagable> tagList, IAssetController assetController, ICommentListController commentListController, ILogListController logListController)
+        public AssetPresenterViewModel(IAssetController assetController, ICommentListController commentListController, ILogListController logListController)
         {
-            Name = assetController.ControlledAsset.Name;
-            ID = $" (id: { assetController.ControlledAsset.ID })";
             _assetController = assetController;
 
             // Tabs
             _tabs = new ObservableCollection<object>();
-            _tabs.Add(new AssetDetailsViewModel(assetController.ControlledAsset, tagList));
-            _tabs.Add(new CommentViewModel(assetController.ControlledAsset, commentListController));
+            _tabs.Add(new AssetDetailsViewModel(_assetController));
+            _tabs.Add(new CommentViewModel(_assetController.ControlledAsset, commentListController));
             _tabs.Add(new LogListViewModel(logListController));
 
             EditCommand = new Base.RelayCommand(() => Edit(), () => Features.GetCurrentSession().IsAdmin());
@@ -48,6 +46,11 @@ namespace AMS.ViewModels
         {
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(ID));
+            OnPropertyChanged(nameof(Tabs));
+            (_tabs[0] as AssetDetailsViewModel).UpdateOnFocus();
+            (_tabs[1] as CommentViewModel).UpdateOnFocus();
+            (_tabs[2] as LogListViewModel).UpdateOnFocus();
+
             OnPropertyChanged(nameof(Tabs));
         }
 
@@ -66,7 +69,7 @@ namespace AMS.ViewModels
 
         private void Edit ()
         {
-            Features.Navigate.To(Features.Create.AssetEditor(_assetController.ControlledAsset));
+            Features.Navigate.To(Features.Create.AssetEditor(_assetController));
         }
 
         private void Cancel()
