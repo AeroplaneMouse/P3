@@ -265,16 +265,6 @@ namespace AMS.ViewModels
             TagSearchProcess();
         }
 
-        private void EditFieldConfirmed(object sender, PromptEventArgs e)
-        {
-            if (e is FieldEditPromptEventArgs args)
-            {
-                _assetController.RemoveField(args.OldField);
-                _assetController.AddField(args.NewField);
-                UpdateAll();
-            }
-        }
-
         public override void UpdateOnFocus()
         {
             OnPropertyChanged(nameof(NonHiddenFieldList));
@@ -424,6 +414,16 @@ namespace AMS.ViewModels
             }
 
             return true;
+        }
+
+        private void EditFieldConfirmed(object sender, PromptEventArgs e)
+        {
+            if (e is FieldEditPromptEventArgs args)
+            {
+                _assetController.RemoveField(args.OldField);
+                _assetController.AddField(args.NewField);
+                UpdateAll();
+            }
         }
 
         #endregion
