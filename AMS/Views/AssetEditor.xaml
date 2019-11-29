@@ -158,14 +158,22 @@
                                    Visibility="{Binding TagSuggestionsVisibility}"                    
                                    IsOpen="{Binding TagSuggestionIsOpen}"
                                    StaysOpen="False"
-                                   MaxHeight="100"
+                                   MaxHeight="200"
+                                   AllowsTransparency="True"
                                    Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
                                    Placement="Bottom">
 
                                 <ListBox x:Name="TagSuggestionList"    
                                          Visibility="{Binding TagSuggestionsVisibility}"    
                                          Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
-                                         ItemsSource="{ Binding TagSearchSuggestions }">
+                                         ItemsSource="{Binding TagSearchSuggestions}"
+                                         Opacity="0.9">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" FontSize="{StaticResource FontSizeSmall}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    
                                     <ListBox.InputBindings>
                                         <KeyBinding Key="Return" Command="{Binding AutoTagCommand}" CommandParameter="{Binding ElementName=TagSuggestionList, Path=SelectedItem}"/>
                                     </ListBox.InputBindings>
@@ -226,15 +234,15 @@
                                 Command="{Binding AddFieldCommand}"
                                 Padding="0 0 0 5"
                                 Width="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ActualHeight}" 
-                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                HorizontalContentAlignment="Center" 
+                                VerticalContentAlignment="Center"
                                 Content="+"/>
                     </StackPanel>
 
                     <!-- FieldList -->
                     <StackPanel>
                         <ItemsControl ItemsSource="{Binding NonHiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
-                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
-                        </ItemsControl>
+                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}"/>
                     </StackPanel>
 
                     <TextBlock Style="{StaticResource ParagraphStyle}"

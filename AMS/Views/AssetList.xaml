@@ -117,13 +117,22 @@
                                    IsOpen="{Binding TagSuggestionIsOpen}"
                                    StaysOpen="False"
                                    MaxHeight="100"
+                                   AllowsTransparency="True"
                                    Width="{Binding ElementName=StartElement, Path=ActualWidth}"
                                    Placement="Bottom">
 
                                 <ListBox x:Name="TagSuggestionList"    
                                          Visibility="{Binding TagSuggestionsVisibility}"    
                                          Width="{Binding ElementName=StartElement, Path=ActualWidth}"
-                                         ItemsSource="{ Binding TagSearchSuggestions }">
+                                         ItemsSource="{ Binding TagSearchSuggestions }"
+                                         Opacity="0.9">
+                                    
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" FontSize="{StaticResource FontSizeSmall}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    
                                     <ListBox.InputBindings>
                                         <KeyBinding Key="Return" Command="{Binding AutoTagCommand}" CommandParameter="{Binding ElementName=TagSuggestionList, Path=SelectedItem}"/>
                                     </ListBox.InputBindings>
