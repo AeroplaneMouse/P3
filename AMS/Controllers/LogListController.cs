@@ -61,12 +61,12 @@ namespace AMS.Controllers
             _exporter.Print(entries);
         }
 
-        public void UpdateEntries()
-        {
+        public void UpdateEntries()
+        {
             if (_asset == null)
                 Search("");
             else
-                EntryList = _logRepository.GetLogEntries(_asset.ID, typeof(Asset)).ToList();
+                EntryList = _logRepository.GetLogEntries(_asset.ID, typeof(Asset)).ToList();
         }
     }
 }

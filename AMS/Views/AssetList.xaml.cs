@@ -9,6 +9,7 @@ using System.DirectoryServices;
 using AMS.Models;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Navigation;
 using AMS.Controllers.Interfaces;
 using AMS.Helpers;
 
@@ -63,7 +64,10 @@ namespace AMS.Views
             if (sender == null) return;
 
             GridViewColumnHeader header = e.OriginalSource as GridViewColumnHeader;
-            string sortBy = header?.Tag.ToString();
+
+            if (header?.Tag == null) return;
+            
+            string sortBy = header.Tag.ToString();
             ListSortDirection sortDirection;
 
             if (header != _lastHeaderClicked)

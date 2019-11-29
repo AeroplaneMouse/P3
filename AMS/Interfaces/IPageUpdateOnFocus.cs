@@ -6,6 +6,6 @@ namespace AMS.Interfaces
 {
     public interface IPageUpdateOnFocus
     {
-        abstract void UpdateOnFocus();
+        void UpdateOnFocus();
     }
 }
