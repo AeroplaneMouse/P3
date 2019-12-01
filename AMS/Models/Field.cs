@@ -78,6 +78,7 @@ namespace AMS.Models
             this.Label = label;
             this.Content = content;
             Type = type;
+            this.IsCustom = isCustom;
             this.Required = required;
             this.Hash = CalculateMd5Hash();
             this.TagIDs = tagIDs ?? new List<ulong>();
