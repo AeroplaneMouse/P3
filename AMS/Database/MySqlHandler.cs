@@ -13,18 +13,16 @@ namespace AMS.Database
     {
         private readonly MySqlConnection _connection;
 
-        //private static MySqlConnection _con;
-        private FileConfigurationHandler _fileConfigurationHandler;
-        private static bool fileExists;
         public static event SqlConnectionEventHandler ConnectionFailed;
 
         public MySqlHandler()
         {
-            // "Server=192.38.49.9; database=ds303e19_dev; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5"
             _connection = new MySqlConnection(Session.GetDBKey());
-            
         }
 
+        /// <summary>
+        /// Opens a connection to the database.
+        /// </summary>
         public static bool Open(ref MySqlConnection con)
         {
             try
@@ -42,29 +40,19 @@ namespace AMS.Database
             }
 
             return false;
-            //_con = con;
-            //return await Task.Run(_open);
         }
 
-        //private static bool _open()
-        //{
-        //    try
-        //    {
-        //        _con.Open();
-        //        return true;
-        //    }
-        //    catch (MySqlException e)
-        //    {
-        //        ConnectionFailed?.Invoke();
-        //    }
-        //    return false;
-        //}
-
+        /// <summary>
+        /// Gets the current connection.
+        /// </summary>
         public MySqlConnection GetConnection()
         {
             return _connection;
         }
 
+        /// <summary>
+        /// Check if a connection to the database is available to use.
+        /// </summary>
         public bool IsAvailable()
         {
             var con = GetConnection();
@@ -77,42 +65,45 @@ namespace AMS.Database
             return false;
         }
 
+        /// <summary>
+        /// Gets the name of the current database or the database to be used after a connection is opened.
+        /// </summary>
         public string GetDatabaseName()
         {
             return _connection.Database;
         }
 
-        public bool RawQuery(string rawQuery, MySqlParameterCollection par = null)
-        {
-            var con = GetConnection();
-            var result = false;
+        //public bool RawQuery(string rawQuery, MySqlParameterCollection par = null)
+        //{
+        //    var con = GetConnection();
+        //    var result = false;
 
-            try
-            {
-                con.Open();
-                using (var cmd = new MySqlCommand(rawQuery, con))
-                {
-                    if (par != null)
-                    {
-                        foreach (var param in par)
-                        {
-                            cmd.Parameters.Add(param);
-                        }
-                    }
+        //    try
+        //    {
+        //        con.Open();
+        //        using (var cmd = new MySqlCommand(rawQuery, con))
+        //        {
+        //            if (par != null)
+        //            {
+        //                foreach (var param in par)
+        //                {
+        //                    cmd.Parameters.Add(param);
+        //                }
+        //            }
 
-                    result = cmd.ExecuteNonQuery() > 0;
-                }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
-            }
+        //            result = cmd.ExecuteNonQuery() > 0;
+        //        }
+        //    }
+        //    catch (MySqlException e)
+        //    {
+        //        Console.WriteLine(e);
+        //    }
+        //    finally
+        //    {
+        //        con.Close();
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
     }
 }
