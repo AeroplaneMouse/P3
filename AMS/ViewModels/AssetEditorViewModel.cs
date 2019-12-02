@@ -244,7 +244,7 @@ namespace AMS.ViewModels
 
                 if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
                 {
-                    _tagHelper.ApplyTag(tag);
+                    _tagHelper.AddTag(tag);
                     _assetController.AttachTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(false);
                     TagSearchQuery = "";
@@ -255,7 +255,7 @@ namespace AMS.ViewModels
                 {
                     // So we need to switch to a group of tags.
                     Tag taggedItem = (Tag)tag;
-                    _tagHelper.Parent(taggedItem);
+                    _tagHelper.SetParent(taggedItem);
                     CurrentGroup = taggedItem.Name;
                     CurrentGroupVisibility = Visibility.Visible;
                     TagSearchQuery = "";
@@ -296,7 +296,7 @@ namespace AMS.ViewModels
         {
             if (_tagHelper.IsParentSet())
             {
-                _tagHelper.Parent(null);
+                _tagHelper.SetParent(null);
                 CurrentGroup = "";
                 CurrentGroupVisibility = Visibility.Collapsed;
                 TagSearchQuery = "";
