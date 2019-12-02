@@ -380,6 +380,8 @@ namespace AMS.Database.Repositories
                     }
 
                     _query.GroupBy = "a.id";
+                    
+                    Console.WriteLine(_query.PrepareSelect());
 
                     using (var cmd = new MySqlCommand(_query.PrepareSelect(), con))
                     {

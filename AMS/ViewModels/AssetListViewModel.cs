@@ -64,8 +64,7 @@ namespace AMS.ViewModels
         public ITagable TagParent { get; set; }
         public bool inTagMode { get; set; } = false;
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
-
-
+        
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand PrintCommand { get; set; }
@@ -107,9 +106,7 @@ namespace AMS.ViewModels
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
             ViewWithParameterCommand = new RelayCommand<object>(ViewAsset);
-            RemoveTagCommand = new RelayCommand<object>((parameter) =>
-
-            {
+            RemoveTagCommand = new RelayCommand<object>((parameter) => {
                 ITagable tag = parameter as ITagable;
                 _tagHelper.RemoveTag(tag);
                 AppliedTags = _tagHelper.GetAppliedTags(true);
@@ -120,8 +117,7 @@ namespace AMS.ViewModels
             ClearInputCommand = new RelayCommand(ClearInput);
             CheckAllChangedCommand = new RelayCommand<object>((parameter) => CheckAllChanged(parameter as ListView));
         }
-
-
+        
         #region Methods
 
         public override void UpdateOnFocus()
@@ -177,7 +173,6 @@ namespace AMS.ViewModels
                 EditAsset(SelectedItems.First());
                 OnPropertyChanged(nameof(Items));
             }
-                
             else
                 Features.AddNotification(new Notification("Please select only one asset.", Notification.ERROR), 3500);
         }
@@ -190,7 +185,6 @@ namespace AMS.ViewModels
                 foreach (Asset asset in Items)
                     SelectedItems.Add(asset);
             }
-
             else if (newValue && SelectedItems.Count < Items.Count)
             {
                 // Some selected. Remove selectionsw.
@@ -200,12 +194,10 @@ namespace AMS.ViewModels
 
                 removeSelection.ForEach(a => SelectedItems.Remove(a));
             }
-
             else if (newValue && SelectedItems.Count == Items.Count)
             {
                 //TODO: All selected. Remove selections
             }
-
             else
             {
                 //TODO Hmm.. Error, unexspected situation.
@@ -220,7 +212,6 @@ namespace AMS.ViewModels
             if (inTagMode)
             {
                 if (SearchQuery == "" && _tagHelper.IsParentSet())
-
                 {
                     _tagHelper.AddTag(_tagHelper.GetParent());
                     _tagHelper.SetParent(null);
@@ -230,7 +221,6 @@ namespace AMS.ViewModels
 
                 AutoTag();
             }
-
             else
             {
                 if (SearchQuery == null)
@@ -263,7 +253,6 @@ namespace AMS.ViewModels
             if (tag != null)
             {
                 if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
-
                 {
                     _tagHelper.AddTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(true);
@@ -294,7 +283,6 @@ namespace AMS.ViewModels
                 SearchQuery = "";
                 TagSearchProcess();
             }
-
             else
             {
                 LeavingTagMode();
