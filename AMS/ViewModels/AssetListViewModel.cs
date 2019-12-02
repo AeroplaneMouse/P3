@@ -20,7 +20,9 @@ namespace AMS.ViewModels
     {
         private IAssetListController _listController;
         private string _searchQuery = String.Empty;
-        private TagHelper _tagHelper;        private bool _isStrict = true;
+        private TagHelper _tagHelper;
+        private bool _isStrict = true;
+        private bool _searchInFields = false;
         private int _tabIndex = 0;
 
         public ObservableCollection<Asset> Items => new ObservableCollection<Asset>(_listController.AssetList);
@@ -32,7 +34,19 @@ namespace AMS.ViewModels
                 ApplyTagOrEnterParent();
             }
         }
-        public bool CheckAll { get; set; }        public string SearchQuery
+
+        public bool SearchInFields
+        {
+            get => _searchInFields;
+            set
+            {
+                _searchInFields = value;
+                RefreshList();
+            }
+        }
+
+        public bool CheckAll { get; set; }
+        public string SearchQuery
         {
             get => _searchQuery;
             set
@@ -135,12 +149,15 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(SearchQuery));
             OnPropertyChanged(nameof(AppliedTags));
             RefreshList();
-        }
+        }
+
         /// <summary>
         /// Checks or unchecks all checkboxes in the given list, based on the current status
         /// </summary>
         /// <param name="list"></param>
-        private void CheckAllChanged(ListView list)        {            if (SelectedItems.Count == 0)
+        private void CheckAllChanged(ListView list)
+        {
+            if (SelectedItems.Count == 0)
             {
                 // None selected. Select all.
                 CheckAll = true;
@@ -152,7 +169,8 @@ namespace AMS.ViewModels
                 CheckAll = false;
                 list.UnselectAll();
             }
-        }
+        }
+
         /// <summary>
         /// Focuses the suggestion list of the seach field
         /// </summary>
@@ -236,7 +254,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void RefreshList()
         {
-            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict);
+            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict, _searchInFields);
             OnPropertyChanged(nameof(Items));
         }
 
@@ -314,7 +332,8 @@ namespace AMS.ViewModels
                 CurrentGroup = "#";
                 SearchQuery = "";
                 UpdateTagSuggestions();
-            }
+            }
+
             else
             {
                 LeaveTagMode();
@@ -430,7 +449,8 @@ namespace AMS.ViewModels
                         Features.AddNotification(
                             new Notification($"" +
                             $"{ ((items.Count == 1) ? items[0].Name : (items.Count + " assets")) } " +
-                            $"{ (items.Count > 1 ? "have" : "has") } been removed from the system",
+                            $"{ (items.Count > 1 ? "have" : "has") } been removed from the system",
+
                             Notification.INFO), 3000);
                         ApplyTagOrEnterParent();
                         OnPropertyChanged(nameof(Items));
