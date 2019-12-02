@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
 
@@ -6,21 +7,19 @@ namespace AMS.ViewModels
 {
     public class HomeViewModel : Base.BaseViewModel
     {
-        public ulong NumberOfUsers { get; set; }
-        public ulong NumberOfAssets { get; set; }
-        public ulong NumberOfTags { get; set; }
-        public ulong NumberOfDepartments { get; set; }
+        public ulong NumberOfUsers => _homeController.NumberOfUsers;
+        public ulong NumberOfAssets => _homeController.NumberOfAssets;
+        public ulong NumberOfTags => _homeController.NumberOfTags;
+        public ulong NumberOfDepartments => _homeController.NumberOfDepartments;
+
+        private IHomeController _homeController { get; set; }
 
         /// <summary>
         /// Default contructor
         /// </summary>
-        public HomeViewModel(IUserRepository userRepository, IAssetRepository assetRepository, ITagRepository tagRepository, IDepartmentRepository departmentRepository)
+        public HomeViewModel(IHomeController controller)
         {
-            // Get the number of stored assets, tags and departments
-            NumberOfUsers = (ulong)userRepository.GetAll().Count(p => p.IsEnabled);
-            NumberOfAssets = assetRepository.GetCount();
-            NumberOfTags = tagRepository.GetCount();
-            NumberOfDepartments = departmentRepository.GetCount();
+            _homeController = controller;
 
             // Notify view
             UpdateOnFocus();

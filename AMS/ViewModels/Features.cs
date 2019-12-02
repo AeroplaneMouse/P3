@@ -177,7 +177,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page Home()
             {
-                return new Home(_userRepository, _assetRepository, _tagRepository, _departmentRepository);
+                return new Home(new HomeController(_userRepository, _assetRepository, _tagRepository, _departmentRepository));
             }
 
             public static Page ShortcutsList()
