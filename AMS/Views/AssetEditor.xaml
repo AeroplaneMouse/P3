@@ -43,6 +43,10 @@
                     Margin="10, 0, 0, 0"
                     Content="Save copy" 
                     ToolTip="Save a copy with the defined attributes"/>
+            <Button Style="{StaticResource RegularRemoveButton}"
+                    Command="{Binding RemoveCommand}"
+                    Margin="10 0 0 0"
+                    Content="Remove" />
             <Button Style="{StaticResource RegularCancelButton}"
                     Command="{Binding CancelCommand}"
                     Margin="10 0 0 0"

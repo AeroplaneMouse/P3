@@ -14,7 +14,6 @@ namespace AMS.Controllers
     {
         private ITagRepository _tagRepository { get; set; }
         private IDepartmentRepository _departmentRepository { get; set; }
-        private ulong _parentID = 0;
 
         public Tag ControlledTag { get; set; }
         public bool IsEditing { get; set; }
@@ -23,18 +22,7 @@ namespace AMS.Controllers
         public ulong Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
-        public ulong ParentID {
-            get => _parentID;
-            set{
-                _parentID = value;
-                if(_parentID != 0)
-                {
-                    Console.WriteLine(value.ToString());
-                    Console.WriteLine(_tagRepository.GetById(value)?.ToString());
-                    //DepartmentID = _tagRepository.GetById(value).DepartmentID;
-                }
-            }
-        }
+        public ulong ParentID { get; set; }
         public ulong DepartmentID { get; set; }
 
 
@@ -95,8 +83,7 @@ namespace AMS.Controllers
                 Name = tag.Name;
                 Color = tag.Color;
                 ParentID = tag.ParentID;
-                DepartmentID = tag.ParentID;
-
+                DepartmentID = tag.DepartmentID;
 
                 NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
                 HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();

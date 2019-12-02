@@ -41,6 +41,11 @@
                     Content="Save" />
 
             <Button Style="{StaticResource RegularCancelButton}"
+                    Command="{Binding RemoveCommand}"
+                    Margin="10 0 0 0"
+                    Content="Remove tag" />
+
+            <Button Style="{StaticResource RegularCancelButton}"
                     Command="{Binding CancelCommand}"
                     Margin="10 0 0 0"
                     Content="Cancel" />
