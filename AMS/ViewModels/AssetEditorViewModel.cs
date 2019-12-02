@@ -418,8 +418,10 @@ namespace AMS.ViewModels
         {
             if (e is FieldEditPromptEventArgs args)
             {
-                _assetController.RemoveField(args.OldField);
-                _assetController.AddField(args.NewField);
+                args.OldField.Label = args.NewField.Label;
+                args.OldField.Required = args.NewField.Required;
+                args.OldField.Type = args.NewField.Type;
+                args.OldField.Content = args.NewField.Content;
                 UpdateAll();
             }
         }
