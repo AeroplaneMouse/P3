@@ -222,21 +222,7 @@ namespace AMS.Database.Repositories
             return comments;
         }
 
-        public Comment DataMapper(MySqlDataReader reader)
-        {
-            ulong rowId = reader.GetUInt64("id");
-            ulong rowAssetId = reader.GetUInt64("asset_id");
-            String rowUsername = reader.GetString("username");
-            String rowContent = reader.GetString("content");
-            DateTime rowCreatedAt = reader.GetDateTime("created_at");
-            DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
-
-            return (Comment)Activator.CreateInstance(typeof(Comment), 
-                BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { rowId, rowUsername, rowContent, rowAssetId, rowCreatedAt, rowUpdatedAt }, null, null);
-        }
-
-        public List<Comment> GetAll()
+        public List<Comment> GetAll(bool includeDeleted = false)
         {
             var con = new MySqlHandler().GetConnection();
             List<Comment> comments = new List<Comment>();
@@ -247,7 +233,7 @@ namespace AMS.Database.Repositories
                 // Sending sql query
                 try
                 {
-                    string query = "SELECT * FROM comments";
+                    string query = "SELECT * FROM comments " + (!includeDeleted ? "WHERE deleted_at IS NULL" : "");
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -272,6 +258,20 @@ namespace AMS.Database.Repositories
             }
 
             return comments;
+        }
+
+        public Comment DataMapper(MySqlDataReader reader)
+        {
+            ulong rowId = reader.GetUInt64("id");
+            ulong rowAssetId = reader.GetUInt64("asset_id");
+            String rowUsername = reader.GetString("username");
+            String rowContent = reader.GetString("content");
+            DateTime rowCreatedAt = reader.GetDateTime("created_at");
+            DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
+
+            return (Comment)Activator.CreateInstance(typeof(Comment),
+                BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new object[] { rowId, rowUsername, rowContent, rowAssetId, rowCreatedAt, rowUpdatedAt }, null, null);
         }
     }
 }

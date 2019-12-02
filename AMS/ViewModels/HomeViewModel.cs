@@ -21,6 +21,7 @@ namespace AMS.ViewModels
             get => _commentListController.CommentList.Where(p => new TimeSpan(DateTime.Now.Ticks - p.CreatedAt.Ticks).TotalHours < 96).ToList();
         }
 
+
         private IHomeController _homeController { get; set; }
         private ICommentListController _commentListController { get; set; }
 
@@ -48,6 +49,8 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(NumberOfAssets));
             OnPropertyChanged(nameof(NumberOfTags));
             OnPropertyChanged(nameof(NumberOfDepartments));
+
+            _commentListController.FetchComments();
             OnPropertyChanged(nameof(CommentList));
         }
 
