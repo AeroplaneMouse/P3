@@ -47,6 +47,11 @@ namespace AMS.Controllers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// As the taglist only contains partial information on a tag, this function returns the complete tag.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         public Tag getTag(Tag tag)
         {
             return _rep.GetById(tag.ID);
