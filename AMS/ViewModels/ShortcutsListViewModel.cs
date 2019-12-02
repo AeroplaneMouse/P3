@@ -18,6 +18,7 @@ namespace AMS.ViewModels
             ShortcutsList["General"].Add("Alt + 3", "Tags");
             ShortcutsList["General"].Add("Alt + 4", "Users");
             ShortcutsList["General"].Add("Alt + 5", "Log");
+            ShortcutsList["General"].Add("Ctrl + Tab", "Go to next element");
 
             ShortcutsList.Add("Overview", new Dictionary<string, string>());
             ShortcutsList["Overview"].Add("Delete / Ctrl + D ", "Delete item");

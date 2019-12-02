@@ -1,28 +1,82 @@
-﻿using AMS.Authentication;
-using AMS.ConfigurationHandler;
-using System;
+﻿using System;
+using AMS.Authentication;
 using System.Windows.Input;
+using AMS.ConfigurationHandler;
 
 namespace AMS.ViewModels
 {
     class SettingsEditorViewModel : Base.BaseViewModel
     {
         private string _oldPassword;
+        private object _caller;
+
         public ICommand SaveCommand { get; set; }
         public ICommand CancelCommand { get; set; }
+        public ICommand LoadFromFileCommand { get; set; }
 
-        public string IP { get; set; }
-        public string Username { get; set; }
+        public string IP { get; set; } = String.Empty;
+        public string Username { get; set; } = String.Empty;
         public string Password { get; set; } = String.Empty;
-        public string Database { get; set; }
-        public string Charset { get; set; }
-        public string Timeout { get; set; }
-        public bool SavePassword { get; set; } = false;
+        public string Database { get; set; } = String.Empty;
+        public string Charset { get; set; } = "utf8";
+        public string Timeout { get; set; } = "5";
 
-        public SettingsEditorViewModel()
+        public SettingsEditorViewModel(object caller)
+        {
+            _caller = caller;
+        }
+
+        /// <summary>
+        /// Aborts the new configuration settings and returns to the previous page
+        /// /// </summary>
+        private void Cancel()
+        {
+            // Return from splashpage if called from it.
+            if (_caller is SplashViewModel)
+                Features.Main.SplashPage = Features.Create.Splash();
+            else
+                Features.Navigate.Back();
+        }
+
+        /// <summary>
+        /// Save the current settings.
+        /// </summary>
+        private void Save()
+        {
+            // Use the old password
+            if (String.IsNullOrEmpty(Password))
+                Password = _oldPassword;
+
+            string conString = $"Server={ IP }; database={ Database }; UID={ Username }; password={ Password }; Charset={ Charset }; Connect Timeout={ Timeout }";
+            new FileConfigurationHandler(null).SetConfigValue(conString);
+            Features.AddNotification(new Models.Notification("Settings saved", Models.Notification.APPROVE));
+            Features.Main.Reload();
+        }
+
+        /// <summary>
+        /// Load the settings when the page gets focus.
+        /// </summary>
+        public override void UpdateOnFocus()
         {
             string conString = Session.GetDBKey();
-            string[] elements = conString.Split(';', '=');
+
+            // If a current configuration exists, load it to the view.
+            if (!String.IsNullOrEmpty(conString))
+                ExtractSettingsFromString(conString);
+
+            SaveCommand = new Base.RelayCommand(Save);
+            CancelCommand = new Base.RelayCommand(Cancel);
+            LoadFromFileCommand = new Base.RelayCommand(LoadSettings);
+        }
+
+        /// <summary>
+        /// Extracts the configuration settings from the configuration string 
+        /// and saves them to properties to be displayed on the view.
+        /// </summary>
+        /// <param name="connectionString"></param>
+        private void ExtractSettingsFromString(string connectionString)
+        {
+            string[] elements = connectionString.Split(';', '=');
 
             IP = elements[1];
             Username = elements[5];
@@ -30,31 +84,35 @@ namespace AMS.ViewModels
             Database = elements[3];
             Charset = elements[9];
             Timeout = elements[11];
-
-            SaveCommand = new Base.RelayCommand(Save);
-            CancelCommand = new Base.RelayCommand(Cancel);
         }
 
-        private void Cancel()
+        /// <summary>
+        /// Reads the configuration settings from a user seleted file, then loads these settings into the view to be displayed.
+        /// </summary>
+        private void LoadSettings()
         {
-            Features.Navigate.Back();
+            string path = GetFilePath();
+            if (!String.IsNullOrEmpty(path))
+            {
+                // Load settings from file and save them to local config file
+                FileConfigurationHandler configurationhandler = new FileConfigurationHandler(Features.GetCurrentSession());
+                string conString  = configurationhandler.LoadConfigValueFromExternalFile(path);
+                ExtractSettingsFromString(conString);
+            }
         }
 
-        private void Save()
+        /// <summary>
+        /// Opens a dialog for the user to select a file.
+        /// </summary>
+        /// <returns>The selected filepath</returns>
+        public string GetFilePath()
         {
-            // Use the old password
-            if (!SavePassword)
-                Password = _oldPassword;
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            Nullable<bool> result = dialog.ShowDialog();
+            if (result == false)
+                return String.Empty;
 
-            string conString = $"Server={ IP }; database={ Database }; UID={ Username }; password={ Password }; Charset={ Charset }; Connect Timeout={ Timeout }";
-            new FileConfigurationHandler(null).SetConfigValue(conString);
-            Features.AddNotification(new Models.Notification("Settings saved", Models.Notification.APPROVE));
-            Features.Navigate.Back();
-        }
-
-        public override void UpdateOnFocus()
-        {
-            throw new NotImplementedException();
+            return dialog.FileName;
         }
     }
 }

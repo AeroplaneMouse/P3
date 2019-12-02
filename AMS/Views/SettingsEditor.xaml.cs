@@ -7,10 +7,10 @@ namespace AMS.Views
     /// </summary>
     public partial class SettingsEditor : Page
     {
-        public SettingsEditor()
+        public SettingsEditor(object caller)
         {
             InitializeComponent();
-            DataContext = new ViewModels.SettingsEditorViewModel();
+            DataContext = new ViewModels.SettingsEditorViewModel(caller);
         }
     }
 }

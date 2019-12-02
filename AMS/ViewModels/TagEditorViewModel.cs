@@ -31,12 +31,6 @@ namespace AMS.ViewModels
         public ObservableCollection<Field> HiddenFieldList =>
             new ObservableCollection<Field>(_controller.HiddenFieldList);
 
-        public Tag _tag
-        {
-            get => _controller.ControlledTag;
-            set => _controller.ControlledTag = value;
-        }
-
         public string Name
         {
             get => _controller.Name;
@@ -167,8 +161,6 @@ namespace AMS.ViewModels
                 _selectedParentTagIndex = i;
             
             OnPropertyChanged(nameof(Color));
-            UpdateAll();
-
 
             Department currentDepartment;
 
@@ -185,6 +177,7 @@ namespace AMS.ViewModels
                 currentDepartment = Features.Main.CurrentDepartment;
             }
 
+            UpdateAll();
             // Setting the selected department
             int index = 0;
             foreach (Department d in _controller.DepartmentList)
@@ -238,8 +231,8 @@ namespace AMS.ViewModels
         /// </summary>
         private void SaveTag()
         {
-            _controller.ControlledTag.ParentID = ParentTagList[SelectedParentTagIndex].ID;
-            _controller.ControlledTag.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
+            _controller.ParentID = ParentTagList[SelectedParentTagIndex].ID;
+            _controller.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
             if (VerifyTagAndFields())
             {
                 if (_controller.IsEditing)
@@ -253,7 +246,6 @@ namespace AMS.ViewModels
 
                 Features.Navigate.Back();
             }
-            
         }
 
         private void AddField()
@@ -323,7 +315,7 @@ namespace AMS.ViewModels
                 }
             }
         }
-        
+
         /// <summary>
         /// Verifies tag and its fields.
         /// </summary>
@@ -341,16 +333,9 @@ namespace AMS.ViewModels
                     Notification.WARNING));
                 return false;
             }
-            
+
             foreach (var field in completeList)
             {
-                if (field.Required && string.IsNullOrEmpty(field.Content))
-                {
-                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
-                        Notification.WARNING));
-                    return false;
-                }
-
                 if (field.Type == Field.FieldType.NumberField)
                 {
                     bool check = field.Content.All(char.IsDigit);
@@ -371,8 +356,10 @@ namespace AMS.ViewModels
         {
             if (e is FieldEditPromptEventArgs args)
             {
-                _controller.RemoveField(args.OldField);
-                _controller.AddField(args.NewField);
+                args.OldField.Label = args.NewField.Label;
+                args.OldField.Required = args.NewField.Required;
+                args.OldField.Type = args.NewField.Type;
+                args.OldField.Content = args.NewField.Content;
                 UpdateAll();
             }
         }

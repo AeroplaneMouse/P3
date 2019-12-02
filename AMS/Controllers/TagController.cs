@@ -79,14 +79,15 @@ namespace AMS.Controllers
                 IsEditing = true;
                 ControlledTag.DeSerializeFields();
 
-                Id = tag.ID;
-                Name = tag.Name;
-                Color = tag.Color;
-                ParentID = tag.ParentID;
-                DepartmentID = tag.DepartmentID;
+                Id = ControlledTag.ID;
+                Name = ControlledTag.Name;
+                Color = ControlledTag.Color;
+                ParentID = ControlledTag.ParentID;
+                DepartmentID = ControlledTag.DepartmentID;
 
-                NonHiddenFieldList = tag.FieldList.Where(f => f.IsHidden == false).ToList();
-                HiddenFieldList = tag.FieldList.Where(f => f.IsHidden == true).ToList();
+
+                NonHiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
+                HiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == true).ToList();
             }
             else
             {
