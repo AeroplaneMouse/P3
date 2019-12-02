@@ -15,6 +15,7 @@ namespace AMS.ViewModels
         private IUserRepository _userRepository;
         private const int _delay = 0;
         private const int _reconnectWaitingTime = 5;
+        private bool _configuring = false;
 
         public string LoadingText { get; set; }
         public string CurrentActionText { get; set; }
@@ -28,12 +29,15 @@ namespace AMS.ViewModels
             _userRepository = userRepository;
 
             // Initializing commands
-            LoadConfigCommand = new Base.RelayCommand(() => LoadConfig());
+            LoadConfigCommand = new Base.RelayCommand(LoadConfig);
 
             Setup();
         }
 
-        public override void UpdateOnFocus() { }
+        public override void UpdateOnFocus()
+        {
+            
+        }
 
         /// <summary>
         /// Establishing a connection to the database and authorizing the user. This function runs asynchronous
@@ -42,12 +46,28 @@ namespace AMS.ViewModels
         private async void Setup()
         {
             //UpdateStatusText(new StatusUpdateEventArgs("Loading...", "Initializing background worker..."));
+            //try
+            //{
+                if (String.IsNullOrEmpty(Session.GetDBKey()))
+                {
+                    LoadingText = "No configuration";
+                    CurrentActionText = "Create a configuration through the button below";
+                    return;
+                }
+                else
+                    Console.WriteLine("Config exists.");
+            //}
+            //catch(Exception e)
+            //{
+            //    Console.WriteLine($"Error with config: {Environment.NewLine}{e.Message}");
+            //    return;
+            //}
+
             bool reconnectRequired;
             do
             {
                 reconnectRequired = await Task.Run(Authenticate);
-            } while (reconnectRequired);
-
+            } while (reconnectRequired && !_configuring);
         }
 
         private bool Authenticate()
@@ -92,7 +112,7 @@ namespace AMS.ViewModels
             else
             {
                 LoadingText = "ERROR!";
-                CurrentActionText = "Configuration file not loaded for database DO OPEN CONFIG THINGY";
+                CurrentActionText = "Unable to connect to the database.";
                 Reconnect();
 
                 // Reconnect is required
@@ -113,7 +133,8 @@ namespace AMS.ViewModels
 
         private void LoadConfig()
         {
-            throw new NotImplementedException();
+            _configuring = true;
+            _main.SplashPage = Features.Create.SettingsEditor();
         }
     }
 }

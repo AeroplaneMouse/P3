@@ -128,9 +128,6 @@ namespace AMS.ViewModels
         {
             InitializeWindowsCommands();
             
-            //FileConfigurationHandler _configurationhandler = new FileConfigurationHandler(CurrentSession);
-            //_configurationhandler.SetConfigValue("Server=192.38.49.9; database=ds303e19_utf16; UID=ds303e19; password=Cisptf8CuT4hLj4T; Charset=utf8; Connect Timeout=5");
-            
             // Setting private fields
             _window = window;
             _outerMarginSize = 10;
@@ -238,7 +235,6 @@ namespace AMS.ViewModels
         private void InitializeCommands()
         {
             RemoveNotificationCommand = new Base.RelayCommand<object>((parameter) => RemoveNotification(parameter as Notification));
-            ReloadCommand = new Base.RelayCommand(Reload);
             ShowShortcutsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.ShortcutsList()));
 
             // Change page commands
@@ -257,7 +253,28 @@ namespace AMS.ViewModels
             // Settings command
             if (CurrentSession.IsAdmin())
                 ChangeSettingsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.SettingsEditor()));
-            //ClearSettingsCommand = new Base.RelayCommand();
+        }
+
+        private void InitializeWindowsCommands()
+        {
+            // Window commands
+            MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
+            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
+            CloseCommand = new Base.RelayCommand(() => _window.Close());
+            SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, _window.PointToScreen(
+                new Point(
+                    OuterMarginSize,
+                    OuterMarginSize + ResizeBorder + TitleHeight
+                )
+            )));
+            ReloadCommand = new Base.RelayCommand(Reload);
+            ClearSettingsCommand = new Base.RelayCommand(ClearSettings);
+        }
+
+        private void ClearSettings()
+        {
+            new FileConfigurationHandler(CurrentSession).Clear();
+            Reload();
         }
 
         private void GoToPage(int pageNumber)
@@ -281,20 +298,6 @@ namespace AMS.ViewModels
                     Features.Navigate.To(Features.Create.LogList());
                     break;
             }
-        }
-
-        private void InitializeWindowsCommands()
-        {
-            // Window commands
-            MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
-            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
-            CloseCommand = new Base.RelayCommand(() => _window.Close());
-            SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, _window.PointToScreen(
-                new Point(
-                    OuterMarginSize,
-                    OuterMarginSize + ResizeBorder + TitleHeight
-                )
-            )));
         }
 
         /// <summary>
@@ -323,7 +326,7 @@ namespace AMS.ViewModels
         /// <summary>
         /// Resets saved content, and reconnects to the database.
         /// </summary>
-        private void Reload()
+        public void Reload()
         {
             // Clearing memory
             MySqlHandler.ConnectionFailed -= ConnectionFailed;

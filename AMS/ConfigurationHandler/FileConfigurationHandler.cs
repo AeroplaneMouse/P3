@@ -52,15 +52,6 @@ namespace AMS.ConfigurationHandler
         public void Clear()
         {
             SetConfigValue("");
-            //if(File.Exists(Path))
-            //{
-            //    try
-            //    {
-            //        File.Delete(Path);
-            //    }
-            //    FileStream file = File.Create(path);
-            //    file.Close();
-            //}
         }
     }
 }

@@ -11,28 +11,16 @@ namespace AMS.ViewModels
         public ICommand SaveCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
-        public string IP { get; set; }
-        public string Username { get; set; }
+        public string IP { get; set; } = String.Empty;
+        public string Username { get; set; } = String.Empty;
         public string Password { get; set; } = String.Empty;
-        public string Database { get; set; }
-        public string Charset { get; set; }
-        public string Timeout { get; set; }
-        public bool SavePassword { get; set; } = false;
+        public string Database { get; set; } = String.Empty;
+        public string Charset { get; set; } = String.Empty;
+        public string Timeout { get; set; } = String.Empty;
 
         public SettingsEditorViewModel()
         {
-            string conString = Session.GetDBKey();
-            string[] elements = conString.Split(';', '=');
-
-            IP = elements[1];
-            Username = elements[5];
-            _oldPassword = elements[7];
-            Database = elements[3];
-            Charset = elements[9];
-            Timeout = elements[11];
-
-            SaveCommand = new Base.RelayCommand(Save);
-            CancelCommand = new Base.RelayCommand(Cancel);
+            UpdateOnFocus();
         }
 
         private void Cancel()
@@ -43,18 +31,34 @@ namespace AMS.ViewModels
         private void Save()
         {
             // Use the old password
-            if (!SavePassword)
+            if (String.IsNullOrEmpty(Password))
                 Password = _oldPassword;
 
             string conString = $"Server={ IP }; database={ Database }; UID={ Username }; password={ Password }; Charset={ Charset }; Connect Timeout={ Timeout }";
             new FileConfigurationHandler(null).SetConfigValue(conString);
             Features.AddNotification(new Models.Notification("Settings saved", Models.Notification.APPROVE));
-            Features.Navigate.Back();
+            Features.Main.Reload();
         }
 
         public override void UpdateOnFocus()
         {
-            throw new NotImplementedException();
+            string conString = Session.GetDBKey();
+
+            // If a current configuration exists, load it to the view.
+            if (!String.IsNullOrEmpty(conString))
+            {
+                string[] elements = conString.Split(';', '=');
+
+                IP = elements[1];
+                Username = elements[5];
+                _oldPassword = elements[7];
+                Database = elements[3];
+                Charset = elements[9];
+                Timeout = elements[11];
+            }
+
+            SaveCommand = new Base.RelayCommand(Save);
+            CancelCommand = new Base.RelayCommand(Cancel);
         }
     }
 }
