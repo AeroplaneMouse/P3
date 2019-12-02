@@ -147,11 +147,21 @@
                             Command="{Binding SearchCommand}"
                             Content="Search" />
                     
-                    <!-- Strict search -->
-                    <StackPanel Orientation="Horizontal" ToolTip="Enables strict searching. Assets MUST have all the applied tags.">
-                        <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsStrict, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Style="{StaticResource ParagraphStyle}" Text="Strict" VerticalAlignment="Center" Margin="2 0 0 0"/>
+                    <StackPanel>
+                        <!-- Strict search -->
+                        <StackPanel Orientation="Horizontal" ToolTip="Enables strict searching. Assets MUST have all the applied tags.">
+                            <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsStrict, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Style="{StaticResource ParagraphStyle}" Text="Strict" Margin="2 0 0 0"/>
+                        </StackPanel>
+                        
+                        <!-- Field search -->
+                        <StackPanel Orientation="Horizontal" ToolTip="Enables the ability to also search on the content of field.\nWarning, this might increase search time!">
+                            <CheckBox VerticalAlignment="Center" IsChecked="{Binding SearchInFields, UpdateSourceTrigger=PropertyChanged}"/>
+                            <TextBlock Style="{StaticResource ParagraphStyle}" Text="Search in fields" Margin="2 0 0 0"/>
+                        </StackPanel>
                     </StackPanel>
+                    
+                    
                 </StackPanel>
 
                 <!-- Function buttons -->
