@@ -80,17 +80,34 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
                         cmd.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;
 
-                        if (entity.DepartmentID == 0)
+                        if (entity.ParentID == 0)
                         {
-                            cmd.Parameters.Add("@department_id", MySqlDbType.String);
-                            cmd.Parameters["@department_id"].Value = null;
+                            if (entity.DepartmentID == 0)
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.String);
+                                cmd.Parameters["@department_id"].Value = null;
+                            }
+                            else
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                                cmd.Parameters["@department_id"].Value = entity.DepartmentID;
+                            }
                         }
                         else
                         {
-                            cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
-                            cmd.Parameters["@department_id"].Value = entity.DepartmentID;
+                            ulong parentDepartmentID = GetById(entity.ParentID).DepartmentID;
+                            if (parentDepartmentID == 0)
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.String);
+                                cmd.Parameters["@department_id"].Value = null;
+                            }
+                            else
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                                cmd.Parameters["@department_id"].Value = parentDepartmentID;
+                            }
                         }
-                        
+
                         cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
                         cmd.Parameters["@parent_id"].Value = entity.ParentID;
 
@@ -153,15 +170,32 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@color", MySqlDbType.String);
                         cmd.Parameters["@color"].Value = entity.Color;
 
-                        if (entity.DepartmentID == 0)
+                        if (entity.ParentID == 0)
                         {
-                            cmd.Parameters.Add("@department_id", MySqlDbType.String);
-                            cmd.Parameters["@department_id"].Value = null;
+                            if (entity.DepartmentID == 0)
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.String);
+                                cmd.Parameters["@department_id"].Value = null;
+                            }
+                            else
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                                cmd.Parameters["@department_id"].Value = entity.DepartmentID;
+                            }
                         }
                         else
                         {
-                            cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
-                            cmd.Parameters["@department_id"].Value = entity.DepartmentID;
+                            ulong parentDepartmentID = GetById(entity.ParentID).DepartmentID;
+                            if(parentDepartmentID == 0)
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.String);
+                                cmd.Parameters["@department_id"].Value = null;
+                            }
+                            else
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                                cmd.Parameters["@department_id"].Value = parentDepartmentID;
+                            }
                         }
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);

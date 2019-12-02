@@ -25,22 +25,23 @@
         <!-- Header -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="224*" />
+            <RowDefinition Height="171*"/>
         </Grid.RowDefinitions>
         <TextBlock Style="{StaticResource TitleStyle}"
                    VerticalAlignment="Center"
-                   Margin="10 0 0 0"
+                   Margin="10,0,0,0"
                    Text="{Binding PageTitle}" />
 
         <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Right"
-                    Margin="10">
+                    HorizontalAlignment="Left"
+                    Margin="470,10,0,10">
 
             <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding SaveTagCommand}"
                     Content="Save" />
 
-            <Button Style="{StaticResource RegularCancelButton}"
+            <Button Style="{StaticResource RegularRemoveButton}"
                     Command="{Binding RemoveCommand}"
                     Margin="10 0 0 0"
                     Content="Remove tag" />
@@ -52,11 +53,11 @@
         </StackPanel>
 
         <Rectangle Style="{StaticResource HorizontalSeparator}"
-                   VerticalAlignment="Bottom" />
+                   VerticalAlignment="Top" Margin="10,54,10,0" />
 
         <!-- Content of the page -->
         <ScrollViewer Grid.Row="1"
-                      Margin="10">
+                      Margin="10,10,10,10" Grid.RowSpan="2">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250" />
@@ -81,7 +82,7 @@
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Parent tag ID"/>
                     <ComboBox ItemsSource="{Binding ParentTagList}" 
-                              SelectedIndex="{Binding SelectedParentTagIndex}"
+                              SelectedIndex="{Binding SelectedParentTagIndex, UpdateSourceTrigger=PropertyChanged}"
                               Margin="0 0 0 10"
                               IsEnabled="{Binding ParentSelectionEnabled}">
                         <ComboBox.ItemTemplate>
@@ -125,7 +126,7 @@
                         <TextBlock Style="{StaticResource HeaderStyle}"
                                    Margin="0 0 10 0"
                                    Text="Fields"/>
-                        
+
                         <Button Style="{StaticResource RegularButton}"
                                 Command="{Binding AddFieldCommand}"
                                 Padding="0 0 0 5"

@@ -134,11 +134,11 @@ namespace AMS.Controllers
             if (ControlledTag.ParentID != ParentID)
             {
                 ControlledTag.ParentID = ParentID;
-            }
 
-            if (ControlledTag.DepartmentID != DepartmentID)
-            {
-                ControlledTag.DepartmentID = DepartmentID;
+                if (ControlledTag.DepartmentID != DepartmentID)
+                {
+                    ControlledTag.DepartmentID = (ParentID != 0 ? _tagRepository.GetById(ParentID).DepartmentID : DepartmentID);
+                }
             }
 
             if (ControlledTag.Color != Color)

@@ -13,6 +13,7 @@ using AMS.Database.Repositories;
 using AMS.Helpers;
 using AMS.Views;
 using AMS.ViewModels.Base;
+using AMS.Views.Prompts;
 
 namespace AMS.ViewModels
 {
@@ -75,6 +76,16 @@ namespace AMS.ViewModels
             get => _selectedParentTagIndex;
             set
             {
+                if (value > 0)
+                {
+                    DepartmentSelectionEnabled = false;
+                    UpdateDepartmentSelectionToParentDepartment();
+                }
+                else
+                {
+                    DepartmentSelectionEnabled = true;
+                }
+
                 if (value == _selectedParentTagIndex) return;
 
                 int oldValue = _selectedParentTagIndex;
@@ -86,14 +97,7 @@ namespace AMS.ViewModels
                     OnPropertyChanged(nameof(Color));
                 }
 
-                if (_selectedParentTagIndex != 0)
-                {
-                    _departmentSelectionEnabled = false;
-                }
-                else
-                {
-                    _departmentSelectionEnabled = true;
-                }
+                _controller.ParentID = ParentTagList[_selectedParentTagIndex].ID;
 
                 _controller.ConnectTag(ParentTagList[_selectedParentTagIndex], ParentTagList[oldValue]);
                 UpdateAll();
@@ -196,10 +200,7 @@ namespace AMS.ViewModels
             AddFieldCommand = new Base.RelayCommand(AddField);
             RemoveFieldCommand = new Base.RelayCommand<object>((parameter) => RemoveField(parameter));
             
-            RemoveCommand = new Base.RelayCommand(() =>
-            {
-                //TODO Handle remove command
-            });
+            RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("The tag will be deleted from the system.\nAre you sure?", RemoveTag)));
 
             CancelCommand = new Base.RelayCommand(Cancel);
 
@@ -376,6 +377,22 @@ namespace AMS.ViewModels
             }
         }
 
+        private void RemoveTag(object sender, PromptEventArgs e)
+        {
+            _controller.Remove();
+            if (Features.Navigate.Back() == false)
+            {
+                Features.Navigate.To(Features.Create.TagList());
+            }
+        }
+
+        private void UpdateDepartmentSelectionToParentDepartment()
+        {
+            int i = DepartmentList.Count - 1;
+            while (i > 0 && DepartmentList[i].ID == ParentTagList[SelectedParentTagIndex].DepartmentID)
+                i--;
+            SelectedDepartmentIndex = i;
+        }
         #endregion
     }
 }
