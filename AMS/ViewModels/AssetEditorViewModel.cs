@@ -267,14 +267,12 @@ namespace AMS.ViewModels
 
         public override void UpdateOnFocus()
         {
-            OnPropertyChanged(nameof(NonHiddenFieldList));
-            OnPropertyChanged(nameof(HiddenFieldList));
-            OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(TagSearchSuggestions));
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(Identifier));
             OnPropertyChanged(nameof(Description));
             OnPropertyChanged(nameof(TagSearchQuery));
+            UpdateAll();
         }
 
         #endregion
