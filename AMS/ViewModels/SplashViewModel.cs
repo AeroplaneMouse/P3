@@ -45,24 +45,15 @@ namespace AMS.ViewModels
         /// </summary>
         private async void Setup()
         {
-            //UpdateStatusText(new StatusUpdateEventArgs("Loading...", "Initializing background worker..."));
-            //try
-            //{
-                if (String.IsNullOrEmpty(Session.GetDBKey()))
-                {
-                    LoadingText = "No configuration";
-                    CurrentActionText = "Create a configuration through the button below";
-                    return;
-                }
-                else
-                    Console.WriteLine("Config exists.");
-            //}
-            //catch(Exception e)
-            //{
-            //    Console.WriteLine($"Error with config: {Environment.NewLine}{e.Message}");
-            //    return;
-            //}
+            // Check for settings file
+            if (String.IsNullOrEmpty(Session.GetDBKey()))
+            {
+                LoadingText = "No configuration";
+                CurrentActionText = "Create a configuration through the button below";
+                return;
+            }
 
+            // Try to connect to database from the set settings and authenticate user.
             bool reconnectRequired;
             do
             {
@@ -85,8 +76,6 @@ namespace AMS.ViewModels
             {
                 // Authorizing user
                 LoadingText = "Connection established...";
-
-                // TODO: Er den her nødvendig?
                 CurrentActionText = "The connection to the database was succesfully established...";
                 Thread.Sleep(_delay);
 
@@ -133,8 +122,11 @@ namespace AMS.ViewModels
 
         private void LoadConfig()
         {
+            // Stop reconnecting
             _configuring = true;
-            _main.SplashPage = Features.Create.SettingsEditor();
+            
+            // Move to the settings editor
+            _main.SplashPage = Features.Create.SettingsEditor(this);
         }
     }
 }

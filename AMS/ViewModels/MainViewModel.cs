@@ -156,7 +156,7 @@ namespace AMS.ViewModels
             _userRep = userRepository;
             _departmentRep = departmentRepository;
 
-            SplashPage = Features.Create.Splash(this);
+            SplashPage = Features.Create.Splash();
         }
 
         public override void UpdateOnFocus() { }
@@ -252,7 +252,7 @@ namespace AMS.ViewModels
 
             // Settings command
             if (CurrentSession.IsAdmin())
-                ChangeSettingsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.SettingsEditor()));
+                ChangeSettingsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.SettingsEditor(this)));
         }
 
         private void InitializeWindowsCommands()
@@ -336,7 +336,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(CurrentUser));
 
             // Load splash screen
-            SplashPage = Features.Create.Splash(this);
+            SplashPage = Features.Create.Splash();
         }
 
         /// <summary>

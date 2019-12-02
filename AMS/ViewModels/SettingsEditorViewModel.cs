@@ -1,6 +1,7 @@
 ﻿using AMS.Authentication;
 using AMS.ConfigurationHandler;
 using System;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace AMS.ViewModels
@@ -8,6 +9,8 @@ namespace AMS.ViewModels
     class SettingsEditorViewModel : Base.BaseViewModel
     {
         private string _oldPassword;
+        private object _caller;
+
         public ICommand SaveCommand { get; set; }
         public ICommand CancelCommand { get; set; }
 
@@ -18,14 +21,19 @@ namespace AMS.ViewModels
         public string Charset { get; set; } = String.Empty;
         public string Timeout { get; set; } = String.Empty;
 
-        public SettingsEditorViewModel()
+        public SettingsEditorViewModel(object caller)
         {
+            _caller = caller;
             UpdateOnFocus();
         }
 
         private void Cancel()
         {
-            Features.Navigate.Back();
+            // Return from splashpage if called from it.
+            if (_caller is SplashViewModel)
+                Features.Main.SplashPage = Features.Create.Splash();
+            else
+                Features.Navigate.Back();
         }
 
         private void Save()
