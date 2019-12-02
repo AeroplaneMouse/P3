@@ -14,10 +14,10 @@ namespace AMS.Helpers
         public bool CanApplyParentTags = false;
         private List<Tag> _tags;
         private List<User> _users;
-        private bool _hasSuggestions = false;
+        private bool _hasSuggestions;
         private readonly ITagRepository _tagRepository;
         private readonly IUserRepository _userRepository;
-        private List<ITagable> SuggestedTags;
+        private  List<ITagable> SuggestedTags;
         private ObservableCollection<ITagable> AppliedTags { get; set; }
 
         public TagHelper(ITagRepository tagRepository, IUserRepository userRepository)
@@ -29,7 +29,7 @@ namespace AMS.Helpers
             SuggestedTags = new List<ITagable>();
 
             Reload();
-            SetParent(null);
+            SetParent();
         }
 
         public void Reload()
@@ -116,12 +116,7 @@ namespace AMS.Helpers
                 }
             }
             
-            if(tag.TagType == typeof(User)){
-                // return the users tag if it is a user.
-                return _tags.Single(u => u.ID == 1);
-            }
-
-            return null;
+            return tag.TagType == typeof(User) ? _tags.Single(u => u.ID == 1) : null;
         }
 
         private bool ApplyParentIfNeeded(ITagable tag)
@@ -144,7 +139,7 @@ namespace AMS.Helpers
                 return false;
             
             if (tag.TagType == typeof(Tag)){
-                int count = AppliedTags.Count(t => t.ParentId == tag.ParentId && t.TagId != tag.TagId);
+                var count = AppliedTags.Count(t => t.ParentId == tag.ParentId && t.TagId != tag.TagId);
 
                 if (count == 0)
                 {
