@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using AMS.Controllers.Interfaces;
 using AMS.Events;
@@ -58,6 +59,7 @@ namespace AMS.ViewModels
             set
             {
                 _tagSearchQuery = value;
+                if(!_tagSearchQuery.EndsWith(' '))
                 TagSearch();
             }
         }
@@ -77,6 +79,7 @@ namespace AMS.ViewModels
         private bool _isEditing { get; set; }
         private string _tagSearchQuery { get; set; }
         private TagHelper _tagHelper { get; set; }
+        private int _tagTabIndex { get; set; }
 
         #endregion
 
@@ -88,11 +91,12 @@ namespace AMS.ViewModels
         public ICommand SaveMultipleCommand { get; set; }
         public ICommand CancelCommand { get; set; }
         public ICommand RemoveTagCommand { get; set; }
-        public ICommand AddTagCommand { get; set; }
-        public ICommand AutoTagCommand { get; set; }
+        public ICommand ApplyTagOrEnterParentCommand { get; set; }
+        public ICommand InsertNextOrSelectedSuggestionCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
         public ICommand EnterSuggestionListCommand { get; set; }
         public ICommand ShowFieldEditPromptCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
 
         #endregion
 
@@ -117,7 +121,7 @@ namespace AMS.ViewModels
             AddFieldCommand = new RelayCommand(() => PromptForCustomField());
             CancelCommand = new RelayCommand(() => Cancel());
             RemoveFieldCommand = new RelayCommand<object>((parameter) => RemoveField(parameter));
-            AddTagCommand = new RelayCommand(() => TagSearch());
+            ApplyTagOrEnterParentCommand = new RelayCommand(() => ApplyTagOrEnterParent());
 
             RemoveTagCommand = new RelayCommand<object>((parameter) =>
             {
@@ -138,7 +142,12 @@ namespace AMS.ViewModels
                     return;
             });
 
-            AutoTagCommand = new RelayCommand(() => AutoTag());
+            RemoveCommand = new RelayCommand(() =>
+            {
+                //TODO Handle remove command
+            });
+
+            InsertNextOrSelectedSuggestionCommand = new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
             ClearInputCommand = new RelayCommand(ClearInput);
             UpdateAll();
         }
@@ -232,37 +241,87 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
-        /// Attach given tag to the asset
+        /// Inserts the next suggestion into the tag search query, or the selected element from the list
         /// </summary>
-        /// <param name="tag"></param>
-        public void AutoTag()
+        /// <param name="input">The selected element (optional)</param>
+        private void InsertNextOrSelectedSuggestion(object input = null)
         {
-
-            if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+            
+            // If the input is null, use the suggestion if possible
+            if (input == null && TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
             {
-                ITagable tag = TagSearchSuggestions[0];
-
-                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
+                if (!(_tagTabIndex <= TagSearchSuggestions.Count() - 1))
                 {
-                    _tagHelper.AddTag(tag);
-                    _assetController.AttachTag(tag);
-                    AppliedTags = _tagHelper.GetAppliedTags(false);
-                    TagSearchQuery = "";
-                    UpdateAll();
-                    //TagSearchProcess();
+                    _tagTabIndex = 0;
+                }
+                TagSearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
+                _tagTabIndex++;
+            }
+            else
+            {
+                ITagable tag;
+
+                if (input is TextBlock textBlock)
+                {
+                    tag = TagSearchSuggestions.SingleOrDefault(t => t.TagLabel == textBlock.Text);
                 }
                 else
                 {
-                    // So we need to switch to a group of tags.
-                    Tag taggedItem = (Tag)tag;
-                    _tagHelper.SetParent(taggedItem);
-                    CurrentGroup = taggedItem.Name;
-                    CurrentGroupVisibility = Visibility.Visible;
-                    TagSearchQuery = "";
+                    tag = (ITagable)input;
+                }
+
+                if(tag != null)
+                {
+                    if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
+                    {
+                        _tagHelper.SetParent(null);
+                        TagSearchQuery = "";
+                        CurrentGroup = "";
+                        CurrentGroupVisibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        // So we need to switch to a group of tags.
+                        Tag taggedItem = (Tag)tag;
+                        _tagHelper.SetParent(taggedItem);
+                        CurrentGroup = tag.TagLabel;
+                        CurrentGroupVisibility = Visibility.Visible;
+                        TagSearchQuery = "";
+                        UpdateTagSuggestions();
+                    }
                 }
             }
+        }
 
-            TagSearchProcess();
+        /// <summary>
+        /// Applies the tag or enters the tag, if it is a parent
+        /// </summary>
+        private void ApplyTagOrEnterParent()
+        {
+            ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == TagSearchQuery.Trim(' '));
+            if (tag != null)
+            {
+                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
+                {
+                    _tagHelper.SetParent((Tag)tag);
+                    CurrentGroup = tag.TagLabel;
+                    CurrentGroupVisibility = Visibility.Visible;
+                    TagSearchQuery = "";
+                    _tagTabIndex = 0;
+                }
+                else
+                {
+                    _tagHelper.AddTag(tag);
+                    AppliedTags = _tagHelper.GetAppliedTags(true);
+                    TagSearchQuery = "";
+                    _tagTabIndex = 0;
+                }
+            }
+            else
+            {
+                //TODO Notify the user, that the input is not a tag
+                Console.WriteLine("Not a tag");
+            }
         }
 
         public override void UpdateOnFocus()
@@ -284,7 +343,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void TagSearch()
         {
-            TagSearchProcess();
+            UpdateTagSuggestions();
         }
 
         /// <summary>
@@ -298,14 +357,14 @@ namespace AMS.ViewModels
                 CurrentGroup = "";
                 CurrentGroupVisibility = Visibility.Collapsed;
                 TagSearchQuery = "";
-                TagSearchProcess();
+                UpdateTagSuggestions();
             }
         }
 
         /// <summary>
         /// Runs the tag process
         /// </summary>
-        private void TagSearchProcess()
+        private void UpdateTagSuggestions()
         {
             TagSearchSuggestions = new ObservableCollection<ITagable>(_tagHelper.Suggest(_tagSearchQuery));
 

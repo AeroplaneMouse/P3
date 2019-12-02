@@ -105,6 +105,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource NavigationHoverBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Cursor" Value="Hand"/>
         <!-- Makes the content of the button a textblock -->
         <Setter Property="Template">
             <Setter.Value>
@@ -135,13 +136,27 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
     <!-- Regular cancel button -->
     <Style TargetType="Button" x:Key="RegularCancelButton" BasedOn="{StaticResource RegularButton}">
+        <!-- Adds the hover effect -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
+                <Setter Property="Foreground" Value="Black"/>
+            </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="Lime"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Regular remove button -->
+    <Style TargetType="Button" x:Key="RegularRemoveButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource CancelRedBrush}"/>
     </Style>
-    
+
     <!-- Regular accept button -->
     <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>

@@ -13,6 +13,7 @@ using AMS.Database.Repositories;
 using AMS.Helpers;
 using AMS.Views;
 using AMS.ViewModels.Base;
+using AMS.Views.Prompts;
 
 namespace AMS.ViewModels
 {
@@ -21,8 +22,8 @@ namespace AMS.ViewModels
         #region Public Properties
 
         private bool _dropdownsEnabled = true;
-        private bool _parentComboEnabled = true;
-        private bool _departmentComboEnabled = true;
+        private bool _parentSelectionEnabled = true;
+        private bool _departmentSelectionEnabled = true;
 
         public ObservableCollection<Field> NonHiddenFieldList =>
             new ObservableCollection<Field>(_controller.NonHiddenFieldList);
@@ -69,6 +70,16 @@ namespace AMS.ViewModels
             get => _selectedParentTagIndex;
             set
             {
+                if (value > 0)
+                {
+                    DepartmentSelectionEnabled = false;
+                    UpdateDepartmentSelectionToParentDepartment();
+                }
+                else
+                {
+                    DepartmentSelectionEnabled = true;
+                }
+
                 if (value == _selectedParentTagIndex) return;
 
                 int oldValue = _selectedParentTagIndex;
@@ -80,6 +91,8 @@ namespace AMS.ViewModels
                     OnPropertyChanged(nameof(Color));
                 }
 
+                _controller.ParentID = ParentTagList[_selectedParentTagIndex].ID;
+
                 _controller.ConnectTag(ParentTagList[_selectedParentTagIndex], ParentTagList[oldValue]);
                 UpdateAll();
             }
@@ -87,16 +100,16 @@ namespace AMS.ViewModels
 
         public int SelectedDepartmentIndex { get; set; }
 
-        public bool ParentComboEnabled
+        public bool ParentSelectionEnabled
         {
-            get => _parentComboEnabled;
-            set => _parentComboEnabled = value;
+            get => _parentSelectionEnabled;
+            set => _parentSelectionEnabled = value;
         }
 
-        public bool DepartmentComboEnabled
+        public bool DepartmentSelectionEnabled
         {
-            get => _departmentComboEnabled;
-            set => _departmentComboEnabled = value;
+            get => _departmentSelectionEnabled;
+            set => _departmentSelectionEnabled = value;
         }
 
         #endregion
@@ -114,6 +127,7 @@ namespace AMS.ViewModels
         public ICommand RemoveFieldCommand { get; set; }
         public ICommand CancelCommand { get; set; }
         public ICommand ShowFieldEditPromptCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
 
         #endregion
 
@@ -125,21 +139,27 @@ namespace AMS.ViewModels
 
             if (_controller.Id == 1)
             {
-                _parentComboEnabled = false;
-                _departmentComboEnabled = false;
+                _parentSelectionEnabled = false;
+                _departmentSelectionEnabled = false;
             }
 
             if (_controller.ParentID > 0)
-                _departmentComboEnabled = false;
+            {
+                _departmentSelectionEnabled = false;
+            }
+            else
+            {
+                _departmentSelectionEnabled = true;
+            }
 
             //Set the selected parent to the parent of the chosen tag
-            int i = ParentTagList.Count;
-            while (i > 0 && ParentTagList[i - 1].ID != _controller.ControlledTag.ParentID)
+            int i = ParentTagList.Count - 1;
+            while (i > 0 && ParentTagList[i].ID != _controller.ParentID)
                 i--;
 
             if (i > 0)
-                _selectedParentTagIndex = i - 1;
-
+                _selectedParentTagIndex = i;
+            
             OnPropertyChanged(nameof(Color));
 
             Department currentDepartment;
@@ -149,8 +169,7 @@ namespace AMS.ViewModels
                 PageTitle = "Edit tag";
 
                 // Use the department of the tag
-                currentDepartment =
-                    _controller.DepartmentList.Find(d => d.ID == _controller.ControlledTag.DepartmentID);
+                currentDepartment = _controller.DepartmentList.Find(d => d.ID == _controller.DepartmentID);
             }
             else
             {
@@ -173,6 +192,8 @@ namespace AMS.ViewModels
             SaveTagCommand = new Base.RelayCommand(SaveTag);
             AddFieldCommand = new Base.RelayCommand(AddField);
             RemoveFieldCommand = new Base.RelayCommand<object>((parameter) => RemoveField(parameter));
+            
+            RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("The tag will be deleted from the system.\nAre you sure?", RemoveTag)));
 
             CancelCommand = new Base.RelayCommand(Cancel);
 
@@ -343,6 +364,22 @@ namespace AMS.ViewModels
             }
         }
 
+        private void RemoveTag(object sender, PromptEventArgs e)
+        {
+            _controller.Remove();
+            if (Features.Navigate.Back() == false)
+            {
+                Features.Navigate.To(Features.Create.TagList());
+            }
+        }
+
+        private void UpdateDepartmentSelectionToParentDepartment()
+        {
+            int i = DepartmentList.Count - 1;
+            while (i > 0 && DepartmentList[i].ID == ParentTagList[SelectedParentTagIndex].DepartmentID)
+                i--;
+            SelectedDepartmentIndex = i;
+        }
         #endregion
     }
 }

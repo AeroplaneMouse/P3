@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using AMS.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
-using System.Collections.ObjectModel;
-using System.Linq;
 using AMS.Database.Repositories.Interfaces;
 using AMS.ViewModels;
 using AMS.Logging.Interfaces;
 using AMS.Logging;
-using Org.BouncyCastle.Utilities;
 
 namespace AMS.Database.Repositories
 {
@@ -58,7 +55,7 @@ namespace AMS.Database.Repositories
         /// <param name="entity"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public bool Insert(Tag entity, out ulong id)
+        public Tag Insert(Tag entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
@@ -83,17 +80,34 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
                         cmd.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;
 
-                        if (entity.DepartmentID == 0)
+                        if (entity.ParentID == 0)
                         {
-                            cmd.Parameters.Add("@department_id", MySqlDbType.String);
-                            cmd.Parameters["@department_id"].Value = null;
+                            if (entity.DepartmentID == 0)
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.String);
+                                cmd.Parameters["@department_id"].Value = null;
+                            }
+                            else
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                                cmd.Parameters["@department_id"].Value = entity.DepartmentID;
+                            }
                         }
                         else
                         {
-                            cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
-                            cmd.Parameters["@department_id"].Value = entity.DepartmentID;
+                            ulong parentDepartmentID = GetById(entity.ParentID).DepartmentID;
+                            if (parentDepartmentID == 0)
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.String);
+                                cmd.Parameters["@department_id"].Value = null;
+                            }
+                            else
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                                cmd.Parameters["@department_id"].Value = parentDepartmentID;
+                            }
                         }
-                        
+
                         cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
                         cmd.Parameters["@parent_id"].Value = entity.ParentID;
 
@@ -113,7 +127,7 @@ namespace AMS.Database.Repositories
                 }
             }
 
-            return querySuccess;
+            return querySuccess ? GetById(id) : null;
         }
 
         /// <summary>
@@ -156,15 +170,32 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@color", MySqlDbType.String);
                         cmd.Parameters["@color"].Value = entity.Color;
 
-                        if (entity.DepartmentID == 0)
+                        if (entity.ParentID == 0)
                         {
-                            cmd.Parameters.Add("@department_id", MySqlDbType.String);
-                            cmd.Parameters["@department_id"].Value = null;
+                            if (entity.DepartmentID == 0)
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.String);
+                                cmd.Parameters["@department_id"].Value = null;
+                            }
+                            else
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                                cmd.Parameters["@department_id"].Value = entity.DepartmentID;
+                            }
                         }
                         else
                         {
-                            cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
-                            cmd.Parameters["@department_id"].Value = entity.DepartmentID;
+                            ulong parentDepartmentID = GetById(entity.ParentID).DepartmentID;
+                            if(parentDepartmentID == 0)
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.String);
+                                cmd.Parameters["@department_id"].Value = null;
+                            }
+                            else
+                            {
+                                cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                                cmd.Parameters["@department_id"].Value = parentDepartmentID;
+                            }
                         }
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
@@ -261,8 +292,8 @@ namespace AMS.Database.Repositories
                 try
                 {
                     const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
-                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
-                                     "FROM tags AS t WHERE t.id=@id";
+                                         "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                         "FROM tags AS t WHERE t.id=@id";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -303,10 +334,10 @@ namespace AMS.Database.Repositories
                 try
                 {
                     const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
-                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
-                                     "FROM tags AS t " +
-                                     "INNER JOIN asset_tags AS at ON at.tag_id = t.id " +
-                                     "WHERE at.asset_id = @id";
+                                         "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                         "FROM tags AS t " +
+                                         "INNER JOIN asset_tags AS at ON at.tag_id = t.id " +
+                                         "WHERE at.asset_id = @id";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -361,8 +392,8 @@ namespace AMS.Database.Repositories
                 try
                 { 
                     const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
-                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
-                                     "FROM tags AS t WHERE t.parent_id=@id  ORDER BY countChildren DESC, t.label ASC";
+                                         "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                         "FROM tags AS t WHERE t.parent_id=@id  ORDER BY countChildren DESC, t.label ASC";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -397,7 +428,7 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public List<Tag> Search(string keyword,List<ulong> tag_list=null, List<ulong> users=null, bool strict=false)
+        public List<Tag> Search(string keyword,List<ulong> tag_list=null, List<ulong> users=null, bool strict=false, bool searchInFields=false)
         {
             var con = new MySqlHandler().GetConnection();
             List<Tag> tags = new List<Tag>();
@@ -408,8 +439,8 @@ namespace AMS.Database.Repositories
                 try 
                 {
                     string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
-                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
-                                     "FROM tags AS t WHERE t.label LIKE @keyword";
+                                   "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                   "FROM tags AS t WHERE t.label LIKE @keyword";
 
                     if (Features.Main.CurrentDepartment.ID > 0)
                         query += $" AND t.department_id={ Features.Main.CurrentDepartment.ID.ToString() } OR t.department_id IS NULL";
@@ -457,8 +488,8 @@ namespace AMS.Database.Repositories
                 try
                 {
                     string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, t.options, " +
-                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
-                                     "FROM tags AS t";
+                                   "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                   "FROM tags AS t";
                     
                     if (Features.Main.CurrentDepartment.ID > 0)
                         query += $" WHERE t.department_id={ Features.Main.CurrentDepartment.ID.ToString() } OR t.department_id IS NULL";

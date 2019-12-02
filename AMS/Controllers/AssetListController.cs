@@ -31,10 +31,10 @@ namespace AMS.Controllers
         /// Filters the list if Assets to only contain assets that match the searchQuery
         /// </summary>
         /// <param name="query"></param>
-        public void Search(string query, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
+        public void Search(string query, List<ulong> tags=null, List<ulong> users=null, bool strict=false, bool searchInFields=false)
         {
             //TODO: Filter list based on search query, also search by tags
-            List<Asset> searchResult = _assetRepository.Search(query, tags, users, strict);
+            List<Asset> searchResult = _assetRepository.Search(query, tags, users, strict, searchInFields);
             AssetList = searchResult;
             //TODO: Determine if search should be on assets or by tags
             /* Remove comment when tagging class is implementet

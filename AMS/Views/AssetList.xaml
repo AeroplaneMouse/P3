@@ -62,7 +62,7 @@
                 </Grid.RowDefinitions>
 
                 <!-- Search bar and its associated buttons --> 
-                <StackPanel Orientation="Horizontal"
+                <StackPanel Orientation="Horizontal" Margin="0"
                             HorizontalAlignment="Left" Grid.Row="0">
                     
                     <StackPanel Orientation="Horizontal"  
@@ -81,7 +81,7 @@
                                 <Style TargetType="Border">
                                     <Style.Triggers>
                                         <Trigger Property="IsVisible" Value="True">
-                                            <Setter Property="Padding" Value="5 0 5 0"/>
+                                            <Setter Property="Padding" Value="5 0 0 0"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -95,14 +95,14 @@
                                      MinHeight="35"
                                      x:Name="StartElement"
                                      TabIndex="0"
-                                     ToolTip="%s: Keyword must end with s. b%: Keyword must start with s. #: Enter tag mode"
+                                     ToolTip="%s: Keyword must end with s. s%: Keyword must start with s. #: Enter tag mode"
                                      Style="{StaticResource SearchTextBox}"
                                      Tag="Start typing...">
 
                                 <TextBox.InputBindings>
-                                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                                    <KeyBinding Key="Enter" Command="{Binding ApplyTagOrEnterParentCommand}"/>
                                     <KeyBinding Key="Escape" Command="{Binding ClearInputCommand}"/>
-                                    <KeyBinding Key="Tab" Command="{Binding AutoTagCommand}"/>
+                                    <KeyBinding Key="Tab" Command="{Binding InsertNextOrSelectedSuggestionCommand}"/>
                                     <KeyBinding Key="Down" Command="{Binding EnterSuggestionListCommand}" CommandParameter="{Binding ElementName=TagSuggestionList}"/>
                                 </TextBox.InputBindings>
                             </TextBox>
@@ -125,12 +125,16 @@
                                     
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding}" FontSize="{StaticResource FontSizeSmall}"/>
+                                            <TextBlock Text="{Binding}" FontSize="{StaticResource FontSizeSmall}" Cursor="Hand" Width="{Binding ElementName=StartElement, Path=ActualWidth}">
+                                                <TextBlock.InputBindings>
+                                                    <MouseBinding Gesture="LeftClick" Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.InsertNextOrSelectedSuggestionCommand}" CommandParameter="{Binding Path=.}"/>
+                                                </TextBlock.InputBindings>
+                                            </TextBlock>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                     
                                     <ListBox.InputBindings>
-                                        <KeyBinding Key="Return" Command="{Binding AutoTagCommand}" CommandParameter="{Binding ElementName=TagSuggestionList, Path=SelectedItem}"/>
+                                        <KeyBinding Key="Return" Command="{Binding InsertNextOrSelectedSuggestionCommand}" CommandParameter="{Binding ElementName=TagSuggestionList, Path=SelectedItem}"/>
                                     </ListBox.InputBindings>
                                 </ListBox>
                             </Popup>
@@ -143,10 +147,14 @@
                             Command="{Binding SearchCommand}"
                             Content="Search" />
                     
-                    <!-- Strict search -->
                     <StackPanel Orientation="Horizontal" ToolTip="Enables strict searching. Assets MUST have all the applied tags.">
+                        <!-- Strict search -->
                         <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsStrict, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock Style="{StaticResource ParagraphStyle}" Text="Strict" VerticalAlignment="Center" Margin="2 0 0 0"/>
+                        <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Strict" Margin="2 0 10 0"/>
+
+                        <!-- Field search -->
+                        <CheckBox VerticalAlignment="Center" IsChecked="{Binding SearchInFields, UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Search in fields" Margin="2 0 0 0"/>
                     </StackPanel>
                 </StackPanel>
 

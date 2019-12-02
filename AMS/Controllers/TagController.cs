@@ -83,7 +83,7 @@ namespace AMS.Controllers
                 Name = ControlledTag.Name;
                 Color = ControlledTag.Color;
                 ParentID = ControlledTag.ParentID;
-                DepartmentID = ControlledTag.ParentID;
+                DepartmentID = ControlledTag.DepartmentID;
 
 
                 NonHiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
@@ -109,30 +109,10 @@ namespace AMS.Controllers
         public void Save()
         {
             //Updates the fields on the tag
-            if (Name != ControlledTag.Name)
-            {
-                ControlledTag.Name = Name;
-            }
-
-            if (ControlledTag.ParentID != ParentID)
-            {
-                ControlledTag.ParentID = ParentID;
-            }
-
-            if (ControlledTag.DepartmentID != DepartmentID)
-            {
-                ControlledTag.DepartmentID = DepartmentID;
-            }
-
-            if (ControlledTag.DepartmentID != DepartmentID)
-            {
-                ControlledTag.DepartmentID = DepartmentID;
-            }
-
-            if (ControlledTag.Color != Color)
-            {
-                ControlledTag.Color = Color;
-            }
+            ControlledTag.Name = Name;
+            ControlledTag.ParentID = ParentID;
+            ControlledTag.DepartmentID = (ParentID != 0 ? _tagRepository.GetById(ParentID).DepartmentID : DepartmentID);
+            ControlledTag.Color = Color;
 
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
@@ -147,7 +127,7 @@ namespace AMS.Controllers
         public void Update()
         {
             //Updates the fields on the tag
-            if (Name != ControlledTag.Name)
+            if (ControlledTag.Name != Name)
             {
                 ControlledTag.Name = Name;
             }
@@ -155,16 +135,11 @@ namespace AMS.Controllers
             if (ControlledTag.ParentID != ParentID)
             {
                 ControlledTag.ParentID = ParentID;
-            }
 
-            if (ControlledTag.DepartmentID != DepartmentID)
-            {
-                ControlledTag.DepartmentID = DepartmentID;
-            }
-
-            if (ControlledTag.DepartmentID != DepartmentID)
-            {
-                ControlledTag.DepartmentID = DepartmentID;
+                if (ControlledTag.DepartmentID != DepartmentID)
+                {
+                    ControlledTag.DepartmentID = (ParentID != 0 ? _tagRepository.GetById(ParentID).DepartmentID : DepartmentID);
+                }
             }
 
             if (ControlledTag.Color != Color)
