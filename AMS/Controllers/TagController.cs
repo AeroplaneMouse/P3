@@ -14,6 +14,7 @@ namespace AMS.Controllers
     {
         private ITagRepository _tagRepository { get; set; }
         private IDepartmentRepository _departmentRepository { get; set; }
+        private ulong _parentID = 0;
 
         public Tag ControlledTag { get; set; }
         public bool IsEditing { get; set; }
@@ -22,7 +23,18 @@ namespace AMS.Controllers
         public ulong Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
-        public ulong ParentID { get; set; }
+        public ulong ParentID {
+            get => _parentID;
+            set{
+                _parentID = value;
+                if(_parentID != 0)
+                {
+                    Console.WriteLine(value.ToString());
+                    Console.WriteLine(_tagRepository.GetById(value)?.ToString());
+                    //DepartmentID = _tagRepository.GetById(value).DepartmentID;
+                }
+            }
+        }
         public ulong DepartmentID { get; set; }
 
 
@@ -109,30 +121,10 @@ namespace AMS.Controllers
         public void Save()
         {
             //Updates the fields on the tag
-            if (Name != ControlledTag.Name)
-            {
-                ControlledTag.Name = Name;
-            }
-
-            if (ControlledTag.ParentID != ParentID)
-            {
-                ControlledTag.ParentID = ParentID;
-            }
-
-            if (ControlledTag.DepartmentID != DepartmentID)
-            {
-                ControlledTag.DepartmentID = DepartmentID;
-            }
-
-            if (ControlledTag.DepartmentID != DepartmentID)
-            {
-                ControlledTag.DepartmentID = DepartmentID;
-            }
-
-            if (ControlledTag.Color != Color)
-            {
-                ControlledTag.Color = Color;
-            }
+            ControlledTag.Name = Name;
+            ControlledTag.ParentID = ParentID;
+            ControlledTag.DepartmentID = (ParentID != 0 ? _tagRepository.GetById(ParentID).DepartmentID : DepartmentID);
+            ControlledTag.Color = Color;
 
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
@@ -147,7 +139,7 @@ namespace AMS.Controllers
         public void Update()
         {
             //Updates the fields on the tag
-            if (Name != ControlledTag.Name)
+            if (ControlledTag.Name != Name)
             {
                 ControlledTag.Name = Name;
             }
@@ -155,11 +147,6 @@ namespace AMS.Controllers
             if (ControlledTag.ParentID != ParentID)
             {
                 ControlledTag.ParentID = ParentID;
-            }
-
-            if (ControlledTag.DepartmentID != DepartmentID)
-            {
-                ControlledTag.DepartmentID = DepartmentID;
             }
 
             if (ControlledTag.DepartmentID != DepartmentID)

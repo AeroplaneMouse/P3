@@ -86,6 +86,15 @@ namespace AMS.ViewModels
                     OnPropertyChanged(nameof(Color));
                 }
 
+                if(value != 0)
+                {
+                    DepartmentSelectionEnabled = false;
+                }
+                else
+                {
+                    DepartmentSelectionEnabled = true;
+                }
+
                 _controller.ConnectTag(ParentTagList[_selectedParentTagIndex], ParentTagList[oldValue]);
                 UpdateAll();
             }

@@ -79,6 +79,7 @@ namespace AMS.ViewModels
         public ICommand ClearInputCommand { get; set; }
         public ICommand EnterSuggestionListCommand { get; set; }
         public ICommand CheckAllChangedCommand { get; set; }
+        public ICommand SearchCommand { get; set; }
 
         public AssetListViewModel(IAssetListController listController, TagHelper tagHelper)
         {
@@ -104,6 +105,7 @@ namespace AMS.ViewModels
 
             // Other functions
             ApplyTagOrEnterParentCommand = new RelayCommand(ApplyTagOrEnterParent);
+            SearchCommand = new RelayCommand(RefreshList);
             ViewCommand = new RelayCommand(ViewAsset);
             ViewWithParameterCommand = new RelayCommand<object>(ViewAsset);
             RemoveTagCommand = new RelayCommand<object>((parameter) =>
@@ -211,6 +213,13 @@ namespace AMS.ViewModels
                 }
                 else
                 {
+                    if (_tagHelper.IsParentSet() && SearchQuery == "")
+                    {
+                        _tagHelper.AddTag(_tagHelper.GetParent());
+                        AppliedTags = _tagHelper.GetAppliedTags(true);
+                        ClearInput();
+                        _tabIndex = 0;
+                    }
                     //TODO Notify the user, that the input is not a tag
                     Console.WriteLine("Not a tag");
                 }
