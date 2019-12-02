@@ -322,6 +322,9 @@ namespace AMS.Database.Repositories
         /// If no '%' is added, the search will return every entry containing the keyword (slower).
         /// </summary>
         /// <param name="keyword">The search query to search by</param>
+        /// <param name="tags">List of tag ids</param>
+        /// <param name="users">List of user ids</param>
+        /// <param name="strict">Enable strict search</param>
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
         public List<Asset> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
         {
@@ -412,8 +415,8 @@ namespace AMS.Database.Repositories
 
             List<User> users = tagged.OfType<User>().ToList();
             List<Tag> tags = tagged.OfType<Tag>().ToList();
-            int user_counter = users.Count;
-            int tag_counter = tags.Count;
+            int userCounter = users.Count;
+            int tagCounter = tags.Count;
 
             ClearTags(asset);
             
@@ -429,21 +432,21 @@ namespace AMS.Database.Repositories
 
                     StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users VALUES ");
 
-                    for (int i = 0; i < user_counter; i++)
+                    for (int i = 0; i < userCounter; i++)
                     {
                         userQuery.AppendFormat("({0},{1})", asset.ID, users[i].ID);
 
-                        if (i != user_counter - 1)
+                        if (i != userCounter - 1)
                             userQuery.Append(",");
                     }
 
                     StringBuilder tagQuery = new StringBuilder("INSERT INTO asset_tags VALUES ");
 
-                    for (int i = 0; i < tag_counter; i++)
+                    for (int i = 0; i < tagCounter; i++)
                     {
                         tagQuery.AppendFormat("({0},{1})", asset.ID, tags[i].ID);
 
-                        if (i != tag_counter - 1)
+                        if (i != tagCounter - 1)
                             tagQuery.Append(",");
                     }
 
@@ -492,10 +495,9 @@ namespace AMS.Database.Repositories
             return taggedWith;
         }
 
-        private bool ClearTags(Asset asset)
+        private void ClearTags(Asset asset)
         {
             var con = new MySqlHandler().GetConnection();
-            bool querySuccess = false;
 
             // Opening connection
             if (MySqlHandler.Open(ref con))
@@ -510,7 +512,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = asset.ID;
 
-                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                        cmd.ExecuteNonQuery();
                     }
                 }
                 catch (MySqlException e)
@@ -522,8 +524,6 @@ namespace AMS.Database.Repositories
                     con.Close();
                 }
             }
-
-            return querySuccess;
         }
 
         /// <summary>
