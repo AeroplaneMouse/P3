@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.Text;
 using AMS.Authentication;
 using SHA256 = SshNet.Security.Cryptography.SHA256;
@@ -19,12 +21,12 @@ namespace AMS.ConfigurationHandler
         public string GetConfigValue()
         {
             string configuration = FileEncryption.UserDataDecrypt(ComputeSha256Hash(Domain), Path);
-
             return configuration;
         }
 
         public void SetConfigValue(string newValue)
         {
+            Session.ClearDBKey();
             FileEncryption.UserDataEncrypt(ComputeSha256Hash(Domain), newValue, Path);
         }
 
@@ -45,6 +47,20 @@ namespace AMS.ConfigurationHandler
 
                 return builder.ToString();
             }
+        }
+
+        public void Clear()
+        {
+            SetConfigValue("");
+            //if(File.Exists(Path))
+            //{
+            //    try
+            //    {
+            //        File.Delete(Path);
+            //    }
+            //    FileStream file = File.Create(path);
+            //    file.Close();
+            //}
         }
     }
 }
