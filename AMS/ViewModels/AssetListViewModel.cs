@@ -249,7 +249,6 @@ namespace AMS.ViewModels
         private void AutoTag(ITagable input = null)
         {
             if (!inTagMode)
-
                 return;
 
             // Use the given input

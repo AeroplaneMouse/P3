@@ -4,102 +4,120 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:converter="clr-namespace:AMS.Views.ValueConverters"
       mc:Ignorable="d"
       ShowsNavigationUI="False"
       Title="Home">
-    
+
+    <Page.Resources>
+        <converter:AssetIDToAssetValueConverter x:Key="AssetIDConverter" />
+    </Page.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <Border Padding="0 20 0 20"
-                Margin="10 0 10 0"
-                BorderBrush="Gray"
-                BorderThickness="0 0 0 1">
+        <!-- Welcome! -->
+        <StackPanel Grid.Row="0" Margin="0 0 0 10">
+            <TextBlock VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Style="{StaticResource TitleStyle}"
+                       Margin="0 10 0 20"
+                       FontSize="{StaticResource FontSizeXLarge}"
+                       Text="Welcome to your Asset Management System"/>
+
+            <Rectangle Style="{StaticResource HorizontalSeparator}"/>
+        </StackPanel>
+
+        <!-- Content -->
+        <Border HorizontalAlignment="Center" Grid.Row="1">
             <Grid>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="250"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition />
-                    <RowDefinition />
-                </Grid.RowDefinitions>
-                
-                <!-- Dashboard headers -->
-                <TextBlock Grid.Column="0"
-                           Grid.Row="0"
-                           Text="Users"
-                           HorizontalAlignment="Center"
-                           Style="{StaticResource HeaderStyle}"/>
 
-                <TextBlock Grid.Column="1"
-                           Grid.Row="0"
-                           HorizontalAlignment="Center"
-                           Text="Assets"
-                           Style="{StaticResource HeaderStyle}"/>
+                <!-- Statistics -->
+                <Border Grid.Column="0" Margin="10 10 5 10" BorderBrush="Gray" BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                <TextBlock Grid.Column="2"
-                           Grid.Row="0"
-                           HorizontalAlignment="Center"
-                           Text="Tags"
-                           Style="{StaticResource HeaderStyle}"/>
+                        <!--Users-->
+                        <StackPanel Grid.Row="0"
+                                VerticalAlignment="Center" HorizontalAlignment="Center">
 
-                <TextBlock Grid.Column="3"
-                           Grid.Row="0"
-                           HorizontalAlignment="Center"
-                           Text="Departments"
-                           Style="{StaticResource HeaderStyle}"/>
-                
-                <!-- Dashboard info -->
-                <TextBlock Grid.Row="1"
-                           Grid.Column="0"
-                           HorizontalAlignment="Center"
-                           Text="{Binding NumberOfUsers}"
-                           Style="{StaticResource TitleStyle}"/>
-                <TextBlock Grid.Row="1"
-                           Grid.Column="1"
-                           HorizontalAlignment="Center"
-                           Text="{Binding NumberOfAssets}"
-                           Style="{StaticResource TitleStyle}"/>
-                <TextBlock Grid.Row="1"
-                           Grid.Column="2"
-                           HorizontalAlignment="Center"
-                           Text="{Binding NumberOfTags}"
-                           Style="{StaticResource TitleStyle}"/>
-                <TextBlock Grid.Row="1"
-                           Grid.Column="3"
-                           HorizontalAlignment="Center"
-                           Text="{Binding NumberOfDepartments}"
-                           Style="{StaticResource TitleStyle}"/>
-            </Grid>
-        </Border>
+                            <TextBlock Text="Users"
+                                   HorizontalAlignment="Center"
+                                   Style="{StaticResource HeaderStyle}"
+                                   FontWeight="DemiBold"/>
 
-        <Border Grid.Row="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                
-                <TextBlock VerticalAlignment="Top"
-                           HorizontalAlignment="Center"
-                           Style="{StaticResource TitleStyle}"
-                           Margin="0 10 0 20"
-                           FontSize="{StaticResource FontSizeXLarge}"
-                           Text="Welcome to your Asset Management System"/>
+                            <TextBlock HorizontalAlignment="Center"
+                                   Text="{Binding NumberOfUsers}"
+                                   Style="{StaticResource TitleStyle}"/>
 
+                        </StackPanel>
+
+                        <!--Assets-->
+                        <StackPanel Grid.Row="1"
+                                VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                            <TextBlock HorizontalAlignment="Center"
+                                   Text="Assets"
+                                   Style="{StaticResource HeaderStyle}"
+                                   FontWeight="DemiBold"/>
+
+                            <TextBlock HorizontalAlignment="Center"
+                                   Text="{Binding NumberOfAssets}"
+                                   Style="{StaticResource TitleStyle}"/>
+
+                        </StackPanel>
+
+                        <!--Tags-->
+                        <StackPanel Grid.Row="2"
+                                VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                            <TextBlock HorizontalAlignment="Center"
+                                   Text="Tags"
+                                   Style="{StaticResource HeaderStyle}"
+                                   FontWeight="DemiBold"/>
+
+                            <TextBlock HorizontalAlignment="Center"
+                                   Text="{Binding NumberOfTags}"
+                                   Style="{StaticResource TitleStyle}"/>
+
+                        </StackPanel>
+
+                        <!--Departments-->
+                        <StackPanel Grid.Row="3"
+                                VerticalAlignment="Center" HorizontalAlignment="Center">
+
+                            <TextBlock HorizontalAlignment="Center"
+                                   Text="Departments"
+                                   Style="{StaticResource HeaderStyle}"
+                                   FontWeight="DemiBold"/>
+
+                            <TextBlock HorizontalAlignment="Center"
+                                   Text="{Binding NumberOfDepartments}"
+                                   Style="{StaticResource TitleStyle}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Comments -->
                 <ListBox ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged}"
-                         SelectedItem="{Binding SelectedComment}"
-                         Margin="10 0"
-                         Grid.Row="1"
-                         Width="500"
-                         Height="300"
-                         x:Name="CommentList">
+                     SelectedItem="{Binding SelectedComment}"
+                     Grid.Column="1"
+                     x:Name="CommentList"
+                     BorderThickness="0"
+                     BorderBrush="Gray"
+                     Margin="5 10 10 10">
 
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
@@ -112,47 +130,74 @@
                         <KeyBinding Key="Return" Command="{Binding ViewCommand}"/>
                     </ListBox.InputBindings>
 
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Width="400">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="IsSelected" Value="{Binding Content.IsSelected, Mode=TwoWay, RelativeSource={RelativeSource Self}}"/>
+                            <Setter Property="HorizontalAlignment" Value="Left"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border Background="Transparent" Name="Bd" Margin="0 0 0 5" BorderThickness="1" BorderBrush="Gray" Padding="10" Width="600">
+                                            <Grid Grid.Row="0">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="2*" />
+                                                    <ColumnDefinition Width="3*" />
+                                                </Grid.ColumnDefinitions>
 
-                                <Grid Grid.Row="0">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
+                                                <!--Comment information-->
+                                                <StackPanel Grid.Column="0" Margin="0 0 50 0">
+                                                    <TextBlock Text="{Binding Path=Username}"
+                                                               Style="{StaticResource ParagraphStyle}"
+                                                               Foreground="Black"
+                                                               FontWeight="DemiBold"
+                                                               TextWrapping="Wrap"
+                                                               Name="Username"/>
 
-                                    <!--Comment information-->
-                                    <StackPanel Grid.Column="0" Margin="0 0 50 0">
-                                        <TextBlock Text="{Binding Path=Username}"
-                                                   Style="{StaticResource ParagraphStyle}"
-                                                   Foreground="Black"
-                                                   FontWeight="DemiBold" />
+                                                    <TextBlock Text="{Binding Path=AssetID, Converter={StaticResource AssetIDConverter}}"
+                                                               Style="{StaticResource ParagraphStyle}"
+                                                               Foreground="DarkSlateGray"
+                                                               FontWeight="Normal"
+                                                               TextWrapping="Wrap"
+                                                               Name="AssetName"/>
+                                                    
+                                                    <TextBlock Text="{Binding Path=CreatedAtString}"
+                                                               Style="{StaticResource ParagraphStyle}"
+                                                               Foreground="Gray"
+                                                               Name="CreatedAt"/>
+                                                </StackPanel>
 
-                                        <TextBlock Text="{Binding Path=CreatedAtString}"
-                                                   Style="{StaticResource ParagraphStyle}"
-                                                   Foreground="Gray" />
-                                    </StackPanel>
+                                                <!--Comment content -->
+                                                <TextBlock Text="{Binding Path=Content}"
+                                                           Style="{StaticResource ParagraphStyle}"
+                                                           FontSize="{StaticResource FontSizeSmall}"
+                                                           Foreground="Black"
+                                                           TextWrapping="Wrap"
+                                                           VerticalAlignment="Center"
+                                                           Name="Content"
+                                                           TextTrimming="CharacterEllipsis"
+                                                           MaxHeight="100"
+                                                           Grid.Column="1"/>
 
-                                    <!--Comment content-->
-                                    <TextBlock Grid.Column="1"
-                                               Text="{Binding Path=Content}"
-                                               Style="{StaticResource ParagraphStyle}"
-                                               Foreground="Black"
-                                               TextWrapping="Wrap"
-                                               VerticalAlignment="Center" />
-                                </Grid>
-                                <!--<Rectangle Grid.Row="1" Height="1" Fill="LightGray" Margin="0 10"/>-->
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
+
+                                            </Grid>
+                                        </Border>
+
+                                        <ControlTemplate.Triggers>
+
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="Bd" Property="Background" Value="LightGray"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
                 </ListBox>
 
             </Grid>
         </Border>
+
     </Grid>
 </Page>

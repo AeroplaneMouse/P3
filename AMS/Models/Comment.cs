@@ -8,7 +8,7 @@ namespace AMS.Models
     {
         private string _content;
 
-        public ulong AssetID;
+        public ulong AssetID { get; set; }
         public string Username { get; set; }
         public string Content 
         {
