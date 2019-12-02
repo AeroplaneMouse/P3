@@ -19,51 +19,32 @@ namespace AMS.ViewModels
 {
     class TagEditorViewModel : Base.BaseViewModel
     {
-        #region Public Properties
-
+        private ITagController _controller;
         private bool _dropdownsEnabled = true;
-        private bool _parentSelectionEnabled = true;
-        private bool _departmentSelectionEnabled = true;
+        private int _selectedParentTagIndex;
+
+
+        #region Public Properties
 
         public ObservableCollection<Field> NonHiddenFieldList =>
             new ObservableCollection<Field>(_controller.NonHiddenFieldList);
-
         public ObservableCollection<Field> HiddenFieldList =>
             new ObservableCollection<Field>(_controller.HiddenFieldList);
 
-        public string Name
-        {
-            get => _controller.Name;
-            set => _controller.Name = value;
-        }
+        public string Name { get => _controller.Name;
+                             set => _controller.Name = value; }
 
-        public string Color
-        {
-            get => _controller.Color;
-            set => _controller.Color = value;
-        }
+        public string Color { get => _controller.Color;
+                              set => _controller.Color = value; }
 
         public ulong ParentID => _controller.ParentID;
 
-        public ulong DepartmentID
-        {
-            get => _controller.DepartmentID;
-            set => _controller.DepartmentID = value;
-        }
+        public ulong DepartmentID { get => _controller.DepartmentID;
+                                    set => _controller.DepartmentID = value; }
 
         public string PageTitle { get; set; }
-
-        public List<Tag> ParentTagList
-        {
-            get => _controller.ParentTagList;
-        }
-
-        public List<Department> DepartmentList
-        {
-            get => _controller.DepartmentList;
-        }
-
-        private int _selectedParentTagIndex;
+        public List<Tag> ParentTagList { get => _controller.ParentTagList; }
+        public List<Department> DepartmentList { get => _controller.DepartmentList; }
 
         public int SelectedParentTagIndex
         {
@@ -99,24 +80,8 @@ namespace AMS.ViewModels
         }
 
         public int SelectedDepartmentIndex { get; set; }
-
-        public bool ParentSelectionEnabled
-        {
-            get => _parentSelectionEnabled;
-            set => _parentSelectionEnabled = value;
-        }
-
-        public bool DepartmentSelectionEnabled
-        {
-            get => _departmentSelectionEnabled;
-            set => _departmentSelectionEnabled = value;
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private ITagController _controller;
+        public bool ParentSelectionEnabled { get; set; } = true;
+        public bool DepartmentSelectionEnabled { get; set; } = true;
 
         #endregion
 
@@ -137,20 +102,15 @@ namespace AMS.ViewModels
         {
             _controller = tagController;
 
+            // Disabling the ability to change parent and department for the user tag
             if (_controller.Id == 1)
             {
-                _parentSelectionEnabled = false;
-                _departmentSelectionEnabled = false;
+                ParentSelectionEnabled = false;
+                DepartmentSelectionEnabled = false;
             }
 
-            if (_controller.ParentID > 0)
-            {
-                _departmentSelectionEnabled = false;
-            }
-            else
-            {
-                _departmentSelectionEnabled = true;
-            }
+            // Enabling department selection for parent tags
+            DepartmentSelectionEnabled = _controller.ParentID == 0;
 
             //Set the selected parent to the parent of the chosen tag
             int i = ParentTagList.Count - 1;
@@ -162,22 +122,18 @@ namespace AMS.ViewModels
             
             OnPropertyChanged(nameof(Color));
 
-            Department currentDepartment;
+            // Identifying the department to be the currently selected department.
+            Department currentDepartment = _controller.IsEditing
+                ? _controller.DepartmentList.Find(d => d.ID == _controller.DepartmentID)
+                : Features.Main.CurrentDepartment;
 
-            if (_controller.IsEditing)
-            {
-                PageTitle = "Edit tag";
-
-                // Use the department of the tag
-                currentDepartment = _controller.DepartmentList.Find(d => d.ID == _controller.DepartmentID);
-            }
-            else
-            {
-                PageTitle = "Add tag";
-                currentDepartment = Features.Main.CurrentDepartment;
-            }
+            // Setting the title of the page
+            PageTitle = _controller.IsEditing
+                ? "Edit tag"
+                : "Add tag";
 
             UpdateAll();
+
             // Setting the selected department
             int index = 0;
             foreach (Department d in _controller.DepartmentList)
@@ -187,15 +143,13 @@ namespace AMS.ViewModels
                 index++;
             }
 
-
             // Initialize commands
-            SaveTagCommand = new Base.RelayCommand(SaveTag);
-            AddFieldCommand = new Base.RelayCommand(AddField);
+            SaveTagCommand = new RelayCommand(SaveTag);
+            AddFieldCommand = new RelayCommand(AddField);
             RemoveFieldCommand = new Base.RelayCommand<object>((parameter) => RemoveField(parameter));
             
-            RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("The tag will be deleted from the system.\nAre you sure?", RemoveTag)));
-
-            CancelCommand = new Base.RelayCommand(Cancel);
+            RemoveCommand = new RelayCommand(() => Features.DisplayPrompt(new Confirm("The tag will be deleted from the system.\nAre you sure?", RemoveTag)));
+            CancelCommand = new RelayCommand(Cancel);
 
             ShowFieldEditPromptCommand = new RelayCommand<object>((parameter) =>
 
@@ -236,13 +190,9 @@ namespace AMS.ViewModels
             if (VerifyTagAndFields())
             {
                 if (_controller.IsEditing)
-                {
                     _controller.Update();
-                }
                 else
-                {
                     _controller.Save();
-                }
 
                 Features.Navigate.Back();
             }
@@ -271,13 +221,14 @@ namespace AMS.ViewModels
                 UpdateAll();
             }
         }
-
+        
+        /// <summary>
+        /// Returns to the tag list without saving anything
+        /// </summary>
         private void Cancel()
         {
-            if (Features.Navigate.Back() == false)
-            {
+            if (!Features.Navigate.Back())
                 Features.Navigate.To(Features.Create.TagList());
-            }
         }
 
         private void UpdateAll()
@@ -309,9 +260,7 @@ namespace AMS.ViewModels
                 foreach (var id in field.TagIDs)
                 {
                     if (field.TagIDs.Contains(id))
-                    {
                         field.TagList.Add(ParentTag);
-                    }
                 }
             }
         }
@@ -322,15 +271,14 @@ namespace AMS.ViewModels
         /// <returns></returns>
         private bool VerifyTagAndFields()
         {
-            //Verifies whether fields contains correct information, or the required information.
+            // Verifies whether fields contains correct information, or the required information.
             List<Field> completeList = HiddenFieldList.ToList();
             completeList.AddRange(NonHiddenFieldList.ToList());
 
-            //Checks whether the name is null
+            // Checks whether the name is null
             if (string.IsNullOrEmpty(_controller.Name))
             {
-                Features.AddNotification(new Notification("Label is required and empty",
-                    Notification.WARNING));
+                Features.AddNotification(new Notification("Label is required and empty", background: Notification.WARNING));
                 return false;
             }
 
@@ -338,12 +286,9 @@ namespace AMS.ViewModels
             {
                 if (field.Type == Field.FieldType.NumberField)
                 {
-                    bool check = field.Content.All(char.IsDigit);
-                    if (check)
+                    if (field.Content.All(char.IsDigit))
                     {
-                        Features.AddNotification(
-                            new Notification("The field " + field.Label + " cannot contain letters",
-                                Notification.WARNING));
+                        Features.AddNotification(new Notification("The field " + field.Label + " cannot contain letters", background: Notification.WARNING));
                         return false;
                     }
                 }
@@ -366,6 +311,11 @@ namespace AMS.ViewModels
 
         private void RemoveTag(object sender, PromptEventArgs e)
         {
+            // Check if the tag to be removed is a parent
+            //if (_controller.ControlledTag.ParentID == 0)
+            //{
+
+            //}
             _controller.Remove();
             if (Features.Navigate.Back() == false)
             {
@@ -380,6 +330,7 @@ namespace AMS.ViewModels
                 i--;
             SelectedDepartmentIndex = i;
         }
+
         #endregion
     }
 }
