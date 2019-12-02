@@ -222,7 +222,7 @@ namespace AMS.Database.Repositories
             return comments;
         }
 
-        public List<Comment> GetAll(bool includeDeleted = false)
+        public List<Comment> GetAll(bool includeDeleted = false, int limit=100)
         {
             var con = new MySqlHandler().GetConnection();
             List<Comment> comments = new List<Comment>();
@@ -233,10 +233,11 @@ namespace AMS.Database.Repositories
                 // Sending sql query
                 try
                 {
-                    string query = "SELECT c.id, c.asset_id, c.username, c.content, c.created_at, c.updated_at FROM comments as c " 
-                                   + "INNER JOIN assets a on c.asset_id = a.id "
-                                   + "WHERE a.deleted_at IS NULL "
-                                   + (!includeDeleted ? "AND c.deleted_at IS NULL" : "");
+                    string query = "SELECT c.id, c.asset_id, c.username, c.content, c.created_at, c.updated_at FROM comments as c "+ 
+                                   "INNER JOIN assets a on c.asset_id = a.id "+ 
+                                   "WHERE a.deleted_at IS NULL "+ 
+                                   (!includeDeleted ? "AND c.deleted_at IS NULL " : "")+
+                                   "ORDER BY created_at DESC LIMIT "+limit;
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
