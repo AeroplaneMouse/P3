@@ -230,8 +230,6 @@ namespace AMS.ViewModels
         /// Used when the application has connected to the database and other external services,
         /// to remove the splash page and shows the navigation menu's and homepage.
         /// </summary>
-        
-
         private void InitializeCommands()
         {
             RemoveNotificationCommand = new Base.RelayCommand<object>((parameter) => RemoveNotification(parameter as Notification));
@@ -255,6 +253,9 @@ namespace AMS.ViewModels
                 ChangeSettingsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.SettingsEditor(this)));
         }
 
+        /// <summary>
+        /// Initialize the windows commands and other that should be initialized on splashpage level
+        /// </summary>
         private void InitializeWindowsCommands()
         {
             // Window commands
@@ -271,10 +272,20 @@ namespace AMS.ViewModels
             ClearSettingsCommand = new Base.RelayCommand(ClearSettings);
         }
 
+        /// <summary>
+        /// Displays confirm prompt and clears the connection settings if approved.
+        /// </summary>
         private void ClearSettings()
         {
-            new FileConfigurationHandler(CurrentSession).Clear();
-            Reload();
+            // Prompt user for confirmation
+            DisplayPrompt(new Views.Prompts.Confirm("Are you sure you want to clear the connection settings?", (sender, e) =>
+            {
+                if (e.Result)
+                {
+                    new FileConfigurationHandler(CurrentSession).Clear();
+                    Reload();
+                }
+            }));
         }
 
         private void GoToPage(int pageNumber)
