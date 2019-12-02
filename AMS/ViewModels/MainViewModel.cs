@@ -170,7 +170,10 @@ namespace AMS.ViewModels
             MySqlHandler.ConnectionFailed += ConnectionFailed;
 
             // Loads homepage and other stuff from the UI-thread.
-            SplashPage.Dispatcher.Invoke(() => ContentFrame.Navigate(Features.Create.Home()));
+            //Page homePage = Features.Create.Home();
+            //History.Push(homePage);
+
+            SplashPage.Dispatcher.Invoke(() => Features.Navigate.To(Features.Create.Home()));
 
             // Remove splash page
             SplashPage = null;

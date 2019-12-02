@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
       mc:Ignorable="d"
       ShowsNavigationUI="False"
       Title="Home">
@@ -81,14 +82,130 @@
         <Border Grid.Row="1">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 
-                <TextBlock VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   Style="{StaticResource TitleStyle}"
-                   FontSize="{StaticResource FontSizeXLarge}"
-                   Text="Welcome to your Asset Management System"/>
+                <TextBlock VerticalAlignment="Top"
+                           HorizontalAlignment="Center"
+                           Style="{StaticResource TitleStyle}"
+                           Margin="0 10 0 20"
+                           FontSize="{StaticResource FontSizeXLarge}"
+                           Text="Welcome to your Asset Management System"/>
+
+                <ListBox ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged}"
+                         SelectedItem="{Binding SelectedComment}"
+                         Margin="10 0"
+                         Grid.Row="1"
+                         Width="500"
+                         Height="300"
+                         x:Name="CommentList">
+
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="MouseDoubleClick">
+                            <i:InvokeCommandAction Command="{Binding ViewCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Width="400">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!--Comment information-->
+                                    <StackPanel Grid.Column="0" Margin="0 0 50 0">
+                                        <TextBlock Text="{Binding Path=Username}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"
+                                                   FontWeight="DemiBold" />
+
+                                        <TextBlock Text="{Binding Path=CreatedAtString}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Gray" />
+                                    </StackPanel>
+
+                                    <!--Comment content-->
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding Path=Content}"
+                                               Style="{StaticResource ParagraphStyle}"
+                                               Foreground="Black"
+                                               TextWrapping="Wrap"
+                                               VerticalAlignment="Center" />
+                                </Grid>
+                                <!--<Rectangle Grid.Row="1" Height="1" Fill="LightGray" Margin="0 10"/>-->
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <!--<ScrollViewer Grid.Row="1"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Visible"
+                              HorizontalAlignment="Left"
+                              Width="400"
+                              Height="300"
+                              Margin="10 0 0 0">
+                    
+                    <ItemsControl ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged}"
+                                  Margin="10 0"
+                                  x:Name="CommentList">
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="MouseDoubleClick">
+                                <i:InvokeCommandAction Command="{Binding ViewCommand}"
+                                                       CommandParameter="{Binding .}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    
+                                    <Grid Grid.Row="0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        --><!--Comment information--><!--
+                                        <StackPanel Grid.Column="0" Margin="0 0 50 0">
+                                            <TextBlock Text="{Binding Path=Username}"
+                                                       Style="{StaticResource ParagraphStyle}"
+                                                       Foreground="Black"
+                                                       FontWeight="DemiBold" />
+                                            
+                                            <TextBlock Text="{Binding Path=CreatedAtString}"
+                                                       Style="{StaticResource ParagraphStyle}"
+                                                       Foreground="Gray" />
+                                        </StackPanel>
+                                        
+                                        --><!--Comment content--><!--
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding Path=Content}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="Black"
+                                                   TextWrapping="Wrap"
+                                                   VerticalAlignment="Center" />
+                                    </Grid>
+                                    <Rectangle Grid.Row="1" Height="1" Fill="LightGray" Margin="0 10" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>-->
             </Grid>
         </Border>
     </Grid>
