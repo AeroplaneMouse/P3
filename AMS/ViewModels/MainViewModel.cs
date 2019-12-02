@@ -387,7 +387,7 @@ namespace AMS.ViewModels
                 department.Name = (e as TextInputPromptEventArgs).Text;
 
                 ulong id;
-                if (_departmentRep.Insert(department, out id))
+                if (_departmentRep.Insert(department, out id) != null)
                 {
                     // TODO: Add log of department insert
                     OnPropertyChanged(nameof(Departments));

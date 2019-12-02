@@ -71,7 +71,7 @@ namespace AMS.Database.Repositories
         /// <param name="entity">The asset to be inserted</param>
         /// <param name="id"></param>
         /// <returns>Whether the insertion was successful or not</returns>
-        public bool Insert(Asset entity, out ulong id)
+        public Asset Insert(Asset entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
@@ -117,7 +117,7 @@ namespace AMS.Database.Repositories
                 }
             }
 
-            return querySuccess;
+            return querySuccess ? GetById(id) : null;
         }
         
         /// <summary>
@@ -412,6 +412,8 @@ namespace AMS.Database.Repositories
 
             List<User> users = tagged.OfType<User>().ToList();
             List<Tag> tags = tagged.OfType<Tag>().ToList();
+            int user_counter = users.Count;
+            int tag_counter = tags.Count;
 
             ClearTags(asset);
             
@@ -426,37 +428,41 @@ namespace AMS.Database.Repositories
                     string tagLabels = "\"" + String.Join("\", \"", tags);
 
                     StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users VALUES ");
-                    int counter = users.Count;
 
-                    for (int i = 0; i < counter; i++)
+                    for (int i = 0; i < user_counter; i++)
                     {
                         userQuery.AppendFormat("({0},{1})", asset.ID, users[i].ID);
 
-                        if (i != counter - 1)
+                        if (i != user_counter - 1)
                             userQuery.Append(",");
                     }
 
                     StringBuilder tagQuery = new StringBuilder("INSERT INTO asset_tags VALUES ");
-                    counter = tags.Count;
 
-                    for (int i = 0; i < counter; i++)
+                    for (int i = 0; i < tag_counter; i++)
                     {
                         tagQuery.AppendFormat("({0},{1})", asset.ID, tags[i].ID);
 
-                        if (i != counter - 1)
+                        if (i != tag_counter - 1)
                             tagQuery.Append(",");
                     }
 
-                    using (var cmd = new MySqlCommand(userQuery.ToString(), con))
+                    if (users.Count > 0)
                     {
-                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                        using (var cmd = new MySqlCommand(userQuery.ToString(), con))
+                        {
+                            querySuccess = cmd.ExecuteNonQuery() > 0;
+                        }
                     }
-
-                    using (var cmd = new MySqlCommand(tagQuery.ToString(), con))
+                    
+                    if (tags.Count > 0)
                     {
-                        querySuccess = cmd.ExecuteNonQuery() > 0 && querySuccess;
+                        using (var cmd = new MySqlCommand(tagQuery.ToString(), con))
+                        {
+                            querySuccess = cmd.ExecuteNonQuery() > 0 && querySuccess;
+                        }
                     }
-
+                    
                     logger.AddEntry("Tag attached", tagLabels + " was attached to the asset with ID: "
                         + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.", Features.GetCurrentSession().user.ID);
 
@@ -476,7 +482,6 @@ namespace AMS.Database.Repositories
 
         public IEnumerable<ITagable> GetTags(Asset asset)
         {
-            // TODO: Ingen new repositories!
             var taggedWith = new List<ITagable>();
             var tagRepository = new TagRepository();
             var userRepository = new UserRepository();

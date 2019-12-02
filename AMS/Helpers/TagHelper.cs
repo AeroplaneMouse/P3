@@ -50,7 +50,7 @@ namespace AMS.Helpers
                                                       && !AppliedTags.Contains(u)).ToList());
                 }else{
                     result.AddRange(SuggestedTags.Where(t => t.TagLabel.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
-                                                             && !AppliedTags.Contains(t)).ToList());
+                                                      && !AppliedTags.Contains(t)).ToList());
                 }
             }
             else

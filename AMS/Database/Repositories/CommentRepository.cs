@@ -15,7 +15,7 @@ namespace AMS.Database.Repositories
     {
         private Ilogger logger { get; set; } = new Logger(new LogRepository());
 
-        public bool Insert(Comment entity, out ulong id)
+        public Comment Insert(Comment entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
             var querySuccess = false;
@@ -57,7 +57,7 @@ namespace AMS.Database.Repositories
                 }
             }
             
-            return querySuccess;
+            return querySuccess ? GetById(id) : null;
         }
 
         public bool Update(Comment entity)
