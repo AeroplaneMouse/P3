@@ -4,6 +4,7 @@ using AMS.ConfigurationHandler;
 using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
 using AMS.ViewModels;
+using System;
 
 namespace AMS.Authentication
 {
@@ -18,8 +19,11 @@ namespace AMS.Authentication
         public Session(IUserRepository repository) => user = repository.GetByIdentity(GetIdentity());
 
         public bool Authenticated() => user != null;
+        
         public bool IsAdmin() => user.IsAdmin;
+        
         public static string GetIdentity() => WindowsIdentity.GetCurrent().Name;
+        
         public static string GetDBKey()
         {
             if (string.IsNullOrEmpty(_dbKey))
@@ -28,6 +32,11 @@ namespace AMS.Authentication
                 _dbKey = fileConfigurationHandler.GetConfigValue();
             }
             return _dbKey;
+        }
+
+        public static void ClearDBKey()
+        {
+            _dbKey = String.Empty;
         }
     }
 }

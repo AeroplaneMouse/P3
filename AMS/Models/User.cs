@@ -38,7 +38,6 @@ namespace AMS.Models
 
                 return DefaultDepartment == 0 ? 0 : _departmentList.Select(p => p.ID).ToList().IndexOf(DefaultDepartment);
             }
-
             set
             {
                 if (_departmentList == null)

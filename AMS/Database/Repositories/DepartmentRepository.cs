@@ -57,7 +57,7 @@ namespace AMS.Database.Repositories
         /// <param name="entity"></param>
         /// <param name="id"></param>
         /// <returns>True if entity was successfully inserted.</returns>
-        public bool Insert(Department entity, out ulong id)
+        public Department Insert(Department entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
@@ -91,7 +91,7 @@ namespace AMS.Database.Repositories
                 }
             }
 
-            return querySuccess;
+            return querySuccess ? GetById(id) : null;
         }
 
         /// <summary>

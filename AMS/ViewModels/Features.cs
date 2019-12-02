@@ -190,9 +190,9 @@ namespace AMS.ViewModels
             /// </summary>
             /// <param name="main"></param>
             /// <returns></returns>
-            public static Page Splash(MainViewModel main)
+            public static Page Splash()
             {
-                return new Splash(main, _userRepository);
+                return new Splash(Main, _userRepository);
             }
 
             /// <summary>
@@ -246,9 +246,9 @@ namespace AMS.ViewModels
             /// Returns a new settings editor page
             /// </summary>
             /// <returns></returns>
-            public static Page SettingsEditor()
+            public static Page SettingsEditor(object caller)
             {
-                return new SettingsEditor();
+                return new SettingsEditor(caller);
             }
 
             #endregion
@@ -259,7 +259,7 @@ namespace AMS.ViewModels
             /// Returns the main window of the application
             /// </summary>
             /// <returns></returns>
-            public static Window Main()
+            public static Window MainWindow()
             {
                 return new Main(_userRepository, _departmentRepository);
             }

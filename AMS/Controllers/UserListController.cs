@@ -291,7 +291,7 @@ namespace AMS.Controllers
 
         public void GetUsersFromFile()
         {
-            string filePath = _importer.GetUsersFile();
+            string filePath = _importer.GetUsersFilePath();
 
             if (!string.IsNullOrEmpty(filePath))
             {

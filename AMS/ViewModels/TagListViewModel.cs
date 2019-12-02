@@ -33,12 +33,12 @@ namespace AMS.ViewModels
         {
             _tagListController = controller;
 
-            RemoveCommand = new RelayCommand(() => Features.DisplayPrompt(new Confirm("Deleting selected tag. This action cannot be undone. Proceed?", RemoveTag)));
+            RemoveCommand = new RelayCommand(() => Features.DisplayPrompt(new Confirm("The selected tag(s) will be deleted from the system.\nAre you sure?", RemoveTag)));
             AddNewCommand = new RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(null)));
             SearchCommand = new RelayCommand(() => Search());
             EditCommand = new RelayCommand(() => {
                 if (SelectedItem != null)
-                    Features.Navigate.To(Features.Create.TagEditor(SelectedItem));
+                    Features.Navigate.To(Features.Create.TagEditor(_tagListController.getTag(SelectedItem.ID)));
             });
             
             Search();

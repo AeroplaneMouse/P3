@@ -45,7 +45,7 @@
     <Style x:Key="{x:Type GridViewColumnHeader}" TargetType="GridViewColumnHeader">
         <Setter Property="HorizontalContentAlignment" Value="Left" />
         <Setter Property="Margin" Value="-4, 0, 0, 0" />
-        <Setter Property="Padding" Value="10, 3, 0, 1" />
+        <Setter Property="Padding" Value="10, 3, 4, 1" />
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
     </Style>
     

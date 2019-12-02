@@ -12,7 +12,6 @@
         <Setter Property="SnapsToDevicePixels" Value="True"/>
     </Style>
     
-    
     <Style TargetType="{x:Type Button}" BasedOn="{StaticResource BaseStyle}" />
     <Style TargetType="{x:Type Label}" BasedOn="{StaticResource BaseStyle}" />
     <Style TargetType="{x:Type TextBox}" BasedOn="{StaticResource BaseStyle}" />
@@ -34,6 +33,7 @@
     <Style TargetType="TextBlock" x:Key="HeaderStyle" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
     </Style>
+    
     <Style TargetType="TextBlock" x:Key="HeaderStyleWithSpace" BasedOn="{StaticResource HeaderStyle}">
         <Setter Property="Margin" Value="0 0 0 10"/>
     </Style>
@@ -46,6 +46,7 @@
     <Style TargetType="TextBlock" x:Key="ParagraphStyle" BasedOn="{StaticResource BaseTextBlockStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
     </Style>
+    
     <Style TargetType="TextBlock" x:Key="ParagraphStyleWithSpace" BasedOn="{StaticResource ParagraphStyle}">
         <Setter Property="Margin" Value="0 0 0 10"/>
     </Style>
@@ -65,6 +66,7 @@
     <Style TargetType="TextBox" x:Key="ParagraphTextBox" BasedOn="{StaticResource BaseTextBoxStyle}">
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
     </Style>
+    
     <Style TargetType="TextBox" x:Key="ParagraphTextBoxWithSpace" BasedOn="{StaticResource ParagraphTextBox}">
         <Setter Property="Margin" Value="0 0 0 10"/>
     </Style>
@@ -74,6 +76,7 @@
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
     </Style>
+    
     <Style TargetType="PasswordBox" x:Key="ParagraphPasswordBoxWithSpace" BasedOn="{StaticResource ParagraphPasswordBox}">
         <Setter Property="Margin" Value="0 0 0 10"/>
     </Style>

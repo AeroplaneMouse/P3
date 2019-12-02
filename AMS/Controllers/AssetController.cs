@@ -169,9 +169,9 @@ namespace AMS.Controllers
             
             //Database saving
             ulong id = 0;
-            _assetRepository.AttachTags(ControlledAsset, CurrentlyAddedTags);
-            _assetRepository.Insert(ControlledAsset, out id);
-            
+            Asset insertedAsset = _assetRepository.Insert(ControlledAsset, out id);
+            _assetRepository.AttachTags(insertedAsset, CurrentlyAddedTags);
+
             //Asset saved verification
             return id != 0;
         }
