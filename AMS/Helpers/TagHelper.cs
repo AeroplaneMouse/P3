@@ -5,7 +5,6 @@ using AMS.Database.Repositories.Interfaces;
 using AMS.Models;
 using System.Linq;
 using AMS.Interfaces;
-using Google.Protobuf.WellKnownTypes;
 using Type = System.Type;
 
 namespace AMS.Helpers
@@ -62,7 +61,6 @@ namespace AMS.Helpers
                     if ((item.ChildrenCount > 0 || item.TagId == 1) 
                         && (!AppliedTags.Contains(item) || !ContainsAllChildrenOfParent(item)))
                         result.Add(item);
-
                     else if (item.ChildrenCount == 0 && !AppliedTags.Contains(item))
                         result.Add(item);
                 }
@@ -184,10 +182,7 @@ namespace AMS.Helpers
                 return false;
             
             if (tag.TagId == 1)
-            {
-                // Users
-                return AppliedTags.Count(u => u.TagType == typeof(User)) == _users.Count;
-            }
+                return AppliedTags.Count(u => u.TagType == typeof(User)) == _users.Count; // Users
 
             return AppliedTags.Count(t => t.ParentId == tag.TagId) == tag.ChildrenCount;
         }
@@ -202,9 +197,7 @@ namespace AMS.Helpers
         public bool AllParentChildrenTagged()
         {
             if (IsParentSet())
-            {
                 return AppliedTags.Count(t => t.ParentId == _parent.ID) == _parent.ChildrenCount;
-            }
 
             return false;
         }
