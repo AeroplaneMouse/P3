@@ -78,7 +78,6 @@ namespace AMS.ViewModels
         public bool inTagMode { get; set; } = false;
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
 
-
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand PrintCommand { get; set; }
@@ -122,8 +121,8 @@ namespace AMS.ViewModels
             SearchCommand = new RelayCommand(RefreshList);
             ViewCommand = new RelayCommand(ViewAsset);
             ViewWithParameterCommand = new RelayCommand<object>(ViewAsset);
-            RemoveTagCommand = new RelayCommand<object>((parameter) =>
-            {
+            
+            RemoveTagCommand = new RelayCommand<object>((parameter) => {
                 ITagable tag = parameter as ITagable;
                 _tagHelper.RemoveTag(tag);
                 AppliedTags = _tagHelper.GetAppliedTags(true);
@@ -134,8 +133,7 @@ namespace AMS.ViewModels
             ClearInputCommand = new RelayCommand(ClearInput);
             CheckAllChangedCommand = new RelayCommand<object>((parameter) => CheckAllChanged(parameter as ListView));
         }
-
-
+        
         #region Methods
 
         /// <summary>
@@ -199,7 +197,6 @@ namespace AMS.ViewModels
                 EditAsset(SelectedItems.First());
                 OnPropertyChanged(nameof(Items));
             }
-                
             else
                 Features.AddNotification(new Notification("Please select only one asset.", Notification.ERROR), 3500);
         }
@@ -242,7 +239,6 @@ namespace AMS.ViewModels
                     Console.WriteLine("Not a tag");
                 }
             }
-
             else if (SearchQuery == null)
                 return;
 
