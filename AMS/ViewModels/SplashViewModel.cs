@@ -65,8 +65,6 @@ namespace AMS.ViewModels
         {
             // Connecting to database
             LoadingText = "Establishing connection...";
-
-            // TODO: Er den her nødvendig?
             CurrentActionText = "A connection to the database is being established...";
             AdditionalText = "";
 

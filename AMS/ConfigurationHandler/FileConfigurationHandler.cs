@@ -30,6 +30,11 @@ namespace AMS.ConfigurationHandler
             FileEncryption.UserDataEncrypt(ComputeSha256Hash(Domain), newValue, Path);
         }
 
+        public string LoadConfigValueFromExternalFile(string path)
+        {
+            return FileEncryption.UserDataDecrypt(ComputeSha256Hash(Domain), path);
+        }
+
         private string ComputeSha256Hash(string rawData)
         {
             // Create a SHA256   

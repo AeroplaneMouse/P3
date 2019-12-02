@@ -32,11 +32,19 @@
 
         <Rectangle Style="{StaticResource HorizontalSeparator}"
                    VerticalAlignment="Bottom" Grid.Row="0" />
+        
+        <Button Style="{StaticResource RegularButton}"
+                Content="Load settings from file"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Grid.Row="1"
+                Margin="10"
+                Command="{Binding LoadFromFileCommand}"/>
+        
         <Grid Grid.Row="1"
               Margin="10"
               MinWidth="200"
               HorizontalAlignment="Left">
-
             <StackPanel>
                 <!-- Server ip -->                
                 <TextBlock Style="{StaticResource ParagraphStyle}"

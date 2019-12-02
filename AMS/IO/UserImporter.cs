@@ -67,18 +67,14 @@ namespace AMS.IO
             }
         }
 
-        public string GetUsersFile()
+        public string GetUsersFilePath()
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();
 
             Nullable<bool> result = dialog.ShowDialog();
 
-            string filePath = String.Empty;
-
             if (result == false)
-            {
                 return String.Empty;
-            }
 
             return dialog.FileName;
         }

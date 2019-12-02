@@ -13,6 +13,7 @@ namespace AMS.ViewModels
 
         public ICommand SaveCommand { get; set; }
         public ICommand CancelCommand { get; set; }
+        public ICommand LoadFromFileCommand { get; set; }
 
         public string IP { get; set; } = String.Empty;
         public string Username { get; set; } = String.Empty;
@@ -54,19 +55,45 @@ namespace AMS.ViewModels
 
             // If a current configuration exists, load it to the view.
             if (!String.IsNullOrEmpty(conString))
-            {
-                string[] elements = conString.Split(';', '=');
-
-                IP = elements[1];
-                Username = elements[5];
-                _oldPassword = elements[7];
-                Database = elements[3];
-                Charset = elements[9];
-                Timeout = elements[11];
-            }
+                ExtractSettingsFromString(conString);
 
             SaveCommand = new Base.RelayCommand(Save);
             CancelCommand = new Base.RelayCommand(Cancel);
+            LoadFromFileCommand = new Base.RelayCommand(LoadSettings);
+        }
+
+        private void ExtractSettingsFromString(string connectionString)
+        {
+            string[] elements = connectionString.Split(';', '=');
+
+            IP = elements[1];
+            Username = elements[5];
+            _oldPassword = elements[7];
+            Database = elements[3];
+            Charset = elements[9];
+            Timeout = elements[11];
+        }
+
+        private void LoadSettings()
+        {
+            string path = GetFilePath();
+            if (!String.IsNullOrEmpty(path))
+            {
+                // Load settings from file and save them to local config file
+                FileConfigurationHandler configurationhandler = new FileConfigurationHandler(Features.GetCurrentSession());
+                string conString  = configurationhandler.LoadConfigValueFromExternalFile(path);
+                ExtractSettingsFromString(conString);
+            }
+        }
+
+        public string GetFilePath()
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog();
+            Nullable<bool> result = dialog.ShowDialog();
+            if (result == false)
+                return String.Empty;
+
+            return dialog.FileName;
         }
     }
 }
