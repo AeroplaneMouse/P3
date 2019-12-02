@@ -18,8 +18,8 @@ namespace AMS.ViewModels
         public string Username { get; set; } = String.Empty;
         public string Password { get; set; } = String.Empty;
         public string Database { get; set; } = String.Empty;
-        public string Charset { get; set; } = String.Empty;
-        public string Timeout { get; set; } = String.Empty;
+        public string Charset { get; set; } = "utf8";
+        public string Timeout { get; set; } = "5";
 
         public SettingsEditorViewModel(object caller)
         {
