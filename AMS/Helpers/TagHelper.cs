@@ -5,6 +5,8 @@ using AMS.Database.Repositories.Interfaces;
 using AMS.Models;
 using System.Linq;
 using AMS.Interfaces;
+using Google.Protobuf.WellKnownTypes;
+using Type = System.Type;
 
 namespace AMS.Helpers
 {
@@ -50,7 +52,7 @@ namespace AMS.Helpers
                                                       && !AppliedTags.Contains(u)).ToList());
                 }else{
                     result.AddRange(SuggestedTags.Where(t => t.TagLabel.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
-                                                      && !AppliedTags.Contains(t)).ToList());
+                                                             && !AppliedTags.Contains(t)).ToList());
                 }
             }
             else
@@ -63,12 +65,12 @@ namespace AMS.Helpers
 
                     else if (item.ChildrenCount == 0 && !AppliedTags.Contains(item))
                         result.Add(item);
-
                 }
-
-                result = result.Where(t => t.TagLabel.Contains(input, StringComparison.InvariantCultureIgnoreCase)).ToList();
+              
+                if(result.Any() && !string.IsNullOrEmpty(input))
+                    result = result.Where(t => t.TagLabel.Contains(input, StringComparison.InvariantCultureIgnoreCase)).ToList();
             }
-
+            
             _hasSuggestions = result.Any();
 
             return result;
