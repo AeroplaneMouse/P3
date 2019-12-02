@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AMS.Interfaces;
+using AMS.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,5 +12,8 @@ namespace AMS.Controllers.Interfaces
         ulong NumberOfAssets { get; set; }
         ulong NumberOfTags { get; set; }
         ulong NumberOfDepartments { get; set; }
+
+        List<ITagable> GetTags(Asset asset);
+        Asset GetAsset(ulong id);
     }
 }

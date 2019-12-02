@@ -1,5 +1,7 @@
 ﻿using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
+using AMS.Interfaces;
+using AMS.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +46,15 @@ namespace AMS.Controllers
             _departmentRepository = departmentRepository;
         }
 
+        public List<ITagable> GetTags(Asset asset)
+        {
+            return _assetRepository.GetTags(asset).ToList();
+        }
+
+        public Asset GetAsset(ulong id)
+        {
+            return _assetRepository.GetById(id);
+        }
 
     }
 }

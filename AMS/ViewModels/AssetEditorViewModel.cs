@@ -267,14 +267,12 @@ namespace AMS.ViewModels
 
         public override void UpdateOnFocus()
         {
-            OnPropertyChanged(nameof(NonHiddenFieldList));
-            OnPropertyChanged(nameof(HiddenFieldList));
-            OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(TagSearchSuggestions));
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(Identifier));
             OnPropertyChanged(nameof(Description));
             OnPropertyChanged(nameof(TagSearchQuery));
+            UpdateAll();
         }
 
         #endregion
@@ -420,8 +418,10 @@ namespace AMS.ViewModels
         {
             if (e is FieldEditPromptEventArgs args)
             {
-                _assetController.RemoveField(args.OldField);
-                _assetController.AddField(args.NewField);
+                args.OldField.Label = args.NewField.Label;
+                args.OldField.Required = args.NewField.Required;
+                args.OldField.Type = args.NewField.Type;
+                args.OldField.Content = args.NewField.Content;
                 UpdateAll();
             }
         }
