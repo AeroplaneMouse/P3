@@ -34,7 +34,7 @@ namespace AMS.ViewModels
             // Tabs
             _tabs = new ObservableCollection<object>();
             _tabs.Add(new AssetDetailsViewModel(_assetController));
-            _tabs.Add(new CommentViewModel(_assetController.ControlledAsset, commentListController));
+            _tabs.Add(new CommentViewModel(commentListController));
             _tabs.Add(new LogListViewModel(logListController));
 
             EditCommand = new Base.RelayCommand(() => Edit(), () => Features.GetCurrentSession().IsAdmin());
