@@ -52,9 +52,9 @@ namespace AMS.Controllers
         /// </summary>
         /// <param name="tag"></param>
         /// <returns></returns>
-        public Tag getTag(Tag tag)
+        public Tag getTag(ulong tagID)
         {
-            return _rep.GetById(tag.ID);
+            return _rep.GetById(tagID);
         }
 
         public List<Tag> GetParentTags()
