@@ -196,14 +196,14 @@ namespace AMS.ViewModels
                 {
                     if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
                     {
-                        _tagHelper.Parent((Tag)tag);
+                        _tagHelper.SetParent((Tag)tag);
                         CurrentGroup = "#" + tag.TagLabel;
                         SearchQuery = "";
                         _tabIndex = 0;
                     }
                     else
                     {
-                        _tagHelper.ApplyTag(tag);
+                        _tagHelper.AddTag(tag);
                         AppliedTags = _tagHelper.GetAppliedTags(true);
                         SearchQuery = "";
                         _tabIndex = 0;
@@ -267,11 +267,11 @@ namespace AMS.ViewModels
                 {
                     if(tag != null)
                     {
-                        _tagHelper.ApplyTag(tag);
+                        _tagHelper.AddTag(tag);
                     }
                     else if(_tagHelper.GetParent() != null)
                     {
-                        _tagHelper.ApplyTag(_tagHelper.GetParent());
+                        _tagHelper.AddTag(_tagHelper.GetParent());
                     }
                     
                     AppliedTags = _tagHelper.GetAppliedTags(true);
@@ -281,7 +281,7 @@ namespace AMS.ViewModels
                 {
                     // So we need to switch to a group of tags.
                     Tag taggedItem = (Tag)tag;
-                    _tagHelper.Parent(taggedItem);
+                    _tagHelper.SetParent(taggedItem);
                     CurrentGroup = "#" + taggedItem.Name;
                     UpdateTagSuggestions();
                 }
@@ -301,7 +301,7 @@ namespace AMS.ViewModels
 
             if (_tagHelper.IsParentSet())
             {
-                _tagHelper.Parent(null);
+                _tagHelper.SetParent(null);
                 CurrentGroup = "#";
                 SearchQuery = "";
                 UpdateTagSuggestions();

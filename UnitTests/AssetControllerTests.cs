@@ -40,7 +40,6 @@ namespace UnitTests
             _fieldTwo = new Field("Label of second field", "content of second field",
                 Field.FieldType.Checkbox, false, true);
 
-
             //Asset controller setup
             _assetController = new AssetController(new Asset(), _assetRepMock.Object);
             _assetController.ControlledAsset.Name = "AssetTests_Asset";

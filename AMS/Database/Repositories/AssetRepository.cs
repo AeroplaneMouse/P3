@@ -71,7 +71,7 @@ namespace AMS.Database.Repositories
         /// <param name="entity">The asset to be inserted</param>
         /// <param name="id"></param>
         /// <returns>Whether the insertion was successful or not</returns>
-        public bool Insert(Asset entity, out ulong id)
+        public Asset Insert(Asset entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
@@ -117,7 +117,7 @@ namespace AMS.Database.Repositories
                 }
             }
 
-            return querySuccess;
+            return querySuccess ? GetById(id) : null;
         }
         
         /// <summary>
@@ -322,6 +322,9 @@ namespace AMS.Database.Repositories
         /// If no '%' is added, the search will return every entry containing the keyword (slower).
         /// </summary>
         /// <param name="keyword">The search query to search by</param>
+        /// <param name="tags">List of tag ids</param>
+        /// <param name="users">List of user ids</param>
+        /// <param name="strict">Enable strict search</param>
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
         public List<Asset> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
         {
@@ -377,6 +380,8 @@ namespace AMS.Database.Repositories
                     }
 
                     _query.GroupBy = "a.id";
+                    
+                    Console.WriteLine(_query.PrepareSelect());
 
                     using (var cmd = new MySqlCommand(_query.PrepareSelect(), con))
                     {
@@ -412,6 +417,8 @@ namespace AMS.Database.Repositories
 
             List<User> users = tagged.OfType<User>().ToList();
             List<Tag> tags = tagged.OfType<Tag>().ToList();
+            int userCounter = users.Count;
+            int tagCounter = tags.Count;
 
             ClearTags(asset);
             
@@ -426,37 +433,41 @@ namespace AMS.Database.Repositories
                     string tagLabels = "\"" + String.Join("\", \"", tags);
 
                     StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users VALUES ");
-                    int counter = users.Count;
 
-                    for (int i = 0; i < counter; i++)
+                    for (int i = 0; i < userCounter; i++)
                     {
                         userQuery.AppendFormat("({0},{1})", asset.ID, users[i].ID);
 
-                        if (i != counter - 1)
+                        if (i != userCounter - 1)
                             userQuery.Append(",");
                     }
 
                     StringBuilder tagQuery = new StringBuilder("INSERT INTO asset_tags VALUES ");
-                    counter = tags.Count;
 
-                    for (int i = 0; i < counter; i++)
+                    for (int i = 0; i < tagCounter; i++)
                     {
                         tagQuery.AppendFormat("({0},{1})", asset.ID, tags[i].ID);
 
-                        if (i != counter - 1)
+                        if (i != tagCounter - 1)
                             tagQuery.Append(",");
                     }
 
-                    using (var cmd = new MySqlCommand(userQuery.ToString(), con))
+                    if (users.Count > 0)
                     {
-                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                        using (var cmd = new MySqlCommand(userQuery.ToString(), con))
+                        {
+                            querySuccess = cmd.ExecuteNonQuery() > 0;
+                        }
                     }
-
-                    using (var cmd = new MySqlCommand(tagQuery.ToString(), con))
+                    
+                    if (tags.Count > 0)
                     {
-                        querySuccess = cmd.ExecuteNonQuery() > 0 && querySuccess;
+                        using (var cmd = new MySqlCommand(tagQuery.ToString(), con))
+                        {
+                            querySuccess = cmd.ExecuteNonQuery() > 0 && querySuccess;
+                        }
                     }
-
+                    
                     logger.AddEntry("Tag attached", tagLabels + " was attached to the asset with ID: "
                         + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.", Features.GetCurrentSession().user.ID);
 
@@ -476,7 +487,6 @@ namespace AMS.Database.Repositories
 
         public IEnumerable<ITagable> GetTags(Asset asset)
         {
-            // TODO: Ingen new repositories!
             var taggedWith = new List<ITagable>();
             var tagRepository = new TagRepository();
             var userRepository = new UserRepository();
@@ -487,10 +497,9 @@ namespace AMS.Database.Repositories
             return taggedWith;
         }
 
-        private bool ClearTags(Asset asset)
+        private void ClearTags(Asset asset)
         {
             var con = new MySqlHandler().GetConnection();
-            bool querySuccess = false;
 
             // Opening connection
             if (MySqlHandler.Open(ref con))
@@ -505,7 +514,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = asset.ID;
 
-                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                        cmd.ExecuteNonQuery();
                     }
                 }
                 catch (MySqlException e)
@@ -517,8 +526,6 @@ namespace AMS.Database.Repositories
                     con.Close();
                 }
             }
-
-            return querySuccess;
         }
 
         /// <summary>

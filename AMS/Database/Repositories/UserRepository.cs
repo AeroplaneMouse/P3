@@ -127,7 +127,7 @@ namespace AMS.Database.Repositories
             return count;
         }
 
-        public bool Insert(User entity, out ulong id)
+        public User Insert(User entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
@@ -176,7 +176,7 @@ namespace AMS.Database.Repositories
                 }
             }
             
-            return querySuccess;
+            return querySuccess ? GetById(id) : null;
         }
 
         public bool Update(User entity)

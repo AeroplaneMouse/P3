@@ -2,18 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Style TargetType="{x:Type TextBox}" x:Key="TextBoxWithPlaceholder">
-        <!--<Setter Property="Padding" Value="10" />-->
-        <!--<Setter Property="Margin" Value="0 5 0 5" />
-        <Setter Property="BorderThickness" Value="0 0 0 1" />-->
-
         <Setter Property="Template">
-
             <Setter.Value>
-
                 <ControlTemplate TargetType="{x:Type TextBoxBase}">
-
                     <Grid>
-
                         <Border x:Name="border" 
                             BorderBrush="{TemplateBinding BorderBrush}" 
                             BorderThickness="{TemplateBinding BorderThickness}" 
@@ -24,7 +16,6 @@
                                       Focusable="False" 
                                       HorizontalScrollBarVisibility="Hidden" 
                                       VerticalScrollBarVisibility="Hidden"/>
-
                         </Border>
 
                         <TextBlock IsHitTestVisible="False" 
@@ -35,23 +26,17 @@
                                    Margin="3 0 0 0"
                                    HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                                    Foreground="Gray">
-
                             <TextBlock.Style>
-
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
-
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}" Value="">
                                             <Setter Property="Visibility" Value="Visible" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
-
                             </TextBlock.Style>
-
                         </TextBlock>
-
                     </Grid>
 
                     <ControlTemplate.Triggers>
@@ -72,7 +57,6 @@
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
-
             </Setter.Value>
         </Setter>
     </Style>

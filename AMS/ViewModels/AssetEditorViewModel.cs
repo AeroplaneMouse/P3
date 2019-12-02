@@ -268,7 +268,7 @@ namespace AMS.ViewModels
                 {
                     if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
                     {
-                        _tagHelper.Parent(null);
+                        _tagHelper.SetParent(null);
                         TagSearchQuery = "";
                         CurrentGroup = "";
                         CurrentGroupVisibility = Visibility.Collapsed;
@@ -277,7 +277,7 @@ namespace AMS.ViewModels
                     {
                         // So we need to switch to a group of tags.
                         Tag taggedItem = (Tag)tag;
-                        _tagHelper.Parent(taggedItem);
+                        _tagHelper.SetParent(taggedItem);
                         CurrentGroup = tag.TagLabel;
                         CurrentGroupVisibility = Visibility.Visible;
                         TagSearchQuery = "";
@@ -297,7 +297,7 @@ namespace AMS.ViewModels
             {
                 if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
                 {
-                    _tagHelper.Parent((Tag)tag);
+                    _tagHelper.SetParent((Tag)tag);
                     CurrentGroup = tag.TagLabel;
                     CurrentGroupVisibility = Visibility.Visible;
                     TagSearchQuery = "";
@@ -305,7 +305,7 @@ namespace AMS.ViewModels
                 }
                 else
                 {
-                    _tagHelper.ApplyTag(tag);
+                    _tagHelper.AddTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(true);
                     TagSearchQuery = "";
                     _tagTabIndex = 0;
@@ -349,7 +349,7 @@ namespace AMS.ViewModels
         {
             if (_tagHelper.IsParentSet())
             {
-                _tagHelper.Parent(null);
+                _tagHelper.SetParent(null);
                 CurrentGroup = "";
                 CurrentGroupVisibility = Visibility.Collapsed;
                 TagSearchQuery = "";
