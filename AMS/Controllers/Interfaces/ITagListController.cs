@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using AMS.Interfaces;
 
 namespace AMS.Controllers.Interfaces
 {
@@ -16,6 +17,8 @@ namespace AMS.Controllers.Interfaces
         void Remove(Tag tag);
 
         void Export(List<Tag> tags);
+
+        Tag getTag(Tag tag);
 
         List<Tag> GetParentTags();
 

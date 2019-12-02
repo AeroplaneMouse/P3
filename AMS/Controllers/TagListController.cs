@@ -47,6 +47,11 @@ namespace AMS.Controllers
             throw new NotImplementedException();
         }
 
+        public Tag getTag(Tag tag)
+        {
+            return _rep.GetById(tag.ID);
+        }
+
         public List<Tag> GetParentTags()
         {
             return _rep.GetParentTags().ToList();
