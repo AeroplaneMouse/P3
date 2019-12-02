@@ -6,10 +6,10 @@ namespace AMS.Views
 {
     public partial class Home : Page
     {
-        public Home(IHomeController homeController)
+        public Home(IHomeController homeController, ICommentListController commentListController)
         {
             InitializeComponent();
-            DataContext = new ViewModels.HomeViewModel(homeController);
+            DataContext = new ViewModels.HomeViewModel(homeController, commentListController);
         }
     }
 }

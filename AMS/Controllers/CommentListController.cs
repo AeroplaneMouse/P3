@@ -38,6 +38,8 @@ namespace AMS.Controllers
             _commentRep = commentRepository;
             // Create new asset if optional parameter not given
             _asset = asset;
+
+            FetchComments();
         }
 
         /// <summary>
@@ -84,6 +86,11 @@ namespace AMS.Controllers
                 _commentRep.Delete(comment);
             }
 
+            CommentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetAll();
+        }
+
+        public void FetchComments()
+        {
             CommentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetAll();
         }
     }
