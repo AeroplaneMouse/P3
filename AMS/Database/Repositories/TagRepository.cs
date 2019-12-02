@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using AMS.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
-using System.Collections.ObjectModel;
-using System.Linq;
 using AMS.Database.Repositories.Interfaces;
 using AMS.ViewModels;
 using AMS.Logging.Interfaces;
 using AMS.Logging;
-using Org.BouncyCastle.Utilities;
 
 namespace AMS.Database.Repositories
 {
@@ -261,8 +258,8 @@ namespace AMS.Database.Repositories
                 try
                 {
                     const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
-                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
-                                     "FROM tags AS t WHERE t.id=@id";
+                                         "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                         "FROM tags AS t WHERE t.id=@id";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -303,10 +300,10 @@ namespace AMS.Database.Repositories
                 try
                 {
                     const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
-                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
-                                     "FROM tags AS t " +
-                                     "INNER JOIN asset_tags AS at ON at.tag_id = t.id " +
-                                     "WHERE at.asset_id = @id";
+                                         "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                         "FROM tags AS t " +
+                                         "INNER JOIN asset_tags AS at ON at.tag_id = t.id " +
+                                         "WHERE at.asset_id = @id";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -361,8 +358,8 @@ namespace AMS.Database.Repositories
                 try
                 { 
                     const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
-                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
-                                     "FROM tags AS t WHERE t.parent_id=@id  ORDER BY countChildren DESC, t.label ASC";
+                                         "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                         "FROM tags AS t WHERE t.parent_id=@id  ORDER BY countChildren DESC, t.label ASC";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -408,8 +405,8 @@ namespace AMS.Database.Repositories
                 try 
                 {
                     string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
-                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
-                                     "FROM tags AS t WHERE t.label LIKE @keyword";
+                                   "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                   "FROM tags AS t WHERE t.label LIKE @keyword";
 
                     if (Features.Main.CurrentDepartment.ID > 0)
                         query += $" AND t.department_id={ Features.Main.CurrentDepartment.ID.ToString() } OR t.department_id IS NULL";
@@ -457,8 +454,8 @@ namespace AMS.Database.Repositories
                 try
                 {
                     string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, t.options, " +
-                                     "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
-                                     "FROM tags AS t";
+                                   "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                   "FROM tags AS t";
                     
                     if (Features.Main.CurrentDepartment.ID > 0)
                         query += $" WHERE t.department_id={ Features.Main.CurrentDepartment.ID.ToString() } OR t.department_id IS NULL";
