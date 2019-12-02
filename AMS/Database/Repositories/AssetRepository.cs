@@ -326,7 +326,7 @@ namespace AMS.Database.Repositories
         /// <param name="users">List of user ids</param>
         /// <param name="strict">Enable strict search</param>
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
-        public List<Asset> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false)
+        public List<Asset> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false, bool searchInFields=false)
         {
             var con = new MySqlHandler().GetConnection();
             List<Asset> assets = new List<Asset>();
@@ -353,7 +353,10 @@ namespace AMS.Database.Repositories
                         Statement statement = new Statement();
                         statement.AddOrStatement("a.name", keyword, "LIKE");
                         statement.AddOrStatement("a.identifier", keyword, "LIKE");
-                        statement.AddOrStatement("JSON_EXTRACT(a.options, '$[*].Content')", keyword, "LIKE");
+                        
+                        if (searchInFields)
+                            statement.AddOrStatement("JSON_EXTRACT(a.options, '$[*].Content')", keyword, "LIKE");
+                        
                         _query.Where(statement);
                     }
 

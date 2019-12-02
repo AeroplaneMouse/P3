@@ -394,7 +394,7 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public List<Tag> Search(string keyword,List<ulong> tag_list=null, List<ulong> users=null, bool strict=false)
+        public List<Tag> Search(string keyword,List<ulong> tag_list=null, List<ulong> users=null, bool strict=false, bool searchInFields=false)
         {
             var con = new MySqlHandler().GetConnection();
             List<Tag> tags = new List<Tag>();

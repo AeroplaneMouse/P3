@@ -254,7 +254,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void RefreshList()
         {
-            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict);
+            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict, _searchInFields);
             OnPropertyChanged(nameof(Items));
         }
 
