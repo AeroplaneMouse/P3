@@ -10,11 +10,14 @@ namespace AMS.Models
 
         public ulong AssetID;
         public string Username { get; set; }
-        public string Content {
-            get {
+        public string Content 
+        {
+            get 
+            {
                 return this._content;
             }
-            set {
+            set 
+            {
                 if (this.Content != null)
                 {
                     this.Changes["Content"] = this.Content;

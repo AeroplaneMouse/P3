@@ -10,17 +10,15 @@ using System.Windows.Input;
 namespace AMS.ViewModels
 {
     public class CommentViewModel : Base.BaseViewModel
-    {
-        private Asset _asset { get; set; }
+    { 
         public string NewComment { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
         public ObservableCollection<Comment> CommentList => new ObservableCollection<Comment>(_controller.CommentList);
         private ICommentListController _controller { get; set; }
 
-        public CommentViewModel(Asset asset, ICommentListController commentListController)
+        public CommentViewModel(ICommentListController commentListController)
         {
-            _asset = asset;
             _controller = commentListController;
 
             SaveCommand = new Base.RelayCommand(SaveComment);

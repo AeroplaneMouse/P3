@@ -47,6 +47,16 @@ namespace AMS.Controllers
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// As the taglist only contains partial information on a tag, this function returns the complete tag.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public Tag getTag(ulong tagID)
+        {
+            return _rep.GetById(tagID);
+        }
+
         public List<Tag> GetParentTags()
         {
             return _rep.GetParentTags().ToList();

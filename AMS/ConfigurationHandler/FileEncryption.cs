@@ -26,7 +26,8 @@ namespace AMS.ConfigurationHandler
 
             if (!File.Exists(path))
             {
-                File.Create(path);
+                FileStream file = File.Create(path);
+                file.Close();
             }
 
             //Reading through the file

@@ -18,29 +18,28 @@ namespace AMS.Controllers
             {
                 if (_commentList == null)
                 {
-                    if (_asset != null)
-                        _commentList = _commentRep.GetByAssetId(_asset.ID);
-                    else
-                        _commentList = _commentRep.GetAll();
+                    _commentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetAll();
                 }
+
                 return _commentList.OrderByDescending(p => p.CreatedAt).ToList();
             }
+
             set => _commentList = value;
         }
 
-        private List<Comment> _commentList;
-        Session _session;
-
-        Asset _asset { get; set; }
-
-        ICommentRepository _commentRep;
+        private List<Comment> _commentList { get; set; }
+        private Session _session { get; set; }
+        private Asset _asset { get; set; }
+        private ICommentRepository _commentRep { get; set; }
 
         public CommentListController(Session session, ICommentRepository commentRepository, Asset asset = null)
         {
             _session = session;
             _commentRep = commentRepository;
             // Create new asset if optional parameter not given
-            _asset = asset ?? new Asset();
+            _asset = asset;
+
+            FetchComments();
         }
 
         /// <summary>
@@ -87,7 +86,12 @@ namespace AMS.Controllers
                 _commentRep.Delete(comment);
             }
 
-            CommentList = _commentRep.GetByAssetId(_asset.ID);
+            CommentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetAll();
+        }
+
+        public void FetchComments()
+        {
+            CommentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetAll();
         }
     }
 }

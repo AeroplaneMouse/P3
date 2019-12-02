@@ -11,7 +11,7 @@ namespace AMS.Interfaces
     {
         #region Methods
 
-        string GetUsersFile();
+        string GetUsersFilePath();
         List<UserWithStatus> ImportUsersFromFile(string filePath);
         List<UserWithStatus> ImportUsersFromDatabase();
 
