@@ -1,8 +1,7 @@
-﻿using AMS.Authentication;
-using AMS.ConfigurationHandler;
-using System;
-using System.Windows.Controls;
+﻿using System;
+using AMS.Authentication;
 using System.Windows.Input;
+using AMS.ConfigurationHandler;
 
 namespace AMS.ViewModels
 {
@@ -25,9 +24,11 @@ namespace AMS.ViewModels
         public SettingsEditorViewModel(object caller)
         {
             _caller = caller;
-            UpdateOnFocus();
         }
 
+        /// <summary>
+        /// Aborts the new configuration settings and returns to the previous page
+        /// /// </summary>
         private void Cancel()
         {
             // Return from splashpage if called from it.
@@ -37,6 +38,9 @@ namespace AMS.ViewModels
                 Features.Navigate.Back();
         }
 
+        /// <summary>
+        /// Save the current settings.
+        /// </summary>
         private void Save()
         {
             // Use the old password
@@ -49,6 +53,9 @@ namespace AMS.ViewModels
             Features.Main.Reload();
         }
 
+        /// <summary>
+        /// Load the settings when the page gets focus.
+        /// </summary>
         public override void UpdateOnFocus()
         {
             string conString = Session.GetDBKey();
@@ -62,6 +69,11 @@ namespace AMS.ViewModels
             LoadFromFileCommand = new Base.RelayCommand(LoadSettings);
         }
 
+        /// <summary>
+        /// Extracts the configuration settings from the configuration string 
+        /// and saves them to properties to be displayed on the view.
+        /// </summary>
+        /// <param name="connectionString"></param>
         private void ExtractSettingsFromString(string connectionString)
         {
             string[] elements = connectionString.Split(';', '=');
@@ -74,6 +86,9 @@ namespace AMS.ViewModels
             Timeout = elements[11];
         }
 
+        /// <summary>
+        /// Reads the configuration settings from a user seleted file, then loads these settings into the view to be displayed.
+        /// </summary>
         private void LoadSettings()
         {
             string path = GetFilePath();
@@ -86,6 +101,10 @@ namespace AMS.ViewModels
             }
         }
 
+        /// <summary>
+        /// Opens a dialog for the user to select a file.
+        /// </summary>
+        /// <returns>The selected filepath</returns>
         public string GetFilePath()
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();

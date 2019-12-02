@@ -125,6 +125,8 @@ namespace AMS.ViewModels
             
             // Move to the settings editor
             _main.SplashPage = Features.Create.SettingsEditor(this);
+            // Manually calls the update function as the page is not navigated to using the navigator.
+            (_main.SplashPage.DataContext as SettingsEditorViewModel).UpdateOnFocus();
         }
     }
 }
