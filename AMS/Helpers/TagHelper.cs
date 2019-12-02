@@ -29,7 +29,7 @@ namespace AMS.Helpers
             SuggestedTags = new List<ITagable>();
 
             Reload();
-            Parent(null);
+            SetParent(null);
         }
 
         public void Reload()
@@ -67,14 +67,6 @@ namespace AMS.Helpers
                 }
 
                 result = result.Where(t => t.TagLabel.Contains(input, StringComparison.InvariantCultureIgnoreCase)).ToList();
-
-
-                //result.AddRange(SuggestedTags
-                //    .Where(t => t.ChildrenCount > 0)
-                //    .Where(t => t.TagId != 1 && t.ChildrenCount == 0 && !AppliedTags.Contains(t))
-                //    .Where(t => (t.TagId == 1 || t.ChildrenCount > 0) && (!AppliedTags.Contains(t) || !ContainsAllChildrenOfParent(t)))
-                //    .Where(t => t.TagLabel.Contains(input, StringComparison.InvariantCultureIgnoreCase))
-                //    .ToList());
             }
 
             _hasSuggestions = result.Any();
@@ -87,7 +79,7 @@ namespace AMS.Helpers
             return _hasSuggestions;
         }
 
-        public void ApplyTag(ITagable tag)
+        public void AddTag(ITagable tag)
         {
             if (!AppliedTags.Contains(tag))
             {
@@ -203,7 +195,7 @@ namespace AMS.Helpers
             return AppliedTags.Count(t => t.ParentId == tag.TagId) == tag.ChildrenCount;
         }
 
-        public void Parent(Tag tag=null)
+        public void SetParent(Tag tag=null)
         {
             SuggestedTags.Clear();
             SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentID == tag.ID).ToList() : _tags.Where(a => a.ParentID == 0).ToList());

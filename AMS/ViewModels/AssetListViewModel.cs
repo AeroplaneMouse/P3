@@ -20,7 +20,8 @@ namespace AMS.ViewModels
     {
         private IAssetListController _listController;
         private string _searchQuery = String.Empty;
-        private TagHelper _tagHelper;        private bool _isStrict = true;
+        private TagHelper _tagHelper;
+        private bool _isStrict = true;
         
         public ObservableCollection<Asset> Items => new ObservableCollection<Asset>(_listController.AssetList);
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
@@ -31,7 +32,8 @@ namespace AMS.ViewModels
                 SearchAssets();
             }
         }
-        public bool CheckAll { get; set; }        public string SearchQuery
+        public bool CheckAll { get; set; }
+        public string SearchQuery
         {
             get => _searchQuery;
             set
@@ -105,7 +107,8 @@ namespace AMS.ViewModels
             SearchCommand = new RelayCommand(SearchAssets);
             ViewCommand = new RelayCommand(ViewAsset);
             ViewWithParameterCommand = new RelayCommand<object>(ViewAsset);
-            RemoveTagCommand = new RelayCommand<object>((parameter) =>
+            RemoveTagCommand = new RelayCommand<object>((parameter) =>
+
             {
                 ITagable tag = parameter as ITagable;
                 _tagHelper.RemoveTag(tag);
@@ -129,8 +132,11 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(SearchQuery));
             OnPropertyChanged(nameof(AppliedTags));
             RefreshList();
-        }
-        private void CheckAllChanged(ListView list)        {            if (SelectedItems.Count == 0)
+        }
+
+        private void CheckAllChanged(ListView list)
+        {
+            if (SelectedItems.Count == 0)
             {
                 // None selected. Select all.
                 CheckAll = true;
@@ -142,7 +148,8 @@ namespace AMS.ViewModels
                 CheckAll = false;
                 list.UnselectAll();
             }
-        }
+        }
+
         private void FocusSuggestion(object parameter)
         {
             var list = parameter as ListBox;
@@ -182,18 +189,23 @@ namespace AMS.ViewModels
                 // Nothing seleted. Check all items
                 foreach (Asset asset in Items)
                     SelectedItems.Add(asset);
-            }
+            }
+
             else if (newValue && SelectedItems.Count < Items.Count)
             {
                 // Some selected. Remove selectionsw.
-                List<Asset> removeSelection = new List<Asset>();
-                SelectedItems.ForEach(a => removeSelection.Add(a));
+                List<Asset> removeSelection = new List<Asset>();
+
+                SelectedItems.ForEach(a => removeSelection.Add(a));
+
                 removeSelection.ForEach(a => SelectedItems.Remove(a));
-            }
+            }
+
             else if (newValue && SelectedItems.Count == Items.Count)
             {
                 //TODO: All selected. Remove selections
-            }
+            }
+
             else
             {
                 //TODO Hmm.. Error, unexspected situation.
@@ -207,13 +219,15 @@ namespace AMS.ViewModels
         {
             if (inTagMode)
             {
-                if (SearchQuery == "" && _tagHelper.IsParentSet())
+                if (SearchQuery == "" && _tagHelper.IsParentSet())
+
                 {
-                    _tagHelper.ApplyTag(_tagHelper.GetParent());
-                    _tagHelper.Parent(null);
+                    _tagHelper.AddTag(_tagHelper.GetParent());
+                    _tagHelper.SetParent(null);
                     CurrentGroup = "#";
                     AppliedTags = _tagHelper.GetAppliedTags(true);
-                }
+                }
+
                 AutoTag();
             }
 
@@ -221,7 +235,8 @@ namespace AMS.ViewModels
             {
                 if (SearchQuery == null)
                     return;
-            }
+            }
+
             RefreshList();
         }
 
@@ -233,7 +248,8 @@ namespace AMS.ViewModels
 
         private void AutoTag(ITagable input = null)
         {
-            if (!inTagMode)
+            if (!inTagMode)
+
                 return;
 
             // Use the given input
@@ -246,9 +262,10 @@ namespace AMS.ViewModels
             // If there is something to apply, do it
             if (tag != null)
             {
-                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
+                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
+
                 {
-                    _tagHelper.ApplyTag(tag);
+                    _tagHelper.AddTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(true);
                     TagSearchProcess();
                 }
@@ -256,7 +273,7 @@ namespace AMS.ViewModels
                 {
                     // So we need to switch to a group of tags.
                     Tag taggedItem = (Tag)tag;
-                    _tagHelper.Parent(taggedItem);
+                    _tagHelper.SetParent(taggedItem);
                     CurrentGroup = "#" + taggedItem.Name;
                 }
 
@@ -272,11 +289,12 @@ namespace AMS.ViewModels
 
             if (_tagHelper.IsParentSet())
             {
-                _tagHelper.Parent(null);
+                _tagHelper.SetParent(null);
                 CurrentGroup = "#";
                 SearchQuery = "";
                 TagSearchProcess();
-            }
+            }
+
             else
             {
                 LeavingTagMode();
@@ -380,7 +398,8 @@ namespace AMS.ViewModels
                         Features.AddNotification(
                             new Notification($"" +
                             $"{ ((items.Count == 1) ? items[0].Name : (items.Count + " assets")) } " +
-                            $"{ (items.Count > 1 ? "have" : "has") } been removed from the system",
+                            $"{ (items.Count > 1 ? "have" : "has") } been removed from the system",
+
                             Notification.INFO), 3000);
                         SearchAssets();
                         OnPropertyChanged(nameof(Items));
