@@ -96,6 +96,7 @@ namespace AMS.ViewModels
         public ICommand ClearInputCommand { get; set; }
         public ICommand EnterSuggestionListCommand { get; set; }
         public ICommand ShowFieldEditPromptCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
 
         #endregion
 
@@ -139,6 +140,11 @@ namespace AMS.ViewModels
                 else
                     //TODO Handle not field event
                     return;
+            });
+
+            RemoveCommand = new RelayCommand(() =>
+            {
+                //TODO Handle remove command
             });
 
             InsertNextOrSelectedSuggestionCommand = new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));

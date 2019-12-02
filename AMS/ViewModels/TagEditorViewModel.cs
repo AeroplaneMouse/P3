@@ -86,13 +86,13 @@ namespace AMS.ViewModels
                     OnPropertyChanged(nameof(Color));
                 }
 
-                if(value != 0)
+                if (_selectedParentTagIndex != 0)
                 {
-                    DepartmentSelectionEnabled = false;
+                    _departmentSelectionEnabled = false;
                 }
                 else
                 {
-                    DepartmentSelectionEnabled = true;
+                    _departmentSelectionEnabled = true;
                 }
 
                 _controller.ConnectTag(ParentTagList[_selectedParentTagIndex], ParentTagList[oldValue]);
@@ -129,6 +129,7 @@ namespace AMS.ViewModels
         public ICommand RemoveFieldCommand { get; set; }
         public ICommand CancelCommand { get; set; }
         public ICommand ShowFieldEditPromptCommand { get; set; }
+        public ICommand RemoveCommand { get; set; }
 
         #endregion
 
@@ -145,15 +146,21 @@ namespace AMS.ViewModels
             }
 
             if (_controller.ParentID > 0)
+            {
                 _departmentSelectionEnabled = false;
+            }
+            else
+            {
+                _departmentSelectionEnabled = true;
+            }
 
             //Set the selected parent to the parent of the chosen tag
-            int i = ParentTagList.Count;
-            while (i > 0 && ParentTagList[i - 1].ID != _controller.ControlledTag.ParentID)
+            int i = ParentTagList.Count - 1;
+            while (i > 0 && ParentTagList[i].ID != _controller.ParentID)
                 i--;
 
             if (i > 0)
-                _selectedParentTagIndex = i - 1;
+                _selectedParentTagIndex = i;
             
             OnPropertyChanged(nameof(Color));
             UpdateAll();
@@ -166,7 +173,7 @@ namespace AMS.ViewModels
                 PageTitle = "Edit tag";
 
                 // Use the department of the tag
-                currentDepartment = _controller.DepartmentList.Find(d => d.ID == _controller.ControlledTag.DepartmentID);
+                currentDepartment = _controller.DepartmentList.Find(d => d.ID == _controller.DepartmentID);
             }
             else
             {
@@ -188,6 +195,11 @@ namespace AMS.ViewModels
             SaveTagCommand = new Base.RelayCommand(SaveTag);
             AddFieldCommand = new Base.RelayCommand(AddField);
             RemoveFieldCommand = new Base.RelayCommand<object>((parameter) => RemoveField(parameter));
+            
+            RemoveCommand = new Base.RelayCommand(() =>
+            {
+                //TODO Handle remove command
+            });
 
             CancelCommand = new Base.RelayCommand(Cancel);
 
