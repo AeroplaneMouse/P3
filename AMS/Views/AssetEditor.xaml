@@ -146,9 +146,9 @@
                                      TabIndex="0">
 
                                 <TextBox.InputBindings>
-                                    <KeyBinding Key="Enter" Command="{Binding SearchCommand}"/>
+                                    <KeyBinding Key="Enter" Command="{Binding ApplyTagOrEnterParentCommand}"/>
                                     <KeyBinding Key="Escape" Command="{Binding ClearInputCommand}"/>
-                                    <KeyBinding Key="Tab" Command="{Binding AutoTagCommand}"/>
+                                    <KeyBinding Key="Tab" Command="{Binding InsertNextOrSelectedSuggestionCommand}"/>
                                     <KeyBinding Key="Down" Command="{Binding EnterSuggestionListCommand}" CommandParameter="{Binding ElementName=TagSuggestionList}"/>
                                 </TextBox.InputBindings>
                             </TextBox>
@@ -170,12 +170,16 @@
                                          Opacity="0.9">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding}" FontSize="{StaticResource FontSizeSmall}"/>
+                                            <TextBlock Text="{Binding}" FontSize="{StaticResource FontSizeSmall}" Cursor="Hand" Width="{Binding ElementName=StartElement, Path=ActualWidth}">
+                                                <TextBlock.InputBindings>
+                                                    <MouseBinding Gesture="LeftClick" Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.InsertNextOrSelectedSuggestionCommand}" CommandParameter="{Binding Path=.}"/>
+                                                </TextBlock.InputBindings>
+                                            </TextBlock>
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                     
                                     <ListBox.InputBindings>
-                                        <KeyBinding Key="Return" Command="{Binding AutoTagCommand}" CommandParameter="{Binding ElementName=TagSuggestionList, Path=SelectedItem}"/>
+                                        <KeyBinding Key="Return" Command="{Binding InsertNextOrSelectedSuggestionCommand}" CommandParameter="{Binding ElementName=TagSuggestionList, Path=SelectedItem}"/>
                                     </ListBox.InputBindings>
                                 </ListBox>
                             </Popup>
