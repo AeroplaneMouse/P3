@@ -329,7 +329,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="{Binding ElementName=PART_Updated, Path=ActualWidth}"/>
-                        <ColumnDefinition Width="{Binding ElementName=PART_View, Path=ActualWidth}" />
+                        <ColumnDefinition Width="{Binding ElementName=PART_View, Path=ActualWidth}"/>
                         <ColumnDefinition Width="{Binding ElementName=PART_Edit, Path=ActualWidth}"/>
                         <ColumnDefinition Width="{Binding ElementName=PART_Trash, Path=ActualWidth}"/>
                     </Grid.ColumnDefinitions>

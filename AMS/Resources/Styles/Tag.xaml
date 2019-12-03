@@ -21,7 +21,6 @@
                                         Background="{Binding TagColor}" 
                                         FocusVisualStyle="{x:Null}" 
                                         RenderOptions.EdgeMode="Aliased">
-                                    
                                     <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
