@@ -112,7 +112,7 @@ namespace AMS.Controllers
                     RemoveFieldRelations(currentTag.ID);
                     
                     //Remove a fields relation to the parent tag, if no other tag with the same parent tag exists in CurrentlyAddedTags.
-                    if (CurrentlyAddedTags.SingleOrDefault(p => p.ParentId == currentTag.ParentID && p.TagId != currentTag.ID) == null)
+                    if (CurrentlyAddedTags.FirstOrDefault(p => p.ParentId == currentTag.ParentID && p.TagId != currentTag.ID) == null)
                     {
                         RemoveFieldRelations(currentTag.ParentID);
                     }

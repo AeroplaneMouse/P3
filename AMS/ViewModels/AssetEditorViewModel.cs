@@ -267,6 +267,7 @@ namespace AMS.ViewModels
                     {
                         _tagHelper.AddTag(tag);
                         _assetController.AttachTag(tag);
+                        _assetController.AttachTag(_tagHelper.GetParent());
                     }
                     else
                     {
@@ -309,6 +310,7 @@ namespace AMS.ViewModels
                 {
                     _tagHelper.AddTag(tag);
                     _assetController.AttachTag(tag);
+                    _assetController.AttachTag(_tagHelper.GetParent());
                     AppliedTags = _tagHelper.GetAppliedTags(false);
                 }
                 TagSearchQuery = "";
@@ -384,7 +386,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void UpdateAll()
         {
-            UpdateTagRelationsOfFields(AppliedTags);
+            UpdateTagRelationsOnFields(AppliedTags);
             OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(NonHiddenFieldList));
             OnPropertyChanged(nameof(HiddenFieldList));
@@ -393,32 +395,34 @@ namespace AMS.ViewModels
         /// <summary>
         /// Updates the fields to show their connections to the given tags
         /// </summary>
-        /// <param name="tagsList"></param>
-        private void UpdateTagRelationsOfFields(ObservableCollection<ITagable> tagsList)
+        /// <param name="tagList"></param>
+        private void UpdateTagRelationsOnFields(ObservableCollection<ITagable> tagList)
         {
             // Runs through the list of tagID's, and adds the tag with the same tagID to the TagList on the field.
             foreach (var field in HiddenFieldList)
             {
-                field.TagList = new List<Tag>();
-                foreach (var id in field.TagIDs)
-                {
-                    if (tagsList.SingleOrDefault(p => p.TagId == id) is Tag tag)
-                    {
-                        field.TagList.Add(tag);
-                    }
-                }
+                UpdateTagRelationsOnSingleField(field, tagList);
             }
 
             foreach (var field in NonHiddenFieldList)
             {
-                field.TagList = new List<Tag>();
-                foreach (var id in field.TagIDs)
+                UpdateTagRelationsOnSingleField(field, tagList);
+            }
+        }
+
+        private void UpdateTagRelationsOnSingleField(Field field, ObservableCollection<ITagable> tagList)
+        {
+            field.TagList = new List<Tag>();
+            foreach (var id in field.TagIDs)
+            {
+                foreach(Tag tag in tagList.Where(p => p.TagId == id || p.ParentId == id))
                 {
-                    if (tagsList.SingleOrDefault(p => p.TagId == id) is Tag tag)
-                    {
-                        field.TagList.Add(tag);
-                    }
+                    field.TagList.Add(tag);
                 }
+            }
+            if (!field.TagList.Any() && !field.IsCustom)
+            {
+                _assetController.RemoveField(field);
             }
         }
 
