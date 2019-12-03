@@ -1,12 +1,6 @@
 ﻿using AMS.Controllers.Interfaces;
-using AMS.Helpers;
-using AMS.Interfaces;
 using AMS.Models;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
 
 namespace AMS.ViewModels
@@ -15,27 +9,22 @@ namespace AMS.ViewModels
     {
         private IAssetController _assetController { get; set; }
 
-        private ObservableCollection<object> _tabs;
-
-
-        public ObservableCollection<object> Tabs => _tabs;
+        public ObservableCollection<object> Tabs { get; }
         public string Name => _assetController.ControlledAsset.Name;
         public string ID => $" (id: { _assetController.ControlledAsset.ID })";
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand CancelCommand { get; set; }
-        
-
-
+   
         public AssetPresenterViewModel(IAssetController assetController, ICommentListController commentListController, ILogListController logListController)
         {
             _assetController = assetController;
 
             // Tabs
-            _tabs = new ObservableCollection<object>();
-            _tabs.Add(new AssetDetailsViewModel(_assetController));
-            _tabs.Add(new CommentViewModel(commentListController));
-            _tabs.Add(new LogListViewModel(logListController));
+            Tabs = new ObservableCollection<object>();
+            Tabs.Add(new AssetDetailsViewModel(_assetController));
+            Tabs.Add(new CommentViewModel(commentListController));
+            Tabs.Add(new LogListViewModel(logListController));
 
             EditCommand = new Base.RelayCommand(() => Edit(), () => Features.GetCurrentSession().IsAdmin());
             RemoveCommand = new Base.RelayCommand(() => Remove(), () => Features.GetCurrentSession().IsAdmin());
@@ -46,10 +35,10 @@ namespace AMS.ViewModels
         {
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(ID));
-            OnPropertyChanged(nameof(Tabs));
-            (_tabs[0] as AssetDetailsViewModel).UpdateOnFocus();
-            (_tabs[1] as CommentViewModel).UpdateOnFocus();
-            (_tabs[2] as LogListViewModel).UpdateOnFocus();
+
+            (Tabs[0] as AssetDetailsViewModel).UpdateOnFocus();
+            (Tabs[1] as CommentViewModel).UpdateOnFocus();
+            (Tabs[2] as LogListViewModel).UpdateOnFocus();
 
             OnPropertyChanged(nameof(Tabs));
         }
@@ -74,12 +63,8 @@ namespace AMS.ViewModels
 
         private void Cancel()
         {
-            if (Features.Navigate.Back() == false)
-            {
+            if (!Features.Navigate.Back())
                 Features.Navigate.To(Features.Create.AssetList());
-            }
         }
-        
-
     }
 }

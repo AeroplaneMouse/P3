@@ -14,13 +14,20 @@ namespace AMS.Controllers
     {
         private ITagRepository _tagRepository { get; set; }
         private IDepartmentRepository _departmentRepository { get; set; }
+        private Tag _controlledTag;
 
+        public Tag ControlledTag 
+        { 
+            get => _controlledTag;
+            set
+            {
+                _controlledTag = value;
+                UpdateParameters(value);
+            }
+        }
         public List<Field> ParentTagFields { get; set; } = new List<Field>();
-
-        public Tag ControlledTag { get; set; }
         public bool IsEditing { get; set; }
         public ulong TagID;
-
         public ulong Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
@@ -73,11 +80,14 @@ namespace AMS.Controllers
         public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) : base(
             tag ?? new Tag())
         {
-            ControlledTag = tag ?? new Tag();
+            ControlledTag = tag;
             _tagRepository = tagRep;
             _departmentRepository = departmentRepository;
+        }
 
-            if (ControlledTag.ID != 0)
+        private void UpdateParameters(Tag value)
+        {
+            if (value != null && value.ID != 0)
             {
                 IsEditing = true;
                 ControlledTag.DeSerializeFields();
@@ -87,20 +97,16 @@ namespace AMS.Controllers
                 Color = ControlledTag.Color;
                 ParentID = ControlledTag.ParentID;
                 DepartmentID = ControlledTag.DepartmentID;
-
-
-                NonHiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
-                HiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == true).ToList();
             }
             else
             {
-                ControlledTag = new Tag {Color = CreateRandomColor()};
-                Color = ControlledTag.Color;
-                ControlledTag.FieldList = new List<Field>();
+                _controlledTag = new Tag { Color = CreateRandomColor() };
+                Color = _controlledTag.Color;
+                _controlledTag.FieldList = new List<Field>();
                 IsEditing = false;
-                NonHiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
-                HiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == true).ToList();
             }
+            NonHiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == true).ToList();
         }
 
         #region Public Methods
@@ -158,6 +164,8 @@ namespace AMS.Controllers
         }
 
         public void Remove() => _tagRepository.Delete(ControlledTag);
+
+        public void RemoveChildren() => _tagRepository.DeleteChildren(ControlledTag.ID);
 
         public string CreateRandomColor()
         {

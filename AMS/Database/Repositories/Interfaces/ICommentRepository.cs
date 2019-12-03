@@ -8,6 +8,6 @@ namespace AMS.Database.Repositories.Interfaces
     {
         List<Comment> GetByAssetId(ulong assetId);
 
-        List<Comment> GetAll(bool includeDeleted = false);
+        List<Comment> GetAll(bool includeDeleted = false, int limit=100);
     }
 }

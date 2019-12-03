@@ -12,6 +12,6 @@ namespace AMS.Database.Repositories.Interfaces
 
         IEnumerable<User> GetUsersForAsset(ulong id);
 
-        ulong GetCount();
+        ulong GetCount(bool? onlyEnabledUsers);
     }
 }

@@ -33,6 +33,8 @@ namespace AMS.Controllers.Interfaces
 
         void Remove();
 
+        void RemoveChildren();
+
         void Update();
 
         string CreateRandomColor();
