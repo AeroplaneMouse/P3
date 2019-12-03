@@ -1,12 +1,6 @@
 ﻿using AMS.Controllers.Interfaces;
-using AMS.Helpers;
-using AMS.Interfaces;
 using AMS.Models;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
 
 namespace AMS.ViewModels
@@ -16,17 +10,14 @@ namespace AMS.ViewModels
         private IAssetController _assetController { get; set; }
 
         private ObservableCollection<object> _tabs;
-
-
+        
         public ObservableCollection<object> Tabs => _tabs;
         public string Name => _assetController.ControlledAsset.Name;
         public string ID => $" (id: { _assetController.ControlledAsset.ID })";
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand CancelCommand { get; set; }
-        
-
-
+   
         public AssetPresenterViewModel(IAssetController assetController, ICommentListController commentListController, ILogListController logListController)
         {
             _assetController = assetController;
@@ -46,7 +37,7 @@ namespace AMS.ViewModels
         {
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(ID));
-            OnPropertyChanged(nameof(Tabs));
+
             (_tabs[0] as AssetDetailsViewModel).UpdateOnFocus();
             (_tabs[1] as CommentViewModel).UpdateOnFocus();
             (_tabs[2] as LogListViewModel).UpdateOnFocus();
@@ -75,11 +66,7 @@ namespace AMS.ViewModels
         private void Cancel()
         {
             if (Features.Navigate.Back() == false)
-            {
                 Features.Navigate.To(Features.Create.AssetList());
-            }
         }
-        
-
     }
 }
