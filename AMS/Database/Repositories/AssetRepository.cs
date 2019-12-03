@@ -262,9 +262,9 @@ namespace AMS.Database.Repositories
         /// <summary>
         /// Searches the database for assets with one or more of the given tags
         /// </summary>
-        /// <param name="tagsIds">A list of IDs of the tags</param>
+        /// <param name="tagIds">A list of IDs of the tags</param>
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
-        public List<Asset> SearchByTags(List<int> tagsIds)
+        public List<Asset> SearchByTags(List<int> tagIds)
         {
             var con = new MySqlHandler().GetConnection();
             List<Asset> assets = new List<Asset>();
@@ -282,7 +282,7 @@ namespace AMS.Database.Repositories
                     using (var cmd = new MySqlCommand(query, con))
                     {
                         cmd.Parameters.Add("@ids", MySqlDbType.String);
-                        cmd.Parameters["@ids"].Value = string.Join(",", tagsIds);
+                        cmd.Parameters["@ids"].Value = string.Join(",", tagIds);
 
                         using (var reader = cmd.ExecuteReader())
                         {
