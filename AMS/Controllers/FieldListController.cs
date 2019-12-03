@@ -17,13 +17,9 @@ namespace AMS.Controllers
         protected FieldListController(FieldContainer element)
         {
             if (element == null)
-            {
-                //TODO: handle null
-            }
+                throw new ArgumentNullException();
             else
-            {
                 _fieldContainer = element;
-            }
         }
 
         /// <summary>
@@ -45,7 +41,7 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool AddField(Field inputField, FieldContainer fieldContainer = null)
         {
-            //Checks whether the field is present in HiddenFieldList, if not, checks NonHiddenFieldList.
+            // Checks whether the field is present in HiddenFieldList, if not, checks NonHiddenFieldList.
             Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(inputField)) ??
                                 NonHiddenFieldList.FirstOrDefault(p => p.Equals(inputField));
 
