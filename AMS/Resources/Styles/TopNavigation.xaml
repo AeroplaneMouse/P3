@@ -217,7 +217,7 @@
                                 <Condition Property="IsPressed" Value="True" />
                                 <Condition Property="IsSubmenuOpen" Value="False" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="{Binding Path=!IsOpen}"/>
+                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
                         </MultiTrigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
