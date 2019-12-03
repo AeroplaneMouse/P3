@@ -53,30 +53,23 @@ namespace AMS.Controllers
             if (fieldInList == null)
             {
                 if (fieldContainer != null)
-                {
                     inputField.TagIDs.Add(fieldContainer.ID);
-                }
 
                 NonHiddenFieldList.Add(inputField);
             }
             else
             {
-                // Checks if a field have been updated. (Either label or Required)
+                // Checks if a field label has been updated
                 if (fieldInList.HashId == inputField.HashId && fieldInList.Label != inputField.Label)
-                {
                     fieldInList.Label = inputField.Label;
-                }
 
+                // Checks if a fields required property has been updated
                 if (fieldInList.HashId == inputField.HashId && fieldInList.Required != inputField.Required)
-                {
                     fieldInList.Required = inputField.Required;
-                }
 
-                //Adds a reference to the field container if its added.
+                // Adds a reference to the field container if its added.
                 if (fieldContainer != null && !fieldInList.TagIDs.Contains(fieldContainer.ID))
-                {
                     fieldInList.TagIDs.Add(fieldContainer.ID);
-                }
             }
 
             return _fieldContainer.FieldList.Contains(inputField);
