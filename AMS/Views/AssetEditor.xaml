@@ -213,10 +213,7 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Label Foreground="{Binding TagFontColor}"
-                                           Content="{Binding TagLabel}"
-                                           Style="{StaticResource TagAddedToSearch}"
-                                           FontSize="{StaticResource FontSizeXSmall}"/>
+                                    <Label Style="{StaticResource TagWithDelete}"/>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>

@@ -169,11 +169,7 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
-                                                <Label Foreground="{Binding TagFontColor}"
-                                                       Content="{Binding TagLabel}"
-                                                       Style="{StaticResource TagLabelOnlyShow}"
-                                                       FontSize="{StaticResource FontSizeXSmall}"
-                                                       FontWeight="UltraBold" />
+                                                <Label Style="{StaticResource TagLabelOnlyShow}" FontWeight="UltraBold" />
                                             </Grid>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
@@ -218,10 +214,7 @@
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
                                                                 <Grid MaxWidth="100" HorizontalAlignment="Left">
-                                                                    <Label Foreground="{Binding FontColor}"
-                                                                               Content="{Binding Name}"
-                                                                               Style="{StaticResource TagLabelOnlyShow}"
-                                                                               FontSize="{StaticResource FontSizeXSmall}"/>
+                                                                    <Label Style="{StaticResource TagLabelOnlyShow}"/>
                                                                 </Grid>
                                                             </DataTemplate>
                                                         </ItemsControl.ItemTemplate>
