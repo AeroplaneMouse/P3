@@ -42,7 +42,6 @@ namespace AMS.Authentication
                     // Insert it into the database
                     ulong id;
                     rep.Insert(user, out id);
-
                     this.user = rep.GetById(id);
 
                     return true;
