@@ -2,7 +2,6 @@
 using AMS.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
-using System.Collections.ObjectModel;
 using AMS.Database.Repositories.Interfaces;
 using System.Collections.Generic;
 using AMS.ViewModels;
@@ -26,16 +25,16 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "INSERT INTO comments (asset_id, username, content, updated_at) " +
-                                         "VALUES (@asset_id, @username, @content, CURRENT_TIMESTAMP())";
+                    const string query = "INSERT INTO comments (asset_id, user_id, content, updated_at) " +
+                                         "VALUES (@asset_id, @user_id, @content, CURRENT_TIMESTAMP())";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
                         cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
                         cmd.Parameters["@asset_id"].Value = entity.AssetID;
 
-                        cmd.Parameters.Add("@username", MySqlDbType.String);
-                        cmd.Parameters["@username"].Value = entity.Username;
+                        cmd.Parameters.Add("@user_id", MySqlDbType.UInt64);
+                        cmd.Parameters["@user_id"].Value = Features.GetCurrentSession().user.ID;
 
                         cmd.Parameters.Add("@content", MySqlDbType.String);
                         cmd.Parameters["@content"].Value = entity.Content;
@@ -50,7 +49,6 @@ namespace AMS.Database.Repositories
                 {
                     Console.WriteLine(e);
                 }
-
                 finally
                 {
                     con.Close();
@@ -70,7 +68,7 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "UPDATE comments SET asset_id=@asset_id, username=@username, content=@content, updated_at=CURRENT_TIMESTAMP() " +
+                    const string query = "UPDATE comments SET asset_id=@asset_id, user_id=@user_id, content=@content, updated_at=CURRENT_TIMESTAMP() " +
                                          "WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, con))
@@ -78,8 +76,8 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
                         cmd.Parameters["@asset_id"].Value = entity.AssetID;
 
-                        cmd.Parameters.Add("@username", MySqlDbType.String);
-                        cmd.Parameters["@username"].Value = entity.Username;
+                        cmd.Parameters.Add("@user_id", MySqlDbType.String);
+                        cmd.Parameters["@user_id"].Value = 0;
 
                         cmd.Parameters.Add("@content", MySqlDbType.String);
                         cmd.Parameters["@content"].Value = entity.Content;
@@ -150,8 +148,10 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
-                                         "FROM comments WHERE id=@id AND deleted_at IS NULL";
+                    const string query = "SELECT c.id, c.asset_id, u.username, c.content, c.created_at, c.updated_at, c.deleted_at " +
+                                         "FROM comments AS c " +
+                                         "INNER JOIN users AS u ON c.user_id = u.id "+
+                                         "WHERE c.id=@id AND c.deleted_at IS NULL";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -191,8 +191,10 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT id, asset_id, username, content, created_at, updated_at, deleted_at " +
-                                         "FROM comments WHERE asset_id=@asset_id AND deleted_at IS NULL";
+                    const string query = "SELECT c.id, c.asset_id, u.username, c.content, c.created_at, c.updated_at, c.deleted_at " +
+                                         "FROM comments AS c " +
+                                         "INNER JOIN users AS u ON c.user_id = u.id "+
+                                         "WHERE c.asset_id=@asset_id AND c.deleted_at IS NULL";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -222,7 +224,7 @@ namespace AMS.Database.Repositories
             return comments;
         }
 
-        public List<Comment> GetAll(bool includeDeleted = false)
+        public List<Comment> GetAll(bool includeDeleted = false, int limit=100)
         {
             var con = new MySqlHandler().GetConnection();
             List<Comment> comments = new List<Comment>();
@@ -233,10 +235,12 @@ namespace AMS.Database.Repositories
                 // Sending sql query
                 try
                 {
-                    string query = "SELECT c.id, c.asset_id, c.username, c.content, c.created_at, c.updated_at FROM comments as c " 
-                                   + "INNER JOIN assets a on c.asset_id = a.id "
-                                   + "WHERE a.deleted_at IS NULL "
-                                   + (!includeDeleted ? "AND c.deleted_at IS NULL" : "");
+                    string query = "SELECT c.id, c.asset_id, u.username, c.content, c.created_at, c.updated_at FROM comments AS c "+ 
+                                   "INNER JOIN assets AS a ON c.asset_id = a.id "+ 
+                                   "INNER JOIN users AS u ON c.user_id = u.id "+
+                                   "WHERE a.deleted_at IS NULL "+ 
+                                   (!includeDeleted ? "AND c.deleted_at IS NULL " : "")+
+                                   "ORDER BY created_at DESC LIMIT "+limit;
 
                     using (var cmd = new MySqlCommand(query, con))
                     {

@@ -30,8 +30,8 @@ namespace AMS.ViewModels
         public bool IsStrict { 
             get => _isStrict; 
             set {
-                _isStrict = value; 
-                ApplyTagOrEnterParent();
+                _isStrict = value;
+                RefreshList();
             }
         }
 
@@ -78,7 +78,6 @@ namespace AMS.ViewModels
         public bool inTagMode { get; set; } = false;
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
 
-
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand PrintCommand { get; set; }
@@ -122,8 +121,8 @@ namespace AMS.ViewModels
             SearchCommand = new RelayCommand(RefreshList);
             ViewCommand = new RelayCommand(ViewAsset);
             ViewWithParameterCommand = new RelayCommand<object>(ViewAsset);
-            RemoveTagCommand = new RelayCommand<object>((parameter) =>
-            {
+            
+            RemoveTagCommand = new RelayCommand<object>((parameter) => {
                 ITagable tag = parameter as ITagable;
                 _tagHelper.RemoveTag(tag);
                 AppliedTags = _tagHelper.GetAppliedTags(true);
@@ -134,8 +133,7 @@ namespace AMS.ViewModels
             ClearInputCommand = new RelayCommand(ClearInput);
             CheckAllChangedCommand = new RelayCommand<object>((parameter) => CheckAllChanged(parameter as ListView));
         }
-
-
+        
         #region Methods
 
         /// <summary>
@@ -199,63 +197,8 @@ namespace AMS.ViewModels
                 EditAsset(SelectedItems.First());
                 OnPropertyChanged(nameof(Items));
             }
-                
             else
                 Features.AddNotification(new Notification("Please select only one asset.", Notification.ERROR), 3500);
-        }
-
-        /// <summary>
-        /// Applies the tag or enters the tag, if it is a parent
-        /// </summary>
-        private void ApplyTagOrEnterParent()
-        {
-            if (inTagMode)
-            {
-                ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == SearchQuery.Trim(' '));
-                if (tag != null)
-                {
-                    if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
-                    {
-                        _tagHelper.SetParent((Tag)tag);
-                        CurrentGroup = "#" + tag.TagLabel;
-                        SearchQuery = "";
-                        _tabIndex = 0;
-                    }
-                    else
-                    {
-                        _tagHelper.AddTag(tag);
-                        AppliedTags = _tagHelper.GetAppliedTags(true);
-                        SearchQuery = "";
-                        _tabIndex = 0;
-                    }
-                }
-                else
-                {
-                    if (_tagHelper.IsParentSet() && SearchQuery == "")
-                    {
-                        _tagHelper.AddTag(_tagHelper.GetParent());
-                        AppliedTags = _tagHelper.GetAppliedTags(true);
-                        ClearInput();
-                        _tabIndex = 0;
-                    }
-                    //TODO Notify the user, that the input is not a tag
-                    Console.WriteLine("Not a tag");
-                }
-            }
-
-            else if (SearchQuery == null)
-                return;
-
-            RefreshList();
-        }
-
-        /// <summary>
-        /// Refreshes the asset list, to accommodate for new search query and tags
-        /// </summary>
-        private void RefreshList()
-        {
-            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict, _searchInFields);
-            OnPropertyChanged(nameof(Items));
         }
 
         /// <summary>
@@ -267,41 +210,32 @@ namespace AMS.ViewModels
             if (!inTagMode)
                 return;
 
-            ITagable tag;
-
-            if (input is TextBlock textBlock)
-            {
-                 tag = TagSearchSuggestions.SingleOrDefault(t => t.TagLabel == textBlock.Text);
-            }
-            else
-            {
-                tag = (ITagable)input;
-            }
-
             // If the input is null, use the suggestion if possible
-            if (input == null && TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+            if (input != null)
             {
-                if (!(_tabIndex <= TagSearchSuggestions.Count() - 1))
+                ITagable tag;
+
+                if (input is TextBlock textBlock)
                 {
-                    _tabIndex = 0;
+                    tag = TagSearchSuggestions.SingleOrDefault(t => t.TagLabel == textBlock.Text);
                 }
-                SearchQuery = TagSearchSuggestions[_tabIndex].TagLabel + ' ';
-                _tabIndex++;
-            }
-            else
-            {
+                else
+                {
+                    tag = (ITagable)input;
+                }
+
                 if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
                 {
-                    if(tag != null)
-                    {
+                    if(tag != null) {
                         _tagHelper.AddTag(tag);
                     }
-                    else if(_tagHelper.GetParent() != null)
+                    else if (_tagHelper.GetParent() != null)
                     {
                         _tagHelper.AddTag(_tagHelper.GetParent());
                     }
-                    
+
                     AppliedTags = _tagHelper.GetAppliedTags(true);
+                    RefreshList();
                     UpdateTagSuggestions();
                 }
                 else
@@ -312,7 +246,67 @@ namespace AMS.ViewModels
                     CurrentGroup = "#" + taggedItem.Name;
                     UpdateTagSuggestions();
                 }
+                SearchQuery = "";
             }
+            else if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+            {
+                if (!(_tabIndex <= TagSearchSuggestions.Count() - 1))
+                {
+                    _tabIndex = 0;
+                }
+                SearchQuery = TagSearchSuggestions[_tabIndex].TagLabel + ' ';
+                _tabIndex++;
+            }
+        }
+
+        /// <summary>
+        /// Applies the tag or enters the tag, if it is a parent
+        /// </summary>
+        private void ApplyTagOrEnterParent()
+        {
+            if (!inTagMode)
+                return;
+
+            ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == SearchQuery.Trim(' '));
+            if (tag != null)
+            {
+                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
+                {
+                    _tagHelper.SetParent((Tag)tag);
+                    CurrentGroup = "#" + tag.TagLabel;
+                }
+                else
+                {
+                    _tagHelper.AddTag(tag);
+                    AppliedTags = _tagHelper.GetAppliedTags(true);
+                }
+                SearchQuery = "";
+                _tabIndex = 0;
+            }
+            else
+            {
+                if (_tagHelper.IsParentSet() && SearchQuery == "")
+                {
+                    _tagHelper.AddTag(_tagHelper.GetParent());
+                    AppliedTags = _tagHelper.GetAppliedTags(true);
+                    ClearInput();
+                    _tabIndex = 0;
+                }
+                Features.AddNotification(new Notification($"{ SearchQuery } is not a tag. To use it, you must first create a tag called { SearchQuery }.",
+                        background: Notification.WARNING),
+                    displayTime: 3500);
+            }
+
+            RefreshList();
+        }
+
+        /// <summary>
+        /// Refreshes the asset list, to accommodate for new search query and tags
+        /// </summary>
+        private void RefreshList()
+        {
+            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict, _searchInFields);
+            OnPropertyChanged(nameof(Items));
         }
 
         /// <summary>
@@ -417,6 +411,7 @@ namespace AMS.ViewModels
                         _listController.Remove(asset);
                         Features.AddNotification(new Notification($"{ asset.Name } has been removed", Notification.APPROVE));
                         ApplyTagOrEnterParent();
+                        RefreshList();
                     }
                 }));
             }

@@ -27,17 +27,20 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="224*" />
             <RowDefinition Height="171*" />
+
         </Grid.RowDefinitions>
         <TextBlock Style="{StaticResource TitleStyle}"
                    VerticalAlignment="Center"
-                   Margin="10,0,0,0"
+                   HorizontalAlignment="Left"
+                   Margin="10, 11, 0, 11"
                    Text="{Binding PageTitle}" />
+        
+        <StackPanel Orientation="Horizontal" 
+                    HorizontalAlignment="Right" 
+                    Margin="10" 
+                    Grid.Row="0">
 
-        <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Left"
-                    Margin="470,10,0,10">
-
-            <Button Style="{StaticResource RegularAcceptButton}"
+        <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding SaveTagCommand}"
                     Content="Save" />
 
@@ -53,11 +56,11 @@
         </StackPanel>
 
         <Rectangle Style="{StaticResource HorizontalSeparator}"
-                   VerticalAlignment="Top" Margin="10,54,10,0" />
+                   VerticalAlignment="Bottom" Grid.Row="0" />
 
         <!-- Content of the page -->
         <ScrollViewer Grid.Row="1"
-                      Margin="10,10,10,10" Grid.RowSpan="2">
+                      Margin="10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250" />

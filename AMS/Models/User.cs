@@ -11,7 +11,7 @@ namespace AMS.Models
 {
     public class User : Model, ITagable
     {
-        public string Name { get; set; }
+        public string Name => Username;
         public string Username { get; set; }
         public bool IsAdmin { get; set; }
         public ulong DefaultDepartment { get; set; }

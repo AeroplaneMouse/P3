@@ -213,10 +213,7 @@
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
-                                    <Label Foreground="{Binding TagFontColor}"
-                                           Content="{Binding TagLabel}"
-                                           Style="{StaticResource TagAddedToSearch}"
-                                           FontSize="{StaticResource FontSizeXSmall}"/>
+                                    <Label Style="{StaticResource TagWithDelete}"/>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -257,9 +254,10 @@
 
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Hidden fields"
+                               Opacity="0.5"
                                Margin="0 20 10 0" />
 
-                    <StackPanel>
+                    <StackPanel Opacity="0.5">
                         <ItemsControl ItemsSource="{Binding HiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
                             ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
                             <ItemsControl.ItemsPanel>
