@@ -310,7 +310,9 @@
                                                 <TextBlock Text="{Binding Path=Username}"
                                                            Style="{StaticResource ParagraphStyle}"
                                                            Foreground="Black"
-                                                           FontWeight="DemiBold" />
+                                                           FontWeight="DemiBold"
+                                                           TextWrapping="Wrap"/>
+                                                
                                                 <TextBlock Text="{Binding Path=CreatedAtString}"
                                                            Style="{StaticResource ParagraphStyle}"
                                                            Foreground="Gray" />

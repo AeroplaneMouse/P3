@@ -9,7 +9,9 @@ namespace AMS.Controllers.Interfaces
         List<Comment> CommentList { get; set; }
 
         ulong AddNewComment(string contentInput);
+
         void RemoveComment(Comment comment); 
+
         void FetchComments();
     }
 }

@@ -30,7 +30,7 @@ namespace UnitTests
             // Mock setup
             _assetRepMock = new Mock<IAssetRepository>();
             _assetRepMock.Setup(p => p.Delete(It.IsAny<Asset>())).Returns(true);
-            _assetRepMock.Setup(p => p.Insert(It.IsAny<Asset>(), out id)).Returns(true);
+            _assetRepMock.Setup(p => p.Insert(It.IsAny<Asset>(), out id)).Returns(It.IsAny<Asset>());
             _assetRepMock.Setup(p => p.Update(It.IsAny<Asset>())).Returns(true);
             _assetRepMock.Setup(p => p.AttachTags(It.IsAny<Asset>(), It.IsAny<List<ITagable>>())).Returns(true);
 

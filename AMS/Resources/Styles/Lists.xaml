@@ -67,5 +67,6 @@
         <Setter Property="MinWidth" Value="300"/>
         <Setter Property="MaxWidth" Value="500"/>
     </Style>
+   
     
 </ResourceDictionary>

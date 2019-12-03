@@ -167,7 +167,7 @@
                             </GridViewColumn>
 
                             <!-- Description-->
-                            <GridViewColumn Width="220">
+                            <GridViewColumn Width="200">
                                 <GridViewColumnHeader Content="Description" Tag="Description"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
@@ -178,8 +178,7 @@
                                                  MinWidth="200"
                                                  Height="Auto" 
                                                  Style="{StaticResource ParagraphTextBox}"
-                                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"
-                                                 TextWrapping="Wrap"/>
+                                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

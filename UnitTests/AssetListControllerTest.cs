@@ -163,14 +163,14 @@ namespace UnitTests
             //Arrange
             Asset asset1 = new Asset {Name = "asset1"};
             _assetListController.AssetList.Add(asset1);
-            assetRepMock.Setup(p => p.Search(It.IsAny<string>(), null, null, false)).Returns(() => new List<Asset>());
+            assetRepMock.Setup(p => p.Search(It.IsAny<string>(), null, null, false,false)).Returns(() => new List<Asset>());
 
             //Act
             _assetListController.Search("asset", null);
 
             //Assert
             // Verify that the method IAssetRepository.Delete(Asset) is called once
-            assetRepMock.Verify((p => p.Search(It.IsAny<string>(), null, null, false)), Times.AtLeastOnce);
+            assetRepMock.Verify((p => p.Search(It.IsAny<string>(), null, null, false,false)), Times.AtLeastOnce);
         }
         
         [TestMethod]
