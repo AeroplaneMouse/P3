@@ -247,17 +247,8 @@ namespace AMS.ViewModels
         private void InsertNextOrSelectedSuggestion(object input = null)
         {
             
-            // If the input is null, use the suggestion if possible
-            if (input == null && TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
-            {
-                if (!(_tagTabIndex <= TagSearchSuggestions.Count() - 1))
-                {
-                    _tagTabIndex = 0;
-                }
-                TagSearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
-                _tagTabIndex++;
-            }
-            else
+            // If the input is not null, use the suggestion if possible
+            if (input != null)
             {
                 ITagable tag;
 
@@ -270,14 +261,13 @@ namespace AMS.ViewModels
                     tag = (ITagable)input;
                 }
 
-                if(tag != null)
+                if (tag != null)
                 {
                     if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
                     {
-                        _tagHelper.SetParent(null);
-                        TagSearchQuery = "";
-                        CurrentGroup = "";
-                        CurrentGroupVisibility = Visibility.Collapsed;
+                        _tagHelper.AddTag(tag);
+                        _assetController.AttachTag(tag);
+                        _assetController.AttachTag(_tagHelper.GetParent());
                     }
                     else
                     {
@@ -286,10 +276,19 @@ namespace AMS.ViewModels
                         _tagHelper.SetParent(taggedItem);
                         CurrentGroup = tag.TagLabel;
                         CurrentGroupVisibility = Visibility.Visible;
-                        TagSearchQuery = "";
                         UpdateTagSuggestions();
                     }
+                    TagSearchQuery = "";
                 }
+            }
+            else if(TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+            {
+                if (!(_tagTabIndex <= TagSearchSuggestions.Count() - 1))
+                {
+                    _tagTabIndex = 0;
+                }
+                TagSearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
+                _tagTabIndex++;
             }
         }
 
@@ -306,21 +305,23 @@ namespace AMS.ViewModels
                     _tagHelper.SetParent((Tag)tag);
                     CurrentGroup = tag.TagLabel;
                     CurrentGroupVisibility = Visibility.Visible;
-                    TagSearchQuery = "";
-                    _tagTabIndex = 0;
                 }
                 else
                 {
                     _tagHelper.AddTag(tag);
-                    AppliedTags = _tagHelper.GetAppliedTags(true);
-                    TagSearchQuery = "";
-                    _tagTabIndex = 0;
+                    _assetController.AttachTag(tag);
+                    _assetController.AttachTag(_tagHelper.GetParent());
+                    AppliedTags = _tagHelper.GetAppliedTags(false);
                 }
+                TagSearchQuery = "";
+                _tagTabIndex = 0;
+                UpdateAll();
             }
             else
             {
-                //TODO Notify the user, that the input is not a tag
-                Console.WriteLine("Not a tag");
+                Features.AddNotification(new Notification($"{ TagSearchQuery } is not a tag. To use it, you must first create a tag called { TagSearchQuery }.",
+                        background: Notification.WARNING),
+                    displayTime: 3500);
             }
         }
 
@@ -386,41 +387,43 @@ namespace AMS.ViewModels
         /// </summary>
         private void UpdateAll()
         {
-            UpdateTagRelations(AppliedTags);
+            UpdateTagRelationsOnFields(AppliedTags);
             OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(NonHiddenFieldList));
             OnPropertyChanged(nameof(HiddenFieldList));
         }
 
         /// <summary>
-        /// Updates the relations from the tag, and adds fields.
+        /// Updates the fields to show their connections to the given tags
         /// </summary>
-        /// <param name="tagsList"></param>
-        private void UpdateTagRelations(ObservableCollection<ITagable> tagsList)
+        /// <param name="tagList"></param>
+        private void UpdateTagRelationsOnFields(ObservableCollection<ITagable> tagList)
         {
             // Runs through the list of tagID's, and adds the tag with the same tagID to the TagList on the field.
             foreach (var field in HiddenFieldList)
             {
-                field.TagList = new List<Tag>();
-                foreach (var id in field.TagIDs)
-                {
-                    if (tagsList.SingleOrDefault(p => p.TagId == id) is Tag tag)
-                    {
-                        field.TagList.Add(tag);
-                    }
-                }
+                UpdateTagRelationsOnSingleField(field, tagList);
             }
 
             foreach (var field in NonHiddenFieldList)
             {
-                field.TagList = new List<Tag>();
-                foreach (var id in field.TagIDs)
+                UpdateTagRelationsOnSingleField(field, tagList);
+            }
+        }
+
+        private void UpdateTagRelationsOnSingleField(Field field, ObservableCollection<ITagable> tagList)
+        {
+            field.TagList = new List<Tag>();
+            foreach (var id in field.TagIDs)
+            {
+                foreach(Tag tag in tagList.Where(p => p.TagId == id || p.ParentId == id))
                 {
-                    if (tagsList.SingleOrDefault(p => p.TagId == id) is Tag tag)
-                    {
-                        field.TagList.Add(tag);
-                    }
+                    field.TagList.Add(tag);
                 }
+            }
+            if (!field.TagList.Any() && !field.IsCustom)
+            {
+                _assetController.RemoveField(field);
             }
         }
 
@@ -435,7 +438,7 @@ namespace AMS.ViewModels
                 Features.AddNotification(new Notification("The field " + "Name" + " is required and empty",Notification.WARNING));
                 return false;
             }
-            else if (Features.Main.CurrentDepartment.ID == 0)
+            else if (Features.Main.CurrentDepartment.ID == 0 && !_isEditing)
             {
                 Features.AddNotification(new Notification("Please select another department than \"All departments\"", Notification.WARNING));
                 return false;

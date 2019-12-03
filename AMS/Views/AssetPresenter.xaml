@@ -55,7 +55,7 @@
                     Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
             
             <!-- Remove button -->
-            <Button Style="{StaticResource RegularCancelButton}"
+            <Button Style="{StaticResource RegularRemoveButton}"
                     Command="{Binding RemoveCommand}"
                     Margin="10 0 0 0"
                     Content="Remove"
@@ -169,11 +169,7 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
-                                                <Label Foreground="{Binding TagFontColor}"
-                                                       Content="{Binding TagLabel}"
-                                                       Style="{StaticResource TagLabelOnlyShow}"
-                                                       FontSize="{StaticResource FontSizeXSmall}"
-                                                       FontWeight="UltraBold" />
+                                                <Label Style="{StaticResource TagLabelOnlyShow}" FontWeight="UltraBold" />
                                             </Grid>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
@@ -196,40 +192,43 @@
                                           Margin="0 0 0 0">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <Border BorderBrush="Black" BorderThickness="1" Padding="10" CornerRadius="10">
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="Auto" />
-                                                        <RowDefinition Height="Auto" />
-                                                        <RowDefinition />
-                                                        <RowDefinition />
-                                                    </Grid.RowDefinitions>
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition Height="Auto" />
+                                                    <RowDefinition />
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
 
-                                                    <TextBlock Style="{StaticResource SmallHeaderStyle}"
+                                                <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                                                Text="{Binding Label}"
                                                                Grid.Row="0" MinWidth="300" />
 
-                                                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                                                <TextBlock Style="{StaticResource ParagraphStyle}"
                                                            Text="{Binding Content}"
                                                            TextWrapping="Wrap"
                                                            Grid.Row="1"/>
 
-                                                    <StackPanel Grid.Row="2">
-                                                        <ItemsControl ItemsSource="{Binding TagList}">
-                                                            <ItemsControl.ItemTemplate>
-                                                                <DataTemplate>
-                                                                    <Grid MaxWidth="100" HorizontalAlignment="Left">
-                                                                        <Label Foreground="{Binding FontColor}"
-                                                                               Content="{Binding Name}"
-                                                                               Style="{StaticResource TagLabelOnlyShow}"
-                                                                               FontSize="{StaticResource FontSizeXSmall}"/>
-                                                                    </Grid>
-                                                                </DataTemplate>
-                                                            </ItemsControl.ItemTemplate>
-                                                        </ItemsControl>
-                                                    </StackPanel>
-                                                </Grid>
-                                            </Border>
+                                                <StackPanel Grid.Row="2">
+                                                    <ItemsControl ItemsSource="{Binding TagList}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Grid MaxWidth="100" HorizontalAlignment="Left">
+                                                                    <Label Style="{StaticResource TagLabelOnlyShow}"/>
+                                                                </Grid>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+                                                <Rectangle Grid.Row="3" Height="2" HorizontalAlignment="Stretch" Margin="0,10,10,10">
+                                                    <Rectangle.Fill>
+                                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                                            <GradientStop Color="LightGray" Offset="0"/>
+                                                            <GradientStop Color="Transparent" Offset="1.0"/>
+                                                        </LinearGradientBrush>
+                                                    </Rectangle.Fill>
+                                                </Rectangle>
+                                            </Grid>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>

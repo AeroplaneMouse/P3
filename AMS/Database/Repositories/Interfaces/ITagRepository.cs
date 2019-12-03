@@ -9,8 +9,9 @@ namespace AMS.Database.Repositories.Interfaces
 
         IEnumerable<Tag> GetTagsForAsset(ulong id);
         IEnumerable<Tag> GetParentTags();
-        IEnumerable<Tag> GetChildTags(ulong parentId);
+        IEnumerable<Tag> GetChildTags(ulong parentID);
         IEnumerable<Tag> GetTreeViewDataList(string keyword = "");
         ulong GetCount();
+        bool DeleteChildren(ulong parentID);
     }
 }

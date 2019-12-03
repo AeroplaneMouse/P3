@@ -91,6 +91,9 @@ namespace AMS.ViewModels
                     Main.History.Push(_currentPage);
                     _currentPage = page;
 
+                    // Run the update method
+                    (page.DataContext as IPageUpdateOnFocus).UpdateOnFocus();
+
                     return true;
                 }
 
@@ -230,7 +233,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page TagList()
             {
-                return new TagList(new TagListController(_tagRepository, _printHelper));
+                return new TagList(new TagListController(_tagRepository, _printHelper), new TagController(null, _tagRepository, _departmentRepository));
             }
 
             /// <summary>
