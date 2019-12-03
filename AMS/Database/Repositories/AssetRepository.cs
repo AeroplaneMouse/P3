@@ -409,6 +409,12 @@ namespace AMS.Database.Repositories
             return assets;
         }
 
+        /// <summary>
+        /// Attaches a list of tags to the given asset
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <param name="tagged">The list of tags to attach to the given asset</param>
+        /// <returns></returns>
         public bool AttachTags(Asset asset, List<ITagable> tagged)
         {
             if (!tagged.Any())
@@ -486,6 +492,11 @@ namespace AMS.Database.Repositories
             return querySuccess;
         }
 
+        /// <summary>
+        /// Returns the tags attached to the given asset
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <returns></returns>
         public IEnumerable<ITagable> GetTags(Asset asset)
         {
             var taggedWith = new List<ITagable>();
@@ -498,6 +509,10 @@ namespace AMS.Database.Repositories
             return taggedWith;
         }
 
+        /// <summary>
+        /// Removes all tags from the given asset
+        /// </summary>
+        /// <param name="asset"></param>
         private void ClearTags(Asset asset)
         {
             var con = new MySqlHandler().GetConnection();

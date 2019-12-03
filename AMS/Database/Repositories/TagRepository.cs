@@ -14,6 +14,10 @@ namespace AMS.Database.Repositories
     {
         private Ilogger logger { get; set; } = new Logger(new LogRepository());
 
+        /// <summary>
+        /// Gets the number of tags in the database
+        /// </summary>
+        /// <returns></returns>
         public ulong GetCount()
         {
             var con = new MySqlHandler().GetConnection();
@@ -50,11 +54,11 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// 
+        /// Inserts a tag into the database
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>The instance added to the database, with its databse ID</returns>
         public Tag Insert(Tag entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
@@ -131,10 +135,10 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// 
+        /// Updates a tag in the database with the same ID as the input tag
         /// </summary>
         /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <returns>Rather the update was successful or not</returns>
         public bool Update(Tag entity)
         {
             var con = new MySqlHandler().GetConnection();
@@ -234,10 +238,10 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// 
+        /// Deletes a tag from the database that corresponds with the input tag
         /// </summary>
         /// <param name="entity"></param>
-        /// <returns></returns>
+        /// <returns>Rather the deletion was successful or not</returns>
         public bool Delete(Tag entity)
         {
             if (entity.ID == 1)
@@ -277,7 +281,7 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// 
+        /// Returns the tag with the given ID
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -368,7 +372,7 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// 
+        /// Returns every parent tag from the database (tags with parentId = 0)
         /// </summary>
         /// <returns></returns>
         public IEnumerable<Tag> GetParentTags()
@@ -377,7 +381,7 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// 
+        /// Returns every child with the given parentId from the database
         /// </summary>
         /// <param name="parentId"></param>
         /// <returns></returns>
@@ -424,7 +428,7 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// 
+        /// Returns a list of tags matching the search keyword
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
@@ -476,6 +480,10 @@ namespace AMS.Database.Repositories
             return tags;
         }
 
+        /// <summary>
+        /// Returns all tags from the database
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Tag> GetAll()
         {
             var con = new MySqlHandler().GetConnection();
@@ -519,6 +527,10 @@ namespace AMS.Database.Repositories
             return tags;
         }
 
+        /// <summary>
+        /// Updates the departmentId of the children of teh given tag
+        /// </summary>
+        /// <param name="tag">Parent tag of the children to update</param>
         private void UpdateChildrenDepartmentId(Tag tag)
         {
             var con = new MySqlHandler().GetConnection();
@@ -561,6 +573,10 @@ namespace AMS.Database.Repositories
             }
         }
 
+        /// <summary>
+        /// Removes all connections to a tag from the database
+        /// </summary>
+        /// <param name="tag">The tag that that all connections to should be removed</param>
         private void ClearConnections(Tag tag)
         {
             var con = new MySqlHandler().GetConnection();
@@ -591,6 +607,11 @@ namespace AMS.Database.Repositories
             }
         }
 
+        /// <summary>
+        /// Returns a dataset, which can be used for a TreeView of the tags matching the keyword
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
         public IEnumerable<Tag> GetTreeViewDataList(string keyword="")
         {
             if (!keyword.Contains('%'))
@@ -675,9 +696,9 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// 
+        /// Maps the data from the database to a tag instance
         /// </summary>
-        /// <param name="reader"></param>
+        /// <param name="reader">The reader to read the database data</param>
         /// <returns></returns>
         public Tag DataMapper(MySqlDataReader reader)
         {

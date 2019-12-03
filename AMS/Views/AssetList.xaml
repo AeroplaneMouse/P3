@@ -201,7 +201,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid HorizontalAlignment="Left">
-                                <Label Foreground="{Binding FontColor}" Content="{Binding TagLabel}" Style="{StaticResource TagAddedToSearch}"/>
+                                <Label Style="{StaticResource TagWithDelete}"/>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

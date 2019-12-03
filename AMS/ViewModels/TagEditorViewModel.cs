@@ -120,7 +120,7 @@ namespace AMS.ViewModels
 
             if (i > 0)
                 _selectedParentTagIndex = i;
-            
+
             OnPropertyChanged(nameof(Color));
 
             // Identifying the department to be the currently selected department.
@@ -282,10 +282,16 @@ namespace AMS.ViewModels
             {
                 if (field.Type == Field.FieldType.NumberField)
                 {
-                    if (field.Content.All(char.IsDigit))
+                    if (!string.IsNullOrEmpty(field.Content))
                     {
-                        Features.AddNotification(new Notification("The field " + field.Label + " cannot contain letters", background: Notification.WARNING));
-                        return false;
+                        bool check = field.Content.All(char.IsDigit);
+                        if (check)
+                        {
+                            Features.AddNotification(
+                                new Notification("The field " + field.Label + " cannot contain letters",
+                                    Notification.WARNING));
+                            return false;
+                        }
                     }
                 }
             }
