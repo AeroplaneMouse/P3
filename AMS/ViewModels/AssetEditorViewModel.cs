@@ -433,7 +433,7 @@ namespace AMS.ViewModels
                 Features.AddNotification(new Notification("The field " + "Name" + " is required and empty",Notification.WARNING));
                 return false;
             }
-            else if (Features.Main.CurrentDepartment.ID == 0)
+            else if (Features.Main.CurrentDepartment.ID == 0 && !_isEditing)
             {
                 Features.AddNotification(new Notification("Please select another department than \"All departments\"", Notification.WARNING));
                 return false;
