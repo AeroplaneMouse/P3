@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using AMS.Controllers;
 using AMS.Controllers.Interfaces;
 using AMS.Events;
 using AMS.Models;
@@ -12,11 +10,9 @@ namespace AMS.ViewModels
 {
     public class TagListViewModel : BaseViewModel
     {
-        private readonly ITagListController _tagListController;
-        private readonly ITagController _tagController;
-        private string _searchQuery = "";
-
         public List<Tag> Tags { get; set; }
+        private readonly ITagListController _tagListController;
+        private string _searchQuery = "";
         public Tag SelectedItem { get; set; }
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
@@ -33,12 +29,11 @@ namespace AMS.ViewModels
             }
         }
         
-        public TagListViewModel(ITagListController controller, ITagController tagController)
+        public TagListViewModel(ITagListController controller)
         {
             _tagListController = controller;
-            _tagController = tagController;
 
-            RemoveCommand = new RelayCommand(RemoveTag);
+            RemoveCommand = new RelayCommand(() => Features.DisplayPrompt(new Confirm("The selected tag(s) will be deleted from the system.\nAre you sure?", RemoveTag)));
             AddNewCommand = new RelayCommand(() => Features.Navigate.To(Features.Create.TagEditor(null)));
             SearchCommand = new RelayCommand(() => Search());
             EditCommand = new RelayCommand(() => {
@@ -55,50 +50,16 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(Tags));
         }
 
-        private void RemoveTag()
+        private void RemoveTag(object sender, PromptEventArgs e)
         {
-            string message = String.Empty;
-            _tagController.ControlledTag = SelectedItem;
-
-            // Check if parent
-            if (_tagController.ParentID == 0 && _tagController.ControlledTag.ChildrenCount > 0)
+            // If the prompt returns true, delete the item
+            if (e.Result)
             {
-                message = "You are about to remove a parent tag!\n"
-                        + $"There are { _tagController.ControlledTag.ChildrenCount } children attached to this parent.";
-
-                List<string> buttons = new List<string>();
-                buttons.Add("Remove parent and all children?");
-                buttons.Add("Remove parent and convert children to parents?");
-
-                Features.DisplayPrompt(new Views.Prompts.ExpandedConfirm(message, buttons, (sender, e) =>
-                {
-                    if (e is ExpandedPromptEventArgs args)
-                    {
-                        string extraMessage = String.Empty;
-                        if (args.ButtonNumber == 0)
-                        {
-                            _tagController.RemoveChildren();
-                            _tagController.Remove();
-                            extraMessage = $" aswell as { _tagController.ControlledTag.ChildrenCount } children";
-                        }
-                        else
-                            _tagController.Remove();
-                        Features.AddNotification(new Notification($"{ _tagController.Name } has been removed{ extraMessage }.", background: Notification.APPROVE), displayTime: 4000);
-                    }
-                }));
+                _tagListController.Remove(SelectedItem);
             }
-            else
-            {
-                Features.DisplayPrompt(new Views.Prompts.Confirm("You are about to remove a tag which cannot be UNDONE!\nAre you sure?", (sender, e) =>
-                {
-                    if (e.Result)
-                    {
-                        _tagController.Remove();
-                        Features.AddNotification(new Notification($"{ _tagController.Name } has been remove.", background: Notification.APPROVE));
-                    }
-                }));
-            }
+
             Search();
+            OnPropertyChanged(nameof(Tags));
         }
 
         private void Search()

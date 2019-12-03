@@ -59,7 +59,7 @@
 
                                         <!-- Menu bar -->
                                         <Menu Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource MenuContainer}">
-                                            <MenuItem Header="_Settings" Style="{StaticResource MenuItemButton}" Visibility="{Binding SettingsVisibility}">
+                                            <MenuItem Header="_Settings" Style="{StaticResource MenuItemButton}">
                                                 <MenuItem Header="_Change" Command="{Binding ChangeSettingsCommand}"/>
                                                 <MenuItem Header="_Clear" Command="{Binding ClearSettingsCommand}"/>
                                             </MenuItem>
@@ -165,8 +165,6 @@
                                                         </Button.Style>
                                                     </Button>
                                                 </StackPanel>
-                                                
-                                                <!-- Current database -->
                                                 <StackPanel VerticalAlignment="Bottom">
                                                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                                                FontSize="{StaticResource FontSizeXSmall}"
@@ -189,21 +187,22 @@
                                                NavigationUIVisibility="Hidden"
                                                Content="{Binding ContentFrame}"/>
 
-                                        <!-- Splash page -->
-                                        <Frame Grid.ColumnSpan="2"
-                                               NavigationUIVisibility="Hidden"
-                                               Content="{Binding SplashPage}"/>
-
                                         <!-- Notifications -->
                                         <ListView Grid.Column="1" 
                                                   FontSize="{StaticResource FontSizeRegular}"
                                                   Style="{StaticResource NotificationView}"/>
 
-                                        <!-- PopupPage -->
-                                        <Frame Grid.ColumnSpan="2"
-                                               NavigationUIVisibility="Hidden"
-                                               Content="{Binding PopupPage}"/>
                                     </Grid>
+
+                                    <!-- Splash page -->
+                                    <Frame Grid.Row="1"
+                                           NavigationUIVisibility="Hidden"
+                                           Content="{Binding SplashPage}"/>
+
+                                    <!-- PopupPage -->
+                                    <Frame Grid.Row="1"
+                                           NavigationUIVisibility="Hidden"
+                                           Content="{Binding PopupPage}"/>
                                 </Grid>
                             </Grid>
                         </Border>

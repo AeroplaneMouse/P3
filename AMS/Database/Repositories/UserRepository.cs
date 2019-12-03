@@ -21,7 +21,7 @@ namespace AMS.Database.Repositories
                 // Sending sql query
                 try
                 {
-                    string query = "SELECT id, description, domain, username, enabled, admin, default_department, created_at, updated_at " +
+                    string query = "SELECT id, name, description, domain, username, enabled, admin, default_department, created_at, updated_at " +
                                          "FROM users " + (!includeDisabled ? "WHERE enabled = 1" : "");
 
                     using (var cmd = new MySqlCommand(query, con))
@@ -59,7 +59,7 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT u.id, u.username, u.domain, u.description, u.enabled, u.admin, u.default_department, u.created_at, u.updated_at " +
+                    const string query = "SELECT u.id, u.name, u.username, u.domain, u.description, u.enabled, u.admin, u.default_department, u.created_at, u.updated_at " +
                                          "FROM users AS u " +
                                          "INNER JOIN asset_users AS au ON au.user_id = u.id " +
                                          "WHERE au.asset_id = @id";
@@ -92,7 +92,7 @@ namespace AMS.Database.Repositories
             return users;
         }
 
-        public ulong GetCount(bool? onlyEnabledUsers)
+        public ulong GetCount()
         {
             var con = new MySqlHandler().GetConnection();
             ulong count = 0;
@@ -102,12 +102,7 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    string query = "SELECT COUNT(*) FROM users";
-                    if (onlyEnabledUsers != null)
-                        query += " WHERE enabled=" + (onlyEnabledUsers == true ? "1" : "0");
-                    else
-                        query += ";";
-
+                    const string query = "SELECT COUNT(*) FROM users WHERE enabled = 1;";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -278,7 +273,7 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT id, username, domain, description, enabled, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
+                    const string query = "SELECT id, name, username, domain, description, enabled, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -320,7 +315,7 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT id, domain, description, enabled, username, admin, default_department, created_at, updated_at " +
+                    const string query = "SELECT id, name, domain, description, enabled, username, admin, default_department, created_at, updated_at " +
                                             "FROM users WHERE username=@username AND domain=@domain AND enabled=1";
 
                     using (var cmd = new MySqlCommand(query, con))

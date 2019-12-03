@@ -24,10 +24,6 @@ namespace AMS.ViewModels
         public SettingsEditorViewModel(object caller)
         {
             _caller = caller;
-
-            SaveCommand = new Base.RelayCommand(Save);
-            CancelCommand = new Base.RelayCommand(Cancel);
-            LoadFromFileCommand = new Base.RelayCommand(LoadSettings);
         }
 
         /// <summary>
@@ -67,6 +63,10 @@ namespace AMS.ViewModels
             // If a current configuration exists, load it to the view.
             if (!String.IsNullOrEmpty(conString))
                 ExtractSettingsFromString(conString);
+
+            SaveCommand = new Base.RelayCommand(Save);
+            CancelCommand = new Base.RelayCommand(Cancel);
+            LoadFromFileCommand = new Base.RelayCommand(LoadSettings);
         }
 
         /// <summary>
@@ -98,7 +98,6 @@ namespace AMS.ViewModels
                 FileConfigurationHandler configurationhandler = new FileConfigurationHandler(Features.GetCurrentSession());
                 string conString  = configurationhandler.LoadConfigValueFromExternalFile(path);
                 ExtractSettingsFromString(conString);
-                Features.AddNotification(new Models.Notification("Settings have been loaded...", Models.Notification.INFO), displayTime: 3000);
             }
         }
 

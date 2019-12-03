@@ -95,7 +95,9 @@ namespace AMS.Controllers
         {
             //If no tag was given, return.
             if (tag == null)
+            {
                 return false;
+            }
 
             //Check if the tag is in the list.
             if (CurrentlyAddedTags.Contains(tag))
@@ -110,8 +112,10 @@ namespace AMS.Controllers
                     RemoveFieldRelations(currentTag.ID);
                     
                     //Remove a fields relation to the parent tag, if no other tag with the same parent tag exists in CurrentlyAddedTags.
-                    if (CurrentlyAddedTags.FirstOrDefault(p => p.ParentId == currentTag.ParentID && p.TagId != currentTag.ID) == null)
+                    if (CurrentlyAddedTags.SingleOrDefault(p => p.ParentId == currentTag.ParentID && p.TagId != currentTag.ID) == null)
+                    {
                         RemoveFieldRelations(currentTag.ParentID);
+                    }
                    
                     //Checks if the field is in the fieldList on the asset, and the tag, if so, remove it.
                     foreach (var field in currentTag.FieldList)
@@ -124,7 +128,9 @@ namespace AMS.Controllers
 
                     //Remove the fields.
                     foreach (var field in removeFields)
+                    {
                         RemoveField(field);
+                    }
                 }
             }
 
@@ -139,13 +145,19 @@ namespace AMS.Controllers
         {
             //Updates the fields on the asset
             if (Name != ControlledAsset.Name)
+            {
                 ControlledAsset.Name = Name;
+            }
 
             if (ControlledAsset.Identifier != Identifier)
+            {
                 ControlledAsset.Identifier = Identifier;
+            }
 
             if (ControlledAsset.Description != Description)
+            {
                 ControlledAsset.Description = Description;
+            }
 
             ControlledAsset.DepartmentID = Features.GetCurrentSession().user.DefaultDepartment;
 
@@ -171,13 +183,19 @@ namespace AMS.Controllers
         public bool Update()
         {
             if (ControlledAsset.Name != Name)
+            {
                 ControlledAsset.Name = Name;
+            }
 
             if (ControlledAsset.Identifier != Identifier)
+            {
                 ControlledAsset.Identifier = Identifier;
+            }
 
             if (ControlledAsset.Description != Description)
+            {
                 ControlledAsset.Description = Description;
+            }
 
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
@@ -208,7 +226,9 @@ namespace AMS.Controllers
                 {
                     currentTag.DeSerializeFields();
                     foreach (var tagField in currentTag.FieldList)
+                    {
                         AddField(tagField, currentTag);
+                    }
                 }
             }
         }

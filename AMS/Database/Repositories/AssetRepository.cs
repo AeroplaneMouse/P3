@@ -259,6 +259,54 @@ namespace AMS.Database.Repositories
             return asset;
         }
 
+        /// <summary>
+        /// Searches the database for assets with one or more of the given tags
+        /// </summary>
+        /// <param name="tagsIds">A list of IDs of the tags</param>
+        /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
+        public List<Asset> SearchByTags(List<int> tagsIds)
+        {
+            var con = new MySqlHandler().GetConnection();
+            List<Asset> assets = new List<Asset>();
+
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
+            {
+                //"WHERE atr.tag_id IN (@ids) GROUP BY a.id";
+                try
+                {
+                    const string query = "SELECT a.* FROM assets AS a " +
+                                         "INNER JOIN asset_tags AS atr ON (a.id = atr.asset_id) " +
+                                         "WHERE atr.tag_id IN (@ids) AND deleted_at IS NULL GROUP BY a.id";
+
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@ids", MySqlDbType.String);
+                        cmd.Parameters["@ids"].Value = string.Join(",", tagsIds);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                assets.Add(DataMapper(reader));
+                            }
+                            reader.Close();
+                        }
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+
+            return assets;
+        }
+
         public List<Asset> Search(string keyword)
         {
             List<ulong> tags = new List<ulong>();
@@ -361,12 +409,6 @@ namespace AMS.Database.Repositories
             return assets;
         }
 
-        /// <summary>
-        /// Attaches a list of tags to the given asset
-        /// </summary>
-        /// <param name="asset"></param>
-        /// <param name="tagged">The list of tags to attach to the given asset</param>
-        /// <returns></returns>
         public bool AttachTags(Asset asset, List<ITagable> tagged)
         {
             if (!tagged.Any())
@@ -444,11 +486,6 @@ namespace AMS.Database.Repositories
             return querySuccess;
         }
 
-        /// <summary>
-        /// Returns the tags attached to the given asset
-        /// </summary>
-        /// <param name="asset"></param>
-        /// <returns></returns>
         public IEnumerable<ITagable> GetTags(Asset asset)
         {
             var taggedWith = new List<ITagable>();
@@ -461,10 +498,6 @@ namespace AMS.Database.Repositories
             return taggedWith;
         }
 
-        /// <summary>
-        /// Removes all tags from the given asset
-        /// </summary>
-        /// <param name="asset"></param>
         private void ClearTags(Asset asset)
         {
             var con = new MySqlHandler().GetConnection();

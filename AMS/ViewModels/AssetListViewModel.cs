@@ -30,8 +30,8 @@ namespace AMS.ViewModels
         public bool IsStrict { 
             get => _isStrict; 
             set {
-                _isStrict = value;
-                RefreshList();
+                _isStrict = value; 
+                ApplyTagOrEnterParent();
             }
         }
 
@@ -78,6 +78,7 @@ namespace AMS.ViewModels
         public bool inTagMode { get; set; } = false;
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
 
+
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand PrintCommand { get; set; }
@@ -121,8 +122,8 @@ namespace AMS.ViewModels
             SearchCommand = new RelayCommand(RefreshList);
             ViewCommand = new RelayCommand(ViewAsset);
             ViewWithParameterCommand = new RelayCommand<object>(ViewAsset);
-            
-            RemoveTagCommand = new RelayCommand<object>((parameter) => {
+            RemoveTagCommand = new RelayCommand<object>((parameter) =>
+            {
                 ITagable tag = parameter as ITagable;
                 _tagHelper.RemoveTag(tag);
                 AppliedTags = _tagHelper.GetAppliedTags(true);
@@ -133,7 +134,8 @@ namespace AMS.ViewModels
             ClearInputCommand = new RelayCommand(ClearInput);
             CheckAllChangedCommand = new RelayCommand<object>((parameter) => CheckAllChanged(parameter as ListView));
         }
-        
+
+
         #region Methods
 
         /// <summary>
@@ -197,66 +199,9 @@ namespace AMS.ViewModels
                 EditAsset(SelectedItems.First());
                 OnPropertyChanged(nameof(Items));
             }
+                
             else
                 Features.AddNotification(new Notification("Please select only one asset.", Notification.ERROR), 3500);
-        }
-
-        /// <summary>
-        /// Inserts the next suggestion into the search query, or the selected element from the list
-        /// </summary>
-        /// <param name="input">The selected element (optional)</param>
-        private void InsertNextOrSelectedSuggestion(object input = null)
-        {
-            if (!inTagMode)
-                return;
-
-            // If the input is null, use the suggestion if possible
-            if (input != null)
-            {
-                ITagable tag;
-
-                if (input is TextBlock textBlock)
-                {
-                    tag = TagSearchSuggestions.SingleOrDefault(t => t.TagLabel == textBlock.Text);
-                }
-                else
-                {
-                    tag = (ITagable)input;
-                }
-
-                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
-                {
-                    if(tag != null) {
-                        _tagHelper.AddTag(tag);
-                    }
-                    else if (_tagHelper.GetParent() != null)
-                    {
-                        _tagHelper.AddTag(_tagHelper.GetParent());
-                    }
-
-                    AppliedTags = _tagHelper.GetAppliedTags(true);
-                    RefreshList();
-                    UpdateTagSuggestions();
-                }
-                else
-                {
-                    // So we need to switch to a group of tags.
-                    Tag taggedItem = (Tag)tag;
-                    _tagHelper.SetParent(taggedItem);
-                    CurrentGroup = "#" + taggedItem.Name;
-                    UpdateTagSuggestions();
-                }
-                SearchQuery = "";
-            }
-            else if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
-            {
-                if (!(_tabIndex <= TagSearchSuggestions.Count() - 1))
-                {
-                    _tabIndex = 0;
-                }
-                SearchQuery = TagSearchSuggestions[_tabIndex].TagLabel + ' ';
-                _tabIndex++;
-            }
         }
 
         /// <summary>
@@ -264,38 +209,42 @@ namespace AMS.ViewModels
         /// </summary>
         private void ApplyTagOrEnterParent()
         {
-            if (!inTagMode)
-                return;
-
-            ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == SearchQuery.Trim(' '));
-            if (tag != null)
+            if (inTagMode)
             {
-                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
+                ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == SearchQuery.Trim(' '));
+                if (tag != null)
                 {
-                    _tagHelper.SetParent((Tag)tag);
-                    CurrentGroup = "#" + tag.TagLabel;
+                    if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
+                    {
+                        _tagHelper.SetParent((Tag)tag);
+                        CurrentGroup = "#" + tag.TagLabel;
+                        SearchQuery = "";
+                        _tabIndex = 0;
+                    }
+                    else
+                    {
+                        _tagHelper.AddTag(tag);
+                        AppliedTags = _tagHelper.GetAppliedTags(true);
+                        SearchQuery = "";
+                        _tabIndex = 0;
+                    }
                 }
                 else
                 {
-                    _tagHelper.AddTag(tag);
-                    AppliedTags = _tagHelper.GetAppliedTags(true);
+                    if (_tagHelper.IsParentSet() && SearchQuery == "")
+                    {
+                        _tagHelper.AddTag(_tagHelper.GetParent());
+                        AppliedTags = _tagHelper.GetAppliedTags(true);
+                        ClearInput();
+                        _tabIndex = 0;
+                    }
+                    //TODO Notify the user, that the input is not a tag
+                    Console.WriteLine("Not a tag");
                 }
-                SearchQuery = "";
-                _tabIndex = 0;
             }
-            else
-            {
-                if (_tagHelper.IsParentSet() && SearchQuery == "")
-                {
-                    _tagHelper.AddTag(_tagHelper.GetParent());
-                    AppliedTags = _tagHelper.GetAppliedTags(true);
-                    ClearInput();
-                    _tabIndex = 0;
-                }
-                Features.AddNotification(new Notification($"{ SearchQuery } is not a tag. To use it, you must first create a tag called { SearchQuery }.",
-                        background: Notification.WARNING),
-                    displayTime: 3500);
-            }
+
+            else if (SearchQuery == null)
+                return;
 
             RefreshList();
         }
@@ -307,6 +256,63 @@ namespace AMS.ViewModels
         {
             _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict, _searchInFields);
             OnPropertyChanged(nameof(Items));
+        }
+
+        /// <summary>
+        /// Inserts the next suggestion into the search query, or the selected element from the list
+        /// </summary>
+        /// <param name="input">The selected element (optional)</param>
+        private void InsertNextOrSelectedSuggestion(object input = null)
+        {
+            if (!inTagMode)
+                return;
+
+            ITagable tag;
+
+            if (input is TextBlock textBlock)
+            {
+                 tag = TagSearchSuggestions.SingleOrDefault(t => t.TagLabel == textBlock.Text);
+            }
+            else
+            {
+                tag = (ITagable)input;
+            }
+
+            // If the input is null, use the suggestion if possible
+            if (input == null && TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+            {
+                if (!(_tabIndex <= TagSearchSuggestions.Count() - 1))
+                {
+                    _tabIndex = 0;
+                }
+                SearchQuery = TagSearchSuggestions[_tabIndex].TagLabel + ' ';
+                _tabIndex++;
+            }
+            else
+            {
+                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
+                {
+                    if(tag != null)
+                    {
+                        _tagHelper.AddTag(tag);
+                    }
+                    else if(_tagHelper.GetParent() != null)
+                    {
+                        _tagHelper.AddTag(_tagHelper.GetParent());
+                    }
+                    
+                    AppliedTags = _tagHelper.GetAppliedTags(true);
+                    UpdateTagSuggestions();
+                }
+                else
+                {
+                    // So we need to switch to a group of tags.
+                    Tag taggedItem = (Tag)tag;
+                    _tagHelper.SetParent(taggedItem);
+                    CurrentGroup = "#" + taggedItem.Name;
+                    UpdateTagSuggestions();
+                }
+            }
         }
 
         /// <summary>
@@ -411,7 +417,6 @@ namespace AMS.ViewModels
                         _listController.Remove(asset);
                         Features.AddNotification(new Notification($"{ asset.Name } has been removed", Notification.APPROVE));
                         ApplyTagOrEnterParent();
-                        RefreshList();
                     }
                 }));
             }

@@ -16,10 +16,10 @@ namespace AMS.Views
     /// </summary>
     public partial class TagList : Page
     {
-        public TagList(ITagListController controller, ITagController tagController)
+        public TagList(ITagListController controller)
         {
             InitializeComponent();
-            DataContext = new TagListViewModel(controller, tagController);
+            DataContext = new TagListViewModel(controller);
         }
 
         private void TagAbleList_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

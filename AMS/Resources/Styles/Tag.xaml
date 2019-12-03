@@ -6,9 +6,6 @@
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinWidth" Value="50" />
         <Setter Property="Padding" Value="6 2 6 2" />
-        <Setter Property="Foreground" Value="{Binding TagFontColor}"/>
-        <Setter Property="Content" Value="{Binding TagLabel}"/>
-        <Setter Property="FontSize" Value="{StaticResource FontSizeXSmall}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">
@@ -24,6 +21,7 @@
                                         Background="{Binding TagColor}" 
                                         FocusVisualStyle="{x:Null}" 
                                         RenderOptions.EdgeMode="Aliased">
+                                    
                                     <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
                                 </Border>
                             </ControlTemplate>
@@ -35,13 +33,10 @@
     </Style>
 
     <!-- Tag style for tags added to seach query -->
-    <Style TargetType="{x:Type Label}" x:Key="TagWithDelete">
+    <Style TargetType="{x:Type Label}" x:Key="TagAddedToSearch">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinWidth" Value="50" />
         <Setter Property="Padding" Value="6 2 6 2" />
-        <Setter Property="Foreground" Value="{Binding TagFontColor}"/>
-        <Setter Property="Content" Value="{Binding TagLabel}"/>
-        <Setter Property="FontSize" Value="{StaticResource FontSizeXSmall}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Label}">

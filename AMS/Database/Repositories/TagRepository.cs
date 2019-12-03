@@ -14,10 +14,6 @@ namespace AMS.Database.Repositories
     {
         private Ilogger logger { get; set; } = new Logger(new LogRepository());
 
-        /// <summary>
-        /// Gets the number of tags in the database
-        /// </summary>
-        /// <returns></returns>
         public ulong GetCount()
         {
             var con = new MySqlHandler().GetConnection();
@@ -54,11 +50,11 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// Inserts a tag into the database
+        /// 
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="id"></param>
-        /// <returns>The instance added to the database, with its databse ID</returns>
+        /// <returns></returns>
         public Tag Insert(Tag entity, out ulong id)
         {
             var con = new MySqlHandler().GetConnection();
@@ -135,10 +131,10 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// Updates a tag in the database with the same ID as the input tag
+        /// 
         /// </summary>
         /// <param name="entity"></param>
-        /// <returns>Rather the update was successful or not</returns>
+        /// <returns></returns>
         public bool Update(Tag entity)
         {
             var con = new MySqlHandler().GetConnection();
@@ -238,10 +234,10 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// Deletes a tag from the database that corresponds with the input tag
+        /// 
         /// </summary>
         /// <param name="entity"></param>
-        /// <returns>Rather the deletion was successful or not</returns>
+        /// <returns></returns>
         public bool Delete(Tag entity)
         {
             if (entity.ID == 1)
@@ -280,47 +276,8 @@ namespace AMS.Database.Repositories
             return querySuccess;
         }
 
-        public bool DeleteChildren(ulong parentID)
-        {
-            if (parentID == 1)
-                return false;
-
-            var con = new MySqlHandler().GetConnection();
-            bool querySuccess = false;
-
-            // Opening connection
-            if (MySqlHandler.Open(ref con))
-            {
-                try
-                {
-                    const string query = "DELETE FROM tags WHERE parent_id=@id";
-
-                    using (var cmd = new MySqlCommand(query, con))
-                    {
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = parentID;
-
-                        querySuccess = cmd.ExecuteNonQuery() > 0;
-                    }
-
-                    // TODO: What to do here?!
-                    //logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
-                }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    con.Close();
-                }
-            }
-
-            return querySuccess;
-        }
-
         /// <summary>
-        /// Returns the tag with the given ID
+        /// 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -411,7 +368,7 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// Returns every parent tag from the database (tags with parentID = 0)
+        /// 
         /// </summary>
         /// <returns></returns>
         public IEnumerable<Tag> GetParentTags()
@@ -420,11 +377,11 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// Returns every child with the given parentID from the database
+        /// 
         /// </summary>
-        /// <param name="parentID"></param>
+        /// <param name="parentId"></param>
         /// <returns></returns>
-        public IEnumerable<Tag> GetChildTags(ulong parentID)
+        public IEnumerable<Tag> GetChildTags(ulong parentId)
         {
             var con = new MySqlHandler().GetConnection();
             List<Tag> tags = new List<Tag>();
@@ -434,23 +391,14 @@ namespace AMS.Database.Repositories
             {
                 try
                 { 
-                    ulong department = Features.Main.CurrentDepartment.ID;
-                    
-                    string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
+                    const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
                                          "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
-                                         "FROM tags AS t WHERE t.parent_id=@id "+(department > 0 ? "AND (t.department_id = @department OR t.department_id IS NULL)" : "")+
-                                         "ORDER BY countChildren DESC, t.label ASC";
+                                         "FROM tags AS t WHERE t.parent_id=@id  ORDER BY countChildren DESC, t.label ASC";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
                         cmd.Parameters.Add("@id", MySqlDbType.Int64);
-                        cmd.Parameters["@id"].Value = parentID;
-                        
-                        if (department > 0)
-                        {
-                            cmd.Parameters.Add("@department", MySqlDbType.UInt64);
-                            cmd.Parameters["@department"].Value = department;
-                        }
+                        cmd.Parameters["@id"].Value = parentId;
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -476,7 +424,7 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// Returns a list of tags matching the search keyword
+        /// 
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
@@ -528,10 +476,6 @@ namespace AMS.Database.Repositories
             return tags;
         }
 
-        /// <summary>
-        /// Returns all tags from the database
-        /// </summary>
-        /// <returns></returns>
         public IEnumerable<Tag> GetAll()
         {
             var con = new MySqlHandler().GetConnection();
@@ -575,10 +519,6 @@ namespace AMS.Database.Repositories
             return tags;
         }
 
-        /// <summary>
-        /// Updates the departmentId of the children of teh given tag
-        /// </summary>
-        /// <param name="tag">Parent tag of the children to update</param>
         private void UpdateChildrenDepartmentId(Tag tag)
         {
             var con = new MySqlHandler().GetConnection();
@@ -621,10 +561,6 @@ namespace AMS.Database.Repositories
             }
         }
 
-        /// <summary>
-        /// Removes all connections to a tag from the database
-        /// </summary>
-        /// <param name="tag">The tag that that all connections to should be removed</param>
         private void ClearConnections(Tag tag)
         {
             var con = new MySqlHandler().GetConnection();
@@ -655,11 +591,6 @@ namespace AMS.Database.Repositories
             }
         }
 
-        /// <summary>
-        /// Returns a dataset, which can be used for a TreeView of the tags matching the keyword
-        /// </summary>
-        /// <param name="keyword"></param>
-        /// <returns></returns>
         public IEnumerable<Tag> GetTreeViewDataList(string keyword="")
         {
             if (!keyword.Contains('%'))
@@ -703,7 +634,7 @@ namespace AMS.Database.Repositories
                             {
                                 ulong rowId = reader.GetUInt64("id");
                                 String rowLabel = reader.GetString("label");
-                                ulong rowParentID = reader.GetUInt64("parent_id");
+                                ulong rowParentId = reader.GetUInt64("parent_id");
                                 var ordinal = reader.GetOrdinal("department_id");
                                 ulong rowDepartmentId = (reader.IsDBNull(ordinal) ? 0 : reader.GetUInt64("department_id"));
                                 string rowColor = reader.GetString("color");
@@ -711,11 +642,11 @@ namespace AMS.Database.Repositories
 
                                 Tag tag = (Tag) Activator.CreateInstance(typeof(Tag),
                                     BindingFlags.Instance | BindingFlags.NonPublic, null,
-                                    new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowContainsChildren, null, null, "[]" }, null,
+                                    new object[] { rowId, rowLabel, rowDepartmentId, rowParentId, rowColor, rowContainsChildren, null, null, "[]" }, null,
                                     null);
 
-                                if (tag.ParentID > 0 && tags_placeholder.ContainsKey(tag.ParentID))
-                                    tags_placeholder[tag.ParentID].Children.Add(tag);
+                                if (tag.ParentId > 0 && tags_placeholder.ContainsKey(tag.ParentId))
+                                    tags_placeholder[tag.ParentId].Children.Add(tag);
                                 else
                                     tags_placeholder.Add(tag.ID, tag);
                             }
@@ -744,15 +675,15 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// Maps the data from the database to a tag instance
+        /// 
         /// </summary>
-        /// <param name="reader">The reader to read the database data</param>
+        /// <param name="reader"></param>
         /// <returns></returns>
         public Tag DataMapper(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
             String rowLabel = reader.GetString("label");
-            ulong rowParentID = reader.GetUInt64("parent_id");
+            ulong rowParentId = reader.GetUInt64("parent_id");
             var ordinal = reader.GetOrdinal("department_id");
             ulong rowDepartmentId = (reader.IsDBNull(ordinal) ? 0 : reader.GetUInt64("department_id"));
             string rowColor = reader.GetString("color");
@@ -763,7 +694,7 @@ namespace AMS.Database.Repositories
 
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowNumOfChildren, rowCreatedAt, rowUpdatedAt, rowOptions }, null,
+                new object[] { rowId, rowLabel, rowDepartmentId, rowParentId, rowColor, rowNumOfChildren, rowCreatedAt, rowUpdatedAt, rowOptions }, null,
                 null);
         }
     }
