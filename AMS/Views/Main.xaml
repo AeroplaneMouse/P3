@@ -59,7 +59,7 @@
 
                                         <!-- Menu bar -->
                                         <Menu Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource MenuContainer}">
-                                            <MenuItem Header="_Settings" Style="{StaticResource MenuItemButton}">
+                                            <MenuItem Header="_Settings" Style="{StaticResource MenuItemButton}" Visibility="{Binding SettingsVisibility}">
                                                 <MenuItem Header="_Change" Command="{Binding ChangeSettingsCommand}"/>
                                                 <MenuItem Header="_Clear" Command="{Binding ClearSettingsCommand}"/>
                                             </MenuItem>
