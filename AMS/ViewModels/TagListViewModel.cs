@@ -55,22 +55,6 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(Tags));
         }
 
-        //private void RemoveTag()
-        //{
-
-
-
-
-        //    // If the prompt returns true, delete the item
-        //    if (e.Result)
-        //    {
-        //        _tagListController.Remove(SelectedItem);
-        //    }
-
-        //    Search();
-        //    OnPropertyChanged(nameof(Tags));
-        //}
-        
         private void RemoveTag()
         {
             string message = String.Empty;
@@ -99,7 +83,6 @@ namespace AMS.ViewModels
                         }
                         else
                             _tagController.Remove();
-                        Features.Navigate.Back();
                         Features.AddNotification(new Notification($"{ _tagController.Name } has been removed{ extraMessage }.", background: Notification.APPROVE), displayTime: 4000);
                     }
                 }));
@@ -111,7 +94,6 @@ namespace AMS.ViewModels
                     if (e.Result)
                     {
                         _tagController.Remove();
-                        Features.Navigate.Back();
                         Features.AddNotification(new Notification($"{ _tagController.Name } has been remove.", background: Notification.APPROVE));
                     }
                 }));
