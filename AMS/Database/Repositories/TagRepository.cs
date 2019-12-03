@@ -434,14 +434,23 @@ namespace AMS.Database.Repositories
             {
                 try
                 { 
-                    const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
+                    ulong department = Features.Main.CurrentDepartment.ID;
+                    
+                    string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
                                          "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
-                                         "FROM tags AS t WHERE t.parent_id=@id ORDER BY countChildren DESC, t.label ASC";
+                                         "FROM tags AS t WHERE t.parent_id=@id "+(department > 0 ? "AND (t.department_id = @department OR t.department_id IS NULL)" : "")+
+                                         "ORDER BY countChildren DESC, t.label ASC";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
                         cmd.Parameters.Add("@id", MySqlDbType.Int64);
                         cmd.Parameters["@id"].Value = parentID;
+                        
+                        if (department > 0)
+                        {
+                            cmd.Parameters.Add("@department", MySqlDbType.UInt64);
+                            cmd.Parameters["@department"].Value = department;
+                        }
 
                         using (var reader = cmd.ExecuteReader())
                         {
