@@ -388,15 +388,11 @@ namespace AMS.ViewModels
         private List<Department> GetDepartments()
         {
             if (CurrentDepartmentVisibility == Visibility.Visible)
-            {
-                //TODO: Find a better solution
-                if (_departmentRep.GetCount() == 0)
-                    return new List<Department>() { new Department() { Name = "- Please add a department to the system -" } };
-                else
-                    return (List<Department>)_departmentRep.GetAll();
-            }
+                return (List<Department>)_departmentRep.GetAll();
+
             else
-                return new List<Department>();
+                //TODO: Find a better solution
+                return new List<Department>() { new Department() { Name = "- Please add a department to the system -" } };
         }
 
         /// <summary>
