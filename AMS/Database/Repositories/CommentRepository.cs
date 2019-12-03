@@ -2,7 +2,6 @@
 using AMS.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
-using System.Collections.ObjectModel;
 using AMS.Database.Repositories.Interfaces;
 using System.Collections.Generic;
 using AMS.ViewModels;
