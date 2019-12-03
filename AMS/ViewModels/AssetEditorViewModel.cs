@@ -266,6 +266,7 @@ namespace AMS.ViewModels
                     if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
                     {
                         _tagHelper.AddTag(tag);
+                        _assetController.AttachTag(tag);
                     }
                     else
                     {
@@ -307,10 +308,12 @@ namespace AMS.ViewModels
                 else
                 {
                     _tagHelper.AddTag(tag);
+                    _assetController.AttachTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(false);
                 }
                 TagSearchQuery = "";
                 _tagTabIndex = 0;
+                UpdateAll();
             }
             else
             {
@@ -381,17 +384,17 @@ namespace AMS.ViewModels
         /// </summary>
         private void UpdateAll()
         {
-            UpdateTagRelations(AppliedTags);
+            UpdateTagRelationsOfFields(AppliedTags);
             OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(NonHiddenFieldList));
             OnPropertyChanged(nameof(HiddenFieldList));
         }
 
         /// <summary>
-        /// Updates the relations from the tag, and adds fields.
+        /// Updates the fields to show their connections to the given tags
         /// </summary>
         /// <param name="tagsList"></param>
-        private void UpdateTagRelations(ObservableCollection<ITagable> tagsList)
+        private void UpdateTagRelationsOfFields(ObservableCollection<ITagable> tagsList)
         {
             // Runs through the list of tagID's, and adds the tag with the same tagID to the TagList on the field.
             foreach (var field in HiddenFieldList)
