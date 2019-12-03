@@ -98,6 +98,7 @@ namespace AMS.ViewModels
                 FileConfigurationHandler configurationhandler = new FileConfigurationHandler(Features.GetCurrentSession());
                 string conString  = configurationhandler.LoadConfigValueFromExternalFile(path);
                 ExtractSettingsFromString(conString);
+                Features.AddNotification(new Models.Notification("Settings have been loaded...", Models.Notification.INFO), displayTime: 3000);
             }
         }
 
