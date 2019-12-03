@@ -81,7 +81,7 @@
                                                Visibility="Collapsed"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Center"
-                                               Text="DELETE"/>
+                                               Text="REMOVE"/>
                                 </Grid>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
