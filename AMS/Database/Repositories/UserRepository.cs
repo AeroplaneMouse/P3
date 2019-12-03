@@ -92,7 +92,7 @@ namespace AMS.Database.Repositories
             return users;
         }
 
-        public ulong GetCount()
+        public ulong GetCount(bool? onlyEnabledUsers)
         {
             var con = new MySqlHandler().GetConnection();
             ulong count = 0;
@@ -102,7 +102,12 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT COUNT(*) FROM users WHERE enabled = 1;";
+                    string query = "SELECT COUNT(*) FROM users";
+                    if (onlyEnabledUsers != null)
+                        query += " WHERE enabled=" + (onlyEnabledUsers == true ? "1" : "0");
+                    else
+                        query += ";";
+
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
