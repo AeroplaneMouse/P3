@@ -51,7 +51,7 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// 
+        /// Inserts a new department into the database
         /// </summary>
         /// <param name="entity"></param>
         /// <param name="id"></param>

@@ -246,7 +246,8 @@ namespace AMS.ViewModels
             Tag ParentTag = ParentTagList[_selectedParentTagIndex];
             foreach (var field in HiddenFieldList)
             {
-                field.TagList = new List<Tag>(); // <=== How does this work?! TODO: Question
+                //TODO: Question
+                field.TagList = new List<Tag>(); // <=== How does this work?! 
                 foreach (var id in field.TagIDs)
                 {
                     if (field.TagIDs.Contains(id))
@@ -292,8 +293,7 @@ namespace AMS.ViewModels
                         if (!check)
                         {
                             Features.AddNotification(
-                                new Notification("The field " + field.Label + " cannot contain letters",
-                                    Notification.WARNING));
+                                new Notification("The field " + field.Label + " cannot contain letters", background: Notification.WARNING));
                             return false;
                         }
                     }
