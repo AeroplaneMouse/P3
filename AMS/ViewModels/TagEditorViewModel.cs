@@ -70,15 +70,6 @@ namespace AMS.ViewModels
             get => _selectedParentTagIndex;
             set
             {
-                if (value > 0)
-                {
-                    DepartmentSelectionEnabled = false;
-                    UpdateDepartmentSelectionToParentDepartment();
-                }
-                else
-                {
-                    DepartmentSelectionEnabled = true;
-                }
 
                 if (value == _selectedParentTagIndex) return;
 
@@ -92,6 +83,16 @@ namespace AMS.ViewModels
                 }
 
                 _controller.ParentID = ParentTagList[_selectedParentTagIndex].ID;
+
+                if (value > 0)
+                {
+                    DepartmentSelectionEnabled = false;
+                    UpdateDepartmentSelectionToParentDepartment();
+                }
+                else
+                {
+                    DepartmentSelectionEnabled = true;
+                }
 
                 _controller.ConnectTag(ParentTagList[_selectedParentTagIndex], ParentTagList[oldValue]);
                 UpdateAll();
@@ -376,7 +377,7 @@ namespace AMS.ViewModels
         private void UpdateDepartmentSelectionToParentDepartment()
         {
             int i = DepartmentList.Count - 1;
-            while (i > 0 && DepartmentList[i].ID == ParentTagList[SelectedParentTagIndex].DepartmentID)
+            while (i > 0 && DepartmentList[i].ID != ParentTagList[SelectedParentTagIndex].DepartmentID)
                 i--;
             SelectedDepartmentIndex = i;
         }
