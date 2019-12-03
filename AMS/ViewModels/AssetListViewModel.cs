@@ -410,6 +410,7 @@ namespace AMS.ViewModels
                         _listController.Remove(asset);
                         Features.AddNotification(new Notification($"{ asset.Name } has been removed", Notification.APPROVE));
                         ApplyTagOrEnterParent();
+                        RefreshList();
                     }
                 }));
             }
