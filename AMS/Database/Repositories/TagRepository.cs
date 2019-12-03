@@ -280,6 +280,45 @@ namespace AMS.Database.Repositories
             return querySuccess;
         }
 
+        public bool DeleteChildren(ulong parentID)
+        {
+            if (parentID == 1)
+                return false;
+
+            var con = new MySqlHandler().GetConnection();
+            bool querySuccess = false;
+
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
+            {
+                try
+                {
+                    const string query = "DELETE FROM tags WHERE parent_id=@id";
+
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = parentID;
+
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                    }
+
+                    // TODO: What to do here?!
+                    //logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+
+            return querySuccess;
+        }
+
         /// <summary>
         /// Returns the tag with the given ID
         /// </summary>
@@ -372,7 +411,7 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// Returns every parent tag from the database (tags with parentId = 0)
+        /// Returns every parent tag from the database (tags with parentID = 0)
         /// </summary>
         /// <returns></returns>
         public IEnumerable<Tag> GetParentTags()
@@ -381,11 +420,11 @@ namespace AMS.Database.Repositories
         }
 
         /// <summary>
-        /// Returns every child with the given parentId from the database
+        /// Returns every child with the given parentID from the database
         /// </summary>
-        /// <param name="parentId"></param>
+        /// <param name="parentID"></param>
         /// <returns></returns>
-        public IEnumerable<Tag> GetChildTags(ulong parentId)
+        public IEnumerable<Tag> GetChildTags(ulong parentID)
         {
             var con = new MySqlHandler().GetConnection();
             List<Tag> tags = new List<Tag>();
@@ -402,7 +441,7 @@ namespace AMS.Database.Repositories
                     using (var cmd = new MySqlCommand(query, con))
                     {
                         cmd.Parameters.Add("@id", MySqlDbType.Int64);
-                        cmd.Parameters["@id"].Value = parentId;
+                        cmd.Parameters["@id"].Value = parentID;
 
                         using (var reader = cmd.ExecuteReader())
                         {
@@ -655,7 +694,7 @@ namespace AMS.Database.Repositories
                             {
                                 ulong rowId = reader.GetUInt64("id");
                                 String rowLabel = reader.GetString("label");
-                                ulong rowParentId = reader.GetUInt64("parent_id");
+                                ulong rowParentID = reader.GetUInt64("parent_id");
                                 var ordinal = reader.GetOrdinal("department_id");
                                 ulong rowDepartmentId = (reader.IsDBNull(ordinal) ? 0 : reader.GetUInt64("department_id"));
                                 string rowColor = reader.GetString("color");
@@ -663,11 +702,11 @@ namespace AMS.Database.Repositories
 
                                 Tag tag = (Tag) Activator.CreateInstance(typeof(Tag),
                                     BindingFlags.Instance | BindingFlags.NonPublic, null,
-                                    new object[] { rowId, rowLabel, rowDepartmentId, rowParentId, rowColor, rowContainsChildren, null, null, "[]" }, null,
+                                    new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowContainsChildren, null, null, "[]" }, null,
                                     null);
 
-                                if (tag.ParentId > 0 && tags_placeholder.ContainsKey(tag.ParentId))
-                                    tags_placeholder[tag.ParentId].Children.Add(tag);
+                                if (tag.ParentID > 0 && tags_placeholder.ContainsKey(tag.ParentID))
+                                    tags_placeholder[tag.ParentID].Children.Add(tag);
                                 else
                                     tags_placeholder.Add(tag.ID, tag);
                             }
@@ -704,7 +743,7 @@ namespace AMS.Database.Repositories
         {
             ulong rowId = reader.GetUInt64("id");
             String rowLabel = reader.GetString("label");
-            ulong rowParentId = reader.GetUInt64("parent_id");
+            ulong rowParentID = reader.GetUInt64("parent_id");
             var ordinal = reader.GetOrdinal("department_id");
             ulong rowDepartmentId = (reader.IsDBNull(ordinal) ? 0 : reader.GetUInt64("department_id"));
             string rowColor = reader.GetString("color");
@@ -715,7 +754,7 @@ namespace AMS.Database.Repositories
 
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowLabel, rowDepartmentId, rowParentId, rowColor, rowNumOfChildren, rowCreatedAt, rowUpdatedAt, rowOptions }, null,
+                new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowNumOfChildren, rowCreatedAt, rowUpdatedAt, rowOptions }, null,
                 null);
         }
     }

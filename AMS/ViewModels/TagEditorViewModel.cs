@@ -318,8 +318,8 @@ namespace AMS.ViewModels
             // Check if parent
             if (_controller.ParentID == 0)
             {
-                message += "You are about to remove a parent tag!\n"
-                    + $"There are { _controller.ControlledTag.ChildrenCount } children attached to this parent.";
+                message = "You are about to remove a parent tag!\n"
+                        + $"There are { _controller.ControlledTag.ChildrenCount } children attached to this parent.";
 
                 List<string> buttons = new List<string>();
                 buttons.Add("Remove parent and all children?");
@@ -331,8 +331,8 @@ namespace AMS.ViewModels
                     {
                         if (args.ButtonNumber == 0)
                         {
-                            ulong id = _controller.Id;
-                            _controller.Remove();
+                            //ulong id = _controller.Id;
+                            //_controller.Remove();
                         }
                         else
                         {
