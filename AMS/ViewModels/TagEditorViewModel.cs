@@ -109,15 +109,17 @@ namespace AMS.ViewModels
                 ParentSelectionEnabled = false;
                 DepartmentSelectionEnabled = false;
             }
+            else
+            {
+                // Enabling department selection for parent tags
+                DepartmentSelectionEnabled = _controller.ParentID == 0;
+            }
 
             if(_controller.ControlledTag.ChildrenCount > 0)
             {
                 ParentSelectionEnabled = false;
             }
-
-            // Enabling department selection for parent tags
-            DepartmentSelectionEnabled = _controller.ParentID == 0;
-
+            
             //Set the selected parent to the parent of the chosen tag
             int i = ParentTagList.Count - 1;
             while (i > 0 && ParentTagList[i].ID != _controller.ParentID)
