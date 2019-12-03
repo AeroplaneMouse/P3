@@ -365,17 +365,17 @@ namespace AMS.Database.Repositories
         /// Attaches a list of tags to the given asset
         /// </summary>
         /// <param name="asset"></param>
-        /// <param name="tagged">The list of tags to attach to the given asset</param>
+        /// <param name="listOfTags">The list of tags to attach to the given asset</param>
         /// <returns></returns>
-        public bool AttachTags(Asset asset, List<ITagable> tagged)
+        public bool AttachTags(Asset asset, List<ITagable> listOfTags)
         {
-            if (!tagged.Any())
+            if (!listOfTags.Any())
             {
                 return true;
             }
 
-            List<User> users = tagged.OfType<User>().ToList();
-            List<Tag> tags = tagged.OfType<Tag>().ToList();
+            List<User> users = listOfTags.OfType<User>().ToList();
+            List<Tag> tags = listOfTags.OfType<Tag>().ToList();
             int userCounter = users.Count;
             int tagCounter = tags.Count;
 
