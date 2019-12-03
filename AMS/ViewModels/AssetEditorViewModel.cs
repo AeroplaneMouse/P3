@@ -247,17 +247,8 @@ namespace AMS.ViewModels
         private void InsertNextOrSelectedSuggestion(object input = null)
         {
             
-            // If the input is null, use the suggestion if possible
-            if (input == null && TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
-            {
-                if (!(_tagTabIndex <= TagSearchSuggestions.Count() - 1))
-                {
-                    _tagTabIndex = 0;
-                }
-                TagSearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
-                _tagTabIndex++;
-            }
-            else
+            // If the input is not null, use the suggestion if possible
+            if (input != null)
             {
                 ITagable tag;
 
@@ -270,14 +261,11 @@ namespace AMS.ViewModels
                     tag = (ITagable)input;
                 }
 
-                if(tag != null)
+                if (tag != null)
                 {
                     if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
                     {
-                        _tagHelper.SetParent(null);
-                        TagSearchQuery = "";
-                        CurrentGroup = "";
-                        CurrentGroupVisibility = Visibility.Collapsed;
+                        _tagHelper.AddTag(tag);
                     }
                     else
                     {
@@ -286,10 +274,19 @@ namespace AMS.ViewModels
                         _tagHelper.SetParent(taggedItem);
                         CurrentGroup = tag.TagLabel;
                         CurrentGroupVisibility = Visibility.Visible;
-                        TagSearchQuery = "";
                         UpdateTagSuggestions();
                     }
+                    TagSearchQuery = "";
                 }
+            }
+            else if(TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+            {
+                if (!(_tagTabIndex <= TagSearchSuggestions.Count() - 1))
+                {
+                    _tagTabIndex = 0;
+                }
+                TagSearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
+                _tagTabIndex++;
             }
         }
 
@@ -306,16 +303,14 @@ namespace AMS.ViewModels
                     _tagHelper.SetParent((Tag)tag);
                     CurrentGroup = tag.TagLabel;
                     CurrentGroupVisibility = Visibility.Visible;
-                    TagSearchQuery = "";
-                    _tagTabIndex = 0;
                 }
                 else
                 {
                     _tagHelper.AddTag(tag);
-                    AppliedTags = _tagHelper.GetAppliedTags(true);
-                    TagSearchQuery = "";
-                    _tagTabIndex = 0;
+                    AppliedTags = _tagHelper.GetAppliedTags(false);
                 }
+                TagSearchQuery = "";
+                _tagTabIndex = 0;
             }
             else
             {
