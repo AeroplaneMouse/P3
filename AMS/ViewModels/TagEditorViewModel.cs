@@ -27,6 +27,8 @@ namespace AMS.ViewModels
 
         public ObservableCollection<Field> NonHiddenFieldList =>
             new ObservableCollection<Field>(_controller.NonHiddenFieldList);
+        
+        public ObservableCollection<Field> ParentTagFields => new ObservableCollection<Field>(_controller.ParentTagFields);
 
         public ObservableCollection<Field> HiddenFieldList =>
             new ObservableCollection<Field>(_controller.HiddenFieldList);
@@ -93,7 +95,7 @@ namespace AMS.ViewModels
 
                 _controller.ParentID = ParentTagList[_selectedParentTagIndex].ID;
 
-                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex], ParentTagList[oldValue]);
+                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex]);
                 UpdateAll();
             }
         }
@@ -170,6 +172,8 @@ namespace AMS.ViewModels
 
                 // Use the department of the tag
                 currentDepartment = _controller.DepartmentList.Find(d => d.ID == _controller.DepartmentID);
+                
+                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex]);
             }
             else
             {
@@ -287,6 +291,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(NonHiddenFieldList));
             OnPropertyChanged(nameof(HiddenFieldList));
             OnPropertyChanged(nameof(SelectedParentTagIndex));
+            OnPropertyChanged(nameof(ParentTagFields));
             UpdateTagRelations();
         }
 

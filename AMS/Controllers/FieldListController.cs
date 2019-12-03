@@ -52,11 +52,6 @@ namespace AMS.Controllers
             //If the field is not in the list, add the field (With or without a relation to the fieldContainer)
             if (fieldInList == null)
             {
-                if (fieldContainer != null)
-                {
-                    inputField.TagIDs.Add(fieldContainer.ID);
-                }
-
                 NonHiddenFieldList.Add(inputField);
             }
             else
@@ -73,10 +68,10 @@ namespace AMS.Controllers
                 }
 
                 //Adds a reference to the field container if its added.
-                if (fieldContainer != null && !fieldInList.TagIDs.Contains(fieldContainer.ID))
-                {
-                    fieldInList.TagIDs.Add(fieldContainer.ID);
-                }
+                //if (fieldContainer != null && !fieldInList.TagIDs.Contains(fieldContainer.ID))
+                //{
+                //    fieldInList.TagIDs.Add(fieldContainer.ID);
+                //}
             }
 
             return _fieldContainer.FieldList.Contains(inputField);

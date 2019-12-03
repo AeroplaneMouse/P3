@@ -162,6 +162,20 @@
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                     </StackPanel>
+                    
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Parent field list"
+                               Margin="10 20 10 0" />
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding ParentTagFields, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </ScrollViewer>
