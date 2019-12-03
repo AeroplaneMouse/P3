@@ -107,7 +107,6 @@
 
                             <Button Style="{StaticResource RegularCancelButton}"
                                     Width="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ActualHeight}" 
-                                    Foreground="White"
                                     Height="25"
                                     MinWidth="0"
                                     VerticalAlignment="Center"

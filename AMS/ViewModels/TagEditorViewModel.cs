@@ -110,6 +110,11 @@ namespace AMS.ViewModels
                 DepartmentSelectionEnabled = false;
             }
 
+            if(_controller.ControlledTag.ChildrenCount > 0)
+            {
+                ParentSelectionEnabled = false;
+            }
+
             // Enabling department selection for parent tags
             DepartmentSelectionEnabled = _controller.ParentID == 0;
 
