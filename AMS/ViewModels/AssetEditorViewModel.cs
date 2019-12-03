@@ -26,9 +26,6 @@ namespace AMS.ViewModels
         public ObservableCollection<Field> HiddenFieldList =>
             new ObservableCollection<Field>(_assetController.HiddenFieldList);
 
-        // TODO: Skal fjernes?
-        //public List<Tag> TagList { get; set; }
-
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
 
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
@@ -137,9 +134,6 @@ namespace AMS.ViewModels
             {
                 if (parameter is Field field && field.IsCustom)
                     Features.DisplayPrompt(new Views.Prompts.CustomField(null, EditFieldConfirmed, true, field));
-                else
-                    //TODO Handle not field event
-                    return;
             });
 
             RemoveCommand = new RelayCommand(() =>

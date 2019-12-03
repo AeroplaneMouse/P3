@@ -13,8 +13,7 @@ namespace AMS.Database.Repositories
 {
     public class DepartmentRepository : IDepartmentRepository
     {
-        //TODO: Ingen new repos
-        private Ilogger logger { get; set; } = new Logger(new LogRepository());
+        private Ilogger _logger { get; set; } = new Logger(new LogRepository());
 
         public ulong GetCount()
         {
@@ -79,7 +78,7 @@ namespace AMS.Database.Repositories
                         id = (ulong)cmd.LastInsertedId;
                     }
 
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
                 }
                 catch (MySqlException e)
                 {
@@ -121,7 +120,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
 
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -160,7 +159,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
 
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {

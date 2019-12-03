@@ -163,9 +163,6 @@ namespace AMS.ViewModels
             {
                 if (parameter is Field field)
                     Features.DisplayPrompt(new Views.Prompts.CustomField(null, EditFieldConfirmed, false, field));
-                else
-                    //TODO Handle not field event
-                    return;
             });
         }
 
