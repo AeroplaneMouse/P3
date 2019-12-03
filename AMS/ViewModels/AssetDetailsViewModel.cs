@@ -17,7 +17,7 @@ namespace AMS.ViewModels
         public string Name => _assetController.ControlledAsset.Name;
         public string Identifier => _assetController.ControlledAsset.Identifier;
         public string Description => _assetController.ControlledAsset.Description;
-        public ObservableCollection<ITagable> TagList => new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags);
+        public ObservableCollection<ITagable> TagList => new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags.Where(t => t.ParentId != 0 || (t.ParentId == 0 && t.ChildrenCount == 0)));
 
         public ObservableCollection<Field> FieldList =>
             new ObservableCollection<Field>(_assetController.ControlledAsset.FieldList.Where(p => p.IsHidden == false && !string.IsNullOrEmpty(p.Content)).ToList());

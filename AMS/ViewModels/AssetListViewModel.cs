@@ -30,8 +30,8 @@ namespace AMS.ViewModels
         public bool IsStrict { 
             get => _isStrict; 
             set {
-                _isStrict = value; 
-                ApplyTagOrEnterParent();
+                _isStrict = value;
+                RefreshList();
             }
         }
 

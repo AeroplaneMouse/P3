@@ -55,7 +55,7 @@
                     Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
             
             <!-- Remove button -->
-            <Button Style="{StaticResource RegularCancelButton}"
+            <Button Style="{StaticResource RegularRemoveButton}"
                     Command="{Binding RemoveCommand}"
                     Margin="10 0 0 0"
                     Content="Remove"
