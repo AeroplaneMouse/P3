@@ -144,7 +144,14 @@ namespace AMS.ViewModels
 
             RemoveCommand = new RelayCommand(() =>
             {
-                //TODO Handle remove command
+                Features.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { _assetController.Name }?", (sender, e) =>
+                {
+                    if (e.Result)
+                    {
+                        _assetController.Remove();
+                        Features.Navigate.To(Features.Create.AssetList());
+                    }
+                }));
             });
 
             InsertNextOrSelectedSuggestionCommand = new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
