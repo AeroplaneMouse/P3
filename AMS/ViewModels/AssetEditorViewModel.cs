@@ -319,9 +319,13 @@ namespace AMS.ViewModels
             }
             else
             {
-                Features.AddNotification(new Notification($"{ TagSearchQuery } is not a tag. To use it, you must first create a tag called { TagSearchQuery }.",
-                        background: Notification.WARNING),
-                    displayTime: 3500);
+                string message;
+                if (TagSearchQuery == String.Empty)
+                    message = $"It is not possible to attach a parent tag that have children to an asset.";
+                else
+                    message = $"{ TagSearchQuery } is not a tag. To use it, you must first create a tag called { TagSearchQuery }.";
+
+                Features.AddNotification(new Notification(message, background: Notification.WARNING), displayTime: 3500);
             }
         }
 
