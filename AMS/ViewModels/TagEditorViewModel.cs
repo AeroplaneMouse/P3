@@ -159,7 +159,7 @@ namespace AMS.ViewModels
 
             if (i > 0)
                 _selectedParentTagIndex = i;
-            
+
             OnPropertyChanged(nameof(Color));
 
             Department currentDepartment;
@@ -192,8 +192,10 @@ namespace AMS.ViewModels
             SaveTagCommand = new Base.RelayCommand(SaveTag);
             AddFieldCommand = new Base.RelayCommand(AddField);
             RemoveFieldCommand = new Base.RelayCommand<object>((parameter) => RemoveField(parameter));
-            
-            RemoveCommand = new Base.RelayCommand(() => Features.DisplayPrompt(new Confirm("The tag will be deleted from the system.\nAre you sure?", RemoveTag)));
+
+            RemoveCommand = new Base.RelayCommand(() =>
+                Features.DisplayPrompt(
+                    new Confirm("The tag will be deleted from the system.\nAre you sure?", RemoveTag)));
 
             CancelCommand = new Base.RelayCommand(Cancel);
 
@@ -338,13 +340,16 @@ namespace AMS.ViewModels
             {
                 if (field.Type == Field.FieldType.NumberField)
                 {
-                    bool check = field.Content.All(char.IsDigit);
-                    if (check)
+                    if (!string.IsNullOrEmpty(field.Content))
                     {
-                        Features.AddNotification(
-                            new Notification("The field " + field.Label + " cannot contain letters",
-                                Notification.WARNING));
-                        return false;
+                        bool check = field.Content.All(char.IsDigit);
+                        if (check)
+                        {
+                            Features.AddNotification(
+                                new Notification("The field " + field.Label + " cannot contain letters",
+                                    Notification.WARNING));
+                            return false;
+                        }
                     }
                 }
             }
@@ -380,6 +385,7 @@ namespace AMS.ViewModels
                 i--;
             SelectedDepartmentIndex = i;
         }
+
         #endregion
     }
 }
