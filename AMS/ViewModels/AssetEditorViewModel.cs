@@ -319,8 +319,9 @@ namespace AMS.ViewModels
             }
             else
             {
-                //TODO Notify the user, that the input is not a tag
-                Console.WriteLine("Not a tag");
+                Features.AddNotification(new Notification($"{ TagSearchQuery } is not a tag. To use it, you must first create a tag called { TagSearchQuery }.",
+                        background: Notification.WARNING),
+                    displayTime: 3500);
             }
         }
 
@@ -437,7 +438,7 @@ namespace AMS.ViewModels
                 Features.AddNotification(new Notification("The field " + "Name" + " is required and empty",Notification.WARNING));
                 return false;
             }
-            else if (Features.Main.CurrentDepartment.ID == 0)
+            else if (Features.Main.CurrentDepartment.ID == 0 && !_isEditing)
             {
                 Features.AddNotification(new Notification("Please select another department than \"All departments\"", Notification.WARNING));
                 return false;

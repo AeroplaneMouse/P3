@@ -292,8 +292,9 @@ namespace AMS.ViewModels
                     ClearInput();
                     _tabIndex = 0;
                 }
-                //TODO Notify the user, that the input is not a tag
-                Console.WriteLine("Not a tag");
+                Features.AddNotification(new Notification($"{ SearchQuery } is not a tag. To use it, you must first create a tag called { SearchQuery }.",
+                        background: Notification.WARNING),
+                    displayTime: 3500);
             }
 
             RefreshList();
@@ -410,6 +411,7 @@ namespace AMS.ViewModels
                         _listController.Remove(asset);
                         Features.AddNotification(new Notification($"{ asset.Name } has been removed", Notification.APPROVE));
                         ApplyTagOrEnterParent();
+                        RefreshList();
                     }
                 }));
             }
