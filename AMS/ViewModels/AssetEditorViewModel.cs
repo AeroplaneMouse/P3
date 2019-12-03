@@ -317,8 +317,9 @@ namespace AMS.ViewModels
             }
             else
             {
-                //TODO Notify the user, that the input is not a tag
-                Console.WriteLine("Not a tag");
+                Features.AddNotification(new Notification($"{ TagSearchQuery } is not a tag. To use it, you must first create a tag called { TagSearchQuery }.",
+                        background: Notification.WARNING),
+                    displayTime: 3500);
             }
         }
 
