@@ -456,7 +456,7 @@ namespace AMS.ViewModels
                     if (!string.IsNullOrEmpty(field.Content))
                     {
                         bool check = field.Content.All(char.IsDigit);
-                        if (check)
+                        if (!check)
                         {
                             Features.AddNotification(
                                 new Notification("The field " + field.Label + " cannot contain letters",

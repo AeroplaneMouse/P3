@@ -95,9 +95,8 @@
                                      MinHeight="35"
                                      x:Name="StartElement"
                                      TabIndex="0"
-                                     ToolTip="%s: Keyword must end with s. s%: Keyword must start with s. #: Enter tag mode"
                                      Style="{StaticResource SearchTextBox}"
-                                     Tag="Start typing...">
+                                     Tag="# to enter tag mode, or start typing...">
 
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding ApplyTagOrEnterParentCommand}"/>
