@@ -148,16 +148,14 @@ namespace AMS.ViewModels
             SaveTagCommand = new RelayCommand(SaveTag);
             AddFieldCommand = new RelayCommand(AddField);
             RemoveFieldCommand = new Base.RelayCommand<object>((parameter) => RemoveField(parameter));
-            RemoveCommand = new RelayCommand(() => Features.DisplayPrompt(new Confirm("The tag will be deleted from the system.\nAre you sure?", RemoveTag)));
+
+            RemoveCommand = new RelayCommand(RemoveTag);
             CancelCommand = new RelayCommand(Cancel);
 
             ShowFieldEditPromptCommand = new RelayCommand<object>((parameter) =>
-
             {
                 if (parameter is Field field)
-                {
                     Features.DisplayPrompt(new Views.Prompts.CustomField(null, EditFieldConfirmed, false, field));
-                }
                 else
                     //TODO Handle not field event
                     return;
@@ -244,19 +242,17 @@ namespace AMS.ViewModels
             Tag ParentTag = ParentTagList[_selectedParentTagIndex];
             foreach (var field in HiddenFieldList)
             {
-                field.TagList = new List<Tag>();
+                field.TagList = new List<Tag>(); // <=== How does this work?! TODO: Question
                 foreach (var id in field.TagIDs)
                 {
                     if (field.TagIDs.Contains(id))
-                    {
                         field.TagList.Add(ParentTag);
-                    }
                 }
             }
 
             foreach (var field in NonHiddenFieldList)
             {
-                field.TagList = new List<Tag>();
+                field.TagList = new List<Tag>(); // <=== How does this work?!
                 foreach (var id in field.TagIDs)
                 {
                     if (field.TagIDs.Contains(id))
@@ -315,17 +311,45 @@ namespace AMS.ViewModels
             }
         }
 
-        private void RemoveTag(object sender, PromptEventArgs e)
+        private void RemoveTag()
         {
-            // Check if the tag to be removed is a parent
-            //if (_controller.ControlledTag.ParentID == 0)
-            //{
+            string message = String.Empty;
 
-            //}
-            _controller.Remove();
-            if (Features.Navigate.Back() == false)
+            // Check if parent
+            if (_controller.ParentID == 0)
             {
-                Features.Navigate.To(Features.Create.TagList());
+                message = "You are about to remove a parent tag!\n"
+                        + $"There are { _controller.ControlledTag.ChildrenCount } children attached to this parent.";
+
+                List<string> buttons = new List<string>();
+                buttons.Add("Remove parent and all children?");
+                buttons.Add("Remove parent and convert children to parents?");
+
+                Features.DisplayPrompt(new Views.Prompts.ExpandedConfirm(message, buttons, (sender, e) =>
+                {
+                    if (e is ExpandedPromptEventArgs args)
+                    {
+                        if (args.ButtonNumber == 0)
+                        {
+                            //ulong id = _controller.Id;
+                            //_controller.Remove();
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                }));
+            }
+            else
+            {
+                Features.DisplayPrompt(new Views.Prompts.Confirm("You are about to remove a tag which cannot be UNDONE!\nAre you sure?", (sender, e) =>
+                {
+                    if (e.Result)
+                    {
+                        _controller.Remove();
+                    }
+                }));
             }
         }
 
