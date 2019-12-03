@@ -57,7 +57,7 @@ namespace UnitTests
             ulong id = 47;
             string content = "Test";
             ulong assetId = 1;
-            _commentRepMock.Setup(p => p.Insert(It.IsAny<Comment>(), out id)).Returns(true);
+            _commentRepMock.Setup(p => p.Insert(It.IsAny<Comment>(), out id)).Returns(It.IsAny<Comment>);
             _commentRepMock.Setup(p => p.GetByAssetId(It.IsAny<ulong>())).Returns(new List<Comment>());
 
             // Act

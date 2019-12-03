@@ -98,7 +98,8 @@ namespace UnitTests
 
                 importerMock.Setup(p => p.ImportUsersFromDatabase()).Returns(existing);
                 importerMock.Setup(p => p.ImportUsersFromFile(It.IsAny<string>())).Returns(imported);
-                importerMock.Setup(p => p.GetUsersFile()).Returns("test");
+                //Todo GetUsersFile er ikke en ting mere?
+                //importerMock.Setup(p => p.GetUsersFile()).Returns("test");
                 //importerMock.Setup(p => p.CombineLists(It.IsAny<List<UserWithStatus>>(), It.IsAny<List<UserWithStatus>>())).Returns(final);
 
                 IUserListController controller = new UserListController(importerMock.Object, new UserRepository(), new DepartmentRepository());
