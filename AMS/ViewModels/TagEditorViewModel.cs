@@ -316,11 +316,11 @@ namespace AMS.ViewModels
             string message = String.Empty;
 
             // Check if parent
-            if (_controller.ParentID == 0)
+            if (_controller.ParentID == 0 && _controller.ControlledTag.ChildrenCount > 0)
             {
                 message = "You are about to remove a parent tag!\n"
                         + $"There are { _controller.ControlledTag.ChildrenCount } children attached to this parent.";
-
+              
                 List<string> buttons = new List<string>();
                 buttons.Add("Remove parent and all children?");
                 buttons.Add("Remove parent and convert children to parents?");
@@ -329,15 +329,17 @@ namespace AMS.ViewModels
                 {
                     if (e is ExpandedPromptEventArgs args)
                     {
+                        string extraMessage = String.Empty;
                         if (args.ButtonNumber == 0)
                         {
-                            //ulong id = _controller.Id;
-                            //_controller.Remove();
+                            _controller.RemoveChildren();
+                            _controller.Remove();
+                            extraMessage = $" aswell as { _controller.ControlledTag.ChildrenCount } children";
                         }
                         else
-                        {
-
-                        }
+                            _controller.Remove();
+                        Features.Navigate.Back();
+                        Features.AddNotification(new Notification($"{ _controller.Name } has been removed{ extraMessage }.", background: Notification.APPROVE), displayTime: 4000);
                     }
                 }));
             }
@@ -348,6 +350,8 @@ namespace AMS.ViewModels
                     if (e.Result)
                     {
                         _controller.Remove();
+                        Features.Navigate.Back();
+                        Features.AddNotification(new Notification($"{ _controller.Name } has been remove.", background: Notification.APPROVE));
                     }
                 }));
             }

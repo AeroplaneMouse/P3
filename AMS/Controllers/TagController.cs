@@ -156,6 +156,8 @@ namespace AMS.Controllers
 
         public void Remove() => _tagRepository.Delete(ControlledTag);
 
+        public void RemoveChildren() => _tagRepository.DeleteChildren(ControlledTag.ID);
+
         public string CreateRandomColor()
         {
             //Creates an instance of the Random, to create pseudo random numbers
