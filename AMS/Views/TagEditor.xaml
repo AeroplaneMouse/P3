@@ -32,13 +32,13 @@
                    HorizontalAlignment="Left"
                    Margin="10, 11, 0, 11"
                    Text="{Binding PageTitle}" />
-        
-        <StackPanel Orientation="Horizontal" 
-                    HorizontalAlignment="Right" 
-                    Margin="10" 
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="10"
                     Grid.Row="0">
 
-        <Button Style="{StaticResource RegularAcceptButton}"
+            <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding SaveTagCommand}"
                     Content="Save" />
 
@@ -150,22 +150,8 @@
                         </ItemsControl>
                     </StackPanel>
 
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
-                               Text="Hidden fields"
-                               Margin="10 20 10 0" />
-                    <StackPanel>
-                        <ItemsControl ItemsSource="{Binding HiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
-                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </StackPanel>
-
                     <!-- Fields from parent -->
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                    <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                Text="Fields from parent"
                                Margin="10 20 10 0" />
                     <StackPanel>
@@ -177,20 +163,33 @@
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Border BorderBrush="DarkGray" BorderThickness="1" Padding="10" CornerRadius="3">
-                                        <Grid>
+                                        <Grid MinWidth="300">
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto" />
                                                 <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
                                             </Grid.RowDefinitions>
-
-                                            <TextBlock Style="{StaticResource SmallHeaderStyle}"
-                                                       Text="{Binding Label}"
-                                                       Grid.Row="0" MinWidth="300" />
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
 
                                             <TextBlock Style="{StaticResource ParagraphStyle}"
+                                                       Text="Label: "
+                                                       Grid.Row="0" />
+                                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                                       Text="{Binding Label}"
+                                                       Foreground="Gray"
+                                                       Grid.Row="0" Grid.Column="1" />
+
+                                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Default value:  "
+                                                       Style="{StaticResource ParagraphStyle}" />
+                                            
+                                            <TextBlock Style="{StaticResource ParagraphStyle}"
                                                        Text="{Binding Content}"
+                                                       Foreground="Gray"
                                                        TextWrapping="Wrap"
-                                                       Grid.Row="1"/>
+                                                       Grid.Row="1" Grid.Column="1" />
                                         </Grid>
                                     </Border>
                                 </DataTemplate>
