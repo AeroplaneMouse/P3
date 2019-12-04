@@ -13,7 +13,7 @@ namespace AMS.IO
 {
     public class UserImporter : IUserImporter
     {
-        #region Public Properties
+        #region Private Properties
 
         private IUserRepository _userRep { get; set; }
 
@@ -53,7 +53,7 @@ namespace AMS.IO
                     u.Domain = session.Domain;
                     u.IsEnabled = true;
                     u.IsAdmin = false;
-                    u.Description = (p[2] != null) ? p[2] : String.Empty;
+                    u.Description = p[2] ?? String.Empty;
 
                     return u;
                 })  // Converts each string[] into a user
@@ -71,7 +71,7 @@ namespace AMS.IO
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();
 
-            Nullable<bool> result = dialog.ShowDialog();
+            bool? result = dialog.ShowDialog();
 
             if (result == false)
                 return String.Empty;

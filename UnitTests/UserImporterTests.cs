@@ -35,16 +35,6 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void Interface_Method_ContextSituation_ExpectedReturn()
-        {
-            // Arrange
-
-            // Act
-
-            // Assert
-        }
-
-        [TestMethod]
         public void ImportUsersFromFile_FileIsFormatted_UsersReturnedInList()
         {
             // Arrange
@@ -121,7 +111,6 @@ namespace UnitTests
         {
             // Arrange
             string filePath = "userFileTest.txt";
-
             CreateFileAt(filePath, new UTF8Encoding(false));
 
             // Act
