@@ -67,7 +67,7 @@ namespace AMS.ViewModels
                 else
                     DepartmentSelectionEnabled = true;
 
-                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex]);
+                _controller.ConnectTag();
                 UpdateAll();
             }
         }
@@ -133,7 +133,7 @@ namespace AMS.ViewModels
                 : "Add tag";
 
             if (_controller.IsEditing && _selectedParentTagIndex != 0)
-                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex]);
+                _controller.ConnectTag();
 
             UpdateAll();
 
