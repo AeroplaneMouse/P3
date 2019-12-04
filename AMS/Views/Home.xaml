@@ -110,17 +110,23 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Recent comments" 
+                               Style="{StaticResource TitleStyle}" Margin="0 0 8 0"
+                               VerticalAlignment="Center"/>
+
+                    <TextBlock Text="{Binding CurrentDepartment}"
+                               FontSize="{StaticResource FontSizeRegular}"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource GrayForLessImportantElementsBrush}"/>
+                </StackPanel>
                 
-                <TextBlock Text="Recent comments:" 
-                               Style="{StaticResource TitleStyle}" 
-                               HorizontalAlignment="Center"
-                               Margin="0 0 0 10"
-                           Grid.Row="0"/>
 
                 <ListBox ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged}"
-                             SelectedItem="{Binding SelectedComm5ent}"
-                             x:Name="CommentList"
-                             BorderThickness="0"
+                         SelectedItem="{Binding SelectedComment}"
+                         x:Name="CommentList"
+                         BorderThickness="0"
                          Grid.Row="1">
 
                     <i:Interaction.Triggers>
