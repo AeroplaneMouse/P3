@@ -334,7 +334,11 @@ namespace AMS.Database.Repositories
                             _query.HavingStatements.Add(new Statement("COUNT(DISTINCT au.user_id)", users.Count.ToString()));
                     }
 
+                    _query.OrderBy("a.id", false);
                     _query.GroupBy = "a.id";
+                    _query.Limit = 1000;
+                    
+                    Console.WriteLine(_query.PrepareSelect());
                     
                     using (var cmd = new MySqlCommand(_query.PrepareSelect(), con))
                     {
