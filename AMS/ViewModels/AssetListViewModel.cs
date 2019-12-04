@@ -309,7 +309,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void RefreshList()
         {
-            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict, _searchInFields);
+            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict, SearchInFields);
             OnPropertyChanged(nameof(Items));
         }
 
@@ -429,7 +429,7 @@ namespace AMS.ViewModels
             if (SelectedItems.Count > 0)
             {
                 // Prompt user for approval for the removal of x assets 
-                string message = $"Are you sure you want to remove " +
+                string message = $"Are you sure you want to remove\n" +
                                  $"{ ((SelectedItems.Count == 1) ? SelectedItems[0].Name : (SelectedItems.Count.ToString()) + " assets")}?";
 
                 Features.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
