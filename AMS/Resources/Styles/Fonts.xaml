@@ -76,6 +76,8 @@
     <Style TargetType="TextBox" x:Key="ParagraphTextBoxWithSpace" BasedOn="{StaticResource ParagraphTextBox}">
         <Setter Property="Margin" Value="0 0 0 10"/>
     </Style>
+    
+
 
     <Style TargetType="PasswordBox" x:Key="ParagraphPasswordBox">
         <Setter Property="FontWeight" Value="UltraLight"/>
