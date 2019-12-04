@@ -44,7 +44,8 @@ namespace AMS.ViewModels
             set
             {
 
-                if (value == _selectedParentTagIndex) return;
+                if (value == _selectedParentTagIndex) 
+                    return;
 
                 int oldValue = _selectedParentTagIndex;
                 _selectedParentTagIndex = value;
