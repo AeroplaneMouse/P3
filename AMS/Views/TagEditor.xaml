@@ -139,36 +139,43 @@
                     </StackPanel>
 
                     <!-- FieldList -->
-                    <StackPanel>
-                        <ItemsControl ItemsSource="{Binding NonHiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
-                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
+                    <StackPanel Margin="10 10 10 0">
+                        <ListView ItemsSource="{Binding NonHiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ItemContainerStyle="{StaticResource ListViewWithTags}"
+                                  BorderBrush="Transparent"
+                                  Margin="0 0 0 0">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Style="{StaticResource FieldAddedInTagEditor}"></Label>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </StackPanel>
 
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Hidden fields"
                                Margin="10 20 10 0" />
-                    <StackPanel>
-                        <ItemsControl ItemsSource="{Binding HiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
-                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
+
+                    <StackPanel Margin="10 10 10 0">
+                        <ListView ItemsSource="{Binding HiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ItemContainerStyle="{StaticResource ListViewWithTags}"
+                                  BorderBrush="Transparent"
+                                  Margin="0 0 0 0">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Style="{StaticResource FieldAddedInTagEditor}"></Label>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </StackPanel>
 
                     <!-- Fields from parent -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Fields from parent"
                                Margin="10 20 10 0" />
-                    <StackPanel>
+                    <StackPanel Margin="10 10 10 0">
                         <ListView ItemsSource="{Binding ParentTagFields}"
                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                   ItemContainerStyle="{StaticResource ListViewWithTags}"
@@ -176,23 +183,7 @@
                                   Margin="0 0 0 0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Border BorderBrush="DarkGray" BorderThickness="1" Padding="10" CornerRadius="3">
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                            </Grid.RowDefinitions>
-
-                                            <TextBlock Style="{StaticResource SmallHeaderStyle}"
-                                                       Text="{Binding Label}"
-                                                       Grid.Row="0" MinWidth="300" />
-
-                                            <TextBlock Style="{StaticResource ParagraphStyle}"
-                                                       Text="{Binding Content}"
-                                                       TextWrapping="Wrap"
-                                                       Grid.Row="1"/>
-                                        </Grid>
-                                    </Border>
+                                    <Label Style="{StaticResource FieldFromParentTag}"></Label>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>

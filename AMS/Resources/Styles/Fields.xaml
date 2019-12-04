@@ -92,6 +92,122 @@
         </Setter>
     </Style>
 
+    <!-- Style for fields added through the parent tag in the tag editor -->
+    <Style TargetType="{x:Type Label}" x:Key="FieldFromParentTag" BasedOn="{StaticResource BaseLabelStyle}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="MinWidth" Value="50" />
+        <Setter Property="Padding" Value="5, 2, 0, 2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Label}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Style="{StaticResource SmallHeaderStyle}"
+                                   Text="{Binding Label}"
+                                   Grid.Row="0" MinWidth="300" />
+
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="{Binding Content}"
+                                   TextWrapping="Wrap"
+                                   Grid.Row="1"/>
+
+                        <Rectangle Grid.Row="2" Height="2" HorizontalAlignment="Stretch" Margin="0,10,10,10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                    <GradientStop Color="LightGray" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="1.0"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Style for fields added through the parent tag in the tag editor -->
+    <Style TargetType="{x:Type Label}" x:Key="FieldAddedInTagEditor" BasedOn="{StaticResource BaseLabelStyle}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="MinWidth" Value="50" />
+        <Setter Property="Padding" Value="5, 2, 0, 2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Label}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button OverridesDefaultStyle="True" 
+                                x:Name="PART_FieldEditButton"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.ShowFieldEditPromptCommand}"
+                                CommandParameter="{Binding Path=.}">>
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Image Source="{StaticResource Edit_Black}" VerticalAlignment="Center"
+                                           Height="14"
+                                           Cursor="Hand">
+                                    </Image>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <Button OverridesDefaultStyle="True" 
+                                x:Name="PART_FieldButton"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveFieldCommand}"
+                                CommandParameter="{Binding Path=.}"
+                                Grid.Row="0"
+                                Grid.Column="2">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <TextBlock Foreground="Black" 
+                                               Style="{StaticResource ParagraphStyle}" 
+                                               VerticalAlignment="Center"
+                                               Margin="0 0 3 0"
+                                               Cursor="Hand"
+                                               Text="X"/>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <TextBlock Style="{StaticResource SmallHeaderStyle}"
+                                   Text="{Binding Label}"
+                                   Grid.Row="1" MinWidth="300" />
+
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="{Binding Content}"
+                                   TextWrapping="Wrap"
+                                   Grid.Row="2"/>
+
+                        <Rectangle Grid.Row="3" Height="2" HorizontalAlignment="Stretch" Margin="0,10,10,10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                    <GradientStop Color="LightGray" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="1.0"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Grid styling for fields -->
     <Style x:Key="AddedFieldGrid"
            TargetType="ItemsControl">
