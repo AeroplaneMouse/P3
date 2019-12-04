@@ -88,7 +88,7 @@
                               IsEnabled="{Binding ParentSelectionEnabled}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Name}"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
@@ -139,22 +139,25 @@
                     </StackPanel>
 
                     <!-- FieldList -->
-                    <StackPanel>
-                        <ItemsControl ItemsSource="{Binding NonHiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
-                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
+                    <StackPanel Margin="20 10 10 0">
+                        <ListView ItemsSource="{Binding NonHiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ItemContainerStyle="{StaticResource ListViewWithTags}"
+                                  BorderBrush="Transparent"
+                                  Margin="0 0 0 0">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Style="{StaticResource FieldAddedInTagEditor}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </StackPanel>
 
                     <!-- Fields from parent -->
-                    <TextBlock Style="{StaticResource SmallHeaderStyle}"
+                    <TextBlock Style="{StaticResource TitleOfFieldListStyle}"
                                Text="Fields from parent"
                                Margin="10 20 10 0" />
-                    <StackPanel>
+                    <StackPanel Margin="20 10 10 0">
                         <ListView ItemsSource="{Binding ParentTagFields}"
                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                   ItemContainerStyle="{StaticResource ListViewWithTags}"
@@ -162,36 +165,7 @@
                                   Margin="0 0 0 0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Border BorderBrush="DarkGray" BorderThickness="1" Padding="10" CornerRadius="3">
-                                        <Grid MinWidth="300">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-
-                                            <TextBlock Style="{StaticResource ParagraphStyle}"
-                                                       Text="Label: "
-                                                       Grid.Row="0" />
-                                            <TextBlock Style="{StaticResource ParagraphStyle}"
-                                                       Text="{Binding Label}"
-                                                       Foreground="Gray"
-                                                       Grid.Row="0" Grid.Column="1" />
-
-                                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Default value:  "
-                                                       Style="{StaticResource ParagraphStyle}" />
-                                            
-                                            <TextBlock Style="{StaticResource ParagraphStyle}"
-                                                       Text="{Binding Content}"
-                                                       Foreground="Gray"
-                                                       TextWrapping="Wrap"
-                                                       Grid.Row="1" Grid.Column="1" />
-                                        </Grid>
-                                    </Border>
+                                    <Label Style="{StaticResource FieldFromParentTag}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>

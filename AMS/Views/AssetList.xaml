@@ -21,7 +21,6 @@
                     <ColumnDefinition Width="Auto"/> <!-- Edit -->
                     <ColumnDefinition Width="Auto"/> <!-- Trash -->
                 </Grid.ColumnDefinitions>
-                
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -146,27 +145,27 @@
                             Command="{Binding SearchCommand}"
                             Content="Search" />
                     
-                    <StackPanel Orientation="Horizontal" ToolTip="Enables strict searching. Assets MUST have all the applied tags.">
+                    <StackPanel Orientation="Horizontal">
                         <!-- Strict search -->
                         <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsStrict, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Strict" Margin="2 0 10 0"/>
+                        <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Strict" Margin="2 0 10 0" ToolTip="Enables strict searching. Assets MUST have all the applied tags."/>
 
                         <!-- Field search -->
                         <CheckBox VerticalAlignment="Center" IsChecked="{Binding SearchInFields, UpdateSourceTrigger=PropertyChanged}"/>
-                        <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Search in fields" Margin="2 0 0 0"/>
+                        <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Search in fields" Margin="2 0 0 0" ToolTip="Enables searching on field content."/>
                     </StackPanel>
                 </StackPanel>
 
                 <!-- Function buttons -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource RegularCancelButton}" 
+                    <Button Style="{StaticResource RegularRemoveButton}" 
                             Command="{Binding RemoveBySelectionCommand}" 
                             Content="Remove" 
                             Visibility="{Binding MultipleSelected}"/>
 
                     <Button Style="{StaticResource RegularButton}" 
                             Command="{Binding EditBySelectionCommand}" 
-                            Margin="10 0 0 0 " 
+                            Margin="10 0 0 0" 
                             Content="Edit"
                             Visibility="{Binding SingleSelected}"/>
 

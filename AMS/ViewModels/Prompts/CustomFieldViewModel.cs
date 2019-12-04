@@ -12,12 +12,21 @@ namespace AMS.ViewModels.Prompts
         private Field _newField;
         private Field _oldField;
         private bool _isCustom;
+        private bool _defaultBool = false;
 
         public override event PromptEventHandler PromptElapsed;
 
         public string Name { get; set; } = String.Empty;
         public string DefaultValue { get; set; } = String.Empty;
-        public bool DefaultBool { get; set; } = false;
+        public bool DefaultBool
+        {
+            get => _defaultBool;
+            set
+            {
+                _defaultBool = value;
+                DefaultValue = value.ToString();
+            }
+        }
         public string SelectedDate { get; set; }
         public bool IsRequired { get; set; } = false;
         public Field.FieldType SelectedFieldType { get; set; }
@@ -36,18 +45,13 @@ namespace AMS.ViewModels.Prompts
                 Name = inputField.Label;
                 SelectedFieldType = inputField.Type;
                 IsRequired = inputField.Required;
+
                 if (SelectedFieldType == Field.FieldType.Checkbox)
-                {
-                    DefaultBool = inputField.Content == "True" ? true : false;
-                }
+                    DefaultBool = inputField.Content == "True";
                 else if (SelectedFieldType == Field.FieldType.Date)
-                {
                     SelectedDate = inputField.Content;
-                }
                 else
-                {
                     DefaultValue = inputField.Content;
-                }
             }
             else
             {
@@ -56,24 +60,19 @@ namespace AMS.ViewModels.Prompts
             }
         }
 
-
         protected override void Accept()
         {
             if (SelectedFieldType == 0)
                 return;
 
-            if (SelectedFieldType == Field.FieldType.Checkbox)
-                DefaultValue = DefaultBool ? "1" : "0";
-
             if (SelectedFieldType == Field.FieldType.Date)
-                DefaultValue = SelectedDate;
+                DefaultValue = SelectedDate.Split(':')[1].Trim();
 
             _newField = new Field(Name, DefaultValue, SelectedFieldType, IsRequired, _isCustom);
 
             if (_oldField == null)
-            {
                 PromptElapsed?.Invoke(this, new FieldInputPromptEventArgs(true, _newField));
-            }
+
             PromptElapsed?.Invoke(this, new FieldEditPromptEventArgs(true, _oldField, _newField));
         }
 

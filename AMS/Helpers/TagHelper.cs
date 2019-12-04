@@ -48,10 +48,10 @@ namespace AMS.Helpers
                 if (_parent.TagId == 1)
                 {
                     result.AddRange(_users.Where(u => u.Username.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
-                                                      && !AppliedTags.Contains(u)).ToList());
+                                                      && AppliedTags.SingleOrDefault(q=>q.TagId == u.TagId) == null ));
                 }else{
                     result.AddRange(SuggestedTags.Where(t => t.TagLabel.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
-                                                             && !AppliedTags.Contains(t)).ToList());
+                                                             && AppliedTags.SingleOrDefault(q=>q.TagId == t.TagId) == null ));
                 }
             }
             else
@@ -61,6 +61,7 @@ namespace AMS.Helpers
                     if ((item.ChildrenCount > 0 || item.TagId == 1) 
                         && (!AppliedTags.Contains(item) || !ContainsAllChildrenOfParent(item)))
                         result.Add(item);
+                    
                     else if (item.ChildrenCount == 0 && !AppliedTags.Contains(item))
                         result.Add(item);
                 }
@@ -227,7 +228,14 @@ namespace AMS.Helpers
 
         public void SetCurrentTags(ObservableCollection<ITagable> tags)
         {
-            AppliedTags = tags;
+            foreach(Tag tag in tags)
+            {
+                if (!AppliedTags.Contains(tag))
+                {
+                    ApplyParentIfNeeded(tag);
+                    AddTag(tag);
+                }
+            }
         }
 
         public Tag GetParent() => _parent;

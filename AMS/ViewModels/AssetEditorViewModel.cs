@@ -241,6 +241,7 @@ namespace AMS.ViewModels
         /// </summary>
         public void Cancel()
         {
+            _assetController.RevertChanges();
             if (!Features.Navigate.Back())
                 Features.Navigate.To(Features.Create.AssetList());
         }
@@ -272,6 +273,8 @@ namespace AMS.ViewModels
                         _tagHelper.AddTag(tag);
                         _assetController.AttachTag(tag);
                         _assetController.AttachTag(_tagHelper.GetParent());
+                        AppliedTags = _tagHelper.GetAppliedTags(false);
+                        UpdateTagSuggestions();
                     }
                     else
                     {
@@ -486,6 +489,11 @@ namespace AMS.ViewModels
                             return false;
                         }
                     }
+                }
+
+                if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "today"))
+                {
+                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
                 }
             }
 

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using AMS.Controllers.Interfaces;
@@ -208,6 +209,14 @@ namespace AMS.Controllers
             }
         }
 
+        public void RevertChanges()
+        {
+            Name = ControlledAsset.Name;
+            Identifier = ControlledAsset.Identifier;
+            Description = ControlledAsset.Description;
+            _tags = _tags = _assetRepository.GetTags(ControlledAsset).ToList();
+        }
+        
         private void LoadFields()
         {
             foreach (var field in HiddenFieldList)

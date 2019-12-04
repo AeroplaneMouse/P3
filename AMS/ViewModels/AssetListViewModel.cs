@@ -148,7 +148,6 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(SearchQuery));
             OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(TitleText));
-            RefreshList();
         }
 
         /// <summary>
@@ -312,7 +311,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void RefreshList()
         {
-            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict, _searchInFields);
+            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict, SearchInFields);
             OnPropertyChanged(nameof(Items));
         }
 
@@ -432,7 +431,7 @@ namespace AMS.ViewModels
             if (SelectedItems.Count > 0)
             {
                 // Prompt user for approval for the removal of x assets 
-                string message = $"Are you sure you want to remove " +
+                string message = $"Are you sure you want to remove\n" +
                                  $"{ ((SelectedItems.Count == 1) ? SelectedItems[0].Name : (SelectedItems.Count.ToString()) + " assets")}?";
 
                 Features.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
@@ -440,10 +439,11 @@ namespace AMS.ViewModels
                     // Check if the user approved
                     if (e.Result)
                     {
-                        // Move selected items to new list
-                        // Hvorfor flyttes de til en ny liste?
+                        // Move selected items to new list as it is not possible to itterate
+                        // over the same list which items is removed from
                         List<Asset> items = new List<Asset>();
                         SelectedItems.ForEach(a => items.Add(a));
+
                         // Remove each asset
                         foreach (Asset asset in items)
                             _listController.Remove(asset);

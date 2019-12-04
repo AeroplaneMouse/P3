@@ -59,9 +59,9 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Text="This is a date selection field. Contains a navigatable date selection." />
                 <ComboBox Grid.Row="1" SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.SelectedDate, UpdateSourceTrigger=PropertyChanged}">
-                <ComboBoxItem Content="Empty" />
-                <ComboBoxItem Content="Today" />
-            </ComboBox>
+                    <ComboBoxItem Content="Empty"/>
+                    <ComboBoxItem Content="Today"/>
+                </ComboBox>
             </Grid>
         </DataTemplate>
 
