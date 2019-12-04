@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -478,9 +479,13 @@ namespace AMS.ViewModels
 
                 if (field.Type == Field.FieldType.NumberField)
                 {
+                    //Checks for ^(Not) the result, as and then returns true if it finds an element that does not match the rule.
+                    Regex regex = new Regex("[^0-9.+-/,]+");
                     if (!string.IsNullOrEmpty(field.Content))
                     {
-                        bool check = field.Content.All(char.IsDigit);
+                        //Checks whether the match is true
+                        bool check = !regex.IsMatch(field.Content);
+                        //Checks if the match returned false
                         if (!check)
                         {
                             Features.AddNotification(
