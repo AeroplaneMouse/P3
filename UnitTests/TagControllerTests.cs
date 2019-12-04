@@ -12,18 +12,27 @@ namespace UnitTests
     [TestClass]
     public class TagControllerTests
     {
+        private Mock<ITagRepository> _tagRepMock;
+        private Mock<IDepartmentRepository> _depRepMock;
+        
+        [TestInitialize]
+        public void InitializeTagControllerTest()
+        {
+            _tagRepMock = new Mock<ITagRepository>();
+            _depRepMock = new Mock<IDepartmentRepository>();
+        }
+        
         [TestMethod]
         public void Save_InjectedWithFakeRepository_TagSavedInFakeRepository()
         {
             //Arrange
             ulong id = 0;
             Tag tag = new Tag();
+            tag.Name = "TestTag";
+            
+            _tagRepMock.Setup(repository => repository.Insert(tag, out id)).Returns(It.IsAny<Tag>());
 
-            var mockRepository = new Mock<ITagRepository>();
-            mockRepository.Setup(repository => repository.Insert(tag, out id)).Returns(It.IsAny<Tag>());
-            var depMockRepository = new Mock<IDepartmentRepository>();
-
-            ITagController tagController = new TagController(tag, mockRepository.Object, depMockRepository.Object);
+            ITagController tagController = new TagController(tag, _tagRepMock.Object, _depRepMock.Object);
             tagController.ControlledTag = tag;
 
 
@@ -32,7 +41,7 @@ namespace UnitTests
             tagController.Save();
 
             //Assert
-            mockRepository.Verify(p => p.Insert(It.IsAny<Tag>(),out id), Times.Once());
+            _tagRepMock.Verify(p => p.Insert(It.IsAny<Tag>(),out id), Times.Once());
         }
 
         //TODO: lav flere tests

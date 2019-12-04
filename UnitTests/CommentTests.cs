@@ -8,9 +8,17 @@ using AMS.Authentication;
 using Moq;
 using AMS.Database.Repositories.Interfaces;
 using System.Collections.Generic;
+using AMS.ViewModels.Base;
 
 namespace UnitTests
 {
+    public class TestSession : Session
+    {
+        public string Username { get; }
+        
+        public TestSession(IUserRepository userRepository) : base(userRepository) {}
+    }
+    
     [TestClass]
     public class CommentTests
     {
@@ -28,7 +36,9 @@ namespace UnitTests
             _commentRepMock = new Mock<ICommentRepository>();
             _userRepMock = new Mock<IUserRepository>();
             _sessionMock = new Mock<Session>(_userRepMock.Object);
-            _controller = new CommentListController(_sessionMock.Object, _commentRepMock.Object);
+            // Gives asset to avoid nullReferenceException
+            Asset testAsset = new Asset();
+            _controller = new CommentListController(_sessionMock.Object, _commentRepMock.Object, testAsset);
         }
 
         [TestMethod]
@@ -46,7 +56,7 @@ namespace UnitTests
 
             // Assert
             _commentRepMock.Verify(p => p.Insert(It.IsAny<Comment>(), out id), Times.Once);
-            _commentRepMock.Verify(p => p.GetByAssetId(It.IsAny<ulong>()), Times.Once);
+            _commentRepMock.Verify(p => p.GetByAssetId(It.IsAny<ulong>()), Times.AtLeastOnce);
             Assert.AreEqual(id, commentId);
         }
         
@@ -80,7 +90,7 @@ namespace UnitTests
             ulong commentId = _controller.AddNewComment(content);
 
             // Assert
-            _commentRepMock.Verify(p => p.GetByAssetId(It.IsAny<ulong>()), Times.Once);
+            _commentRepMock.Verify(p => p.GetByAssetId(It.IsAny<ulong>()), Times.AtLeastOnce);
         }
 
         [TestMethod]
