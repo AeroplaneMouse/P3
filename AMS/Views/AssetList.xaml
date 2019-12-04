@@ -39,7 +39,7 @@
         <TextBlock Style="{StaticResource TitleStyle}"
                    VerticalAlignment="Center"
                    Margin="10, 11, 0, 11"
-                   Text="Assets"/>
+                   Text="{Binding TitleText}"/>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Grid.Row="0">
             <Button Style="{StaticResource RegularAcceptButton}"
