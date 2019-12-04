@@ -134,7 +134,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetPresenter(Asset asset, List<ITagable> tagables)
             {
-                return new AssetPresenter(tagables, new AssetController(asset, _assetRepository), new CommentListController(GetCurrentSession(), _commentRepository, asset), new LogListController(_logRepository, _printHelper, asset));
+                return new AssetPresenter(tagables, new AssetController(asset, _assetRepository, GetCurrentSession()), new CommentListController(GetCurrentSession(), _commentRepository, asset), new LogListController(_logRepository, _printHelper, asset));
             }
 
             /// <summary>
@@ -148,7 +148,7 @@ namespace AMS.ViewModels
                 if (asset == null)
                     asset = new Asset();
 
-                return new AssetEditor(new AssetController(asset, _assetRepository), CreateTagHelper());
+                return new AssetEditor(new AssetController(asset, _assetRepository, GetCurrentSession()), CreateTagHelper());
             }
 
             /// <summary>

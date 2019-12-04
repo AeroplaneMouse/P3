@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using AMS.Authentication;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
@@ -40,8 +41,9 @@ namespace AMS.Controllers
         public string Description { get; set; }
 
         private IAssetRepository _assetRepository;
+        private Session _session;
 
-        public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset ?? new Asset())
+        public AssetController(Asset asset, IAssetRepository assetRepository, Session session) : base(asset ?? new Asset())
         {
             if (asset == null)
             {
@@ -53,6 +55,7 @@ namespace AMS.Controllers
             }
 
             _assetRepository = assetRepository;
+            _session = session;
 
             ControlledAsset.DeSerializeFields();
 
@@ -159,7 +162,7 @@ namespace AMS.Controllers
                 ControlledAsset.Description = Description;
             }
 
-            ControlledAsset.DepartmentID = Features.GetCurrentSession().user.DefaultDepartment;
+            ControlledAsset.DepartmentID = _session.user.DefaultDepartment;
 
             //Combines the two lists
             List<Field> fieldList = NonHiddenFieldList;
