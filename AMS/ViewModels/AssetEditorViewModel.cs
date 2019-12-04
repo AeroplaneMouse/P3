@@ -475,11 +475,6 @@ namespace AMS.ViewModels
                         }
                     }
                 }
-
-                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"today"))
-                {
-                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-                }
             }
 
             return true;
