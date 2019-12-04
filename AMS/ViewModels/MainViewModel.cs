@@ -88,6 +88,7 @@ namespace AMS.ViewModels
         public int SelectedNavigationItem { get; set; }
 
         public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
+        public Visibility SettingsVisibility { get; set; } = Visibility.Collapsed;
         public Visibility OnlyVisibleForAdmin { get; private set; } = Visibility.Collapsed;
 
         public List<Department> Departments { get => GetDepartments(); }
@@ -182,6 +183,9 @@ namespace AMS.ViewModels
             CurrentUser = CurrentSession.Username;
             OnPropertyChanged(nameof(CurrentUser));
 
+            // Show settings menu
+            SettingsVisibility = Visibility.Visible;
+
             // Sets the visibility of WPF elements binding to this, based on whether or not the current user is an admin
             OnlyVisibleForAdmin = CurrentSession.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
 
@@ -249,6 +253,7 @@ namespace AMS.ViewModels
             AddDepartmentCommand = new Base.RelayCommand(() => DisplayPrompt(new TextInput("Enter the name of your new department", AddDepartment)), () => Features.GetCurrentSession().IsAdmin());
 
             // Settings command
+            ClearSettingsCommand = new Base.RelayCommand(ClearSettings);
             if (CurrentSession.IsAdmin())
                 ChangeSettingsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.SettingsEditor(this)));
         }
@@ -269,7 +274,6 @@ namespace AMS.ViewModels
                 )
             )));
             ReloadCommand = new Base.RelayCommand(Reload);
-            ClearSettingsCommand = new Base.RelayCommand(ClearSettings);
         }
 
         /// <summary>
@@ -342,6 +346,7 @@ namespace AMS.ViewModels
             // Clearing memory
             MySqlHandler.ConnectionFailed -= ConnectionFailed;
             CurrentDepartmentVisibility = Visibility.Hidden;
+            SettingsVisibility = Visibility.Collapsed;
             CurrentUser = null;
             CurrentDepartment = null;
             OnPropertyChanged(nameof(CurrentUser));
@@ -383,11 +388,15 @@ namespace AMS.ViewModels
         private List<Department> GetDepartments()
         {
             if (CurrentDepartmentVisibility == Visibility.Visible)
-                return (List<Department>)_departmentRep.GetAll();
-
-            else
+            {
                 //TODO: Find a better solution
-                return new List<Department>() { new Department() { Name = "- Please add a department to the system -" } };
+                if (_departmentRep.GetCount() == 0)
+                    return new List<Department>() { new Department() { Name = "- Please add a department to the system -" } };
+                else
+                    return (List<Department>)_departmentRep.GetAll();
+            }
+            else
+                return new List<Department>();
         }
 
         /// <summary>
@@ -405,13 +414,10 @@ namespace AMS.ViewModels
                 {
                     // TODO: Add log of department insert
                     OnPropertyChanged(nameof(Departments));
-                    AddNotification(new Notification($"{department.Name} has now been added to the system.",
-                        Notification.APPROVE));
+                    AddNotification(new Notification($"{ department.Name } has now been added to the system.", background: Notification.APPROVE));
                 }
                 else
-                    AddNotification(new Notification(
-                            $"An unknown error stopped the department {department.Name} from beeing added.",
-                            Notification.ERROR), 3000);
+                    AddNotification(new Notification($"An unknown error stopped the department { department.Name } from beeing added.", background: Notification.ERROR), displayTime: 3000);
             }
         }
     }

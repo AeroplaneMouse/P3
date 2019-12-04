@@ -11,6 +11,8 @@ namespace AMS.Controllers.Interfaces
         #region Properties
 
         Tag ControlledTag { get; set; }
+        
+        List<Field> ParentTagFields { get; set; }
 
         ulong Id { get; set; }
         string Name { get; set; }
@@ -31,11 +33,13 @@ namespace AMS.Controllers.Interfaces
 
         void Remove();
 
+        void RemoveChildren();
+
         void Update();
 
         string CreateRandomColor();
 
-        void ConnectTag(Tag tag, Tag oldTag);
+        void ConnectTag(Tag tag);
 
         #endregion
     }

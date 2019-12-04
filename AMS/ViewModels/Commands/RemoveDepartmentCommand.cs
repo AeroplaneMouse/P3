@@ -39,8 +39,7 @@ namespace AMS.ViewModels.Commands
             }
             catch (Exception)
             {
-                Features.AddNotification(new Notification("An unknown error occurred. Unable to remove department.", Notification.ERROR),
-                    3500);
+                Features.AddNotification(new Notification("An unknown error occurred. Unable to remove department.", background: Notification.ERROR), displayTime: 3500);
                 return;
             }
 
@@ -57,12 +56,11 @@ namespace AMS.ViewModels.Commands
                     Features.DisplayPrompt(new Confirm($"Are you sure you want to delete { _department.Name }?", PromptElapsed));
                 }
                 else
-                    Features.AddNotification(new Notification("You cannot remove your current department. Please change your department and then try again.", Notification.ERROR),
+                    Features.AddNotification(new Notification("You cannot remove your current department. Please change your department and then try again.", background: Notification.ERROR),
                         3500);
             }
             else
-                Features.AddNotification(new Notification("Removing department failed. Department not found!",
-                    Notification.ERROR));
+                Features.AddNotification(new Notification("Removing department failed. Department not found!", background: Notification.ERROR));
         }
 
         public void PromptElapsed(object sender, PromptEventArgs e)
@@ -74,12 +72,10 @@ namespace AMS.ViewModels.Commands
                 if (new DepartmentRepository().Delete(_department))
                 {
                     _main.OnPropertyChanged(nameof(_main.Departments));
-                    Features.AddNotification(new Notification(
-                        $"{ _department.Name } has now been removed from the system.", Notification.APPROVE));
+                    Features.AddNotification(new Notification($"{ _department.Name } has now been removed from the system.", background: Notification.APPROVE));
                 }
                 else
-                    Features.AddNotification(new Notification(
-                        "An unknown error occurred. Unable to remove department.", Notification.ERROR));
+                    Features.AddNotification(new Notification("An unknown error occurred. Unable to remove department.", background: Notification.ERROR));
             }
         }
     }

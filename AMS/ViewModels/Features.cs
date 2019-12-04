@@ -79,8 +79,8 @@ namespace AMS.ViewModels
                         return true;
                     }
 
-                    if (page.GetType() == typeof(Home) || 
-                        page.GetType() == typeof(AssetList) || 
+                    if (page.GetType() == typeof(Home) ||
+                        page.GetType() == typeof(AssetList) ||
                         page.GetType() == typeof(TagList) ||
                         page.GetType() == typeof(UserList) ||
                         page.GetType() == typeof(LogList))
@@ -90,6 +90,9 @@ namespace AMS.ViewModels
 
                     Main.History.Push(_currentPage);
                     _currentPage = page;
+
+                    // Run the update method
+                    (page.DataContext as IPageUpdateOnFocus).UpdateOnFocus();
 
                     return true;
                 }
@@ -144,9 +147,8 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetEditor(Asset asset = null)
             {
-                // Create a new asset if null
-                if (asset == null)
-                    asset = new Asset();
+                // Create new asset if null
+                asset = asset ?? new Asset();
 
                 return new AssetEditor(new AssetController(asset, _assetRepository, GetCurrentSession()), CreateTagHelper());
             }
@@ -158,7 +160,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetEditor(IAssetController controller)
             {
-                
+
                 return new AssetEditor(controller, CreateTagHelper());
             }
 
@@ -221,6 +223,9 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page TagEditor(Tag tag)
             {
+                // Create new tag if null
+                tag = tag ?? new Tag();
+
                 return new TagEditor(new TagController(tag, _tagRepository, _departmentRepository));
             }
 
@@ -230,7 +235,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page TagList()
             {
-                return new TagList(new TagListController(_tagRepository, _printHelper));
+                return new TagList(new TagListController(_tagRepository, _printHelper), new TagController(new Tag(), _tagRepository, _departmentRepository));
             }
 
             /// <summary>
@@ -241,7 +246,7 @@ namespace AMS.ViewModels
             {
                 return new UserList(new UserListController(_userImporter, _userRepository, _departmentRepository));
             }
-            
+
             /// <summary>
             /// Returns a new settings editor page
             /// </summary>
@@ -266,5 +271,5 @@ namespace AMS.ViewModels
 
             #endregion
         }
-    }    
+    }
 }

@@ -26,29 +26,25 @@ namespace UnitTests
             // Assert
         }
 
-        private IUserRepository _userRepository { get; set; }
-
-        private IDepartmentRepository _departmentRepository { get; set; }
-
-        private IUserImporter _userImporter { get; set; }
-
-        private IUserListController _userListController { get; set; }
-
-        private Mock<IUserRepository> _userRepMock { get; set; }
+//        private Mock<IUserRepository> _userRepMock { get; set; }
+//        
+//        private Mock<IDepartmentRepository> _departmentRepMock { get; set; }
 
         [TestInitialize]
         public void InitializeUserTest()
         {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-
-            _userRepMock = new Mock<IUserRepository>();
-            _userRepMock.Setup(p => p.GetAll(true)).Returns(new List<User>());
-
-            _userRepository = new UserRepository();
-            _departmentRepository = new DepartmentRepository();
-
-            _userImporter = new UserImporter(_userRepository);
-            _userListController = new UserListController(_userImporter, _userRepository, _departmentRepository);
+//            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+//
+//            _userRepMock = new Mock<IUserRepository>();
+//            _userRepMock.Setup(p => p.GetAll(true)).Returns(new List<User>());
+//            
+//            _departmentRepMock = new Mock<IDepartmentRepository>();
+//
+//            _userRepository = new UserRepository();
+//            _departmentRepository = new DepartmentRepository();
+//
+//            _userImporter = new UserImporter(_userRepository);
+//            _userListController = new UserListController(_userImporter, _userRepository, _departmentRepository);
         }
 
         [TestMethod]
@@ -57,7 +53,6 @@ namespace UnitTests
             try
             {
                 // Arrange
-
                 User existingHans = new User()
                 {
                     IsEnabled = false,
@@ -98,11 +93,13 @@ namespace UnitTests
 
                 importerMock.Setup(p => p.ImportUsersFromDatabase()).Returns(existing);
                 importerMock.Setup(p => p.ImportUsersFromFile(It.IsAny<string>())).Returns(imported);
-                //Todo GetUsersFile er ikke en ting mere?
-                //importerMock.Setup(p => p.GetUsersFile()).Returns("test");
-                //importerMock.Setup(p => p.CombineLists(It.IsAny<List<UserWithStatus>>(), It.IsAny<List<UserWithStatus>>())).Returns(final);
+                importerMock.Setup(p => p.GetUsersFilePath()).Returns("test");
+                
+                Mock<IDepartmentRepository> departmentRepMock = new Mock<IDepartmentRepository>();
+                
+                Mock<IUserRepository> userRepMock = new Mock<IUserRepository>();
 
-                IUserListController controller = new UserListController(importerMock.Object, new UserRepository(), new DepartmentRepository());
+                IUserListController controller = new UserListController(importerMock.Object, userRepMock.Object, departmentRepMock.Object);
 
                 controller.GetExistingUsers();
                 controller.GetUsersFromFile();

@@ -13,8 +13,6 @@ namespace AMS.Controllers
     {
         private IExporter _exporter;
         private IAssetRepository _assetRepository;
-        //TODO: Create tagging class
-        //public Tagging _tags;
 
         public List<Asset> AssetList { get; set; }
         public List<Tag> TagList { get; set; } 

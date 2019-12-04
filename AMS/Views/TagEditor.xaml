@@ -16,26 +16,27 @@
     </Page.Resources>
 
     <Page.InputBindings>
-        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CancelCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CancelCommand}" />
         <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
-        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding SaveTagCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding SaveTagCommand}" />
     </Page.InputBindings>
 
     <Grid>
         <!-- Header -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="224*" />
-            <RowDefinition Height="171*"/>
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Style="{StaticResource TitleStyle}"
                    VerticalAlignment="Center"
-                   Margin="10,0,0,0"
+                   HorizontalAlignment="Left"
+                   Margin="10, 11, 0, 11"
                    Text="{Binding PageTitle}" />
 
         <StackPanel Orientation="Horizontal"
-                    HorizontalAlignment="Left"
-                    Margin="470,10,0,10">
+                    HorizontalAlignment="Right"
+                    Margin="10"
+                    Grid.Row="0">
 
             <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding SaveTagCommand}"
@@ -53,11 +54,11 @@
         </StackPanel>
 
         <Rectangle Style="{StaticResource HorizontalSeparator}"
-                   VerticalAlignment="Top" Margin="10,54,10,0" />
+                   VerticalAlignment="Bottom" Grid.Row="0" />
 
         <!-- Content of the page -->
         <ScrollViewer Grid.Row="1"
-                      Margin="10,10,10,10" Grid.RowSpan="2">
+                      Margin="10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250" />
@@ -69,19 +70,19 @@
                 <StackPanel Grid.Column="0">
                     <TextBlock Style="{StaticResource HeaderStyle}"
                                Text="Details"
-                               Margin="0 0 0 10"/>
+                               Margin="0 0 0 10" />
                     <!-- Label -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Label" />
                     <TextBox Style="{StaticResource ParagraphTextBox}"
                              Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                              Margin="0 0 0 10"
-                             x:Name="StartElement"/>
+                             x:Name="StartElement" />
 
                     <!-- Parent tag id -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
-                               Text="Parent tag ID"/>
-                    <ComboBox ItemsSource="{Binding ParentTagList}" 
+                               Text="Parent tag ID" />
+                    <ComboBox ItemsSource="{Binding ParentTagList}"
                               SelectedIndex="{Binding SelectedParentTagIndex, UpdateSourceTrigger=PropertyChanged}"
                               Margin="0 0 0 10"
                               IsEnabled="{Binding ParentSelectionEnabled}">
@@ -94,20 +95,20 @@
 
                     <!-- Color -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
-                               Text="Color"/>
-                    <xctk:ColorPicker SelectedColor="{Binding Color}" 
+                               Text="Color" />
+                    <xctk:ColorPicker SelectedColor="{Binding Color}"
                                       Name="ColorPicker"
-                                      Margin="0 0 0 10"/>
+                                      Margin="0 0 0 10" />
 
                     <!-- Department -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
-                               Text="Department"/>
+                               Text="Department" />
                     <ComboBox ItemsSource="{Binding DepartmentList}"
                               SelectedIndex="{Binding SelectedDepartmentIndex, UpdateSourceTrigger=PropertyChanged}"
                               IsEnabled="{Binding DepartmentSelectionEnabled}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Name}"/>
+                                <TextBlock Text="{Binding Name}" />
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
@@ -117,7 +118,7 @@
                 <!-- Separator -->
                 <Rectangle Style="{StaticResource VerticalSeparator}"
                            Grid.Column="1"
-                           Margin="10 0 10 0"/>
+                           Margin="10 0 10 0" />
 
                 <!-- Fields -->
                 <StackPanel Grid.Column="2">
@@ -125,16 +126,16 @@
                                 Margin="0 0 0 10">
                         <TextBlock Style="{StaticResource HeaderStyle}"
                                    Margin="0 0 10 0"
-                                   Text="Fields"/>
+                                   Text="Fields" />
 
                         <Button Style="{StaticResource RegularButton}"
                                 Command="{Binding AddFieldCommand}"
                                 Padding="0 0 0 5"
                                 Height="Auto"
                                 MinWidth="0"
-                                Width="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ActualHeight}" 
+                                Width="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ActualHeight}"
                                 HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                Content="+"/>
+                                Content="+" />
                     </StackPanel>
 
                     <!-- FieldList -->
@@ -143,24 +144,57 @@
                                       ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <StackPanel/>
+                                    <StackPanel />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                         </ItemsControl>
                     </StackPanel>
 
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
-                               Text="Hidden fields"
+                    <!-- Fields from parent -->
+                    <TextBlock Style="{StaticResource SmallHeaderStyle}"
+                               Text="Fields from parent"
                                Margin="10 20 10 0" />
                     <StackPanel>
-                        <ItemsControl ItemsSource="{Binding HiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
-                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
+                        <ListView ItemsSource="{Binding ParentTagFields}"
+                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                  ItemContainerStyle="{StaticResource ListViewWithTags}"
+                                  BorderBrush="Transparent"
+                                  Margin="0 0 0 0">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border BorderBrush="DarkGray" BorderThickness="1" Padding="10" CornerRadius="3">
+                                        <Grid MinWidth="300">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                                       Text="Label: "
+                                                       Grid.Row="0" />
+                                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                                       Text="{Binding Label}"
+                                                       Foreground="Gray"
+                                                       Grid.Row="0" Grid.Column="1" />
+
+                                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Default value:  "
+                                                       Style="{StaticResource ParagraphStyle}" />
+                                            
+                                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                                       Text="{Binding Content}"
+                                                       Foreground="Gray"
+                                                       TextWrapping="Wrap"
+                                                       Grid.Row="1" Grid.Column="1" />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
                     </StackPanel>
                 </StackPanel>
             </Grid>

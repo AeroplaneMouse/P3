@@ -200,7 +200,7 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid HorizontalAlignment="Left">
-                                <Label Foreground="{Binding FontColor}" Content="{Binding TagLabel}" Style="{StaticResource TagAddedToSearch}"/>
+                                <Label Style="{StaticResource TagWithDelete}"/>
                             </Grid>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
@@ -238,6 +238,7 @@
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Name}"
                                                    Style="{StaticResource ParagraphStyle}"
+                                                   MinWidth="420"
                                                    Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -250,6 +251,7 @@
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Identifier}"
                                                    Style="{StaticResource ParagraphStyle}"
+                                                   MinWidth="280"
                                                    Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -262,6 +264,7 @@
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=UpdatedAtString}"
                                                    FontSize="{StaticResource FontSizeSmall}"
+                                                   MinWidth="140"
                                                    Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -296,7 +299,7 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Style="{StaticResource TrashButton}"
-                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveBySelectionCommand}"
+                                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Page}}, Path=DataContext.RemoveCommand}"
                                                 CommandParameter="{Binding Path=.}"
                                                 Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>
                                     </DataTemplate>
@@ -328,7 +331,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="{Binding ElementName=PART_Updated, Path=ActualWidth}"/>
-                        <ColumnDefinition Width="{Binding ElementName=PART_View, Path=ActualWidth}" />
+                        <ColumnDefinition Width="{Binding ElementName=PART_View, Path=ActualWidth}"/>
                         <ColumnDefinition Width="{Binding ElementName=PART_Edit, Path=ActualWidth}"/>
                         <ColumnDefinition Width="{Binding ElementName=PART_Trash, Path=ActualWidth}"/>
                     </Grid.ColumnDefinitions>
