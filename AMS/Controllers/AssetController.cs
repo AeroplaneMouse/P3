@@ -52,13 +52,14 @@ namespace AMS.Controllers
 
             ControlledAsset.DeSerializeFields();
 
-            LoadFields();
+            
             
             Name = ControlledAsset.Name;
             Identifier = ControlledAsset.Identifier;
             Description = ControlledAsset.Description;
             NonHiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == true).ToList();
+            LoadFields();
             
             LoadTags();
         }
@@ -81,6 +82,7 @@ namespace AMS.Controllers
                 }
             }
 
+            LoadFields();
             return CurrentlyAddedTags.Contains(tag);
         }
 
@@ -223,14 +225,19 @@ namespace AMS.Controllers
         {
             foreach (var field in HiddenFieldList)
             {
-                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"System.Windows.Controls.ComboBoxItem: Today"))
+                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"Current Date"))
                 {
                     field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
                 }
             }
             foreach (var field in NonHiddenFieldList)
             {
-                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"System.Windows.Controls.ComboBoxItem: Today"))
+                
+                if (field.Type == Field.FieldType.Date)
+                {
+                    Console.WriteLine(field.Content);
+                }
+                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"Current Date"))
                 {
                     field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
                 }
