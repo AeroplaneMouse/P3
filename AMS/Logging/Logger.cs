@@ -52,24 +52,25 @@ namespace AMS.Logging
 
                 string name = entity is Asset ? ((Asset)entity).Name : (entity is Tag ? ((Tag)entity).Name : (entity is Department ? ((Department)entity).Name : null));
 
-                if (name == null)
+                if (name == null && entity is Comment)
                 {
                     description = entity.GetType().ToString().Split('.').Last() + " with ID: " + id + " connected to asset with ID: " + ((Comment)entity).AssetID;
                 }
-                else
+                else if(name != null)
                 {
                     description = entity.GetType().ToString().Split('.').Last() + ": '" + name + "' with ID: " + id;
                 }
+                else
+                {
+                    description = entity.GetType().ToString().Split('.').Last() + " with id " + id;
+                }
                 changes = this.GetPropertiesAndValues(entity);
 
-                this.Write(entryType, description, userId, id, entity.GetType(), changes);
+                return this.Write(entryType, description, userId, id, entity.GetType(), changes);
 
             }
-            else
-            {
-                return false;
-            }
-            return true;
+            
+            return false;
         }
 
         /// <summary>

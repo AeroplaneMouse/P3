@@ -21,90 +21,41 @@ namespace UnitTests
         private Dictionary<string, string> _prevValuesTestDict;
 
         [TestInitialize]
-        public void InitiateAssets()
+        public void InitiateTest()
         {
             // Create Mocks of dependencies
             _logRepMock = new Mock<ILogRepository>();
-            
-            _testDict = new Dictionary<string, string> {{"ID", "1"}, {"Name", "NewValue"}};
-            _prevValuesTestDict = new Dictionary<string, string>{{"ID", "1"}, {"Name", "PrevValue"}};
             
             // This creates a new instance of the class for each test
             _Log = new Logger(_logRepMock.Object);
         }
         
         [TestMethod]
-        public void LogCreate_CallsRepositoryInsert_ReturnsTrue()
+        public void LogCreate_AddEntryReceivesComment_ReturnsTrue()
         {
             //Arrange
             _logRepMock.Setup(p => p.Insert(It.IsAny<LogEntry>())).Returns(true);
+            Comment comment = new Comment();
+            
+            //Act
+            bool result = _Log.AddEntry(comment, 1);
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void LogCreate_AddEntryReceivesAsset_loggedItemIdIsSameAsAssetId()
+        {
+            //Arrange
             Asset asset = new Asset();
-            
+            _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le => le.LoggedItemId == asset.ID))).Returns(true);
+
             //Act
-            _Log.AddEntry(asset, 1);
+            bool result = _Log.AddEntry(asset, 1);
 
             //Assert
-            _logRepMock.Verify((p => p.Insert(It.IsAny<LogEntry>())), Times.Once);
+            Assert.IsTrue(result);
         }
-        /*
-        [TestMethod]
-        public void LogDelete_CallsRepositoryInsert_ReturnsTrue()
-        {
-            //Arrange
-            _logRepMock.Setup(p => p.Insert(It.IsAny<Entry>())).Returns(true);
-            _newItemMock.Setup(p => p.GetLoggableValues()).Returns(_testDict);
-            
-            //Act
-            _Log.LogDelete(_newItemMock.Object);
-
-            //Assert
-            _logRepMock.Verify((p => p.Insert(It.IsAny<Entry>())), Times.Once);
-        }
-        
-        [TestMethod]
-        public void LogUpdate_CallsRepositoryInsert_ReturnsTrue()
-        {
-            //Arrange
-            _logRepMock.Setup(p => p.Insert(It.IsAny<Entry>())).Returns(true);
-            _newItemMock.Setup(p => p.GetLoggableValues()).Returns(_testDict);
-            _prevItemMock.Setup(p => p.GetLoggableValues()).Returns(_prevValuesTestDict);
-            
-            //TODO: Find out if it is possible to avoid using this method
-            _Log.SavePreviousValues(_prevItemMock.Object);
-            
-            //Act
-            _Log.LogUpdate(_newItemMock.Object);
-
-            //Assert
-            _logRepMock.Verify((p => p.Insert(It.IsAny<Entry>())), Times.Once);
-        }
-        
-        [TestMethod]
-        public void LogUpdate_DoesNotCallRepositoryInsertWhenPrevValuesAreNull_ReturnsTrue()
-        {
-            //Arrange
-            _logRepMock.Setup(p => p.Insert(It.IsAny<Entry>())).Returns(true);
-            _newItemMock.Setup(p => p.GetLoggableValues()).Returns(_testDict);
-
-            //Act
-            _Log.LogUpdate(_newItemMock.Object);
-
-            //Assert
-            _logRepMock.Verify((p => p.Insert(It.IsAny<Entry>())), Times.Never);
-        }
-        
-        [TestMethod]
-        public void LogUpdate_PrevValuesAreNull_ReturnsFalse()
-        {
-            //Arrange
-            _logRepMock.Setup(p => p.Insert(It.IsAny<Entry>())).Returns(true);
-            _newItemMock.Setup(p => p.GetLoggableValues()).Returns(_testDict);
-
-            //Act
-            bool result = _Log.LogUpdate(_newItemMock.Object);
-
-            //Assert
-            Assert.IsFalse(result);
-        }*/
     }
 }
