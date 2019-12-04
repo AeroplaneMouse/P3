@@ -429,10 +429,10 @@ namespace AMS.ViewModels
 
         private void UpdateTagRelationsOnSingleField(Field field, ObservableCollection<ITagable> tagList)
         {
-            field.TagList = new List<Tag>();
+            field.TagList = new List<ITagable>();
             foreach (var id in field.TagIDs)
             {
-                foreach (Tag tag in tagList.Where(p => p.TagId == id || p.ParentId == id))
+                foreach (ITagable tag in tagList.Where(p => p.TagId == id || p.ParentId == id))
                 {
                     field.TagList.Add(tag);
                 }
@@ -491,10 +491,11 @@ namespace AMS.ViewModels
                     }
                 }
 
-                if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
-                {
-                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-                }
+                //Saves currentDate
+                //if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
+                //{
+                //    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+                //}
             }
 
             return true;

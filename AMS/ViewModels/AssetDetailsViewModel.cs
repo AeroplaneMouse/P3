@@ -44,7 +44,7 @@ namespace AMS.ViewModels
         {
             foreach (var field in FieldList)
             {
-                field.TagList = new List<Tag>();
+                field.TagList = new List<ITagable>();
                 foreach (var id in field.TagIDs)
                 {
                     if (TagList.SingleOrDefault(p => p.TagId == id) is Tag tag)

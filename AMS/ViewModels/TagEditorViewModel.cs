@@ -11,6 +11,7 @@ using System.Globalization;
 using AMS.Controllers;
 using AMS.Database.Repositories;
 using AMS.Helpers;
+using AMS.Interfaces;
 using AMS.Views;
 using AMS.ViewModels.Base;
 using AMS.Views.Prompts;
@@ -241,7 +242,7 @@ namespace AMS.ViewModels
             foreach (var field in HiddenFieldList)
             {
                 //TODO: Question
-                field.TagList = new List<Tag>(); // <=== How does this work?! 
+                field.TagList = new List<ITagable>(); 
                 foreach (var id in field.TagIDs)
                 {
                     if (field.TagIDs.Contains(id))
@@ -251,7 +252,7 @@ namespace AMS.ViewModels
 
             foreach (var field in NonHiddenFieldList)
             {
-                field.TagList = new List<Tag>(); // <=== How does this work?!
+                field.TagList = new List<ITagable>(); 
                 foreach (var id in field.TagIDs)
                 {
                     if (field.TagIDs.Contains(id))

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Security.Cryptography;
+using AMS.Interfaces;
 using Newtonsoft.Json;
 
 namespace AMS.Models
@@ -32,7 +33,7 @@ namespace AMS.Models
         public List<ulong> TagIDs { get; set; }
 
         [JsonIgnore]
-        public List<Tag> TagList { get; set; }
+        public List<ITagable> TagList { get; set; }
 
         public string HashId { get; set; }
 
