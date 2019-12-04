@@ -148,6 +148,8 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(SearchQuery));
             OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(CurrentDepartment));
+
+            RefreshList();
         }
 
         /// <summary>

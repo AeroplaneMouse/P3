@@ -96,8 +96,6 @@ namespace AMS.ViewModels
                     Main.History.Push(_currentPage);
                     _currentPage = page;
 
-                    // Run the update method
-                    (page.DataContext as IPageUpdateOnFocus).UpdateOnFocus();
 
                     return true;
                 }
