@@ -33,7 +33,7 @@ namespace UnitTests
         }
         
         [TestMethod]
-        public void WriteToFile_GivenEmptyList_WritesToStream()
+        public void WriteToFile_GivenEmptyList_WritesToStreamOnlyOnce()
         {
             //Arrange
             List<Asset> testList = new List<Asset>();
@@ -43,7 +43,7 @@ namespace UnitTests
             _exporter.WriteToFile(testList, testType);
             
             //Assert
-            _streamMock.Verify(p => p.WriteLine(It.IsAny<string>()), Times.Once);
+            _streamMock.Verify(p => p.WriteLine(It.IsAny<string>()), Times.Exactly(1));
         }
         
         [TestMethod]
@@ -52,13 +52,17 @@ namespace UnitTests
             //Arrange
             List<Asset> testList = new List<Asset>{new Asset{Name = "TestAsset1"}, new Asset{Name = "TestAsset2"}};
             Type testType = new Asset().GetType();
-            
+            //There should be one line for each item and one for the header
+            int linesToWrite = testList.Count + 1;
+
             //Act
             _exporter.WriteToFile(testList, testType);
             
             //Assert
-            _streamMock.Verify(p => p.WriteLine(It.IsAny<string>()), Times.AtLeastOnce);
+            _streamMock.Verify(p => p.WriteLine(It.IsAny<string>()), Times.Exactly(linesToWrite));
         }
+        
+        
         
     }
 }
