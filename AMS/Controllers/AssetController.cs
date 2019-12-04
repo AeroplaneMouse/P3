@@ -212,5 +212,13 @@ namespace AMS.Controllers
                 }
             }
         }
+
+        public void RevertChanges()
+        {
+            Name = ControlledAsset.Name;
+            Identifier = ControlledAsset.Identifier;
+            Description = ControlledAsset.Description;
+            _tags = _tags = _assetRepository.GetTags(ControlledAsset).ToList();
+        }
     }
 }

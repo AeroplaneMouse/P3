@@ -227,7 +227,14 @@ namespace AMS.Helpers
 
         public void SetCurrentTags(ObservableCollection<ITagable> tags)
         {
-            AppliedTags = tags;
+            foreach(Tag tag in tags)
+            {
+                if (!AppliedTags.Contains(tag))
+                {
+                    ApplyParentIfNeeded(tag);
+                    AddTag(tag);
+                }
+            }
         }
 
         public Tag GetParent() => _parent;

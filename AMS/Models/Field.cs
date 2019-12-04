@@ -36,7 +36,7 @@ namespace AMS.Models
 
         public string HashId { get; set; }
 
-        public bool IsCustom;
+        public bool IsCustom { get; set; }
 
         public bool IsHidden = false;
         public string Label { get; set; }
