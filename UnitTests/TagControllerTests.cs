@@ -28,13 +28,11 @@ namespace UnitTests
             //Arrange
             ulong id = 0;
             Tag tag = new Tag();
-            tag.Name = "TestTag";
-            
-            _tagRepMock.Setup(repository => repository.Insert(tag, out id)).Returns(It.IsAny<Tag>());
+
+            _tagRepMock.Setup(repository => repository.Insert(It.IsAny<Tag>(), out id)).Returns(It.IsAny<Tag>());
 
             ITagController tagController = new TagController(tag, _tagRepMock.Object, _depRepMock.Object);
             tagController.ControlledTag = tag;
-
 
             //Act
             //tagController.tagRepository = mockRepository.Object;
