@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories;
@@ -50,6 +52,8 @@ namespace AMS.Controllers
 
             ControlledAsset.DeSerializeFields();
 
+            LoadFields();
+            
             Name = ControlledAsset.Name;
             Identifier = ControlledAsset.Identifier;
             Description = ControlledAsset.Description;
@@ -213,6 +217,24 @@ namespace AMS.Controllers
             Identifier = ControlledAsset.Identifier;
             Description = ControlledAsset.Description;
             _tags = _tags = _assetRepository.GetTags(ControlledAsset).ToList();
+        }
+        
+        private void LoadFields()
+        {
+            foreach (var field in HiddenFieldList)
+            {
+                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"System.Windows.Controls.ComboBoxItem: Today"))
+                {
+                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+                }
+            }
+            foreach (var field in NonHiddenFieldList)
+            {
+                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"System.Windows.Controls.ComboBoxItem: Today"))
+                {
+                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+                }
+            }
         }
     }
 }
