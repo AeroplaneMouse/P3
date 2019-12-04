@@ -297,12 +297,14 @@ namespace AMS.Database.Repositories
                         
                     _query.Where("a.deleted_at", "IS NULL", "");
 
-                    if (keyword.Length > 0)
+                    if (keyword.Length > 0 && !keyword.Equals("%"))
                     {
                         if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
                             keyword = "%" + keyword + "%";
-
+                  
                         Statement statement = new Statement();
+                        if(int.TryParse(keyword.Replace("%", ""), out int assetIdKeyword))
+                            statement.AddOrStatement("a.id", assetIdKeyword.ToString());
                         statement.AddOrStatement("a.name", keyword, "LIKE");
                         statement.AddOrStatement("a.identifier", keyword, "LIKE");
                         
