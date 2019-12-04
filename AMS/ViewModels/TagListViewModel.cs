@@ -18,6 +18,8 @@ namespace AMS.ViewModels
 
         public List<Tag> Tags { get; set; }
         public Tag SelectedItem { get; set; }
+
+        public string CurrentDepartment => "(" + Features.GetCurrentDepartment().Name + ")";
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand AddNewCommand { get; set; }
@@ -51,6 +53,7 @@ namespace AMS.ViewModels
 
         public override void UpdateOnFocus()
         {
+            OnPropertyChanged(nameof(CurrentDepartment));
             Search();
             OnPropertyChanged(nameof(Tags));
         }

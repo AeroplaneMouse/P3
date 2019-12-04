@@ -44,6 +44,7 @@ namespace AMS.ViewModels
                 RefreshList();
             }
         }
+        public string CurrentDepartment => "(" + Features.GetCurrentDepartment().Name + ")";
 
         public bool CheckAll { get; set; }
         public string SearchQuery
@@ -146,6 +147,9 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(IsStrict));
             OnPropertyChanged(nameof(SearchQuery));
             OnPropertyChanged(nameof(AppliedTags));
+            OnPropertyChanged(nameof(CurrentDepartment));
+
+            RefreshList();
         }
 
         /// <summary>

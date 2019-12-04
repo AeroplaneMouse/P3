@@ -22,14 +22,29 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
-        <TextBlock Style="{StaticResource TitleStyle}"
+        <!--<TextBlock Style="{StaticResource TitleStyle}"
             VerticalAlignment="Center"
             Margin="10, 11, 0, 11"
-            Text="Tags"/>
+            Text="{Binding TitleText}"/>-->
+
+        <StackPanel Grid.Row="0" 
+                    Margin="10, 11, 0, 11"
+                    Orientation="Horizontal" 
+                    VerticalAlignment="Center">
+
+            <TextBlock Text="Tags" 
+                       Style="{StaticResource TitleStyle}" Margin="0 0 8 0"
+                       VerticalAlignment="Center"/>
+
+            <TextBlock Text="{Binding CurrentDepartment}"
+                       FontSize="{StaticResource FontSizeRegular}"
+                       VerticalAlignment="Center"
+                       Foreground="{StaticResource GrayForLessImportantElementsBrush}"/>
+        </StackPanel>
 
         <StackPanel Orientation="Horizontal"
-            HorizontalAlignment="Right"
-            Margin="10">
+                    HorizontalAlignment="Right"
+                    Margin="10">
             
             <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding AddNewCommand}"

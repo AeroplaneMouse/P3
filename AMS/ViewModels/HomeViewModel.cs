@@ -15,13 +15,17 @@ namespace AMS.ViewModels
         public ulong NumberOfAssets => _homeController.NumberOfAssets;
         public ulong NumberOfTags => _homeController.NumberOfTags;
         public ulong NumberOfDepartments => _homeController.NumberOfDepartments;
-        public int HoursLookedBack => 96;
+        public int HoursLookedBack => 168;
 
         public List<Comment> CommentList
         {
-            get => _commentListController.CommentList.Where(p => new TimeSpan(DateTime.Now.Ticks - p.CreatedAt.Ticks).TotalHours < HoursLookedBack).ToList();
+            get => _commentListController.CommentList
+                .Where(p => new TimeSpan(DateTime.Now.Ticks - p.CreatedAt.Ticks).TotalHours < HoursLookedBack)
+                .Where(p => (Features.GetCurrentDepartment().ID != 0) ? _homeController.GetAsset(p.AssetID).DepartmentID == Features.GetCurrentDepartment().ID : true)
+                .ToList();
         }
 
+        public string CurrentDepartment => "(" + Features.GetCurrentDepartment().Name + ")";
 
         private IHomeController _homeController { get; set; }
         private ICommentListController _commentListController { get; set; }
@@ -50,6 +54,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(NumberOfAssets));
             OnPropertyChanged(nameof(NumberOfTags));
             OnPropertyChanged(nameof(NumberOfDepartments));
+            OnPropertyChanged(nameof(CurrentDepartment));
 
             _commentListController.FetchComments();
             OnPropertyChanged(nameof(CommentList));
