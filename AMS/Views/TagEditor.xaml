@@ -88,7 +88,7 @@
                               IsEnabled="{Binding ParentSelectionEnabled}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
+                                <TextBlock Text="{Binding Name}"/>
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
@@ -139,7 +139,7 @@
                     </StackPanel>
 
                     <!-- FieldList -->
-                    <StackPanel Margin="10 10 10 0">
+                    <StackPanel Margin="20 10 10 0">
                         <ListView ItemsSource="{Binding NonHiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                   ItemContainerStyle="{StaticResource ListViewWithTags}"
@@ -147,35 +147,17 @@
                                   Margin="0 0 0 0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Label Style="{StaticResource FieldAddedInTagEditor}"></Label>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackPanel>
-
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
-                               Text="Hidden fields"
-                               Margin="10 20 10 0" />
-
-                    <StackPanel Margin="10 10 10 0">
-                        <ListView ItemsSource="{Binding HiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                  ItemContainerStyle="{StaticResource ListViewWithTags}"
-                                  BorderBrush="Transparent"
-                                  Margin="0 0 0 0">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Label Style="{StaticResource FieldAddedInTagEditor}"></Label>
+                                    <Label Style="{StaticResource FieldAddedInTagEditor}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
                     </StackPanel>
 
                     <!-- Fields from parent -->
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                    <TextBlock Style="{StaticResource TitleOfFieldListStyle}"
                                Text="Fields from parent"
                                Margin="10 20 10 0" />
-                    <StackPanel Margin="10 10 10 0">
+                    <StackPanel Margin="20 10 10 0">
                         <ListView ItemsSource="{Binding ParentTagFields}"
                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                   ItemContainerStyle="{StaticResource ListViewWithTags}"
@@ -183,7 +165,7 @@
                                   Margin="0 0 0 0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Label Style="{StaticResource FieldFromParentTag}"></Label>
+                                    <Label Style="{StaticResource FieldFromParentTag}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>

@@ -105,18 +105,65 @@
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
                         </Grid.RowDefinitions>
 
-                        <TextBlock Style="{StaticResource SmallHeaderStyle}"
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
                                    Text="{Binding Label}"
+                                   FontWeight="Medium"
                                    Grid.Row="0" MinWidth="300" />
 
                         <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Foreground="{StaticResource GrayForLessImportantElementsBrush}"
                                    Text="{Binding Content}"
                                    TextWrapping="Wrap"
                                    Grid.Row="1"/>
 
-                        <Rectangle Grid.Row="2" Height="2" HorizontalAlignment="Stretch" Margin="0,10,10,10">
+                        <TextBlock TextWrapping="Wrap"
+                                   Grid.Row="2">
+                            <TextBlock.Style>
+                                <Style BasedOn="{StaticResource ParagraphStyle}" TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Required}" Value="True">
+                                            <Setter Property="Text" Value="Must be filled on assets: Yes"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Required}" Value="False">
+                                            <Setter Property="Text" Value="Must be filled on assets: No"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <TextBlock TextWrapping="Wrap"
+                                   Grid.Row="3">
+                            <TextBlock.Style>
+                                <Style BasedOn="{StaticResource ParagraphStyle}" TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="1">
+                                            <Setter Property="Text" Value="Type: Textarea"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="2">
+                                            <Setter Property="Text" Value="Type: Text box"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="3">
+                                            <Setter Property="Text" Value="Type: Number"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="4">
+                                            <Setter Property="Text" Value="Type: Date"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="3">
+                                            <Setter Property="Text" Value="Type: Checkbox"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <Rectangle Grid.Row="4" Height="2" HorizontalAlignment="Stretch" Margin="0,10,10,10">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                                     <GradientStop Color="LightGray" Offset="0"/>
@@ -130,7 +177,7 @@
         </Setter>
     </Style>
 
-    <!-- Style for fields added through the parent tag in the tag editor -->
+    <!-- Style for fields added through in the tag editor -->
     <Style TargetType="{x:Type Label}" x:Key="FieldAddedInTagEditor" BasedOn="{StaticResource BaseLabelStyle}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="MinWidth" Value="50" />
@@ -140,6 +187,7 @@
                 <ControlTemplate TargetType="{x:Type Label}">
                     <Grid>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="Auto" />
@@ -185,16 +233,61 @@
                             </Button.Template>
                         </Button>
 
-                        <TextBlock Style="{StaticResource SmallHeaderStyle}"
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
                                    Text="{Binding Label}"
-                                   Grid.Row="1" MinWidth="300" />
+                                   FontWeight="Medium"
+                                   Grid.Row="0" MinWidth="300"
+                                   Grid.Column="0"/>
 
                         <TextBlock Style="{StaticResource ParagraphStyle}"
                                    Text="{Binding Content}"
                                    TextWrapping="Wrap"
-                                   Grid.Row="2"/>
+                                   Grid.Row="1"/>
 
-                        <Rectangle Grid.Row="3" Height="2" HorizontalAlignment="Stretch" Margin="0,10,10,10">
+                        <TextBlock TextWrapping="Wrap"
+                                   Grid.Row="2">
+                            <TextBlock.Style>
+                                <Style BasedOn="{StaticResource ParagraphStyle}" TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Required}" Value="True">
+                                            <Setter Property="Text" Value="Must be filled on assets: Yes"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Required}" Value="False">
+                                            <Setter Property="Text" Value="Must be filled on assets: No"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <TextBlock TextWrapping="Wrap"
+                                   Grid.Row="3">
+                            <TextBlock.Style>
+                                <Style BasedOn="{StaticResource ParagraphStyle}" TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="1">
+                                            <Setter Property="Text" Value="Type: Textarea"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="2">
+                                            <Setter Property="Text" Value="Type: Text box"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="3">
+                                            <Setter Property="Text" Value="Type: Number"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="4">
+                                            <Setter Property="Text" Value="Type: Date"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="3">
+                                            <Setter Property="Text" Value="Type: Checkbox"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        
+                        <Rectangle Grid.Row="4" Height="2" HorizontalAlignment="Stretch" Margin="0,10,10,10">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                                     <GradientStop Color="LightGray" Offset="0"/>

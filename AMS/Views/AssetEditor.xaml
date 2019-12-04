@@ -252,9 +252,8 @@
                                       ItemTemplateSelector="{StaticResource MyFieldDesignSelector}"/>
                     </StackPanel>
 
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                    <TextBlock Style="{StaticResource TitleOfFieldListStyle}"
                                Text="Hidden fields"
-                               Opacity="0.5"
                                Margin="0 20 10 0" />
 
                     <StackPanel Opacity="0.5">
