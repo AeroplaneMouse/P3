@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:designSelector="clr-namespace:AMS.Views"
-                    xmlns:helper="clr-namespace:AMS.Resources.Styles.Helper">
+                    xmlns:designSelector="clr-namespace:AMS.Views">
     
     <designSelector:FieldDesignSelector x:Key="MyFieldDesignSelector" />
 
