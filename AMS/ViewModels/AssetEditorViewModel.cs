@@ -56,10 +56,11 @@ namespace AMS.ViewModels
             set
             {
                 _tagSearchQuery = value;
-                if(!_tagSearchQuery.EndsWith(' '))
-                TagSearch();
+                if (!_tagSearchQuery.EndsWith(' '))
+                    TagSearch();
             }
         }
+
         public string CurrentGroup { get; set; }
         public Visibility CurrentGroupVisibility { get; set; } = Visibility.Collapsed;
         public Visibility TagSuggestionsVisibility { get; set; } = Visibility.Collapsed;
@@ -138,17 +139,19 @@ namespace AMS.ViewModels
 
             RemoveCommand = new RelayCommand(() =>
             {
-                Features.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { _assetController.Name }?", (sender, e) =>
-                {
-                    if (e.Result)
+                Features.DisplayPrompt(new Views.Prompts.Confirm(
+                    $"Are you sure you want to remove {_assetController.Name}?", (sender, e) =>
                     {
-                        _assetController.Remove();
-                        Features.Navigate.To(Features.Create.AssetList());
-                    }
-                }));
+                        if (e.Result)
+                        {
+                            _assetController.Remove();
+                            Features.Navigate.To(Features.Create.AssetList());
+                        }
+                    }));
             });
 
-            InsertNextOrSelectedSuggestionCommand = new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
+            InsertNextOrSelectedSuggestionCommand =
+                new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
             ClearInputCommand = new RelayCommand(ClearInput);
             UpdateAll();
         }
@@ -194,6 +197,7 @@ namespace AMS.ViewModels
                 _assetController.Save();
                 Features.AddNotification(new Notification("Asset added", Notification.APPROVE));
             }
+
             return true;
         }
 
@@ -247,7 +251,6 @@ namespace AMS.ViewModels
         /// <param name="input">The selected element (optional)</param>
         private void InsertNextOrSelectedSuggestion(object input = null)
         {
-            
             // If the input is not null, use the suggestion if possible
             if (input != null)
             {
@@ -259,7 +262,7 @@ namespace AMS.ViewModels
                 }
                 else
                 {
-                    tag = (ITagable)input;
+                    tag = (ITagable) input;
                 }
 
                 if (tag != null)
@@ -273,21 +276,23 @@ namespace AMS.ViewModels
                     else
                     {
                         // So we need to switch to a group of tags.
-                        Tag taggedItem = (Tag)tag;
+                        Tag taggedItem = (Tag) tag;
                         _tagHelper.SetParent(taggedItem);
                         CurrentGroup = tag.TagLabel;
                         CurrentGroupVisibility = Visibility.Visible;
                         UpdateTagSuggestions();
                     }
+
                     TagSearchQuery = "";
                 }
             }
-            else if(TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+            else if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
             {
                 if (!(_tagTabIndex <= TagSearchSuggestions.Count() - 1))
                 {
                     _tagTabIndex = 0;
                 }
+
                 TagSearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
                 _tagTabIndex++;
             }
@@ -303,7 +308,7 @@ namespace AMS.ViewModels
             {
                 if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
                 {
-                    _tagHelper.SetParent((Tag)tag);
+                    _tagHelper.SetParent((Tag) tag);
                     CurrentGroup = tag.TagLabel;
                     CurrentGroupVisibility = Visibility.Visible;
                 }
@@ -314,6 +319,7 @@ namespace AMS.ViewModels
                     _assetController.AttachTag(_tagHelper.GetParent());
                     AppliedTags = _tagHelper.GetAppliedTags(false);
                 }
+
                 TagSearchQuery = "";
                 _tagTabIndex = 0;
                 UpdateAll();
@@ -324,9 +330,11 @@ namespace AMS.ViewModels
                 if (TagSearchQuery == String.Empty)
                     message = $"It is not possible to attach a parent tag that have children to an asset.";
                 else
-                    message = $"{ TagSearchQuery } is not a tag. To use it, you must first create a tag called { TagSearchQuery }.";
+                    message =
+                        $"{TagSearchQuery} is not a tag. To use it, you must first create a tag called {TagSearchQuery}.";
 
-                Features.AddNotification(new Notification(message, background: Notification.WARNING), displayTime: 3500);
+                Features.AddNotification(new Notification(message, background: Notification.WARNING),
+                    displayTime: 3500);
             }
         }
 
@@ -386,7 +394,7 @@ namespace AMS.ViewModels
                 TagSuggestionIsOpen = false;
             }
         }
-        
+
         /// <summary>
         /// Updates the elements of the view.
         /// </summary>
@@ -421,11 +429,12 @@ namespace AMS.ViewModels
             field.TagList = new List<Tag>();
             foreach (var id in field.TagIDs)
             {
-                foreach(Tag tag in tagList.Where(p => p.TagId == id || p.ParentId == id))
+                foreach (Tag tag in tagList.Where(p => p.TagId == id || p.ParentId == id))
                 {
                     field.TagList.Add(tag);
                 }
             }
+
             if (!field.TagList.Any() && !field.IsCustom)
             {
                 _assetController.RemoveField(field);
@@ -440,24 +449,27 @@ namespace AMS.ViewModels
         {
             if (string.IsNullOrEmpty(Name))
             {
-                Features.AddNotification(new Notification("The field " + "Name" + " is required and empty",Notification.WARNING));
+                Features.AddNotification(new Notification("The field " + "Name" + " is required and empty",
+                    Notification.WARNING));
                 return false;
             }
             else if (Features.Main.CurrentDepartment.ID == 0 && !_isEditing)
             {
-                Features.AddNotification(new Notification("Please select another department than \"All departments\"", Notification.WARNING));
+                Features.AddNotification(new Notification("Please select another department than \"All departments\"",
+                    Notification.WARNING));
                 return false;
             }
-            
+
             //Verifies whether fields contains correct information, or the required information.
             List<Field> completeList = HiddenFieldList.ToList();
             completeList.AddRange(NonHiddenFieldList.ToList());
-            
+
             foreach (var field in completeList)
             {
                 if (field.Required && string.IsNullOrEmpty(field.Content))
                 {
-                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",Notification.WARNING));
+                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
+                        Notification.WARNING));
                     return false;
                 }
 
