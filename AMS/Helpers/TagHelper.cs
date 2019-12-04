@@ -58,11 +58,11 @@ namespace AMS.Helpers
             {
                 foreach (var item in SuggestedTags)
                 {
-                    if ((item.ChildrenCount > 0 || item.TagId == 1) 
+                    if ((item.NumOfChildren > 0 || item.TagId == 1) 
                         && (!AppliedTags.Contains(item) || !ContainsAllChildrenOfParent(item)))
                         result.Add(item);
                     
-                    else if (item.ChildrenCount == 0 && !AppliedTags.Contains(item))
+                    else if (item.NumOfChildren == 0 && !AppliedTags.Contains(item))
                         result.Add(item);
                 }
               
@@ -84,7 +84,7 @@ namespace AMS.Helpers
         {
             if (!AppliedTags.Contains(tag))
             {
-                if (tag.ParentId == 0 && tag.ChildrenCount > 0)
+                if (tag.ParentId == 0 && tag.NumOfChildren > 0)
                 {
                     if (CanApplyParentTags)
                     {
@@ -122,7 +122,7 @@ namespace AMS.Helpers
 
         private bool ApplyParentIfNeeded(ITagable tag)
         {
-            if (CanApplyParentTags || (tag.ParentId == 0 && tag.ChildrenCount > 0))
+            if (CanApplyParentTags || (tag.ParentId == 0 && tag.NumOfChildren > 0))
                 return false;
             
             var parent = GetTagParent(tag);
@@ -185,7 +185,7 @@ namespace AMS.Helpers
             if (tag.TagId == 1)
                 return AppliedTags.Count(u => u.TagType == typeof(User)) == _users.Count; // Users
 
-            return AppliedTags.Count(t => t.ParentId == tag.TagId) == tag.ChildrenCount;
+            return AppliedTags.Count(t => t.ParentId == tag.TagId) == tag.NumOfChildren;
         }
 
         public void SetParent(Tag tag=null)
@@ -198,7 +198,7 @@ namespace AMS.Helpers
         public bool AllParentChildrenTagged()
         {
             if (IsParentSet())
-                return AppliedTags.Count(t => t.ParentId == _parent.ID) == _parent.ChildrenCount;
+                return AppliedTags.Count(t => t.ParentId == _parent.ID) == _parent.NumOfChildren;
 
             return false;
         }
@@ -208,7 +208,7 @@ namespace AMS.Helpers
             if (includeParents)
                 return AppliedTags;
             
-            return new ObservableCollection<ITagable>(AppliedTags.Where(t => t.ParentId > 0 || (t.ParentId == 0 && t.ChildrenCount == 0 && (t.TagId != 1 && t.TagType == typeof(Tag)))));
+            return new ObservableCollection<ITagable>(AppliedTags.Where(t => t.ParentId > 0 || (t.ParentId == 0 && t.NumOfChildren == 0 && (t.TagId != 1 && t.TagType == typeof(Tag)))));
         }
 
         public List<ulong> GetAppliedTagIds(Type type)

@@ -126,6 +126,11 @@ namespace AMS.Controllers
             _tagRepository.Insert(ControlledTag, out TagID);
         }
 
+        public Tag GetTagById(ulong id)
+        {
+            return _tagRepository.GetById(id);
+        }
+
         /// <summary>
         /// Updates the tag.
         /// </summary>

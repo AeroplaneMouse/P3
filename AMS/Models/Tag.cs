@@ -124,7 +124,6 @@ namespace AMS.Models
         public Type TagType => this.GetType();
         public string TagLabel => Name;
         public ulong ParentId => ParentID;
-        public int ChildrenCount => NumOfChildren;
         public List<ITagable> Children { get; set; } = new List<ITagable>();
         public string TagColor { 
             get => Color;

@@ -268,7 +268,7 @@ namespace AMS.ViewModels
 
                 if (tag != null)
                 {
-                    if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
+                    if (_tagHelper.IsParentSet() || (tag.NumOfChildren == 0 && tag.TagId != 1))
                     {
                         _tagHelper.AddTag(tag);
                         _assetController.AttachTag(tag);
@@ -309,7 +309,7 @@ namespace AMS.ViewModels
             ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == TagSearchQuery.Trim(' '));
             if (tag != null)
             {
-                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
+                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.NumOfChildren > 0))
                 {
                     _tagHelper.SetParent((Tag) tag);
                     CurrentGroup = tag.TagLabel;
