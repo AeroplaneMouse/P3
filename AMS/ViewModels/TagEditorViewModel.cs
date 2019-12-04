@@ -106,7 +106,7 @@ namespace AMS.ViewModels
                 DepartmentSelectionEnabled = _controller.ParentID == 0;
             }
 
-            if(_controller.ControlledTag.ChildrenCount > 0)
+            if(_controller.ControlledTag.NumOfChildren > 0)
             {
                 ParentSelectionEnabled = false;
             }
@@ -315,10 +315,10 @@ namespace AMS.ViewModels
             string message = String.Empty;
 
             // Check if parent
-            if (_controller.ParentID == 0 && _controller.ControlledTag.ChildrenCount > 0)
+            if (_controller.ParentID == 0 && _controller.ControlledTag.NumOfChildren > 0)
             {
                 message = "You are about to remove a parent tag!\n"
-                        + $"There are { _controller.ControlledTag.ChildrenCount } children attached to this parent.";
+                        + $"There are { _controller.ControlledTag.NumOfChildren } children attached to this parent.";
               
                 List<string> buttons = new List<string>();
                 buttons.Add("Remove parent and all children?");
@@ -333,7 +333,7 @@ namespace AMS.ViewModels
                         {
                             _controller.RemoveChildren();
                             _controller.Remove();
-                            extraMessage = $" aswell as { _controller.ControlledTag.ChildrenCount } children";
+                            extraMessage = $" aswell as { _controller.ControlledTag.NumOfChildren } children";
                         }
                         else
                             _controller.Remove();
