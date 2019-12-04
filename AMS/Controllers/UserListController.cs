@@ -170,7 +170,7 @@ namespace AMS.Controllers
         public bool ApplyChanges()
         {
             // Check if there are any conflicts left
-            if (_finalUsersList.Where(p => p.Status.CompareTo("Conflicting") == 0).Count() > 0)
+            if (_finalUsersList.Any(p => p.Status.CompareTo("Conflicting") == 0))
             {
                 return false;
             }
@@ -224,8 +224,7 @@ namespace AMS.Controllers
 
             // Get the other conflicting user
             UserWithStatus otherUser = _finalUsersList
-                .Where(p => p.Username.CompareTo(keptUser.Username) == 0 && p.Equals(keptUser) == false)
-                .FirstOrDefault();
+                .FirstOrDefault(p => p.Username.CompareTo(keptUser.Username) == 0 && p.Equals(keptUser) == false);
 
             // If the kept user is coming from the imported list:
             // Set their status to "Added".
@@ -307,7 +306,7 @@ namespace AMS.Controllers
 
         private bool UserIsInList(List<UserWithStatus> list, User user)
         {
-            return list.Where(u => u.Username.CompareTo(user.Username) == 0).Count() > 0;
+            return list.Any(u => u.Username.CompareTo(user.Username) == 0);
         }
 
         private void CombineLists()
@@ -316,7 +315,7 @@ namespace AMS.Controllers
             _finalUsersList.AddRange(_existingUsersList);
             _finalUsersList.AddRange(_importedUsersList);
 
-            // Conflicting users. Existing users that are not enabled, whose username occures in both lists
+            // Conflicting users. Existing users that are not enabled, whose username occurs in both lists
             _finalUsersList
                 .Where(u => UserIsInList(_existingUsersList.Where(p => p.IsEnabled == false).ToList(), u) && UserIsInList(_importedUsersList, u))
                 .ToList()

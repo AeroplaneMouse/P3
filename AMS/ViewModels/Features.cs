@@ -137,6 +137,9 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetPresenter(Asset asset, List<ITagable> tagables)
             {
+                // Create new asset if null
+                asset = asset ?? new Asset();
+
                 return new AssetPresenter(tagables, new AssetController(asset, _assetRepository), new CommentListController(GetCurrentSession(), _commentRepository, asset), new LogListController(_logRepository, _printHelper, asset));
             }
 
@@ -147,9 +150,8 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetEditor(Asset asset = null)
             {
-                // Create a new asset if null
-                if (asset == null)
-                    asset = new Asset();
+                // Create new asset if null
+                asset = asset ?? new Asset();
 
                 return new AssetEditor(new AssetController(asset, _assetRepository), CreateTagHelper());
             }
@@ -224,6 +226,9 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page TagEditor(Tag tag)
             {
+                // Create new tag if null
+                tag = tag ?? new Tag();
+
                 return new TagEditor(new TagController(tag, _tagRepository, _departmentRepository));
             }
 
@@ -233,7 +238,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page TagList()
             {
-                return new TagList(new TagListController(_tagRepository, _printHelper), new TagController(null, _tagRepository, _departmentRepository));
+                return new TagList(new TagListController(_tagRepository, _printHelper), new TagController(new Tag(), _tagRepository, _departmentRepository));
             }
 
             /// <summary>

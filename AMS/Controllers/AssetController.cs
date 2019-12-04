@@ -41,16 +41,10 @@ namespace AMS.Controllers
 
         private IAssetRepository _assetRepository;
 
-        public AssetController(Asset asset, IAssetRepository assetRepository) : base(asset ?? new Asset())
+        public AssetController(Asset asset, IAssetRepository assetRepository) 
+            : base(asset)
         {
-            if (asset == null)
-            {
-                ControlledAsset = new Asset();
-            }
-            else
-            {
-                ControlledAsset = asset;
-            }
+            ControlledAsset = asset;
 
             _assetRepository = assetRepository;
 
@@ -211,6 +205,14 @@ namespace AMS.Controllers
                         AddField(tagField, currentTag);
                 }
             }
+        }
+
+        public void RevertChanges()
+        {
+            Name = ControlledAsset.Name;
+            Identifier = ControlledAsset.Identifier;
+            Description = ControlledAsset.Description;
+            _tags = _tags = _assetRepository.GetTags(ControlledAsset).ToList();
         }
     }
 }

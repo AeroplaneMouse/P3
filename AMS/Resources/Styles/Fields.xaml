@@ -138,6 +138,14 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsCustom}" Value="True">
+                <Setter Property="Visibility" Value="Hidden" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsCustom}" Value="False">
+                <Setter Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
     
     <!-- Style for textblock above tags -->
@@ -146,6 +154,14 @@
         <Setter Property="Grid.Row" Value="2"/>
         <Setter Property="Grid.Column" Value="0"/>
         <Setter Property="Text" Value="Tag references in:"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsCustom}" Value="True">
+                <Setter Property="Visibility" Value="Hidden" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsCustom}" Value="False">
+                <Setter Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <!-- Textareafield style -->
