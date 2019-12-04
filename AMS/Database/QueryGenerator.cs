@@ -14,6 +14,7 @@ namespace AMS.Database
         public List<Statement> HavingStatements;
         private Dictionary<string, string> _orderBys;
         public string GroupBy { get; set; }
+        public int Limit { get; set; } = 0;
         private StringBuilder _query;
 
         public QueryGenerator()
@@ -118,6 +119,11 @@ namespace AMS.Database
                     _query.Append($", {keyValuePair.Key} {keyValuePair.Value}");
                 }
                 */
+            }
+
+            if (Limit > 0)
+            {
+                _query.Append(" LIMIT " + Limit);
             }
 
             return _query.ToString();
