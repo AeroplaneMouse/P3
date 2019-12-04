@@ -26,22 +26,14 @@ namespace AMS.ViewModels
 
         #region Public Properties
 
-        public ObservableCollection<Field> NonHiddenFieldList =>
-            new ObservableCollection<Field>(_controller.NonHiddenFieldList);
-        public ObservableCollection<Field> HiddenFieldList =>
-            new ObservableCollection<Field>(_controller.HiddenFieldList);
+        public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_controller.NonHiddenFieldList);
+        public ObservableCollection<Field> ParentTagFields => new ObservableCollection<Field>(_controller.ParentTagFields);
+        public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_controller.HiddenFieldList);
 
-        public string Name { get => _controller.Name;
-                             set => _controller.Name = value; }
-
-        public string Color { get => _controller.Color;
-                              set => _controller.Color = value; }
-
+        public string Name { get => _controller.Name; set => _controller.Name = value; }
+        public string Color { get => _controller.Color; set => _controller.Color = value; }
         public ulong ParentID => _controller.ParentID;
-
-        public ulong DepartmentID { get => _controller.DepartmentID;
-                                    set => _controller.DepartmentID = value; }
-
+        public ulong DepartmentID { get => _controller.DepartmentID; set => _controller.DepartmentID = value; }
         public string PageTitle { get; set; }
         public List<Tag> ParentTagList { get => _controller.ParentTagList; }
         public List<Department> DepartmentList { get => _controller.DepartmentList; }
@@ -71,11 +63,9 @@ namespace AMS.ViewModels
                     UpdateDepartmentSelectionToParentDepartment();
                 }
                 else
-                {
                     DepartmentSelectionEnabled = true;
-                }
 
-                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex], ParentTagList[oldValue]);
+                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex]);
                 UpdateAll();
             }
         }
@@ -140,6 +130,9 @@ namespace AMS.ViewModels
                 ? "Edit tag"
                 : "Add tag";
 
+            if (_controller.IsEditing && _selectedParentTagIndex != 0)
+                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex]);
+
             UpdateAll();
 
             // Setting the selected department
@@ -163,9 +156,6 @@ namespace AMS.ViewModels
             {
                 if (parameter is Field field)
                     Features.DisplayPrompt(new Views.Prompts.CustomField(null, EditFieldConfirmed, false, field));
-                else
-                    //TODO Handle not field event
-                    return;
             });
         }
 
@@ -241,6 +231,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(NonHiddenFieldList));
             OnPropertyChanged(nameof(HiddenFieldList));
             OnPropertyChanged(nameof(SelectedParentTagIndex));
+            OnPropertyChanged(nameof(ParentTagFields));
             UpdateTagRelations();
         }
 
@@ -249,7 +240,8 @@ namespace AMS.ViewModels
             Tag ParentTag = ParentTagList[_selectedParentTagIndex];
             foreach (var field in HiddenFieldList)
             {
-                field.TagList = new List<Tag>(); // <=== How does this work?! TODO: Question
+                //TODO: Question
+                field.TagList = new List<Tag>(); // <=== How does this work?! 
                 foreach (var id in field.TagIDs)
                 {
                     if (field.TagIDs.Contains(id))
@@ -295,8 +287,7 @@ namespace AMS.ViewModels
                         if (!check)
                         {
                             Features.AddNotification(
-                                new Notification("The field " + field.Label + " cannot contain letters",
-                                    Notification.WARNING));
+                                new Notification("The field " + field.Label + " cannot contain letters", background: Notification.WARNING));
                             return false;
                         }
                     }

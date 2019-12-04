@@ -94,9 +94,7 @@ namespace AMS.Models
                 return false;
 
             if (obj is UserWithStatus)
-            {
                 return base.Equals(obj);
-            }
 
             ITagable objAsPart = obj as ITagable;
 
