@@ -228,7 +228,7 @@ namespace AMS.Helpers
 
         public void SetCurrentTags(ObservableCollection<ITagable> tags)
         {
-            foreach(Tag tag in tags)
+            foreach(ITagable tag in tags)
             {
                 if (!AppliedTags.Contains(tag))
                 {

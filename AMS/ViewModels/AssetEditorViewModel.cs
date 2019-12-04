@@ -490,12 +490,6 @@ namespace AMS.ViewModels
                         }
                     }
                 }
-
-                //Saves currentDate
-                //if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
-                //{
-                //    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-                //}
             }
 
             return true;

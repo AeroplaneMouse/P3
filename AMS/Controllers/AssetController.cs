@@ -218,7 +218,7 @@ namespace AMS.Controllers
             Name = ControlledAsset.Name;
             Identifier = ControlledAsset.Identifier;
             Description = ControlledAsset.Description;
-            _tags = _tags = _assetRepository.GetTags(ControlledAsset).ToList();
+            _tags = _assetRepository.GetTags(ControlledAsset).ToList();
         }
         
         private void LoadFields()
