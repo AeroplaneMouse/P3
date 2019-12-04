@@ -78,11 +78,24 @@
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <TextBlock Foreground="Black" 
-                                               Style="{StaticResource ParagraphStyle}" 
                                                VerticalAlignment="Center"
                                                Margin="0 0 3 0"
-                                               Cursor="Hand"
-                                               Text="X"/>
+                                               Cursor="Hand">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock" BasedOn="{StaticResource ParagraphStyle}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsHidden}" Value="False">
+                                                        <Setter Property="Text" Value="X" />
+                                                        <Setter Property="FontSize" Value="{StaticResource FontSizexSmall}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsHidden}" Value="True">
+                                                        <Setter Property="Text" Value="+" />
+                                                        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
