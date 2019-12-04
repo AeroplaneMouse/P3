@@ -337,9 +337,7 @@ namespace AMS.Database.Repositories
                     _query.OrderBy("a.id", false);
                     _query.GroupBy = "a.id";
                     _query.Limit = 1000;
-                    
-                    Console.WriteLine(_query.PrepareSelect());
-                    
+                   
                     using (var cmd = new MySqlCommand(_query.PrepareSelect(), con))
                     {
                         using (var reader = cmd.ExecuteReader())

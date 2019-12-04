@@ -27,7 +27,7 @@ namespace AMS.ViewModels
         public AssetDetailsViewModel(IAssetController assetController)
         {
             _assetController = assetController;
-            UpdateTagRelations();
+            UpdateOnFocus();
         }
 
         public override void UpdateOnFocus()
@@ -49,6 +49,9 @@ namespace AMS.ViewModels
                 {
                     if (TagList.SingleOrDefault(p => p.TagId == id) is Tag tag)
                         field.TagList.Add(tag);
+                    
+                    if (TagList.SingleOrDefault(p => p.ParentId == id) is Tag parentTag)
+                        field.TagList.Add(parentTag);
                 }
             }
         }
