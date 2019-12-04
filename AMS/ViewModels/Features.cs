@@ -63,6 +63,11 @@ namespace AMS.ViewModels
             return Main.CurrentSession;
         }
 
+        public static Department GetCurrentDepartment()
+        {
+            return Main.CurrentDepartment;
+        }
+
         // Navigation
         public static class Navigate
         {
@@ -91,8 +96,6 @@ namespace AMS.ViewModels
                     Main.History.Push(_currentPage);
                     _currentPage = page;
 
-                    // Run the update method
-                    (page.DataContext as IPageUpdateOnFocus).UpdateOnFocus();
 
                     return true;
                 }

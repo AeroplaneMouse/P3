@@ -18,6 +18,8 @@ namespace AMS.ViewModels
 
         public List<Tag> Tags { get; set; }
         public Tag SelectedItem { get; set; }
+
+        public string CurrentDepartment => "(" + Features.GetCurrentDepartment().Name + ")";
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand AddNewCommand { get; set; }
@@ -51,6 +53,7 @@ namespace AMS.ViewModels
 
         public override void UpdateOnFocus()
         {
+            OnPropertyChanged(nameof(CurrentDepartment));
             Search();
             OnPropertyChanged(nameof(Tags));
         }
@@ -58,13 +61,15 @@ namespace AMS.ViewModels
         private void RemoveTag()
         {
             string message = String.Empty;
-            _tagController.ControlledTag = SelectedItem;
 
+            // Get complete tag from database
+            _tagController.ControlledTag = _tagController.GetTagById(SelectedItem.ID);
+            
             // Check if parent
-            if (_tagController.ParentID == 0 && _tagController.ControlledTag.ChildrenCount > 0)
+            if (_tagController.ParentID == 0 && _tagController.ControlledTag.NumOfChildren > 0)
             {
                 message = "You are about to remove a parent tag!\n"
-                        + $"There are { _tagController.ControlledTag.ChildrenCount } children attached to this parent.";
+                        + $"There are { _tagController.ControlledTag.NumOfChildren } children attached to this parent.";
 
                 List<string> buttons = new List<string>();
                 buttons.Add("Remove parent and all children?");
@@ -79,11 +84,12 @@ namespace AMS.ViewModels
                         {
                             _tagController.RemoveChildren();
                             _tagController.Remove();
-                            extraMessage = $" aswell as { _tagController.ControlledTag.ChildrenCount } children";
+                            extraMessage = $" aswell as { _tagController.ControlledTag.NumOfChildren } children";
                         }
                         else
                             _tagController.Remove();
                         Features.AddNotification(new Notification($"{ _tagController.Name } has been removed{ extraMessage }.", background: Notification.APPROVE), displayTime: 4000);
+                        UpdateOnFocus();
                     }
                 }));
             }

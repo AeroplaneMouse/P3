@@ -29,7 +29,7 @@ namespace UnitTests
             Mock<IUserRepository> rep = new Mock<IUserRepository>();
 
             rep.Setup(p => p.GetAll(true)).Returns(new List<User>());
-            rep.Setup(p => p.GetByIdentity(It.IsAny<string>())).Returns(new User() { Name = "TestName", Domain = "TestDomain" });
+            rep.Setup(p => p.GetByIdentity(It.IsAny<string>())).Returns(new User() { Username = "TestName", Domain = "TestDomain" });
 
             _userImporter = new UserImporter(rep.Object);
         }

@@ -19,8 +19,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Welcome! -->
+        
         <StackPanel Grid.Row="0" Margin="0 0 0 10">
+            
+            <!-- Welcome! -->
             <TextBlock VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Style="{StaticResource TitleStyle}"
@@ -29,95 +31,103 @@
                        Text="Welcome to your Asset Management System"/>
 
             <Rectangle Style="{StaticResource HorizontalSeparator}"/>
-        </StackPanel>
 
-        <!-- Content -->
-        <Border HorizontalAlignment="Center" Grid.Row="1">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="250"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <!-- Statistics -->
+            <Border Grid.Column="0" Margin="10 10 5 10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- Statistics -->
-                <Border Grid.Column="0" Margin="10 10 5 10" BorderBrush="Gray" BorderThickness="1" CornerRadius="5">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
+                    <!--Users-->
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
 
-                        <!--Users-->
-                        <StackPanel Grid.Row="0"
-                                VerticalAlignment="Center" HorizontalAlignment="Center">
-
-                            <TextBlock Text="Users"
+                        <TextBlock Text="Users"
                                    HorizontalAlignment="Center"
                                    Style="{StaticResource HeaderStyle}"
                                    FontWeight="DemiBold"/>
 
-                            <TextBlock HorizontalAlignment="Center"
+                        <TextBlock HorizontalAlignment="Center"
                                    Text="{Binding NumberOfUsers}"
                                    Style="{StaticResource TitleStyle}"/>
 
-                        </StackPanel>
+                    </StackPanel>
 
-                        <!--Assets-->
-                        <StackPanel Grid.Row="1"
-                                VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <!--Assets-->
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
 
-                            <TextBlock HorizontalAlignment="Center"
+                        <TextBlock HorizontalAlignment="Center"
                                    Text="Assets"
                                    Style="{StaticResource HeaderStyle}"
                                    FontWeight="DemiBold"/>
 
-                            <TextBlock HorizontalAlignment="Center"
+                        <TextBlock HorizontalAlignment="Center"
                                    Text="{Binding NumberOfAssets}"
                                    Style="{StaticResource TitleStyle}"/>
 
-                        </StackPanel>
+                    </StackPanel>
 
-                        <!--Tags-->
-                        <StackPanel Grid.Row="2"
-                                VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <!--Tags-->
+                    <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Center">
 
-                            <TextBlock HorizontalAlignment="Center"
+                        <TextBlock HorizontalAlignment="Center"
                                    Text="Tags"
                                    Style="{StaticResource HeaderStyle}"
                                    FontWeight="DemiBold"/>
 
-                            <TextBlock HorizontalAlignment="Center"
+                        <TextBlock HorizontalAlignment="Center"
                                    Text="{Binding NumberOfTags}"
                                    Style="{StaticResource TitleStyle}"/>
 
-                        </StackPanel>
+                    </StackPanel>
 
-                        <!--Departments-->
-                        <StackPanel Grid.Row="3"
-                                VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <!--Departments-->
+                    <StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center">
 
-                            <TextBlock HorizontalAlignment="Center"
+                        <TextBlock HorizontalAlignment="Center"
                                    Text="Departments"
                                    Style="{StaticResource HeaderStyle}"
                                    FontWeight="DemiBold"/>
 
-                            <TextBlock HorizontalAlignment="Center"
+                        <TextBlock HorizontalAlignment="Center"
                                    Text="{Binding NumberOfDepartments}"
                                    Style="{StaticResource TitleStyle}"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
+                    </StackPanel>
 
-                <!-- Comments -->
+                </Grid>
+            </Border>
+        </StackPanel>
+
+        <!-- Content -->
+        <Border HorizontalAlignment="Center" Grid.Row="1">
+            <!-- Comments -->
+            <Grid Margin="10">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <TextBlock Text="Recent comments" 
+                               Style="{StaticResource TitleStyle}" Margin="0 0 8 0"
+                               VerticalAlignment="Center"/>
+
+                    <TextBlock Text="{Binding CurrentDepartment}"
+                               FontSize="{StaticResource FontSizeRegular}"
+                               VerticalAlignment="Center"
+                               Foreground="{StaticResource GrayForLessImportantElementsBrush}"/>
+                </StackPanel>
+                
+
                 <ListBox ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged}"
-                     SelectedItem="{Binding SelectedComment}"
-                     Grid.Column="1"
-                     x:Name="CommentList"
-                     BorderThickness="0"
-                     BorderBrush="Gray"
-                     Margin="5 10 10 10">
+                         SelectedItem="{Binding SelectedComment}"
+                         x:Name="CommentList"
+                         BorderThickness="0"
+                         Grid.Row="1">
 
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="MouseDoubleClick">
@@ -145,7 +155,7 @@
                                                 Padding="10" 
                                                 Width="600"
                                                 CornerRadius="5">
-                                            
+
                                             <Grid Grid.Row="0">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="2*" />
@@ -167,7 +177,7 @@
                                                                FontWeight="Normal"
                                                                TextWrapping="Wrap"
                                                                Name="AssetName"/>
-                                                    
+
                                                     <TextBlock Text="{Binding Path=CreatedAtString}"
                                                                Style="{StaticResource ParagraphStyle}"
                                                                Foreground="Gray"
@@ -203,7 +213,6 @@
                     </ListBox.ItemContainerStyle>
 
                 </ListBox>
-
             </Grid>
         </Border>
 

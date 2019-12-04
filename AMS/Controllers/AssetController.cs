@@ -4,11 +4,8 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using AMS.Controllers.Interfaces;
-using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
-using AMS.Logging;
-using AMS.Logging.Interfaces;
 using AMS.Models;
 using AMS.ViewModels;
 
@@ -79,6 +76,7 @@ namespace AMS.Controllers
                     AddField(tagField, currentTag);
                 }
             }
+            LoadFields();
 
             LoadFields();
             return CurrentlyAddedTags.Contains(tag);

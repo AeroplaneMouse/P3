@@ -32,13 +32,13 @@
                    HorizontalAlignment="Left"
                    Margin="10, 11, 0, 11"
                    Text="{Binding PageTitle}" />
-        
-        <StackPanel Orientation="Horizontal" 
-                    HorizontalAlignment="Right" 
-                    Margin="10" 
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="10"
                     Grid.Row="0">
 
-        <Button Style="{StaticResource RegularAcceptButton}"
+            <Button Style="{StaticResource RegularAcceptButton}"
                     Command="{Binding SaveTagCommand}"
                     Content="Save" />
 
