@@ -20,8 +20,6 @@ namespace AMS.Controllers
 
         private List<ITagable> _tags;
 
-        //public List<ITagable> CurrentlyAddedTags => _assetRepository.GetTags(ControlledAsset).ToList();
-
         public List<ITagable> CurrentlyAddedTags
         {
             get
@@ -221,6 +219,10 @@ namespace AMS.Controllers
             _tags = _assetRepository.GetTags(ControlledAsset).ToList();
         }
         
+        
+        /// <summary>
+        /// Runs on startup, loads fields, and updates fields that are dependent on values.
+        /// </summary>
         private void LoadFields()
         {
             foreach (var field in HiddenFieldList)
