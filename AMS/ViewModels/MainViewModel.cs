@@ -282,7 +282,10 @@ namespace AMS.ViewModels
         private void ClearSettings()
         {
             // Prompt user for confirmation
-            DisplayPrompt(new Views.Prompts.Confirm("Are you sure you want to clear the connection settings?", (sender, e) =>
+            const string message = "Are you ABSOLUTELY sure you want to ERASE the connection settings?\n\n"
+                                 + "!!! The system will be INACCESSABLE !!!\n\n"
+                                 + "And the connection settings whould have to be reconfigured!";
+            DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
             {
                 if (e.Result)
                 {
