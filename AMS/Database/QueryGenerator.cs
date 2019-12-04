@@ -43,7 +43,10 @@ namespace AMS.Database
         /// <param name="order">'true' for ascending or 'false' for descending</param>
         public void OrderBy(string column, bool ascending = true)
         {
-            _orderBys.Add(column, (ascending ? "ASC" : "DESC"));
+            if (!_orderBys.ContainsKey(column))
+            {
+                _orderBys.Add(column, (ascending ? "ASC" : "DESC"));
+            }
         }
 
         /// <summary>
@@ -94,20 +97,22 @@ namespace AMS.Database
             {
                 _query.Append(" WHERE " + string.Join(" AND ", from item in WhereStatements select item.Render()));
             }
-
-            if (_orderBys.Count > 0)
-            {
-                _query.Append($" ORDER BY {_orderBys.First().Key} {_orderBys.First().Value}");
-
-                foreach (KeyValuePair<string, string> keyValuePair in _orderBys.Skip(1))
-                {
-                    _query.Append($", {keyValuePair.Key} {keyValuePair.Value}");
-                }
-            }
-
+            
             if (!string.IsNullOrEmpty(GroupBy))
             {
                 _query.Append(" GROUP BY " + GroupBy);
+            }
+            
+            if (_orderBys.Count > 0)
+            {
+                _query.Append($" ORDER BY {_orderBys.First().Key} {_orderBys.First().Value}");
+                
+                /*
+                foreach (KeyValuePair<string, string> keyValuePair in _orderBys.Skip(0))
+                {
+                    _query.Append($", {keyValuePair.Key} {keyValuePair.Value}");
+                }
+                */
             }
 
             if (HavingStatements.Count > 0)
@@ -222,6 +227,7 @@ namespace AMS.Database
             Tables.Clear();
             Columns.Clear();
             Values.Clear();
+            _orderBys.Clear();
         }
     }
 }
