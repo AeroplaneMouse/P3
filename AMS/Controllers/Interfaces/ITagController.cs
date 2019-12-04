@@ -39,7 +39,7 @@ namespace AMS.Controllers.Interfaces
 
         string CreateRandomColor();
 
-        void ConnectTag(Tag tag);
+        void ConnectTag();
 
         Tag GetTagById(ulong id);
         #endregion
