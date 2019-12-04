@@ -65,10 +65,7 @@ namespace AMS.Controllers
             {
                 List<Department> departments = new List<Department>()
                 {
-                    new Department()
-                    {
-                        Name = "All departments"
-                    }
+                    new Department() { Name = "All departments" }
                 };
 
                 _departmentRepository.GetAll().ToList().ForEach(d => departments.Add(d));
@@ -77,8 +74,8 @@ namespace AMS.Controllers
             }
         }
 
-        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) : base(
-            tag ?? new Tag())
+        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) 
+            : base(tag)
         {
             ControlledTag = tag;
             _tagRepository = tagRep;

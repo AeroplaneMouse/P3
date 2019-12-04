@@ -42,16 +42,9 @@ namespace AMS.Controllers
         private IAssetRepository _assetRepository;
 
         public AssetController(Asset asset, IAssetRepository assetRepository) 
-            : base(asset ?? new Asset())
+            : base(asset)
         {
-            if (asset == null)
-            {
-                ControlledAsset = new Asset();
-            }
-            else
-            {
-                ControlledAsset = asset;
-            }
+            ControlledAsset = asset;
 
             _assetRepository = assetRepository;
 

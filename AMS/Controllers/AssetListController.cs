@@ -13,8 +13,6 @@ namespace AMS.Controllers
     {
         private IExporter _exporter;
         private IAssetRepository _assetRepository;
-        //TODO: Create tagging class
-        //public Tagging _tags;
 
         public List<Asset> AssetList { get; set; }
         public List<Tag> TagList { get; set; } 
@@ -33,16 +31,8 @@ namespace AMS.Controllers
         /// <param name="query"></param>
         public void Search(string query, List<ulong> tags=null, List<ulong> users=null, bool strict=false, bool searchInFields=false)
         {
-            //TODO: Filter list based on search query, also search by tags
             List<Asset> searchResult = _assetRepository.Search(query, tags, users, strict, searchInFields);
             AssetList = searchResult;
-            //TODO: Determine if search should be on assets or by tags
-            /* Remove comment when tagging class is implementet
-            SearchList = _rep.Search(SearchQueryText,
-                Tags.AppliedTags.OfType<Tag>().Select(t => t.ID).ToList(),
-                Tags.AppliedTags.OfType<User>().Select(u => u.ID).ToList(),
-                IsStrict);
-                */
         }
 
         /// <summary>
@@ -66,7 +56,6 @@ namespace AMS.Controllers
         /// <param name="assets"></param>
         public void Export(List<Asset> assets)
         {
-            //TODO: Implement printHelper
             _exporter.Print(assets);
         }
 
