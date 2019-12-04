@@ -103,6 +103,11 @@ namespace AMS.Database
                 _query.Append(" GROUP BY " + GroupBy);
             }
             
+            if (HavingStatements.Count > 0)
+            {
+                _query.Append(" HAVING " + string.Join(" AND ", from item in HavingStatements select item.Render()));
+            }
+            
             if (_orderBys.Count > 0)
             {
                 _query.Append($" ORDER BY {_orderBys.First().Key} {_orderBys.First().Value}");
@@ -115,11 +120,6 @@ namespace AMS.Database
                 */
             }
 
-            if (HavingStatements.Count > 0)
-            {
-                _query.Append(" HAVING " + string.Join(" AND ", from item in HavingStatements select item.Render()));
-            }
-            
             return _query.ToString();
         }
 
