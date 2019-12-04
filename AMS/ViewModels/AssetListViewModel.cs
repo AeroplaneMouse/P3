@@ -438,10 +438,11 @@ namespace AMS.ViewModels
                     // Check if the user approved
                     if (e.Result)
                     {
-                        // Move selected items to new list
-                        // Hvorfor flyttes de til en ny liste?
+                        // Move selected items to new list as it is not possible to itterate
+                        // over the same list which items is removed from
                         List<Asset> items = new List<Asset>();
                         SelectedItems.ForEach(a => items.Add(a));
+
                         // Remove each asset
                         foreach (Asset asset in items)
                             _listController.Remove(asset);

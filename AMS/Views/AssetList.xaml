@@ -21,7 +21,6 @@
                     <ColumnDefinition Width="Auto"/> <!-- Edit -->
                     <ColumnDefinition Width="Auto"/> <!-- Trash -->
                 </Grid.ColumnDefinitions>
-                
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -159,14 +158,14 @@
 
                 <!-- Function buttons -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{StaticResource RegularCancelButton}" 
+                    <Button Style="{StaticResource RegularRemoveButton}" 
                             Command="{Binding RemoveBySelectionCommand}" 
                             Content="Remove" 
                             Visibility="{Binding MultipleSelected}"/>
 
                     <Button Style="{StaticResource RegularButton}" 
                             Command="{Binding EditBySelectionCommand}" 
-                            Margin="10 0 0 0 " 
+                            Margin="10 0 0 0" 
                             Content="Edit"
                             Visibility="{Binding SingleSelected}"/>
 
