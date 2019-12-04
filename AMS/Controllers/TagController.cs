@@ -186,7 +186,7 @@ namespace AMS.Controllers
         /// Connects a parentTag, and removes the relation to the old parent tag.
         /// </summary>
         /// <param name="newTag"></param>
-        public void ConnectTag(Tag newTag)
+        public void ConnectTag()
         {
             Tag currentTag = _tagRepository.GetById(ControlledTag.ParentId);
             currentTag.DeSerializeFields();
