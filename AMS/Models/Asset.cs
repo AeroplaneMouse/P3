@@ -112,11 +112,11 @@ namespace AMS.Models
             if (ID != other.ID)
                 return false;
 
-            for(int i = this.FieldList.Count - 1; i >= 0; i--)
-            {
-                if(!this.FieldList[i].Equals(other.FieldList[i]))
-                    return false;
-            }
+            //for(int i = this.FieldList.Count - 1; i >= 0; i--)
+            //{
+            //    if(!this.FieldList[i].Equals(other.FieldList[i]))
+            //        return false;
+            //}
 
             return true;
         }
