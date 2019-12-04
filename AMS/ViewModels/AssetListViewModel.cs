@@ -146,7 +146,6 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(IsStrict));
             OnPropertyChanged(nameof(SearchQuery));
             OnPropertyChanged(nameof(AppliedTags));
-            RefreshList();
         }
 
         /// <summary>

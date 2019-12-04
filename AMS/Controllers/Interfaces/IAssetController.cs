@@ -23,5 +23,7 @@ namespace AMS.Controllers.Interfaces
         bool Update();
 
         bool Remove();
+
+        void RevertChanges();
     }
 }
