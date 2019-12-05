@@ -126,6 +126,11 @@ namespace AMS.Controllers
             _tagRepository.Insert(ControlledTag, out TagID);
         }
 
+        public Tag GetTagById(ulong id)
+        {
+            return _tagRepository.GetById(id);
+        }
+
         /// <summary>
         /// Updates the tag.
         /// </summary>
@@ -181,7 +186,7 @@ namespace AMS.Controllers
         /// Connects a parentTag, and removes the relation to the old parent tag.
         /// </summary>
         /// <param name="newTag"></param>
-        public void ConnectTag(Tag newTag)
+        public void ConnectTag()
         {
             Tag currentTag = _tagRepository.GetById(ControlledTag.ParentId);
             currentTag.DeSerializeFields();

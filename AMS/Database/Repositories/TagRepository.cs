@@ -228,7 +228,7 @@ namespace AMS.Database.Repositories
                 // If we are updating a parent, make sure that to
                 // update the children tags department_id if needed
                 if (entity.ParentID == 0 
-                    && entity.ChildrenCount > 0 
+                    && entity.NumOfChildren > 0 
                     && entity.Changes.ContainsKey("DepartmentID")){
                     UpdateChildrenDepartmentId(entity);
                 }

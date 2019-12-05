@@ -11,6 +11,7 @@ using System.Globalization;
 using AMS.Controllers;
 using AMS.Database.Repositories;
 using AMS.Helpers;
+using AMS.Interfaces;
 using AMS.Views;
 using AMS.ViewModels.Base;
 using AMS.Views.Prompts;
@@ -44,7 +45,8 @@ namespace AMS.ViewModels
             set
             {
 
-                if (value == _selectedParentTagIndex) return;
+                if (value == _selectedParentTagIndex) 
+                    return;
 
                 int oldValue = _selectedParentTagIndex;
                 _selectedParentTagIndex = value;
@@ -65,7 +67,7 @@ namespace AMS.ViewModels
                 else
                     DepartmentSelectionEnabled = true;
 
-                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex]);
+                _controller.ConnectTag();
                 UpdateAll();
             }
         }
@@ -105,7 +107,7 @@ namespace AMS.ViewModels
                 DepartmentSelectionEnabled = _controller.ParentID == 0;
             }
 
-            if(_controller.ControlledTag.ChildrenCount > 0)
+            if(_controller.ControlledTag.NumOfChildren > 0)
             {
                 ParentSelectionEnabled = false;
             }
@@ -131,7 +133,7 @@ namespace AMS.ViewModels
                 : "Add tag";
 
             if (_controller.IsEditing && _selectedParentTagIndex != 0)
-                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex]);
+                _controller.ConnectTag();
 
             UpdateAll();
 
@@ -241,7 +243,7 @@ namespace AMS.ViewModels
             foreach (var field in HiddenFieldList)
             {
                 //TODO: Question
-                field.TagList = new List<Tag>(); // <=== How does this work?! 
+                field.TagList = new List<ITagable>(); 
                 foreach (var id in field.TagIDs)
                 {
                     if (field.TagIDs.Contains(id))
@@ -251,7 +253,7 @@ namespace AMS.ViewModels
 
             foreach (var field in NonHiddenFieldList)
             {
-                field.TagList = new List<Tag>(); // <=== How does this work?!
+                field.TagList = new List<ITagable>(); 
                 foreach (var id in field.TagIDs)
                 {
                     if (field.TagIDs.Contains(id))
@@ -314,10 +316,10 @@ namespace AMS.ViewModels
             string message = String.Empty;
 
             // Check if parent
-            if (_controller.ParentID == 0 && _controller.ControlledTag.ChildrenCount > 0)
+            if (_controller.ParentID == 0 && _controller.ControlledTag.NumOfChildren > 0)
             {
                 message = "You are about to remove a parent tag!\n"
-                        + $"There are { _controller.ControlledTag.ChildrenCount } children attached to this parent.";
+                        + $"There are { _controller.ControlledTag.NumOfChildren } children attached to this parent.";
               
                 List<string> buttons = new List<string>();
                 buttons.Add("Remove parent and all children?");
@@ -332,7 +334,7 @@ namespace AMS.ViewModels
                         {
                             _controller.RemoveChildren();
                             _controller.Remove();
-                            extraMessage = $" aswell as { _controller.ControlledTag.ChildrenCount } children";
+                            extraMessage = $" aswell as { _controller.ControlledTag.NumOfChildren } children";
                         }
                         else
                             _controller.Remove();

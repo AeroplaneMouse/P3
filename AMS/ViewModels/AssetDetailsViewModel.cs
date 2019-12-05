@@ -19,7 +19,7 @@ namespace AMS.ViewModels
         public string Description => _assetController.ControlledAsset.Description;
         public ObservableCollection<ITagable> TagList => new ObservableCollection<ITagable>(
             // Only show parent tag without children and children
-            _assetController.CurrentlyAddedTags.Where(t => t.ParentId != 0 || (t.ParentId == 0 && t.ChildrenCount == 0))
+            _assetController.CurrentlyAddedTags.Where(t => t.ParentId != 0 || (t.ParentId == 0 && t.NumOfChildren == 0))
         );
 
         public ObservableCollection<Field> FieldList =>
@@ -44,7 +44,7 @@ namespace AMS.ViewModels
         {
             foreach (var field in FieldList)
             {
-                field.TagList = new List<Tag>();
+                field.TagList = new List<ITagable>();
                 foreach (var id in field.TagIDs)
                 {
                     if (TagList.SingleOrDefault(p => p.TagId == id) is Tag tag)

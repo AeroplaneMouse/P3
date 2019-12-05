@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -268,7 +269,7 @@ namespace AMS.ViewModels
 
                 if (tag != null)
                 {
-                    if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
+                    if (_tagHelper.IsParentSet() || (tag.NumOfChildren == 0 && tag.TagId != 1))
                     {
                         _tagHelper.AddTag(tag);
                         _assetController.AttachTag(tag);
@@ -309,7 +310,7 @@ namespace AMS.ViewModels
             ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == TagSearchQuery.Trim(' '));
             if (tag != null)
             {
-                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
+                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.NumOfChildren > 0))
                 {
                     _tagHelper.SetParent((Tag) tag);
                     CurrentGroup = tag.TagLabel;
@@ -429,10 +430,10 @@ namespace AMS.ViewModels
 
         private void UpdateTagRelationsOnSingleField(Field field, ObservableCollection<ITagable> tagList)
         {
-            field.TagList = new List<Tag>();
+            field.TagList = new List<ITagable>();
             foreach (var id in field.TagIDs)
             {
-                foreach (Tag tag in tagList.Where(p => p.TagId == id || p.ParentId == id))
+                foreach (ITagable tag in tagList.Where(p => p.TagId == id || p.ParentId == id))
                 {
                     field.TagList.Add(tag);
                 }
@@ -478,9 +479,13 @@ namespace AMS.ViewModels
 
                 if (field.Type == Field.FieldType.NumberField)
                 {
+                    //Checks for ^(Not) the result, as and then returns true if it finds an element that does not match the rule.
+                    Regex regex = new Regex("[^0-9.+-/,]+");
                     if (!string.IsNullOrEmpty(field.Content))
                     {
-                        bool check = field.Content.All(char.IsDigit);
+                        //Checks whether the match is true
+                        bool check = !regex.IsMatch(field.Content);
+                        //Checks if the match returned false
                         if (!check)
                         {
                             Features.AddNotification(
@@ -489,11 +494,6 @@ namespace AMS.ViewModels
                             return false;
                         }
                     }
-                }
-
-                if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "today"))
-                {
-                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
                 }
             }
 
