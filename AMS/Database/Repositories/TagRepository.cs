@@ -188,7 +188,7 @@ namespace AMS.Database.Repositories
                     }
                     else
                     {
-                        ulong parentDepartmentID = GetById(entity.ParentID).DepartmentID;
+                        ulong parentDepartmentID = GetById(entity.ParentId).DepartmentID;
                         if(parentDepartmentID == 0)
                         {
                             command.Parameters.Add("@department_id", MySqlDbType.String);
@@ -214,7 +214,7 @@ namespace AMS.Database.Repositories
                     
                     // If we are updating a parent, make sure that to
                     // update the children tags department_id if needed
-                    if (entity.ParentID == 0 
+                    if (entity.ParentId == 0 
                         && entity.NumOfChildren > 0 
                         && entity.Changes.ContainsKey("DepartmentID")){
                         UpdateChildrenDepartmentId(entity, command);
