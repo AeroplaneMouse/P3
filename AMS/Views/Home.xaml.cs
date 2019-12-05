@@ -1,4 +1,5 @@
-﻿using AMS.Controllers.Interfaces;
+﻿using System;
+using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using System.Windows.Controls;
 

@@ -240,7 +240,7 @@ namespace AMS.Database.Repositories
                                    "INNER JOIN users AS u ON c.user_id = u.id "+
                                    "WHERE a.deleted_at IS NULL "+ 
                                    (!includeDeleted ? "AND c.deleted_at IS NULL " : "")+
-                                   "ORDER BY created_at DESC LIMIT "+limit;
+                                   "ORDER BY c.id DESC LIMIT "+limit;
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
