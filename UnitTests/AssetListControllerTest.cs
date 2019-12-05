@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
@@ -89,11 +91,11 @@ namespace UnitTests
         public void Remove_RemoveAssetNotInListDoesNotCallRepository_ReturnsTrue()
         {
             //Arrange
-            Asset asset1 = new Asset {Name = "asset1"};
-            Asset asset2 = new Asset {Name = "asset2"};
+            Asset asset1 = CreateTestAssetWithId(1, "asset1");
+            Asset asset2 = CreateTestAssetWithId(2, "asset2");
             _assetListController.AssetList.Add(asset1);
             _assetListController.AssetList.Add(asset2);
-            Asset asset3 = new Asset {Name = "asset3"};
+            Asset asset3 = CreateTestAssetWithId(3, "asset3");
 
             //Act
             _assetListController.Remove(asset3);
@@ -154,8 +156,12 @@ namespace UnitTests
             // Verify that the method IAssetRepository.Delete(Asset) is called once
             exporterMock.Verify((p => p.Print(It.IsAny<IEnumerable<object>>())), Times.Once);
         }
-        
 
-        
+        // Create asset with id.
+        private Asset CreateTestAssetWithId(ulong rowId, string rowName)
+        {
+            return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new object[] { rowId, rowName, null, null, null, null, null, null }, null, null);
+        }
     }
 }

@@ -11,6 +11,7 @@ using AMS.Database.Repositories;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using Moq;
+using System.Reflection;
 
 namespace UnitTests
 {
@@ -50,7 +51,7 @@ namespace UnitTests
                 Field.FieldType.Checkbox, false, true);
 
             //Asset controller setup
-            _assetController = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
+            _assetController = new AssetController(CreateTestAssetWithId((ulong)1), _assetRepMock.Object, _sessionMock.Object);
             _assetController.ControlledAsset.Name = "AssetTests_Asset";
             _assetController.ControlledAsset.Description = "Desription";
             _assetController.ControlledAsset.DepartmentID = 1;
@@ -68,7 +69,7 @@ namespace UnitTests
         public void Equals_ReceivesAnEqualAsset_ReturnsTrue()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
+            AssetController otherAsset = new AssetController(CreateTestAssetWithId(1), _assetRepMock.Object, _sessionMock.Object);
             otherAsset.ControlledAsset.Name = "AssetTests_Asset";
             otherAsset.ControlledAsset.Description = "Desription";
             otherAsset.ControlledAsset.DepartmentID = 1;
@@ -88,7 +89,7 @@ namespace UnitTests
         public void Equals_ReceivesDifferentAsset_ReturnsFalse()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
+            AssetController otherAsset = new AssetController(CreateTestAssetWithId(2), _assetRepMock.Object, _sessionMock.Object);
             otherAsset.ControlledAsset.Name = "AssetTests_Asset";
             otherAsset.ControlledAsset.Description = "Desription";
             otherAsset.ControlledAsset.DepartmentID = 4;
@@ -368,6 +369,13 @@ namespace UnitTests
 
             //Assert
             Assert.IsTrue(localField.TagIDs.Count == count + 1);
+        }
+
+        // Create asset with id.
+        private Asset CreateTestAssetWithId(ulong rowId)
+        {
+            return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new object[] { rowId, null, null, null, null, null, null, null }, null, null);
         }
     }
 }

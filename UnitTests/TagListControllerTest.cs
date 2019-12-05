@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
@@ -31,9 +33,12 @@ namespace UnitTests
 
             _tagListController = new TagListController(_tagRepMock.Object, new PrintHelper());
 
-            _tagOne = new Tag {Name = "TagOne", TagColor = "#f2f2f2f2"};
-            _tagTwo = new Tag {Name = "TagTwo", TagColor = "#f2f2f2f2"};
-            _tagThree = new Tag {Name = "TagThree", TagColor = "#f2f2f2f2"};
+            _tagOne = CreateTestTagWithId(1, "TagOne");
+            _tagTwo = CreateTestTagWithId(2, "TagTwo");
+            _tagThree = CreateTestTagWithId(3, "TagThree");
+            _tagOne.TagColor = "#f2f2f2f2";
+            _tagTwo.TagColor = "#f2f2f2f2";
+            _tagThree.TagColor = "#f2f2f2f2";
 
         }
         [TestMethod]
@@ -48,9 +53,16 @@ namespace UnitTests
             //Act
             _tagListController.Remove(_tagThree);
 
-
             //Assert
             Assert.IsFalse(_tagListController.TagsList.Contains(_tagThree));
+        }
+
+
+        private Tag CreateTestTagWithId(ulong rowId, string rowLabel)
+        {
+            return (Tag)Activator.CreateInstance(typeof(Tag),
+                BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new object[] { rowId, rowLabel, null, null, null, null, null, null, null }, null, null);
         }
     }
 }
