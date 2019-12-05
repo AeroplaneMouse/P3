@@ -175,7 +175,7 @@
                                                  BorderBrush="Transparent"
                                                  Background="Transparent"
                                                  Padding="0"
-                                                 MinWidth="200"
+                                                 MinWidth="190"
                                                  Height="Auto" 
                                                  Style="{StaticResource ParagraphTextBox}"
                                                  Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>

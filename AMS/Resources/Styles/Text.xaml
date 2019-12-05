@@ -13,9 +13,9 @@
                             SnapsToDevicePixels="False">
 
                             <ScrollViewer x:Name="PART_ContentHost" 
-                                      Focusable="False" 
-                                      HorizontalScrollBarVisibility="Hidden" 
-                                      VerticalScrollBarVisibility="Hidden"/>
+                                          Focusable="False" 
+                                          HorizontalScrollBarVisibility="Hidden" 
+                                          VerticalScrollBarVisibility="Hidden"/>
                         </Border>
 
                         <TextBlock IsHitTestVisible="False" 
