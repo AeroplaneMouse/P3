@@ -75,12 +75,12 @@ namespace UnitTests
         public void Remove_Returns_RepositoryDeleteUsed()
         {
             //Arrange
-
+            
             //Act
             _tagController.Remove();
 
             //Assert
-            _tagRepMock.Verify(p => p.Delete(It.IsAny<Tag>()), Times.Once());
+            _tagRepMock.Verify(p => p.Delete(It.IsAny<Tag>(), It.IsAny<bool>()), Times.Once());
         }
 
         [TestMethod]

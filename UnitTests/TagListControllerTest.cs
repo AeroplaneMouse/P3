@@ -28,23 +28,19 @@ namespace UnitTests
             _tagRepMock.Setup(p => p.Delete(It.IsAny<Tag>())).Returns(true);
             // This creates a new instance of the class for each test
 
-            _tagListController = new TagListController(_tagRepMock.Object, new PrintHelper());
-
-            _tagOne = CreateTestTagWithId(1, "TagOne");
-            _tagTwo = CreateTestTagWithId(2, "TagTwo");
-            _tagThree = CreateTestTagWithId(3, "TagThree");
-            _tagOne.TagColor = "#f2f2f2f2";
-            _tagTwo.TagColor = "#f2f2f2f2";
-            _tagThree.TagColor = "#f2f2f2f2";
+            _tagListController = new TagListController(_tagRepMock.Object);
 
         }
         [TestMethod]
         public void TagListRemove_ElementInList_ReturnContains()
         {
             //Arrange
-            Tag tagOne = new Tag {Name = "TagOne", TagColor = "#f2f2f2f2"};
-            Tag tagTwo = new Tag {Name = "TagTwo", TagColor = "#f2f2f2f2"};
-            Tag tagThree = new Tag {Name = "TagThree", TagColor = "#f2f2f2f2"};
+            Tag tagOne = CreateTestTagWithId(1, "TagOne");
+            Tag tagTwo = CreateTestTagWithId(2, "TagTwo");
+            Tag tagThree = CreateTestTagWithId(3, "TagThree");
+            tagOne.TagColor = "#f2f2f2f2";
+            tagTwo.TagColor = "#f2f2f2f2";
+            tagThree.TagColor = "#f2f2f2f2";
             _tagListController.TagsList = new List<Tag> {tagOne, tagTwo, tagThree};
 
             //Act
