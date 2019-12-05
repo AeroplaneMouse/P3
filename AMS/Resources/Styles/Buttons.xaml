@@ -165,6 +165,7 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
+                <Setter Property="Foreground" Value="Black"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -194,13 +195,11 @@
     <!-- Regular remove button -->
     <Style TargetType="Button" x:Key="RegularRemoveButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource CancelRedBrush}"/>
     </Style>
 
     <!-- Regular accept button -->
     <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource AcceptGreenBrush}"/>
     </Style>
 
     
