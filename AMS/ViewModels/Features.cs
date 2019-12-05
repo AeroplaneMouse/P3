@@ -235,7 +235,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page TagList()
             {
-                return new TagList(new TagListController(_tagRepository, _printHelper), new TagController(new Tag(), _tagRepository, _departmentRepository));
+                return new TagList(new TagListController(_tagRepository), new TagController(new Tag(), _tagRepository, _departmentRepository));
             }
 
             /// <summary>

@@ -66,5 +66,50 @@ namespace UnitTests
             //Assert
             Assert.AreEqual(expectedTags, actualTags);
         }
+        
+        [TestMethod]
+        public void AddTag_GivenValidTag_TagAddedToAppliedTags()
+        {
+            //Arrange
+            ITagable tag = new Tag {Name = "TestTag"};
+            
+            //Act
+            _tagHelper.AddTag(tag);
+            var result = _tagHelper.GetAppliedTags();
+            
+            //Assert
+            Assert.IsTrue(result.Contains(tag));
+        }
+        
+        [TestMethod]
+        public void RemoveTag_SingleTagInList_ListLengthIsZero()
+        {
+            //Arrange
+            ITagable tag = new Tag {Name = "TestTag"};
+            _tagHelper.SetAppliedTags(new ObservableCollection<ITagable>{tag});
+            int expectedLength = 0;
+            
+            //Act
+            _tagHelper.RemoveTag(tag);
+            int actualLength = _tagHelper.GetAppliedTags().Count;
+            
+            //Assert
+            Assert.AreEqual(expectedLength, actualLength);
+        }
+        
+        [TestMethod]
+        public void SetParent_GivenValidTag_SetsValueCorrectly()
+        {
+            //Arrange
+            Tag tag = new Tag {Name = "TestTag"};
+            
+            //Act
+            _tagHelper.SetParent(tag);
+            Tag result = _tagHelper.GetParent();
+            
+            //Assert
+            Assert.AreEqual(tag, result);
+        }
+        
     }
 }

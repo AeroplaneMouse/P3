@@ -16,8 +16,6 @@ namespace AMS.Controllers.Interfaces
 
         void Remove(Tag tag);
 
-        void Export(List<Tag> tags);
-
         Tag getTag(ulong tagID);
 
         List<Tag> GetParentTags();
