@@ -476,9 +476,6 @@ namespace AMS.Database.Repositories
         /// <param name="asset"></param>
         private void ClearTags(Asset asset, MySqlCommand command)
         {
-            //string query = "DELETE FROM asset_tags WHERE asset_id = @id; " +
-                           //"DELETE FROM asset_users WHERE asset_id = @id;";
-
             command.CommandText = "DELETE FROM asset_tags WHERE asset_id = @id";
             command.Parameters.Add("@id", MySqlDbType.UInt64);
             command.Parameters["@id"].Value = asset.ID;

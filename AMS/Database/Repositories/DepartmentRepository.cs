@@ -242,8 +242,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                Department dep = DataMapper(reader);
-                                departments.Add(dep);
+                                departments.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }

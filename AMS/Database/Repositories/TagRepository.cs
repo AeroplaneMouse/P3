@@ -142,95 +142,96 @@ namespace AMS.Database.Repositories
         public bool Update(Tag entity)
         {
             var con = new MySqlHandler().GetConnection();
-            //MySqlTransaction trans = con.BeginTransaction();
-            
             bool querySuccess = false;
-            
-            // Check if current tag is a child and changed parent
-            if (entity.ParentId > 0 && entity.Changes.ContainsKey("ParentID"))
-            {
-                // Is child and parent_id changed
-                Tag newParent = GetById((ulong) entity.Changes["ParentID"]);
-
-                if (newParent.DepartmentID != entity.DepartmentID)
-                {
-                    entity.DepartmentID = newParent.DepartmentID;
-                    ClearConnections(entity);
-                }
-            }
 
             // Opening connection
             if (MySqlHandler.Open(ref con) && entity.IsDirty())
             {
+                MySqlCommand command = con.CreateCommand();
+                MySqlTransaction transaction = con.BeginTransaction();
+                command.Transaction = transaction;
+                command.Connection = con;
+                
                 try
                 {
-                    const string query = "UPDATE tags SET label=@label, color=@color, options=@options, department_id=@department_id, parent_id=@parent_id, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
-
-                    using (var cmd = new MySqlCommand(query, con))
+                    // Check if current tag is a child and changed parent
+                    if (entity.ParentId > 0 && entity.Changes.ContainsKey("ParentID"))
                     {
-                        cmd.Parameters.Add("@label", MySqlDbType.String);
-                        cmd.Parameters["@label"].Value = entity;
+                        // Is child and parent_id changed
+                        Tag newParent = GetById((ulong) entity.Changes["ParentID"]);
 
-                        cmd.Parameters.Add("@color", MySqlDbType.String);
-                        cmd.Parameters["@color"].Value = entity.Color;
-
-                        if (entity.ParentID == 0)
+                        if (newParent != null && newParent.DepartmentID != entity.DepartmentID)
                         {
-                            if (entity.DepartmentID == 0)
-                            {
-                                cmd.Parameters.Add("@department_id", MySqlDbType.String);
-                                cmd.Parameters["@department_id"].Value = null;
-                            }
-                            else
-                            {
-                                cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
-                                cmd.Parameters["@department_id"].Value = entity.DepartmentID;
-                            }
+                            entity.DepartmentID = newParent.DepartmentID;
+                            ClearConnections(entity, command);
+                        }
+                    }
+                    
+                    command.CommandText = "UPDATE tags SET label=@label, color=@color, options=@options, department_id=@department_id, parent_id=@parent_id, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
+                    command.Parameters.Add("@label", MySqlDbType.String);
+                    command.Parameters["@label"].Value = entity;
+                    command.Parameters.Add("@color", MySqlDbType.String);
+                    command.Parameters["@color"].Value = entity.Color;
+
+                    if (entity.ParentID == 0)
+                    {
+                        if (entity.DepartmentID == 0)
+                        {
+                            command.Parameters.Add("@department_id", MySqlDbType.String);
+                            command.Parameters["@department_id"].Value = null;
                         }
                         else
                         {
-                            ulong parentDepartmentID = GetById(entity.ParentID).DepartmentID;
-                            if(parentDepartmentID == 0)
-                            {
-                                cmd.Parameters.Add("@department_id", MySqlDbType.String);
-                                cmd.Parameters["@department_id"].Value = null;
-                            }
-                            else
-                            {
-                                cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
-                                cmd.Parameters["@department_id"].Value = parentDepartmentID;
-                            }
+                            command.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                            command.Parameters["@department_id"].Value = entity.DepartmentID;
                         }
-
-                        cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                        cmd.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;
-
-                        cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@parent_id"].Value = entity.ParentID;
-
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = entity.ID;
-
-                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                    }
+                    else
+                    {
+                        ulong parentDepartmentID = GetById(entity.ParentID).DepartmentID;
+                        if(parentDepartmentID == 0)
+                        {
+                            command.Parameters.Add("@department_id", MySqlDbType.String);
+                            command.Parameters["@department_id"].Value = null;
+                        }
+                        else
+                        {
+                            command.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                            command.Parameters["@department_id"].Value = parentDepartmentID;
+                        }
                     }
 
+                    command.Parameters.Add("@options", MySqlDbType.JSON);
+                    command.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;
+
+                    command.Parameters.Add("@parent_id", MySqlDbType.UInt64);
+                    command.Parameters["@parent_id"].Value = entity.ParentID;
+
+                    command.Parameters.Add("@id", MySqlDbType.UInt64);
+                    command.Parameters["@id"].Value = entity.ID;
+
+                    querySuccess = command.ExecuteNonQuery() > 0;
+                    
+                    // If we are updating a parent, make sure that to
+                    // update the children tags department_id if needed
+                    if (entity.ParentID == 0 
+                        && entity.NumOfChildren > 0 
+                        && entity.Changes.ContainsKey("DepartmentID")){
+                        UpdateChildrenDepartmentId(entity, command);
+                    }
+                    
+                    transaction.Commit();
+                    
                     logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
+                    transaction.Rollback();
                     Console.WriteLine(e);
                 }
                 finally
                 {
                     con.Close();
-                }
-                
-                // If we are updating a parent, make sure that to
-                // update the children tags department_id if needed
-                if (entity.ParentID == 0 
-                    && entity.NumOfChildren > 0 
-                    && entity.Changes.ContainsKey("DepartmentID")){
-                    UpdateChildrenDepartmentId(entity);
                 }
             }
 
@@ -579,80 +580,38 @@ namespace AMS.Database.Repositories
         /// Updates the departmentId of the children of teh given tag
         /// </summary>
         /// <param name="tag">Parent tag of the children to update</param>
-        private void UpdateChildrenDepartmentId(Tag tag)
+        private void UpdateChildrenDepartmentId(Tag tag, MySqlCommand command)
         {
-            var con = new MySqlHandler().GetConnection();
-
-            // Opening connection
-            if (MySqlHandler.Open(ref con))
+            command.Parameters.Clear();
+            command.CommandText = "UPDATE tags SET department_id=@department_id WHERE parent_id=@parent_id";
+            
+            if (tag.DepartmentID == 0)
             {
-                // Sending sql query
-                try
-                {
-                    const string query = "UPDATE tags SET department_id=@department_id WHERE parent_id=@parent_id";
-
-                    using (var cmd = new MySqlCommand(query, con))
-                    {
-                        if (tag.DepartmentID == 0)
-                        {
-                            cmd.Parameters.Add("@department_id", MySqlDbType.String);
-                            cmd.Parameters["@department_id"].Value = null;
-                        }
-                        else
-                        {
-                            cmd.Parameters.Add("@department_id", MySqlDbType.UInt64);
-                            cmd.Parameters["@department_id"].Value = tag.DepartmentID;
-                        }
-                        
-                        cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@parent_id"].Value = tag.ID;
-                        
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    con.Close();
-                }
+                command.Parameters.Add("@department_id", MySqlDbType.String);
+                command.Parameters["@department_id"].Value = null;
             }
+            else
+            {
+                command.Parameters.Add("@department_id", MySqlDbType.UInt64);
+                command.Parameters["@department_id"].Value = tag.DepartmentID;
+            }
+            
+            command.Parameters.Add("@parent_id", MySqlDbType.UInt64);
+            command.Parameters["@parent_id"].Value = tag.ID;
+            command.ExecuteNonQuery();
         }
 
         /// <summary>
         /// Removes all connections to a tag from the database
         /// </summary>
         /// <param name="tag">The tag that that all connections to should be removed</param>
-        private void ClearConnections(Tag tag)
+        private void ClearConnections(Tag tag, MySqlCommand command)
         {
-            var con = new MySqlHandler().GetConnection();
-
-            // Opening connection
-            if (MySqlHandler.Open(ref con))
-            {
-                try
-                {
-                    const string query = "DELETE FROM asset_tags WHERE tag_id=@id";
-
-                    using (var cmd = new MySqlCommand(query, con))
-                    {
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = tag.ID;
-                        
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    con.Close();
-                }
-            }
+            command.CommandText = "DELETE FROM asset_tags WHERE tag_id=@id";
+            command.Parameters.Add("@id", MySqlDbType.UInt64);
+            command.Parameters["@id"].Value = tag.ID;
+            command.ExecuteNonQuery();
+            command.Parameters.Clear();
         }
 
         /// <summary>
