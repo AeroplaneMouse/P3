@@ -31,9 +31,9 @@ namespace AMS.Controllers.Interfaces
 
         void Save();
 
-        void Remove();
+        bool Remove(bool removeChildren = false);
 
-        void RemoveChildren();
+        //void RemoveChildren();
 
         void Update();
 

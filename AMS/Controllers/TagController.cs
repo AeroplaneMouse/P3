@@ -165,9 +165,9 @@ namespace AMS.Controllers
             _tagRepository.Update(ControlledTag);
         }
 
-        public void Remove() => _tagRepository.Delete(ControlledTag);
+        public bool Remove(bool removeChildren = false) => _tagRepository.Delete(ControlledTag, removeChildren);
 
-        public void RemoveChildren() => _tagRepository.DeleteChildren(ControlledTag.ID);
+        //public void RemoveChildren() => _tagRepository.DeleteChildren(ControlledTag.ID);
 
         public string CreateRandomColor()
         {

@@ -237,16 +237,25 @@ namespace AMS.Database.Repositories
             return querySuccess;
         }
 
+        public bool Delete(Tag entity)
+        {
+            return Delete(entity, false);
+        }
+
         /// <summary>
         /// Deletes a tag from the database that corresponds with the input tag
         /// </summary>
         /// <param name="entity"></param>
         /// <returns>Rather the deletion was successful or not</returns>
-        public bool Delete(Tag entity)
+        public bool Delete(Tag entity, bool removeChildren)
         {
             if (entity.ID == 1)
                 return false;
-            
+
+            // Removes a parent children
+            if (removeChildren && entity.ParentId == 0)
+                DeleteChildren(entity.ID);
+
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
@@ -255,7 +264,7 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "DELETE FROM tags WHERE id=@id";
+                    string query = "DELETE FROM tags WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {

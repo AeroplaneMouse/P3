@@ -12,6 +12,7 @@ namespace AMS.Database.Repositories.Interfaces
         IEnumerable<Tag> GetChildTags(ulong parentID);
         IEnumerable<Tag> GetTreeViewDataList(string keyword = "");
         ulong GetCount();
+        bool Delete(Tag entity, bool removeChildren);
         bool DeleteChildren(ulong parentID);
     }
 }

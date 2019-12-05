@@ -79,16 +79,20 @@ namespace AMS.ViewModels
                 {
                     if (e is ExpandedPromptEventArgs args)
                     {
-                        string extraMessage = String.Empty;
+                        string extraMessage = $"{ _tagController.Name } has been removed";
+                        bool actionSuccess;
                         if (args.ButtonNumber == 0)
                         {
-                            _tagController.RemoveChildren();
-                            _tagController.Remove();
+                            actionSuccess = _tagController.Remove(removeChildren: true);
                             extraMessage = $" aswell as { _tagController.ControlledTag.NumOfChildren } children";
                         }
                         else
-                            _tagController.Remove();
-                        Features.AddNotification(new Notification($"{ _tagController.Name } has been removed{ extraMessage }.", background: Notification.APPROVE), displayTime: 4000);
+                            actionSuccess = _tagController.Remove();
+
+                        if (!actionSuccess)
+                            extraMessage = "Error! Unable to remove tag(s).";
+
+                        Features.AddNotification(new Notification(extraMessage, background: actionSuccess ? Notification.APPROVE : Notification.ERROR), displayTime: 4000);
                         UpdateOnFocus();
                     }
                 }));
