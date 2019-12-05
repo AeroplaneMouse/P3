@@ -104,30 +104,7 @@ namespace AMS.Models
 
         public override bool Equals(object obj)
         {
-            if(obj is Asset == false)
-            {
-                return false;
-            }
-
-            Asset other = (Asset)obj;
-
-            if (this.FieldList.Count != other.FieldList.Count ||
-                this.Name != other.Name ||
-                this.Description != other.Description ||
-                this.DepartmentID != other.DepartmentID)
-            {
-                return false;
-            }
-
-            for(int i = this.FieldList.Count - 1; i >= 0; i--)
-            {
-                if(! this.FieldList[i].Equals(other.FieldList[i]))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return obj is Asset other && ID == other.ID;
         }
         
         public bool DeSerializeFields()

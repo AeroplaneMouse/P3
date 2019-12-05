@@ -227,7 +227,7 @@ namespace AMS.ViewModels
                     tag = (ITagable)input;
                 }
 
-                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
+                if (_tagHelper.IsParentSet() || (tag.NumOfChildren == 0 && tag.TagId != 1))
                 {
                     if(tag != null) {
                         _tagHelper.AddTag(tag);
@@ -273,7 +273,7 @@ namespace AMS.ViewModels
             ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == SearchQuery.Trim(' '));
             if (tag != null)
             {
-                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
+                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.NumOfChildren > 0))
                 {
                     _tagHelper.SetParent((Tag)tag);
                     CurrentGroup = "#" + tag.TagLabel;
@@ -295,14 +295,12 @@ namespace AMS.ViewModels
                     ClearInput();
                     _tabIndex = 0;
                 }
-
-                string message;
-                if (SearchQuery == String.Empty)
-                    message = $"It is not possible to attach a parent tag that have children to an asset.";
                 else
-                    message = $"{ SearchQuery } is not a tag. To use it, you must first create a tag called { SearchQuery }.";
+                {
+                    string message = $"{ SearchQuery } is not a tag. To use it, you must first create a tag called { SearchQuery }.";
+                    Features.AddNotification(new Notification(message, background: Notification.WARNING), displayTime: 3500);
+                }
 
-                Features.AddNotification(new Notification(message, background: Notification.WARNING), displayTime: 3500);
             }
 
             RefreshList();
