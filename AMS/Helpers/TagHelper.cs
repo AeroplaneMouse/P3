@@ -48,10 +48,10 @@ namespace AMS.Helpers
                 if (_parent.TagId == 1)
                 {
                     result.AddRange(_users.Where(u => u.Username.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
-                                                      && AppliedTags.Count(q => q.TagId == u.TagId) == 0 ));
+                                                      && !AppliedTags.Contains(u)));
                 }else{
                     result.AddRange(SuggestedTags.Where(t => t.TagLabel.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
-                                                             && AppliedTags.Count(q => q.TagId == t.TagId) == 0 ));
+                                                      && !AppliedTags.Contains(t)));
                 }
             }
             else
