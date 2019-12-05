@@ -33,39 +33,6 @@ namespace UnitTests
             };
         }
 
-        /* Tests deprecated method
-        [TestMethod]
-        public void AddNew_NewAssetAdded_ReturnsOne()
-        {
-            //Arrange
-            int expected = 1;
-            
-            //Act
-            _assetListController.AddNew();
-            int result = _assetListController.AssetList.Count;
-
-            //Assert
-            Assert.AreEqual(expected, result);
-        }
-        */
-
-        /* Tests deprecated method
-        [TestMethod]
-        public void AddNew_TwoNewAssetAdded_ReturnsTwo()
-        {
-            //Arrange
-            int expected = 2;
-
-            //Act
-            _assetListController.AddNew();
-            _assetListController.AddNew();
-            int result = _assetListController.AssetList.Count;
-
-            //Assert
-            Assert.AreEqual(expected, result);
-        }
-        */
-
         [TestMethod]
         public void Remove_RemoveAsset_ReturnsOne()
         {
@@ -187,6 +154,8 @@ namespace UnitTests
             // Verify that the method IAssetRepository.Delete(Asset) is called once
             exporterMock.Verify((p => p.Print(It.IsAny<IEnumerable<object>>())), Times.Once);
         }
+        
+
         
     }
 }

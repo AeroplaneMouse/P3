@@ -66,10 +66,10 @@ namespace AMS.ViewModels
             _tagController.ControlledTag = _tagController.GetTagById(SelectedItem.ID);
             
             // Check if parent
-            if (_tagController.ParentID == 0 && _tagController.ControlledTag.NumOfChildren > 0)
+            if (_tagController.ParentId == 0 && _tagController.ControlledTag.NumberOfChildren > 0)
             {
                 message = "You are about to remove a parent tag!\n"
-                        + $"There are { _tagController.ControlledTag.NumOfChildren } children attached to this parent.";
+                        + $"There are { _tagController.ControlledTag.NumberOfChildren } children attached to this parent.";
 
                 List<string> buttons = new List<string>();
                 buttons.Add("Remove parent and all children?");
@@ -84,7 +84,7 @@ namespace AMS.ViewModels
                         if (args.ButtonNumber == 0)
                         {
                             actionSuccess = _tagController.Remove(removeChildren: true);
-                            extraMessage = $" aswell as { _tagController.ControlledTag.NumOfChildren } children";
+                            extraMessage = $" aswell as { _tagController.ControlledTag.NumberOfChildren } children";
                         }
                         else
                             actionSuccess = _tagController.Remove();

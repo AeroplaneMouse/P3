@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.RightsManagement;
 
 namespace AMS.Controllers
 {
@@ -31,7 +32,7 @@ namespace AMS.Controllers
         public ulong Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
-        public ulong ParentID { get; set; }
+        public ulong ParentId { get; set; }
         public ulong DepartmentID { get; set; }
 
 
@@ -92,7 +93,7 @@ namespace AMS.Controllers
                 Id = ControlledTag.ID;
                 Name = ControlledTag.Name;
                 Color = ControlledTag.Color;
-                ParentID = ControlledTag.ParentId;
+                ParentId = ControlledTag.ParentId;
                 DepartmentID = ControlledTag.DepartmentID;
             }
             else
@@ -114,13 +115,17 @@ namespace AMS.Controllers
         public void Save()
         {
             //Updates the fields on the tag
-            ControlledTag.Name = Name;
-            ControlledTag.ParentId = ParentID;
-            ControlledTag.DepartmentID = (ParentID != 0 ? _tagRepository.GetById(ParentID).DepartmentID : DepartmentID);
-            ControlledTag.Color = Color;
+            if(Name != ControlledTag.Name)
+                ControlledTag.Name = Name;
+            if(ParentId != ControlledTag.ParentId)
+                ControlledTag.ParentId = ParentId;
 
-            List<Field> fieldList = NonHiddenFieldList.Where(p => p.TagIDs!.Contains(ParentID)).ToList();
-            fieldList.AddRange(HiddenFieldList.Where(p => p.TagIDs!.Contains(ParentID)).ToList());
+            ControlledTag.DepartmentID = (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
+            if(Color != ControlledTag.Color)
+                ControlledTag.Color = Color;
+
+            List<Field> fieldList = NonHiddenFieldList.Where(p => p.TagIDs!.Contains(ParentId)).ToList();
+            fieldList.AddRange(HiddenFieldList.Where(p => p.TagIDs!.Contains(ParentId)).ToList());
             ControlledTag.FieldList = fieldList;
             SerializeFields();
             _tagRepository.Insert(ControlledTag, out TagID);
@@ -142,14 +147,14 @@ namespace AMS.Controllers
                 ControlledTag.Name = Name;
             }
 
-            if (ControlledTag.ParentId != ParentID)
+            if (ControlledTag.ParentId != ParentId)
             {
-                ControlledTag.ParentId = ParentID;
+                ControlledTag.ParentId = ParentId;
 
                 if (ControlledTag.DepartmentID != DepartmentID)
                 {
                     ControlledTag.DepartmentID =
-                        (ParentID != 0 ? _tagRepository.GetById(ParentID).DepartmentID : DepartmentID);
+                        (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
                 }
             }
 
@@ -189,6 +194,7 @@ namespace AMS.Controllers
         public void ConnectTag()
         {
             Tag currentTag = _tagRepository.GetById(ControlledTag.ParentId);
+            //TODO Throws exception, når et tags parent id ændres
             currentTag.DeSerializeFields();
             ParentTagFields = currentTag.FieldList;
         }

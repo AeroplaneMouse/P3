@@ -33,7 +33,7 @@ namespace AMS.ViewModels
 
         public string Name { get => _controller.Name; set => _controller.Name = value; }
         public string Color { get => _controller.Color; set => _controller.Color = value; }
-        public ulong ParentID => _controller.ParentID;
+        public ulong ParentID => _controller.ParentId;
         public ulong DepartmentID { get => _controller.DepartmentID; set => _controller.DepartmentID = value; }
         public string PageTitle { get; set; }
         public List<Tag> ParentTagList { get => _controller.ParentTagList; }
@@ -57,7 +57,7 @@ namespace AMS.ViewModels
                     OnPropertyChanged(nameof(Color));
                 }
 
-                _controller.ParentID = ParentTagList[_selectedParentTagIndex].ID;
+                _controller.ParentId = ParentTagList[_selectedParentTagIndex].ID;
 
                 if (value > 0)
                 {
@@ -104,17 +104,17 @@ namespace AMS.ViewModels
             else
             {
                 // Enabling department selection for parent tags
-                DepartmentSelectionEnabled = _controller.ParentID == 0;
+                DepartmentSelectionEnabled = _controller.ParentId == 0;
             }
 
-            if(_controller.ControlledTag.NumOfChildren > 0)
+            if(_controller.ControlledTag.NumberOfChildren > 0)
             {
                 ParentSelectionEnabled = false;
             }
             
             //Set the selected parent to the parent of the chosen tag
             int i = ParentTagList.Count - 1;
-            while (i > 0 && ParentTagList[i].ID != _controller.ParentID)
+            while (i > 0 && ParentTagList[i].ID != _controller.ParentId)
                 i--;
 
             if (i > 0)
@@ -182,7 +182,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void SaveTag()
         {
-            _controller.ParentID = ParentTagList[SelectedParentTagIndex].ID;
+            _controller.ParentId = ParentTagList[SelectedParentTagIndex].ID;
             _controller.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
             if (VerifyTagAndFields())
             {
@@ -316,10 +316,10 @@ namespace AMS.ViewModels
             string message = String.Empty;
 
             // Check if parent
-            if (_controller.ParentID == 0 && _controller.ControlledTag.NumOfChildren > 0)
+            if (_controller.ParentId == 0 && _controller.ControlledTag.NumberOfChildren > 0)
             {
                 message = "You are about to remove a parent tag!\n"
-                        + $"There are { _controller.ControlledTag.NumOfChildren } children attached to this parent.";
+                        + $"There are { _controller.ControlledTag.NumberOfChildren } children attached to this parent.";
               
                 List<string> buttons = new List<string>();
                 buttons.Add("Remove parent and all children?");
@@ -334,7 +334,7 @@ namespace AMS.ViewModels
                         if (args.ButtonNumber == 0)
                         {
                             actionSuccess = _controller.Remove(removeChildren: true);
-                            extraMessage = $" aswell as { _controller.ControlledTag.NumOfChildren } children";
+                            extraMessage = $" aswell as { _controller.ControlledTag.NumberOfChildren } children";
                         }
                         else
                             actionSuccess = _controller.Remove();

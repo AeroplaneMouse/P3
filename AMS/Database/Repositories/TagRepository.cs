@@ -155,10 +155,10 @@ namespace AMS.Database.Repositories
                 try
                 {
                     // Check if current tag is a child and changed parent
-                    if (entity.ParentId > 0 && entity.Changes.ContainsKey("ParentID"))
+                    if (entity.ParentId > 0 && entity.Changes.ContainsKey("ParentId"))
                     {
                         // Is child and parent_id changed
-                        Tag newParent = GetById((ulong) entity.Changes["ParentID"]);
+                        Tag newParent = GetById((ulong) entity.Changes["ParentId"]);
 
                         if (newParent != null && newParent.DepartmentID != entity.DepartmentID)
                         {
@@ -215,7 +215,7 @@ namespace AMS.Database.Repositories
                     // If we are updating a parent, make sure that to
                     // update the children tags department_id if needed
                     if (entity.ParentId == 0 
-                        && entity.NumOfChildren > 0 
+                        && entity.NumberOfChildren > 0 
                         && entity.Changes.ContainsKey("DepartmentID")){
                         UpdateChildrenDepartmentId(entity, command);
                     }
@@ -660,7 +660,7 @@ namespace AMS.Database.Repositories
 
                                 Tag tag = (Tag) Activator.CreateInstance(typeof(Tag),
                                     BindingFlags.Instance | BindingFlags.NonPublic, null,
-                                    new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowContainsChildren, null, null, "[]" }, null,
+                                    new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowContainsChildren, "[]", null, null }, null,
                                     null);
 
                                 if (tag.ParentId > 0 && tags_placeholder.ContainsKey(tag.ParentId))
@@ -705,14 +705,14 @@ namespace AMS.Database.Repositories
             var ordinal = reader.GetOrdinal("department_id");
             ulong rowDepartmentId = (reader.IsDBNull(ordinal) ? 0 : reader.GetUInt64("department_id"));
             string rowColor = reader.GetString("color");
-            int rowNumOfChildren = reader.GetInt32("countChildren");
+            int rowNumberOfChildren = reader.GetInt32("countChildren");
+            string rowOptions = reader.GetString("options");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
-            string rowOptions = reader.GetString("options");
 
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowNumOfChildren, rowCreatedAt, rowUpdatedAt, rowOptions }, null,
+                new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowNumberOfChildren, rowOptions, rowCreatedAt, rowUpdatedAt }, null,
                 null);
         }
     }
