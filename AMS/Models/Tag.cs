@@ -127,7 +127,9 @@ namespace AMS.Models
         public List<ITagable> Children { get; set; } = new List<ITagable>();
         public string TagColor { 
             get => Color;
-            set => Color = value; }
+            set => Color = value; 
+        }
+        
         public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
         
         public override bool Equals(object obj)
