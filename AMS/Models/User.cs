@@ -19,6 +19,8 @@ namespace AMS.Models
         public bool IsEnabled { get; set; }
         public string Domain { get; set; }
 
+        private string _color;
+
         private List<Department> _departmentList { get; set; }
         private IDepartmentRepository _departmentRep { get; set; }
         private ITagRepository _tagRepository { get; set; }
@@ -63,9 +65,19 @@ namespace AMS.Models
         public string TagColor
         {
             // TODO: Ingen new repositories!
-            get => (_tagRepository ?? new TagRepository()).GetById(1).TagColor;
-            set => TagColor = value;
+            get
+            {
+                if (_color != null)
+                {
+                    return _color;
+                }
+
+                _color = new TagRepository().GetById(1).TagColor;
+                return _color;
+            }
+            set => _color = value;
         }
+
         public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
 
         #endregion
