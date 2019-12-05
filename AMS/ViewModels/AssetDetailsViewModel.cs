@@ -47,11 +47,16 @@ namespace AMS.ViewModels
                 field.TagList = new List<ITagable>();
                 foreach (var id in field.TagIDs)
                 {
-                    if (TagList.SingleOrDefault(p => p.TagId == id) is Tag tag)
-                        field.TagList.Add(tag);
-                    
-                    if (TagList.SingleOrDefault(p => p.ParentId == id) is Tag parentTag)
-                        field.TagList.Add(parentTag);
+                    foreach(ITagable tag in TagList)
+                        if (tag.ParentId == id || tag.TagId == id)
+                            field.TagList.Add(tag);
+
+                    // #CrappyCode
+                    //if (TagList.FirstOrDefault(p => p.TagId == id) is Tag tag)
+                    //    field.TagList.Add(tag);
+
+                    //if (TagList.forea(p => p.ParentId == id) is Tag parentTag)
+                    //    field.TagList.Add(parentTag);
                 }
             }
         }

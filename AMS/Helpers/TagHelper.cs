@@ -111,9 +111,9 @@ namespace AMS.Helpers
             {
                 var item = (Tag) tag;
 
-                if (item.ParentID > 0)
+                if (item.ParentId > 0)
                 {
-                    return _tags.Single(t => t.ID == item.ParentID);
+                    return _tags.Single(t => t.ID == item.ParentId);
                 }
             }
             
@@ -191,7 +191,7 @@ namespace AMS.Helpers
         public void SetParent(Tag tag=null)
         {
             SuggestedTags.Clear();
-            SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentID == tag.ID).ToList() : _tags.Where(a => a.ParentID == 0).ToList());
+            SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentId == tag.ID).ToList() : _tags.Where(a => a.ParentId == 0).ToList());
             _parent = tag;
         }
 

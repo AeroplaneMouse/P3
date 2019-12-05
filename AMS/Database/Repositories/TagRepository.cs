@@ -84,7 +84,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
                         cmd.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;
 
-                        if (entity.ParentID == 0)
+                        if (entity.ParentId == 0)
                         {
                             if (entity.DepartmentID == 0)
                             {
@@ -99,7 +99,7 @@ namespace AMS.Database.Repositories
                         }
                         else
                         {
-                            ulong parentDepartmentID = GetById(entity.ParentID).DepartmentID;
+                            ulong parentDepartmentID = GetById(entity.ParentId).DepartmentID;
                             if (parentDepartmentID == 0)
                             {
                                 cmd.Parameters.Add("@department_id", MySqlDbType.String);
@@ -113,7 +113,7 @@ namespace AMS.Database.Repositories
                         }
 
                         cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@parent_id"].Value = entity.ParentID;
+                        cmd.Parameters["@parent_id"].Value = entity.ParentId;
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                         id = (ulong)cmd.LastInsertedId;
@@ -174,7 +174,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@color", MySqlDbType.String);
                         cmd.Parameters["@color"].Value = entity.Color;
 
-                        if (entity.ParentID == 0)
+                        if (entity.ParentId == 0)
                         {
                             if (entity.DepartmentID == 0)
                             {
@@ -189,7 +189,7 @@ namespace AMS.Database.Repositories
                         }
                         else
                         {
-                            ulong parentDepartmentID = GetById(entity.ParentID).DepartmentID;
+                            ulong parentDepartmentID = GetById(entity.ParentId).DepartmentID;
                             if(parentDepartmentID == 0)
                             {
                                 cmd.Parameters.Add("@department_id", MySqlDbType.String);
@@ -206,7 +206,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;
 
                         cmd.Parameters.Add("@parent_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@parent_id"].Value = entity.ParentID;
+                        cmd.Parameters["@parent_id"].Value = entity.ParentId;
 
                         cmd.Parameters.Add("@id", MySqlDbType.UInt64);
                         cmd.Parameters["@id"].Value = entity.ID;
@@ -227,7 +227,7 @@ namespace AMS.Database.Repositories
                 
                 // If we are updating a parent, make sure that to
                 // update the children tags department_id if needed
-                if (entity.ParentID == 0 
+                if (entity.ParentId == 0 
                     && entity.NumOfChildren > 0 
                     && entity.Changes.ContainsKey("DepartmentID")){
                     UpdateChildrenDepartmentId(entity);
@@ -723,8 +723,8 @@ namespace AMS.Database.Repositories
                                     new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowContainsChildren, null, null, "[]" }, null,
                                     null);
 
-                                if (tag.ParentID > 0 && tags_placeholder.ContainsKey(tag.ParentID))
-                                    tags_placeholder[tag.ParentID].Children.Add(tag);
+                                if (tag.ParentId > 0 && tags_placeholder.ContainsKey(tag.ParentId))
+                                    tags_placeholder[tag.ParentId].Children.Add(tag);
                                 else
                                     tags_placeholder.Add(tag.ID, tag);
                             }

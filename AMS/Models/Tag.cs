@@ -11,7 +11,7 @@ namespace AMS.Models
     {
         private string _name;
         private string _color;
-        private ulong _parentID;
+        private ulong _parentId;
         private ulong _departmentID;
         private int _numOfChildren;
 
@@ -40,17 +40,17 @@ namespace AMS.Models
             }
         }
 
-        public ulong ParentID 
+        public ulong ParentId 
         {
-            get => this._parentID;
+            get => this._parentId;
             set 
             {
-                if (this.ParentID > 0)
+                if (this.ParentId > 0)
                 {
-                    this.Changes["ParentID"] = this.ParentID;
+                    this.Changes["ParentID"] = this.ParentId;
                 }
 
-                this._parentID = value;
+                this._parentId = value;
             }
         }
 
@@ -93,7 +93,7 @@ namespace AMS.Models
             ID = id;
             Name = name;
             DepartmentID = department_id;
-            ParentID = parent_id;
+            ParentId = parent_id;
             Color = color;
             NumOfChildren = numOfChildren;
             this.SerializedFields = serializedField;
@@ -123,7 +123,6 @@ namespace AMS.Models
         public ulong TagId => ID;
         public Type TagType => this.GetType();
         public string TagLabel => Name;
-        public ulong ParentId => ParentID;
         public List<ITagable> Children { get; set; } = new List<ITagable>();
         public string TagColor { 
             get => Color;

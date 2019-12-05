@@ -44,7 +44,7 @@ namespace AMS.Controllers
                     new Tag()
                     {
                         Name = "[No Parent Tag]",
-                        ParentID = 0,
+                        ParentId = 0,
                         TagColor = ControlledTag.TagColor
                     }
                 };
@@ -92,7 +92,7 @@ namespace AMS.Controllers
                 Id = ControlledTag.ID;
                 Name = ControlledTag.Name;
                 Color = ControlledTag.Color;
-                ParentID = ControlledTag.ParentID;
+                ParentID = ControlledTag.ParentId;
                 DepartmentID = ControlledTag.DepartmentID;
             }
             else
@@ -115,7 +115,7 @@ namespace AMS.Controllers
         {
             //Updates the fields on the tag
             ControlledTag.Name = Name;
-            ControlledTag.ParentID = ParentID;
+            ControlledTag.ParentId = ParentID;
             ControlledTag.DepartmentID = (ParentID != 0 ? _tagRepository.GetById(ParentID).DepartmentID : DepartmentID);
             ControlledTag.Color = Color;
 
@@ -142,9 +142,9 @@ namespace AMS.Controllers
                 ControlledTag.Name = Name;
             }
 
-            if (ControlledTag.ParentID != ParentID)
+            if (ControlledTag.ParentId != ParentID)
             {
-                ControlledTag.ParentID = ParentID;
+                ControlledTag.ParentId = ParentID;
 
                 if (ControlledTag.DepartmentID != DepartmentID)
                 {
