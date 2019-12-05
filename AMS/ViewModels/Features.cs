@@ -136,7 +136,7 @@ namespace AMS.ViewModels
                 // Create new asset if null
                 asset = asset ?? new Asset();
 
-                return new AssetPresenter(tagables, new AssetController(asset, AssetRepository), new CommentListController(GetCurrentSession(), CommentRepository, asset), new LogListController(LogRepository, _printHelper, asset));
+                return new AssetPresenter(tagables, new AssetController(asset, AssetRepository, GetCurrentSession()), new CommentListController(GetCurrentSession(), CommentRepository, asset), new LogListController(LogRepository, _printHelper, asset));
             }
 
             /// <summary>
@@ -146,7 +146,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetEditor(Asset asset = null)
             {
-                return new AssetEditor(new AssetController(asset ?? new Asset(), AssetRepository), CreateTagHelper());
+                return new AssetEditor(new AssetController(asset ?? new Asset(), AssetRepository, GetCurrentSession()), CreateTagHelper());
             }
 
             /// <summary>
