@@ -23,7 +23,6 @@ namespace AMS.Controllers
 
                 return _commentList.OrderByDescending(p => p.CreatedAt).ToList();
             }
-
             set => _commentList = value;
         }
 
