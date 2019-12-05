@@ -34,15 +34,6 @@ namespace AMS.IO
 
         public List<UserWithStatus> ImportUsersFromFile(string filePath)
         {
-            if (String.IsNullOrEmpty(filePath)) 
-                return new List<UserWithStatus>();
-            
-            using (var file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            {
-                return ImportUserFromStream(file);
-            }
-
-            /*
             var session = new Session(_userRep);
 
             if (!String.IsNullOrEmpty(filePath))
@@ -74,48 +65,8 @@ namespace AMS.IO
             {
                 return new List<UserWithStatus>();
             }
-            */
         }
-
-        public List<UserWithStatus> ImportUserFromStream(Stream stream)
-        {
-            var session = new Session(_userRep);
-
-            if (stream == Stream.Null)
-                return null;
-            
-            MemoryStream memoryStream = new MemoryStream();
-            stream.CopyTo(memoryStream);
-            if (stream.CanRead)
-            {
-                return GetEncoding(stream).GetString(memoryStream.ToArray())
-                    .Split("\r\n")                  // Splits file into lines, by newlines
-                    .Select(p => p.Split('\t'))     // Splits lines into sections, by tabs
-                    .Where(p => p.Count() > 1)      // Only gets lines with something in them
-                    .Where(p => p[0].CompareTo("Name") != 0 &&
-                                p[1].CompareTo("Type") != 0 &&
-                                p[2].CompareTo("Description") != 0) // Don't use the first line of the file
-                    .Select(p =>
-                    {
-                        User u = new User();
-
-                        u.Username = p[0];
-                        u.Domain = session.Domain;
-                        u.IsEnabled = true;
-                        u.IsAdmin = false;
-                        u.Description = p[2] ?? String.Empty;
-
-                        return u;
-                    })  // Converts each string[] into a user
-                    .Select(u => new UserWithStatus(u))
-                    .ToList();
-            }
-
-            else
-            {
-                return new List<UserWithStatus>();
-            }
-        }
+        
 
         public string GetUsersFilePath()
         {
@@ -142,34 +93,6 @@ namespace AMS.IO
             var bom = new byte[4];
             using (var file = new FileStream(filename, FileMode.Open, FileAccess.Read))
             {
-                return GetEncoding(file);
-            }
-
-            /*
-            // Analyze the BOM
-            if (bom[0] == 0x2b && bom[1] == 0x2f && bom[2] == 0x76)
-                return Encoding.UTF7;
-            if (bom[0] == 0xef && bom[1] == 0xbb && bom[2] == 0xbf)
-                return Encoding.UTF8;
-            //if (bom[0] == 0x4e && bom[1] == 0x61 && bom[2] == 0x6d && bom[3] == 0x65)
-            //    return Encoding.UTF8;
-            if (bom[0] == 0xff && bom[1] == 0xfe)
-                return Encoding.Unicode; //UTF-16LE
-            if (bom[0] == 0xfe && bom[1] == 0xff)
-                return Encoding.BigEndianUnicode; //UTF-16BE
-            if (bom[0] == 0 && bom[1] == 0 && bom[2] == 0xfe && bom[3] == 0xff)
-                return Encoding.UTF32;
-
-            return Encoding.GetEncoding(1252);
-            */
-        }
-
-        private static Encoding GetEncoding(Stream fileStream)
-        {
-            // Read the BOM
-            var bom = new byte[4];
-            using (var file = fileStream)
-            {
                 file.Read(bom, 0, 4);
             }
 
@@ -188,6 +111,7 @@ namespace AMS.IO
                 return Encoding.UTF32;
 
             return Encoding.GetEncoding(1252);
+            
         }
 
         #endregion
