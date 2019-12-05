@@ -10,6 +10,8 @@ namespace AMS.Models
 
         public ulong AssetID { get; set; }
         public string Username { get; set; }
+        public string AssetName { get; set; }
+
         public string Content 
         {
             get 
@@ -32,12 +34,13 @@ namespace AMS.Models
         }
 
         /* Constructor used by DB */
-        private Comment(ulong id, string username, string content, ulong assetId, DateTime createdAt, DateTime updatedAt)
+        private Comment(ulong id, string username, string assetName, string content, ulong assetId, DateTime createdAt, DateTime updatedAt)
         {
             ID = id;
             Username = username;
             Content = content;
             AssetID = assetId;
+            AssetName = assetName;
             base.CreatedAt = createdAt;
             base.UpdatedAt = updatedAt;
             TrackChanges = true;
