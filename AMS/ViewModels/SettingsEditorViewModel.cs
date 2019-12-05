@@ -73,14 +73,21 @@ namespace AMS.ViewModels
         /// <param name="connectionString"></param>
         private void ExtractSettingsFromString(string connectionString)
         {
-            string[] elements = connectionString.Split(';', '=');
+            try
+            {
+                string[] elements = connectionString.Split(';', '=');
 
-            IP = elements[1];
-            Username = elements[5];
-            _oldPassword = elements[7];
-            Database = elements[3];
-            Charset = elements[9];
-            Timeout = elements[11];
+                IP = elements[1];
+                Username = elements[5];
+                _oldPassword = elements[7];
+                Database = elements[3];
+                Charset = elements[9];
+                Timeout = elements[11];
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         /// <summary>

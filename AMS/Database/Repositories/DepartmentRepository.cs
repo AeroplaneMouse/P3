@@ -79,7 +79,6 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@name", MySqlDbType.String);
                         cmd.Parameters["@name"].Value = entity.Name;
                         querySuccess = cmd.ExecuteNonQuery() > 0;
-
                         id = (ulong)cmd.LastInsertedId;
                     }
 
@@ -248,8 +247,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                Department dep = DataMapper(reader);
-                                departments.Add(dep);
+                                departments.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }

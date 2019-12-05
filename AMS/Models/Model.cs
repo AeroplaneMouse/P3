@@ -16,5 +16,6 @@ namespace AMS.Models
         {
             return Changes.Any();
         }
+        public bool TrackChanges { get; set; } = false;
     }
 }

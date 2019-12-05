@@ -97,7 +97,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                entries.Add(DBOToModelConvert(reader));
+                                entries.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -144,7 +144,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                entries.Add(DBOToModelConvert(reader));
+                                entries.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -168,7 +168,7 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public LogEntry DBOToModelConvert(MySqlDataReader reader)
+        public LogEntry DataMapper(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
             ulong rowLoggedItemId = reader.GetUInt64("logged_item_id");

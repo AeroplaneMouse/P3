@@ -77,8 +77,8 @@ namespace AMS.ViewModels
                         return true;
                     }
 
-                    if (page.GetType() == typeof(Home) || 
-                        page.GetType() == typeof(AssetList) || 
+                    if (page.GetType() == typeof(Home) ||
+                        page.GetType() == typeof(AssetList) ||
                         page.GetType() == typeof(TagList) ||
                         page.GetType() == typeof(UserList) ||
                         page.GetType() == typeof(LogList))
@@ -238,7 +238,7 @@ namespace AMS.ViewModels
             {
                 return new UserList(new UserListController(_userImporter, UserRepository, DepartmentRepository));
             }
-            
+
             /// <summary>
             /// Returns a new settings editor page
             /// </summary>
@@ -263,5 +263,5 @@ namespace AMS.ViewModels
 
             #endregion
         }
-    }    
+    }
 }

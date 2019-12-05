@@ -20,6 +20,8 @@ namespace AMS.Models
         public bool IsEnabled { get; set; }
         public string Domain { get; set; }
 
+        private string _color;
+
         private List<Department> _departmentList { get; set; }
 
         // Index of the default department in the list of departments
@@ -55,13 +57,20 @@ namespace AMS.Models
         public Type TagType => this.GetType();
         public string TagLabel => Username;
         public ulong ParentId => 1;
-        public int NumOfChildren => 0;
+        public int NumberOfChildren => 0;
         public List<ITagable> Children { get; set; }
         public string TagColor
         {
-            get => Features.TagRepository.GetById(1).TagColor;
-            set => TagColor = value;
+            get
+            {
+                if (_color == null)
+                    _color = Features.TagRepository.GetById(1).TagColor;
+                
+                return _color;
+            }
+            set => _color = value;
         }
+
         public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
 
         #endregion

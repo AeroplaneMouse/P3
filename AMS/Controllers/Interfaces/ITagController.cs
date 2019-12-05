@@ -17,7 +17,7 @@ namespace AMS.Controllers.Interfaces
         ulong Id { get; set; }
         string Name { get; set; }
         string Color { get; set; }
-        ulong ParentID { get; set; }
+        ulong ParentId { get; set; }
         ulong DepartmentID { get; set; }
 
         bool IsEditing { get; set; }
@@ -31,9 +31,9 @@ namespace AMS.Controllers.Interfaces
 
         void Save();
 
-        void Remove();
+        bool Remove(bool removeChildren = false);
 
-        void RemoveChildren();
+        //void RemoveChildren();
 
         void Update();
 

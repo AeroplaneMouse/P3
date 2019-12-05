@@ -66,6 +66,7 @@ namespace AMS.IO
                 return new List<UserWithStatus>();
             }
         }
+        
 
         public string GetUsersFilePath()
         {
@@ -110,6 +111,7 @@ namespace AMS.IO
                 return Encoding.UTF32;
 
             return Encoding.GetEncoding(1252);
+            
         }
 
         #endregion
