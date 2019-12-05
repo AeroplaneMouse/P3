@@ -711,7 +711,7 @@ namespace AMS.Database.Repositories
 
                                 Tag tag = (Tag) Activator.CreateInstance(typeof(Tag),
                                     BindingFlags.Instance | BindingFlags.NonPublic, null,
-                                    new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowContainsChildren, null, null, "[]" }, null,
+                                    new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowContainsChildren, "[]", null, null }, null,
                                     null);
 
                                 if (tag.ParentID > 0 && tags_placeholder.ContainsKey(tag.ParentID))
@@ -757,13 +757,13 @@ namespace AMS.Database.Repositories
             ulong rowDepartmentId = (reader.IsDBNull(ordinal) ? 0 : reader.GetUInt64("department_id"));
             string rowColor = reader.GetString("color");
             int rowNumOfChildren = reader.GetInt32("countChildren");
+            string rowOptions = reader.GetString("options");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
-            string rowOptions = reader.GetString("options");
 
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowNumOfChildren, rowCreatedAt, rowUpdatedAt, rowOptions }, null,
+                new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowNumOfChildren, rowOptions, rowCreatedAt, rowUpdatedAt }, null,
                 null);
         }
     }

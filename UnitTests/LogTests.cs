@@ -34,7 +34,7 @@ namespace UnitTests
         }
         
         [TestMethod]
-        public void LogCreate_AddEntryReceivesComment_ReturnsTrue()
+        public void AddEntry_ReceivesComment_ReturnsTrue()
         {
             //Arrange
             _logRepMock.Setup(p => p.Insert(It.IsAny<LogEntry>())).Returns(true);
@@ -48,7 +48,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesAsset_loggedItemIdIsSameAsAssetId()
+        public void AddEntry_ReceivesAsset_loggedItemIdIsSameAsAssetId()
         {
             //Arrange
             Asset asset = new Asset();
@@ -62,7 +62,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesAsset_loggedItemTypeIsAsset()
+        public void AddEntry_ReceivesAsset_loggedItemTypeIsAsset()
         {
             //Arrange
             Asset entity = new Asset();
@@ -76,16 +76,16 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesTag_loggedItemTypeIsTag()
+        public void AddEntry_ReceivesTag_loggedItemTypeIsTag()
         {
             //Arrange
             Tag entity = new Tag()
             {
-                Name = "Tag name",
+                Name = "tag name",
                 Color = "#d3d3d3",
                 DepartmentID = 1,
                 ParentID = 0,
-                NumOfChildren = 10
+                NumberOfChildren = 10
             };
             
             _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le => le.LoggedItemType == entity.GetType()))).Returns(true);
@@ -98,7 +98,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesDepartment_loggedItemTypeIsDepartment()
+        public void AddEntry_ReceivesDepartment_loggedItemTypeIsDepartment()
         {
             //Arrange
             Department entity = new Department()
@@ -115,7 +115,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesComment_loggedItemTypeIsComment()
+        public void AddEntry_ReceivesComment_loggedItemTypeIsComment()
         {
             //Arrange
             Comment entity = new Comment();
@@ -129,7 +129,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesNewAsset_EntryTypeIsCreate()
+        public void AddEntry_ReceivesNewAsset_EntryTypeIsCreate()
         {
             //Arrange
             Asset entity = new Asset()
@@ -151,7 +151,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesExistingAssetANdNewID_EntryTypeIsCreate()
+        public void AddEntry_ReceivesExistingAssetANdNewID_EntryTypeIsCreate()
         {
             //Arrange
             object[] assetConstructorParameters = new object[]
@@ -180,17 +180,23 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesAlteredAsset_EntryTypeIsUpdate()
+        public void AddEntry_ReceivesAlteredAsset_EntryTypeIsUpdate()
         {
             //Arrange
-            Asset entity = new Asset()
+            object[] assetConstructorParameters = new object[]
             {
-                Name = "Asset name",
-                Description = "Description",
-                DepartmentID = 1,
-                SerializedFields = "[]",
-                Identifier = "Asset identifier"
+                (ulong)10,
+                "Asset name",
+                "Asset description",
+                "Asset identifier",
+                (ulong)1,
+                "[]",
+                new DateTime(2019, 12, 4, 13, 57, 56),
+                new DateTime(2019, 12, 4, 13, 57, 59)
             };
+
+            Asset entity = (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.NonPublic | BindingFlags.Instance, null, assetConstructorParameters, null, null);
+
             entity.Name = "New asset name";
 
             _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le => le.EntryType == "Update"))).Returns(true);
@@ -203,7 +209,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesCleanAssetWithId10_EntryTypeIsDelete()
+        public void AddEntry_ReceivesCleanAssetWithId10_EntryTypeIsDelete()
         {
             //Arrange
             object[] assetConstructorParameters = new object[]
@@ -230,7 +236,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesAlteredAsset_ChangesCorrespondsWithTheChangesMade()
+        public void AddEntry_ReceivesAlteredAsset_ChangesCorrespondsWithTheChangesMade()
         {
             //Arrange
             object[] assetConstructorParameters = new object[]
@@ -249,8 +255,9 @@ namespace UnitTests
             entity.Name = "New asset name";
             entity.Description = "New asset description";
 
-            _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le => 
-                le.Changes.Contains("New asset name")
+            _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le =>
+                le.EntryType == "Update"
+                && le.Changes.Contains("New asset name")
                 && le.Changes.Contains("New asset description")
                 && !le.Changes.Contains("Asset identifier")
                 && !le.Changes.Contains("DepartmentID"))))
@@ -264,7 +271,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesNewAsset_ChangesContainsAllValues()
+        public void AddEntry_ReceivesCreatedAsset_ChangesContainsAllValues()
         {
             //Arrange
             Asset entity = new Asset()
@@ -295,7 +302,7 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesDeletedAsset_ChangesContainsAllValues()
+        public void AddEntry_ReceivesDeletedAsset_ChangesContainsAllValues()
         {
             //Arrange
             object[] assetConstructorParameters = new object[]
@@ -331,7 +338,201 @@ namespace UnitTests
         }
 
         [TestMethod]
-        public void LogCreate_AddEntryReceivesException_DescriptionContainsErrorMessageAndStackTrace()
+        public void AddEntry_ReceivesAlteredTag_ChangesCorrespondsWithTheChangesMade()
+        {
+            //Arrange
+            object[] tagConstructorParameters = new object[]
+            {
+                (ulong)10,
+                "tag name",
+                (ulong)1,
+                (ulong)0,
+                "#d3d3d3",
+                10,
+                "[]",
+                new DateTime(2019, 12, 4, 13, 57, 56),
+                new DateTime(2019, 12, 4, 13, 57, 59)
+            };
+
+            Tag entity = (Tag)Activator.CreateInstance(typeof(Tag), BindingFlags.NonPublic | BindingFlags.Instance, null, tagConstructorParameters, null, null);
+            entity.Name = "new tag name";
+            entity.Color = "#f9f9f9";
+
+            _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le =>
+                le.EntryType == "Update"
+                && le.Changes.Contains("Name")
+                && le.Changes.Contains("new tag name")
+                && le.Changes.Contains("Color")
+                && le.Changes.Contains("#f9f9f9")
+                && !le.Changes.Contains("ParentID")
+                && !le.Changes.Contains("DepartmentID"))))
+                .Returns(true);
+
+            //Act
+            bool result = _Log.AddEntry(entity, 1);
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void AddEntry_ReceivesCreatedTag_ChangesContainsAllValues()
+        {
+            //Arrange
+            Tag entity = new Tag()
+            {
+                Name = "tag name",
+                Color = "#d3d3d3",
+                DepartmentID = 1,
+                ParentID = 0,
+                NumberOfChildren = 10
+            };
+
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+            PropertyInfo[] properties = entity.GetType().GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                keyValuePairs.Add(property.Name, property.GetValue(entity)?.ToString());
+            }
+
+            string expectedChanges = JsonConvert.SerializeObject(keyValuePairs, Formatting.Indented);
+
+            _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le => le.EntryType == "Create" && le.Changes == expectedChanges))).Returns(true);
+
+            //Act
+            bool result = _Log.AddEntry(entity, 1, 10);
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void AddEntry_ReceivesDeletedTag_ChangesContainsAllValues()
+        {
+            //Arrange
+            object[] tagConstructorParameters = new object[]
+            {
+                (ulong) 10,
+                "tag name",
+                (ulong) 1,
+                (ulong) 0,
+                "#d3d3d3",
+                10,
+                "[]",
+                new DateTime(2019, 12, 4, 13, 57, 56),
+                new DateTime(2019, 12, 4, 13, 57, 59)
+            };
+
+            Tag entity = (Tag)Activator.CreateInstance(typeof(Tag), BindingFlags.NonPublic | BindingFlags.Instance, null, tagConstructorParameters, null, null);
+
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+            PropertyInfo[] properties = entity.GetType().GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                keyValuePairs.Add(property.Name, property.GetValue(entity)?.ToString());
+            }
+
+            string expectedChanges = JsonConvert.SerializeObject(keyValuePairs, Formatting.Indented);
+
+            _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le => le.EntryType == "Delete" && le.Changes == expectedChanges))).Returns(true);
+
+            //Act
+            bool result = _Log.AddEntry(entity, 1);
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void AddEntry_ReceivesAlteredDepartment_ChangesCorrespondsWithTheChangesMade()
+        {
+            //Arrange
+            object[] departmentConstructorParameters = new object[]
+            {
+                (ulong)10,
+                "Department name",
+                new DateTime(2019, 12, 4, 13, 57, 56),
+                new DateTime(2019, 12, 4, 13, 57, 59)
+            };
+
+            Department entity = (Department)Activator.CreateInstance(typeof(Department), BindingFlags.Instance | BindingFlags.NonPublic, null, departmentConstructorParameters, null, null);
+
+            entity.Name = "New department name";
+
+            _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le =>
+                le.EntryType == "Update"
+                && le.Changes.Contains("Name")
+                && le.Changes.Contains("New department name"))))
+                .Returns(true);
+
+            //Act
+            bool result = _Log.AddEntry(entity, 1);
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void AddEntry_ReceivesCreatedDepartment_ChangesContainsAllValues()
+        {
+            //Arrange
+            Department entity = new Department()
+            {
+                Name = "Department name"
+            };
+
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+            PropertyInfo[] properties = entity.GetType().GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                keyValuePairs.Add(property.Name, property.GetValue(entity)?.ToString());
+            }
+
+            string expectedChanges = JsonConvert.SerializeObject(keyValuePairs, Formatting.Indented);
+
+            _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le => le.EntryType == "Create" && le.Changes == expectedChanges))).Returns(true);
+
+            //Act
+            bool result = _Log.AddEntry(entity, 1, 10);
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void AddEntry_ReceivesDeletedDepartment_ChangesContainsAllValues()
+        {
+            //Arrange
+            object[] departmentConstructorParameters = new object[]
+            {
+                (ulong)10,
+                "Department name",
+                new DateTime(2019, 12, 4, 13, 57, 56),
+                new DateTime(2019, 12, 4, 13, 57, 59)
+            };
+
+            Department entity = (Department)Activator.CreateInstance(typeof(Department), BindingFlags.NonPublic | BindingFlags.Instance, null, departmentConstructorParameters, null, null);
+
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+            PropertyInfo[] properties = entity.GetType().GetProperties();
+            foreach (PropertyInfo property in properties)
+            {
+                keyValuePairs.Add(property.Name, property.GetValue(entity)?.ToString());
+            }
+
+            string expectedChanges = JsonConvert.SerializeObject(keyValuePairs, Formatting.Indented);
+
+            _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le => le.EntryType == "Delete" && le.Changes == expectedChanges))).Returns(true);
+
+            //Act
+            bool result = _Log.AddEntry(entity, 1);
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void AddEntry_ReceivesException_DescriptionContainsErrorMessageAndStackTrace()
         {
             //Arrange
             Exception e = new Exception("Exception message!!!");
