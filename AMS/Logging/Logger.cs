@@ -38,16 +38,19 @@ namespace AMS.Logging
                 {
                     id = entity.ID;
                     entryType = "Update";
+                    changes = this.GetChanges(entity);
                 }
                 else if (entity.ID == 0 || entityId != 0)
                 {
                     id = entityId;
                     entryType = "Create";
+                    changes = this.GetPropertiesAndValues(entity);
                 }
                 else
                 {
                     id = entity.ID;
                     entryType = "Delete";
+                    changes = this.GetPropertiesAndValues(entity);
                 }
 
                 string name = entity is Asset ? ((Asset)entity).Name : (entity is Tag ? ((Tag)entity).Name : (entity is Department ? ((Department)entity).Name : null));
@@ -64,7 +67,6 @@ namespace AMS.Logging
                 {
                     description = entity.GetType().ToString().Split('.').Last() + " with id " + id;
                 }
-                changes = this.GetPropertiesAndValues(entity);
 
                 return this.Write(entryType, description, userId, id, entity.GetType(), changes);
 
