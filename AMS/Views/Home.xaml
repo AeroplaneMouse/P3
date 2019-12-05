@@ -171,12 +171,12 @@
                                                                TextWrapping="Wrap"
                                                                Name="Username"/>
 
-                                                    <TextBlock Text="{Binding Path=AssetID, Converter={StaticResource AssetIDConverter}}"
+                                                    <TextBlock Text="{Binding Path=AssetName}"
                                                                Style="{StaticResource ParagraphStyle}"
                                                                Foreground="DarkSlateGray"
                                                                FontWeight="Normal"
                                                                TextWrapping="Wrap"
-                                                               Name="AssetName"/>
+                                                               Name="AssetNamey"/>
 
                                                     <TextBlock Text="{Binding Path=CreatedAtString}"
                                                                Style="{StaticResource ParagraphStyle}"
@@ -211,10 +211,8 @@
                             </Setter>
                         </Style>
                     </ListBox.ItemContainerStyle>
-
                 </ListBox>
             </Grid>
         </Border>
-
     </Grid>
 </Page>
