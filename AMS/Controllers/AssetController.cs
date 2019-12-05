@@ -64,14 +64,17 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool AttachTag(ITagable tag)
         {
-            CurrentlyAddedTags.Add(tag);
-            if (tag is Tag currentTag)
+            if (!CurrentlyAddedTags.Contains(tag))
             {
-                //DeSerialize the fields, so the fieldList is instantiated
-                currentTag.DeSerializeFields();
-                foreach (var tagField in currentTag.FieldList)
+                CurrentlyAddedTags.Add(tag);
+                if (tag is Tag currentTag)
                 {
-                    AddField(tagField, currentTag);
+                    //DeSerialize the fields, so the fieldList is instantiated
+                    currentTag.DeSerializeFields();
+                    foreach (var tagField in currentTag.FieldList)
+                    {
+                        AddField(tagField, currentTag);
+                    }
                 }
             }
             

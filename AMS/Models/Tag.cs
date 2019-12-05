@@ -129,6 +129,19 @@ namespace AMS.Models
             get => Color;
             set => Color = value; }
         public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);
+        
+        public override bool Equals(object obj)
+        {
+            if (!(obj is ITagable objAsPart)) 
+                return false;
+            
+            return ID.Equals(objAsPart.TagId);
+        }
+
+        public bool Equals(Tag other)
+        {
+            return other != null && ID.Equals(other.ID);
+        }
 
         #endregion
     }

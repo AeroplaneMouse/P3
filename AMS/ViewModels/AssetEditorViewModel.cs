@@ -19,6 +19,8 @@ namespace AMS.ViewModels
 {
     public class AssetEditorViewModel : BaseViewModel
     {
+        private ObservableCollection<ITagable> _appliedTags = new ObservableCollection<ITagable>();
+
         #region Public Properties
 
         public ObservableCollection<Field> NonHiddenFieldList =>
@@ -27,7 +29,11 @@ namespace AMS.ViewModels
         public ObservableCollection<Field> HiddenFieldList =>
             new ObservableCollection<Field>(_assetController.HiddenFieldList);
 
-        public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
+        public ObservableCollection<ITagable> AppliedTags
+        {
+            get => _appliedTags;
+            set => _appliedTags = value;
+        }
 
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
 
