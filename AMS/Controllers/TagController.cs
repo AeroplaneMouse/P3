@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Security.RightsManagement;
 
 namespace AMS.Controllers
 {
@@ -114,10 +115,13 @@ namespace AMS.Controllers
         public void Save()
         {
             //Updates the fields on the tag
-            ControlledTag.Name = Name;
-            ControlledTag.ParentID = ParentID;
+            if(Name != ControlledTag.Name)
+                ControlledTag.Name = Name;
+            if(ParentID != ControlledTag.ParentID)
+                ControlledTag.ParentID = ParentID;
             ControlledTag.DepartmentID = (ParentID != 0 ? _tagRepository.GetById(ParentID).DepartmentID : DepartmentID);
-            ControlledTag.Color = Color;
+            if(Color != ControlledTag.Color)
+                ControlledTag.Color = Color;
 
             List<Field> fieldList = NonHiddenFieldList.Where(p => p.TagIDs!.Contains(ParentID)).ToList();
             fieldList.AddRange(HiddenFieldList.Where(p => p.TagIDs!.Contains(ParentID)).ToList());
