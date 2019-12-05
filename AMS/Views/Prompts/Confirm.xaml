@@ -7,6 +7,10 @@
       Height="Auto" d:DesignWidth="800"
       Title="Confirm"
       FocusManager.FocusedElement="{Binding ElementName=StartElement}">
+
+    <Page.InputBindings>
+        <KeyBinding Key="Esc" Command="{Binding CancelCommand}"/>
+    </Page.InputBindings>
     <Grid>
         <Canvas Style="{StaticResource PromptBackground}"/>
         <Border Style="{StaticResource PromptBorder}">
@@ -27,12 +31,12 @@
                             HorizontalAlignment="Center"
                             Grid.Row="2"
                             Margin="15">
-                    <Button Style="{StaticResource RegularAcceptButton}"
+                    <Button Style="{StaticResource RegularYesButton}"
                             Command="{Binding AcceptCommand}"
                             Content="Yes"
                             Name="Accept"
                             TabIndex="0"/>
-                    <Button Style="{StaticResource RegularCancelButton}"
+                    <Button Style="{StaticResource RegularNoButton}"
                             Command="{Binding CancelCommand}"
                             Content="No"
                             Margin="15 0 0 0"

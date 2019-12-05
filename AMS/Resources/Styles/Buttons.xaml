@@ -169,6 +169,28 @@
         </Style.Triggers>
     </Style>
 
+    <!-- Regular Yes Button -->
+    <Style TargetType="Button" x:Key="RegularYesButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
+        
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource NavigationHoverBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Regular No button -->
+    <Style TargetType="Button" x:Key="RegularNoButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource NavigationHoverBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <!-- Regular remove button -->
     <Style TargetType="Button" x:Key="RegularRemoveButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
@@ -180,6 +202,8 @@
         <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource AcceptGreenBrush}"/>
     </Style>
+
+    
 
     <!-- Department content menu item button -->
     <Style TargetType="Button" x:Key="DepartmentButton">
