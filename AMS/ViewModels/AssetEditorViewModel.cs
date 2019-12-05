@@ -106,7 +106,7 @@ namespace AMS.ViewModels
 
             _tagHelper = tagHelper;
             _tagHelper.CanApplyParentTags = false;
-            _tagHelper.SetCurrentTags(new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags));
+            _tagHelper.SetAppliedTags(new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags));
             AppliedTags = _tagHelper.GetAppliedTags(false);
 
             _isEditing = (_assetController.ControlledAsset.ID != 0);
