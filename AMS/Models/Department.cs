@@ -14,7 +14,7 @@ namespace AMS.Models
                 return this._name;
             }
             set {
-                if (this.Name != null)
+                if (TrackChanges)
                 {
                     this.Changes["Name"] = this.Name;
                 }
@@ -28,6 +28,7 @@ namespace AMS.Models
             Name = name;
             CreatedAt = created_at;
             UpdatedAt = updated_at;
+            TrackChanges = true;
         }
 
         public Department()
