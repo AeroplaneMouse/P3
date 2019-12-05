@@ -144,6 +144,24 @@ namespace UnitTests
         {
             File.Delete(filePath);
         }
+        
+        MemoryStream CreateStream(Encoding encoding)
+        {
+            string fileContent = "Name\tType\tDescription\r\n" +
+                                 "Hans Hansen\tUser\tHan er bare for god\r\n" +
+                                 "Åge Ågesen\tUser\tÅge øser æsler\r\n";
+            byte[] contentArray = encoding.GetBytes(fileContent);
+            
+            var stream = new MemoryStream();
+            
+            stream.Write(contentArray);
+            return stream;
+        }
+
+        void DeleteStream(Stream stream)
+        {
+            stream.Dispose();
+        }
 
         #endregion
     }
