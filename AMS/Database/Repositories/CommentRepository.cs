@@ -194,7 +194,8 @@ namespace AMS.Database.Repositories
                     const string query = "SELECT c.id, c.asset_id, u.username, c.content, c.created_at, c.updated_at, c.deleted_at " +
                                          "FROM comments AS c " +
                                          "INNER JOIN users AS u ON c.user_id = u.id "+
-                                         "WHERE c.asset_id=@asset_id AND c.deleted_at IS NULL";
+                                         "WHERE c.asset_id=@asset_id AND c.deleted_at IS NULL " +
+                                         "ORDER BY c.id DESC";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -240,10 +241,59 @@ namespace AMS.Database.Repositories
                                    "INNER JOIN users AS u ON c.user_id = u.id "+
                                    "WHERE a.deleted_at IS NULL "+ 
                                    (!includeDeleted ? "AND c.deleted_at IS NULL " : "")+
-                                   "ORDER BY created_at DESC LIMIT "+limit;
+                                   "ORDER BY c.id DESC LIMIT "+limit;
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                comments.Add(DataMapper(reader));
+                            }
+                            reader.Close();
+                        }
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+
+            return comments;
+        }
+        
+        public List<Comment> GetLatestComments(ulong departmentId=0, int limit=100, int days=7)
+        {
+            var con = new MySqlHandler().GetConnection();
+            List<Comment> comments = new List<Comment>();
+            
+            if (MySqlHandler.Open(ref con))
+            {
+                // Sending sql query
+                try
+                {
+                    string query = "SELECT c.id, c.asset_id, u.username, c.content, c.created_at, c.updated_at " +
+                                   "FROM comments AS c " +
+                                   "INNER JOIN assets AS a ON c.asset_id = a.id " +
+                                   "INNER JOIN users AS u ON c.user_id = u.id " +
+                                   "WHERE "+(departmentId > 0 ? "a.department_id = @depId AND " : "")+"c.created_at >= DATE_SUB(now(), interval @days day) AND c.deleted_at IS NULL " +
+                                   "ORDER BY c.id DESC " +
+                                   "LIMIT "+limit;
+                    
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@depId", MySqlDbType.UInt64);
+                        cmd.Parameters["@depId"].Value = departmentId;
+                        
+                        cmd.Parameters.Add("@days", MySqlDbType.UInt64);
+                        cmd.Parameters["@days"].Value = days;
+                        
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())

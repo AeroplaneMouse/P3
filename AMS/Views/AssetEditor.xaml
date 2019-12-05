@@ -161,6 +161,8 @@
                             <Popup x:Name="TagSuggestionPopup"    
                                    Visibility="{Binding TagSuggestionsVisibility}"                    
                                    IsOpen="{Binding TagSuggestionIsOpen}"
+                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
                                    StaysOpen="False"
                                    MaxHeight="200"
                                    AllowsTransparency="True"
@@ -174,7 +176,7 @@
                                          Opacity="0.9">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding}" FontSize="{StaticResource FontSizeSmall}" Cursor="Hand" Width="{Binding ElementName=StartElement, Path=ActualWidth}">
+                                            <TextBlock Text="{Binding}" FontSize="{StaticResource FontSizeSmall}" Cursor="Hand">
                                                 <TextBlock.InputBindings>
                                                     <MouseBinding Gesture="LeftClick" Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.InsertNextOrSelectedSuggestionCommand}" CommandParameter="{Binding Path=.}"/>
                                                 </TextBlock.InputBindings>
@@ -252,9 +254,8 @@
                                       ItemTemplateSelector="{StaticResource MyFieldDesignSelector}"/>
                     </StackPanel>
 
-                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                    <TextBlock Style="{StaticResource TitleOfFieldListStyle}"
                                Text="Hidden fields"
-                               Opacity="0.5"
                                Margin="0 20 10 0" />
 
                     <StackPanel Opacity="0.5">

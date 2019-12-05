@@ -18,6 +18,8 @@ namespace AMS.ViewModels
 
         public List<Tag> Tags { get; set; }
         public Tag SelectedItem { get; set; }
+
+        public string CurrentDepartment => "(" + Features.GetCurrentDepartment().Name + ")";
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand AddNewCommand { get; set; }
@@ -51,6 +53,7 @@ namespace AMS.ViewModels
 
         public override void UpdateOnFocus()
         {
+            OnPropertyChanged(nameof(CurrentDepartment));
             Search();
             OnPropertyChanged(nameof(Tags));
         }
@@ -58,13 +61,15 @@ namespace AMS.ViewModels
         private void RemoveTag()
         {
             string message = String.Empty;
-            _tagController.ControlledTag = SelectedItem;
 
+            // Get complete tag from database
+            _tagController.ControlledTag = _tagController.GetTagById(SelectedItem.ID);
+            
             // Check if parent
-            if (_tagController.ParentID == 0 && _tagController.ControlledTag.ChildrenCount > 0)
+            if (_tagController.ParentId == 0 && _tagController.ControlledTag.NumberOfChildren > 0)
             {
                 message = "You are about to remove a parent tag!\n"
-                        + $"There are { _tagController.ControlledTag.ChildrenCount } children attached to this parent.";
+                        + $"There are { _tagController.ControlledTag.NumberOfChildren } children attached to this parent.";
 
                 List<string> buttons = new List<string>();
                 buttons.Add("Remove parent and all children?");
@@ -74,16 +79,21 @@ namespace AMS.ViewModels
                 {
                     if (e is ExpandedPromptEventArgs args)
                     {
-                        string extraMessage = String.Empty;
+                        string extraMessage = $"{ _tagController.Name } has been removed";
+                        bool actionSuccess;
                         if (args.ButtonNumber == 0)
                         {
-                            _tagController.RemoveChildren();
-                            _tagController.Remove();
-                            extraMessage = $" aswell as { _tagController.ControlledTag.ChildrenCount } children";
+                            actionSuccess = _tagController.Remove(removeChildren: true);
+                            extraMessage = $" aswell as { _tagController.ControlledTag.NumberOfChildren } children";
                         }
                         else
-                            _tagController.Remove();
-                        Features.AddNotification(new Notification($"{ _tagController.Name } has been removed{ extraMessage }.", background: Notification.APPROVE), displayTime: 4000);
+                            actionSuccess = _tagController.Remove();
+
+                        if (!actionSuccess)
+                            extraMessage = "Error! Unable to remove tag(s).";
+
+                        Features.AddNotification(new Notification(extraMessage, background: actionSuccess ? Notification.APPROVE : Notification.ERROR), displayTime: 4000);
+                        UpdateOnFocus();
                     }
                 }));
             }

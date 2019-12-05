@@ -44,6 +44,7 @@ namespace AMS.ViewModels
                 RefreshList();
             }
         }
+        public string CurrentDepartment => "(" + Features.GetCurrentDepartment().Name + ")";
 
         public bool CheckAll { get; set; }
         public string SearchQuery
@@ -146,6 +147,8 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(IsStrict));
             OnPropertyChanged(nameof(SearchQuery));
             OnPropertyChanged(nameof(AppliedTags));
+            OnPropertyChanged(nameof(CurrentDepartment));
+
             RefreshList();
         }
 
@@ -224,7 +227,7 @@ namespace AMS.ViewModels
                     tag = (ITagable)input;
                 }
 
-                if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
+                if (_tagHelper.IsParentSet() || (tag.NumberOfChildren == 0 && tag.TagId != 1))
                 {
                     if(tag != null) {
                         _tagHelper.AddTag(tag);
@@ -270,7 +273,7 @@ namespace AMS.ViewModels
             ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == SearchQuery.Trim(' '));
             if (tag != null)
             {
-                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
+                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.NumberOfChildren > 0))
                 {
                     _tagHelper.SetParent((Tag)tag);
                     CurrentGroup = "#" + tag.TagLabel;
@@ -292,14 +295,12 @@ namespace AMS.ViewModels
                     ClearInput();
                     _tabIndex = 0;
                 }
-
-                string message;
-                if (SearchQuery == String.Empty)
-                    message = $"It is not possible to attach a parent tag that have children to an asset.";
                 else
-                    message = $"{ SearchQuery } is not a tag. To use it, you must first create a tag called { SearchQuery }.";
+                {
+                    string message = $"{ SearchQuery } is not a tag. To use it, you must first create a tag called { SearchQuery }.";
+                    Features.AddNotification(new Notification(message, background: Notification.WARNING), displayTime: 3500);
+                }
 
-                Features.AddNotification(new Notification(message, background: Notification.WARNING), displayTime: 3500);
             }
 
             RefreshList();
@@ -310,7 +311,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void RefreshList()
         {
-            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict, _searchInFields);
+            _listController.Search(inTagMode ? "" : SearchQuery, _tagHelper.GetAppliedTagIds(typeof(Tag)), _tagHelper.GetAppliedTagIds(typeof(User)), _isStrict, SearchInFields);
             OnPropertyChanged(nameof(Items));
         }
 
@@ -430,7 +431,7 @@ namespace AMS.ViewModels
             if (SelectedItems.Count > 0)
             {
                 // Prompt user for approval for the removal of x assets 
-                string message = $"Are you sure you want to remove " +
+                string message = $"Are you sure you want to remove\n" +
                                  $"{ ((SelectedItems.Count == 1) ? SelectedItems[0].Name : (SelectedItems.Count.ToString()) + " assets")}?";
 
                 Features.DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
@@ -438,10 +439,11 @@ namespace AMS.ViewModels
                     // Check if the user approved
                     if (e.Result)
                     {
-                        // Move selected items to new list
-                        // Hvorfor flyttes de til en ny liste?
+                        // Move selected items to new list as it is not possible to itterate
+                        // over the same list which items is removed from
                         List<Asset> items = new List<Asset>();
                         SelectedItems.ForEach(a => items.Add(a));
+
                         // Remove each asset
                         foreach (Asset asset in items)
                             _listController.Remove(asset);

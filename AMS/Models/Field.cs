@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Security.Cryptography;
+using AMS.Interfaces;
 using Newtonsoft.Json;
 
 namespace AMS.Models
@@ -28,17 +29,17 @@ namespace AMS.Models
                 FieldType.Checkbox
             };
         }
-        
+
         public List<ulong> TagIDs { get; set; }
-        
+
         [JsonIgnore]
-        public List<Tag> TagList { get; set; }
+        public List<ITagable> TagList { get; set; }
 
         public string HashId { get; set; }
 
-        public bool IsCustom;
+        public bool IsCustom { get; set; }
 
-        public bool IsHidden = false;
+        public bool IsHidden { get; set; }
         public string Label { get; set; }
         public string Content { get; set; }
         public bool Required { get; set; }

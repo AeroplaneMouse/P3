@@ -32,7 +32,7 @@ namespace AMS.Controllers
         public ulong Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
-        public ulong ParentID { get; set; }
+        public ulong ParentId { get; set; }
         public ulong DepartmentID { get; set; }
 
 
@@ -45,7 +45,7 @@ namespace AMS.Controllers
                     new Tag()
                     {
                         Name = "[No Parent Tag]",
-                        ParentID = 0,
+                        ParentId = 0,
                         TagColor = ControlledTag.TagColor
                     }
                 };
@@ -93,7 +93,7 @@ namespace AMS.Controllers
                 Id = ControlledTag.ID;
                 Name = ControlledTag.Name;
                 Color = ControlledTag.Color;
-                ParentID = ControlledTag.ParentID;
+                ParentId = ControlledTag.ParentId;
                 DepartmentID = ControlledTag.DepartmentID;
             }
             else
@@ -117,17 +117,23 @@ namespace AMS.Controllers
             //Updates the fields on the tag
             if(Name != ControlledTag.Name)
                 ControlledTag.Name = Name;
-            if(ParentID != ControlledTag.ParentID)
-                ControlledTag.ParentID = ParentID;
-            ControlledTag.DepartmentID = (ParentID != 0 ? _tagRepository.GetById(ParentID).DepartmentID : DepartmentID);
+            if(ParentId != ControlledTag.ParentId)
+                ControlledTag.ParentId = ParentId;
+
+            ControlledTag.DepartmentID = (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
             if(Color != ControlledTag.Color)
                 ControlledTag.Color = Color;
 
-            List<Field> fieldList = NonHiddenFieldList.Where(p => p.TagIDs!.Contains(ParentID)).ToList();
-            fieldList.AddRange(HiddenFieldList.Where(p => p.TagIDs!.Contains(ParentID)).ToList());
+            List<Field> fieldList = NonHiddenFieldList.Where(p => p.TagIDs!.Contains(ParentId)).ToList();
+            fieldList.AddRange(HiddenFieldList.Where(p => p.TagIDs!.Contains(ParentId)).ToList());
             ControlledTag.FieldList = fieldList;
             SerializeFields();
             _tagRepository.Insert(ControlledTag, out TagID);
+        }
+
+        public Tag GetTagById(ulong id)
+        {
+            return _tagRepository.GetById(id);
         }
 
         /// <summary>
@@ -141,14 +147,14 @@ namespace AMS.Controllers
                 ControlledTag.Name = Name;
             }
 
-            if (ControlledTag.ParentID != ParentID)
+            if (ControlledTag.ParentId != ParentId)
             {
-                ControlledTag.ParentID = ParentID;
+                ControlledTag.ParentId = ParentId;
 
                 if (ControlledTag.DepartmentID != DepartmentID)
                 {
                     ControlledTag.DepartmentID =
-                        (ParentID != 0 ? _tagRepository.GetById(ParentID).DepartmentID : DepartmentID);
+                        (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
                 }
             }
 
@@ -164,9 +170,9 @@ namespace AMS.Controllers
             _tagRepository.Update(ControlledTag);
         }
 
-        public void Remove() => _tagRepository.Delete(ControlledTag);
+        public bool Remove(bool removeChildren = false) => _tagRepository.Delete(ControlledTag, removeChildren);
 
-        public void RemoveChildren() => _tagRepository.DeleteChildren(ControlledTag.ID);
+        //public void RemoveChildren() => _tagRepository.DeleteChildren(ControlledTag.ID);
 
         public string CreateRandomColor()
         {
@@ -185,7 +191,7 @@ namespace AMS.Controllers
         /// Connects a parentTag, and removes the relation to the old parent tag.
         /// </summary>
         /// <param name="newTag"></param>
-        public void ConnectTag(Tag newTag)
+        public void ConnectTag()
         {
             Tag currentTag = _tagRepository.GetById(ControlledTag.ParentId);
             //TODO Throws exception, når et tags parent id ændres

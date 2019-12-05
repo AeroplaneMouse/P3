@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converter="clr-namespace:AMS.Views.ValueConverters"
         xmlns:local="clr-namespace:AMS.Views"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
@@ -16,6 +17,10 @@
         Width="1200">
     
     <Window.Resources>
+
+        <converter:DepartmentStringValueConverter x:Key="DepartmentConverter"/>
+
+
         <!-- Style of the window -->
         <Style TargetType="{x:Type local:Main}">
             <Setter Property="Template">
@@ -64,20 +69,24 @@
                                                 <MenuItem Header="_Clear" Command="{Binding ClearSettingsCommand}"/>
                                             </MenuItem>
                                             <MenuItem Header="_Help" Style="{StaticResource MenuItemButton}">
-                                                <MenuItem Header="_About"/>
                                                 <MenuItem Header="_Shortcuts" Command="{Binding ShowShortcutsCommand}"/>
                                                 <MenuItem Header="_Reload" Command="{Binding ReloadCommand}"/>
                                                 <MenuItem Header="_Exit" Command="{Binding CloseCommand}"/>
                                             </MenuItem>
                                         </Menu>
 
-                                        <StackPanel Grid.Column="2"
-                                                    Orientation="Horizontal">
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                            <!--<TextBlock Text="Department: " 
+                                                       Foreground="LightSteelBlue"
+                                                       VerticalAlignment="Center" 
+                                                       HorizontalAlignment="Right" 
+                                                       FontSize="{StaticResource FontSizeSmall}"/>-->
+                                            
                                             <!-- Departments -->
-                                            <Menu Style="{StaticResource MenuContainer}" Visibility="{Binding CurrentDepartmentVisibility}">
+                                            <Menu Style="{StaticResource MenuContainer}" Visibility="{Binding CurrentDepartmentVisibility}" HorizontalAlignment="Left">
                                                 <MenuItem ItemsSource="{Binding Departments}"
                                                           ItemContainerStyle="{StaticResource DepartmentWithEdit}"
-                                                          Header="{Binding CurrentDepartment}"
+                                                          Header="{Binding CurrentDepartment, Converter={StaticResource DepartmentConverter}}"
                                                           Style="{StaticResource MenuItemButtonDepartments}">
                                                 </MenuItem>
                                             </Menu>

@@ -28,6 +28,12 @@ namespace AMS.ViewModels
             SaveCommand = new Base.RelayCommand(Save);
             CancelCommand = new Base.RelayCommand(Cancel);
             LoadFromFileCommand = new Base.RelayCommand(LoadSettings);
+
+            string conString = Session.GetDBKey();
+
+            // If a current configuration exists, load it to the view.
+            if (!String.IsNullOrEmpty(conString))
+                ExtractSettingsFromString(conString);
         }
 
         /// <summary>
@@ -57,17 +63,7 @@ namespace AMS.ViewModels
             Features.Main.Reload();
         }
 
-        /// <summary>
-        /// Load the settings when the page gets focus.
-        /// </summary>
-        public override void UpdateOnFocus()
-        {
-            string conString = Session.GetDBKey();
-
-            // If a current configuration exists, load it to the view.
-            if (!String.IsNullOrEmpty(conString))
-                ExtractSettingsFromString(conString);
-        }
+        public override void UpdateOnFocus() { }
 
         /// <summary>
         /// Extracts the configuration settings from the configuration string 

@@ -297,12 +297,14 @@ namespace AMS.Database.Repositories
                         
                     _query.Where("a.deleted_at", "IS NULL", "");
 
-                    if (keyword.Length > 0)
+                    if (keyword.Length > 0 && !keyword.Equals("%"))
                     {
                         if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
                             keyword = "%" + keyword + "%";
-
+                  
                         Statement statement = new Statement();
+                        if(int.TryParse(keyword.Replace("%", ""), out int assetIdKeyword))
+                            statement.AddOrStatement("a.id", assetIdKeyword.ToString());
                         statement.AddOrStatement("a.name", keyword, "LIKE");
                         statement.AddOrStatement("a.identifier", keyword, "LIKE");
                         
@@ -334,8 +336,10 @@ namespace AMS.Database.Repositories
                             _query.HavingStatements.Add(new Statement("COUNT(DISTINCT au.user_id)", users.Count.ToString()));
                     }
 
+                    _query.OrderBy("a.id", false);
                     _query.GroupBy = "a.id";
-                    
+                    _query.Limit = 1000;
+                   
                     using (var cmd = new MySqlCommand(_query.PrepareSelect(), con))
                     {
                         using (var reader = cmd.ExecuteReader())
@@ -379,16 +383,21 @@ namespace AMS.Database.Repositories
             int userCounter = users.Count;
             int tagCounter = tags.Count;
 
-            ClearTags(asset);
-            
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
+                MySqlCommand command = con.CreateCommand();
+                MySqlTransaction transaction = con.BeginTransaction();
+                command.Transaction = transaction;
+                command.Connection = con;
+                
                 try
                 {
+                    ClearTags(asset, command);
+                    
                     string tagLabels = "\"" + String.Join("\", \"", tags);
 
                     StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users VALUES ");
@@ -410,29 +419,29 @@ namespace AMS.Database.Repositories
                         if (i != tagCounter - 1)
                             tagQuery.Append(",");
                     }
-
+                    
+                    Console.WriteLine(tagQuery.ToString());
+                    
                     if (users.Count > 0)
                     {
-                        using (var cmd = new MySqlCommand(userQuery.ToString(), con))
-                        {
-                            querySuccess = cmd.ExecuteNonQuery() > 0;
-                        }
+                        command.CommandText = userQuery.ToString();
+                        command.ExecuteNonQuery();
                     }
                     
                     if (tags.Count > 0)
                     {
-                        using (var cmd = new MySqlCommand(tagQuery.ToString(), con))
-                        {
-                            querySuccess = cmd.ExecuteNonQuery() > 0 && querySuccess;
-                        }
+                        command.CommandText = tagQuery.ToString();
+                        command.ExecuteNonQuery();
                     }
                     
                     logger.AddEntry("Tag attached", tagLabels + " was attached to the asset with ID: "
                         + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.", Features.GetCurrentSession().user.ID);
-
+                    
+                    transaction.Commit();
                 }
                 catch (MySqlException e)
                 {
+                    transaction.Rollback();
                     Console.WriteLine(e);
                 }
                 finally
@@ -465,35 +474,19 @@ namespace AMS.Database.Repositories
         /// Removes all tags from the given asset
         /// </summary>
         /// <param name="asset"></param>
-        private void ClearTags(Asset asset)
+        private void ClearTags(Asset asset, MySqlCommand command)
         {
-            var con = new MySqlHandler().GetConnection();
-
-            // Opening connection
-            if (MySqlHandler.Open(ref con))
-            {
-                try
-                {
-                    const string query = "DELETE FROM asset_tags WHERE asset_id = @id; " +
-                                         "DELETE FROM asset_users WHERE asset_id = @id;";
-
-                    using (var cmd = new MySqlCommand(query, con))
-                    {
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = asset.ID;
-
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    con.Close();
-                }
-            }
+            command.CommandText = "DELETE FROM asset_tags WHERE asset_id = @id";
+            command.Parameters.Add("@id", MySqlDbType.UInt64);
+            command.Parameters["@id"].Value = asset.ID;
+            command.ExecuteNonQuery();
+            command.Parameters.Clear();
+            
+            command.CommandText = "DELETE FROM asset_users WHERE asset_id = @id";
+            command.Parameters.Add("@id", MySqlDbType.UInt64);
+            command.Parameters["@id"].Value = asset.ID;
+            command.ExecuteNonQuery();
+            command.Parameters.Clear();
         }
 
         /// <summary>

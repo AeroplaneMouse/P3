@@ -19,7 +19,7 @@ namespace AMS.ViewModels
         public string Description => _assetController.ControlledAsset.Description;
         public ObservableCollection<ITagable> TagList => new ObservableCollection<ITagable>(
             // Only show parent tag without children and children
-            _assetController.CurrentlyAddedTags.Where(t => t.ParentId != 0 || (t.ParentId == 0 && t.ChildrenCount == 0))
+            _assetController.CurrentlyAddedTags.Where(t => t.ParentId != 0 || (t.ParentId == 0 && t.NumberOfChildren == 0))
         );
 
         public ObservableCollection<Field> FieldList =>
@@ -27,7 +27,7 @@ namespace AMS.ViewModels
         public AssetDetailsViewModel(IAssetController assetController)
         {
             _assetController = assetController;
-            UpdateTagRelations();
+            UpdateOnFocus();
         }
 
         public override void UpdateOnFocus()
@@ -44,11 +44,19 @@ namespace AMS.ViewModels
         {
             foreach (var field in FieldList)
             {
-                field.TagList = new List<Tag>();
+                field.TagList = new List<ITagable>();
                 foreach (var id in field.TagIDs)
                 {
-                    if (TagList.SingleOrDefault(p => p.TagId == id) is Tag tag)
-                        field.TagList.Add(tag);
+                    foreach(ITagable tag in TagList)
+                        if (tag.ParentId == id || tag.TagId == id)
+                            field.TagList.Add(tag);
+
+                    // #CrappyCode
+                    //if (TagList.FirstOrDefault(p => p.TagId == id) is Tag tag)
+                    //    field.TagList.Add(tag);
+
+                    //if (TagList.forea(p => p.ParentId == id) is Tag parentTag)
+                    //    field.TagList.Add(parentTag);
                 }
             }
         }

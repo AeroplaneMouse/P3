@@ -47,10 +47,10 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}"/>
             </Trigger>
             <Trigger Property="IsSubmenuOpen" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -173,7 +173,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type MenuItem}">
                     <Border Background="{TemplateBinding Background}"
-                            Padding="15, 0, 15, 1">
+                            Padding="15, 0, 15, 0">
                         <Grid>
                             <ContentPresenter
                                 Margin="6,4,6,4"
@@ -182,7 +182,7 @@
                             <Popup Placement="Bottom"
                                    x:Name="PART_Popup"
                                    PopupAnimation="Fade"
-                                   VerticalOffset="1"
+                                   VerticalOffset="0"
                                    HorizontalOffset="-15"
                                    AllowsTransparency="True"
                                    IsOpen="{TemplateBinding IsSubmenuOpen}">
@@ -226,10 +226,10 @@
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}"/>
             </Trigger>
             <Trigger Property="IsSubmenuOpen" Value="True">
-                <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>

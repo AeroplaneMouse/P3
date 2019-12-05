@@ -24,6 +24,13 @@
         </Style.Triggers>
     </Style>
     
+    <!-- Style for adding a field with placeholder -->
+    <Style TargetType="TextBox" x:Key="ParagraphTextBoxWithPlaceholder" BasedOn="{StaticResource TextBoxWithPlaceholder}">
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+    </Style>
+    
     <!-- Style for the label of added fields (includes required) -->
     <Style TargetType="{x:Type Label}" x:Key="AddedFieldLabel" BasedOn="{StaticResource BaseLabelStyle}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
@@ -78,6 +85,165 @@
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
                                     <TextBlock Foreground="Black" 
+                                               VerticalAlignment="Center"
+                                               Margin="0 0 3 0"
+                                               Cursor="Hand">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock" BasedOn="{StaticResource ParagraphStyle}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsHidden}" Value="False">
+                                                        <Setter Property="Text" Value="X" />
+                                                        <Setter Property="FontSize" Value="{StaticResource FontSizexSmall}"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsHidden}" Value="True">
+                                                        <Setter Property="Text" Value="+" />
+                                                        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Style for fields added through the parent tag in the tag editor -->
+    <Style TargetType="{x:Type Label}" x:Key="FieldFromParentTag" BasedOn="{StaticResource BaseLabelStyle}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="MinWidth" Value="50" />
+        <Setter Property="Padding" Value="5, 2, 0, 2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Label}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="{Binding Label}"
+                                   FontWeight="Medium"
+                                   Grid.Row="0" MinWidth="300" />
+
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Foreground="{StaticResource GrayForLessImportantElementsBrush}"
+                                   Text="{Binding Content}"
+                                   TextWrapping="Wrap"
+                                   Grid.Row="1"/>
+
+                        <TextBlock TextWrapping="Wrap"
+                                   Grid.Row="2">
+                            <TextBlock.Style>
+                                <Style BasedOn="{StaticResource ParagraphStyle}" TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Required}" Value="True">
+                                            <Setter Property="Text" Value="Must be filled on assets: Yes"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Required}" Value="False">
+                                            <Setter Property="Text" Value="Must be filled on assets: No"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <TextBlock TextWrapping="Wrap"
+                                   Grid.Row="3">
+                            <TextBlock.Style>
+                                <Style BasedOn="{StaticResource ParagraphStyle}" TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="1">
+                                            <Setter Property="Text" Value="Type: Textarea"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="2">
+                                            <Setter Property="Text" Value="Type: Text box"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="3">
+                                            <Setter Property="Text" Value="Type: Number"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="4">
+                                            <Setter Property="Text" Value="Type: Date"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="3">
+                                            <Setter Property="Text" Value="Type: Checkbox"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <Rectangle Grid.Row="4" Height="2" HorizontalAlignment="Stretch" Margin="0,10,10,10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                    <GradientStop Color="LightGray" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="1.0"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Style for fields added through in the tag editor -->
+    <Style TargetType="{x:Type Label}" x:Key="FieldAddedInTagEditor" BasedOn="{StaticResource BaseLabelStyle}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="MinWidth" Value="50" />
+        <Setter Property="Padding" Value="5, 2, 0, 2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Label}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button OverridesDefaultStyle="True" 
+                                x:Name="PART_FieldEditButton"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.ShowFieldEditPromptCommand}"
+                                CommandParameter="{Binding Path=.}">>
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Image Source="{StaticResource Edit_Black}" VerticalAlignment="Center"
+                                           Height="14"
+                                           Cursor="Hand">
+                                    </Image>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <Button OverridesDefaultStyle="True" 
+                                x:Name="PART_FieldButton"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveFieldCommand}"
+                                CommandParameter="{Binding Path=.}"
+                                Grid.Row="0"
+                                Grid.Column="2">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <TextBlock Foreground="Black" 
                                                Style="{StaticResource ParagraphStyle}" 
                                                VerticalAlignment="Center"
                                                Margin="0 0 3 0"
@@ -86,6 +252,69 @@
                                 </ControlTemplate>
                             </Button.Template>
                         </Button>
+
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="{Binding Label}"
+                                   FontWeight="Medium"
+                                   Grid.Row="0" MinWidth="300"
+                                   Grid.Column="0"/>
+
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="{Binding Content}"
+                                   TextWrapping="Wrap"
+                                   Grid.Row="1"/>
+
+                        <TextBlock TextWrapping="Wrap"
+                                   Grid.Row="2">
+                            <TextBlock.Style>
+                                <Style BasedOn="{StaticResource ParagraphStyle}" TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Required}" Value="True">
+                                            <Setter Property="Text" Value="Must be filled on assets: Yes"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Required}" Value="False">
+                                            <Setter Property="Text" Value="Must be filled on assets: No"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <TextBlock TextWrapping="Wrap"
+                                   Grid.Row="3">
+                            <TextBlock.Style>
+                                <Style BasedOn="{StaticResource ParagraphStyle}" TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="1">
+                                            <Setter Property="Text" Value="Type: Textarea"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="2">
+                                            <Setter Property="Text" Value="Type: Text box"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="3">
+                                            <Setter Property="Text" Value="Type: Number"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="4">
+                                            <Setter Property="Text" Value="Type: Date"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="3">
+                                            <Setter Property="Text" Value="Type: Checkbox"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        
+                        <Rectangle Grid.Row="4" Height="2" HorizontalAlignment="Stretch" Margin="0,10,10,10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                    <GradientStop Color="LightGray" Offset="0"/>
+                                    <GradientStop Color="Transparent" Offset="1.0"/>
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -138,6 +367,14 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsCustom}" Value="True">
+                <Setter Property="Visibility" Value="Hidden" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsCustom}" Value="False">
+                <Setter Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
     
     <!-- Style for textblock above tags -->
@@ -146,6 +383,14 @@
         <Setter Property="Grid.Row" Value="2"/>
         <Setter Property="Grid.Column" Value="0"/>
         <Setter Property="Text" Value="Tag references in:"/>
+        <Style.Triggers>
+            <DataTrigger Binding="{Binding IsCustom}" Value="True">
+                <Setter Property="Visibility" Value="Hidden" />
+            </DataTrigger>
+            <DataTrigger Binding="{Binding IsCustom}" Value="False">
+                <Setter Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </Style.Triggers>
     </Style>
 
     <!-- Textareafield style -->
@@ -163,7 +408,8 @@
     <DataTemplate x:Key="StringFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
             <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ParagraphTextBox}"/>
+            <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ParagraphTextBoxWithPlaceholder}"
+                     Tag="ABCD...."/>
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
@@ -173,7 +419,8 @@
     <DataTemplate x:Key="IntegerFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
             <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ParagraphTextBox}"/>
+            <TextBox Grid.Row="1" Grid.ColumnSpan="3" Text="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource ParagraphTextBoxWithPlaceholder}"
+                     Tag="Field can contain: 0-9.- "/>
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>

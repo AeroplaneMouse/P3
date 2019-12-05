@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using AMS.Authentication;
@@ -16,8 +17,6 @@ namespace AMS.Controllers
         public Asset ControlledAsset { get; set; }
 
         private List<ITagable> _tags;
-
-        //public List<ITagable> CurrentlyAddedTags => _assetRepository.GetTags(ControlledAsset).ToList();
 
         public List<ITagable> CurrentlyAddedTags
         {
@@ -50,82 +49,15 @@ namespace AMS.Controllers
 
             ControlledAsset.DeSerializeFields();
 
-            LoadFields();
-
             Name = ControlledAsset.Name;
             Identifier = ControlledAsset.Identifier;
             Description = ControlledAsset.Description;
             NonHiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == true).ToList();
 
-            LoadTags();
-        }
-
-        /// <summary>
-        /// Attaches a tag and its fields to a asset.
-        /// </summary>
-        /// <param name="tag"></param>
-        /// <returns></returns>
-        public bool AttachTag(ITagable tag)
-        {
-            CurrentlyAddedTags.Add(tag);
-            if (tag is Tag currentTag)
-            {
-                //DeSerialize the fields, so the fieldList is instantiated
-                currentTag.DeSerializeFields();
-                foreach (var tagField in currentTag.FieldList)
-                {
-                    AddField(tagField, currentTag);
-                }
-            }
             LoadFields();
 
-            return CurrentlyAddedTags.Contains(tag);
-        }
-
-        /// <summary>
-        /// Detaches tag from an asset.
-        /// </summary>
-        /// <param name="tag"></param>
-        /// <returns></returns>
-        public bool DetachTag(ITagable tag)
-        {
-            //If no tag was given, return.
-            if (tag == null)
-                return false;
-
-            //Check if the tag is in the list.
-            if (CurrentlyAddedTags.Contains(tag))
-            {
-                List<Field> removeFields = new List<Field>();
-                CurrentlyAddedTags.Remove(tag);
-
-                //Checks if the ITagable is a Tag.
-                if (tag is Tag currentTag)
-                {
-                    //Remove relations to the field.
-                    RemoveFieldRelations(currentTag.ID);
-
-                    //Remove a fields relation to the parent tag, if no other tag with the same parent tag exists in CurrentlyAddedTags.
-                    if (CurrentlyAddedTags.FirstOrDefault(p => p.ParentId == currentTag.ParentID && p.TagId != currentTag.ID) == null)
-                        RemoveFieldRelations(currentTag.ParentID);
-
-                    //Checks if the field is in the fieldList on the asset, and the tag, if so, remove it.
-                    foreach (var field in currentTag.FieldList)
-                    {
-                        Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(field)) ??
-                                            NonHiddenFieldList.FirstOrDefault(p => p.Equals(field));
-                        if (fieldInList != null)
-                            removeFields.Add(fieldInList);
-                    }
-
-                    //Remove the fields.
-                    foreach (var field in removeFields)
-                        RemoveField(field);
-                }
-            }
-
-            return !CurrentlyAddedTags.Contains(tag);
+            LoadTags();
         }
 
         /// <summary>
@@ -195,6 +127,87 @@ namespace AMS.Controllers
         }
 
         /// <summary>
+        /// Resets the attributes of the controller to correspond with the attributes on the asset
+        /// </summary>
+        public void RevertChanges()
+        {
+            Name = ControlledAsset.Name;
+            Identifier = ControlledAsset.Identifier;
+            Description = ControlledAsset.Description;
+            _tags = _assetRepository.GetTags(ControlledAsset).ToList();
+        }
+
+        /// <summary>
+        /// Attaches a tag and its fields to a asset.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public bool AttachTag(ITagable tag)
+        {
+            if (!CurrentlyAddedTags.Contains(tag))
+            {
+                CurrentlyAddedTags.Add(tag);
+                if (tag is Tag currentTag)
+                {
+                    //DeSerialize the fields, so the fieldList is instantiated
+                    currentTag.DeSerializeFields();
+                    foreach (var tagField in currentTag.FieldList)
+                    {
+                        AddField(tagField, currentTag);
+                    }
+                }
+            }
+
+            LoadFields();
+            return CurrentlyAddedTags.Contains(tag);
+        }
+
+        /// <summary>
+        /// Detaches tag from an asset.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        public bool DetachTag(ITagable tag)
+        {
+            //If no tag was given, return.
+            if (tag == null)
+                return false;
+
+            //Check if the tag is in the list.
+            if (CurrentlyAddedTags.Contains(tag))
+            {
+                List<Field> removeFields = new List<Field>();
+                CurrentlyAddedTags.Remove(tag);
+
+                //Checks if the ITagable is a Tag.
+                if (tag is Tag currentTag)
+                {
+                    //Remove relations to the field.
+                    RemoveFieldRelations(currentTag.ID);
+
+                    //Remove a fields relation to the parent tag, if no other tag with the same parent tag exists in CurrentlyAddedTags.
+                    if (CurrentlyAddedTags.FirstOrDefault(p => p.ParentId == currentTag.ParentId && p.TagId != currentTag.ID) == null)
+                        RemoveFieldRelations(currentTag.ParentId);
+
+                    //Checks if the field is in the fieldList on the asset, and the tag, if so, remove it.
+                    foreach (var field in currentTag.FieldList)
+                    {
+                        Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(field)) ??
+                                            NonHiddenFieldList.FirstOrDefault(p => p.Equals(field));
+                        if (fieldInList != null)
+                            removeFields.Add(fieldInList);
+                    }
+
+                    //Remove the fields.
+                    foreach (var field in removeFields)
+                        RemoveField(field);
+                }
+            }
+
+            return !CurrentlyAddedTags.Contains(tag);
+        }
+
+        /// <summary>
         /// Loads the tags when opening the page, and adds any fields added to the tag since the editor was last opened.
         /// </summary>
         private void LoadTags()
@@ -209,19 +222,27 @@ namespace AMS.Controllers
                 }
             }
         }
-
+        
+        /// <summary>
+        /// Runs on startup, loads fields, and updates fields that are dependent on values.
+        /// </summary>
         private void LoadFields()
         {
             foreach (var field in HiddenFieldList)
             {
-                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"System.Windows.Controls.ComboBoxItem: Today"))
+                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"Current Date"))
                 {
                     field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
                 }
             }
             foreach (var field in NonHiddenFieldList)
             {
-                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"System.Windows.Controls.ComboBoxItem: Today"))
+                
+                if (field.Type == Field.FieldType.Date)
+                {
+                    Console.WriteLine(field.Content);
+                }
+                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"Current Date"))
                 {
                     field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
                 }

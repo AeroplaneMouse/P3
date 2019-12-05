@@ -7,6 +7,7 @@ using AMS.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using AMS.Database.Repositories;
+using AMS.ViewModels;
 
 namespace AMS.Controllers 
 {
@@ -18,12 +19,11 @@ namespace AMS.Controllers
             {
                 if (_commentList == null)
                 {
-                    _commentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetAll();
+                    FetchComments();
                 }
 
-                return _commentList.OrderByDescending(p => p.CreatedAt).ToList();
+                return _commentList;
             }
-
             set => _commentList = value;
         }
 
@@ -86,12 +86,12 @@ namespace AMS.Controllers
                 _commentRep.Delete(comment);
             }
 
-            CommentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetAll();
+            FetchComments();
         }
 
         public void FetchComments()
         {
-            CommentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetAll();
+            CommentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetLatestComments(Features.Main.CurrentDepartment.ID);
         }
     }
 }

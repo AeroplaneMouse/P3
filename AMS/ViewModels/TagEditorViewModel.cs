@@ -11,6 +11,7 @@ using System.Globalization;
 using AMS.Controllers;
 using AMS.Database.Repositories;
 using AMS.Helpers;
+using AMS.Interfaces;
 using AMS.Views;
 using AMS.ViewModels.Base;
 using AMS.Views.Prompts;
@@ -32,7 +33,7 @@ namespace AMS.ViewModels
 
         public string Name { get => _controller.Name; set => _controller.Name = value; }
         public string Color { get => _controller.Color; set => _controller.Color = value; }
-        public ulong ParentID => _controller.ParentID;
+        public ulong ParentID => _controller.ParentId;
         public ulong DepartmentID { get => _controller.DepartmentID; set => _controller.DepartmentID = value; }
         public string PageTitle { get; set; }
         public List<Tag> ParentTagList { get => _controller.ParentTagList; }
@@ -44,7 +45,8 @@ namespace AMS.ViewModels
             set
             {
 
-                if (value == _selectedParentTagIndex) return;
+                if (value == _selectedParentTagIndex) 
+                    return;
 
                 int oldValue = _selectedParentTagIndex;
                 _selectedParentTagIndex = value;
@@ -55,7 +57,7 @@ namespace AMS.ViewModels
                     OnPropertyChanged(nameof(Color));
                 }
 
-                _controller.ParentID = ParentTagList[_selectedParentTagIndex].ID;
+                _controller.ParentId = ParentTagList[_selectedParentTagIndex].ID;
 
                 if (value > 0)
                 {
@@ -65,7 +67,7 @@ namespace AMS.ViewModels
                 else
                     DepartmentSelectionEnabled = true;
 
-                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex]);
+                _controller.ConnectTag();
                 UpdateAll();
             }
         }
@@ -102,17 +104,17 @@ namespace AMS.ViewModels
             else
             {
                 // Enabling department selection for parent tags
-                DepartmentSelectionEnabled = _controller.ParentID == 0;
+                DepartmentSelectionEnabled = _controller.ParentId == 0;
             }
 
-            if(_controller.ControlledTag.ChildrenCount > 0)
+            if(_controller.ControlledTag.NumberOfChildren > 0)
             {
                 ParentSelectionEnabled = false;
             }
             
             //Set the selected parent to the parent of the chosen tag
             int i = ParentTagList.Count - 1;
-            while (i > 0 && ParentTagList[i].ID != _controller.ParentID)
+            while (i > 0 && ParentTagList[i].ID != _controller.ParentId)
                 i--;
 
             if (i > 0)
@@ -131,7 +133,7 @@ namespace AMS.ViewModels
                 : "Add tag";
 
             if (_controller.IsEditing && _selectedParentTagIndex != 0)
-                _controller.ConnectTag(ParentTagList[_selectedParentTagIndex]);
+                _controller.ConnectTag();
 
             UpdateAll();
 
@@ -180,7 +182,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void SaveTag()
         {
-            _controller.ParentID = ParentTagList[SelectedParentTagIndex].ID;
+            _controller.ParentId = ParentTagList[SelectedParentTagIndex].ID;
             _controller.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
             if (VerifyTagAndFields())
             {
@@ -241,7 +243,7 @@ namespace AMS.ViewModels
             foreach (var field in HiddenFieldList)
             {
                 //TODO: Question
-                field.TagList = new List<Tag>(); // <=== How does this work?! 
+                field.TagList = new List<ITagable>(); 
                 foreach (var id in field.TagIDs)
                 {
                     if (field.TagIDs.Contains(id))
@@ -251,7 +253,7 @@ namespace AMS.ViewModels
 
             foreach (var field in NonHiddenFieldList)
             {
-                field.TagList = new List<Tag>(); // <=== How does this work?!
+                field.TagList = new List<ITagable>(); 
                 foreach (var id in field.TagIDs)
                 {
                     if (field.TagIDs.Contains(id))
@@ -314,10 +316,10 @@ namespace AMS.ViewModels
             string message = String.Empty;
 
             // Check if parent
-            if (_controller.ParentID == 0 && _controller.ControlledTag.ChildrenCount > 0)
+            if (_controller.ParentId == 0 && _controller.ControlledTag.NumberOfChildren > 0)
             {
                 message = "You are about to remove a parent tag!\n"
-                        + $"There are { _controller.ControlledTag.ChildrenCount } children attached to this parent.";
+                        + $"There are { _controller.ControlledTag.NumberOfChildren } children attached to this parent.";
               
                 List<string> buttons = new List<string>();
                 buttons.Add("Remove parent and all children?");
@@ -327,17 +329,21 @@ namespace AMS.ViewModels
                 {
                     if (e is ExpandedPromptEventArgs args)
                     {
-                        string extraMessage = String.Empty;
+                        string extraMessage = $"{ _controller.Name } has been removed";
+                        bool actionSuccess;
                         if (args.ButtonNumber == 0)
                         {
-                            _controller.RemoveChildren();
-                            _controller.Remove();
-                            extraMessage = $" aswell as { _controller.ControlledTag.ChildrenCount } children";
+                            actionSuccess = _controller.Remove(removeChildren: true);
+                            extraMessage = $" aswell as { _controller.ControlledTag.NumberOfChildren } children";
                         }
                         else
-                            _controller.Remove();
+                            actionSuccess = _controller.Remove();
+
+                        if (!actionSuccess)
+                            extraMessage = "Error! Unable to remove tag(s).";
+
                         Features.Navigate.Back();
-                        Features.AddNotification(new Notification($"{ _controller.Name } has been removed{ extraMessage }.", background: Notification.APPROVE), displayTime: 4000);
+                        Features.AddNotification(new Notification(extraMessage, background: actionSuccess ? Notification.APPROVE : Notification.ERROR), displayTime: 4000);
                     }
                 }));
             }

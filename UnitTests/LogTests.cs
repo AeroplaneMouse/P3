@@ -84,7 +84,7 @@ namespace UnitTests
                 Name = "tag name",
                 Color = "#d3d3d3",
                 DepartmentID = 1,
-                ParentID = 0,
+                ParentId = 0,
                 NumberOfChildren = 10
             };
             
@@ -364,7 +364,7 @@ namespace UnitTests
                 && le.Changes.Contains("new tag name")
                 && le.Changes.Contains("Color")
                 && le.Changes.Contains("#f9f9f9")
-                && !le.Changes.Contains("ParentID")
+                && !le.Changes.Contains("ParentId")
                 && !le.Changes.Contains("DepartmentID"))))
                 .Returns(true);
 
@@ -384,7 +384,7 @@ namespace UnitTests
                 Name = "tag name",
                 Color = "#d3d3d3",
                 DepartmentID = 1,
-                ParentID = 0,
+                ParentId = 0,
                 NumberOfChildren = 10
             };
 

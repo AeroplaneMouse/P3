@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -18,6 +19,8 @@ namespace AMS.ViewModels
 {
     public class AssetEditorViewModel : BaseViewModel
     {
+        private ObservableCollection<ITagable> _appliedTags = new ObservableCollection<ITagable>();
+
         #region Public Properties
 
         public ObservableCollection<Field> NonHiddenFieldList =>
@@ -26,7 +29,11 @@ namespace AMS.ViewModels
         public ObservableCollection<Field> HiddenFieldList =>
             new ObservableCollection<Field>(_assetController.HiddenFieldList);
 
-        public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
+        public ObservableCollection<ITagable> AppliedTags
+        {
+            get => _appliedTags;
+            set => _appliedTags = value;
+        }
 
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
 
@@ -241,6 +248,7 @@ namespace AMS.ViewModels
         /// </summary>
         public void Cancel()
         {
+            _assetController.RevertChanges();
             if (!Features.Navigate.Back())
                 Features.Navigate.To(Features.Create.AssetList());
         }
@@ -267,11 +275,13 @@ namespace AMS.ViewModels
 
                 if (tag != null)
                 {
-                    if (_tagHelper.IsParentSet() || (tag.ChildrenCount == 0 && tag.TagId != 1))
+                    if (_tagHelper.IsParentSet() || (tag.NumberOfChildren == 0 && tag.TagId != 1))
                     {
                         _tagHelper.AddTag(tag);
                         _assetController.AttachTag(tag);
                         _assetController.AttachTag(_tagHelper.GetParent());
+                        AppliedTags = _tagHelper.GetAppliedTags(false);
+                        UpdateTagSuggestions();
                     }
                     else
                     {
@@ -306,14 +316,16 @@ namespace AMS.ViewModels
             ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == TagSearchQuery.Trim(' '));
             if (tag != null)
             {
-                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.ChildrenCount > 0))
+                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.NumberOfChildren > 0))
                 {
+                    // Set parent tag with children or user parent
                     _tagHelper.SetParent((Tag) tag);
                     CurrentGroup = tag.TagLabel;
                     CurrentGroupVisibility = Visibility.Visible;
                 }
                 else
                 {
+                    // Attach tag and parent
                     _tagHelper.AddTag(tag);
                     _assetController.AttachTag(tag);
                     _assetController.AttachTag(_tagHelper.GetParent());
@@ -426,10 +438,10 @@ namespace AMS.ViewModels
 
         private void UpdateTagRelationsOnSingleField(Field field, ObservableCollection<ITagable> tagList)
         {
-            field.TagList = new List<Tag>();
+            field.TagList = new List<ITagable>();
             foreach (var id in field.TagIDs)
             {
-                foreach (Tag tag in tagList.Where(p => p.TagId == id || p.ParentId == id))
+                foreach (ITagable tag in tagList.Where(p => p.TagId == id || p.ParentId == id))
                 {
                     field.TagList.Add(tag);
                 }
@@ -475,9 +487,13 @@ namespace AMS.ViewModels
 
                 if (field.Type == Field.FieldType.NumberField)
                 {
+                    //Checks for ^(Not) the result, as and then returns true if it finds an element that does not match the rule.
+                    Regex regex = new Regex("[^0-9.+-/,]+");
                     if (!string.IsNullOrEmpty(field.Content))
                     {
-                        bool check = field.Content.All(char.IsDigit);
+                        //Checks whether the match is true
+                        bool check = !regex.IsMatch(field.Content);
+                        //Checks if the match returned false
                         if (!check)
                         {
                             Features.AddNotification(

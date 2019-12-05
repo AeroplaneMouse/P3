@@ -77,7 +77,7 @@ namespace AMS.Database.Repositories
                     string query = "SELECT l.id, u.username, u.domain, l.entry_type, l.description, l.logged_item_id, l.logged_item_type, l.changes, l.created_at " +
                                    "FROM log AS l INNER JOIN users AS u ON(l.user_id = u.id) " +
                                    "WHERE logged_item_id=@logged_item_id AND logged_item_type=@logged_item_type" +
-                                   (userId != null ? " AND user_id=@user_id" : "");
+                                   (userId != null ? " AND user_id=@user_id" : "")+" LIMIT 1000";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -97,7 +97,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                entries.Add(DBOToModelConvert(reader));
+                                entries.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -120,7 +120,6 @@ namespace AMS.Database.Repositories
         {
             var con = new MySqlHandler().GetConnection();
             List<LogEntry> entries = new List<LogEntry>();
-            int limit = 1000;
 
             // Opening connection
             if (MySqlHandler.Open(ref con))
@@ -131,7 +130,7 @@ namespace AMS.Database.Repositories
                                    "l.logged_item_id, l.logged_item_type, l.changes, l.created_at " +
                                    "FROM log AS l INNER JOIN users AS u ON(l.user_id = u.id) " +
                                    "WHERE l.user_id LIKE @keyword OR l.description LIKE @keyword OR l.entry_type LIKE @keyword OR l.created_at LIKE @keyword " +
-                                   "ORDER BY l.id desc LIMIT " + limit;
+                                   "ORDER BY l.id desc LIMIT 1000";
 
                     if (!keyword.Contains("%"))
                         keyword = "%" + keyword + "%";
@@ -145,7 +144,7 @@ namespace AMS.Database.Repositories
                         {
                             while (reader.Read())
                             {
-                                entries.Add(DBOToModelConvert(reader));
+                                entries.Add(DataMapper(reader));
                             }
                             reader.Close();
                         }
@@ -169,7 +168,7 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public LogEntry DBOToModelConvert(MySqlDataReader reader)
+        public LogEntry DataMapper(MySqlDataReader reader)
         {
             ulong rowId = reader.GetUInt64("id");
             ulong rowLoggedItemId = reader.GetUInt64("logged_item_id");

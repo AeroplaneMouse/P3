@@ -48,20 +48,21 @@ namespace AMS.Helpers
                 if (_parent.TagId == 1)
                 {
                     result.AddRange(_users.Where(u => u.Username.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
-                                                      && !AppliedTags.Contains(u)).ToList());
+                                                      && !AppliedTags.Contains(u)));
                 }else{
                     result.AddRange(SuggestedTags.Where(t => t.TagLabel.StartsWith(input, StringComparison.InvariantCultureIgnoreCase) 
-                                                             && !AppliedTags.Contains(t)).ToList());
+                                                      && !AppliedTags.Contains(t)));
                 }
             }
             else
             {
                 foreach (var item in SuggestedTags)
                 {
-                    if ((item.ChildrenCount > 0 || item.TagId == 1) 
+                    if ((item.NumberOfChildren > 0 || item.TagId == 1) 
                         && (!AppliedTags.Contains(item) || !ContainsAllChildrenOfParent(item)))
                         result.Add(item);
-                    else if (item.ChildrenCount == 0 && !AppliedTags.Contains(item))
+                    
+                    else if (item.NumberOfChildren == 0 && !AppliedTags.Contains(item))
                         result.Add(item);
                 }
               
@@ -83,7 +84,7 @@ namespace AMS.Helpers
         {
             if (!AppliedTags.Contains(tag))
             {
-                if (tag.ParentId == 0 && tag.ChildrenCount > 0)
+                if (tag.ParentId == 0 && tag.NumberOfChildren > 0)
                 {
                     if (CanApplyParentTags)
                     {
@@ -110,9 +111,9 @@ namespace AMS.Helpers
             {
                 var item = (Tag) tag;
 
-                if (item.ParentID > 0)
+                if (item.ParentId > 0)
                 {
-                    return _tags.Single(t => t.ID == item.ParentID);
+                    return _tags.Single(t => t.ID == item.ParentId);
                 }
             }
             
@@ -121,7 +122,7 @@ namespace AMS.Helpers
 
         private bool ApplyParentIfNeeded(ITagable tag)
         {
-            if (CanApplyParentTags || (tag.ParentId == 0 && tag.ChildrenCount > 0))
+            if (CanApplyParentTags || (tag.ParentId == 0 && tag.NumberOfChildren > 0))
                 return false;
             
             var parent = GetTagParent(tag);
@@ -184,13 +185,13 @@ namespace AMS.Helpers
             if (tag.TagId == 1)
                 return AppliedTags.Count(u => u.TagType == typeof(User)) == _users.Count; // Users
 
-            return AppliedTags.Count(t => t.ParentId == tag.TagId) == tag.ChildrenCount;
+            return AppliedTags.Count(t => t.ParentId == tag.TagId) == tag.NumberOfChildren;
         }
-        
+
         public bool AllParentChildrenTagged()
         {
             if (IsParentSet())
-                return AppliedTags.Count(t => t.ParentId == _parent.ID) == _parent.ChildrenCount;
+                return AppliedTags.Count(t => t.ParentId == _parent.ID) == _parent.NumberOfChildren;
 
             return false;
         }
@@ -208,7 +209,7 @@ namespace AMS.Helpers
             if (includeParents)
                 return AppliedTags;
             
-            return new ObservableCollection<ITagable>(AppliedTags.Where(t => t.ParentId > 0 || (t.ParentId == 0 && t.ChildrenCount == 0 && (t.TagId != 1 && t.TagType == typeof(Tag)))));
+            return new ObservableCollection<ITagable>(AppliedTags.Where(t => t.ParentId > 0 || (t.ParentId == 0 && t.NumberOfChildren == 0 && (t.TagId != 1 && t.TagType == typeof(Tag)))));
         }
         
         public void SetAppliedTags(ObservableCollection<ITagable> tags)
@@ -226,7 +227,7 @@ namespace AMS.Helpers
         public void SetParent(Tag tag=null)
         {
             SuggestedTags.Clear();
-            SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentID == tag.ID).ToList() : _tags.Where(a => a.ParentID == 0).ToList());
+            SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentId == tag.ID).ToList() : _tags.Where(a => a.ParentId == 0).ToList());
             _parent = tag;
         }
         

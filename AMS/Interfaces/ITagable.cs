@@ -10,7 +10,7 @@ namespace AMS.Interfaces
         Type TagType { get; }
         string TagLabel { get; }
         ulong ParentId { get; }
-        int ChildrenCount { get; }
+        int NumberOfChildren { get; }
         List<ITagable> Children { get; set; }
         string TagColor { get; set; }
         SolidColorBrush TagFontColor { get; }
