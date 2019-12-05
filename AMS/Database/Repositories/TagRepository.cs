@@ -253,32 +253,35 @@ namespace AMS.Database.Repositories
             if (entity.ID == 1)
                 return false;
 
-            // Removes a parent children
-            if (removeChildren && entity.ParentId == 0)
-                DeleteChildren(entity.ID);
-
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
+                MySqlCommand command = con.CreateCommand();
+                MySqlTransaction transaction = con.BeginTransaction();
+                command.Transaction = transaction;
+                command.Connection = con;
+                
                 try
                 {
-                    string query = "DELETE FROM tags WHERE id=@id";
-
-                    using (var cmd = new MySqlCommand(query, con))
-                    {
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = entity.ID;
-
-                        querySuccess = cmd.ExecuteNonQuery() > 0;
-                    }
-
+                    // Removes a parent children
+                    if (removeChildren && entity.ParentId == 0)
+                        DeleteChildren(entity.ID, command);
+                    
+                    command.CommandText = "DELETE FROM tags WHERE id=@id";
+                    command.Parameters.Add("@id", MySqlDbType.UInt64);
+                    command.Parameters["@id"].Value = entity.ID;
+                    command.ExecuteNonQuery();
+                    transaction.Commit();
+                    
                     logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    querySuccess = true;
                 }
                 catch (MySqlException e)
                 {
+                    transaction.Rollback();
                     Console.WriteLine(e);
                 }
                 finally
@@ -292,41 +295,19 @@ namespace AMS.Database.Repositories
 
         public bool DeleteChildren(ulong parentID)
         {
-            if (parentID == 1)
-                return false;
+            throw new NotImplementedException();
+        }
 
-            var con = new MySqlHandler().GetConnection();
-            bool querySuccess = false;
+        private void DeleteChildren(ulong parentID, MySqlCommand command)
+        {
+            command.CommandText = "DELETE FROM tags WHERE parent_id=@id";
+            command.Parameters.Add("@id", MySqlDbType.UInt64);
+            command.Parameters["@id"].Value = parentID;
+            command.ExecuteNonQuery();
+            command.Parameters.Clear();
 
-            // Opening connection
-            if (MySqlHandler.Open(ref con))
-            {
-                try
-                {
-                    const string query = "DELETE FROM tags WHERE parent_id=@id";
-
-                    using (var cmd = new MySqlCommand(query, con))
-                    {
-                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                        cmd.Parameters["@id"].Value = parentID;
-
-                        querySuccess = cmd.ExecuteNonQuery() > 0;
-                    }
-
-                    // TODO: What to do here?!
-                    //logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
-                }
-                catch (MySqlException e)
-                {
-                    Console.WriteLine(e);
-                }
-                finally
-                {
-                    con.Close();
-                }
-            }
-
-            return querySuccess;
+                // TODO: What to do here?!
+            //logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
         }
 
         /// <summary>
