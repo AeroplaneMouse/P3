@@ -74,7 +74,6 @@ namespace AMS.Database.Repositories
                         cmd.Parameters.Add("@name", MySqlDbType.String);
                         cmd.Parameters["@name"].Value = entity.Name;
                         querySuccess = cmd.ExecuteNonQuery() > 0;
-
                         id = (ulong)cmd.LastInsertedId;
                     }
 
