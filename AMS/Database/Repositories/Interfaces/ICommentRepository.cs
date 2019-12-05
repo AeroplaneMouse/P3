@@ -9,5 +9,7 @@ namespace AMS.Database.Repositories.Interfaces
         List<Comment> GetByAssetId(ulong assetId);
 
         List<Comment> GetAll(bool includeDeleted = false, int limit=100);
+
+        List<Comment> GetLatestComments(ulong departmentId = 0, int limit = 100, int days = 7);
     }
 }

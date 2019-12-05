@@ -15,14 +15,10 @@ namespace AMS.ViewModels
         public ulong NumberOfAssets => _homeController.NumberOfAssets;
         public ulong NumberOfTags => _homeController.NumberOfTags;
         public ulong NumberOfDepartments => _homeController.NumberOfDepartments;
-        public int HoursLookedBack => 168;
 
         public List<Comment> CommentList
         {
-            get => _commentListController.CommentList
-                .Where(p => new TimeSpan(DateTime.Now.Ticks - p.CreatedAt.Ticks).TotalHours < HoursLookedBack)
-                .Where(p => (Features.GetCurrentDepartment().ID != 0) ? _homeController.GetAsset(p.AssetID).DepartmentID == Features.GetCurrentDepartment().ID : true)
-                .ToList();
+            get => _commentListController.CommentList;
         }
 
         public string CurrentDepartment => "(" + Features.GetCurrentDepartment().Name + ")";
