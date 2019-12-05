@@ -142,10 +142,13 @@
                                 <GridViewColumnHeader Content="Username" Tag="Username"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Path=Username}"
-                                                   Style="{StaticResource ParagraphStyle}"
-                                                   Padding="0"
-                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
+                                        <TextBox Text="{Binding Path=Username, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                                 Style="{StaticResource ParagraphTextBox}"
+                                                 BorderBrush="Transparent"
+                                                 Background="Transparent"
+                                                 Padding="0"
+                                                 Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"
+                                                 MinWidth="220"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
@@ -175,7 +178,7 @@
                                                  BorderBrush="Transparent"
                                                  Background="Transparent"
                                                  Padding="0"
-                                                 MinWidth="190"
+                                                 MinWidth="180"
                                                  Height="Auto" 
                                                  Style="{StaticResource ParagraphTextBox}"
                                                  Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
