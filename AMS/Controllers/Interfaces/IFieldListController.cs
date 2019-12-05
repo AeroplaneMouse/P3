@@ -10,9 +10,9 @@ namespace AMS.Controllers.Interfaces
 
         bool SerializeFields();
 
-        bool AddField(Field field,FieldContainer fieldContainer = null);
+        bool AddField(Field field, FieldContainer fieldContainer = null);
 
-        bool RemoveField(Field inputField, FieldContainer fieldContainer = null);
+        bool RemoveField(Field inputField);
 
         bool RemoveFieldRelations(ulong TagId);
     }
