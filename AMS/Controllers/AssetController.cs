@@ -47,8 +47,6 @@ namespace AMS.Controllers
 
             ControlledAsset.DeSerializeFields();
 
-            
-            
             Name = ControlledAsset.Name;
             Identifier = ControlledAsset.Identifier;
             Description = ControlledAsset.Description;
@@ -76,8 +74,7 @@ namespace AMS.Controllers
                     AddField(tagField, currentTag);
                 }
             }
-            LoadFields();
-
+            
             LoadFields();
             return CurrentlyAddedTags.Contains(tag);
         }
