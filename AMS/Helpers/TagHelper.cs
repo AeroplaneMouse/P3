@@ -35,8 +35,8 @@ namespace AMS.Helpers
 
         public void Reload()
         {
-            _tags = (List<Tag>) _tagRepository.GetAll();
-            _users = (List<User>) _userRepository.GetAll();
+            _tags = _tagRepository.GetAll().ToList();
+            _users = _userRepository.GetAll().ToList();
         }
 
         public List<ITagable> Suggest(string input)
@@ -58,11 +58,11 @@ namespace AMS.Helpers
             {
                 foreach (var item in SuggestedTags)
                 {
-                    if ((item.NumOfChildren > 0 || item.TagId == 1) 
+                    if ((item.NumberOfChildren > 0 || item.TagId == 1) 
                         && (!AppliedTags.Contains(item) || !ContainsAllChildrenOfParent(item)))
                         result.Add(item);
                     
-                    else if (item.NumOfChildren == 0 && !AppliedTags.Contains(item))
+                    else if (item.NumberOfChildren == 0 && !AppliedTags.Contains(item))
                         result.Add(item);
                 }
               
@@ -84,7 +84,7 @@ namespace AMS.Helpers
         {
             if (!AppliedTags.Contains(tag))
             {
-                if (tag.ParentId == 0 && tag.NumOfChildren > 0)
+                if (tag.ParentId == 0 && tag.NumberOfChildren > 0)
                 {
                     if (CanApplyParentTags)
                     {
@@ -122,7 +122,7 @@ namespace AMS.Helpers
 
         private bool ApplyParentIfNeeded(ITagable tag)
         {
-            if (CanApplyParentTags || (tag.ParentId == 0 && tag.NumOfChildren > 0))
+            if (CanApplyParentTags || (tag.ParentId == 0 && tag.NumberOfChildren > 0))
                 return false;
             
             var parent = GetTagParent(tag);
@@ -185,39 +185,17 @@ namespace AMS.Helpers
             if (tag.TagId == 1)
                 return AppliedTags.Count(u => u.TagType == typeof(User)) == _users.Count; // Users
 
-            return AppliedTags.Count(t => t.ParentId == tag.TagId) == tag.NumOfChildren;
-        }
-
-        public void SetParent(Tag tag=null)
-        {
-            SuggestedTags.Clear();
-            SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentId == tag.ID).ToList() : _tags.Where(a => a.ParentId == 0).ToList());
-            _parent = tag;
+            return AppliedTags.Count(t => t.ParentId == tag.TagId) == tag.NumberOfChildren;
         }
 
         public bool AllParentChildrenTagged()
         {
             if (IsParentSet())
-                return AppliedTags.Count(t => t.ParentId == _parent.ID) == _parent.NumOfChildren;
+                return AppliedTags.Count(t => t.ParentId == _parent.ID) == _parent.NumberOfChildren;
 
             return false;
         }
-
-        public ObservableCollection<ITagable> GetAppliedTags(bool includeParents=false)
-        {
-            if (includeParents)
-                return AppliedTags;
-            
-            return new ObservableCollection<ITagable>(AppliedTags.Where(t => t.ParentId > 0 || (t.ParentId == 0 && t.NumOfChildren == 0 && (t.TagId != 1 && t.TagType == typeof(Tag)))));
-        }
-
-        public List<ulong> GetAppliedTagIds(Type type)
-        {
-            return AppliedTags.Where(t => t.TagType == type).Select(t => t.TagId).ToList();
-        }
-
-        public bool IsParentSet() => _parent != null;
-
+        
         public bool ContainsAllChildrenFromParent()
         {
             if (IsParentSet())
@@ -226,18 +204,33 @@ namespace AMS.Helpers
             return true;
         }
 
-        public void SetCurrentTags(ObservableCollection<ITagable> tags)
+        public ObservableCollection<ITagable> GetAppliedTags(bool includeParents=false)
         {
-            foreach(ITagable tag in tags)
-            {
-                if (!AppliedTags.Contains(tag))
-                {
-                    ApplyParentIfNeeded(tag);
-                    AddTag(tag);
-                }
-            }
+            if (includeParents)
+                return AppliedTags;
+            
+            return new ObservableCollection<ITagable>(AppliedTags.Where(t => t.ParentId > 0 || (t.ParentId == 0 && t.NumberOfChildren == 0 && (t.TagId != 1 && t.TagType == typeof(Tag)))));
+        }
+        
+        public void SetAppliedTags(ObservableCollection<ITagable> tags)
+        {
+            AppliedTags = tags;
+        }
+        
+        public List<ulong> GetAppliedTagIds(Type type)
+        {
+            return AppliedTags.Where(t => t.TagType == type).Select(t => t.TagId).ToList();
         }
 
         public Tag GetParent() => _parent;
+        
+        public void SetParent(Tag tag=null)
+        {
+            SuggestedTags.Clear();
+            SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentId == tag.ID).ToList() : _tags.Where(a => a.ParentId == 0).ToList());
+            _parent = tag;
+        }
+        
+        public bool IsParentSet() => _parent != null;
     }
 }

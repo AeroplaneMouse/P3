@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using AMS.Authentication;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
@@ -37,13 +38,14 @@ namespace AMS.Controllers
         public string Description { get; set; }
 
         private IAssetRepository _assetRepository;
+        private Session _session;
 
-        public AssetController(Asset asset, IAssetRepository assetRepository) 
-            : base(asset)
+        public AssetController(Asset asset, IAssetRepository assetRepository, Session session) : base(asset ?? new Asset())
         {
             ControlledAsset = asset;
 
             _assetRepository = assetRepository;
+            _session = session;
 
             ControlledAsset.DeSerializeFields();
 
@@ -52,8 +54,9 @@ namespace AMS.Controllers
             Description = ControlledAsset.Description;
             NonHiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == true).ToList();
+
             LoadFields();
-            
+
             LoadTags();
         }
 
@@ -104,7 +107,7 @@ namespace AMS.Controllers
                 {
                     //Remove relations to the field.
                     RemoveFieldRelations(currentTag.ID);
-                    
+
                     //Remove a fields relation to the parent tag, if no other tag with the same parent tag exists in CurrentlyAddedTags.
                     if (CurrentlyAddedTags.FirstOrDefault(p => p.ParentId == currentTag.ParentId && p.TagId != currentTag.ID) == null)
                         RemoveFieldRelations(currentTag.ParentId);
@@ -143,14 +146,14 @@ namespace AMS.Controllers
             if (ControlledAsset.Description != Description)
                 ControlledAsset.Description = Description;
 
-            ControlledAsset.DepartmentID = Features.GetCurrentSession().user.DefaultDepartment;
+            ControlledAsset.DepartmentID = _session.user.DefaultDepartment;
 
             //Combines the two lists
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
             ControlledAsset.FieldList = fieldList;
             SerializeFields();
-            
+
             //Database saving
             ulong id = 0;
             Asset insertedAsset = _assetRepository.Insert(ControlledAsset, out id);

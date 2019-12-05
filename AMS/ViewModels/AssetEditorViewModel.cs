@@ -113,7 +113,7 @@ namespace AMS.ViewModels
 
             _tagHelper = tagHelper;
             _tagHelper.CanApplyParentTags = false;
-            _tagHelper.SetCurrentTags(new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags));
+            _tagHelper.SetAppliedTags(new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags));
             AppliedTags = _tagHelper.GetAppliedTags(false);
 
             _isEditing = (_assetController.ControlledAsset.ID != 0);
@@ -275,7 +275,7 @@ namespace AMS.ViewModels
 
                 if (tag != null)
                 {
-                    if (_tagHelper.IsParentSet() || (tag.NumOfChildren == 0 && tag.TagId != 1))
+                    if (_tagHelper.IsParentSet() || (tag.NumberOfChildren == 0 && tag.TagId != 1))
                     {
                         _tagHelper.AddTag(tag);
                         _assetController.AttachTag(tag);
@@ -316,7 +316,7 @@ namespace AMS.ViewModels
             ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == TagSearchQuery.Trim(' '));
             if (tag != null)
             {
-                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.NumOfChildren > 0))
+                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.NumberOfChildren > 0))
                 {
                     // Set parent tag with children or user parent
                     _tagHelper.SetParent((Tag) tag);

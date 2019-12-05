@@ -15,7 +15,7 @@ namespace AMS.Models
         public string Name {
             get => this._name;
             set {
-                if (this.Name != null)
+                if (TrackChanges)
                 {
                     this.Changes["Name"] = this.Name;
                 }
@@ -25,7 +25,7 @@ namespace AMS.Models
         public string Description {
             get => this._description;
             set {
-                if (this.Description != null)
+                if (TrackChanges)
                 {
                     this.Changes["Description"] = this.Description;
                 }
@@ -36,7 +36,7 @@ namespace AMS.Models
         public string Identifier {
             get => this._identifier;
             set {
-                if (this.Identifier != null)
+                if (TrackChanges)
                 {
                     this.Changes["Identifier"] = this.Identifier;
                 }
@@ -49,7 +49,7 @@ namespace AMS.Models
                 return this._departmentID;
             }
             set {
-                if (this.DepartmentID > 0)
+                if (TrackChanges)
                 {
                     this.Changes["DepartmentID"] = this.DepartmentID;
                 }
@@ -63,21 +63,7 @@ namespace AMS.Models
         }
 
         [JsonConstructor]
-        private Asset(ulong id, string name, string description, string identifier, ulong departmentId, string options,
-            DateTime created_at, DateTime updated_at, string serializedFields)
-        {
-            ID = id;
-            Name = name;
-            Description = description;
-            DepartmentID = departmentId;
-            SerializedFields = serializedFields;
-            CreatedAt = created_at;
-            UpdatedAt = updated_at;
-            Identifier = identifier;
-
-        }
-        
-        private Asset(ulong id, string name, string description, string identifier, ulong departmentId, string options,
+        private Asset(ulong id, string name, string description, string identifier, ulong departmentId, string serializedFields,
             DateTime created_at, DateTime updated_at)
         {
             ID = id;
@@ -85,9 +71,10 @@ namespace AMS.Models
             Description = description;
             DepartmentID = departmentId;
             Identifier = identifier;
-            SerializedFields = options;
+            SerializedFields = serializedFields;
             CreatedAt = created_at;
             UpdatedAt = updated_at;
+            TrackChanges = true;
         }
 
         /// <summary>

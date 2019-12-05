@@ -84,8 +84,8 @@ namespace AMS.ViewModels
                         return true;
                     }
 
-                    if (page.GetType() == typeof(Home) || 
-                        page.GetType() == typeof(AssetList) || 
+                    if (page.GetType() == typeof(Home) ||
+                        page.GetType() == typeof(AssetList) ||
                         page.GetType() == typeof(TagList) ||
                         page.GetType() == typeof(UserList) ||
                         page.GetType() == typeof(LogList))
@@ -140,10 +140,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetPresenter(Asset asset, List<ITagable> tagables)
             {
-                // Create new asset if null
-                asset = asset ?? new Asset();
-
-                return new AssetPresenter(tagables, new AssetController(asset, _assetRepository), new CommentListController(GetCurrentSession(), _commentRepository, asset), new LogListController(_logRepository, _printHelper, asset));
+                return new AssetPresenter(tagables, new AssetController(asset, _assetRepository, GetCurrentSession()), new CommentListController(GetCurrentSession(), _commentRepository, asset), new LogListController(_logRepository, _printHelper, asset));
             }
 
             /// <summary>
@@ -156,7 +153,7 @@ namespace AMS.ViewModels
                 // Create new asset if null
                 asset = asset ?? new Asset();
 
-                return new AssetEditor(new AssetController(asset, _assetRepository), CreateTagHelper());
+                return new AssetEditor(new AssetController(asset, _assetRepository, GetCurrentSession()), CreateTagHelper());
             }
 
             /// <summary>
@@ -166,7 +163,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetEditor(IAssetController controller)
             {
-                
+
                 return new AssetEditor(controller, CreateTagHelper());
             }
 
@@ -252,7 +249,7 @@ namespace AMS.ViewModels
             {
                 return new UserList(new UserListController(_userImporter, _userRepository, _departmentRepository));
             }
-            
+
             /// <summary>
             /// Returns a new settings editor page
             /// </summary>
@@ -277,5 +274,5 @@ namespace AMS.ViewModels
 
             #endregion
         }
-    }    
+    }
 }

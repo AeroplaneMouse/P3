@@ -60,7 +60,7 @@ namespace AMS.Models
         public Type TagType => this.GetType();
         public string TagLabel => Username;
         public ulong ParentId => 1;
-        public int NumOfChildren => 0;
+        public int NumberOfChildren => 0;
         public List<ITagable> Children { get; set; }
         public string TagColor
         {

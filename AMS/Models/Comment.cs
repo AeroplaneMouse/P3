@@ -18,7 +18,7 @@ namespace AMS.Models
             }
             set 
             {
-                if (this.Content != null)
+                if (TrackChanges)
                 {
                     this.Changes["Content"] = this.Content;
                 }
@@ -40,6 +40,7 @@ namespace AMS.Models
             AssetID = assetId;
             base.CreatedAt = createdAt;
             base.UpdatedAt = updatedAt;
+            TrackChanges = true;
         }
     }
 }

@@ -38,38 +38,41 @@ namespace AMS.Logging
                 {
                     id = entity.ID;
                     entryType = "Update";
+                    changes = this.GetChanges(entity);
                 }
                 else if (entity.ID == 0 || entityId != 0)
                 {
                     id = entityId;
                     entryType = "Create";
+                    changes = this.GetPropertiesAndValues(entity);
                 }
                 else
                 {
                     id = entity.ID;
                     entryType = "Delete";
+                    changes = this.GetPropertiesAndValues(entity);
                 }
 
                 string name = entity is Asset ? ((Asset)entity).Name : (entity is Tag ? ((Tag)entity).Name : (entity is Department ? ((Department)entity).Name : null));
 
-                if (name == null)
+                if (name == null && entity is Comment)
                 {
                     description = entity.GetType().ToString().Split('.').Last() + " with ID: " + id + " connected to asset with ID: " + ((Comment)entity).AssetID;
                 }
-                else
+                else if(name != null)
                 {
                     description = entity.GetType().ToString().Split('.').Last() + ": '" + name + "' with ID: " + id;
                 }
-                changes = this.GetPropertiesAndValues(entity);
+                else
+                {
+                    description = entity.GetType().ToString().Split('.').Last() + " with id " + id;
+                }
 
-                this.Write(entryType, description, userId, id, entity.GetType(), changes);
+                return this.Write(entryType, description, userId, id, entity.GetType(), changes);
 
             }
-            else
-            {
-                return false;
-            }
-            return true;
+            
+            return false;
         }
 
         /// <summary>

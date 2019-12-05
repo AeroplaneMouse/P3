@@ -13,14 +13,13 @@ namespace AMS.Models
         private string _color;
         private ulong _parentId;
         private ulong _departmentID;
-        private int _numOfChildren;
 
         public string Name 
         {
             get => this._name;
             set 
             {
-                if (this.Name != null)
+                if (TrackChanges)
                     this.Changes["Name"] = this.Name;
                 this._name = value.ToLower();
             }
@@ -31,7 +30,7 @@ namespace AMS.Models
             get => this._color;
             set 
             {
-                if (this.Color != null)
+                if (TrackChanges)
                 {
                     this.Changes["Color"] = this.Color;
                 }
@@ -45,9 +44,9 @@ namespace AMS.Models
             get => this._parentId;
             set 
             {
-                if (this.ParentId > 0)
+                if (TrackChanges)
                 {
-                    this.Changes["ParentID"] = this.ParentId;
+                    this.Changes["ParentId"] = this.ParentId;
                 }
 
                 this._parentId = value;
@@ -59,7 +58,7 @@ namespace AMS.Models
             get => this._departmentID;
             set 
             {
-                if (this.DepartmentID > 0)
+                if (TrackChanges)
                 {
                     this.Changes["DepartmentID"] = this.DepartmentID;
                 }
@@ -68,19 +67,7 @@ namespace AMS.Models
             }
         }
 
-        public int NumOfChildren 
-        {
-            get => this._numOfChildren;
-            set 
-            {
-                if (this.NumOfChildren >= 0)
-                {
-                    this.Changes["Color"] = this.NumOfChildren;
-                }
-
-                this._numOfChildren = value;
-            }
-        }
+        public int NumberOfChildren { get; set; }
 
         public Tag()
         {
@@ -88,17 +75,18 @@ namespace AMS.Models
         }
 
         /*Constructor used by DB*/
-        private Tag(ulong id, string name, ulong department_id, ulong parent_id, string color, int numOfChildren, DateTime created_at, DateTime updated_at, string serializedField)
+        private Tag(ulong id, string name, ulong department_id, ulong parent_id, string color, int numOfChildren, string serializedField, DateTime created_at, DateTime updated_at)
         {
             ID = id;
             Name = name;
             DepartmentID = department_id;
             ParentId = parent_id;
             Color = color;
-            NumOfChildren = numOfChildren;
+            NumberOfChildren = numOfChildren;
             this.SerializedFields = serializedField;
             CreatedAt = created_at;
             UpdatedAt = updated_at;
+            TrackChanges = true;
         }
         
         public override string ToString() => Name;
