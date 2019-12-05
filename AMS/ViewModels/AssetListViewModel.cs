@@ -46,6 +46,8 @@ namespace AMS.ViewModels
         }
         public string CurrentDepartment => "(" + Features.GetCurrentDepartment().Name + ")";
 
+        public string PlaceholderText => (inTagMode) ? "Esc to exit, Tab to autocomplete" : "# to search with tags, or start typing...";
+
         public bool CheckAll { get; set; }
         public string SearchQuery
         {
