@@ -133,10 +133,7 @@ namespace AMS.Models
         
         public override bool Equals(object obj)
         {
-            if (!(obj is ITagable objAsPart)) 
-                return false;
-            
-            return ID.Equals(objAsPart.TagId);
+            return obj is Tag tag && ID.Equals(tag.ID);
         }
 
         public bool Equals(Tag other)
