@@ -12,7 +12,12 @@ namespace AMS.Database.Repositories
 {
     public class CommentRepository : ICommentRepository
     {
-        private Ilogger logger { get; set; } = new Logger(new LogRepository());
+        private Ilogger _logger { get; set; }
+
+        public CommentRepository()
+        {
+            _logger = new Logger(Features.LogRepository);
+        }
 
         public Comment Insert(Comment entity, out ulong id)
         {
@@ -43,7 +48,7 @@ namespace AMS.Database.Repositories
                         id = (ulong)cmd.LastInsertedId;
                     }
 
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
                 }
                 catch (MySqlException e)
                 {
@@ -88,7 +93,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
                     
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -123,7 +128,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
 
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {

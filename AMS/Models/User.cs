@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using AMS.Interfaces;
 using System.Windows.Media;
+using AMS.ViewModels;
 
 namespace AMS.Models
 {
@@ -20,8 +21,6 @@ namespace AMS.Models
         public string Domain { get; set; }
 
         private List<Department> _departmentList { get; set; }
-        private IDepartmentRepository _departmentRep { get; set; }
-        private ITagRepository _tagRepository { get; set; }
 
         // Index of the default department in the list of departments
         public int DepartmentIndex
@@ -32,8 +31,7 @@ namespace AMS.Models
                 {
                     _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
 
-                    // TODO: Ingen new repositories!
-                    _departmentList.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
+                    _departmentList.AddRange(Features.DepartmentRepository.GetAll().ToList());
                 }
 
                 return DefaultDepartment == 0 ? 0 : _departmentList.Select(p => p.ID).ToList().IndexOf(DefaultDepartment);
@@ -44,8 +42,7 @@ namespace AMS.Models
                 {
                     _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
 
-                    // TODO: Ingen new repositories!
-                    _departmentList.AddRange((_departmentRep ?? new DepartmentRepository()).GetAll().ToList());
+                    _departmentList.AddRange(Features.DepartmentRepository.GetAll().ToList());
                 }
 
                 DefaultDepartment = (value == 0) ? 0 : _departmentList[value].ID;
@@ -62,8 +59,7 @@ namespace AMS.Models
         public List<ITagable> Children { get; set; }
         public string TagColor
         {
-            // TODO: Ingen new repositories!
-            get => (_tagRepository ?? new TagRepository()).GetById(1).TagColor;
+            get => Features.TagRepository.GetById(1).TagColor;
             set => TagColor = value;
         }
         public SolidColorBrush TagFontColor => Notification.GetForegroundColor(TagColor);

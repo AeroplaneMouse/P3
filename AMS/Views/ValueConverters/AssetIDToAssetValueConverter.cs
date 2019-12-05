@@ -1,5 +1,6 @@
 ﻿using AMS.Database.Repositories;
 using AMS.Models;
+using AMS.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -12,8 +13,7 @@ namespace AMS.Views.ValueConverters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            // TODO: Ingen new repositories!
-            return new AssetRepository().GetById((ulong)value).Name;
+            return Features.AssetRepository.GetById((ulong)value).Name;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

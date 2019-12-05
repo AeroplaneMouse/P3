@@ -17,13 +17,14 @@ namespace AMS.Database.Repositories
 {
     public class AssetRepository : IAssetRepository
     {
-        private QueryGenerator _query;
-        
-        private Ilogger logger { get; set; } = new Logger(new LogRepository());
+        private QueryGenerator _query { get; set; }
+        private Ilogger _logger { get; set; }
 
         public AssetRepository()
         {
             _query = new QueryGenerator();
+            _logger = new Logger(Features.LogRepository);
+            
         }
 
         /// <summary>
@@ -105,7 +106,7 @@ namespace AMS.Database.Repositories
                         id = (ulong)cmd.LastInsertedId;
                     }
 
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
                 }
                 catch (MySqlException e)
                 {
@@ -158,7 +159,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
                     
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -198,7 +199,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
                     
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -431,7 +432,7 @@ namespace AMS.Database.Repositories
                         }
                     }
                     
-                    logger.AddEntry("Tag attached", tagLabels + " was attached to the asset with ID: "
+                    _logger.AddEntry("Tag attached", tagLabels + " was attached to the asset with ID: "
                         + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.", Features.GetCurrentSession().user.ID);
 
                 }
@@ -456,11 +457,9 @@ namespace AMS.Database.Repositories
         public IEnumerable<ITagable> GetTags(Asset asset)
         {
             var taggedWith = new List<ITagable>();
-            var tagRepository = new TagRepository();
-            var userRepository = new UserRepository();
             
-            taggedWith.AddRange(tagRepository.GetTagsForAsset(asset.ID));
-            taggedWith.AddRange(userRepository.GetUsersForAsset(asset.ID));
+            taggedWith.AddRange(Features.TagRepository.GetTagsForAsset(asset.ID));
+            taggedWith.AddRange(Features.UserRepository.GetUsersForAsset(asset.ID));
 
             return taggedWith;
         }
