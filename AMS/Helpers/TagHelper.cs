@@ -35,8 +35,8 @@ namespace AMS.Helpers
 
         public void Reload()
         {
-            _tags = (List<Tag>) _tagRepository.GetAll();
-            _users = (List<User>) _userRepository.GetAll();
+            _tags = _tagRepository.GetAll().ToList();
+            _users = _userRepository.GetAll().ToList();
         }
 
         public List<ITagable> Suggest(string input)
@@ -186,20 +186,21 @@ namespace AMS.Helpers
 
             return AppliedTags.Count(t => t.ParentId == tag.TagId) == tag.ChildrenCount;
         }
-
-        public void SetParent(Tag tag=null)
-        {
-            SuggestedTags.Clear();
-            SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentID == tag.ID).ToList() : _tags.Where(a => a.ParentID == 0).ToList());
-            _parent = tag;
-        }
-
+        
         public bool AllParentChildrenTagged()
         {
             if (IsParentSet())
                 return AppliedTags.Count(t => t.ParentId == _parent.ID) == _parent.ChildrenCount;
 
             return false;
+        }
+        
+        public bool ContainsAllChildrenFromParent()
+        {
+            if (IsParentSet())
+                return ContainsAllChildrenOfParent(_parent);
+
+            return true;
         }
 
         public ObservableCollection<ITagable> GetAppliedTags(bool includeParents=false)
@@ -209,27 +210,26 @@ namespace AMS.Helpers
             
             return new ObservableCollection<ITagable>(AppliedTags.Where(t => t.ParentId > 0 || (t.ParentId == 0 && t.ChildrenCount == 0 && (t.TagId != 1 && t.TagType == typeof(Tag)))));
         }
-
+        
+        public void SetAppliedTags(ObservableCollection<ITagable> tags)
+        {
+            AppliedTags = tags;
+        }
+        
         public List<ulong> GetAppliedTagIds(Type type)
         {
             return AppliedTags.Where(t => t.TagType == type).Select(t => t.TagId).ToList();
         }
 
-        public bool IsParentSet() => _parent != null;
-
-        public bool ContainsAllChildrenFromParent()
-        {
-            if (IsParentSet())
-                return ContainsAllChildrenOfParent(_parent);
-
-            return true;
-        }
-
-        public void SetCurrentTags(ObservableCollection<ITagable> tags)
-        {
-            AppliedTags = tags;
-        }
-
         public Tag GetParent() => _parent;
+        
+        public void SetParent(Tag tag=null)
+        {
+            SuggestedTags.Clear();
+            SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentID == tag.ID).ToList() : _tags.Where(a => a.ParentID == 0).ToList());
+            _parent = tag;
+        }
+        
+        public bool IsParentSet() => _parent != null;
     }
 }
