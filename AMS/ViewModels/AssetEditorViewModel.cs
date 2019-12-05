@@ -318,12 +318,14 @@ namespace AMS.ViewModels
             {
                 if (tag.ParentId == 0 && (tag.TagId == 1 || tag.NumOfChildren > 0))
                 {
+                    // Set parent tag with children or user parent
                     _tagHelper.SetParent((Tag) tag);
                     CurrentGroup = tag.TagLabel;
                     CurrentGroupVisibility = Visibility.Visible;
                 }
                 else
                 {
+                    // Attach tag and parent
                     _tagHelper.AddTag(tag);
                     _assetController.AttachTag(tag);
                     _assetController.AttachTag(_tagHelper.GetParent());
