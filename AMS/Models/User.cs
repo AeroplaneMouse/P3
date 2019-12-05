@@ -64,7 +64,6 @@ namespace AMS.Models
         public List<ITagable> Children { get; set; }
         public string TagColor
         {
-            // TODO: Ingen new repositories!
             get
             {
                 if (_color != null)
