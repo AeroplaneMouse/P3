@@ -188,6 +188,7 @@ namespace AMS.Controllers
         public void ConnectTag(Tag newTag)
         {
             Tag currentTag = _tagRepository.GetById(ControlledTag.ParentId);
+            //TODO Throws exception, når et tags parent id ændres
             currentTag.DeSerializeFields();
             ParentTagFields = currentTag.FieldList;
         }
