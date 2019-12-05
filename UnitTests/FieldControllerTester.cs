@@ -119,7 +119,7 @@ namespace UnitTests
             otherAssetController.AddField(_fourthField);
             otherAssetController.AddField(_thirdField);
             //Act
-            otherAssetController.RemoveFieldRelations(5);
+            otherAssetController.RemoveTagRelationsOnFields(5);
 
             //Assert
             Assert.IsFalse(otherAssetController.NonHiddenFieldList.SingleOrDefault(p => p.TagIDs.Contains(5)) != null);
@@ -138,7 +138,7 @@ namespace UnitTests
 
             otherAssetController.RemoveField(_thirdField);
             //Act
-            otherAssetController.RemoveFieldRelations(5);
+            otherAssetController.RemoveTagRelationsOnFields(5);
 
             //Assert
             Assert.IsFalse(otherAssetController.HiddenFieldList.SingleOrDefault(p => p.TagIDs.Contains(5)) != null);

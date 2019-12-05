@@ -14,6 +14,6 @@ namespace AMS.Controllers.Interfaces
 
         bool RemoveField(Field inputField);
 
-        bool RemoveFieldRelations(ulong TagId);
+        bool RemoveTagRelationsOnFields(ulong TagId);
     }
 }

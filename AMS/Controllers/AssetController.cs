@@ -183,11 +183,11 @@ namespace AMS.Controllers
                 if (tag is Tag currentTag)
                 {
                     //Remove relations to the field.
-                    RemoveFieldRelations(currentTag.ID);
+                    RemoveTagRelationsOnFields(currentTag.ID);
 
                     //Remove a fields relation to the parent tag, if no other tag with the same parent tag exists in CurrentlyAddedTags.
                     if (CurrentlyAddedTags.FirstOrDefault(p => p.ParentId == currentTag.ParentId && p.TagId != currentTag.ID) == null)
-                        RemoveFieldRelations(currentTag.ParentId);
+                        RemoveTagRelationsOnFields(currentTag.ParentId);
 
                     //Checks if the field is in the fieldList on the asset, and the tag, if so, remove it.
                     foreach (var field in currentTag.FieldList)

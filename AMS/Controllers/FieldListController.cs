@@ -119,7 +119,7 @@ namespace AMS.Controllers
         /// </summary>
         /// <param name="TagId"></param>
         /// <returns></returns>
-        public bool RemoveFieldRelations(ulong TagId)
+        public bool RemoveTagRelationsOnFields(ulong TagId)
         {
             // Checks the hiddenlist and checks whether a field contains the tagID, if it does, remove it.
             foreach (var field in HiddenFieldList)
