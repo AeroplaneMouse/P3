@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using AMS.Authentication;
@@ -8,7 +7,6 @@ using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Models;
-using AMS.ViewModels;
 
 namespace AMS.Controllers
 {
@@ -40,9 +38,10 @@ namespace AMS.Controllers
         private IAssetRepository _assetRepository;
         private Session _session;
 
-        public AssetController(Asset asset, IAssetRepository assetRepository, Session session) : base(asset ?? new Asset())
+        public AssetController(Asset asset, IAssetRepository assetRepository, Session session) : base(
+            asset ?? new Asset())
         {
-            ControlledAsset = asset;
+            ControlledAsset = asset ?? new Asset();
 
             _assetRepository = assetRepository;
             _session = session;
@@ -54,12 +53,10 @@ namespace AMS.Controllers
             Description = ControlledAsset.Description;
             NonHiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == true).ToList();
-
-            LoadFields();
-
             LoadTags();
+            LoadFields();
         }
-
+        
         /// <summary>
         /// Saves the asset to the database. As well as connects the tag in the tag repository.
         /// </summary>
@@ -183,11 +180,12 @@ namespace AMS.Controllers
                 if (tag is Tag currentTag)
                 {
                     //Remove relations to the field.
-                    RemoveFieldRelations(currentTag.ID);
+                    RemoveTagRelationsOnFields(currentTag.ID);
 
                     //Remove a fields relation to the parent tag, if no other tag with the same parent tag exists in CurrentlyAddedTags.
-                    if (CurrentlyAddedTags.FirstOrDefault(p => p.ParentId == currentTag.ParentId && p.TagId != currentTag.ID) == null)
-                        RemoveFieldRelations(currentTag.ParentId);
+                    if (CurrentlyAddedTags.FirstOrDefault(p =>
+                            p.ParentId == currentTag.ParentId && p.TagId != currentTag.ID) == null)
+                        RemoveTagRelationsOnFields(currentTag.ParentId);
 
                     //Checks if the field is in the fieldList on the asset, and the tag, if so, remove it.
                     foreach (var field in currentTag.FieldList)
@@ -222,7 +220,7 @@ namespace AMS.Controllers
                 }
             }
         }
-        
+
         /// <summary>
         /// Runs on startup, loads fields, and updates fields that are dependent on values.
         /// </summary>
@@ -230,19 +228,20 @@ namespace AMS.Controllers
         {
             foreach (var field in HiddenFieldList)
             {
-                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"Current Date"))
+                if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
                 {
                     field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
                 }
             }
+
             foreach (var field in NonHiddenFieldList)
             {
-                
                 if (field.Type == Field.FieldType.Date)
                 {
                     Console.WriteLine(field.Content);
                 }
-                if (field.Type == Field.FieldType.Date && string.Equals(field.Content,"Current Date"))
+
+                if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
                 {
                     field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
                 }

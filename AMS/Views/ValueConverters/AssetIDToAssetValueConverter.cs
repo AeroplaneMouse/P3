@@ -13,7 +13,7 @@ namespace AMS.Views.ValueConverters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             // TODO: Ingen new repositories!
-            return new AssetRepository().GetById((ulong)value).Name;
+            return new NotImplementedException(); //AssetRepository().GetById((ulong)value).Name;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
