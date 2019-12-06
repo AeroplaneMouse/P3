@@ -209,7 +209,7 @@
                             </GridViewColumn>
 
                             <!-- Admin or not -->
-                            <GridViewColumn Width="50">
+                            <GridViewColumn Width="60">
                                 <GridViewColumnHeader Content="Admin" Tag="IsAdmin"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>

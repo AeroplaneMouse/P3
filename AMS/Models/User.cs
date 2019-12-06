@@ -38,6 +38,7 @@ namespace AMS.Models
 
                 return DefaultDepartment == 0 ? 0 : _departmentList.Select(p => p.ID).ToList().IndexOf(DefaultDepartment);
             }
+            
             set
             {
                 if (_departmentList == null)
@@ -61,13 +62,7 @@ namespace AMS.Models
         public List<ITagable> Children { get; set; }
         public string TagColor
         {
-            get
-            {
-                if (_color == null)
-                    _color = Features.TagRepository.GetById(1).TagColor;
-                
-                return _color;
-            }
+            get { return _color ??= Features.TagRepository.GetById(1).TagColor; }
             set => _color = value;
         }
 

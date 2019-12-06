@@ -276,7 +276,7 @@ namespace AMS.Controllers
        
         public void GetExistingUsers()
         {
-            _existingUsersList = _importer.ImportUsersFromDatabase().Select(u => new UserWithStatus(u)).ToList();
+            _existingUsersList = _importer.ImportUsersFromDatabase();
 
             // Sets inactive users to "Disabled" for sorting purposes
             _existingUsersList
@@ -294,7 +294,7 @@ namespace AMS.Controllers
 
             if (!string.IsNullOrEmpty(filePath))
             {
-                _importedUsersList = _importer.ImportUsersFromFile(filePath).Select(u => new UserWithStatus(u)).ToList();
+                _importedUsersList = _importer.ImportUsersFromFile(filePath);
                 CombineLists();
                 UpdateShownUsers(_finalUsersList);
             }
