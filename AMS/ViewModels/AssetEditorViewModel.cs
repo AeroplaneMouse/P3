@@ -19,22 +19,15 @@ namespace AMS.ViewModels
 {
     public class AssetEditorViewModel : BaseViewModel
     {
-        private ObservableCollection<ITagable> _appliedTags = new ObservableCollection<ITagable>();
+        private IAssetController _assetController { get; set; }
+        private bool _isEditing { get; set; }
+        private string _tagSearchQuery { get; set; }
+        private TagHelper _tagHelper { get; set; }
+        private int _tagTabIndex { get; set; }
 
-        #region Public Properties
-
-        public ObservableCollection<Field> NonHiddenFieldList =>
-            new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
-
-        public ObservableCollection<Field> HiddenFieldList =>
-            new ObservableCollection<Field>(_assetController.HiddenFieldList);
-
-        public ObservableCollection<ITagable> AppliedTags
-        {
-            get => _appliedTags;
-            set => _appliedTags = value;
-        }
-
+        public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
+        public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.HiddenFieldList);
+        public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
 
         public string Name
@@ -76,20 +69,6 @@ namespace AMS.ViewModels
         public bool TagSuggestionIsOpen { get; set; } = false;
         public ITagable TagParent { get; set; }
 
-        #endregion
-
-        #region Private Properties
-
-        private IAssetController _assetController { get; set; }
-        private bool _isEditing { get; set; }
-        private string _tagSearchQuery { get; set; }
-        private TagHelper _tagHelper { get; set; }
-        private int _tagTabIndex { get; set; }
-
-        #endregion
-
-        #region Comands
-
         public ICommand AddFieldCommand { get; set; }
         public ICommand RemoveFieldCommand { get; set; }
         public ICommand SaveCommand { get; set; }
@@ -102,10 +81,7 @@ namespace AMS.ViewModels
         public ICommand EnterSuggestionListCommand { get; set; }
         public ICommand ShowFieldEditPromptCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
-
-        #endregion
-
-        #region Constructor
+        public ICommand BackspaceCommand { get; set; }
 
         public AssetEditorViewModel(IAssetController assetController, TagHelper tagHelper)
         {
@@ -160,12 +136,10 @@ namespace AMS.ViewModels
             InsertNextOrSelectedSuggestionCommand =
                 new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
             ClearInputCommand = new RelayCommand(ClearInput);
+            BackspaceCommand = new RelayCommand<object>((parameter) => RemoveCharacterOrExitTagMode(parameter as TextBox));
+
             UpdateAll();
         }
-
-        #endregion
-
-        #region Public Methods
 
         /// <summary>
         /// Saves and leaves the page
@@ -360,10 +334,6 @@ namespace AMS.ViewModels
             UpdateAll();
         }
 
-        #endregion
-
-        #region Private Methods
-
         /// <summary>
         /// Runs the tagsearch process.
         /// </summary>
@@ -520,6 +490,21 @@ namespace AMS.ViewModels
             }
         }
 
-        #endregion
+        private void RemoveCharacterOrExitTagMode(TextBox textBox)
+        {
+            if (TagSearchQuery.Length > 0)
+            {
+                int cursorIndex = textBox.CaretIndex;
+                if (cursorIndex > 0)
+                {
+                    TagSearchQuery = TagSearchQuery.Remove(cursorIndex - 1, 1);
+                    textBox.CaretIndex = cursorIndex - 1;
+                }
+            }
+            else
+            {
+                ClearInput();
+            }
+        }
     }
 }

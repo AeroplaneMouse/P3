@@ -83,7 +83,7 @@
 
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Right">
-                    <Button Style="{StaticResource RegularCancelButton}"
+                    <Button Style="{StaticResource RegularRemoveButton}"
                             Command="{Binding RemoveCommand}"
                             Content="Remove"
                             Visibility="{x:Static VM:Features.OnlyVisibleForAdmin}"/>

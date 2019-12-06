@@ -165,6 +165,7 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource CancelRedBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
