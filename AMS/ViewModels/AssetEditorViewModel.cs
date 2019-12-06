@@ -114,7 +114,6 @@ namespace AMS.ViewModels
             });
 
             ShowFieldEditPromptCommand = new RelayCommand<object>((parameter) =>
-
             {
                 if (parameter is Field field && field.IsCustom)
                     Features.DisplayPrompt(new Views.Prompts.CustomField(null, EditFieldConfirmed, true, field));
