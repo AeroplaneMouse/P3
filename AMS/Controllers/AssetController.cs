@@ -41,7 +41,7 @@ namespace AMS.Controllers
         public AssetController(Asset asset, IAssetRepository assetRepository, Session session) : base(
             asset ?? new Asset())
         {
-            ControlledAsset = asset;
+            ControlledAsset = asset ?? new Asset();
 
             _assetRepository = assetRepository;
             _session = session;
