@@ -112,15 +112,15 @@ namespace AMS.ViewModels
                 else
                 {
                     Features.DisplayPrompt(new Views.Prompts.Confirm(
-                    "You are about to remove a tag which cannot be UNDONE!\n"
-                    + "Are you sure?\n"
-                    + $"Tag: { _tagController.Name }", (sender, e) =>
-                    {
-                        _tagController.Remove();
-                        UpdateOnFocus();
-                        Features.AddNotification(new Notification($"{ _tagController.Name } has been remove.", background: Notification.APPROVE));
-                    }
-                }));
+                        "You are about to remove a tag which cannot be UNDONE!\n"
+                        + "Are you sure?\n"
+                        + $"Tag: { _tagController.Name }", (sender, e) =>
+                        {
+                            _tagController.Remove();
+                            UpdateOnFocus();
+                            Features.AddNotification(new Notification($"{ _tagController.Name } has been remove.", background: Notification.APPROVE));
+                        }));
+                }
             }
         }
 
