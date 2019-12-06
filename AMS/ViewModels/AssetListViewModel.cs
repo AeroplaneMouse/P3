@@ -94,6 +94,7 @@ namespace AMS.ViewModels
         public ICommand EnterSuggestionListCommand { get; set; }
         public ICommand CheckAllChangedCommand { get; set; }
         public ICommand SearchCommand { get; set; }
+        public ICommand BackspaceCommand { get; set; }
 
         public AssetListViewModel(IAssetListController listController, TagHelper tagHelper)
         {
@@ -133,8 +134,9 @@ namespace AMS.ViewModels
             InsertNextOrSelectedSuggestionCommand = new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
             ClearInputCommand = new RelayCommand(ClearInput);
             CheckAllChangedCommand = new RelayCommand<object>((parameter) => CheckAllChanged(parameter as ListView));
+            BackspaceCommand = new RelayCommand<object>((parameter) => RemoveCharacterOrExitTagMode(parameter as TextBox));
         }
-        
+
         #region Methods
 
         /// <summary>
@@ -472,6 +474,23 @@ namespace AMS.ViewModels
             else
                 // Export all items found by search
                 _listController.Export(Items.ToList());
+        }
+
+        private void RemoveCharacterOrExitTagMode(TextBox textBox)
+        {
+            if(SearchQuery.Length > 0)
+            {
+                int cursorIndex = textBox.CaretIndex;
+                if(cursorIndex > 0)
+                {
+                    SearchQuery = SearchQuery.Remove(cursorIndex - 1, 1);
+                    textBox.CaretIndex = cursorIndex - 1;
+                }
+            }
+            else
+            {
+                ClearInput();
+            }
         }
 
         #endregion

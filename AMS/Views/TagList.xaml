@@ -22,11 +22,6 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
-        <!--<TextBlock Style="{StaticResource TitleStyle}"
-            VerticalAlignment="Center"
-            Margin="10, 11, 0, 11"
-            Text="{Binding TitleText}"/>-->
-
         <StackPanel Grid.Row="0" 
                     Margin="10, 11, 0, 11"
                     Orientation="Horizontal" 
@@ -86,7 +81,7 @@
                     <Button Style="{StaticResource RegularRemoveButton}"
                             Command="{Binding RemoveCommand}"
                             Content="Remove"
-                            Visibility="{x:Static VM:Features.OnlyVisibleForAdmin}"/>
+                            Visibility="{Binding RemoveSelectedVisibility}"/>
                 </StackPanel>
 
                 <TreeView Margin="0 10 0 0" 

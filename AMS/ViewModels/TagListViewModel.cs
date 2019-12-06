@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
@@ -24,7 +25,9 @@ namespace AMS.ViewModels
         public ICommand EditCommand { get; set; }
         public ICommand AddNewCommand { get; set; }
         public ICommand SearchCommand { get; set; }
-        
+
+        public Visibility RemoveSelectedVisibility { get; set; } = Visibility.Collapsed;
+
         public string SearchQuery
         {
             get => _searchQuery;
