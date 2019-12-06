@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using AMS.Interfaces;
 using System.Windows.Media;
+using AMS.ViewModels;
 
 namespace AMS.Models
 {
@@ -22,11 +23,34 @@ namespace AMS.Models
         private string _color;
 
         private List<Department> _departmentList { get; set; }
-        private IDepartmentRepository _departmentRep { get; set; }
-        private ITagRepository _tagRepository { get; set; }
 
         // Index of the default department in the list of departments
-        public string DepartmentIndex { get; set; } = "1";
+        public int DepartmentIndex
+        {
+            get
+            {
+                if (_departmentList == null)
+                {
+                    _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
+
+                    _departmentList.AddRange(Features.DepartmentRepository.GetAll().ToList());
+                }
+
+                return DefaultDepartment == 0 ? 0 : _departmentList.Select(p => p.ID).ToList().IndexOf(DefaultDepartment);
+            }
+            
+            set
+            {
+                if (_departmentList == null)
+                {
+                    _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
+
+                    _departmentList.AddRange(Features.DepartmentRepository.GetAll().ToList());
+                }
+
+                DefaultDepartment = (value == 0) ? 0 : _departmentList[value].ID;
+            }
+        }
 
         #region ITagable
 
@@ -38,16 +62,7 @@ namespace AMS.Models
         public List<ITagable> Children { get; set; }
         public string TagColor
         {
-            get
-            {
-                if (_color != null)
-                {
-                    return _color;
-                }
-
-                _color = new TagRepository().GetById(1).TagColor;
-                return _color;
-            }
+            get { return _color ??= Features.TagRepository.GetById(1).TagColor; }
             set => _color = value;
         }
 

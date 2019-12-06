@@ -1,8 +1,6 @@
 ﻿using System;
-using AMS.Views;
 using AMS.Models;
 using AMS.Events;
-using System.Linq;
 using AMS.Database;
 using System.Windows;
 using AMS.Views.Prompts;
@@ -10,15 +8,9 @@ using AMS.Authentication;
 using System.Windows.Input;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using AMS.Database.Repositories;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Windows.Media;
-using AMS.Controllers;
 using AMS.Database.Repositories.Interfaces;
-using AMS.Helpers;
-using AMS.IO;
-using System.Windows.Navigation;
 using AMS.ConfigurationHandler;
 using AMS.Interfaces;
 
@@ -40,11 +32,11 @@ namespace AMS.ViewModels
 
         #region Window Properties
 
-        public double WindowMinWidth { get; set; } = 700;
-        public double WindowMinHeight { get; set; } = 500;
-        public int InnerContentPaddingSize { get; set; }
+        public double WindowMinWidth { get; private set; }
+        public double WindowMinHeight { get; private set; }
+        public int InnerContentPaddingSize { get; private set; }
         public Thickness InnerContentPadding { get => new Thickness(0); }
-        public int ResizeBorder { get; set; }
+        public int ResizeBorder { get; private set; }
         public Thickness ResizeBorderThickness { get => new Thickness(ResizeBorder + OuterMarginSize); }
         public int OuterMarginSize
         {
@@ -53,13 +45,13 @@ namespace AMS.ViewModels
             set => _outerMarginSize = value;
         }
         public Thickness OuterMarginThicknessSize { get => new Thickness(OuterMarginSize); }
-        public int TitleHeight { get; set; }
+        public int TitleHeight { get; private set; }
         public GridLength TitleHeightGridLength { get => new GridLength(TitleHeight + ResizeBorder); }
-        public int NavigationHeight { get; set; }
+        public int NavigationHeight { get; private set; }
 
         #endregion
 
-        public Stack<Page> History = new Stack<Page>();
+        public Stack<Page> History { get; private set; } = new Stack<Page>();
 
         public string CurrentUser { get; set; }
         public string CurrentDatabase { get; set; }
@@ -82,7 +74,7 @@ namespace AMS.ViewModels
             }
         }
 
-        public Frame ContentFrame { get; set; } = new Frame();
+        public Frame ContentFrame { get; private set; } = new Frame();
         public Page SplashPage { get; set; }
         public Page PopupPage { get; set; }
         public int SelectedNavigationItem { get; set; }
@@ -95,32 +87,32 @@ namespace AMS.ViewModels
         public ObservableCollection<Notification> ActiveNotifications { get; private set; } = new ObservableCollection<Notification>();
 
         // Window commands
-        public ICommand MinimizeCommand { get; set; }
-        public ICommand MaximizeCommand { get; set; }
-        public ICommand CloseCommand { get; set; }
-        public ICommand SystemMenuCommand { get; set; }
+        public ICommand MinimizeCommand { get; private set; }
+        public ICommand MaximizeCommand { get; private set; }
+        public ICommand CloseCommand { get; private set; }
+        public ICommand SystemMenuCommand { get; private set; }
 
         // Change page commands
-        public ICommand ShowHomePageCommand { get; set; }
-        public ICommand ShowAssetListPageCommand { get; set; }
-        public ICommand ShowTagListPageCommand { get; set; }
-        public ICommand ShowLogPageCommand { get; set; }
-        public ICommand ShowUserListPageCommand { get; set; }
+        public ICommand ShowHomePageCommand { get; private set; }
+        public ICommand ShowAssetListPageCommand { get; private set; }
+        public ICommand ShowTagListPageCommand { get; private set; }
+        public ICommand ShowLogPageCommand { get; private set; }
+        public ICommand ShowUserListPageCommand { get; private set; }
 
         // Department commands
-        public ICommand SelectDepartmentCommand { get; set; }
-        public ICommand RemoveDepartmentCommand { get; set; }
-        public ICommand EditDepartmentCommand { get; set; }
-        public ICommand AddDepartmentCommand { get; set; }
+        public ICommand SelectDepartmentCommand { get; private set; }
+        public ICommand RemoveDepartmentCommand { get; private set; }
+        public ICommand EditDepartmentCommand { get; private set; }
+        public ICommand AddDepartmentCommand { get; private set; }
 
         // Notification commands
-        public ICommand RemoveNotificationCommand { get; set; }
-        public ICommand ReloadCommand { get; set; }
-        public ICommand ShowShortcutsCommand { get; set; }
+        public ICommand RemoveNotificationCommand { get; private set; }
+        public ICommand ReloadCommand { get; private set; }
+        public ICommand ShowShortcutsCommand { get; private set; }
 
         // Settings command
-        public ICommand ChangeSettingsCommand { get; set; }
-        public ICommand ClearSettingsCommand { get; set; }
+        public ICommand ChangeSettingsCommand { get; private set; }
+        public ICommand ClearSettingsCommand { get; private set; }
 
         /// <summary>
         /// Default constructor
@@ -284,7 +276,7 @@ namespace AMS.ViewModels
             // Prompt user for confirmation
             const string message = "Are you ABSOLUTELY sure you want to ERASE the connection settings?\n\n"
                                  + "!!! The system will be INACCESSABLE !!!\n\n"
-                                 + "And the connection settings whould have to be reconfigured!";
+                                 + "The connection settings whould have to be reconfigured!";
             DisplayPrompt(new Views.Prompts.Confirm(message, (sender, e) =>
             {
                 if (e.Result)

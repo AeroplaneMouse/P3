@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using AMS.Controllers.Interfaces;
+using AMS.Interfaces;
 using AMS.Models;
 using Newtonsoft.Json;
 
@@ -32,7 +33,6 @@ namespace AMS.Controllers
             return !string.IsNullOrEmpty(_fieldContainer.SerializedFields);
         }
 
-
         /// <summary>
         /// Add a field to the field list.
         /// </summary>
@@ -49,11 +49,16 @@ namespace AMS.Controllers
             if (fieldInList == null)
             {
                 if (fieldContainer != null)
+                {
                     inputField.TagIDs.Add(fieldContainer.ID);
+                }
 
-                NonHiddenFieldList.Add(inputField);
+                NonHiddenFieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
+                    inputField.HashId, inputField.Required, inputField.IsCustom, inputField.IsHidden,
+                    inputField.TagIDs));
             }
-            else
+
+            if (fieldInList != null)
             {
                 // Checks if a field label has been updated
                 if (fieldInList.HashId == inputField.HashId && fieldInList.Label != inputField.Label)
@@ -65,7 +70,11 @@ namespace AMS.Controllers
 
                 // Adds a reference to the field container if its added.
                 if (fieldContainer != null && !fieldInList.TagIDs.Contains(fieldContainer.ID))
+                {
                     fieldInList.TagIDs.Add(fieldContainer.ID);
+                }
+
+                fieldInList.IsCustom = false;
             }
 
             return _fieldContainer.FieldList.Contains(inputField);
@@ -83,36 +92,62 @@ namespace AMS.Controllers
             if (field == null) return false;
 
             //Checks if the field is custom (Ie made on a asset)
-            if (field.IsCustom)
+            if (field.IsCustom && !field.IsHidden)
             {
                 NonHiddenFieldList.Remove(field);
                 return true;
             }
 
-            //Checks whether the field have been toggled to be hidden, therefor is in the hiddenlist.
             if (field.IsHidden)
             {
-                //Checks the if the field is removed from a tag, as this has different requirements.
-                if (!(_fieldContainer is Tag) && field.TagIDs.Count > 0)
+                field.IsHidden = !field.IsHidden;
+                if (!NonHiddenFieldList.Contains(field))
                 {
-                    field.IsHidden = false;
                     NonHiddenFieldList.Add(field);
                 }
 
                 HiddenFieldList.Remove(field);
+            }
+            else
+            {
+                if (!(_fieldContainer is Tag))
+                {
+                    field.IsHidden = !field.IsHidden;
+                    if (!HiddenFieldList.Contains(field))
+                    {
+                        HiddenFieldList.Add(field);
+                    }
+                }
+                NonHiddenFieldList.Remove(field);
+            }
+
+            return true;
+        }
+
+        public bool HandleFieldsFromRemoveTag(Field inputField, Tag tagable)
+        {
+            if (!inputField.IsCustom && inputField.Content ==
+                tagable.FieldList.SingleOrDefault(p => p.Hash == inputField.Hash)?.Content)
+            {
+                if (inputField.IsHidden)
+                {
+                    HiddenFieldList.Remove(inputField);
+                }
+                else
+                {
+                    NonHiddenFieldList.Remove(inputField);
+                }
+
+                return true;
+            }
+            else
+            {
+                inputField.IsCustom = true;
                 return true;
             }
 
-            //If the field is not hidden: (Again, checks if its a tag)
-            if (!(_fieldContainer is Tag) && field.TagIDs.Count > 0)
-            {
-                field.IsHidden = true;
-                HiddenFieldList.Add(field);
-            }
-
-            return NonHiddenFieldList.Remove(field);
+            return false;
         }
-
 
         /// <summary>
         /// Removes the relation between a tagID and any of the fields.

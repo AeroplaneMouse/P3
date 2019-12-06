@@ -269,14 +269,18 @@ namespace AMS.Controllers
                 selectedUser.IsEnabled = !selectedUser.IsEnabled;
                 selectedUser.Status = "Disabled";
             }
-                
+
+            else if (selectedUser.Status.CompareTo("Conflicting") == 0)
+            {
+                KeepUser(selectedUser);
+            }
 
             UpdateShownUsers(_finalUsersList);
         }
        
         public void GetExistingUsers()
         {
-            _existingUsersList = _importer.ImportUsersFromDatabase().Select(u => new UserWithStatus(u)).ToList();
+            _existingUsersList = _importer.ImportUsersFromDatabase();
 
             // Sets inactive users to "Disabled" for sorting purposes
             _existingUsersList
@@ -294,7 +298,7 @@ namespace AMS.Controllers
 
             if (!string.IsNullOrEmpty(filePath))
             {
-                _importedUsersList = _importer.ImportUsersFromFile(filePath).Select(u => new UserWithStatus(u)).ToList();
+                _importedUsersList = _importer.ImportUsersFromFile(filePath);
                 CombineLists();
                 UpdateShownUsers(_finalUsersList);
             }

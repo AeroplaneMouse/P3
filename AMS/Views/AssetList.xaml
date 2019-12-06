@@ -105,7 +105,7 @@
                                      x:Name="StartElement"
                                      TabIndex="0"
                                      Style="{StaticResource SearchTextBox}"
-                                     Tag="# to enter tag mode, or start typing...">
+                                     Tag="{Binding PlaceholderText, UpdateSourceTrigger=PropertyChanged}">
 
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding ApplyTagOrEnterParentCommand}"/>

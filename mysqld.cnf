@@ -1,0 +1,6 @@
+[mysqld]
+skip-character-set-client-handshake
+collation-server     = utf8_unicode_ci
+character-set-server = utf8
+# https://dba.stackexchange.com/questions/166484/how-do-i-set-mysqls-character-set-server-and-collation-server-variables-whe
+# https://bugs.mysql.com/bug.php?id=89290

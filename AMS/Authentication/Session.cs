@@ -25,8 +25,7 @@ namespace AMS.Authentication
             else
             {
                 // Check if database is empty
-                UserRepository rep = new UserRepository();
-                if (rep.GetCount(null) == 0)
+                if (Features.UserRepository.GetCount(null) == 0)
                 {
                     // Create the new user and give it admin rights.
                     User user = new User()
@@ -40,8 +39,8 @@ namespace AMS.Authentication
 
                     // Insert it into the database
                     ulong id;
-                    rep.Insert(user, out id);
-                    this.user = rep.GetById(id);
+                    Features.UserRepository.Insert(user, out id);
+                    this.user = Features.UserRepository.GetById(id);
 
                     return true;
                 }

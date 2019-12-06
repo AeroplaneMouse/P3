@@ -356,7 +356,7 @@ namespace UnitTests
                 Field.FieldType.TextBox);
             otherAssetController.AddField(localField);
 
-            Tag localTag = new Tag {Name = "First tag"};
+            Tag localTag = CreateTestTagWithId(4);
             localTag.FieldList.Add(localField);
 
 
@@ -376,6 +376,14 @@ namespace UnitTests
         {
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
                 new object[] { rowId, null, null, null, null, null, null, null }, null, null);
+        }
+        // Create asset with id.
+        private Tag CreateTestTagWithId(ulong rowId)
+        {
+            return (Tag) Activator.CreateInstance(typeof(Tag),
+                BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new object[] { rowId, "TagTest", null, null, null, null, null, null, null }, null,
+                null);
         }
     }
 }

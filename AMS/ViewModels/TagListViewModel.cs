@@ -102,14 +102,19 @@ namespace AMS.ViewModels
                     }
                 }));
             }
+
             else
             {
-                Features.DisplayPrompt(new Views.Prompts.Confirm(
+                if (_tagController.Id == 1)
+                {
+                    Features.AddNotification(new Notification($"{_tagController.Name} cannot be removed, it is essential", Notification.WARNING));
+                }
+                else
+                {
+                    Features.DisplayPrompt(new Views.Prompts.Confirm(
                     "You are about to remove a tag which cannot be UNDONE!\n"
                     + "Are you sure?\n"
                     + $"Tag: { _tagController.Name }", (sender, e) =>
-                {
-                    if (e.Result)
                     {
                         _tagController.Remove();
                         UpdateOnFocus();

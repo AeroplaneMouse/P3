@@ -35,6 +35,9 @@ namespace AMS.Models
         [JsonIgnore]
         public List<ITagable> TagList { get; set; }
 
+        [JsonIgnore]
+        public bool HasNoTagRelations => TagList.Count == 0;
+
         public string HashId { get; set; }
 
         public bool IsCustom { get; set; }
@@ -69,6 +72,20 @@ namespace AMS.Models
             this.IsCustom = isCustom;
             this.IsHidden = false;
             this.TagIDs = new List<ulong>();
+        }
+        
+        public Field(string label, string content, FieldType type,string hashId, bool required,
+            bool isCustom,bool isHidden,List<ulong> tagIDs)
+        {
+            this.Label = label;
+            this.Content = content;
+            Type = type;
+            this.HashId = hashId;
+            this.Required = required;
+            this.Hash = CalculateMd5Hash();
+            this.IsCustom = isCustom;
+            this.IsHidden = isHidden;
+            this.TagIDs = tagIDs;
         }
         
         [JsonConstructor]
@@ -120,9 +137,9 @@ namespace AMS.Models
         {
             string hashString = "";
             if (uniqueHash)
-                hashString += this.Label + this.Required.ToString() + Type.ToString() + DateTime.Now;
+                hashString += this.Label + Type.ToString() + DateTime.Now;
             else
-                hashString += this.Label + this.Required.ToString() + Type.ToString();
+                hashString += this.Label + Type.ToString();
 
             // step 1, calculate MD5 hash from input
             MD5 md5 = MD5.Create();

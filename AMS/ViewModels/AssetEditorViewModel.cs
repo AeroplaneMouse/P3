@@ -110,6 +110,7 @@ namespace AMS.ViewModels
                 _tagHelper.RemoveTag(tag);
                 _assetController.DetachTag(tag);
                 AppliedTags = _tagHelper.GetAppliedTags(false);
+                
                 UpdateAll();
             });
 
@@ -199,8 +200,8 @@ namespace AMS.ViewModels
             if (e.Result && e is FieldInputPromptEventArgs args)
             {
                 _assetController.AddField(args.Field);
-                UpdateAll();
             }
+            UpdateAll();
         }
 
         /// <summary>
@@ -279,6 +280,7 @@ namespace AMS.ViewModels
                 TagSearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
                 _tagTabIndex++;
             }
+            UpdateAll();
         }
 
         /// <summary>
@@ -447,7 +449,7 @@ namespace AMS.ViewModels
 
             foreach (var field in completeList)
             {
-                if (field.Required && string.IsNullOrEmpty(field.Content))
+                if (field.Required && string.IsNullOrEmpty(field.Content) && !field.IsHidden)
                 {
                     Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
                         Notification.WARNING));

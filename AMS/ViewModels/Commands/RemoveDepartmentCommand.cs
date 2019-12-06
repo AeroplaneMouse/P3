@@ -44,8 +44,7 @@ namespace AMS.ViewModels.Commands
             }
 
             // Validating id
-            //TODO: Ingen new repositories!
-            _department = new DepartmentRepository().GetById(id);
+            _department = Features.DepartmentRepository.GetById(id);
             if (_department != null)
             {
                 if (_department.ID != _main.CurrentDepartment.ID)
@@ -68,8 +67,7 @@ namespace AMS.ViewModels.Commands
             if (e.Result)
             {
                 // Removing department
-                // TODO: Ingen new repositories!
-                if (new DepartmentRepository().Delete(_department))
+                if (Features.DepartmentRepository.Delete(_department))
                 {
                     _main.OnPropertyChanged(nameof(_main.Departments));
                     Features.AddNotification(new Notification($"{ _department.Name } has now been removed from the system.", background: Notification.APPROVE));

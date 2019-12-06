@@ -5,6 +5,8 @@ using System.Linq;
 using AMS.Authentication;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
+using AMS.Events;
+using AMS.Helpers;
 using AMS.Interfaces;
 using AMS.Models;
 
@@ -38,10 +40,10 @@ namespace AMS.Controllers
         private IAssetRepository _assetRepository;
         private Session _session;
 
-        public AssetController(Asset asset, IAssetRepository assetRepository, Session session) : base(
-            asset ?? new Asset())
+        public AssetController(Asset asset, IAssetRepository assetRepository, Session session) 
+            : base(asset)
         {
-            ControlledAsset = asset ?? new Asset();
+            ControlledAsset = asset;
 
             _assetRepository = assetRepository;
             _session = session;
@@ -166,6 +168,7 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool DetachTag(ITagable tag)
         {
+            
             //If no tag was given, return.
             if (tag == null)
                 return false;
@@ -179,16 +182,22 @@ namespace AMS.Controllers
                 //Checks if the ITagable is a Tag.
                 if (tag is Tag currentTag)
                 {
+                    List<Field> removelist = currentTag.FieldList;
                     //Remove relations to the field.
                     RemoveTagRelationsOnFields(currentTag.ID);
 
                     //Remove a fields relation to the parent tag, if no other tag with the same parent tag exists in CurrentlyAddedTags.
-                    if (CurrentlyAddedTags.FirstOrDefault(p =>
-                            p.ParentId == currentTag.ParentId && p.TagId != currentTag.ID) == null)
+                    if (!CurrentlyAddedTags.Any(p => p.ParentId == currentTag.ParentId && p.TagId != currentTag.ID))
+                    {
                         RemoveTagRelationsOnFields(currentTag.ParentId);
+                        Tag parentTag = (Tag)CurrentlyAddedTags.SingleOrDefault(p => p.TagId == currentTag.ParentId);
+                        if (parentTag != null) removelist.AddRange(parentTag.FieldList);
+                        CurrentlyAddedTags.RemoveAll(p=>p.TagId == currentTag.ParentId);
+                        
+                    }
 
                     //Checks if the field is in the fieldList on the asset, and the tag, if so, remove it.
-                    foreach (var field in currentTag.FieldList)
+                    foreach (var field in removelist)
                     {
                         Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(field)) ??
                                             NonHiddenFieldList.FirstOrDefault(p => p.Equals(field));
@@ -198,10 +207,10 @@ namespace AMS.Controllers
 
                     //Remove the fields.
                     foreach (var field in removeFields)
-                        RemoveField(field);
+                        HandleFieldsFromRemoveTag(field,currentTag);
                 }
             }
-
+            LoadFields();
             return !CurrentlyAddedTags.Contains(tag);
         }
 

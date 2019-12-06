@@ -112,6 +112,7 @@
                                         <Border Background="{StaticResource NavigationBackgroundBrush}">
                                             <Grid>
                                                 <StackPanel Orientation="Vertical">
+                                                    <!-- Home -->
                                                     <Button Content="Home" Command="{Binding ShowHomePageCommand}">
                                                         <Button.Style>
                                                             <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
@@ -123,6 +124,8 @@
                                                             </Style>
                                                         </Button.Style>
                                                     </Button>
+                                                    
+                                                    <!-- Assets -->
                                                     <Button Content="Assets" Command="{Binding ShowAssetListPageCommand}">
                                                         <Button.Style>
                                                             <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
@@ -134,6 +137,8 @@
                                                             </Style>
                                                         </Button.Style>
                                                     </Button>
+                                                    
+                                                    <!-- Tags -->
                                                     <Button Content="Tags" Command="{Binding ShowTagListPageCommand}" Visibility="{Binding OnlyVisibleForAdmin}">
                                                         <Button.Style>
                                                             <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
@@ -145,6 +150,8 @@
                                                             </Style>
                                                         </Button.Style>
                                                     </Button>
+                                                    
+                                                    <!-- Users -->
                                                     <Button Content="Users" Command="{Binding ShowUserListPageCommand}" Visibility="{Binding OnlyVisibleForAdmin}">
                                                         <Button.Style>
                                                             <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
@@ -156,6 +163,8 @@
                                                             </Style>
                                                         </Button.Style>
                                                     </Button>
+                                                    
+                                                    <!-- Log -->
                                                     <Button Content="Log" Command="{Binding ShowLogPageCommand}" Visibility="{Binding OnlyVisibleForAdmin}">
                                                         <Button.Style>
                                                             <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
@@ -177,6 +186,7 @@
                                                                FontWeight="Bold"
                                                                Text="Current database"
                                                                HorizontalAlignment="Center"/>
+                                                    
                                                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                                                FontSize="{StaticResource FontSizeXSmall}"
                                                                Foreground="White"
