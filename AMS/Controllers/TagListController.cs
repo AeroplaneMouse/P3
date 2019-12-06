@@ -21,10 +21,9 @@ namespace AMS.Controllers
         
         public IUserListController UserListController { get; set; }
 
-        public TagListController(ITagRepository tagRepository, IExporter printHelper)
+        public TagListController(ITagRepository tagRepository)
         {
             _rep = tagRepository;
-            _exporter = printHelper;
             TagsList = new List<Tag>();
         }
 
@@ -40,11 +39,6 @@ namespace AMS.Controllers
                 TagsList.Remove(tag);
                 _rep.Delete(tag);
             }
-        }
-
-        public void Export(List<Tag> tags)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
