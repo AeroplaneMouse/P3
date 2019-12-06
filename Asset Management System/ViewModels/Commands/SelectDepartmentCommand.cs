@@ -2,17 +2,24 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using Asset_Management_System.Database.Repositories;
+using Asset_Management_System.Models;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels.Commands
 {
     class SelectDepartmentCommand : ICommand
     {
         private ViewModels.MainViewModel _main;
+        private IDepartmentService _service;
+        private IDepartmentRepository _rep;
         public event EventHandler CanExecuteChanged;
 
-        public SelectDepartmentCommand(ViewModels.MainViewModel main)
+        public SelectDepartmentCommand(MainViewModel main, IDepartmentService service)
         {
             _main = main;
+            _service = service;
+            _rep = service.GetRepository() as IDepartmentRepository;
         }
 
         public bool CanExecute(object parameter)
@@ -25,7 +32,7 @@ namespace Asset_Management_System.ViewModels.Commands
             try
             {
                 ulong id = ulong.Parse(parameter.ToString());
-                Models.Department selectedDepartment = new Database.Repositories.DepartmentRepository().GetById(id);
+                Department selectedDepartment = _rep.GetById(id);
                 if (selectedDepartment == null)
                     selectedDepartment = Models.Department.GetDefault();
 

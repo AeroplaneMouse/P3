@@ -107,7 +107,9 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
 
-                    <ListView ItemsSource="{Binding CurrentlyAddedTags}" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ItemContainerStyle="{StaticResource ListViewWithTags}">
+                    <ListView ItemsSource="{Binding CurrentlyAddedTags}"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              ItemContainerStyle="{StaticResource ListViewWithTags}">
                         <ListView.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel

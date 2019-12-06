@@ -1,58 +1,56 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Windows;
 using System.Windows.Input;
-using Asset_Management_System.Logging;
+using Asset_Management_System.Events;
 using Asset_Management_System.Models;
+using Asset_Management_System.Logging;
 using Asset_Management_System.Resources.DataModels;
 using Asset_Management_System.Database.Repositories;
-using System.Windows;
-using Asset_Management_System.Events;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
-    public abstract class ChangeableListPageViewModel<RepositoryType, T> : ListPageViewModel<RepositoryType, T>
-        where RepositoryType : Database.Repositories.ISearchableRepository<T>, new()
+    public abstract class ChangeableListPageViewModel<T> : ListPageViewModel<T>
         where T : class, new()
     {
-        #region Commands
+        private Asset RemoveAsset;
+        private Tag RemoveTag;
 
         public ICommand AddNewCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
 
-        #endregion
-
-        #region Constructor
-
-        public ChangeableListPageViewModel(MainViewModel main, ListPageType pageType) : base(main, pageType)
+        protected IDisplayableService<T> _service;
+        
+        public ChangeableListPageViewModel(MainViewModel main, IDisplayableService<T> service) : base(main, service)
         {
             // AddNewCommand = new ViewModels.Base.RelayCommand(() => _main.ChangeMainContent(new Views.TagManager(_main)));
             AddNewCommand = new Base.RelayCommand(AddNew);
             EditCommand = new Base.RelayCommand(Edit);
             RemoveCommand = new Base.RelayCommand(Remove);
+
+            _service = service;
         }
-
-        #endregion
-
-        #region Methods
 
         protected void AddNew()
         {
+            _main.ChangeMainContent(_service.GetManagerPage(_main));
+            /*
             switch (PageType)
             {
                 case ListPageType.Asset:
-                    Main.ChangeMainContent(new Views.AssetManager(Main));
+                	Main.ChangeMainContent(new Views.AssetManager(Main)); // TODO: Get via the service?
                     break;
 
                 case ListPageType.Tag:
-                    Main.ChangeMainContent(new Views.TagManager(Main));
+                    _main.ChangeMainContent(new Views.TagManager(_main));
                     break;
 
                 default:
                     Console.WriteLine("Error when adding new");
                     break;
             }
+            */
         }
 
         protected void Edit()
@@ -60,74 +58,84 @@ namespace Asset_Management_System.ViewModels
             T selected = GetSelectedItem();
             Console.WriteLine("Check: " + SelectedItemIndex);
 
-            if (selected == null) return;
+            if (selected == null) 
+                return;
+            _main.ChangeMainContent(_service.GetManagerPage(_main, selected));
+            /*
             switch (selected)
             {
                 case Asset asset:
-                    Main.ChangeMainContent(new Views.AssetManager(Main, asset));
+                    _main.ChangeMainContent(new Views.AssetManager(_main, asset));
                     break;
                 case Tag tag:
-                    Main.ChangeMainContent(new Views.TagManager(Main, tag));
+                    _main.ChangeMainContent(new Views.TagManager(_main, tag));
                     break;
                 default:
                     Console.WriteLine("Fejl ved edit");
                     break;
             }
+            */
         }
-
-        private Asset RemoveAsset;
-        private Tag RemoveTag;
+        
 
         protected void Remove()
         {
-            T selected = GetSelectedItem();
+            var selected = SelectedItems[0];
 
-            if (selected == null) return;
+            if (selected == null) 
+                return;
+
+            string message = $"Are you sure you want to delete { SelectedItems.Count } ";
             switch (selected)
             {
                 case Asset asset:
                     RemoveAsset = asset;
                     RemoveTag = null;
-                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete asset { asset.Name }?", RemovePromptElapsed));
+                    message += "asset";
                     break;
                 case Tag tag:
                     RemoveAsset = null;
                     RemoveTag = tag;
-                    _main.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to delete tag { tag.Name }?", RemovePromptElapsed));
+                    message += "tag";
+                    
                     break;
                 default:
+                    _main.AddNotification(new Notification("Error! An unknown error occured...", Notification.ERROR));
                     Console.WriteLine("Fejl ved Remove");
-                    break;
+                    return;
             }
+
+            // Showing prompt
+            message += SelectedItems.Count > 1 ? "s?" : "?";
+            _main.DisplayPrompt(new Views.Prompts.Confirm(message, RemovePromptElapsed));
         }
 
         private void RemovePromptElapsed(object sender, PromptEventArgs e)
         {
+            // Check if the pressed button was accept
             if (e.Result)
             {
+                Log<T>.CreateLog((ILoggable<T>)GetSelectedItem(), true); //TODO: Fix so typecast is unnecessary
                 if (RemoveAsset != null)
+                    Rep.Delete(RemoveAsset as T);
+                else if (RemoveTag != null)
                 {
-                    Log<Asset>.CreateLog(RemoveAsset, true);
-                    (Rep as AssetRepository).Delete(RemoveAsset as Asset);
+                    foreach (var var in SelectedItems)
+                    {
+                        Rep.Delete(var as T);
+                        /*
+                        if (RemoveAsset != null)
+                            ((AssetRepository) Rep).Delete(var as Asset);
+
+                        else if(RemoveTag != null)
+                            ((TagRepository) Rep).Delete(var as Tag);
+                        */
+                        Search();
+                    }
                 }
-                else if(RemoveTag != null)
-                {
-                    Log<Tag>.CreateLog(RemoveTag, true);
-                    (Rep as TagRepository).Delete(RemoveTag as Tag);
-                }
+                /**/
                 Search();
             }
         }
-
-        #endregion
-
-
-        #region Helpers
-
-        public Visibility IsRemoveVisible { get; set; } = Visibility.Hidden;
-
-        public string Title { get; set; }
-
-        #endregion
     }
 }

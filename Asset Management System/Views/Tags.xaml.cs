@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
-using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Events;
-using Asset_Management_System.Models;
+﻿using System.Windows.Controls;
 using Asset_Management_System.ViewModels;
-using Asset_Management_System.Resources.DataModels;
+using Asset_Management_System.Services.Interfaces;
+using System.Windows;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.Views
 {
@@ -17,10 +11,24 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Tags : Page
     {
-        public Tags(MainViewModel main)
+        MainViewModel mainView;
+        private ITagService _service;
+
+        public Tags(MainViewModel main, ITagService tagService)
         {
             InitializeComponent();
-            DataContext = new ViewModels.TagsViewModel(main, ListPageType.Tag);
+            DataContext = new TagsViewModel(main, tagService);
+            mainView = main;
+        }
+
+        private void TreeView_MouseDoubleClick(object sender, RoutedEventArgs e)
+        {
+            if (sender is Label)
+            {
+                TagsViewModel vm = this.DataContext as TagsViewModel;
+                ulong treeViewParentTagID = ((Tag)TagAbleList.SelectedItem).ParentID;
+                vm.GoToEdit(sender, e, treeViewParentTagID);
+            }
         }
     }
 }

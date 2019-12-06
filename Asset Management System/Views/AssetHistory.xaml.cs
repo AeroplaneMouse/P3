@@ -1,20 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Logging;
 using Asset_Management_System.Models;
+using Asset_Management_System.Services.Interfaces;
 using Asset_Management_System.ViewModels;
 
 namespace Asset_Management_System.Views
@@ -24,11 +12,11 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class AssetHistory : Window
     {
-        public AssetHistory(Model asset)
+        public AssetHistory(Asset asset, IEntryService entryService)
         {
             InitializeComponent();
             //DataContext = this;
-            DataContext = new AssetHistoryViewModel(this, asset);
+            DataContext = new AssetHistoryViewModel(this, entryService, asset);
             //ILogRepository<Entry> rep = new LogRepository();
             //History = rep.GetLogEntries(asset.ID, asset.GetType());
             Type type = asset.GetType();

@@ -2,28 +2,21 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
+using Asset_Management_System.ViewModels.Interfaces;
 using Asset_Management_System.ViewModels.ViewModelHelper;
 
 namespace Asset_Management_System.ViewModels
 {
-    public abstract class FieldsController : Base.BaseViewModel
+    public abstract class FieldsController : Base.BaseViewModel, IFieldManager
     {
-        public ObservableCollection<ShownField> FieldsList { get; set; }
-        protected bool _editing;
+        protected abstract void LoadFields();
+        public ObservableCollection<ShownField> FieldsList { get; set; } = new ObservableCollection<ShownField>();
+        protected bool Editing;
 
 
         public ICommand AddFieldCommand { get; set; }
-
-        public void NumberVerification(object sender, TextCompositionEventArgs e)
-        {
-            Regex regex = new Regex("[^0-9]+");
-            e.Handled = regex.IsMatch(e.Text);
-        }
+        public static ICommand RemoveFieldCommand { get; set; }
 
         public List<string> PromptManager(string label, out bool required)
         {
@@ -43,6 +36,21 @@ namespace Asset_Management_System.ViewModels
             }
 
             return outputList;
+        }
+
+        public bool AddField(DoesContainFields obj, Field field)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool UpdateField(DoesContainFields obj, Field field)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveField(DoesContainFields obj, Field field)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Logging;
 using Asset_Management_System.Models;
+using Asset_Management_System.Services.Interfaces;
 using Asset_Management_System.ViewModels.Base;
 using Asset_Management_System.Views;
 
@@ -18,7 +19,7 @@ namespace Asset_Management_System.ViewModels
         /// <summary>
         /// Default contructor
         /// </summary>
-        public AssetHistoryViewModel(Window window, Model asset)
+        public AssetHistoryViewModel(Window window, IEntryService service, Asset asset)
         {
             // Initialize commands
             _window = window;
@@ -27,7 +28,7 @@ namespace Asset_Management_System.ViewModels
             // Start the search over
             ExitCommand = new Base.RelayCommand(Exit);
 
-            ILogRepository<Entry> rep = new LogRepository();
+            ILogRepository rep = service.GetSearchableRepository() as ILogRepository;
             History = (List<Entry>) rep.GetLogEntries(asset.ID, asset.GetType());
         }
 

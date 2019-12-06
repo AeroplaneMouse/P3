@@ -1,0 +1,242 @@
+﻿<Window x:Class="AMS.Views.Main"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converter="clr-namespace:AMS.Views.ValueConverters"
+        xmlns:local="clr-namespace:AMS.Views"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Normal"
+        x:Name="AppWindow"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Icon="{StaticResource ApplicationIcon}"
+        Title="Asset Management System"
+        Height="600" 
+        Width="1200">
+    
+    <Window.Resources>
+
+        <converter:DepartmentStringValueConverter x:Key="DepartmentConverter"/>
+
+
+        <!-- Style of the window -->
+        <Style TargetType="{x:Type local:Main}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <!-- Overrides the standard template for Window, giving a "blank slate" -->
+                    <ControlTemplate TargetType="{x:Type Window}">
+                        <Border Padding="{Binding OuterMarginThicknessSize}">
+                            <Grid>
+                                <!-- Window border and drop shadow -->
+                                <Border Background="{StaticResource BackgroundLightBrush}"
+                                        CornerRadius="0">
+                                    <Border.Effect>
+                                        <DropShadowEffect ShadowDepth="0" Opacity="0.5" />
+                                    </Border.Effect>
+                                </Border>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="{Binding TitleHeightGridLength}"/>
+                                        <!-- Menu bar -->
+                                        <RowDefinition Height="*"/>
+                                        <!-- Window content -->
+                                    </Grid.RowDefinitions>
+                                    <Grid Grid.Row="0"
+                                          Panel.ZIndex="1"
+                                          Background="{StaticResource BackgroundDarkBrush}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- Icon -->
+                                            <ColumnDefinition Width="*" />
+                                            <!-- Menu -->
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- Window buttons -->
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Icon button -->
+                                        <Button Grid.Column="0"
+                                                Style="{StaticResource SystemIconButton}"
+                                                Command="{Binding SystemMenuCommand}">
+                                            <Image Source="{StaticResource ApplicationIcon}"/>
+                                        </Button>
+
+                                        <!-- Menu bar -->
+                                        <Menu Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource MenuContainer}">
+                                            <MenuItem Header="_Settings" Style="{StaticResource MenuItemButton}" Visibility="{Binding SettingsVisibility}">
+                                                <MenuItem Header="_Change" Command="{Binding ChangeSettingsCommand}"/>
+                                                <MenuItem Header="_Clear" Command="{Binding ClearSettingsCommand}"/>
+                                            </MenuItem>
+                                            <MenuItem Header="_Help" Style="{StaticResource MenuItemButton}">
+                                                <MenuItem Header="_Shortcuts" Command="{Binding ShowShortcutsCommand}"/>
+                                                <MenuItem Header="_Reload" Command="{Binding ReloadCommand}"/>
+                                                <MenuItem Header="_Exit" Command="{Binding CloseCommand}"/>
+                                            </MenuItem>
+                                        </Menu>
+
+                                        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                                            <!-- Departments -->
+                                            <Menu Style="{StaticResource MenuContainer}" Visibility="{Binding CurrentDepartmentVisibility}" HorizontalAlignment="Left">
+                                                <MenuItem ItemsSource="{Binding Departments}"
+                                                          ItemContainerStyle="{StaticResource DepartmentWithEdit}"
+                                                          Header="{Binding CurrentDepartment, Converter={StaticResource DepartmentConverter}}"
+                                                          Style="{StaticResource MenuItemButtonDepartments}">
+                                                </MenuItem>
+                                            </Menu>
+
+                                            <!-- Current user -->
+                                            <TextBlock Text="{Binding CurrentUser}"
+                                                       Foreground="White"
+                                                       Style="{StaticResource ParagraphStyle}"
+                                                       VerticalAlignment="Center"
+                                                       Margin="15, 0, 15, 0">
+                                            </TextBlock>
+
+                                            <!-- Window buttons -->
+                                            <Button Content="-" Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}"/>
+                                            <Button Content="[ ]" Command="{Binding MaximizeCommand}" Style="{StaticResource WindowControlButton}"/>
+                                            <Button Content="X" Command="{Binding CloseCommand}" Style="{StaticResource WindowCloseButton}"/>
+                                        </StackPanel>
+
+                                    </Grid>
+
+                                    <!-- Window content -->
+                                    <Grid Grid.Row="1" Background="{StaticResource BackgroundLightBrush}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="100"/>
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Navigation menu -->
+                                        <Border Background="{StaticResource NavigationBackgroundBrush}">
+                                            <Grid>
+                                                <StackPanel Orientation="Vertical">
+                                                    <!-- Home -->
+                                                    <Button Content="Home" Command="{Binding ShowHomePageCommand}">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding SelectedNavigationItem}" Value="0">
+                                                                        <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                    
+                                                    <!-- Assets -->
+                                                    <Button Content="Assets" Command="{Binding ShowAssetListPageCommand}">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding SelectedNavigationItem}" Value="1">
+                                                                        <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                    
+                                                    <!-- Tags -->
+                                                    <Button Content="Tags" Command="{Binding ShowTagListPageCommand}" Visibility="{Binding OnlyVisibleForAdmin}">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding SelectedNavigationItem}" Value="2">
+                                                                        <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                    
+                                                    <!-- Users -->
+                                                    <Button Content="Users" Command="{Binding ShowUserListPageCommand}" Visibility="{Binding OnlyVisibleForAdmin}">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding SelectedNavigationItem}" Value="3">
+                                                                        <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                    
+                                                    <!-- Log -->
+                                                    <Button Content="Log" Command="{Binding ShowLogPageCommand}" Visibility="{Binding OnlyVisibleForAdmin}">
+                                                        <Button.Style>
+                                                            <Style TargetType="Button" BasedOn="{StaticResource NavigationButton}">
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding SelectedNavigationItem}" Value="4">
+                                                                        <Setter Property="Background" Value="{StaticResource NavigationSelectedBrush}" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </Button.Style>
+                                                    </Button>
+                                                </StackPanel>
+                                                
+                                                <!-- Current database -->
+                                                <StackPanel VerticalAlignment="Bottom">
+                                                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                                                               FontSize="{StaticResource FontSizeXSmall}"
+                                                               Foreground="White"
+                                                               FontWeight="Bold"
+                                                               Text="Current database"
+                                                               HorizontalAlignment="Center"/>
+                                                    
+                                                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                                                               FontSize="{StaticResource FontSizeXSmall}"
+                                                               Foreground="White"
+                                                               Text="{Binding CurrentDatabase}"
+                                                               HorizontalAlignment="Center"
+                                                               Margin="10 0 10 10"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+
+                                        <!-- Main content -->
+                                        <Frame Grid.Column="1"
+                                               NavigationUIVisibility="Hidden"
+                                               Content="{Binding ContentFrame}"/>
+
+                                        <!-- Splash page -->
+                                        <Frame Grid.ColumnSpan="2"
+                                               NavigationUIVisibility="Hidden"
+                                               Content="{Binding SplashPage}"/>
+
+                                        <!-- Notifications -->
+                                        <ListView Grid.Column="1" 
+                                                  FontSize="{StaticResource FontSizeRegular}"
+                                                  Style="{StaticResource NotificationView}"/>
+
+                                        <!-- PopupPage -->
+                                        <Frame Grid.ColumnSpan="2"
+                                               NavigationUIVisibility="Hidden"
+                                               Content="{Binding PopupPage}"/>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Alt" Key="D1" Command="{Binding ShowHomePageCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="D2" Command="{Binding ShowAssetListPageCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="D3" Command="{Binding ShowTagListPageCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="D4" Command="{Binding ShowUserListPageCommand}"/>
+        <KeyBinding Modifiers="Alt" Key="D5" Command="{Binding ShowLogPageCommand}"/>
+    </Window.InputBindings>
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome ResizeBorderThickness="{Binding ResizeBorderThickness}"
+                      CaptionHeight="{Binding TitleHeight}"
+                      GlassFrameThickness="0"/>
+    </WindowChrome.WindowChrome>
+</Window>

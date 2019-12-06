@@ -1,23 +1,23 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace Asset_Management_System.Models
 {
     [Serializable]
     public class Field
     {
-        public enum FieldType {Textarea = 1, Textbox, Integer, Date, Boolean};
+        public enum FieldType {Textarea = 1, TextBox, NumberField, Date, Checkbox};
 
         public static IEnumerable<FieldType> GetTypes()
         {
             return new List<FieldType>() {
                 FieldType.Textarea,
-                FieldType.Textbox,
-                FieldType.Integer,
+                FieldType.TextBox,
+                FieldType.NumberField,
                 FieldType.Date,
-                FieldType.Boolean
+                FieldType.Checkbox
             };
         }
 
@@ -55,8 +55,6 @@ namespace Asset_Management_System.Models
         public bool Required { get; set; }
         public string Hash { get; }
 
-        //private int _fieldType;
-
         public FieldType Type { get; set; }
 
         public string DefaultValue;
@@ -72,7 +70,7 @@ namespace Asset_Management_System.Models
                 {"Label", Label},
                 {"Description", Content},
                 {"Required", Required.ToString()},
-                {"FieldType", Type.ToString()},
+                {"Type", Type.ToString()},
                 {"DefaultValue", DefaultValue}
             };
             return output;
@@ -86,7 +84,6 @@ namespace Asset_Management_System.Models
             Field other = (Field) obj;
             return (this.Hash == other.Hash);
         }
-
 
         /// <summary>
         /// Calculates a MD5 hash for the input string
@@ -116,9 +113,6 @@ namespace Asset_Management_System.Models
             return sb.ToString();
         }
 
-        public override string ToString()
-        {
-            return $"{ Label } : { Content } : { DefaultValue } : { Type } : { Required } : { IsHidden }";
-        }
+        public override string ToString() => $"{ Label } : { Content } : { DefaultValue } : { Type } : { Required } : { IsHidden }";
     }
 }

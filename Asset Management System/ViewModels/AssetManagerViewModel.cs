@@ -1,29 +1,28 @@
-﻿using Asset_Management_System.Models;
-using System;
+﻿using System;
+using System.Linq;
+using System.Windows.Input;
+using System.Windows.Controls;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Input;
+using Asset_Management_System.Models;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.ViewModels.Commands;
 using Asset_Management_System.ViewModels.ViewModelHelper;
-using System.Drawing;
+using Asset_Management_System.Services.Interfaces;
+using Asset_Management_System.ViewModels.Controllers;
+using Asset_Management_System.ViewModels.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
-    public class AssetManagerViewModel : ObjectManagerController
+    public class AssetManagerViewModel : AssetController, IAssetManager
     {
         private MainViewModel _main;
-        private Asset _asset;
 
         public string Name { get; set; }
-        public string Identifier { get; set; }
-        public string Description { get; set; }
+        public string Identifier { get; set; } = String.Empty;
+        public string Description { get; set; } = String.Empty;
 
         public string Title { get; set; }
-
-        #region Tag related private properties
 
         // The string that the user is searching with
         private string _searchString { get; set; }
@@ -41,22 +40,14 @@ namespace Asset_Management_System.ViewModels
         private string _parentString { get; set; }
 
         // A tag repository, for communication with the database
-        private TagRepository _tagRep { get; set; }
+        private ITagRepository _tagRep { get; set; }
 
         // TODO: Kom uden om mig
         private TextBox _box { get; set; }
+        
+        private IAssetRepository _assetRep { get; set; }
 
-
-        private List<Asset> _assetList { get; set; }
-
-        private AssetRepository _assetRep { get; set; }
-
-        #endregion
-
-
-        #region tag related public Properties
-
-        public List<Asset> AssetList;
+        private IAssetService _service;
 
         // The current parent exposed to the view
         public string ParentID
@@ -106,10 +97,7 @@ namespace Asset_Management_System.ViewModels
             }
         }
 
-        #endregion
 
-
-        #region Commands
 
         public ICommand EnterKeyCommand { get; set; }
 
@@ -121,49 +109,49 @@ namespace Asset_Management_System.ViewModels
 
         public ICommand BackspaceKeyCommand { get; set; }
 
-        #endregion
 
-
-        public AssetManagerViewModel(MainViewModel main, Asset inputAsset, TextBox box, bool addMultiple = false)
+        public AssetManagerViewModel(MainViewModel main, Asset inputAsset, IAssetService service, TextBox box, bool addMultiple = false): base(inputAsset, service, addMultiple)
         {
             _main = main;
             Title = "Edit asset";
+            _service = service;
+            _assetRep = _service.GetRepository() as IAssetRepository;
 
-            // TODO: Consider if this should be given via Dependency Injection
-            _assetRep = new AssetRepository();
-
-            FieldsList = new ObservableCollection<ShownField>();
             if (inputAsset != null)
             {
-                _asset = inputAsset;
-                LoadFields();
+                Name = Asset.Name;
+                Identifier = Asset.Identifier;
+                Description = Asset.Description;
 
-                CurrentlyAddedTags = new ObservableCollection<Tag>(_assetRep.GetAssetTags(_asset));
+                // Notify view about changes
+                OnPropertyChanged(nameof(Name));
+                OnPropertyChanged(nameof(Description));
+                CurrentlyAddedTags = new ObservableCollection<ITagable>(_assetRep.GetTags(Asset));
 
                 ConnectTags();
                 if (!addMultiple)
                 {
-                    _editing = true;
+                    Editing = true;
                 }
-                
             }
             else
             {
-                CurrentlyAddedTags = new ObservableCollection<Tag>();
-                _asset = new Asset();
-                _editing = false;
+                CurrentlyAddedTags = new ObservableCollection<ITagable>();
+                Asset = new Asset();
+                Editing = false;
             }
 
             // Initialize commands
-            SaveAssetCommand = new SaveAssetCommand(this, _main, _asset, _editing);
-            SaveMultipleAssetsCommand = new SaveAssetCommand(this, _main, _asset, false, true);
-            AddFieldCommand = new AddFieldCommand(_main, this, true);
-            RemoveFieldCommand = new RemoveFieldCommand(this);
+            SaveAssetCommand = new SaveAssetCommand(this, _main, Asset, _service, Editing);
+            SaveMultipleAssetsCommand = new SaveAssetCommand(this, _main, Asset, _service, false, true);
+            //AddFieldCommand = new AddFieldCommand(_main, this, true);
+            //RemoveFieldCommand = new RemoveFieldCommand(this);
 
-            CancelCommand = new Base.RelayCommand(() => _main.ChangeMainContent(new Views.Assets(_main)));
+            CancelCommand = new Base.RelayCommand(() => _main.ReturnToPreviousPage());
 
             #region Tag related variables
 
+            // TODO: get via Dependency Injection
             _tagRep = new TagRepository();
 
             // TODO: Kom uden om mig
@@ -186,14 +174,13 @@ namespace Asset_Management_System.ViewModels
 
             #endregion
 
-            UnTagTagCommand = new UntagTagCommand(this);
+            UntagTagCommand = new RemoveRelationToTagCommand(this);
         }
 
         public ICommand SaveAssetCommand { get; set; }
         public ICommand SaveMultipleAssetsCommand { get; set; }
-        public static ICommand UnTagTagCommand { get; set; }
+        public static ICommand UntagTagCommand { get; set; }
         public ICommand CancelCommand { get; set; }
-
 
         /// <summary>
         /// Verification of the asset, before saving.
@@ -203,33 +190,6 @@ namespace Asset_Management_System.ViewModels
         {
             //TODO Figure out the implementation for this one.
             return true;
-        }
-
-
-        /// <summary>
-        /// This function loads the fields from the asset, and into the viewmodel.
-        /// </summary>
-        protected override void LoadFields()
-        {
-            foreach (var field in _asset.FieldsList)
-            {
-                if (field.IsHidden)
-                {
-                    HiddenFields.Add(new ShownField(field));
-                }
-                else
-                {
-                    FieldsList.Add(new ShownField(field));
-                }
-            }
-
-            Name = _asset.Name;
-            Identifier = _asset.Identifier;
-            Description = _asset.Description;
-
-            // Notify view about changes
-            OnPropertyChanged(nameof(Name));
-            OnPropertyChanged(nameof(Description));
         }
 
         #region Tag search related methods
@@ -248,10 +208,11 @@ namespace Asset_Management_System.ViewModels
         }
 
         /// <summary>
-        /// This function runs uppon selecting a Tag with Enter.
+        /// This function runs upon selecting a Tag with Enter.
         /// </summary>
         private void Apply()
         {
+            // If no tag matching searchString is found in _tagList
             if (_tagList.SingleOrDefault(tag => tag.Name == _searchString) == null)
             {
                 _searchString = _tagList
@@ -259,14 +220,18 @@ namespace Asset_Management_System.ViewModels
                     .ElementAtOrDefault(0);
             }
 
-            if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.Name, _searchString)) == null)
+            if (CurrentlyAddedTags.FirstOrDefault(p => Equals(p.TagLabel, _searchString)) == null)
             {
                 Tag tag = _tagList.SingleOrDefault(p =>
                     String.Equals(p.Name, _searchString, StringComparison.CurrentCultureIgnoreCase));
                 if (tag != null)
+                {
                     CurrentlyAddedTags.Add(tag);
+                }
                 else
+                {
                     _main.AddNotification(new Notification("No matching tags found", Notification.WARNING));
+                }
                 ConnectTags();
             }
 
@@ -317,26 +282,25 @@ namespace Asset_Management_System.ViewModels
         private void EnterChildren()
         {
             // Can only go in, if the parent tag is at the highest level
-            if (_parentID == 0)
+            if (_parentID != 0) return;
+
+            // Checks if the tag we are "going into" has any children
+            ulong tempID = _tagList
+                .Select(p => p.ID)
+                .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
+            List<Tag> childList = _tagRep.GetChildTags(tempID).ToList();
+
+            // If the tag we are "going into" has children, we go into it
+            if (childList?.Count != 0)
             {
-                // Checks if the tag we are "going into" has any children
-                ulong tempID = _tagList
-                    .Select(p => p.ID)
+                _parentString = _tagList
+                    .Select(p => p.Name)
                     .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                List<Tag> tempList = _tagRep.GetChildTags(tempID) as List<Tag>;
+                _searchString = String.Empty;
+                _parentID = tempID;
+                _tagList = childList;
 
-                // If the tag we are "going into" has children, we go into it
-                if (tempList?.Count != 0)
-                {
-                    _parentString = _tagList
-                        .Select(p => p.Name)
-                        .ElementAtOrDefault(_tabIndex == 0 ? 0 : _tabIndex - 1);
-                    _searchString = String.Empty;
-                    _parentID = tempID;
-                    _tagList = tempList;
-
-                    _tabIndex = 0;
-                }
+                _tabIndex = 0;
             }
         }
 
@@ -384,5 +348,45 @@ namespace Asset_Management_System.ViewModels
         }
 
         #endregion
+
+        public bool AttachTag(Asset asset, ITagable tag)
+        {
+            return true;
+        }
+
+        public bool DetachTag(Asset asset, ITagable tag)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<ShownField> GetRelations(Asset asset, List<Tag> tags)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool RemoveRelations(Asset asset, Tag tag, List<ShownField> shownFields)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Tag CreateTag(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Save()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Remove()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Update()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

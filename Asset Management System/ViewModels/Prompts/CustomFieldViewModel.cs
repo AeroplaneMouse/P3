@@ -1,9 +1,9 @@
-﻿using Asset_Management_System.Events;
-using Asset_Management_System.Models;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Collections.Generic;
+using Asset_Management_System.Events;
+using Asset_Management_System.Models;
 
 namespace Asset_Management_System.ViewModels.Prompts
 {
@@ -30,17 +30,16 @@ namespace Asset_Management_System.ViewModels.Prompts
             : base(message, handler)
         {
             _isCustom = isCustom;
-            SelectedFieldType = Field.FieldType.Textbox;
+            SelectedFieldType = Field.FieldType.TextBox;
         }
 
 
         protected override void Accept()
         {
-
             if (SelectedFieldType == 0)
                 return;
 
-            if (SelectedFieldType == Field.FieldType.Boolean)
+            if (SelectedFieldType == Field.FieldType.Checkbox)
                 DefaultValue = DefaultBool ? "1" : "0";
 
             if (SelectedFieldType == Field.FieldType.Date)
@@ -73,37 +72,15 @@ namespace Asset_Management_System.ViewModels.Prompts
                 return type switch
                 {
                     Field.FieldType.Textarea => element?.FindResource("Area") as DataTemplate,
-                    Field.FieldType.Textbox => element?.FindResource("Box") as DataTemplate,
-                    Field.FieldType.Integer => element?.FindResource("NumberField") as DataTemplate,
+                    Field.FieldType.TextBox => element?.FindResource("Box") as DataTemplate,
+                    Field.FieldType.NumberField => element?.FindResource("NumberField") as DataTemplate,
                     Field.FieldType.Date => element?.FindResource("Date") as DataTemplate,
-                    Field.FieldType.Boolean => element?.FindResource("Boolean") as DataTemplate,
+                    Field.FieldType.Checkbox => element?.FindResource("Boolean") as DataTemplate,
                     _ => element?.FindResource("Box") as DataTemplate
                 };
             }
             else
                 throw new NotSupportedException("Wrong formatting syntax.");
-
-            //Field.FieldType type = item as Field.FieldType;
-            //return element?.FindResource()
-
-
-
-                ////ShownField field = item as ShownField;
-                //switch (item as Field.FieldType)
-                //{
-                //    case Field.FieldType.Textarea: // Textbox
-                //        return element?.FindResource("Area") as DataTemplate;
-                //    case Field.FieldType.Textbox: // String
-                //        return element?.FindResource("Box") as DataTemplate;
-                //    case Field.FieldType.Integer: // Integer
-                //        return element?.FindResource("Box") as DataTemplate;
-                //    case Field.FieldType.Date: // Date
-                //        return element?.FindResource("Box") as DataTemplate;
-                //    case Field.FieldType.Boolean: // Boolean
-                //        return element?.FindResource("Box") as DataTemplate;
-                //    default:
-                //        throw new NotSupportedException("Wrong formatting syntax.");
-                //}
         }
     }
 }

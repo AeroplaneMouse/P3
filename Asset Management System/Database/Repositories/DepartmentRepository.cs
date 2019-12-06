@@ -13,28 +13,31 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             ulong count = 0;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "SELECT COUNT(*) FROM departments;";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    const string query = "SELECT COUNT(*) FROM departments;";
+
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        if (reader.Read())
-                            count = reader.GetUInt64("COUNT(*)");
-                        reader.Close();
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                                count = reader.GetUInt64("COUNT(*)");
+                            reader.Close();
+                        }
                     }
                 }
-            }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
             
             return count;
@@ -50,31 +53,34 @@ namespace Asset_Management_System.Database.Repositories
         {
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
-            
-            try
-            {
-                const string query = "INSERT INTO departments (name, updated_at) VALUES (@name, CURRENT_TIMESTAMP())";
+            id = 0;
 
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
+            {
+                try
                 {
-                    cmd.Parameters.Add("@name", MySqlDbType.String);
-                    cmd.Parameters["@name"].Value = entity.Name;
-                    querySuccess = cmd.ExecuteNonQuery() > 0;
-                    
-                    id = (ulong)cmd.LastInsertedId;
+                    const string query = "INSERT INTO departments (name, updated_at) VALUES (@name, CURRENT_TIMESTAMP())";
+
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@name", MySqlDbType.String);
+                        cmd.Parameters["@name"].Value = entity.Name;
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+
+                        id = (ulong)cmd.LastInsertedId;
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
                 }
             }
-            catch (MySqlException e)
-            {
-                id = 0;
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
-            }
-            
+
             return querySuccess;
         }
 
@@ -88,30 +94,33 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "UPDATE departments SET name=@name, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.Add("@name", MySqlDbType.String);
-                    cmd.Parameters["@name"].Value = entity.Name;
-                    cmd.Parameters.Add("@id", MySqlDbType.Int64);
-                    cmd.Parameters["@id"].Value = entity.ID;
+                    const string query = "UPDATE departments SET name=@name, updated_at=CURRENT_TIMESTAMP() WHERE id=@id";
 
-                    querySuccess = cmd.ExecuteNonQuery() > 0;
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@name", MySqlDbType.String);
+                        cmd.Parameters["@name"].Value = entity.Name;
+                        cmd.Parameters.Add("@id", MySqlDbType.Int64);
+                        cmd.Parameters["@id"].Value = entity.ID;
+
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
                 }
             }
-            catch (MySqlException e)
-            {
-                Console.WriteLine(e);
-            }
-            finally
-            {
-                con.Close();
-            }
-            
+
             return querySuccess;
         }
 
@@ -125,23 +134,30 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
 
-            try
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
             {
-                const string query = "DELETE FROM departments WHERE id=@id";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+                try
                 {
-                    cmd.Parameters.AddWithValue  ("@id", MySqlDbType.Int64);
-                    cmd.Parameters["@id"].Value = entity.ID;
-                    querySuccess = cmd.ExecuteNonQuery() > 0;
+                    const string query = "DELETE FROM departments WHERE id=@id";
+
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.AddWithValue("@id", MySqlDbType.Int64);
+                        cmd.Parameters["@id"].Value = entity.ID;
+                        querySuccess = cmd.ExecuteNonQuery() > 0;
+                    }
                 }
-            }catch(MySqlException e){ 
-                Console.WriteLine(e);
-            }finally{
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
-            
+
             return querySuccess;
         }
 
@@ -155,29 +171,37 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             Department department = null;
 
-            try{
-                const string query = "SELECT id, name, created_at, updated_at " +
-                                     "FROM departments WHERE id=@id";
-
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
+            {
+                try
                 {
-                    cmd.Parameters.Add("@id", MySqlDbType.UInt64);
-                    cmd.Parameters["@id"].Value = id;
+                    const string query = "SELECT id, name, created_at, updated_at " +
+                                         "FROM departments WHERE id=@id";
 
-                    using (var reader = cmd.ExecuteReader())
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        cmd.Parameters.Add("@id", MySqlDbType.UInt64);
+                        cmd.Parameters["@id"].Value = id;
+
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            department = DBOToModelConvert(reader);
+                            while (reader.Read())
+                            {
+                                department = DBOToModelConvert(reader);
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
                 }
-            }catch(MySqlException e){ 
-                Console.WriteLine(e);
-            }finally{
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
             
             return department;
@@ -192,27 +216,35 @@ namespace Asset_Management_System.Database.Repositories
             var con = new MySqlHandler().GetConnection();
             List<Department> departments = new List<Department>();
 
-            try{
-                const string query = "SELECT id, name, created_at, updated_at " +
-                                     "FROM departments ORDER BY name ASC";
-                
-                con.Open();
-                using (var cmd = new MySqlCommand(query, con))
+            // Opening connection
+            if (MySqlHandler.Open(ref con))
+            {
+                try
                 {
-                    using (var reader = cmd.ExecuteReader())
+                    const string query = "SELECT id, name, created_at, updated_at " +
+                                         "FROM departments ORDER BY name ASC";
+
+                    using (var cmd = new MySqlCommand(query, con))
                     {
-                        while (reader.Read())
+                        using (var reader = cmd.ExecuteReader())
                         {
-                            Department dep = DBOToModelConvert(reader);
-                            departments.Add(dep);
+                            while (reader.Read())
+                            {
+                                Department dep = DBOToModelConvert(reader);
+                                departments.Add(dep);
+                            }
+                            reader.Close();
                         }
-                        reader.Close();
                     }
                 }
-            }catch(MySqlException e){ 
-                Console.WriteLine(e);
-            }finally{
-                con.Close();
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
             }
             
             return departments;

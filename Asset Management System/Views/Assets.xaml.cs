@@ -1,18 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using Asset_Management_System.Models;
-using Asset_Management_System.Database.Repositories;
-using System.Collections.Generic;
-using System.Windows.Input;
-using System.Windows.Media;
-using Asset_Management_System.Events;
-using System.ComponentModel;
-using System.Collections.ObjectModel;
-using System.Windows.Controls.Primitives;
+﻿using System.Windows.Controls;
 using Asset_Management_System.ViewModels;
 using Asset_Management_System.Resources.DataModels;
+using Asset_Management_System.Services.Interfaces;
+using Asset_Management_System.Models;
+using System.Linq;
 
 namespace Asset_Management_System.Views
 {
@@ -21,11 +12,16 @@ namespace Asset_Management_System.Views
     /// </summary>
     public partial class Assets : Page
     {
-        public Assets(MainViewModel main)
+        public Assets(MainViewModel main, IAssetService assetService)
         {
             InitializeComponent();
 
-            DataContext = new ViewModels.AssetsViewModel(main, ListPageType.Asset);
+            DataContext = new AssetsViewModel(main, assetService);
+        }
+        private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var viewmodel = (ListPageViewModel<Asset>) DataContext;
+            viewmodel.SelectedItems = ListView.SelectedItems.Cast<DoesContainFields>().ToList();
         }
     }
 }

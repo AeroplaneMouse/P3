@@ -1,18 +1,23 @@
 using System;
-using System.Collections.Generic;
-using Asset_Management_System.Database.Repositories;
-using Asset_Management_System.Logging;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using Asset_Management_System.Logging;
+using Asset_Management_System.Database.Repositories;
 
 namespace Asset_Management_System.Models
 {
     [Serializable]
     public class Asset : DoesContainFields, ILoggable<Asset>
     {
-        public Asset() : base() { }
+        public Asset() : base()
+        {
+            Description = "";
+            Identifier = "";
+        }
 
         [JsonConstructor]
-        private Asset(ulong id, string name, string description, string identifier, ulong department_id, string options, DateTime created_at, DateTime updated_at)
+        private Asset(ulong id, string name, string description, string identifier, ulong department_id, string options,
+            DateTime created_at, DateTime updated_at)
         {
             ID = id;
             Name = name;
@@ -40,12 +45,12 @@ namespace Asset_Management_System.Models
         /// <returns>Rather the two objects are equal</returns>
         public override bool Equals(object obj)
         {
-            if(obj is Asset == false)
+            if (obj is Asset == false)
             {
                 return false;
             }
 
-            Asset other = (Asset)obj;
+            Asset other = (Asset) obj;
 
             if (this.FieldsList.Count != other.FieldsList.Count ||
                 this.Name != other.Name ||
@@ -55,9 +60,9 @@ namespace Asset_Management_System.Models
                 return false;
             }
 
-            for(int i = this.FieldsList.Count - 1; i >= 0; i--)
+            for (int i = this.FieldsList.Count - 1; i >= 0; i--)
             {
-                if(! this.FieldsList[i].Equals(other.FieldsList[i]))
+                if (!this.FieldsList[i].Equals(other.FieldsList[i]))
                 {
                     return false;
                 }
@@ -77,7 +82,7 @@ namespace Asset_Management_System.Models
         /// </summary>
         /// <returns>Name of the asset</returns>
         public override string ToString() => Name;
-        
+
         /// <summary>
         /// Saves all properties to a dictionary with Property name and value
         /// </summary>
@@ -93,7 +98,7 @@ namespace Asset_Management_System.Models
             props.Add("Options", SerializedFields);
             props.Add("Created at", DateToStringConverter);
             return props;
-            
+
             /* Possible alternative using reflection
             PropertyInfo[] Props = this.GetType().GetProperties();
             foreach (var prop in Props)
@@ -102,7 +107,6 @@ namespace Asset_Management_System.Models
             }
             return props
             /**/
-            
         }
 
         /// <summary>

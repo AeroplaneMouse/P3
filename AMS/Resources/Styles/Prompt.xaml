@@ -1,0 +1,68 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Style TargetType="{x:Type Window}" x:Key="PromptWindow">
+        <Setter Property="WindowStyle" Value="ToolWindow"/>
+        <Setter Property="Height" Value="400"/>
+        <Setter Property="Width" Value="800"/>
+        <Setter Property="Background" Value="White"/>
+    </Style>
+            
+    <!-- Prompt window -->
+    <Style TargetType="{x:Type StackPanel}" x:Key="PromptStackPanel">
+        <Setter Property="Height" Value="180" />
+        <Setter Property="Width" Value="300" />
+    </Style>
+
+    <!-- Buttons inside prompt window -->
+    <Style TargetType="{x:Type Button}" x:Key="PromptButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="Margin" Value="10,20,10,20" />
+        <Setter Property="Padding" Value="15" />
+    </Style>
+
+    <!-- TextBlock inside prompt window -->
+    <Style TargetType="{x:Type TextBlock}" x:Key="PromptTextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="Margin" Value="10,10,10,8" />
+    </Style>
+
+    <!-- TextBox inside prompt window -->
+    <Style TargetType="{x:Type TextBox}" x:Key="PromptTextBox" BasedOn="{StaticResource BaseStyle}">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Margin" Value="10,0" />
+        <Setter Property="Padding" Value="10" />
+    </Style>
+
+    <!-- Prompt background canvas -->
+    <Style TargetType="Canvas" x:Key="PromptBackground">
+        <Setter Property="Opacity" Value="0.34" />
+        <Setter Property="Background" Value="Black" />
+    </Style>
+
+    <!-- Prompt Border -->
+    <Style TargetType="Border" x:Key="PromptBorder">
+        <Setter Property="Width" Value="Auto" />
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="CornerRadius" Value="3" />
+        <Setter Property="Background" Value="White" />
+    </Style>
+
+    <!-- Display text -->
+    <Style TargetType="TextBlock" x:Key="PromptDisplay" BasedOn="{StaticResource HeaderStyle}">
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="10" />
+        <!--<Setter Property="MaxWidth" Value="270" />-->
+        <Setter Property="TextWrapping" Value="Wrap" />
+        <Setter Property="TextAlignment" Value="Center" />
+    </Style>
+
+    <!-- Input text -->
+    <Style TargetType="TextBox" x:Key="PromptInput" BasedOn="{StaticResource BaseTextBoxStyle}">
+        <Setter Property="Width" Value="216" />
+        <Setter Property="Margin" Value="0 10 0 10" />
+    </Style>
+
+</ResourceDictionary>

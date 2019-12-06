@@ -1,0 +1,237 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:v="clr-namespace:AMS.ViewModels">
+    
+    <Style TargetType="{x:Type Menu}" x:Key="MenuContainer" BasedOn="{StaticResource BaseStyle}">
+        <!-- So it can be clicked -->
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    
+    <!-- Menu button -->
+    <Style TargetType="MenuItem" x:Key="MenuItemButton">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        <Setter Property="FontWeight" Value="Light"/>
+
+        <!-- Content template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type MenuItem}">
+                    <Border Background="{TemplateBinding Background}"
+                            Padding="15, 0, 15, 1">
+                        <Grid>
+                            <ContentPresenter
+                                Margin="6,4,6,4"
+                                ContentSource="Header"
+                                RecognizesAccessKey="True"/>
+                            <Popup
+                                Placement="Bottom"
+                                VerticalOffset="1"
+                                HorizontalOffset="-15"
+                                IsOpen="{TemplateBinding IsSubmenuOpen}"
+                                AllowsTransparency="True"
+                                PopupAnimation="Fade">
+                                
+                                <Border Name="PopupContainer"
+                                        Background="{StaticResource BackgroundGrayBrush}">
+                                    <ItemsPresenter/>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}"/>
+            </Trigger>
+            <Trigger Property="IsSubmenuOpen" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Department content MenuItem button -->
+    <Style TargetType="MenuItem" x:Key="Department">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        <Setter Property="FontWeight" Value="Light"/>
+        <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SelectDepartmentCommand}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <ContentPresenter Content="{TemplateBinding Header}"
+                                              Margin="0 3 40 3"
+                                              Grid.Column="1"
+                                              VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style TargetType="MenuItem" x:Key="DepartmentItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}">
+                        <Image Source="{TemplateBinding Header}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Department edit item -->
+    <Style TargetType="MenuItem" x:Key="DepartmentEdit" BasedOn="{StaticResource DepartmentItem}">
+        <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.EditDepartmentCommand}"/> 
+        <Setter Property="Header" Value="{StaticResource Edit_White}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Header" Value="{StaticResource Edit_Gray}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Department remove item -->
+    <Style TargetType="MenuItem" x:Key="DepartmentRemove" BasedOn="{StaticResource DepartmentItem}">
+        <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RemoveDepartmentCommand}"/> 
+        <Setter Property="Header" Value="{StaticResource Trash_White}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Header" Value="{StaticResource Trash_Red}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Department content MenuItem button with edit and remove buttons -->
+    <Style TargetType="MenuItem" x:Key="DepartmentWithEdit" BasedOn="{StaticResource Department}">
+        <Setter Property="CommandParameter" Value="{Binding Path=ID}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="MenuItem">
+                    <Border Padding="{TemplateBinding Padding}"
+                            Background="{TemplateBinding Background}">
+                        <Grid Margin="0 0 10 0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="16"/>
+                                <ColumnDefinition Width="5"/>
+                                <ColumnDefinition Width="16"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <ContentPresenter Content="{TemplateBinding Header}"
+                                              Margin="0 3 40 3"
+                                              Grid.Column="1"/>
+                            <MenuItem Grid.Column="2" 
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.EditDepartmentCommand}" 
+                                    CommandParameter="{TemplateBinding CommandParameter}" 
+                                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.OnlyVisibleForAdmin}"
+                                    Style="{StaticResource DepartmentEdit}"/> 
+                            <MenuItem Grid.Column="4" 
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.RemoveDepartmentCommand}" 
+                                    CommandParameter="{TemplateBinding CommandParameter}"
+                                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.OnlyVisibleForAdmin}"
+                                    Style="{StaticResource DepartmentRemove}"/> 
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Department menu button -->
+    <Style TargetType="MenuItem" x:Key="MenuItemButtonDepartments">
+        <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+        <Setter Property="FontWeight" Value="Light"/>
+
+        <!-- Content template -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type MenuItem}">
+                    <Border Background="{TemplateBinding Background}"
+                            Padding="15, 0, 15, 0">
+                        <Grid>
+                            <ContentPresenter
+                                Margin="6,4,6,4"
+                                ContentSource="Header"
+                                RecognizesAccessKey="True"/>
+                            <Popup Placement="Bottom"
+                                   x:Name="PART_Popup"
+                                   PopupAnimation="Fade"
+                                   VerticalOffset="0"
+                                   HorizontalOffset="-15"
+                                   AllowsTransparency="True"
+                                   IsOpen="{TemplateBinding IsSubmenuOpen}">
+                                <Border Background="{StaticResource BackgroundGrayBrush}"
+                                        x:Name="Border_Popup">
+                                    <StackPanel x:Name="StackPanel_Popup">
+                                        <MenuItem Header="All departments"
+                                                  Style="{StaticResource Department}"
+                                                  CommandParameter="0"
+                                                  x:Name="AllDepartments_Popup"/>
+                                        <Rectangle Style="{StaticResource HorizontalSeparator}" Fill="White"
+                                                   x:Name="Separator1_Popup"/>
+
+                                        <ItemsPresenter x:Name="DepartmentsPresenter_Popup"/>
+
+                                        <Rectangle Style="{StaticResource HorizontalSeparator}" Fill="White"
+                                                   x:Name="Separator2_Popup"
+                                                   Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.OnlyVisibleForAdmin}"/>
+                                        <MenuItem Header="Add new"
+                                                  Visibility="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.OnlyVisibleForAdmin}"
+                                                  x:Name="AddDepartment_Popup"
+                                                  Style="{StaticResource Department}"
+                                                  Command="{Binding AddDepartmentCommand}"/>
+                                    </StackPanel>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="IsSubmenuOpen" Value="False" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_Popup" Property="IsOpen" Value="True"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}"/>
+            </Trigger>
+            <Trigger Property="IsSubmenuOpen" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+</ResourceDictionary>

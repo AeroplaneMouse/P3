@@ -15,6 +15,8 @@ using Asset_Management_System.Authentication;
 using Asset_Management_System.Database.Repositories;
 using Asset_Management_System.Resources.Interfaces;
 using Asset_Management_System.Helpers.ConfigurationHandler;
+using Asset_Management_System.Services;
+using Asset_Management_System.Services.Interfaces;
 
 namespace Asset_Management_System.ViewModels
 {
@@ -48,11 +50,17 @@ namespace Asset_Management_System.ViewModels
                 //OnPropertyChanged(nameof(WindowRadius));
                 //OnPropertyChanged(nameof(WindowCornerRadius));
             };
+            
+            //TODO: Determine if this is composition root
+            _assetService = new AssetService(new AssetRepository());
+            _tagService = new TagService(new TagRepository());
+            _entryService = new EntryService(new LogRepository());
+            _userService = new UserService(new UserRepository());
+            _commentService = new CommentService(new CommentRepository());
+            _departmentService = new DepartmentService(new DepartmentRepository());
 
             // Setting up frames
-            SplashPage = new Views.Splash(this);
-            //SplashPage.Dispatcher.
-
+            SplashPage = new Views.Splash(this, _userService);
 
             // Initialize commands
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
@@ -60,23 +68,24 @@ namespace Asset_Management_System.ViewModels
             CloseCommand = new Base.RelayCommand(() => _window.Close());
 
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, GetMousePosition()));
-
-            ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this)));
-            ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this)));
-            ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this)));
-            ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this)));
+            
+            
+            ShowHomePageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Home(this, _assetService, _tagService)));
+            ShowAssetsPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Assets(this, _assetService)));
+            ShowTagPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Tags(this, _tagService)));
+            ShowLogPageCommand = new Base.RelayCommand(() => ChangeMainContent(new Views.Logs(this, _entryService)));
 
             RemoveNotificationCommand = new Commands.RemoveNotificationCommand(this);
 
             ReloadCommand = new Base.RelayCommand(Reload);
 
-            AddFieldTestCommand = new Base.RelayCommand(TestField);
+            //AddFieldTestCommand = new Base.RelayCommand();
 
             ImportUsersCommand = new Base.RelayCommand(ImportUsers);
 
-            SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this);
-            RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this);
-            EditDepartmentCommand = new Commands.EditDepartmentCommand(this);
+            SelectDepartmentCommand = new Commands.SelectDepartmentCommand(this, _departmentService);
+            RemoveDepartmentCommand = new Commands.RemoveDepartmentCommand(this, _departmentService);
+            EditDepartmentCommand = new Commands.EditDepartmentCommand(this, _departmentService);
             AddDepartmentCommand = new Base.RelayCommand(() =>
             {
                 DisplayPrompt(new Views.Prompts.TextInput("Enter the name of your new department", AddDepartment));
@@ -84,25 +93,6 @@ namespace Asset_Management_System.ViewModels
 
             // Fixes window sizing issues at maximized
             var resizer = new Resources.Window.WindowResizer(_window);
-        }
-
-        private void TestField()
-        {
-            DisplayPrompt(new Views.Prompts.CustomField("Testing", testingResults));
-        }
-
-        private void testingResults(object sender, PromptEventArgs e)
-        {
-            if (e.Result)
-            {
-                Field newField = e.ResultObject as Field;
-
-                if (newField != null)
-                {
-                    Console.WriteLine(newField.ToString());
-                }
-
-            }
         }
 
         #endregion
@@ -120,6 +110,16 @@ namespace Asset_Management_System.ViewModels
         private List<Page> excludedPages = new List<Page>();
 
         private Department _currentDepartment;
+        private Stack<Page> _history = new Stack<Page>();
+        private Page _currentPage;
+        private bool HasConnectionFailedBeenRaised = false;
+
+        private IAssetService _assetService;
+        private ITagService _tagService;
+        private IEntryService _entryService;
+        private IUserService _userService;
+        private ICommentService _commentService;
+        private DepartmentService _departmentService;
 
         #endregion
 
@@ -185,7 +185,7 @@ namespace Asset_Management_System.ViewModels
                 if (_currentDepartment != null)
                 {
                     CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
-                    new UserRepository().Update(CurrentSession.user);
+                    _userService.GetRepository().Update(CurrentSession.user);
                 }
             }
         }
@@ -203,7 +203,7 @@ namespace Asset_Management_System.ViewModels
             get => GetDepartments();
         }
 
-        public bool DisplayCurrentDepartment { get; set; } = false;
+        public Visibility CurrentDepartmentVisibility { get; set; } = Visibility.Hidden;
 
         public Session CurrentSession { get; private set; }
 
@@ -211,6 +211,12 @@ namespace Asset_Management_System.ViewModels
             new ObservableCollection<Notification>();
 
         public Visibility Visible { get; set; }
+
+        // Accessed in that get main as parameter, dont know if its bad practice.
+        public IEntryService EntryService
+        {
+            get => _entryService;
+        }
 
         #endregion
 
@@ -273,10 +279,18 @@ namespace Asset_Management_System.ViewModels
 
             // Update the list on the page, if there is one
             if (setPage.DataContext is IListUpdate)
-                (setPage.DataContext as IListUpdate).UpdateList();
-
+                (setPage.DataContext as IListUpdate).PageGotFocus();
+             
+            if(!_history.Contains(_currentPage))
+                _history.Push(_currentPage);
             // Setting the content of the given frame, to the newPage object to display the requested page.
             frame.Content = setPage;
+            _currentPage = setPage;
+        }
+
+        public void ReturnToPreviousPage()
+        {
+            ChangeMainContent(_history.Pop());
         }
 
         public void AddNotification(string message, SolidColorBrush foreground, SolidColorBrush background)
@@ -315,7 +329,7 @@ namespace Asset_Management_System.ViewModels
         public void LoadSystem(Session session)
         {
             // Attaching notification
-            new MySqlHandler().SqlConnectionFailed += AddNotification;
+            MySqlHandler.ConnectionFailed += Reload;
 
             // Loads homepage and other stuff from the UI-thread.
             SplashPage.Dispatcher.Invoke(Load);
@@ -323,39 +337,57 @@ namespace Asset_Management_System.ViewModels
             // Remove splash page
             SplashPage = null;
 
+            // Resetting connection failed
+            HasConnectionFailedBeenRaised = false;
+
             // Show department and username
-            DisplayCurrentDepartment = true;
+            CurrentDepartmentVisibility = Visibility.Visible;
             CurrentSession = session;
             CurrentUser = CurrentSession.Username;
             OnPropertyChanged(nameof(CurrentUser));
 
             // Setting the current department, from the default department of the current user.
-            CurrentDepartment = new DepartmentRepository().GetById(session.user.DefaultDepartment);
+            CurrentDepartment = _departmentService.GetRepository().GetById(session.user.DefaultDepartment);
             if (CurrentDepartment == null)
                 CurrentDepartment = Department.GetDefault();
-        }
-
-        // Loads excluded pages and sets homepage.
-        private void Load()
-        {
-            // Add excluded pages
-            excludedPages.Add(new Views.AssetManager(null));
-            excludedPages.Add(new Views.TagManager(null));
-            excludedPages.Add(new Views.ObjectViewer(null, null));
-
-            // Load homepage
-            ChangeMainContent(new Views.Home(this));
         }
 
         #endregion
 
         #region Private Methods
 
+        private void ConnectionFailed(Notification n, bool reloadRequired)
+        {
+            if (!HasConnectionFailedBeenRaised)
+            {
+                HasConnectionFailedBeenRaised = true;
+                // Display notification if one was given
+                if (n != null)
+                    AddNotification(n, 6000);
+
+                // Reload the application is that is required
+                if (reloadRequired)
+                    Reload();
+            }
+        }
+
+        // Loads excluded pages and sets homepage.
+        private void Load()
+        {
+            // Add excluded pages
+            excludedPages.Add(new Views.AssetManager(null, _assetService));
+            excludedPages.Add(new Views.TagManager(null, _tagService));
+            excludedPages.Add(new Views.ObjectViewer(null, _commentService, null));
+            excludedPages.Add(new Views.UserImporterView(null, _userService, _departmentService));
+            
+
+            // Load homepage
+            ChangeMainContent(new Views.Home(this, _assetService, _tagService));
+        }
+
         private void ImportUsers()
         {
-            var dialog = new Views.UserImporterView();
-
-            dialog.ShowDialog();
+            ChangeMainContent(new Views.UserImporterView(this, _userService, _departmentService));
         }
 
         // Used to reload the application
@@ -365,14 +397,14 @@ namespace Asset_Management_System.ViewModels
 
             // Clearing memory
             pages.Clear();
-            new MySqlHandler().SqlConnectionFailed -= AddNotification;
-            DisplayCurrentDepartment = false;
+            MySqlHandler.ConnectionFailed -= Reload;
+            CurrentDepartmentVisibility = Visibility.Hidden;
             CurrentUser = null;
             CurrentDepartment = null;
             OnPropertyChanged(nameof(CurrentUser));
 
             // Load splash screen
-            SplashPage = new Views.Splash(this);
+            SplashPage = new Views.Splash(this, _userService);
         }
 
         private bool ExcludedFromSaving(Page page)
@@ -390,8 +422,8 @@ namespace Asset_Management_System.ViewModels
 
         private List<Department> GetDepartments()
         {
-            if (DisplayCurrentDepartment)
-                return (List<Department>) new DepartmentRepository().GetAll();
+            if (CurrentDepartmentVisibility == Visibility.Visible)
+                return (List<Department>) ((IDepartmentRepository) _departmentService.GetRepository()).GetAll();
             else
                 return new List<Department>();
         }
@@ -404,7 +436,7 @@ namespace Asset_Management_System.ViewModels
                 department.Name = e.ResultMessage;
 
                 ulong id;
-                if (new DepartmentRepository().Insert(department, out id))
+                if (_departmentService.GetRepository().Insert(department, out id))
                 {
                     // TODO: Add log of department insert
                     OnPropertyChanged(nameof(Departments));

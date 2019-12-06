@@ -1,0 +1,158 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- Tag style for tags where they can not be removed -->
+    <Style TargetType="{x:Type Label}" x:Key="TagLabelOnlyShow">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="MinWidth" Value="50" />
+        <Setter Property="Padding" Value="6 2 6 2" />
+        <Setter Property="Foreground" Value="{Binding TagFontColor}"/>
+        <Setter Property="Content" Value="{Binding TagLabel}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeXSmall}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Label}">
+                    <Button OverridesDefaultStyle="True" x:Name="PART_TagButton"
+                            Content="{TemplateBinding Content}" Margin="{TemplateBinding Margin}" Padding="{TemplateBinding Padding}" FontWeight="DemiBold">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Margin="{TemplateBinding Margin}" 
+                                        Padding="{TemplateBinding Padding}" 
+                                        BorderBrush="{Binding TagColor}"
+                                        BorderThickness="2" 
+                                        CornerRadius="10"
+                                        Background="{Binding TagColor}" 
+                                        FocusVisualStyle="{x:Null}" 
+                                        RenderOptions.EdgeMode="Aliased">
+                                    <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Tag style for tags added to seach query -->
+    <Style TargetType="{x:Type Label}" x:Key="TagWithDelete">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="MinWidth" Value="50" />
+        <Setter Property="Padding" Value="6 2 6 2" />
+        <Setter Property="Foreground" Value="{Binding TagFontColor}"/>
+        <Setter Property="Content" Value="{Binding TagLabel}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeXSmall}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Label}">
+                    <Button OverridesDefaultStyle="True" 
+                            x:Name="PART_TagButton"
+                            Content="{TemplateBinding Content}" 
+                            Margin="{TemplateBinding Margin}" 
+                            VerticalAlignment="Center" 
+                            Padding="{TemplateBinding Padding}"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveTagCommand}"
+                            CommandParameter="{Binding Path=.}">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Grid>
+                                    <Border Margin="{TemplateBinding Margin}" 
+                                            Padding="{TemplateBinding Padding}"
+                                            BorderBrush="{Binding TagColor}" 
+                                            BorderThickness="2" 
+                                            CornerRadius="10"
+                                            Background="{Binding TagColor}" 
+                                            FocusVisualStyle="{x:Null}"
+                                            RenderOptions.EdgeMode="Aliased">
+                                        <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    </Border>
+                                    
+                                    <Border Background="Black"
+                                            Padding="{TemplateBinding Padding}"
+                                            CornerRadius="10"
+                                            Opacity="0.6"
+                                            x:Name="PART_DeleteTagBackground"
+                                            Visibility="Collapsed"/>
+                                    
+                                    <TextBlock Foreground="White"
+                                               x:Name="PART_DeleteTagText"
+                                               FontWeight="DemiBold"
+                                               SnapsToDevicePixels="True"
+                                               Visibility="Collapsed"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Center"
+                                               Text="REMOVE"/>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="PART_DeleteTagText" Property="Visibility" Value="Visible" />
+                                        <Setter TargetName="PART_DeleteTagBackground" Property="Visibility" Value="Visible"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ListView style to remove hover effect -->
+    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="Transparent"/>
+    <SolidColorBrush x:Key="Item.MouseOver.Border" Color="Transparent"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="Transparent"/>
+    <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="Transparent"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="Transparent"/>
+    <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="Transparent"/>
+    
+    <Style x:Key="ListViewWithTags" TargetType="{x:Type ListViewItem}">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                <Condition Property="IsSelected" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Border}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                                <Condition Property="IsSelected" Value="True"/>
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
+                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
+                        </MultiTrigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+</ResourceDictionary>

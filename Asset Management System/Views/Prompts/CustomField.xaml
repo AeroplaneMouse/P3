@@ -21,7 +21,7 @@
                          AcceptsReturn="True"
                          AcceptsTab="True"
                          MinHeight="70"
-                         Text="{Binding DefaultValue, UpdateSourceTrigger=PropertyChanged}" 
+                         Text="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.DefaultValue, UpdateSourceTrigger=PropertyChanged}" 
                          Grid.Row="1" />
             </Grid>
         </DataTemplate>
@@ -34,7 +34,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Text="This is a one line text box, does not accept tabs and linebreaks." />
             <TextBox Grid.Row="1" Style="{StaticResource ParagraphTextBox}"
-                     Text="{Binding DefaultValue, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.DefaultValue, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="NumberField">
@@ -45,7 +45,7 @@
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Text="This is a one line text box, can only accept numbers." />
             <TextBox Grid.Row="1" Style="{StaticResource ParagraphTextBox}"
-                     Text="{Binding DefaultValue, UpdateSourceTrigger=PropertyChanged}" />
+                     Text="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.DefaultValue, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </DataTemplate>
 
@@ -56,7 +56,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Text="This is a date selection field. Contains a navigatable date selection." />
-            <ComboBox Grid.Row="1" SelectedItem="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox Grid.Row="1" SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.SelectedDate, UpdateSourceTrigger=PropertyChanged}">
                 <ComboBoxItem Content="Empty" />
                 <ComboBoxItem Content="Today" />
             </ComboBox>
@@ -69,8 +69,8 @@
                     <RowDefinition />
                     <RowDefinition />
                 </Grid.RowDefinitions>
-                <TextBlock  Grid.Row="0" Text="This is a checkbox." />
-            <CheckBox Grid.Row="1" IsChecked="{Binding DefaultBool, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock  Grid.Row="0" Text="" />
+                <CheckBox Grid.Row="1" IsChecked="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.DefaultBool, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
         </DataTemplate>
 
@@ -130,7 +130,7 @@
                                  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
 
                         <TextBlock Text="Default Value:"
-                                   Style="{StaticResource ParagraphStyle}" />
+                                   Style="{StaticResource ParagraphStyle}" DataContext="{Binding}" />
 
                         <ContentPresenter Margin="0 0 0 10"
                                           ContentTemplateSelector="{StaticResource MyDefaultValueDesignSelector}"
@@ -146,8 +146,9 @@
                     <Button Style="{StaticResource RegularAcceptButton}"
                             Command="{Binding AcceptCommand}"
                             Grid.Row="1"
+                            IsEnabled="{Binding IsFieldNameNotNull}"
                             HorizontalAlignment="Right"
-                            Content="Add field" />
+                            Content="Save field" />
                 </Grid>
             </Grid>
         </Border>

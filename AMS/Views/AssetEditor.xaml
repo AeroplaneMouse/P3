@@ -1,0 +1,277 @@
+﻿<Page x:Class="AMS.Views.AssetEditor"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:AMS.Views"
+      mc:Ignorable="d"
+      Title="AssetEditor"
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
+    
+    <Page.Resources>
+        <local:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+    </Page.Resources>
+
+    <Page.InputBindings>
+        <KeyBinding Modifiers="Ctrl" Key="Q" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}" />
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding SaveCommand}"/>
+        <KeyBinding Modifiers="Ctrl+Shift" Key="S" Command="{Binding SaveMultipleCommand}"/>
+    </Page.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <TextBlock Style="{StaticResource TitleStyle}"
+                   VerticalAlignment="Center"
+                   Margin="10 0 0 0"
+                   Text="{Binding Title}" />
+
+        <StackPanel Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="10">
+
+            <Button Style="{StaticResource RegularAcceptButton}"
+                    Command="{Binding SaveCommand}"
+                    Content="Save" />
+            <Button Style="{StaticResource RegularAcceptButton}"
+                    Command="{Binding SaveMultipleCommand}"
+                    Margin="10, 0, 0, 0"
+                    Content="Save copy" 
+                    ToolTip="Save a copy with the defined attributes"/>
+            <Button Style="{StaticResource RegularRemoveButton}"
+                    Command="{Binding RemoveCommand}"
+                    Margin="10 0 0 0"
+                    Content="Remove" />
+            <Button Style="{StaticResource RegularCancelButton}"
+                    Command="{Binding CancelCommand}"
+                    Margin="10 0 0 0"
+                    Content="Cancel" />
+        </StackPanel>
+
+        <Rectangle Style="{StaticResource HorizontalSeparator}"
+                   VerticalAlignment="Bottom" />
+
+        <!-- Page content -->
+        <ScrollViewer Grid.Row="1" Margin="10"
+                      VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Details -->
+                <StackPanel Grid.Column="0">
+                    <TextBlock Style="{StaticResource HeaderStyleWithSpace}"
+                               Text="Details" />
+                    <!-- Name -->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="Name" />
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Foreground="Red"
+                                   Text="*"/>
+                    </StackPanel>
+                    <TextBox Style="{StaticResource ParagraphTextBoxWithSpace}"
+                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                             x:Name="StartElement"/>
+
+                    <!-- Identifier -->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Identifier" />
+                    <TextBox Style="{StaticResource ParagraphTextBoxWithSpace}"
+                             Text="{Binding Identifier, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <!-- Description-->
+                    <TextBlock Style="{StaticResource ParagraphStyle}"
+                               Text="Description" />
+                    <TextBox Style="{StaticResource ParagraphTextBoxWithSpace}"
+                             Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             AcceptsTab="True"
+                             MinHeight="80" />
+                </StackPanel>
+
+                <Rectangle Style="{StaticResource VerticalSeparator}"
+                           Margin="10 0 10 0"
+                           Grid.Column="1" />
+
+                <!-- Tags -->
+                <StackPanel Grid.Column="2">
+                    <!-- Title -->
+                    <TextBlock Style="{StaticResource HeaderStyleWithSpace}"
+                               Text="Tags" />
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Current parent tag -->
+                        <Border x:Name="CurrentTagGroup" 
+                                Background="LightGray"
+                                BorderThickness="0"
+                                Visibility="{Binding CurrentGroupVisibility}"
+                                Grid.Column="0">
+
+                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                       Text="{Binding CurrentGroup}"
+                                       VerticalAlignment="Center"/>
+
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Style.Triggers>
+                                        <Trigger Property="IsVisible" Value="True">
+                                            <Setter Property="Padding" Value="5 0 5 0"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                        </Border>
+
+                        <!-- Search container -->
+                        <StackPanel Grid.Column="1">
+                            <!-- Search bar -->
+                            <TextBox FontSize="{StaticResource FontSizeSmall}"
+                                     Text="{Binding TagSearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                     VerticalContentAlignment="Center"
+                                     Height="30"
+                                     x:Name="SearchElement"
+                                     TabIndex="0">
+
+                                <TextBox.InputBindings>
+                                    <KeyBinding Key="Enter" Command="{Binding ApplyTagOrEnterParentCommand}"/>
+                                    <KeyBinding Key="Escape" Command="{Binding ClearInputCommand}"/>
+                                    <KeyBinding Key="Tab" Command="{Binding InsertNextOrSelectedSuggestionCommand}"/>
+                                    <KeyBinding Key="Down" Command="{Binding EnterSuggestionListCommand}" CommandParameter="{Binding ElementName=TagSuggestionList}"/>
+                                    <KeyBinding Key="Backspace" Command="{Binding BackspaceCommand}" CommandParameter="{Binding ElementName=SearchElement, Path=.}"/>
+                                </TextBox.InputBindings>
+                            </TextBox>
+
+                            <!-- Suggestion dropdown -->
+                            <Popup x:Name="TagSuggestionPopup"    
+                                   Visibility="{Binding TagSuggestionsVisibility}"                    
+                                   IsOpen="{Binding TagSuggestionIsOpen}"
+                                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                   StaysOpen="False"
+                                   MaxHeight="200"
+                                   AllowsTransparency="True"
+                                   Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
+                                   Placement="Bottom">
+
+                                <ListBox x:Name="TagSuggestionList"    
+                                         Visibility="{Binding TagSuggestionsVisibility}"    
+                                         Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
+                                         ItemsSource="{Binding TagSearchSuggestions}"
+                                         Opacity="0.9">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding}" FontSize="{StaticResource FontSizeSmall}" Cursor="Hand">
+                                                <TextBlock.InputBindings>
+                                                    <MouseBinding Gesture="LeftClick" Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.InsertNextOrSelectedSuggestionCommand}" CommandParameter="{Binding Path=.}"/>
+                                                </TextBlock.InputBindings>
+                                            </TextBlock>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    
+                                    <ListBox.InputBindings>
+                                        <KeyBinding Key="Return" Command="{Binding InsertNextOrSelectedSuggestionCommand}" CommandParameter="{Binding ElementName=TagSuggestionList, Path=SelectedItem}"/>
+                                    </ListBox.InputBindings>
+                                </ListBox>
+                            </Popup>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Current tags -->
+                    <ListView ItemsSource="{Binding AppliedTags, UpdateSourceTrigger=PropertyChanged}"
+                              ItemContainerStyle="{StaticResource ListViewWithTags}"
+                              Style="{StaticResource HideIfEmpty}"
+                              Grid.Row="1" Margin="0 5 0 -4">
+                        <ListView.Template>
+                            <ControlTemplate>
+                                <WrapPanel IsItemsHost="True"/>
+                            </ControlTemplate>
+                        </ListView.Template>
+
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal"
+                                           ItemHeight="40"
+                                           VerticalAlignment="Top"
+                                           HorizontalAlignment="Left"
+                                           OverridesDefaultStyle="True" />
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Label Style="{StaticResource TagWithDelete}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                </StackPanel>
+
+                <Rectangle Style="{StaticResource VerticalSeparator}"
+                           Margin="10 0 10 0"
+                           Grid.Column="3" />
+
+                <!-- Fields -->
+                <StackPanel Grid.Column="4"
+                            Margin="0 0 10 0">
+                    <!-- Title -->
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0 0 0 10">
+                        <TextBlock Style="{StaticResource HeaderStyle}"
+                                   Margin="0 0 10 0"
+                                   Text="Fields"/>
+
+                        <Button Style="{StaticResource RegularButton}"
+                                Command="{Binding AddFieldCommand}"
+                                Padding="0 0 0 5"
+                                Height="Auto"
+                                MinWidth="0"
+                                Width="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ActualHeight}" 
+                                HorizontalContentAlignment="Center" 
+                                VerticalContentAlignment="Center"
+                                Content="+"/>
+                    </StackPanel>
+
+                    <!-- FieldList -->
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding NonHiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
+                                      ItemTemplateSelector="{StaticResource MyFieldDesignSelector}"/>
+                    </StackPanel>
+
+                    <TextBlock Style="{StaticResource TitleOfFieldListStyle}"
+                               Text="Hidden fields"
+                               Margin="0 20 10 0" />
+
+                    <StackPanel Opacity="0.5">
+                        <ItemsControl ItemsSource="{Binding HiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
+                            ItemTemplateSelector="{StaticResource MyFieldDesignSelector}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+
+        </ScrollViewer>
+    </Grid>
+</Page>

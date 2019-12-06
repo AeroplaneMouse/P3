@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text.Unicode;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Asset_Management_System.Models
 {
@@ -16,7 +12,7 @@ namespace Asset_Management_System.Models
         [JsonIgnore] public List<Field> FieldsList { get; set; }
         
         //Used for formatting the DateTimeOutput when showing the elements within a database.
-        public string DateToStringConverter => CreatedAt.ToString("MM/dd/yyyy HH:mm");
+        public string DateToStringConverter => CreatedAt.ToString("dd/MM/yyyy HH:mm");
 
         public DoesContainFields()
         {
@@ -62,7 +58,6 @@ namespace Asset_Management_System.Models
         public bool AddField(string name, Field.FieldType type, string content, string defaultValue, bool required = false)
         {
             Field currentField = new Field(name, content, type, defaultValue, required);
-
             FieldsList.Add(currentField);
             return true;
         }

@@ -13,8 +13,10 @@
         Icon="{StaticResource ApplicationIcon}"
         MinHeight="{Binding WindowMinHeight}"
         MinWidth="{Binding WindowMinWidth}"
-        Title="Asset Management System" Height="600" Width="1200">
-    
+        Title="Asset Management System" 
+        Height="600" 
+        Width="1200">
+
     <Window.Resources>
         <!-- Style of the window -->
         <Style TargetType="{x:Type local:Main}">
@@ -33,16 +35,21 @@
                                 </Border>
                                 <Grid>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="{Binding TitleHeightGridLength}"/>   <!-- Menu bar -->
-                                        <RowDefinition Height="*"/>                                 <!-- Window content -->
+                                        <RowDefinition Height="{Binding TitleHeightGridLength}"/>
+                                        <!-- Menu bar -->
+                                        <RowDefinition Height="*"/>
+                                        <!-- Window content -->
                                     </Grid.RowDefinitions>
                                     <Grid Grid.Row="0"
                                           Panel.ZIndex="1"
                                           Background="{StaticResource BackgroundDarkBrush}">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto"/> <!-- Icon -->
-                                            <ColumnDefinition Width="*" /> <!-- Menu -->
-                                            <ColumnDefinition Width="Auto"/> <!-- Window buttons -->
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- Icon -->
+                                            <ColumnDefinition Width="*" />
+                                            <!-- Menu -->
+                                            <ColumnDefinition Width="Auto"/>
+                                            <!-- Window buttons -->
                                         </Grid.ColumnDefinitions>
 
                                         <!-- Icon button -->
@@ -66,25 +73,25 @@
                                                 <MenuItem Header="_Exit"/>
                                             </MenuItem>
                                         </Menu>
-                                        
+
                                         <StackPanel Grid.Column="2"
                                                     Orientation="Horizontal">
                                             <!-- Departments -->
-                                            <Menu Style="{StaticResource MenuContainer}" IsEnabled="{Binding DisplayCurrentDepartment}">
+                                            <Menu Style="{StaticResource MenuContainer}" Visibility="{Binding CurrentDepartmentVisibility}">
                                                 <MenuItem ItemsSource="{Binding Departments}"
                                                           ItemContainerStyle="{StaticResource DepartmentWithEdit}"
                                                           Header="{Binding CurrentDepartment}"
                                                           Style="{StaticResource MenuItemButtonDepartments}">
                                                 </MenuItem>
                                             </Menu>
-                                            
+
                                             <!-- Current user -->
                                             <TextBlock Text="{Binding CurrentUser}"
                                                        Foreground="White"
                                                        Style="{StaticResource ParagraphStyle}"
                                                        VerticalAlignment="Center"
                                                        Margin="15, 0, 15, 0"/>
-                                            
+
                                             <!-- Window buttons -->
                                             <Button Content="-" Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}"/>
                                             <Button Content="[ ]" Command="{Binding MaximizeCommand}" Style="{StaticResource WindowControlButton}"/>
@@ -107,7 +114,7 @@
                                                 <Button Content="Assets" Command="{Binding ShowAssetsPageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Tags" Command="{Binding ShowTagPageCommand}" Style="{StaticResource NavigationButton}"/>
                                                 <Button Content="Log" Command="{Binding ShowLogPageCommand}" Style="{StaticResource NavigationButton}" Visibility="{Binding Visible}"/>
-                                                <Button Content="Test" Command="{Binding AddFieldTestCommand}" Style="{StaticResource NavigationButton}"/>
+                                                <!--<Button Content="Test" Command="{Binding AddFieldTestCommand}" Style="{StaticResource NavigationButton}"/>-->
                                                 <!--<Button Content="Random" Command="{Binding AddNotificationTestCommand}" Style="{StaticResource NavigationButton}"/>-->
                                             </StackPanel>
                                         </Border>
@@ -124,7 +131,7 @@
                                                   Style="{StaticResource NotificationView}"/>
 
                                     </Grid>
-                                    
+
                                     <!-- Splash page -->
                                     <Frame Grid.Row="1"
                                            NavigationUIVisibility="Hidden"
@@ -134,7 +141,6 @@
                                     <Frame Grid.Row="1"
                                            NavigationUIVisibility="Hidden"
                                            Content="{Binding PopupPage}"/>
-
                                 </Grid>
                             </Grid>
                         </Border>

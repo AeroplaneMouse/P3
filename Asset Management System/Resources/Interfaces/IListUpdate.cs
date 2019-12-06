@@ -6,6 +6,7 @@ namespace Asset_Management_System.Resources.Interfaces
 {
     public interface IListUpdate
     {
-        void UpdateList();
+        void PageGotFocus();
+        void PageLostFocus();
     }
 }
