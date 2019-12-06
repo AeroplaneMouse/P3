@@ -20,22 +20,18 @@ namespace AMS.Models
                 {
                     return "#00B600";
                 }
-
                 else if (Status.CompareTo("Removed") == 0)
                 {
                     return "#E30000";
                 }
-
                 else if (Status.CompareTo("Conflicting") == 0)
                 {
                     return "#FFCC1A";
                 }
-
                 else if (Status.CompareTo("Disabled") == 0)
                 {
                     return "#C0C0C0";
                 }
-
                 else
                 {
                     return "#3385ff";
@@ -64,7 +60,5 @@ namespace AMS.Models
         }
 
         #endregion
-
-
     }
 }

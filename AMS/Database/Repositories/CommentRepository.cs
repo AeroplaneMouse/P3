@@ -148,7 +148,7 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT c.id, c.asset_id, u.username, c.content, c.created_at, c.updated_at, c.deleted_at " +
+                    const string query = "SELECT c.id, c.asset_id, u.username, a.name AS asset_name, c.content, c.created_at, c.updated_at, c.deleted_at " +
                                          "FROM comments AS c " +
                                          "INNER JOIN users AS u ON c.user_id = u.id "+
                                          "INNER JOIN assets AS a ON c.asset_id = a.id "+
