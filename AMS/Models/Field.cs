@@ -35,6 +35,7 @@ namespace AMS.Models
         [JsonIgnore]
         public List<ITagable> TagList { get; set; }
 
+        [JsonIgnore]
         public bool HasNoTagRelations => TagList.Count == 0;
 
         public string HashId { get; set; }
