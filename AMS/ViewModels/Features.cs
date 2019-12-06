@@ -182,7 +182,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page Home()
             {
-                return new Home(new HomeController(_userRepository, _assetRepository, _tagRepository, _departmentRepository), new CommentListController(GetCurrentSession(), _commentRepository, GetCurrentDepartment(), new Asset()));
+                return new Home(new HomeController(_userRepository, _assetRepository, _tagRepository, _departmentRepository), new CommentListController(GetCurrentSession(), _commentRepository, GetCurrentDepartment(), null));
             }
 
             public static Page ShortcutsList()
