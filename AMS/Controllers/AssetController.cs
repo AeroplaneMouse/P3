@@ -198,6 +198,17 @@ namespace AMS.Controllers
         }
 
         /// <summary>
+        /// Reverts the changes made to the AssetController, to correspond with the information on the asset
+        /// </summary>
+        public void RevertChanges()
+        {
+            Name = ControlledAsset.Name;
+            Identifier = ControlledAsset.Identifier;
+            Description = ControlledAsset.Description;
+            _tags = _assetRepository.GetTags(ControlledAsset).ToList();
+        }
+
+        /// <summary>
         /// Loads the tags when opening the page, and adds any fields added to the tag since the editor was last opened.
         /// </summary>
         private void LoadTags()
@@ -212,15 +223,6 @@ namespace AMS.Controllers
                 }
             }
         }
-
-        public void RevertChanges()
-        {
-            Name = ControlledAsset.Name;
-            Identifier = ControlledAsset.Identifier;
-            Description = ControlledAsset.Description;
-            _tags = _assetRepository.GetTags(ControlledAsset).ToList();
-        }
-        
         
         /// <summary>
         /// Runs on startup, loads fields, and updates fields that are dependent on values.
