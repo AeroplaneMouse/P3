@@ -334,7 +334,7 @@ namespace AMS.ViewModels
                         if (args.ButtonNumber == 0)
                         {
                             actionSuccess = _controller.Remove(removeChildren: true);
-                            extraMessage = $" aswell as { _controller.ControlledTag.NumberOfChildren } children";
+                            extraMessage += $" aswell as { _controller.ControlledTag.NumberOfChildren } children";
                         }
                         else
                             actionSuccess = _controller.Remove();
