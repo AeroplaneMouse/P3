@@ -102,6 +102,7 @@ namespace AMS.ViewModels
         public ICommand EnterSuggestionListCommand { get; set; }
         public ICommand ShowFieldEditPromptCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
+        public ICommand BackspaceCommand { get; set; }
 
         #endregion
 
@@ -160,6 +161,8 @@ namespace AMS.ViewModels
             InsertNextOrSelectedSuggestionCommand =
                 new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
             ClearInputCommand = new RelayCommand(ClearInput);
+            BackspaceCommand = new RelayCommand<object>((parameter) => RemoveCharacterOrExitTagMode(parameter as TextBox));
+
             UpdateAll();
         }
 
@@ -239,8 +242,8 @@ namespace AMS.ViewModels
             if (sender is Field field)
             {
                 _assetController.RemoveField(field);
-                UpdateAll();
             }
+            UpdateAll();
         }
 
         /// <summary>
@@ -517,6 +520,23 @@ namespace AMS.ViewModels
                 args.OldField.Type = args.NewField.Type;
                 args.OldField.Content = args.NewField.Content;
                 UpdateAll();
+            }
+        }
+
+        private void RemoveCharacterOrExitTagMode(TextBox textBox)
+        {
+            if (TagSearchQuery.Length > 0)
+            {
+                int cursorIndex = textBox.CaretIndex;
+                if (cursorIndex > 0)
+                {
+                    TagSearchQuery = TagSearchQuery.Remove(cursorIndex - 1, 1);
+                    textBox.CaretIndex = cursorIndex - 1;
+                }
+            }
+            else
+            {
+                ClearInput();
             }
         }
 
