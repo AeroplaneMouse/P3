@@ -27,6 +27,14 @@ namespace AMS.Views
             TagListViewModel vm = this.DataContext as TagListViewModel;
             Tag tag = e.NewValue as Tag;
             vm.SelectedItem = tag;
+
+            if (Features.OnlyVisibleForAdmin == Visibility.Visible)
+            {
+                if (vm.SelectedItem == null)
+                    vm.RemoveSelectedVisibility = Visibility.Collapsed;
+                else
+                    vm.RemoveSelectedVisibility = Visibility.Visible;
+            }
         }
     }
 }
