@@ -167,7 +167,7 @@
                             Grid.Row="1"
                             HorizontalAlignment="Right"
                             IsEnabled="{Binding IsFieldNameNotNull}"
-                            Content="{Binding PromptHeaderAndAcceptButtonText}"
+                            Content="Save field"
                             x:Name="StartElement"/>
                 </StackPanel>
             </Grid>

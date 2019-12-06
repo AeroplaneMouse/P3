@@ -258,17 +258,27 @@
                                    FontWeight="Medium"
                                    Grid.Row="0" MinWidth="300"
                                    Grid.Column="0"/>
-
+                        <Grid Grid.Row="1" Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="Default value:"
+                                   TextWrapping="Wrap"
+                                   Grid.Column="0" />
+                        
                         <TextBlock Style="{StaticResource ParagraphStyle}"
                                    Text="{Binding Content}"
                                    TextWrapping="Wrap"
-                                   Grid.Row="1"/>
-
+                                   Grid.Column="1" />
+                            <!--Foreground="{StaticResource GrayForLessImportantElementsBrush}" -->
+                        </Grid>
                         <TextBlock TextWrapping="Wrap"
                                    Grid.Row="2">
                             <TextBlock.Style>
                                 <Style BasedOn="{StaticResource ParagraphStyle}" TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
+                                    <!--<Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/> -->
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Required}" Value="True">
                                             <Setter Property="Text" Value="Must be filled on assets: Yes"/>
@@ -285,7 +295,7 @@
                                    Grid.Row="3">
                             <TextBlock.Style>
                                 <Style BasedOn="{StaticResource ParagraphStyle}" TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
+                                    <!--<Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/> -->
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Type}" Value="1">
                                             <Setter Property="Text" Value="Type: Text Area"/>
