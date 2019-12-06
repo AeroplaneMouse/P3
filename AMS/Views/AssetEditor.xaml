@@ -154,6 +154,7 @@
                                     <KeyBinding Key="Escape" Command="{Binding ClearInputCommand}"/>
                                     <KeyBinding Key="Tab" Command="{Binding InsertNextOrSelectedSuggestionCommand}"/>
                                     <KeyBinding Key="Down" Command="{Binding EnterSuggestionListCommand}" CommandParameter="{Binding ElementName=TagSuggestionList}"/>
+                                    <KeyBinding Key="Backspace" Command="{Binding BackspaceCommand}" CommandParameter="{Binding ElementName=SearchElement, Path=.}"/>
                                 </TextBox.InputBindings>
                             </TextBox>
 
