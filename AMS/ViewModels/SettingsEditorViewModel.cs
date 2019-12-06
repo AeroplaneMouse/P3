@@ -29,6 +29,7 @@ namespace AMS.ViewModels
             CancelCommand = new Base.RelayCommand(Cancel);
             LoadFromFileCommand = new Base.RelayCommand(LoadSettings);
 
+            // Load the settings
             string conString = Session.GetDBKey();
 
             // If a current configuration exists, load it to the view.

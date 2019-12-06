@@ -33,7 +33,6 @@ namespace AMS.Controllers
             return !string.IsNullOrEmpty(_fieldContainer.SerializedFields);
         }
 
-
         /// <summary>
         /// Add a field to the field list.
         /// </summary>
@@ -147,7 +146,6 @@ namespace AMS.Controllers
 
             return false;
         }
-
 
         /// <summary>
         /// Removes the relation between a tagID and any of the fields.

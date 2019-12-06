@@ -100,16 +100,25 @@ namespace AMS.ViewModels
                     }
                 }));
             }
+
             else
             {
-                Features.DisplayPrompt(new Views.Prompts.Confirm("You are about to remove a tag which cannot be UNDONE!\nAre you sure?", (sender, e) =>
+                if (_tagController.Id == 1)
                 {
-                    if (e.Result)
+                    Features.AddNotification(new Notification($"{_tagController.Name} cannot be removed, it is essential", Notification.WARNING));
+                }
+
+                else
+                {
+                    Features.DisplayPrompt(new Confirm($"You are about to remove the tag \"{_tagController.Name }\". This action cannot be undone.\nAre you sure?", (sender, e) =>
                     {
-                        _tagController.Remove();
-                        Features.AddNotification(new Notification($"{ _tagController.Name } has been remove.", background: Notification.APPROVE));
-                    }
-                }));
+                        if (e.Result)
+                        {
+                            _tagController.Remove();
+                            Features.AddNotification(new Notification($"{ _tagController.Name } has been removed.", background: Notification.APPROVE));
+                        }
+                    }));
+                }
             }
             Search();
         }

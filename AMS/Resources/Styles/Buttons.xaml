@@ -171,6 +171,29 @@
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
                 <Setter Property="BorderBrush" Value="{StaticResource CancelRedBrush}"/>
+                    <Setter Property="Foreground" Value="Black"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Regular Yes Button -->
+    <Style TargetType="Button" x:Key="RegularYesButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
+        
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource NavigationHoverBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Regular No button -->
+    <Style TargetType="Button" x:Key="RegularNoButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource NavigationHoverBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -178,14 +201,14 @@
     <!-- Regular remove button -->
     <Style TargetType="Button" x:Key="RegularRemoveButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource CancelRedBrush}"/>
     </Style>
 
     <!-- Regular accept button -->
     <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButton}">
         <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource AcceptGreenBrush}"/>
     </Style>
+
+    
 
     <!-- Department content menu item button -->
     <Style TargetType="Button" x:Key="DepartmentButton">
@@ -361,6 +384,7 @@
     
     <!-- Keep user button -->
     <Style TargetType="Button" x:Key="KeepUserButton" BasedOn="{StaticResource RegularButton}">
+        <Setter Property="Height" Value="23"/>
         <Setter Property="Padding" Value="1"/>
     </Style>
     

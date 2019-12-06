@@ -23,12 +23,19 @@ namespace AMS.ViewModels
 
         #region Repositories
 
-        private static IUserRepository _userRepository { get; } = new UserRepository();
-        private static IAssetRepository _assetRepository { get; } = new AssetRepository();
-        private static ITagRepository _tagRepository { get; } = new TagRepository();
-        private static IDepartmentRepository _departmentRepository { get; } = new DepartmentRepository();
-        private static ICommentRepository _commentRepository { get; } = new CommentRepository();
-        private static ILogRepository _logRepository { get; } = new LogRepository();
+        private static IUserRepository _userRepository;
+        private static IAssetRepository _assetRepository;
+        private static ITagRepository _tagRepository;
+        private static IDepartmentRepository _departmentRepository;
+        private static ICommentRepository _commentRepository;
+        private static ILogRepository _logRepository;
+
+        public static IUserRepository UserRepository => _userRepository ??= new UserRepository();
+        public static IAssetRepository AssetRepository => _assetRepository ??= new AssetRepository();
+        public static ITagRepository TagRepository => _tagRepository ??= new TagRepository();
+        public static IDepartmentRepository DepartmentRepository => _departmentRepository ??= new DepartmentRepository();
+        public static ICommentRepository CommentRepository => _commentRepository ??= new CommentRepository();
+        public static ILogRepository LogRepository => _logRepository ??= new LogRepository();
 
         #endregion
 
@@ -36,37 +43,23 @@ namespace AMS.ViewModels
 
         private static IExporter _printHelper = new PrintHelper();
 
-        private static IUserImporter _userImporter = new UserImporter(_userRepository);
+        private static IUserImporter _userImporter = new UserImporter(UserRepository);
 
-        private static TagHelper CreateTagHelper()
-        {
-            return new TagHelper(_tagRepository, _userRepository);
-        }
+        private static TagHelper CreateTagHelper() => new TagHelper(TagRepository, UserRepository);
 
         #endregion
 
         // Notifications
-        public static void AddNotification(Notification n, int displayTime = 2500)
-        {
-            Main.AddNotification(n, displayTime);
-        }
+        public static void AddNotification(Notification n, int displayTime = 2500) => Main.AddNotification(n, displayTime);
 
         // Prompts
-        public static void DisplayPrompt(Page prompt)
-        {
-            Main.DisplayPrompt(prompt);
-        }
+        public static void DisplayPrompt(Page prompt) => Main.DisplayPrompt(prompt);
 
         // Session
-        public static Session GetCurrentSession()
-        {
-            return Main.CurrentSession;
-        }
+        public static Session GetCurrentSession() => Main.CurrentSession;
 
-        public static Department GetCurrentDepartment()
-        {
-            return Main.CurrentDepartment;
-        }
+        // Current department
+        public static Department GetCurrentDepartment() => Main.CurrentDepartment;
 
         // Navigation
         public static class Navigate
@@ -140,7 +133,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetPresenter(Asset asset, List<ITagable> tagables)
             {
-                return new AssetPresenter(tagables, new AssetController(asset, _assetRepository, GetCurrentSession()), new CommentListController(GetCurrentSession(), _commentRepository, GetCurrentDepartment(), asset), new LogListController(_logRepository, _printHelper, asset));
+                return new AssetPresenter(tagables, new AssetController(asset, AssetRepository, GetCurrentSession()), new CommentListController(GetCurrentSession(), CommentRepository, GetCurrentDepartment(), asset), new LogListController(LogRepository, _printHelper, asset));
             }
 
             /// <summary>
@@ -150,10 +143,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetEditor(Asset asset = null)
             {
-                // Create new asset if null
-                asset = asset ?? new Asset();
-
-                return new AssetEditor(new AssetController(asset, _assetRepository, GetCurrentSession()), CreateTagHelper());
+                return new AssetEditor(new AssetController(asset ?? new Asset(), AssetRepository, GetCurrentSession()), CreateTagHelper());
             }
 
             /// <summary>
@@ -163,7 +153,6 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetEditor(IAssetController controller)
             {
-
                 return new AssetEditor(controller, CreateTagHelper());
             }
 
@@ -173,7 +162,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetList()
             {
-                return new AssetList(new AssetListController(_assetRepository, _printHelper), CreateTagHelper());
+                return new AssetList(new AssetListController(AssetRepository, _printHelper), CreateTagHelper());
             }
 
             /// <summary>
@@ -182,7 +171,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page Home()
             {
-                return new Home(new HomeController(_userRepository, _assetRepository, _tagRepository, _departmentRepository), new CommentListController(GetCurrentSession(), _commentRepository, GetCurrentDepartment(), null));
+                return new Home(new HomeController(UserRepository, AssetRepository, TagRepository, DepartmentRepository), new CommentListController(GetCurrentSession(), CommentRepository, GetCurrentDepartment(), null));
             }
 
             public static Page ShortcutsList()
@@ -197,7 +186,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page Splash()
             {
-                return new Splash(Main, _userRepository);
+                return new Splash(Main, UserRepository);
             }
 
             /// <summary>
@@ -206,7 +195,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page LogList()
             {
-                return new LogList(new LogListController(_logRepository, _printHelper));
+                return new LogList(new LogListController(LogRepository, _printHelper));
             }
 
             /// <summary>
@@ -226,10 +215,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page TagEditor(Tag tag)
             {
-                // Create new tag if null
-                tag = tag ?? new Tag();
-
-                return new TagEditor(new TagController(tag, _tagRepository, _departmentRepository));
+                return new TagEditor(new TagController(tag ?? new Tag(), TagRepository, DepartmentRepository));
             }
 
             /// <summary>
@@ -238,7 +224,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page TagList()
             {
-                return new TagList(new TagListController(_tagRepository), new TagController(new Tag(), _tagRepository, _departmentRepository));
+                return new TagList(new TagListController(TagRepository), new TagController(new Tag(), TagRepository, DepartmentRepository));
             }
 
             /// <summary>
@@ -247,7 +233,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page UserList()
             {
-                return new UserList(new UserListController(_userImporter, _userRepository, _departmentRepository));
+                return new UserList(new UserListController(_userImporter, UserRepository, DepartmentRepository));
             }
 
             /// <summary>
@@ -269,7 +255,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Window MainWindow()
             {
-                return new Main(_userRepository, _departmentRepository);
+                return new Main(UserRepository, DepartmentRepository);
             }
 
             #endregion
