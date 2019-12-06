@@ -156,6 +156,11 @@
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="BorderBrush" Value="{StaticResource NavigationHoverBrush}"/>
             </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{StaticResource DisabledGrayBrush}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource DisabledGrayBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource DisabledGrayTextBrush}"/>
+            </Trigger>
         </Style.Triggers>
     </Style>
 

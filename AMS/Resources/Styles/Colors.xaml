@@ -59,6 +59,12 @@
 
     <!--3d5266-->
     <Color x:Key="GrayForLessImportantElements">#d3d3d3</Color>
-    <SolidColorBrush x:Key="GrayForLessImportantElementsBrush" Color="Gray"/>
+    <SolidColorBrush x:Key="GrayForLessImportantElementsBrush" Color="{StaticResource GrayForLessImportantElements}"/>
+
+    <Color x:Key="DisabledGray">#c8c8c8</Color>
+    <SolidColorBrush x:Key="DisabledGrayBrush" Color="{StaticResource DisabledGray}"/>
+
+    <Color x:Key="DisabledGrayText">#eeeeee</Color>
+    <SolidColorBrush x:Key="DisabledGrayTextBrush" Color="{StaticResource DisabledGrayText}"/>
     
 </ResourceDictionary>
