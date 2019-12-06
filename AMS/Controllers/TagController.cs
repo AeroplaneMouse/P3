@@ -83,30 +83,6 @@ namespace AMS.Controllers
             _departmentRepository = departmentRepository;
         }
 
-        private void RevertChanges()
-        {
-            if (ControlledTag != null && ControlledTag.ID != 0)
-            {
-                IsEditing = true;
-                ControlledTag.DeSerializeFields();
-
-                Id = ControlledTag.ID;
-                Name = ControlledTag.Name;
-                Color = ControlledTag.Color;
-                ParentId = ControlledTag.ParentId;
-                DepartmentID = ControlledTag.DepartmentID;
-            }
-            else
-            {
-                _controlledTag = new Tag { Color = CreateRandomColor() };
-                Color = _controlledTag.Color;
-                _controlledTag.FieldList = new List<Field>();
-                IsEditing = false;
-            }
-            NonHiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == true).ToList();
-        }
-
         #region Public Methods
 
         /// <summary>
@@ -129,11 +105,6 @@ namespace AMS.Controllers
             ControlledTag.FieldList = fieldList;
             SerializeFields();
             _tagRepository.Insert(ControlledTag, out TagID);
-        }
-
-        public Tag GetTagById(ulong id)
-        {
-            return _tagRepository.GetById(id);
         }
 
         /// <summary>
@@ -170,10 +141,27 @@ namespace AMS.Controllers
             _tagRepository.Update(ControlledTag);
         }
 
+        /// <summary>
+        /// Removes the controlled tag from the repository, and optionally its children
+        /// </summary>
+        /// <param name="removeChildren">Rather or not to remove the children of the tag as well</param>
+        /// <returns></returns>
         public bool Remove(bool removeChildren = false) => _tagRepository.Delete(ControlledTag, removeChildren);
 
-        //public void RemoveChildren() => _tagRepository.DeleteChildren(ControlledTag.ID);
+        /// <summary>
+        /// Returns a tag with the given tag, or null if tag does not exist
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Tag GetTagById(ulong id)
+        {
+            return _tagRepository.GetById(id);
+        }
 
+        /// <summary>
+        /// Returns a random hex color string within a specified limit
+        /// </summary>
+        /// <returns></returns>
         public string CreateRandomColor()
         {
             //Creates an instance of the Random, to create pseudo random numbers
@@ -191,7 +179,7 @@ namespace AMS.Controllers
         /// Connects a parentTag, and removes the relation to the old parent tag.
         /// </summary>
         /// <param name="newTag"></param>
-        public void ConnectTag()
+        public void ConnectParentTag()
         {
             Tag currentTag = _tagRepository.GetById(ControlledTag.ParentId);
             //TODO Throws exception, når et tags parent id ændres
@@ -200,5 +188,32 @@ namespace AMS.Controllers
         }
 
         #endregion
+
+        /// <summary>
+        /// Reverts the changes made to the TagController, to correspond with the information on the tag, or creates a new tag
+        /// </summary>
+        private void RevertChanges()
+        {
+            if (ControlledTag != null && ControlledTag.ID != 0)
+            {
+                IsEditing = true;
+                ControlledTag.DeSerializeFields();
+
+                Id = ControlledTag.ID;
+                Name = ControlledTag.Name;
+                Color = ControlledTag.Color;
+                ParentId = ControlledTag.ParentId;
+                DepartmentID = ControlledTag.DepartmentID;
+            }
+            else
+            {
+                _controlledTag = new Tag { Color = CreateRandomColor() };
+                Color = _controlledTag.Color;
+                _controlledTag.FieldList = new List<Field>();
+                IsEditing = false;
+            }
+            NonHiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == true).ToList();
+        }
     }
 }
