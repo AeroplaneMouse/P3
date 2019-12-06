@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using AMS.Authentication;
@@ -8,7 +7,6 @@ using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Models;
-using AMS.ViewModels;
 
 namespace AMS.Controllers
 {
@@ -55,7 +53,7 @@ namespace AMS.Controllers
             Description = ControlledAsset.Description;
             NonHiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == false).ToList();
             HiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == true).ToList();
-
+            LoadTags();
             LoadFields();
         }
         
