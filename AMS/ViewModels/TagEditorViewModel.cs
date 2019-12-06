@@ -319,11 +319,13 @@ namespace AMS.ViewModels
             if (_controller.ParentId == 0 && _controller.ControlledTag.NumberOfChildren > 0)
             {
                 message = "You are about to remove a parent tag!\n"
-                        + $"There are { _controller.ControlledTag.NumberOfChildren } children attached to this parent.";
-              
+                        + $"There are { _controller.ControlledTag.NumberOfChildren } children attached to this parent.\n\n"
+                        + "- Remove parent and all children\n"
+                        + "- Remove parent and convert children to parents";
+
                 List<string> buttons = new List<string>();
-                buttons.Add("Remove parent and all children?");
-                buttons.Add("Remove parent and convert children to parents?");
+                buttons.Add("Remove all");
+                buttons.Add("Remove parent");
 
                 Features.DisplayPrompt(new Views.Prompts.ExpandedConfirm(message, buttons, (sender, e) =>
                 {
@@ -349,15 +351,18 @@ namespace AMS.ViewModels
             }
             else
             {
-                Features.DisplayPrompt(new Views.Prompts.Confirm("You are about to remove a tag which cannot be UNDONE!\nAre you sure?", (sender, e) =>
-                {
-                    if (e.Result)
+                Features.DisplayPrompt(new Views.Prompts.Confirm(
+                    "You are about to remove a tag which cannot be UNDONE!\n"
+                    + "Are you sure?\n"
+                    + $"Tag: { _controller.Name }", (sender, e) =>
                     {
-                        _controller.Remove();
-                        Features.Navigate.Back();
-                        Features.AddNotification(new Notification($"{ _controller.Name } has been remove.", background: Notification.APPROVE));
-                    }
-                }));
+                        if (e.Result)
+                        {
+                            _controller.Remove();
+                            UpdateOnFocus();
+                            Features.AddNotification(new Notification($"{ _controller.Name } has been remove.", background: Notification.APPROVE));
+                        }
+                    }));
             }
         }
 
