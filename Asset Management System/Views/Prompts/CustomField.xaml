@@ -146,8 +146,9 @@
                     <Button Style="{StaticResource RegularAcceptButton}"
                             Command="{Binding AcceptCommand}"
                             Grid.Row="1"
+                            IsEnabled="{Binding IsFieldNameNotNull}"
                             HorizontalAlignment="Right"
-                            Content="Add field" />
+                            Content="Save field" />
                 </Grid>
             </Grid>
         </Border>

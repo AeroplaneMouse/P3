@@ -58,7 +58,7 @@
                     <RowDefinition />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Text="This is a date selection field. Contains a navigatable date selection." />
-                <ComboBox Grid.Row="1" SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.SelectedDate, UpdateSourceTrigger=PropertyChanged}">
+                <ComboBox Grid.Row="1" SelectedIndex="1" SelectedItem="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.SelectedDate, UpdateSourceTrigger=PropertyChanged}">
                     <ComboBoxItem Content="Empty"/>
                     <ComboBoxItem Content="Current Date"/>
                 </ComboBox>
@@ -166,6 +166,7 @@
                             Command="{Binding AcceptCommand}"
                             Grid.Row="1"
                             HorizontalAlignment="Right"
+                            IsEnabled="{Binding IsFieldNameNotNull}"
                             Content="{Binding PromptHeaderAndAcceptButtonText}"
                             x:Name="StartElement"/>
                 </StackPanel>

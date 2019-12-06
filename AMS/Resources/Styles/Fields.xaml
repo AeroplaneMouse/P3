@@ -164,10 +164,10 @@
                                     <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Type}" Value="1">
-                                            <Setter Property="Text" Value="Type: Textarea"/>
+                                            <Setter Property="Text" Value="Type: Text Area"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Type}" Value="2">
-                                            <Setter Property="Text" Value="Type: Text box"/>
+                                            <Setter Property="Text" Value="Type: Text Box"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Type}" Value="3">
                                             <Setter Property="Text" Value="Type: Number"/>
@@ -175,7 +175,7 @@
                                         <DataTrigger Binding="{Binding Type}" Value="4">
                                             <Setter Property="Text" Value="Type: Date"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="3">
+                                        <DataTrigger Binding="{Binding Type}" Value="5">
                                             <Setter Property="Text" Value="Type: Checkbox"/>
                                         </DataTrigger>
                                     </Style.Triggers>
@@ -288,10 +288,10 @@
                                     <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Type}" Value="1">
-                                            <Setter Property="Text" Value="Type: Textarea"/>
+                                            <Setter Property="Text" Value="Type: Text Area"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Type}" Value="2">
-                                            <Setter Property="Text" Value="Type: Text box"/>
+                                            <Setter Property="Text" Value="Type: Text Box"/>
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Type}" Value="3">
                                             <Setter Property="Text" Value="Type: Number"/>
@@ -299,7 +299,7 @@
                                         <DataTrigger Binding="{Binding Type}" Value="4">
                                             <Setter Property="Text" Value="Type: Date"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="3">
+                                        <DataTrigger Binding="{Binding Type}" Value="5">
                                             <Setter Property="Text" Value="Type: Checkbox"/>
                                         </DataTrigger>
                                     </Style.Triggers>

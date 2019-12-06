@@ -53,7 +53,7 @@ namespace AMS.ViewModels.Commands
                     // TODO: Add check for assets and tags conneced to the department.
 
                     // Prompting user for confirmation
-                    Features.DisplayPrompt(new Confirm($"Are you sure you want to delete { _department.Name }?", PromptElapsed));
+                    Features.DisplayPrompt(new Confirm($"Are you sure you want to delete\n{ _department.Name }?", PromptElapsed));
                 }
                 else
                     Features.AddNotification(new Notification("You cannot remove your current department. Please change your department and then try again.", background: Notification.ERROR),
