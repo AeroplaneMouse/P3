@@ -166,6 +166,7 @@
                             Command="{Binding AcceptCommand}"
                             Grid.Row="1"
                             HorizontalAlignment="Right"
+                            IsEnabled="{Binding IsFieldNameNotNull}"
                             Content="{Binding PromptHeaderAndAcceptButtonText}"
                             x:Name="StartElement"/>
                 </StackPanel>

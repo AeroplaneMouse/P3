@@ -16,6 +16,7 @@ namespace AMS.ViewModels.Prompts
 
         public override event PromptEventHandler PromptElapsed;
 
+        public bool IsFieldNameNotNull => !string.IsNullOrEmpty(Name);
         public string Name { get; set; } = String.Empty;
         public string DefaultValue { get; set; } = String.Empty;
         public bool DefaultBool
