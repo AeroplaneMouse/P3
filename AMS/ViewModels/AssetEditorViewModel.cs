@@ -233,8 +233,8 @@ namespace AMS.ViewModels
             if (sender is Field field)
             {
                 _assetController.RemoveField(field);
-                UpdateAll();
             }
+            UpdateAll();
         }
 
         /// <summary>

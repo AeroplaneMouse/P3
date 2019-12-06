@@ -123,7 +123,7 @@ namespace AMS.Controllers
                         RemoveField(field);
                 }
             }
-
+            
             return !CurrentlyAddedTags.Contains(tag);
         }
 
