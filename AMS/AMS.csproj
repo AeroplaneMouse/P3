@@ -30,7 +30,7 @@
   <ItemGroup>
     <Folder Include="Resources\Window\" />
   </ItemGroup>
-
+  
   <ItemGroup>
     <Resource Include="Resources\Images\Logos\placeholder-beaut.png" />
     <Resource Include="Resources\Images\Logos\logo-light.png" />
