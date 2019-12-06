@@ -25,32 +25,7 @@ namespace AMS.Models
         private List<Department> _departmentList { get; set; }
 
         // Index of the default department in the list of departments
-        public int DepartmentIndex
-        {
-            get
-            {
-                if (_departmentList == null)
-                {
-                    _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
-
-                    _departmentList.AddRange(Features.DepartmentRepository.GetAll().ToList());
-                }
-
-                return DefaultDepartment == 0 ? 0 : _departmentList.Select(p => p.ID).ToList().IndexOf(DefaultDepartment);
-            }
-            
-            set
-            {
-                if (_departmentList == null)
-                {
-                    _departmentList = new List<Department>() { new Department() { Name = "All departments" } };
-
-                    _departmentList.AddRange(Features.DepartmentRepository.GetAll().ToList());
-                }
-
-                DefaultDepartment = (value == 0) ? 0 : _departmentList[value].ID;
-            }
-        }
+        public string DepartmentIndex { get; set; } = "1";
 
         #region ITagable
 
