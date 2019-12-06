@@ -13,13 +13,13 @@ namespace AMS.Views
             string status = value as string;
 
             if (status.CompareTo(String.Empty) == 0)
-                return "Active user";
+                return "Active user. Click to disable";
 
             else if (status.CompareTo("Disabled") == 0)
-                return "Inactive user";
+                return "Inactive user. Click to enable";
 
             else if (status.CompareTo("Conflicting") == 0)
-                return "Another user has the same username";
+                return "Another user has the same username. Click to keep this user";
 
             else if (status.CompareTo("Added") == 0)
                 return "New user";

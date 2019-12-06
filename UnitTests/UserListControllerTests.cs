@@ -21,6 +21,143 @@ namespace UnitTests
     public class UserListControllerTests
     {
         [TestMethod]
+        public void UserListController_KeepUser_KeptUserIsNull_UserStatusNotChanged()
+        {
+            // Arrange
+            User existingHans = new User()
+            {
+                IsEnabled = false,
+                Username = "Hans Hansen",
+                Description = "Existing Hans",
+                DefaultDepartment = 1,
+                Domain = "Existing Hans PC",
+                IsAdmin = true
+            };
+
+            User importedHans = new User()
+            {
+                IsEnabled = true,
+                Username = "Hans Hansen",
+                Description = "Imported Hans",
+                DefaultDepartment = 0,
+                Domain = "Imported Hans PC",
+                IsAdmin = false
+            };
+
+            // Users in conflict
+            UserWithStatus existingUser = new UserWithStatus(existingHans) { Status = "Conflicting" };
+            UserWithStatus importedUser = new UserWithStatus(importedHans) { Status = "Conflicting" };
+
+            // Set up test lists
+            List<UserWithStatus> existing = new List<UserWithStatus>();
+            existing.Add(existingUser);
+
+            List<UserWithStatus> imported = new List<UserWithStatus>();
+            imported.Add(importedUser);
+
+            List<UserWithStatus> final = new List<UserWithStatus>();
+            final.Add(existingUser);
+            final.Add(importedUser);
+
+            // Set up mocks
+            Mock<IUserImporter> importerMock = new Mock<IUserImporter>();
+
+            importerMock.Setup(p => p.ImportUsersFromDatabase()).Returns(existing);
+            importerMock.Setup(p => p.ImportUsersFromFile(It.IsAny<string>())).Returns(imported);
+            importerMock.Setup(p => p.GetUsersFilePath()).Returns("TestPath");
+            
+            Mock<IDepartmentRepository> departmentRepMock = new Mock<IDepartmentRepository>();
+            
+            Mock<IUserRepository> userRepMock = new Mock<IUserRepository>();
+
+            IUserListController controller = new UserListController(importerMock.Object, userRepMock.Object, departmentRepMock.Object);
+
+            controller.GetExistingUsers();
+            controller.GetUsersFromFile();
+
+            // Save a reference to the user, before changes are made
+            var existingBefore = controller.UserList[0];
+            var importedBefore = controller.UserList[1];
+            
+            // Act
+            controller.KeepUser(null);
+
+            // Assert
+            Assert.IsTrue(existingBefore.Status.CompareTo("Conflicting") == 0 && importedBefore.Status.CompareTo("Conflicting") == 0);
+        }
+        
+        [TestMethod]
+        public void UserListController_KeepUser_KeptUserIsNotInConflict_UserStatusNotChanged()
+        {
+            // Arrange
+            User existingHans = new User()
+            {
+                IsEnabled = false,
+                Username = "Hans Hansen",
+                Description = "Existing Hans",
+                DefaultDepartment = 1,
+                Domain = "Existing Hans PC",
+                IsAdmin = true
+            };
+
+            User importedHans = new User()
+            {
+                IsEnabled = true,
+                Username = "Hans Hansen",
+                Description = "Imported Hans",
+                DefaultDepartment = 0,
+                Domain = "Imported Hans PC",
+                IsAdmin = false
+            };
+            
+            User importedJens = new User()
+            {
+                IsEnabled = true,
+                Username = "Jens Jensen",
+                Description = "Imported Jens",
+                DefaultDepartment = 0,
+                Domain = "Imported Jens PC",
+                IsAdmin = false
+            }; 
+
+            // Users in conflict
+            UserWithStatus existingUser = new UserWithStatus(existingHans) { Status = "Conflicting" };
+            UserWithStatus importedUser1 = new UserWithStatus(importedHans) { Status = "Conflicting" };
+            UserWithStatus importedUser2 = new UserWithStatus(importedJens) { Status = "Added" };
+            
+            // Set up test lists
+            List<UserWithStatus> existing = new List<UserWithStatus> {existingUser};
+
+            List<UserWithStatus> imported = new List<UserWithStatus> {importedUser1, importedUser2};
+
+            // Set up mocks
+            Mock<IUserImporter> importerMock = new Mock<IUserImporter>();
+
+            importerMock.Setup(p => p.ImportUsersFromDatabase()).Returns(existing);
+            importerMock.Setup(p => p.ImportUsersFromFile(It.IsAny<string>())).Returns(imported);
+            importerMock.Setup(p => p.GetUsersFilePath()).Returns("TestPath");
+            
+            Mock<IDepartmentRepository> departmentRepMock = new Mock<IDepartmentRepository>();
+            
+            Mock<IUserRepository> userRepMock = new Mock<IUserRepository>();
+
+            IUserListController controller = new UserListController(importerMock.Object, userRepMock.Object, departmentRepMock.Object);
+
+            controller.GetExistingUsers();
+            controller.GetUsersFromFile();
+
+            // Save a reference to the user, before changes are made
+            var existingBefore = controller.UserList[0];
+            var importedBefore = controller.UserList[1];
+            
+            // Act
+            controller.KeepUser(controller.UserList.Single(p => p.Username.CompareTo("Jens Jensen") == 0));
+
+            // Assert
+            Assert.IsTrue(existingBefore.Status.CompareTo("Conflicting") == 0 && importedBefore.Status.CompareTo("Conflicting") == 0);
+        }
+        
+        [TestMethod]
         public void UserListController_KeepUser_KeptUserImported_KeptUserStatusSetToAdded()
         {
             // Arrange
@@ -1047,6 +1184,87 @@ namespace UnitTests
             
             // Assert
             Assert.IsTrue(controller.UserList[0].Status.CompareTo("Added") == 0);
+        }
+
+        [TestMethod]
+        public void UserListController_CombineLists_UserIsExistingAndEnabled_StatusSetToRemoved()
+        {
+            // Arrange
+            User existingHans = new User()
+            {
+                IsEnabled = true,
+                Username = "Hans Hansen",
+                Description = "Existing Hans",
+                DefaultDepartment = 1,
+                Domain = "Existing Hans PC",
+                IsAdmin = true
+            };
+            
+            UserWithStatus existingUser = new UserWithStatus(existingHans) { Status = String.Empty };
+
+            List<UserWithStatus> existing = new List<UserWithStatus>() {existingUser};
+            
+            // Set up mocks
+            Mock<IUserImporter> importerMock = new Mock<IUserImporter>();
+
+            importerMock.Setup(p => p.ImportUsersFromDatabase()).Returns(existing);
+            importerMock.Setup(p => p.ImportUsersFromFile(It.IsAny<string>())).Returns(new List<UserWithStatus>());
+            importerMock.Setup(p => p.GetUsersFilePath()).Returns("TestPath");
+            
+            Mock<IDepartmentRepository> departmentRepMock = new Mock<IDepartmentRepository>();
+            
+            Mock<IUserRepository> userRepMock = new Mock<IUserRepository>();
+
+            IUserListController controller = new UserListController(importerMock.Object, userRepMock.Object, departmentRepMock.Object);
+            
+            // Act
+            controller.GetUsersFromFile();
+            
+            // Assert
+            Assert.IsTrue(controller.UserList[0].Status.CompareTo("Removed") == 0);
+            
+        }
+
+        [TestMethod]
+        public void UserListController_CombineLists_UserIsExistingAndDisabled_StatusSetToDisabled()
+        {
+            // Arrange
+            User existingHans = new User()
+            {
+                IsEnabled = false,
+                Username = "Hans Hansen",
+                Description = "Existing Hans",
+                DefaultDepartment = 1,
+                Domain = "Existing Hans PC",
+                IsAdmin = true
+            };
+            
+            UserWithStatus existingUser = new UserWithStatus(existingHans) { Status = String.Empty };
+
+            List<UserWithStatus> existing = new List<UserWithStatus>() {existingUser};
+            
+            // Set up mocks
+            Mock<IUserImporter> importerMock = new Mock<IUserImporter>();
+
+            importerMock.Setup(p => p.ImportUsersFromDatabase()).Returns(existing);
+            importerMock.Setup(p => p.ImportUsersFromFile(It.IsAny<string>())).Returns(new List<UserWithStatus>());
+            importerMock.Setup(p => p.GetUsersFilePath()).Returns("TestPath");
+            
+            Mock<IDepartmentRepository> departmentRepMock = new Mock<IDepartmentRepository>();
+            
+            Mock<IUserRepository> userRepMock = new Mock<IUserRepository>();
+
+            IUserListController controller = new UserListController(importerMock.Object, userRepMock.Object, departmentRepMock.Object);
+
+            controller.IsShowingDisabled = true;
+            
+            controller.UserList[0].Status = String.Empty;
+            
+            // Act
+            controller.GetUsersFromFile();
+            
+            // Assert
+            Assert.IsTrue(controller.UserList[0].Status.CompareTo("Disabled") == 0);
         }
     }
 }

@@ -269,7 +269,11 @@ namespace AMS.Controllers
                 selectedUser.IsEnabled = !selectedUser.IsEnabled;
                 selectedUser.Status = "Disabled";
             }
-                
+
+            else if (selectedUser.Status.CompareTo("Conflicting") == 0)
+            {
+                KeepUser(selectedUser);
+            }
 
             UpdateShownUsers(_finalUsersList);
         }
