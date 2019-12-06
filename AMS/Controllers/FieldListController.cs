@@ -111,12 +111,14 @@ namespace AMS.Controllers
             }
             else
             {
-                field.IsHidden = !field.IsHidden;
-                if (!HiddenFieldList.Contains(field))
+                if (!(_fieldContainer is Tag))
                 {
-                    HiddenFieldList.Add(field);
+                    field.IsHidden = !field.IsHidden;
+                    if (!HiddenFieldList.Contains(field))
+                    {
+                        HiddenFieldList.Add(field);
+                    }
                 }
-
                 NonHiddenFieldList.Remove(field);
             }
 
