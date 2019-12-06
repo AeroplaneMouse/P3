@@ -28,7 +28,8 @@ namespace AMS.ViewModels.Prompts
                 DefaultValue = value.ToString();
             }
         }
-        public string SelectedDate { get; set; }
+
+        public string SelectedDate { get; set; } = "Current Date";
         public bool IsRequired { get; set; } = false;
         public Field.FieldType SelectedFieldType { get; set; }
         public List<Field.FieldType> FieldTypes { get; set; } = (List<Field.FieldType>)Field.GetTypes();
