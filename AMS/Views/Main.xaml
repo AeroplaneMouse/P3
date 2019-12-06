@@ -76,12 +76,6 @@
                                         </Menu>
 
                                         <StackPanel Grid.Column="2" Orientation="Horizontal">
-                                            <!--<TextBlock Text="Department: " 
-                                                       Foreground="LightSteelBlue"
-                                                       VerticalAlignment="Center" 
-                                                       HorizontalAlignment="Right" 
-                                                       FontSize="{StaticResource FontSizeSmall}"/>-->
-                                            
                                             <!-- Departments -->
                                             <Menu Style="{StaticResource MenuContainer}" Visibility="{Binding CurrentDepartmentVisibility}" HorizontalAlignment="Left">
                                                 <MenuItem ItemsSource="{Binding Departments}"

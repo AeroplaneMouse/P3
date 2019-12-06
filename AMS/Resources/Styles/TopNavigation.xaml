@@ -35,7 +35,7 @@
                                 PopupAnimation="Fade">
                                 
                                 <Border Name="PopupContainer"
-                                        Background="{StaticResource NavigationSelectedBrush}">
+                                        Background="{StaticResource BackgroundGrayBrush}">
                                     <ItemsPresenter/>
                                 </Border>
                             </Popup>
@@ -186,7 +186,7 @@
                                    HorizontalOffset="-15"
                                    AllowsTransparency="True"
                                    IsOpen="{TemplateBinding IsSubmenuOpen}">
-                                <Border Background="{StaticResource NavigationSelectedBrush}"
+                                <Border Background="{StaticResource BackgroundGrayBrush}"
                                         x:Name="Border_Popup">
                                     <StackPanel x:Name="StackPanel_Popup">
                                         <MenuItem Header="All departments"
