@@ -27,6 +27,8 @@ namespace AMS.Views
             this.DataContext = new UserListViewModel(controller);
         }
         
+        
+        
         private GridViewColumnHeader _lastHeaderClicked;
         private ListSortDirection _lastDirectionSorted;
         

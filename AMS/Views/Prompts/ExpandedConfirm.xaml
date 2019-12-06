@@ -12,7 +12,7 @@
         <Border Style="{StaticResource PromptBorder}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition />
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
