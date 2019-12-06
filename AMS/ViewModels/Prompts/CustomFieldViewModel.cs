@@ -68,7 +68,7 @@ namespace AMS.ViewModels.Prompts
                 return;
 
             if (SelectedFieldType == Field.FieldType.Date)
-                DefaultValue = SelectedDate.Split(':')[1].Trim();
+                DefaultValue = SelectedDate.Trim();
 
             _newField = new Field(Name, DefaultValue, SelectedFieldType, IsRequired, _isCustom);
 

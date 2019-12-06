@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using AMS.Interfaces;
 using AMS.Models;
 
 namespace AMS.Controllers.Interfaces
@@ -13,6 +14,8 @@ namespace AMS.Controllers.Interfaces
         bool AddField(Field field, FieldContainer fieldContainer = null);
 
         bool RemoveField(Field inputField);
+        
+        bool HandleFieldsFromRemoveTag(Field inputField,Tag tag);
 
         bool RemoveTagRelationsOnFields(ulong TagId);
     }

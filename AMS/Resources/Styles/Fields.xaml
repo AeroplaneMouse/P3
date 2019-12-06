@@ -378,10 +378,10 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsCustom}" Value="True">
+            <DataTrigger Binding="{Binding HasNoTagRelations}" Value="True">
                 <Setter Property="Visibility" Value="Hidden" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding IsCustom}" Value="False">
+            <DataTrigger Binding="{Binding HasNoTagRelations}" Value="False">
                 <Setter Property="Visibility" Value="Visible" />
             </DataTrigger>
         </Style.Triggers>
@@ -394,10 +394,10 @@
         <Setter Property="Grid.Column" Value="0"/>
         <Setter Property="Text" Value="Tag references in:"/>
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsCustom}" Value="True">
+            <DataTrigger Binding="{Binding HasNoTagRelations}" Value="True">
                 <Setter Property="Visibility" Value="Hidden" />
             </DataTrigger>
-            <DataTrigger Binding="{Binding IsCustom}" Value="False">
+            <DataTrigger Binding="{Binding HasNoTagRelations}" Value="False">
                 <Setter Property="Visibility" Value="Visible" />
             </DataTrigger>
         </Style.Triggers>
