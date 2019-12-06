@@ -31,12 +31,13 @@ namespace AMS.Controllers
         private Session _session { get; set; }
         private Asset _asset { get; set; }
         private ICommentRepository _commentRep { get; set; }
+        private Department _department;
 
-        public CommentListController(Session session, ICommentRepository commentRepository, Asset asset = null)
+        public CommentListController(Session session, ICommentRepository commentRepository, Department department, Asset asset)
         {
             _session = session;
             _commentRep = commentRepository;
-            // Create new asset if optional parameter not given
+            _department = department;
             _asset = asset;
 
             FetchComments();
@@ -91,7 +92,7 @@ namespace AMS.Controllers
 
         public void FetchComments()
         {
-            CommentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetLatestComments(Features.Main.CurrentDepartment.ID);
+            CommentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetLatestComments(_department.ID);
         }
     }
 }

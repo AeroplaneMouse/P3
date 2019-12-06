@@ -27,6 +27,7 @@ namespace UnitTests
         private Mock<ICommentRepository> _commentRepMock;
         private Mock<IUserRepository> _userRepMock;
         private Mock<Session> _sessionMock;
+        private Mock<Department> _departmentMock;
 
 
         [TestInitialize]
@@ -36,9 +37,10 @@ namespace UnitTests
             _commentRepMock = new Mock<ICommentRepository>();
             _userRepMock = new Mock<IUserRepository>();
             _sessionMock = new Mock<Session>(_userRepMock.Object);
+            _departmentMock = new Mock<Department>();
             // Gives asset to avoid nullReferenceException
             Asset testAsset = new Asset();
-            _controller = new CommentListController(_sessionMock.Object, _commentRepMock.Object, testAsset);
+            _controller = new CommentListController(_sessionMock.Object, _commentRepMock.Object, _departmentMock.Object, testAsset);
         }
 
         [TestMethod]

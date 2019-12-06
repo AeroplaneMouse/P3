@@ -140,7 +140,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetPresenter(Asset asset, List<ITagable> tagables)
             {
-                return new AssetPresenter(tagables, new AssetController(asset, _assetRepository, GetCurrentSession()), new CommentListController(GetCurrentSession(), _commentRepository, asset), new LogListController(_logRepository, _printHelper, asset));
+                return new AssetPresenter(tagables, new AssetController(asset, _assetRepository, GetCurrentSession()), new CommentListController(GetCurrentSession(), _commentRepository, GetCurrentDepartment(), asset), new LogListController(_logRepository, _printHelper, asset));
             }
 
             /// <summary>
@@ -182,7 +182,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page Home()
             {
-                return new Home(new HomeController(_userRepository, _assetRepository, _tagRepository, _departmentRepository), new CommentListController(GetCurrentSession(), _commentRepository));
+                return new Home(new HomeController(_userRepository, _assetRepository, _tagRepository, _departmentRepository), new CommentListController(GetCurrentSession(), _commentRepository, GetCurrentDepartment(), new Asset()));
             }
 
             public static Page ShortcutsList()
@@ -238,7 +238,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page TagList()
             {
-                return new TagList(new TagListController(_tagRepository, _printHelper), new TagController(new Tag(), _tagRepository, _departmentRepository));
+                return new TagList(new TagListController(_tagRepository), new TagController(new Tag(), _tagRepository, _departmentRepository));
             }
 
             /// <summary>

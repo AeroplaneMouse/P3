@@ -29,7 +29,6 @@ namespace AMS.Authentication
                 if (rep.GetCount(null) == 0)
                 {
                     // Create the new user and give it admin rights.
-
                     User user = new User()
                     {
                         Username = this.Username,
