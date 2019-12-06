@@ -46,8 +46,7 @@ namespace AMS.ViewModels.Commands
             }
 
             // Validating id
-            // TODO: Ingen new repositories!
-            _department = new DepartmentRepository().GetById(id);
+            _department = Features.DepartmentRepository.GetById(id);
             if (_department != null)
                 Features.DisplayPrompt(new TextInput("Enter new name", _department.Name, PromptElapsed));
             else
@@ -66,8 +65,7 @@ namespace AMS.ViewModels.Commands
                 {
                     _department.Name = f.Text;
 
-                    // TODO: Ingen new repositories!
-                    if (new DepartmentRepository().Update(_department))
+                    if (Features.DepartmentRepository.Update(_department))
                     {
                         _main.CurrentDepartment = _department;
                         _main.OnPropertyChanged(nameof(_main.CurrentDepartment));

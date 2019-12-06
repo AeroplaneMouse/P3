@@ -272,10 +272,10 @@
                             </TextBox.InputBindings>
                         </TextBox>
                         <Button Grid.Column="1"
-                                Content="Save"
+                                Content="Send"
                                 Command="{Binding SaveCommand}"
                                 Style="{StaticResource RegularAcceptButton}"
-                                ToolTip="To save press Ctrl + Enter"
+                                ToolTip="To send press Ctrl + Enter"
                                 Height="36"
                                 VerticalAlignment="Top" />
                     </Grid>

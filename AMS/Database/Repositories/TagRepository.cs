@@ -12,7 +12,12 @@ namespace AMS.Database.Repositories
 {
     public class TagRepository : ITagRepository
     {
-        private Ilogger logger { get; set; } = new Logger(new LogRepository());
+        private Ilogger _logger { get; set; }
+
+        public TagRepository()
+        {
+            _logger = new Logger(Features.LogRepository);
+        }
 
         /// <summary>
         /// Gets the number of tags in the database
@@ -119,7 +124,7 @@ namespace AMS.Database.Repositories
                         id = (ulong)cmd.LastInsertedId;
                     }
 
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
                 }
                 catch (MySqlException e)
                 {
@@ -222,7 +227,7 @@ namespace AMS.Database.Repositories
                     
                     transaction.Commit();
                     
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -276,7 +281,7 @@ namespace AMS.Database.Repositories
                     command.ExecuteNonQuery();
                     transaction.Commit();
                     
-                    logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                     querySuccess = true;
                 }
                 catch (MySqlException e)

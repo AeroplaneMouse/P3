@@ -12,48 +12,59 @@ namespace AMS.Models
         private string _identifier;
         private ulong _departmentID;
 
-        public string Name {
-            get => this._name;
-            set {
+        public string Name
+        {
+            get => _name;
+            set
+            {
                 if (TrackChanges)
                 {
-                    this.Changes["Name"] = this.Name;
+                    Changes["Name"] = Name;
                 }
-                this._name = value;
-            }
-        }
-        public string Description {
-            get => this._description;
-            set {
-                if (TrackChanges)
-                {
-                    this.Changes["Description"] = this.Description;
-                }
-                this._description = value;
+
+                _name = value;
             }
         }
 
-        public string Identifier {
-            get => this._identifier;
-            set {
+        public string Description
+        {
+            get => _description;
+            set
+            {
                 if (TrackChanges)
                 {
-                    this.Changes["Identifier"] = this.Identifier;
+                    Changes["Description"] = Description;
                 }
-                this._identifier = value;
+
+                _description = value;
             }
         }
 
-        public ulong DepartmentID {
-            get {
-                return this._departmentID;
-            }
-            set {
+        public string Identifier
+        {
+            get => _identifier;
+            set
+            {
                 if (TrackChanges)
                 {
-                    this.Changes["DepartmentID"] = this.DepartmentID;
+                    Changes["Identifier"] = Identifier;
                 }
-                this._departmentID = value;
+
+                _identifier = value;
+            }
+        }
+
+        public ulong DepartmentID
+        {
+            get => _departmentID;
+            set
+            {
+                if (TrackChanges)
+                {
+                    Changes["DepartmentID"] = DepartmentID;
+                }
+
+                _departmentID = value;
             }
         }
 
@@ -63,7 +74,8 @@ namespace AMS.Models
         }
 
         [JsonConstructor]
-        private Asset(ulong id, string name, string description, string identifier, ulong departmentId, string serializedFields,
+        private Asset(ulong id, string name, string description, string identifier, ulong departmentId,
+            string serializedFields,
             DateTime created_at, DateTime updated_at)
         {
             ID = id;
@@ -93,7 +105,7 @@ namespace AMS.Models
         {
             return obj is Asset other && ID == other.ID;
         }
-        
+
         public bool DeSerializeFields()
         {
             if (!string.IsNullOrEmpty(this.SerializedFields))
@@ -105,6 +117,5 @@ namespace AMS.Models
 
             return false;
         }
-
     }
 }

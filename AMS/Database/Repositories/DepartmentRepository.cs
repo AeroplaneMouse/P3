@@ -13,7 +13,12 @@ namespace AMS.Database.Repositories
 {
     public class DepartmentRepository : IDepartmentRepository
     {
-        private Ilogger _logger { get; set; } = new Logger(new LogRepository());
+        private Ilogger _logger { get; set; } 
+
+        public DepartmentRepository()
+        {
+            _logger = new Logger(Features.LogRepository);
+        }
 
         public ulong GetCount()
         {
