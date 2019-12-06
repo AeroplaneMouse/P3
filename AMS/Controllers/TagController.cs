@@ -23,7 +23,7 @@ namespace AMS.Controllers
             set
             {
                 _controlledTag = value;
-                UpdateParameters(value);
+                RevertChanges();
             }
         }
         public List<Field> ParentTagFields { get; set; } = new List<Field>();
@@ -83,9 +83,9 @@ namespace AMS.Controllers
             _departmentRepository = departmentRepository;
         }
 
-        private void UpdateParameters(Tag value)
+        private void RevertChanges()
         {
-            if (value != null && value.ID != 0)
+            if (ControlledTag != null && ControlledTag.ID != 0)
             {
                 IsEditing = true;
                 ControlledTag.DeSerializeFields();
