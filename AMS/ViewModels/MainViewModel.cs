@@ -167,12 +167,6 @@ namespace AMS.ViewModels
             // Attaching notification
             MySqlHandler.ConnectionFailed += ConnectionFailed;
 
-            // Loads homepage and other stuff from the UI-thread.
-            SplashPage.Dispatcher.Invoke(() => Features.Navigate.To(Features.Create.Home()));
-
-            // Remove splash page
-            SplashPage = null;
-
             // Resetting connection failed
             _hasConnectionFailedBeenRaised = false;
 
@@ -196,6 +190,12 @@ namespace AMS.ViewModels
                 CurrentDepartment = Department.GetDefault();
 
             InitializeCommands();
+
+            // Loads homepage and other stuff from the UI-thread.
+            SplashPage.Dispatcher.Invoke(() => Features.Navigate.To(Features.Create.Home()));
+            
+            // Remove splash page
+            SplashPage = null;
         }
 
         /// <summary>

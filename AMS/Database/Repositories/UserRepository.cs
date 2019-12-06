@@ -107,8 +107,7 @@ namespace AMS.Database.Repositories
                         query += " WHERE enabled=" + (onlyEnabledUsers == true ? "1" : "0");
                     else
                         query += ";";
-
-
+                    
                     using (var cmd = new MySqlCommand(query, con))
                     {
                         using (var reader = cmd.ExecuteReader())

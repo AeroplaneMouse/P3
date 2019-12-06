@@ -151,6 +151,7 @@ namespace AMS.Database.Repositories
                     const string query = "SELECT c.id, c.asset_id, u.username, c.content, c.created_at, c.updated_at, c.deleted_at " +
                                          "FROM comments AS c " +
                                          "INNER JOIN users AS u ON c.user_id = u.id "+
+                                         "INNER JOIN assets AS a ON c.asset_id = a.id "+
                                          "WHERE c.id=@id AND c.deleted_at IS NULL";
 
                     using (var cmd = new MySqlCommand(query, con))
@@ -191,10 +192,12 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT c.id, c.asset_id, u.username, c.content, c.created_at, c.updated_at, c.deleted_at " +
+                    const string query = "SELECT c.id, c.asset_id, u.username, a.name AS asset_name, c.content, c.created_at, c.updated_at, c.deleted_at " +
                                          "FROM comments AS c " +
                                          "INNER JOIN users AS u ON c.user_id = u.id "+
-                                         "WHERE c.asset_id=@asset_id AND c.deleted_at IS NULL";
+                                         "INNER JOIN assets AS a ON c.asset_id = a.id "+
+                                         "WHERE c.asset_id=@asset_id AND c.deleted_at IS NULL " +
+                                         "ORDER BY c.id DESC";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -235,15 +238,64 @@ namespace AMS.Database.Repositories
                 // Sending sql query
                 try
                 {
-                    string query = "SELECT c.id, c.asset_id, u.username, c.content, c.created_at, c.updated_at FROM comments AS c "+ 
+                    string query = "SELECT c.id, c.asset_id, u.username, a.name AS asset_name, c.content, c.created_at, c.updated_at FROM comments AS c "+ 
                                    "INNER JOIN assets AS a ON c.asset_id = a.id "+ 
                                    "INNER JOIN users AS u ON c.user_id = u.id "+
                                    "WHERE a.deleted_at IS NULL "+ 
                                    (!includeDeleted ? "AND c.deleted_at IS NULL " : "")+
-                                   "ORDER BY created_at DESC LIMIT "+limit;
+                                   "ORDER BY c.id DESC LIMIT "+limit;
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                comments.Add(DataMapper(reader));
+                            }
+                            reader.Close();
+                        }
+                    }
+                }
+                catch (MySqlException e)
+                {
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+
+            return comments;
+        }
+        
+        public List<Comment> GetLatestComments(ulong departmentId=0, int limit=100, int days=7)
+        {
+            var con = new MySqlHandler().GetConnection();
+            List<Comment> comments = new List<Comment>();
+            
+            if (MySqlHandler.Open(ref con))
+            {
+                // Sending sql query
+                try
+                {
+                    string query = "SELECT c.id, c.asset_id, u.username, a.name AS asset_name, c.content, c.created_at, c.updated_at " +
+                                   "FROM comments AS c " +
+                                   "INNER JOIN assets AS a ON c.asset_id = a.id " +
+                                   "INNER JOIN users AS u ON c.user_id = u.id " +
+                                   "WHERE "+(departmentId > 0 ? "a.department_id = @depId AND " : "")+"c.created_at >= DATE_SUB(now(), interval @days day) AND c.deleted_at IS NULL " +
+                                   "ORDER BY c.id DESC " +
+                                   "LIMIT "+limit;
+                    
+                    using (var cmd = new MySqlCommand(query, con))
+                    {
+                        cmd.Parameters.Add("@depId", MySqlDbType.UInt64);
+                        cmd.Parameters["@depId"].Value = departmentId;
+                        
+                        cmd.Parameters.Add("@days", MySqlDbType.UInt64);
+                        cmd.Parameters["@days"].Value = days;
+                        
                         using (var reader = cmd.ExecuteReader())
                         {
                             while (reader.Read())
@@ -272,13 +324,14 @@ namespace AMS.Database.Repositories
             ulong rowId = reader.GetUInt64("id");
             ulong rowAssetId = reader.GetUInt64("asset_id");
             String rowUsername = reader.GetString("username");
+            String rowAssetName = reader.GetString("asset_name");
             String rowContent = reader.GetString("content");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
 
             return (Comment)Activator.CreateInstance(typeof(Comment),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowUsername, rowContent, rowAssetId, rowCreatedAt, rowUpdatedAt }, null, null);
+                new object[] { rowId, rowUsername, rowAssetName, rowContent, rowAssetId, rowCreatedAt, rowUpdatedAt }, null, null);
         }
     }
 }

@@ -77,7 +77,7 @@ namespace AMS.Controllers
         /// <param name="field">The field to update/remove</param>
         /// <param name="fieldContainer"></param>
         /// <returns>Rather the field was removed</returns>
-        public bool RemoveField(Field field, FieldContainer fieldContainer = null)
+        public bool RemoveField(Field field)
         {
             //If no input field is given, return.
             if (field == null) return false;
@@ -119,7 +119,7 @@ namespace AMS.Controllers
         /// </summary>
         /// <param name="TagId"></param>
         /// <returns></returns>
-        public bool RemoveFieldRelations(ulong TagId)
+        public bool RemoveTagRelationsOnFields(ulong TagId)
         {
             // Checks the hiddenlist and checks whether a field contains the tagID, if it does, remove it.
             foreach (var field in HiddenFieldList)

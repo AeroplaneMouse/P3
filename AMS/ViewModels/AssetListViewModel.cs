@@ -227,7 +227,7 @@ namespace AMS.ViewModels
                     tag = (ITagable)input;
                 }
 
-                if (_tagHelper.IsParentSet() || (tag.NumOfChildren == 0 && tag.TagId != 1))
+                if (_tagHelper.IsParentSet() || (tag.NumberOfChildren == 0 && tag.TagId != 1))
                 {
                     if(tag != null) {
                         _tagHelper.AddTag(tag);
@@ -273,7 +273,7 @@ namespace AMS.ViewModels
             ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == SearchQuery.Trim(' '));
             if (tag != null)
             {
-                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.NumOfChildren > 0))
+                if (tag.ParentId == 0 && (tag.TagId == 1 || tag.NumberOfChildren > 0))
                 {
                     _tagHelper.SetParent((Tag)tag);
                     CurrentGroup = "#" + tag.TagLabel;

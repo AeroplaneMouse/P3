@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace AMS.Models
 {
-    public class FieldContainer : Model
+    public abstract class FieldContainer : Model
     {
         public List<Field> FieldList = new List<Field>();
 
@@ -12,7 +12,7 @@ namespace AMS.Models
         public string SerializedFields{
             get => this._serializedFields;
             set {
-                if (this.SerializedFields != null)
+                if (this.SerializedFields != null && TrackChanges)
                 {
                     this.Changes["SerializedFields"] = this.SerializedFields;
                 }

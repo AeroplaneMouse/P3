@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using AMS.Authentication;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
@@ -16,6 +17,8 @@ namespace UnitTests
         private Field _thirdField;
         private Field _fourthField;
         private Mock<IAssetRepository> _mockedReppository;
+        private Mock<Session> _sessionMock;
+        private Mock<IUserRepository> _userRepMock;
         [TestInitialize]
         public void InitiateFieldsList()
         {
@@ -28,13 +31,17 @@ namespace UnitTests
             
             _mockedReppository = new Mock<IAssetRepository>();
             _mockedReppository.Setup(p=>p.GetTags(It.IsAny<Asset>())).Returns(new List<ITagable>());
+            _userRepMock = new Mock<IUserRepository>();
+            _userRepMock.Setup(p => p.GetByIdentity(It.IsAny<string>()))
+                .Returns(new User {Username = "TestUser", DefaultDepartment = 1});
+            _sessionMock = new Mock<Session>(_userRepMock.Object);
         }
 
         [TestMethod]
         public void AddField_ChecksFieldsContains()
         {
             //Arrange
-            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object)
+            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
             {
                 ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
@@ -51,7 +58,7 @@ namespace UnitTests
         public void RemoveField_CheckFieldDoesNotContain()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), _mockedReppository.Object)
+            AssetController otherAsset = new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
             {
                 ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
@@ -70,7 +77,7 @@ namespace UnitTests
         public void RemoveField_UsingInheritedField_CheckFieldIsHidden()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), _mockedReppository.Object)
+            AssetController otherAsset = new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
             {
                 ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
@@ -88,7 +95,7 @@ namespace UnitTests
         public void AddField_UsingInheritedField_CheckFieldsContains()
         {
             //Arrange
-            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object)
+            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
             {
                 ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
@@ -105,14 +112,14 @@ namespace UnitTests
         public void RemoveFieldRelations_Returns_IdInField_NonHiddenFieldList()
         {
             //Arrange
-            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object)
+            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
             {
                 ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
             otherAssetController.AddField(_fourthField);
             otherAssetController.AddField(_thirdField);
             //Act
-            otherAssetController.RemoveFieldRelations(5);
+            otherAssetController.RemoveTagRelationsOnFields(5);
 
             //Assert
             Assert.IsFalse(otherAssetController.NonHiddenFieldList.SingleOrDefault(p => p.TagIDs.Contains(5)) != null);
@@ -122,7 +129,7 @@ namespace UnitTests
         public void RemoveFieldRelations_Returns_IdInField_HiddenFieldList()
         {
             //Arrange
-            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object)
+            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
             {
                 ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentID = 1}
             };
@@ -131,7 +138,7 @@ namespace UnitTests
 
             otherAssetController.RemoveField(_thirdField);
             //Act
-            otherAssetController.RemoveFieldRelations(5);
+            otherAssetController.RemoveTagRelationsOnFields(5);
 
             //Assert
             Assert.IsFalse(otherAssetController.HiddenFieldList.SingleOrDefault(p => p.TagIDs.Contains(5)) != null);
