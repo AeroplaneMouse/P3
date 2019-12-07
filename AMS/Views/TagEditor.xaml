@@ -158,7 +158,7 @@
                                Text="Fields from parent"
                                Margin="10 20 10 0" />
                     <StackPanel Margin="20 10 10 0">
-                        <ListView ItemsSource="{Binding ParentTagFields}"
+                        <ListView ItemsSource="{Binding ParentTagFields, UpdateSourceTrigger=PropertyChanged}"
                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                   ItemContainerStyle="{StaticResource ListViewWithTags}"
                                   BorderBrush="Transparent"

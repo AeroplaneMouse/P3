@@ -168,7 +168,6 @@ namespace AMS.ViewModels
         public override void UpdateOnFocus()
         {
             UpdateAll();
-
             OnPropertyChanged(nameof(Name));
             OnPropertyChanged(nameof(Color));
             OnPropertyChanged(nameof(DepartmentID));

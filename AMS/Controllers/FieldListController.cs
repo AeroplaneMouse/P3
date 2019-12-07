@@ -53,26 +53,35 @@ namespace AMS.Controllers
                     inputField.TagIDs.Add(fieldContainer.ID);
                 }
 
+
                 NonHiddenFieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
                     inputField.HashId, inputField.Required, inputField.IsCustom, inputField.IsHidden,
                     inputField.TagIDs));
             }
 
-            if (fieldInList != null)
+            Field fieldInListByHashId = HiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId) ??
+                                        NonHiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId);
+
+            if (fieldInListByHashId != null)
             {
                 // Checks if a field label has been updated
-                if (fieldInList.HashId == inputField.HashId && fieldInList.Label != inputField.Label)
-                    fieldInList.Label = inputField.Label;
+                if (fieldInListByHashId.HashId == inputField.HashId && fieldInListByHashId.Label != inputField.Label)
+                    fieldInListByHashId.Label = inputField.Label;
 
                 // Checks if a fields required property has been updated
-                if (fieldInList.HashId == inputField.HashId && fieldInList.Required != inputField.Required)
-                    fieldInList.Required = inputField.Required;
+                if (fieldInListByHashId.HashId == inputField.HashId && fieldInListByHashId.Required != inputField.Required)
+                    fieldInListByHashId.Required = inputField.Required;
 
                 // Adds a reference to the field container if its added.
-                if (fieldContainer != null && !fieldInList.TagIDs.Contains(fieldContainer.ID))
+                if (fieldContainer != null && !fieldInListByHashId.TagIDs.Contains(fieldContainer.ID))
                 {
-                    fieldInList.TagIDs.Add(fieldContainer.ID);
+                    fieldInListByHashId.TagIDs.Add(fieldContainer.ID);
                 }
+                fieldInListByHashId.IsCustom = false;
+            }
+            
+            if (fieldInList != null)
+            {
 
                 fieldInList.IsCustom = false;
             }
@@ -118,6 +127,7 @@ namespace AMS.Controllers
                         HiddenFieldList.Add(field);
                     }
                 }
+
                 NonHiddenFieldList.Remove(field);
             }
 

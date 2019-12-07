@@ -25,6 +25,7 @@ namespace AMS.Controllers
 
         public List<Field> ParentTagFields { get; set; } = new List<Field>();
         public bool IsEditing { get; set; }
+        
         public ulong TagID;
         public ulong Id { get; set; }
         public string Name { get; set; }
@@ -202,7 +203,7 @@ namespace AMS.Controllers
         /// <param name="newTag"></param>
         public void ConnectParentTag()
         {
-            Tag currentTag = _tagRepository.GetById(ControlledTag.ParentId);
+            Tag currentTag = _tagRepository.GetById(_controlledTag.ParentId);
             //TODO Throws exception, når et tags parent id ændres
             currentTag.DeSerializeFields();
             ParentTagFields = currentTag.FieldList;

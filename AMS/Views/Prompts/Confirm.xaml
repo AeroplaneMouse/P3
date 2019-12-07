@@ -9,7 +9,7 @@
       FocusManager.FocusedElement="{Binding ElementName=StartElement}">
 
     <Page.InputBindings>
-        <KeyBinding Key="Esc" Command="{Binding CancelCommand}"/>
+        <KeyBinding Key="Escape" Command="{Binding CancelCommand}"/>
     </Page.InputBindings>
     <Grid>
         <Canvas Style="{StaticResource PromptBackground}"/>
