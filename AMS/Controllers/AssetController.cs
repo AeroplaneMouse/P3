@@ -134,6 +134,8 @@ namespace AMS.Controllers
             Identifier = ControlledAsset.Identifier;
             Description = ControlledAsset.Description;
             _tags = _assetRepository.GetTags(ControlledAsset).ToList();
+            HiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == true).ToList();
+            NonHiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == false).ToList();
         }
 
         /// <summary>

@@ -118,7 +118,7 @@ namespace AMS.ViewModels
                         {
                             _tagController.Remove();
                             UpdateOnFocus();
-                            Features.AddNotification(new Notification($"{ _tagController.Name } has been remove.", background: Notification.APPROVE));
+                            Features.AddNotification(new Notification($"{ _tagController.Name } has been removed.", background: Notification.APPROVE));
                         }));
                 }
             }

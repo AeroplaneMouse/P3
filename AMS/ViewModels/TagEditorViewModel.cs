@@ -225,7 +225,10 @@ namespace AMS.ViewModels
         private void Cancel()
         {
             if (!Features.Navigate.Back())
+            {
+                _controller.RevertChanges();
                 Features.Navigate.To(Features.Create.TagList());
+            }
         }
 
         private void UpdateAll()
@@ -360,7 +363,8 @@ namespace AMS.ViewModels
                         {
                             _controller.Remove();
                             UpdateOnFocus();
-                            Features.AddNotification(new Notification($"{ _controller.Name } has been remove.", background: Notification.APPROVE));
+                            Features.AddNotification(new Notification($"{ _controller.Name } has been removed.", background: Notification.APPROVE));
+                            Features.Navigate.Back();
                         }
                     }));
             }

@@ -17,15 +17,12 @@ namespace AMS.Controllers
         private IDepartmentRepository _departmentRepository { get; set; }
         private Tag _controlledTag;
 
-        public Tag ControlledTag 
-        { 
+        public Tag ControlledTag
+        {
             get => _controlledTag;
-            set
-            {
-                _controlledTag = value;
-                RevertChanges();
-            }
+            set => _controlledTag = value;
         }
+
         public List<Field> ParentTagFields { get; set; } = new List<Field>();
         public bool IsEditing { get; set; }
         public ulong TagID;
@@ -66,7 +63,7 @@ namespace AMS.Controllers
             {
                 List<Department> departments = new List<Department>()
                 {
-                    new Department() { Name = "All departments" }
+                    new Department() {Name = "All departments"}
                 };
 
                 _departmentRepository.GetAll().ToList().ForEach(d => departments.Add(d));
@@ -75,12 +72,35 @@ namespace AMS.Controllers
             }
         }
 
-        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) 
+        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository)
             : base(tag)
         {
-            ControlledTag = tag;
+            _controlledTag = tag;
+
             _tagRepository = tagRep;
             _departmentRepository = departmentRepository;
+
+            if (_controlledTag.ID == 0)
+            {
+                _controlledTag.Color = CreateRandomColor();
+                Color = _controlledTag.Color;
+                IsEditing = false;
+            }
+            else
+            {
+                IsEditing = true;
+                _controlledTag.DeSerializeFields();
+            }
+            
+            
+            Id = _controlledTag.ID;
+            Name = _controlledTag.Name;
+            Color = _controlledTag.Color;
+            ParentId = _controlledTag.ParentId;
+            DepartmentID = _controlledTag.DepartmentID;
+
+            NonHiddenFieldList = _controlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = _controlledTag.FieldList.Where(f => f.IsHidden == true).ToList();
         }
 
         #region Public Methods
@@ -91,19 +111,21 @@ namespace AMS.Controllers
         public void Save()
         {
             //Updates the fields on the tag
-            if(Name != ControlledTag.Name)
-                ControlledTag.Name = Name;
-            if(ParentId != ControlledTag.ParentId)
-                ControlledTag.ParentId = ParentId;
+            if (Name != _controlledTag.Name)
+                _controlledTag.Name = Name;
+            if (ParentId != _controlledTag.ParentId)
+                _controlledTag.ParentId = ParentId;
 
-            ControlledTag.DepartmentID = (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
-            if(Color != ControlledTag.Color)
-                ControlledTag.Color = Color;
+            _controlledTag.DepartmentID = (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
+            if (Color != _controlledTag.Color)
+                _controlledTag.Color = Color;
 
-            List<Field> fieldList = NonHiddenFieldList.Where(p => p.TagIDs!.Contains(ParentId)).ToList();
-            fieldList.AddRange(HiddenFieldList.Where(p => p.TagIDs!.Contains(ParentId)).ToList());
-            ControlledTag.FieldList = fieldList;
+
+            List<Field> fieldList = NonHiddenFieldList;
+            fieldList.AddRange(HiddenFieldList);
+            _controlledTag.FieldList = fieldList;
             SerializeFields();
+
             _tagRepository.Insert(ControlledTag, out TagID);
         }
 
@@ -113,30 +135,29 @@ namespace AMS.Controllers
         public void Update()
         {
             //Updates the fields on the tag
-            if (ControlledTag.Name != Name)
+            if (_controlledTag.Name != Name)
             {
-                ControlledTag.Name = Name;
+                _controlledTag.Name = Name;
             }
 
-            if (ControlledTag.ParentId != ParentId)
+            if (_controlledTag.ParentId != ParentId)
             {
-                ControlledTag.ParentId = ParentId;
+                _controlledTag.ParentId = ParentId;
 
-                if (ControlledTag.DepartmentID != DepartmentID)
+                if (_controlledTag.DepartmentID != DepartmentID)
                 {
                     ControlledTag.DepartmentID =
                         (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
                 }
             }
 
-            if (ControlledTag.Color != Color)
+            if (_controlledTag.Color != Color)
             {
-                ControlledTag.Color = Color;
+                _controlledTag.Color = Color;
             }
 
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
-            ControlledTag.FieldList = fieldList;
             SerializeFields();
             _tagRepository.Update(ControlledTag);
         }
@@ -190,30 +211,11 @@ namespace AMS.Controllers
         #endregion
 
         /// <summary>
-        /// Reverts the changes made to the TagController, to correspond with the information on the tag, or creates a new tag
+        /// Reverts the changes made to the TagController, to correspond with the information on the tag.
         /// </summary>
-        private void RevertChanges()
+        public void RevertChanges()
         {
-            if (ControlledTag != null && ControlledTag.ID != 0)
-            {
-                IsEditing = true;
-                ControlledTag.DeSerializeFields();
-
-                Id = ControlledTag.ID;
-                Name = ControlledTag.Name;
-                Color = ControlledTag.Color;
-                ParentId = ControlledTag.ParentId;
-                DepartmentID = ControlledTag.DepartmentID;
-            }
-            else
-            {
-                _controlledTag = new Tag { Color = CreateRandomColor() };
-                Color = _controlledTag.Color;
-                _controlledTag.FieldList = new List<Field>();
-                IsEditing = false;
-            }
-            NonHiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = ControlledTag.FieldList.Where(f => f.IsHidden == true).ToList();
+            _controlledTag = _tagRepository.GetById(_controlledTag.ID);
         }
     }
 }

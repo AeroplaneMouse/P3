@@ -42,6 +42,9 @@ namespace AMS.Controllers.Interfaces
         void ConnectParentTag();
 
         Tag GetTagById(ulong id);
+
+        void RevertChanges();
+
         #endregion
     }
 }
