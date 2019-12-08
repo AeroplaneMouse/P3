@@ -79,13 +79,16 @@ namespace AMS.Logging
         /// Adding an entry to the log, based on custom an entry type, description, and potentiallu user id and exception
         /// </summary>
         /// <param name="inputEntryType">The type of the log entry</param>
-        /// <param name="inputDescription">The description of the log entry</param>
+        /// <param name="inputDescription">The description of the log entry (if an exception is given as input, the error message and stack trace will be added to the description)</param>
         /// <param name="userId">The id of the related user (optional)</param>
         /// <param name="changes">Changes made as a serialized JSON format (optional)</param>
         /// <param name="e">The exception to be logged (optional)</param>
         /// <returns>Rather the entry was successfully added or not</returns>
         public bool AddEntry(string inputEntryType, string inputDescription, ulong userId = 0, string changes = "[]", Exception e = null)
         {
+            if (inputEntryType == null)
+                return false;
+
             string error;
             if (e != null)
             {

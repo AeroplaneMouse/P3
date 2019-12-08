@@ -545,5 +545,44 @@ namespace UnitTests
             //Assert
             Assert.IsTrue(result);
         }
+
+        [TestMethod]
+        public void AddEntry_ReceivesNullAsModel_NothingIsSentToRepositoryAndReturnsFalse()
+        {
+            //Arrange
+            _logRepMock.Setup(lr => lr.Insert(It.IsAny<LogEntry>())).Returns(true);
+
+            //Act
+            bool result = _Log.AddEntry(null, 1);
+
+            //Arrange
+            Assert.IsTrue(!result);
+        }
+
+        [TestMethod]
+        public void AddEntry_ReceivesEntryTypeAndDescription_RepositoryReceivesLogEntryWithTheGivenEntryTypeAndDescription()
+        {
+            //Arrange
+            _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le => le.EntryType == "Entry" && le.Description == "This is an entry"))).Returns(true);
+
+            //Act
+            bool result = _Log.AddEntry("Entry", "This is an entry");
+
+            //Assert
+            Assert.IsTrue(result);
+        }
+
+        [TestMethod]
+        public void AddEntry_ReceivesNullForEntryTypeAndDescription_NothingIsSentToRepositoryAndReturnsFalse()
+        {
+            //Arrange
+            _logRepMock.Setup(lr => lr.Insert(It.IsAny<LogEntry>())).Returns(true);
+
+            //Act
+            bool result = _Log.AddEntry(null, null);
+
+            //Assert
+            Assert.IsTrue(!result);
+        }
     }
 }
