@@ -235,7 +235,7 @@ namespace AMS.Controllers
         /// <summary>
         /// Runs on startup, loads fields, and updates fields that are dependent on values.
         /// </summary>
-        private void LoadFields()
+        public void LoadFields()
         {
             foreach (var field in HiddenFieldList)
             {

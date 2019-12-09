@@ -139,7 +139,7 @@
                                         Margin="0 0 0 10"
                                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
 
-                            <TextBlock Text="Default Value:"
+                            <TextBlock Text="Value:"
                                        Style="{StaticResource ParagraphStyle}" DataContext="{Binding}" />
 
                             <ContentPresenter Margin="0 0 0 10"

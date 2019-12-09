@@ -24,6 +24,7 @@ namespace AMS.Controllers.Interfaces
 
         bool Remove();
 
+        void LoadFields();
         void RevertChanges();
     }
 }

@@ -387,6 +387,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(NonHiddenFieldList));
             OnPropertyChanged(nameof(HiddenFieldList));
+            _assetController.LoadFields();
         }
 
         /// <summary>
@@ -450,6 +451,11 @@ namespace AMS.ViewModels
             foreach (var field in completeList)
             {
                 if (field.Required && string.IsNullOrEmpty(field.Content) && !field.IsHidden)
+                {
+                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
+                        Notification.WARNING));
+                    return false;
+                }if (field.Required && field.Type == Field.FieldType.Date && field.Content == "Current date" && field.Content == "Empty" && !field.IsHidden)
                 {
                     Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
                         Notification.WARNING));
