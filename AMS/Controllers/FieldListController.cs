@@ -41,24 +41,6 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool AddField(Field inputField, FieldContainer fieldContainer = null)
         {
-            // Checks whether the field is present in HiddenFieldList, if not, checks NonHiddenFieldList.
-            Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(inputField)) ??
-                                NonHiddenFieldList.FirstOrDefault(p => p.Equals(inputField));
-
-            //If the field is not in the list, add the field (With or without a relation to the fieldContainer)
-            if (fieldInList == null)
-            {
-                if (fieldContainer != null)
-                {
-                    inputField.TagIDs.Add(fieldContainer.ID);
-                }
-
-
-                NonHiddenFieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
-                    inputField.HashId, inputField.Required, inputField.IsCustom, inputField.IsHidden,
-                    inputField.TagIDs));
-            }
-
             Field fieldInListByHashId = HiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId) ??
                                         NonHiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId);
 
@@ -78,6 +60,25 @@ namespace AMS.Controllers
                     fieldInListByHashId.TagIDs.Add(fieldContainer.ID);
                 }
                 fieldInListByHashId.IsCustom = false;
+            }
+
+            
+            // Checks whether the field is present in HiddenFieldList, if not, checks NonHiddenFieldList.
+            Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(inputField)) ??
+                                NonHiddenFieldList.FirstOrDefault(p => p.Equals(inputField));
+
+            //If the field is not in the list, add the field (With or without a relation to the fieldContainer)
+            if (fieldInList == null && fieldInListByHashId == null)
+            {
+                if (fieldContainer != null)
+                {
+                    inputField.TagIDs.Add(fieldContainer.ID);
+                }
+
+
+                NonHiddenFieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
+                    inputField.HashId, inputField.Required, inputField.IsCustom, inputField.IsHidden,
+                    inputField.TagIDs));
             }
             
             if (fieldInList != null)
