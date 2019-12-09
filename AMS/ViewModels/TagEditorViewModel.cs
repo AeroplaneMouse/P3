@@ -44,7 +44,6 @@ namespace AMS.ViewModels
             get => _selectedParentTagIndex;
             set
             {
-
                 if (value == _selectedParentTagIndex) 
                     return;
 
@@ -108,9 +107,7 @@ namespace AMS.ViewModels
             }
 
             if(_controller.ControlledTag.NumberOfChildren > 0)
-            {
                 ParentSelectionEnabled = false;
-            }
             
             //Set the selected parent to the parent of the chosen tag
             int i = ParentTagList.Count - 1;
@@ -244,7 +241,6 @@ namespace AMS.ViewModels
             Tag ParentTag = ParentTagList[_selectedParentTagIndex];
             foreach (var field in HiddenFieldList)
             {
-                //TODO: Question
                 field.TagList = new List<ITagable>(); 
                 foreach (var id in field.TagIDs)
                 {
@@ -281,6 +277,7 @@ namespace AMS.ViewModels
                 return false;
             }
 
+            // Verify number fields
             foreach (var field in completeList)
             {
                 if (field.Type == Field.FieldType.NumberField)
