@@ -242,6 +242,18 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
+                            
+                            <!-- ID -->
+                            <GridViewColumn Width="Auto">
+                                <GridViewColumnHeader Content="ID" Tag="ID"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=ID}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
 
                             <!-- Name -->
                             <GridViewColumn Width="Auto">
