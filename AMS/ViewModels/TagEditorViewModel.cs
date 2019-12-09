@@ -233,31 +233,6 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(HiddenFieldList));
             OnPropertyChanged(nameof(SelectedParentTagIndex));
             OnPropertyChanged(nameof(ParentTagFields));
-            UpdateTagRelations();
-        }
-
-        private void UpdateTagRelations()
-        {
-            Tag ParentTag = ParentTagList[_selectedParentTagIndex];
-            foreach (var field in HiddenFieldList)
-            {
-                field.TagList = new List<ITagable>(); 
-                foreach (var id in field.TagIDs)
-                {
-                    if (field.TagIDs.Contains(id))
-                        field.TagList.Add(ParentTag);
-                }
-            }
-
-            foreach (var field in NonHiddenFieldList)
-            {
-                field.TagList = new List<ITagable>(); 
-                foreach (var id in field.TagIDs)
-                {
-                    if (field.TagIDs.Contains(id))
-                        field.TagList.Add(ParentTag);
-                }
-            }
         }
 
         /// <summary>

@@ -193,10 +193,19 @@ namespace AMS.Controllers
         /// <param name="newTag"></param>
         public void ConnectParentTag()
         {
-            Tag currentTag = _tagRepository.GetById(_controlledTag.ParentId);
-            //TODO Throws exception, når et tags parent id ændres
-            currentTag.DeSerializeFields();
-            ParentTagFields = currentTag.FieldList;
+            
+            Tag currentTag = _tagRepository.GetById(ParentId);
+            if (currentTag != null)
+            {
+                //TODO Throws exception, når et tags parent id ændres
+                currentTag.DeSerializeFields();
+                ParentTagFields = currentTag.FieldList;
+            }
+            else
+            {
+                ParentTagFields = new List<Field>();
+            }
+
         }
 
         #endregion
