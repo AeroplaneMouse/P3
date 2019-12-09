@@ -40,7 +40,7 @@ namespace AMS.Controllers
         private IAssetRepository _assetRepository;
         private Session _session;
 
-        public AssetController(Asset asset, IAssetRepository assetRepository, Session session) 
+        public AssetController(Asset asset, IAssetRepository assetRepository, Session session)
             : base(asset)
         {
             ControlledAsset = asset;
@@ -58,7 +58,7 @@ namespace AMS.Controllers
             LoadTags();
             LoadFields();
         }
-        
+
         /// <summary>
         /// Saves the asset to the database. As well as connects the tag in the tag repository.
         /// </summary>
@@ -134,8 +134,10 @@ namespace AMS.Controllers
             Identifier = ControlledAsset.Identifier;
             Description = ControlledAsset.Description;
             _tags = _assetRepository.GetTags(ControlledAsset).ToList();
-            HiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == true).ToList();
-            NonHiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == false).ToList();
+            HiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == true)
+                .ToList();
+            NonHiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == false)
+                .ToList();
         }
 
         /// <summary>
@@ -170,7 +172,6 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool DetachTag(ITagable tag)
         {
-            
             //If no tag was given, return.
             if (tag == null)
                 return false;
@@ -192,10 +193,9 @@ namespace AMS.Controllers
                     if (!CurrentlyAddedTags.Any(p => p.ParentId == currentTag.ParentId && p.TagId != currentTag.ID))
                     {
                         RemoveTagRelationsOnFields(currentTag.ParentId);
-                        Tag parentTag = (Tag)CurrentlyAddedTags.SingleOrDefault(p => p.TagId == currentTag.ParentId);
+                        Tag parentTag = (Tag) CurrentlyAddedTags.SingleOrDefault(p => p.TagId == currentTag.ParentId);
                         if (parentTag != null) removelist.AddRange(parentTag.FieldList);
-                        CurrentlyAddedTags.RemoveAll(p=>p.TagId == currentTag.ParentId);
-                        
+                        CurrentlyAddedTags.RemoveAll(p => p.TagId == currentTag.ParentId);
                     }
 
                     //Checks if the field is in the fieldList on the asset, and the tag, if so, remove it.
@@ -209,9 +209,10 @@ namespace AMS.Controllers
 
                     //Remove the fields.
                     foreach (var field in removeFields)
-                        HandleFieldsFromRemoveTag(field,currentTag);
+                        HandleFieldsFromRemoveTag(field, currentTag);
                 }
             }
+
             LoadFields();
             return !CurrentlyAddedTags.Contains(tag);
         }
@@ -243,18 +244,23 @@ namespace AMS.Controllers
                 {
                     field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
                 }
+
+                if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
+                {
+                    field.Content = false.ToString();
+                }
             }
 
             foreach (var field in NonHiddenFieldList)
             {
-                if (field.Type == Field.FieldType.Date)
-                {
-                    Console.WriteLine(field.Content);
-                }
-
                 if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
                 {
                     field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+                }
+
+                if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
+                {
+                    field.Content = false.ToString();
                 }
             }
         }
