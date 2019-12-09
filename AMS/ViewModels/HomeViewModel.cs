@@ -1,33 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using AMS.Models;
 using System.Windows.Input;
+using System.Collections.Generic;
 using AMS.Controllers.Interfaces;
-using AMS.Database.Repositories;
-using AMS.Database.Repositories.Interfaces;
-using AMS.Models;
 
 namespace AMS.ViewModels
 {
     public class HomeViewModel : Base.BaseViewModel
     {
+        private IHomeController _homeController { get; set; }
+        private ICommentListController _commentListController { get; set; }
+
         public ulong NumberOfUsers => _homeController.NumberOfUsers;
         public ulong NumberOfAssets => _homeController.NumberOfAssets;
         public ulong NumberOfTags => _homeController.NumberOfTags;
         public ulong NumberOfDepartments => _homeController.NumberOfDepartments;
-
-        public List<Comment> CommentList
-        {
-            get => _commentListController.CommentList;
-        }
-
+        public List<Comment> CommentList { get => _commentListController.CommentList; }
         public string CurrentDepartment => "(" + Features.GetCurrentDepartment().Name + ")";
 
-        private IHomeController _homeController { get; set; }
-        private ICommentListController _commentListController { get; set; }
-
         public ICommand ViewCommand { get; set; }
-
         public Comment SelectedComment{ get; set; }
 
         /// <summary>
