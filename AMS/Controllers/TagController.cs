@@ -33,7 +33,6 @@ namespace AMS.Controllers
         public ulong ParentId { get; set; }
         public ulong DepartmentID { get; set; }
 
-
         public List<Tag> ParentTagList
         {
             get
@@ -111,22 +110,7 @@ namespace AMS.Controllers
         /// </summary>
         public void Save()
         {
-            //Updates the fields on the tag
-            if (Name != _controlledTag.Name)
-                _controlledTag.Name = Name;
-            if (ParentId != _controlledTag.ParentId)
-                _controlledTag.ParentId = ParentId;
-
-            _controlledTag.DepartmentID = (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
-            if (Color != _controlledTag.Color)
-                _controlledTag.Color = Color;
-
-
-            List<Field> fieldList = NonHiddenFieldList;
-            fieldList.AddRange(HiddenFieldList);
-            _controlledTag.FieldList = fieldList;
-            SerializeFields();
-
+            UpdateControlledProperties();
             _tagRepository.Insert(ControlledTag, out TagID);
         }
 
@@ -135,31 +119,39 @@ namespace AMS.Controllers
         /// </summary>
         public void Update()
         {
-            // Updates the fields on the tag
-            if (_controlledTag.Name != Name)
+            UpdateControlledProperties();
+            _tagRepository.Update(ControlledTag);
+        }
+
+        /// <summary>
+        /// Updates the properties of the controlled tag, to the new values 
+        /// of the views properties.
+        /// </summary>
+        private void UpdateControlledProperties()
+        {
+            // Save name
+            if (Name != _controlledTag.Name)
                 _controlledTag.Name = Name;
 
-            if (_controlledTag.ParentId != ParentId)
-            {
+            // Save parent id
+            if (ParentId != _controlledTag.ParentId)
                 _controlledTag.ParentId = ParentId;
 
-                if (_controlledTag.DepartmentID != DepartmentID)
-                {
-                    ControlledTag.DepartmentID = (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
-                }
-            }
+            // Save department id
+            if (_controlledTag.DepartmentID != DepartmentID)
+                _controlledTag.DepartmentID = (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
 
-            if (_controlledTag.Color != Color)
+            // Save color
+            if (Color != _controlledTag.Color)
                 _controlledTag.Color = Color;
 
-            // Adding the fields to the controlled tag
+            // Save fields
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
             _controlledTag.FieldList = fieldList;
             SerializeFields();
-
-            _tagRepository.Update(ControlledTag);
         }
+
 
         /// <summary>
         /// Removes the controlled tag from the repository, and optionally its children
