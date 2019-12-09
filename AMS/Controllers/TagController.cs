@@ -135,11 +135,9 @@ namespace AMS.Controllers
         /// </summary>
         public void Update()
         {
-            //Updates the fields on the tag
+            // Updates the fields on the tag
             if (_controlledTag.Name != Name)
-            {
                 _controlledTag.Name = Name;
-            }
 
             if (_controlledTag.ParentId != ParentId)
             {
@@ -147,19 +145,19 @@ namespace AMS.Controllers
 
                 if (_controlledTag.DepartmentID != DepartmentID)
                 {
-                    ControlledTag.DepartmentID =
-                        (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
+                    ControlledTag.DepartmentID = (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
                 }
             }
 
             if (_controlledTag.Color != Color)
-            {
                 _controlledTag.Color = Color;
-            }
 
+            // Adding the fields to the controlled tag
             List<Field> fieldList = NonHiddenFieldList;
             fieldList.AddRange(HiddenFieldList);
+            _controlledTag.FieldList = fieldList;
             SerializeFields();
+
             _tagRepository.Update(ControlledTag);
         }
 
