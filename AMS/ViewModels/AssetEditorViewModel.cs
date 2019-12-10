@@ -108,8 +108,7 @@ namespace AMS.ViewModels
             RemoveTagCommand = new RelayCommand<object>((parameter) =>
             {
                 ITagable tag = parameter as ITagable;
-                _tagHelper.RemoveTag(tag);
-                _assetController.DetachTag(tag);
+                _assetController.DetachTags(_tagHelper.RemoveTag(tag));
                 AppliedTags = _tagHelper.GetAppliedTags(false);
 
                 UpdateAll();
@@ -253,9 +252,7 @@ namespace AMS.ViewModels
                 {
                     if (_tagHelper.IsParentSet() || (tag.NumberOfChildren == 0 && tag.TagId != 1))
                     {
-                        _tagHelper.AddTag(tag);
-                        _assetController.AttachTag(tag);
-                        _assetController.AttachTag(_tagHelper.GetParent());
+                        _assetController.AttachTags(_tagHelper.AddTag(tag));
                         AppliedTags = _tagHelper.GetAppliedTags(false);
                         UpdateTagSuggestions();
                     }
@@ -304,9 +301,7 @@ namespace AMS.ViewModels
                 else
                 {
                     // Attach tag and parent
-                    _tagHelper.AddTag(tag);
-                    _assetController.AttachTag(tag);
-                    _assetController.AttachTag(_tagHelper.GetParent());
+                    _assetController.AttachTags(_tagHelper.AddTag(tag));
                     AppliedTags = _tagHelper.GetAppliedTags(false);
                 }
 

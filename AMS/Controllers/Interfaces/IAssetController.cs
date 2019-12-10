@@ -15,13 +15,11 @@ namespace AMS.Controllers.Interfaces
         string Identifier { get; set; }
         string Description { get; set; }
 
-        bool AttachTag(ITagable tag);
-
-        bool DetachTag(ITagable tag);
+        void AttachTags(List<ITagable> tags);
+        void DetachTags(List<ITagable> tags);
 
         bool Save();
         bool Update();
-
         bool Remove();
 
         void LoadFields();
