@@ -14,31 +14,26 @@ namespace AMS.Controllers
 {
     public class AssetController : FieldListController, IAssetController
     {
-        public Asset ControlledAsset { get; set; }
-
         private List<ITagable> _tags;
+        private IAssetRepository _assetRepository;
+        private Session _session;
 
+        public Asset ControlledAsset { get; set; }
         public List<ITagable> CurrentlyAddedTags
         {
             get
             {
                 if (_tags == null)
-                {
                     _tags = _assetRepository.GetTags(ControlledAsset).ToList();
-                }
 
                 return _tags;
             }
-
             set => _tags = value;
         }
 
         public string Name { get; set; }
         public string Identifier { get; set; }
         public string Description { get; set; }
-
-        private IAssetRepository _assetRepository;
-        private Session _session;
 
         public AssetController(Asset asset, IAssetRepository assetRepository, Session session)
             : base(asset)
@@ -65,25 +60,12 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Save()
         {
-            //Updates the fields on the asset
-            if (Name != ControlledAsset.Name)
-                ControlledAsset.Name = Name;
+            UpdateControlledProperties();
 
-            if (ControlledAsset.Identifier != Identifier)
-                ControlledAsset.Identifier = Identifier;
-
-            if (ControlledAsset.Description != Description)
-                ControlledAsset.Description = Description;
-
+            // Save the current department onto the asset.
             ControlledAsset.DepartmentID = _session.user.DefaultDepartment;
 
-            //Combines the two lists
-            List<Field> fieldList = NonHiddenFieldList;
-            fieldList.AddRange(HiddenFieldList);
-            ControlledAsset.FieldList = fieldList;
-            SerializeFields();
-
-            //Database saving
+            // Database saving
             ulong id = 0;
             Asset insertedAsset = _assetRepository.Insert(ControlledAsset, out id);
             _assetRepository.AttachTags(insertedAsset, CurrentlyAddedTags);
@@ -98,30 +80,43 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Update()
         {
-            if (ControlledAsset.Name != Name)
-                ControlledAsset.Name = Name;
-
-            if (ControlledAsset.Identifier != Identifier)
-                ControlledAsset.Identifier = Identifier;
-
-            if (ControlledAsset.Description != Description)
-                ControlledAsset.Description = Description;
-
-            List<Field> fieldList = NonHiddenFieldList;
-            fieldList.AddRange(HiddenFieldList);
-            ControlledAsset.FieldList = fieldList;
-            SerializeFields();
+            UpdateControlledProperties();
+            
             _assetRepository.AttachTags(ControlledAsset, CurrentlyAddedTags);
             return _assetRepository.Update(ControlledAsset);
         }
 
         /// <summary>
-        /// Removes the asset form the database.
+        /// Updates the properties of the controlled tag, to the new values 
+        /// of the views properties.
+        /// </summary>
+        private void UpdateControlledProperties()
+        {
+            // Save name
+            if (Name != ControlledAsset.Name)
+                ControlledAsset.Name = Name;
+
+            // Save identifier id
+            if (ControlledAsset.Identifier != Identifier)
+                ControlledAsset.Identifier = Identifier;
+
+            // Save description
+            if (ControlledAsset.Description != Description)
+                ControlledAsset.Description = Description;
+
+            // Combine fields and save
+            List<Field> fieldList = NonHiddenFieldList;
+            fieldList.AddRange(HiddenFieldList);
+            ControlledAsset.FieldList = fieldList;
+            SerializeFields();
+        }
+
+        /// <summary>
+        /// Removes the asset from the database
         /// </summary>
         /// <returns></returns>
         public bool Remove()
         {
-            //Deletes the asset from the database.
             return _assetRepository.Delete(ControlledAsset);
         }
 
@@ -134,10 +129,9 @@ namespace AMS.Controllers
             Identifier = ControlledAsset.Identifier;
             Description = ControlledAsset.Description;
             _tags = _assetRepository.GetTags(ControlledAsset).ToList();
-            HiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == true)
-                .ToList();
-            NonHiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == false)
-                .ToList();
+
+            HiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == true).ToList();
+            NonHiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == false).ToList();
         }
 
         /// <summary>
@@ -241,27 +235,19 @@ namespace AMS.Controllers
             foreach (var field in HiddenFieldList)
             {
                 if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
-                {
                     field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-                }
 
                 if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
-                {
                     field.Content = false.ToString();
-                }
             }
 
             foreach (var field in NonHiddenFieldList)
             {
                 if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
-                {
                     field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-                }
 
                 if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
-                {
                     field.Content = false.ToString();
-                }
             }
         }
     }

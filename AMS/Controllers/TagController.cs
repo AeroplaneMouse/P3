@@ -1,4 +1,4 @@
-﻿using AMS.Controllers.Interfaces;
+using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Logging;
 using AMS.Models;
@@ -91,16 +91,7 @@ namespace AMS.Controllers
                 IsEditing = true;
                 _controlledTag.DeSerializeFields();
             }
-            
-            
-            Id = _controlledTag.ID;
-            Name = _controlledTag.Name;
-            Color = _controlledTag.Color;
-            ParentId = _controlledTag.ParentId;
-            DepartmentID = _controlledTag.DepartmentID;
-
-            NonHiddenFieldList = _controlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = _controlledTag.FieldList.Where(f => f.IsHidden == true).ToList();
+            UpdateViewProperties();
         }
 
         #region Public Methods
@@ -150,6 +141,18 @@ namespace AMS.Controllers
             fieldList.AddRange(HiddenFieldList);
             _controlledTag.FieldList = fieldList;
             SerializeFields();
+        }
+
+        private void UpdateViewProperties()
+        {
+            Id = _controlledTag.ID;
+            Name = _controlledTag.Name;
+            Color = _controlledTag.Color;
+            ParentId = _controlledTag.ParentId;
+            DepartmentID = _controlledTag.DepartmentID;
+
+            NonHiddenFieldList = _controlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = _controlledTag.FieldList.Where(f => f.IsHidden == true).ToList();
         }
 
 

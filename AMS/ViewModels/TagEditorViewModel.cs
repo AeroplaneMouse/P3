@@ -1,20 +1,12 @@
-﻿using AMS.Controllers.Interfaces;
+﻿using System;
 using AMS.Events;
 using AMS.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
 using System.Linq;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using AMS.Controllers;
-using AMS.Database.Repositories;
-using AMS.Helpers;
-using AMS.Interfaces;
-using AMS.Views;
 using AMS.ViewModels.Base;
-using AMS.Views.Prompts;
+using System.Windows.Input;
+using AMS.Controllers.Interfaces;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace AMS.ViewModels
 {

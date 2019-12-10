@@ -12,6 +12,7 @@ namespace AMS.Controllers
     public abstract class FieldListController : IFieldListController
     {
         private FieldContainer _fieldContainer;
+
         public List<Field> NonHiddenFieldList { get; set; } = new List<Field>();
         public List<Field> HiddenFieldList { get; set; } = new List<Field>();
 
@@ -56,9 +57,8 @@ namespace AMS.Controllers
 
                 // Adds a reference to the field container if its added.
                 if (fieldContainer != null && !fieldInListByHashId.TagIDs.Contains(fieldContainer.ID))
-                {
                     fieldInListByHashId.TagIDs.Add(fieldContainer.ID);
-                }
+
                 fieldInListByHashId.IsCustom = false;
             }
 
@@ -71,10 +71,7 @@ namespace AMS.Controllers
             if (fieldInList == null && fieldInListByHashId == null)
             {
                 if (fieldContainer != null)
-                {
                     inputField.TagIDs.Add(fieldContainer.ID);
-                }
-
 
                 NonHiddenFieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
                     inputField.HashId, inputField.Required, inputField.IsCustom, inputField.IsHidden,
@@ -82,10 +79,7 @@ namespace AMS.Controllers
             }
             
             if (fieldInList != null)
-            {
-
                 fieldInList.IsCustom = false;
-            }
 
             return _fieldContainer.FieldList.Contains(inputField);
         }
@@ -141,13 +135,9 @@ namespace AMS.Controllers
                 tagable.FieldList.SingleOrDefault(p => p.Hash == inputField.Hash)?.Content)
             {
                 if (inputField.IsHidden)
-                {
                     HiddenFieldList.Remove(inputField);
-                }
                 else
-                {
                     NonHiddenFieldList.Remove(inputField);
-                }
 
                 return true;
             }

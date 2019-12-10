@@ -110,8 +110,7 @@ namespace AMS.Models
         {
             if (!string.IsNullOrEmpty(this.SerializedFields))
             {
-                this.FieldList =
-                    JsonConvert.DeserializeObject<List<Field>>(this.SerializedFields);
+                this.FieldList = JsonConvert.DeserializeObject<List<Field>>(this.SerializedFields);
                 return true;
             }
 

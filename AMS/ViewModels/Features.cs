@@ -150,8 +150,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetEditor(Asset asset = null)
             {
-                return new AssetEditor(new AssetController(asset ?? new Asset(), AssetRepository, GetCurrentSession()),
-                    CreateTagHelper());
+                return new AssetEditor(new AssetController(asset ?? new Asset(), AssetRepository, GetCurrentSession()), CreateTagHelper());
             }
 
             /// <summary>

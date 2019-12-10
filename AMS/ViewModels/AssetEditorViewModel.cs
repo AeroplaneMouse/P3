@@ -25,11 +25,8 @@ namespace AMS.ViewModels
         private TagHelper _tagHelper { get; set; }
         private int _tagTabIndex { get; set; }
 
-        public ObservableCollection<Field> NonHiddenFieldList =>
-            new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
-
-        public ObservableCollection<Field> HiddenFieldList =>
-            new ObservableCollection<Field>(_assetController.HiddenFieldList);
+        public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
+        public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.HiddenFieldList);
 
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
@@ -137,11 +134,9 @@ namespace AMS.ViewModels
                     }));
             });
 
-            InsertNextOrSelectedSuggestionCommand =
-                new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
+            InsertNextOrSelectedSuggestionCommand = new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
             ClearInputCommand = new RelayCommand(ClearInput);
-            BackspaceCommand =
-                new RelayCommand<object>((parameter) => RemoveCharacterOrExitTagMode(parameter as TextBox));
+            BackspaceCommand = new RelayCommand<object>((parameter) => RemoveCharacterOrExitTagMode(parameter as TextBox));
 
             UpdateAll();
         }

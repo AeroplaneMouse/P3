@@ -41,6 +41,9 @@ namespace AMS.ViewModels
             (Tabs[2] as LogListViewModel).UpdateOnFocus();
 
             OnPropertyChanged(nameof(Tabs));
+
+            // Update asset from database
+
         }
 
         private void Remove()
