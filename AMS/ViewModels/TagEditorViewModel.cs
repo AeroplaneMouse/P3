@@ -174,11 +174,19 @@ namespace AMS.ViewModels
             _controller.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
             if (VerifyTagAndFields())
             {
+                string message = $"'{ _controller.Name }' has been ";
                 if (_controller.IsEditing)
+                {
                     _controller.Update();
+                    message += "updated";
+                }
                 else
+                {
                     _controller.Save();
+                    message += "added";
+                }
 
+                Features.AddNotification(new Notification(message, background: Notification.APPROVE), displayTime: 3500);
                 Features.Navigate.Back();
             }
         }
