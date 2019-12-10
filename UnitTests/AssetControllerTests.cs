@@ -239,7 +239,7 @@ namespace UnitTests
             otherAsset.ControlledAsset.DepartmentID = 4;
 
             //Act
-            otherAsset.AttachTag(_tagOne);
+            otherAsset.AttachTags(_tagOne);
 
             //Assert
             Assert.IsTrue(otherAsset.CurrentlyAddedTags.Contains(_tagOne));
@@ -253,12 +253,12 @@ namespace UnitTests
             otherAsset.ControlledAsset.Name = "AssetTests_Asset";
             otherAsset.ControlledAsset.Description = "Desription";
             otherAsset.ControlledAsset.DepartmentID = 4;
-            otherAsset.AttachTag(_tagOne);
-            otherAsset.AttachTag(_tagTwo);
+            otherAsset.AttachTags(_tagOne);
+            otherAsset.AttachTags(_tagTwo);
 
 
             //Act
-            otherAsset.DetachTag(_tagTwo);
+            otherAsset.DetachTags(_tagTwo);
 
             //Assert
             Assert.IsFalse(otherAsset.CurrentlyAddedTags.Contains(_tagTwo));
@@ -278,11 +278,11 @@ namespace UnitTests
             localTag.Name = "First tag";
             localTag.FieldList.Add(localField);
 
-            otherAssetController.AttachTag(_tagOne);
-            otherAssetController.AttachTag(_tagTwo);
+            otherAssetController.AttachTags(_tagOne);
+            otherAssetController.AttachTags(_tagTwo);
 
             //Act
-            otherAssetController.AttachTag(localTag);
+            otherAssetController.AttachTags(localTag);
 
             //Assert
             Assert.IsTrue(
@@ -304,11 +304,11 @@ namespace UnitTests
             localTag.FieldList.Add(localField);
 
 
-            otherAssetController.AttachTag(_tagOne);
-            otherAssetController.AttachTag(_tagTwo);
+            otherAssetController.AttachTags(_tagOne);
+            otherAssetController.AttachTags(_tagTwo);
 
             //Act
-            otherAssetController.AttachTag(localTag);
+            otherAssetController.AttachTags(localTag);
 
             //Assert
             Assert.IsTrue(otherAssetController.CurrentlyAddedTags.Contains(localTag));
@@ -329,13 +329,13 @@ namespace UnitTests
             localTag.FieldList.Add(localField);
 
 
-            otherAssetController.AttachTag(_tagOne);
-            otherAssetController.AttachTag(_tagTwo);
-            otherAssetController.AttachTag(localTag);
+            otherAssetController.AttachTags(_tagOne);
+            otherAssetController.AttachTags(_tagTwo);
+            otherAssetController.AttachTags(localTag);
 
 
             //Act
-            otherAssetController.DetachTag(localTag);
+            otherAssetController.DetachTags(localTag);
 
             //Assert
             Assert.IsFalse(otherAssetController.CurrentlyAddedTags.Contains(localTag) &&
@@ -360,12 +360,12 @@ namespace UnitTests
             localTag.FieldList.Add(localField);
 
 
-            otherAssetController.AttachTag(_tagOne);
-            otherAssetController.AttachTag(_tagTwo);
+            otherAssetController.AttachTags(_tagOne);
+            otherAssetController.AttachTags(_tagTwo);
 
             //Act
             int count = localField.TagIDs.Count;
-            otherAssetController.AttachTag(localTag);
+            otherAssetController.AttachTags(localTag);
 
             //Assert
             Assert.IsTrue(localField.TagIDs.Count == count + 1);
