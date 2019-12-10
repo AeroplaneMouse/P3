@@ -42,17 +42,19 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool AddField(Field inputField, FieldContainer fieldContainer = null)
         {
+            // Does the field already exist in shown or hidden fields?
             Field fieldInListByHashId = HiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId) ??
                                         NonHiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId);
-
+            
+            // If field already exist check got updates
             if (fieldInListByHashId != null)
             {
                 // Checks if a field label has been updated
-                if (fieldInListByHashId.HashId == inputField.HashId && fieldInListByHashId.Label != inputField.Label)
+                if (fieldInListByHashId.Label != inputField.Label)
                     fieldInListByHashId.Label = inputField.Label;
 
                 // Checks if a fields required property has been updated
-                if (fieldInListByHashId.HashId == inputField.HashId && fieldInListByHashId.Required != inputField.Required)
+                if (fieldInListByHashId.Required != inputField.Required)
                     fieldInListByHashId.Required = inputField.Required;
 
                 // Adds a reference to the field container if its added.
@@ -61,7 +63,6 @@ namespace AMS.Controllers
 
                 fieldInListByHashId.IsCustom = false;
             }
-
             
             // Checks whether the field is present in HiddenFieldList, if not, checks NonHiddenFieldList.
             Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(inputField)) ??
@@ -104,7 +105,7 @@ namespace AMS.Controllers
 
             if (field.IsHidden)
             {
-                field.IsHidden = !field.IsHidden;
+                field.IsHidden = false;
                 if (!NonHiddenFieldList.Contains(field))
                 {
                     NonHiddenFieldList.Add(field);

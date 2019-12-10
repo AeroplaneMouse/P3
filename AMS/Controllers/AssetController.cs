@@ -198,6 +198,9 @@ namespace AMS.Controllers
                     //Checks if the ITagable is a Tag.
                     if (tag is Tag currentTag)
                     {
+                        if(currentTag.FieldList.Count == 0)
+                            currentTag.DeSerializeFields();
+                        
                         List<Field> removelist = currentTag.FieldList;
                         //Remove relations to the field.
                         RemoveTagRelationsOnFields(currentTag.ID);
