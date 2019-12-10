@@ -374,41 +374,14 @@ namespace AMS.Database.Repositories
         /// <returns></returns>
         public bool AttachTags(Asset asset, List<ITagable> listOfTags)
         {
-
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
             
-            if (!listOfTags.Any())
-            { // Opening connection
-                if (MySqlHandler.Open(ref con))
-                {
-                    MySqlCommand command = con.CreateCommand();
-                    MySqlTransaction transaction = con.BeginTransaction();
-                    command.Transaction = transaction;
-                    command.Connection = con;
-
-                    try
-                    {
-                        ClearTags(asset, command);
-                    }
-                    catch (MySqlException e)
-                    {
-                        transaction.Rollback();
-                        Console.WriteLine(e);
-                    }
-                    finally
-                    {
-                        con.Close();
-                    }
-                }
-            }
-
             List<User> users = listOfTags.OfType<User>().ToList();
             List<Tag> tags = listOfTags.OfType<Tag>().ToList();
             int userCounter = users.Count;
             int tagCounter = tags.Count;
-
-
+            
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
