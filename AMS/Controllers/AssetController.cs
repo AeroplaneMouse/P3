@@ -44,12 +44,7 @@ namespace AMS.Controllers
             _session = session;
 
             ControlledAsset.DeSerializeFields();
-
-            Name = ControlledAsset.Name;
-            Identifier = ControlledAsset.Identifier;
-            Description = ControlledAsset.Description;
-            NonHiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == true).ToList();
+            UpdateViewProperties();
             LoadTags();
             LoadFields();
         }
@@ -109,6 +104,16 @@ namespace AMS.Controllers
             fieldList.AddRange(HiddenFieldList);
             ControlledAsset.FieldList = fieldList;
             SerializeFields();
+        }
+
+        private void UpdateViewProperties()
+        {
+            Name = ControlledAsset.Name;
+            Identifier = ControlledAsset.Identifier;
+            Description = ControlledAsset.Description;
+
+            NonHiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == false).ToList();
+            HiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == true).ToList();
         }
 
         /// <summary>
