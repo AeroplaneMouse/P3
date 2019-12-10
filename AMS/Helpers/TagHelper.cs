@@ -103,12 +103,7 @@ namespace AMS.Helpers
                 
                 EffectedTags.Add(tag);
             }
-
-            foreach (var t in EffectedTags)
-            {
-                Console.WriteLine(t.TagLabel);
-            }
-
+            
             return EffectedTags;
         }
 
@@ -118,12 +113,6 @@ namespace AMS.Helpers
             RemoveParentIfNeeded(tag);
             EffectedTags.Add(tag);
             AppliedTags.Remove(tag);
-
-            foreach (var t in EffectedTags)
-            {
-                Console.WriteLine(t.TagLabel);
-            }
-            
             return EffectedTags;
         }
 
