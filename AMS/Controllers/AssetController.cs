@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using AMS.Authentication;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
@@ -31,10 +32,6 @@ namespace AMS.Controllers
             set => _tags = value;
         }
 
-        public string Name { get; set; }
-        public string Identifier { get; set; }
-        public string Description { get; set; }
-
         public AssetController(Asset asset, IAssetRepository assetRepository, Session session)
             : base(asset)
         {
@@ -44,7 +41,6 @@ namespace AMS.Controllers
             _session = session;
 
             ControlledAsset.DeSerializeFields();
-            UpdateViewProperties();
             LoadTags();
             LoadFields();
         }
@@ -55,10 +51,8 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Save()
         {
-            UpdateControlledProperties();
-
             // Save the current department onto the asset.
-            ControlledAsset.DepartmentID = _session.user.DefaultDepartment;
+            ControlledAsset.DepartmentdId = _session.user.DefaultDepartment;
 
             // Database saving
             ulong id = 0;
@@ -75,45 +69,8 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Update()
         {
-            UpdateControlledProperties();
-            
             _assetRepository.AttachTags(ControlledAsset, CurrentlyAddedTags);
             return _assetRepository.Update(ControlledAsset);
-        }
-
-        /// <summary>
-        /// Updates the properties of the controlled tag, to the new values 
-        /// of the views properties.
-        /// </summary>
-        private void UpdateControlledProperties()
-        {
-            // Save name
-            if (Name != ControlledAsset.Name)
-                ControlledAsset.Name = Name;
-
-            // Save identifier id
-            if (ControlledAsset.Identifier != Identifier)
-                ControlledAsset.Identifier = Identifier;
-
-            // Save description
-            if (ControlledAsset.Description != Description)
-                ControlledAsset.Description = Description;
-
-            // Combine fields and save
-            List<Field> fieldList = NonHiddenFieldList;
-            fieldList.AddRange(HiddenFieldList);
-            ControlledAsset.FieldList = fieldList;
-            SerializeFields();
-        }
-
-        private void UpdateViewProperties()
-        {
-            Name = ControlledAsset.Name;
-            Identifier = ControlledAsset.Identifier;
-            Description = ControlledAsset.Description;
-
-            NonHiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = ControlledAsset.FieldList.Where(f => f.IsHidden == true).ToList();
         }
 
         /// <summary>
@@ -130,13 +87,13 @@ namespace AMS.Controllers
         /// </summary>
         public void RevertChanges()
         {
-            Name = ControlledAsset.Name;
-            Identifier = ControlledAsset.Identifier;
-            Description = ControlledAsset.Description;
-            _tags = _assetRepository.GetTags(ControlledAsset).ToList();
+            foreach (PropertyInfo property in ControlledAsset.GetType().GetProperties())
+            {
+                if (ControlledAsset.Changes.ContainsKey(property.Name))
+                    property.SetValue(ControlledAsset, ControlledAsset.Changes[property.Name].ToString());
+            }
 
-            HiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == true).ToList();
-            NonHiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == false).ToList();
+            ControlledAsset.Changes = new Dictionary<string, object>();
         }
 
         /// <summary>

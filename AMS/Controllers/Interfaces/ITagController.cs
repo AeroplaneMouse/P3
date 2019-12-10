@@ -14,12 +14,6 @@ namespace AMS.Controllers.Interfaces
         
         List<Field> ParentTagFields { get; set; }
 
-        ulong Id { get; set; }
-        string Name { get; set; }
-        string Color { get; set; }
-        ulong ParentId { get; set; }
-        ulong DepartmentID { get; set; }
-
         bool IsEditing { get; set; }
 
         List<Tag> ParentTagList { get; }

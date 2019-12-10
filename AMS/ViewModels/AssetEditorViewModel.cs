@@ -33,20 +33,20 @@ namespace AMS.ViewModels
 
         public string Name
         {
-            get => _assetController.Name;
-            set => _assetController.Name = value;
+            get => _assetController.ControlledAsset.Name;
+            set => _assetController.ControlledAsset.Name = value;
         }
 
         public string Identifier
         {
-            get => _assetController.Identifier;
-            set => _assetController.Identifier = value;
+            get => _assetController.ControlledAsset.Identifier;
+            set => _assetController.ControlledAsset.Identifier = value;
         }
 
         public string Description
         {
-            get => _assetController.Description;
-            set => _assetController.Description = value;
+            get => _assetController.ControlledAsset.Description;
+            set => _assetController.ControlledAsset.Description = value;
         }
 
         public string Title { get; set; }
@@ -124,7 +124,7 @@ namespace AMS.ViewModels
             RemoveCommand = new RelayCommand(() =>
             {
                 Features.DisplayPrompt(new Views.Prompts.Confirm(
-                    $"Are you sure you want to remove {_assetController.Name}?", (sender, e) =>
+                    $"Are you sure you want to remove {_assetController.ControlledAsset.Name}?", (sender, e) =>
                     {
                         if (e.Result)
                         {

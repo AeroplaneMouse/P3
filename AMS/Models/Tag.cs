@@ -12,15 +12,19 @@ namespace AMS.Models
         private string _name;
         private string _color;
         private ulong _parentId;
-        private ulong _departmentID;
+        private ulong _departmentId;
 
         public string Name 
         {
             get => this._name;
             set 
             {
-                if (TrackChanges)
-                    this.Changes["Name"] = this.Name;
+                string propertyName = "Name";
+                if (TrackChanges && !Changes.ContainsKey(propertyName) && _name != value)
+                    Changes[propertyName] = _name;
+                else if (Changes.ContainsKey(propertyName) && (string)this.Changes[propertyName] == value.ToLower())
+                    this.Changes.Remove(propertyName);
+
                 this._name = value.ToLower();
             }
         }
@@ -30,10 +34,11 @@ namespace AMS.Models
             get => this._color;
             set 
             {
-                if (TrackChanges)
-                {
-                    this.Changes["Color"] = this.Color;
-                }
+                string propertyName = "Color";
+                if (TrackChanges && !Changes.ContainsKey(propertyName) && _color != value)
+                    Changes[propertyName] = _color;
+                else if (Changes.ContainsKey(propertyName) && (string)this.Changes[propertyName] == value)
+                    this.Changes.Remove(propertyName);
 
                 this._color = value;
             }
@@ -44,10 +49,11 @@ namespace AMS.Models
             get => this._parentId;
             set 
             {
-                if (TrackChanges)
-                {
-                    this.Changes["ParentId"] = this.ParentId;
-                }
+                string propertyName = "ParentId";
+                if (TrackChanges && !Changes.ContainsKey(propertyName) && _parentId != value)
+                    Changes[propertyName] = _parentId;
+                else if (Changes.ContainsKey(propertyName) && (ulong)this.Changes[propertyName] == value)
+                    this.Changes.Remove(propertyName);
 
                 this._parentId = value;
             }
@@ -55,15 +61,16 @@ namespace AMS.Models
 
         public ulong DepartmentID 
         {
-            get => this._departmentID;
+            get => this._departmentId;
             set 
             {
-                if (TrackChanges)
-                {
-                    this.Changes["DepartmentID"] = this.DepartmentID;
-                }
+                string propertyName = "DepartmentId";
+                if (TrackChanges && !Changes.ContainsKey(propertyName) && _departmentId != value)
+                    Changes[propertyName] = _departmentId;
+                else if (Changes.ContainsKey(propertyName) && (ulong)this.Changes[propertyName] == value)
+                    this.Changes.Remove(propertyName);
 
-                this._departmentID = value;
+                this._departmentId = value;
             }
         }
 
