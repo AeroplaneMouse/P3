@@ -16,7 +16,9 @@ namespace AMS.Controllers.Interfaces
         string Description { get; set; }
 
         void AttachTags(List<ITagable> tags);
+        void AttachTags(ITagable tag);
         void DetachTags(List<ITagable> tags);
+        void DetachTags(ITagable tag);
 
         bool Save();
         bool Update();

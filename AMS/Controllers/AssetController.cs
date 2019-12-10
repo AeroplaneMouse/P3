@@ -139,6 +139,13 @@ namespace AMS.Controllers
             NonHiddenFieldList = _assetRepository.GetById(ControlledAsset.ID).FieldList.Where(p => p.IsHidden == false).ToList();
         }
 
+        public void AttachTags(ITagable tag)
+        {
+            List<ITagable> tagList = new List<ITagable>();
+            tagList.Add(tag);
+            AttachTags(tagList);
+        }
+
         /// <summary>
         /// Attaches a tag and its fields to a asset.
         /// </summary>
@@ -164,6 +171,13 @@ namespace AMS.Controllers
             }
 
             LoadFields();
+        }
+
+        public void DetachTags(ITagable tag)
+        {
+            List<ITagable> tagList = new List<ITagable>();
+            tagList.Add(tag);
+            DetachTags(tagList);
         }
 
         /// <summary>
