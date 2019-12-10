@@ -54,7 +54,7 @@ namespace UnitTests
             _assetController = new AssetController(CreateTestAssetWithId((ulong)1), _assetRepMock.Object, _sessionMock.Object);
             _assetController.ControlledAsset.Name = "AssetTests_Asset";
             _assetController.ControlledAsset.Description = "Desription";
-            _assetController.ControlledAsset.DepartmentID = 1;
+            _assetController.ControlledAsset.DepartmentdId = 1;
             _assetController.AddField(_fieldOne);
             _assetController.AddField(_fieldTwo);
 
@@ -72,7 +72,7 @@ namespace UnitTests
             AssetController otherAsset = new AssetController(CreateTestAssetWithId(1), _assetRepMock.Object, _sessionMock.Object);
             otherAsset.ControlledAsset.Name = "AssetTests_Asset";
             otherAsset.ControlledAsset.Description = "Desription";
-            otherAsset.ControlledAsset.DepartmentID = 1;
+            otherAsset.ControlledAsset.DepartmentdId = 1;
 
             otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.TextBox));
             otherAsset.AddField(new Field("Label of second field", "content of second field",
@@ -92,7 +92,7 @@ namespace UnitTests
             AssetController otherAsset = new AssetController(CreateTestAssetWithId(2), _assetRepMock.Object, _sessionMock.Object);
             otherAsset.ControlledAsset.Name = "AssetTests_Asset";
             otherAsset.ControlledAsset.Description = "Desription";
-            otherAsset.ControlledAsset.DepartmentID = 4;
+            otherAsset.ControlledAsset.DepartmentdId = 4;
 
             otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.TextBox));
 
@@ -236,7 +236,7 @@ namespace UnitTests
             AssetController otherAsset = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
             otherAsset.ControlledAsset.Name = "AssetTests_Asset";
             otherAsset.ControlledAsset.Description = "Desription";
-            otherAsset.ControlledAsset.DepartmentID = 4;
+            otherAsset.ControlledAsset.DepartmentdId = 4;
 
             //Act
             otherAsset.AttachTags(_tagOne);
@@ -252,10 +252,10 @@ namespace UnitTests
             AssetController otherAsset = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
             otherAsset.ControlledAsset.Name = "AssetTests_Asset";
             otherAsset.ControlledAsset.Description = "Desription";
+
             otherAsset.ControlledAsset.DepartmentID = 4;
             otherAsset.AttachTags(_tagOne);
             otherAsset.AttachTags(_tagTwo);
-
 
             //Act
             otherAsset.DetachTags(_tagTwo);
@@ -271,7 +271,7 @@ namespace UnitTests
             AssetController otherAssetController = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
             otherAssetController.ControlledAsset.Name = "AssetTests_Asset";
             otherAssetController.ControlledAsset.Description = "Desription";
-            otherAssetController.ControlledAsset.DepartmentID = 4;
+            otherAssetController.ControlledAsset.DepartmentdId = 4;
             Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox);
 
             Tag localTag = new Tag();
@@ -297,7 +297,7 @@ namespace UnitTests
             AssetController otherAssetController = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
             otherAssetController.ControlledAsset.Name = "AssetTests_Asset";
             otherAssetController.ControlledAsset.Description = "Desription";
-            otherAssetController.ControlledAsset.DepartmentID = 4;
+            otherAssetController.ControlledAsset.DepartmentdId = 4;
             Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox);
             otherAssetController.AddField(localField);
             Tag localTag = new Tag();
@@ -321,7 +321,7 @@ namespace UnitTests
             AssetController otherAssetController = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
             otherAssetController.ControlledAsset.Name = "AssetTests_Asset";
             otherAssetController.ControlledAsset.Description = "Desription";
-            otherAssetController.ControlledAsset.DepartmentID = 4;
+            otherAssetController.ControlledAsset.DepartmentdId = 4;
             Field localField = new Field("Label of first field", "content of first field", Field.FieldType.TextBox,
                 true, true);
             Tag localTag = new Tag();
@@ -349,7 +349,7 @@ namespace UnitTests
             AssetController otherAssetController = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
             otherAssetController.ControlledAsset.Name = "AssetTests_Asset";
             otherAssetController.ControlledAsset.Description = "Desription";
-            otherAssetController.ControlledAsset.DepartmentID = 4;
+            otherAssetController.ControlledAsset.DepartmentdId = 4;
 
             //Local field moq
             Field localField = new Field("Label of the first field", "content of the first field",

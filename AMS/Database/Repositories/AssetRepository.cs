@@ -97,7 +97,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@identifier"].Value = entity.Identifier == null ? "" : entity.Identifier;
 
                         cmd.Parameters.Add("@department", MySqlDbType.UInt64);
-                        cmd.Parameters["@department"].Value = entity.DepartmentID;
+                        cmd.Parameters["@department"].Value = entity.DepartmentdId;
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
                         cmd.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;

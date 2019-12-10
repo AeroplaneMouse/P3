@@ -136,7 +136,7 @@ namespace UnitTests
             {
                 Name = "Asset name",
                 Description = "Description",
-                DepartmentID = 1,
+                DepartmentdId = 1,
                 SerializedFields = "[]",
                 Identifier = "Asset identifier"
             };
@@ -260,7 +260,7 @@ namespace UnitTests
                 && le.Changes.Contains("New asset name")
                 && le.Changes.Contains("New asset description")
                 && !le.Changes.Contains("Asset identifier")
-                && !le.Changes.Contains("DepartmentID"))))
+                && !le.Changes.Contains("DepartmentdId"))))
                 .Returns(true);
 
             //Act
@@ -278,7 +278,7 @@ namespace UnitTests
             {
                 Name = "Asset name",
                 Description = "Description",
-                DepartmentID = 1,
+                DepartmentdId = 1,
                 SerializedFields = "[]",
                 Identifier = "Asset identifier"
             };
@@ -365,7 +365,7 @@ namespace UnitTests
                 && le.Changes.Contains("Color")
                 && le.Changes.Contains("#f9f9f9")
                 && !le.Changes.Contains("ParentId")
-                && !le.Changes.Contains("DepartmentID"))))
+                && !le.Changes.Contains("DepartmentdId"))))
                 .Returns(true);
 
             //Act
