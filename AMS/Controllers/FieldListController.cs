@@ -80,56 +80,30 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Remove a field, or its relation to a tag, from the fields list.
+        /// Removes custom fields and empty fields with no tag relations. Non empty field with no tag relations is made custom.
+        /// Fields with tag relations would have its IsHidden property toggled.
         /// </summary>
         /// <param name="field">The field to update/remove</param>
-        /// <param name="fieldContainer"></param>
-        /// <returns>Rather the field was removed</returns>
+        /// <returns>Always returns true</returns>
         public bool RemoveField(Field field)
         {
-            //If no input field is given, return.
-            //if (field == null) 
-            //    return false;
-
             // Remove custom asset field or field when editing tag
             if (field.IsCustom || _fieldContainer is Tag)
                 _fieldContainer.FieldList.Remove(field);
             else
+            {
+                // Remove field if it has not relations to tags and do not contain anything
+                if (field.TagIDs.Count == 0 && field.Content == String.Empty)
+                    _fieldContainer.FieldList.Remove(field);
+
+                // Make custom, if there is no relations to tag and content is not empty
+                else if (field.TagIDs.Count == 0)
+                    field.IsCustom = true;
+                
                 // Toggle the hidden state of the field.
-                field.IsHidden = !field.IsHidden;
-
-
-            //Checks if the field is custom (Ie made on a asset)
-            //if (field.IsCustom && !field.IsHidden)
-            //{
-            //    NonHiddenFieldList.Remove(field);
-            //    return true;
-            //}
-
-            //if (field.IsHidden)
-            //{
-            //    field.IsHidden = false;
-            //    if (!NonHiddenFieldList.Contains(field))
-            //    {
-            //        NonHiddenFieldList.Add(field);
-            //    }
-
-            //    HiddenFieldList.Remove(field);
-            //}
-            //else
-            //{
-            //    if (!(_fieldContainer is Tag))
-            //    {
-            //        field.IsHidden = !field.IsHidden;
-            //        if (!HiddenFieldList.Contains(field))
-            //        {
-            //            HiddenFieldList.Add(field);
-            //        }
-            //    }
-
-            //    //NonHiddenFieldList.Remove(field);
-            //    _fieldContainer.FieldList.Remove(field);
-            //}
+                else
+                    field.IsHidden = !field.IsHidden;
+            }
 
             return true;
         }
@@ -156,36 +130,32 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Removes the relation between a tagID and any of the fields.
+        /// Removes any relation to the given tag. If there are no relations left on the field,
+        /// remove the field, if it's empty, otherwise make it custom.
         /// </summary>
-        /// <param name="TagId"></param>
-        /// <returns></returns>
-        public bool RemoveTagRelationsOnFields(ulong TagId)
+        /// <param name="tag">The tag for which all the fields relation to, should be removed.</param>
+        /// <returns>Always return true</returns>
+        public bool RemoveTagRelationsOnFields(ITagable tag)
         {
+            List<Field> fieldsToRemove = new List<Field>();
+
+            // Update all the fields
             foreach(Field field in _fieldContainer.FieldList)
             {
-                if (field.TagIDs.Contains(TagId))
+                if (field.TagIDs.Contains(tag.TagId))
                 {
-                    field.TagIDs.Remove(TagId);
+                    field.TagIDs.Remove(tag.TagId);
+                    field.TagList.Remove(tag);
                 }
+
+                // Check if the field has any relations to tags left on it
+                if (field.TagIDs.Count == 0)
+                    fieldsToRemove.Add(field);
             }
 
-            // Checks the hiddenlist and checks whether a field contains the tagID, if it does, remove it.
-            //foreach (var field in HiddenFieldList)
-            //{
-            //    if (field.TagIDs.Contains(TagId))
-            //    {
-            //        field.TagIDs.Remove(TagId);
-            //    }
-            //}
-
-            //foreach (var field in NonHiddenFieldList)
-            //{
-            //    if (field.TagIDs.Contains(TagId))
-            //    {
-            //        field.TagIDs.Remove(TagId);
-            //    }
-            //}
+            // Remove the fields, that was marked
+            foreach (Field field in fieldsToRemove)
+                RemoveField(field);
 
             return true;
         }

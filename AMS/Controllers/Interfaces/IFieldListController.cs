@@ -17,6 +17,6 @@ namespace AMS.Controllers.Interfaces
         
         bool HandleFieldsFromRemoveTag(Field inputField,Tag tag);
 
-        bool RemoveTagRelationsOnFields(ulong TagId);
+        bool RemoveTagRelationsOnFields(ITagable tag);
     }
 }
