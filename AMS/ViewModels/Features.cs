@@ -18,7 +18,7 @@ namespace AMS.ViewModels
 {
     public static class Features
     {
-        public static MainViewModel Main;
+        public static MainViewModel Main { get; set; }
         
         #region Repositories
 

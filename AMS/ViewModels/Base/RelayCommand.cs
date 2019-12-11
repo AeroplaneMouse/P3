@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace AMS.ViewModels.Base
 {
-    // Command heavily inspired by the RelayCommand found in 
+    // Command heavily inspired by the RelayCommand found in AngelSix's fasseto-word repository: https://github.com/angelsix/fasetto-word
     internal class RelayCommand : ICommand
     {
         // The action to run
@@ -39,7 +39,7 @@ namespace AMS.ViewModels.Base
         }
     }
 
-    // Command heavily inspired by the RelayCommand found in 
+    // Command heavily inspired by the RelayCommand found in AngelSix's fasseto-word repository: https://github.com/angelsix/fasetto-word
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _action;
