@@ -21,8 +21,8 @@ namespace AMS.ViewModels
         public static MainViewModel Main { get; set; }
 
         // Navigating between pages
-        private static Navigator _navigator;
-        public static Navigator Navigate => _navigator ??= new Navigator();
+        private static PageNavigator _navigator;
+        public static PageNavigator Navigate => _navigator ??= new PageNavigator();
 
         // Page and window creation
         private static ContentCreator _creator;

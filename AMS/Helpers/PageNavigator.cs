@@ -14,7 +14,7 @@ using System.Windows.Controls;
 
 namespace AMS.Helpers
 {
-    public class Navigator
+    public class PageNavigator
     {
         private Page _currentPage;
 
