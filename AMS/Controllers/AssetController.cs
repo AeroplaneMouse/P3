@@ -42,7 +42,6 @@ namespace AMS.Controllers
 
             ControlledAsset.DeSerializeFields();
             LoadTags();
-            LoadFields();
         }
 
         /// <summary>
@@ -136,6 +135,10 @@ namespace AMS.Controllers
             UpdateFieldContent();
         }
 
+        /// <summary>
+        /// Detaches an ITagable and its fields from the controlled asset.
+        /// </summary>
+        /// <param name="tag">The ITagable that should be detached</param>
         public void DetachTags(ITagable tag)
         {
             List<ITagable> tagList = new List<ITagable>();
@@ -144,10 +147,9 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Detaches tag from an asset.
+        /// Detaches a list of ITagable and their field from the controlled asset.
         /// </summary>
-        /// <param name="tag"></param>
-        /// <returns></returns>
+        /// <param name="tags">The list of ITagble that should be detached</param>
         public void DetachTags(List<ITagable> tags)
         {
             foreach (ITagable tag in tags)
@@ -155,60 +157,102 @@ namespace AMS.Controllers
                 // Check if the tag is in the list.
                 if (CurrentlyAddedTags.Contains(tag))
                 {
-                    List<Field> removeFields = new List<Field>();
                     CurrentlyAddedTags.Remove(tag);
 
-                    //Checks if the ITagable is a Tag.
+                    // Checks if the ITagable is a Tag, remove its fields.
                     if (tag is Tag currentTag)
                     {
+                        // DeSerialize fields if there aren't any. It might be a parent tag.
                         if(currentTag.FieldList.Count == 0)
                             currentTag.DeSerializeFields();
-                        
-                        List<Field> removelist = currentTag.FieldList;
-                        //Remove relations to the field.
-                        RemoveTagRelationsOnFields(currentTag.ID);
 
-                        //Remove a fields relation to the parent tag, if no other tag with the same parent tag exists in CurrentlyAddedTags.
-                        //if (!CurrentlyAddedTags.Any(p => p.ParentId == currentTag.ParentId && p.TagId != currentTag.ID))
-                        //{
-                        //    RemoveTagRelationsOnFields(currentTag.ParentId);
-                        //    Tag parentTag = (Tag)CurrentlyAddedTags.SingleOrDefault(p => p.TagId == currentTag.ParentId);
-                        //    if (parentTag != null) removelist.AddRange(parentTag.FieldList);
-                        //    CurrentlyAddedTags.RemoveAll(p => p.TagId == currentTag.ParentId);
-                        //}
-
-                        //Checks if the field is in the fieldList on the asset, and the tag, if so, remove it.
-                        foreach (var field in removelist)
-                        {
-                            Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(field)) ??
-                                                NonHiddenFieldList.FirstOrDefault(p => p.Equals(field));
-                            if (fieldInList != null)
-                                removeFields.Add(fieldInList);
-                        }
-
-                        //Remove the fields.
-                        foreach (var field in removeFields)
-                            HandleFieldsFromRemoveTag(field, currentTag);
+                        // Remove relations to the tag from the fields and handle wether or not the field itself should be removed.
+                        RemoveTagRelationsOnFields(currentTag);
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Loads the tags when opening the page, and adds any fields added to the tag since the editor was last opened.
+        /// Update any tag-inheritet old, new and removed fields.
         /// </summary>
         private void LoadTags()
         {
+            // For every tag
             foreach (var tag in CurrentlyAddedTags)
             {
                 if (tag is Tag currentTag)
                 {
                     currentTag.DeSerializeFields();
                     foreach (var tagField in currentTag.FieldList)
-                        //AddField(tagField, currentTag);
                         AddField(tagField);
                 }
             }
+
+            // For every field, check if its related tags still have the field associated.
+            foreach(Field field in ControlledAsset.FieldList)
+            {
+                // Find any tagIDs that should no longer be related to the field
+                List<ulong> idsToRemove = new List<ulong>();
+                foreach(ulong id in field.TagIDs)
+                {
+                    ITagable tag = GetTagFromID(id);
+                    if (!IsTagContainingField(tag, field))
+                        idsToRemove.Add(id);
+                }
+
+                // Remove the tagIDs from the field.
+                foreach (ulong id in idsToRemove)
+                    field.TagIDs.Remove(id);
+            }
+
+            // Check the TagFieldRelations, remove any field that has no relations
+            RemoveFieldsWithNoTagRelations();
+        }
+
+        /// <summary>
+        /// Removes any field that have no relations to tags and any content. Fields with no relations,
+        /// but with content, is made custom.
+        /// </summary>
+        private void RemoveFieldsWithNoTagRelations()
+        {
+            List<Field> fieldsToRemove = new List<Field>();
+            foreach(Field field in ControlledAsset.FieldList)
+            {
+                if (field.TagIDs.Count == 0)
+                    fieldsToRemove.Add(field);
+            }
+
+            // Remove the marked fields
+            foreach (Field field in fieldsToRemove)
+                RemoveField(field);
+        }
+
+        /// <summary>
+        /// Gets the full tag from its ID in the list currently add tags.
+        /// </summary>
+        /// <param name="id">The Id of the full tag, found in the CurrentlyAddTags list</param>
+        /// <returns>The full tag object</returns>
+        private ITagable GetTagFromID(ulong id)
+        {
+            return CurrentlyAddedTags.FirstOrDefault(t => t.TagId == id);
+        }
+
+        /// <summary>
+        /// Checks wether or not a tag contains the given field.
+        /// </summary>
+        /// <param name="tag">The tag which should be check to have the given field</param>
+        /// <param name="field">The field to be check if its contained</param>
+        /// <returns>Returns wethere or not the given field was contained in the given tag</returns>
+        private bool IsTagContainingField(ITagable tag, Field field)
+        {
+            if (tag is Tag currentTag)
+            {
+                Field containedField = currentTag.FieldList.FirstOrDefault(f => f.Hash == field.Hash);
+                return containedField != null;
+            }
+            else
+                return false;
         }
 
         /// <summary>
