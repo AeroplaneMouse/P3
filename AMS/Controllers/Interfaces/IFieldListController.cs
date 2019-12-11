@@ -6,10 +6,10 @@ namespace AMS.Controllers.Interfaces
 {
     public interface IFieldListController
     {
-        List<Field> NonHiddenFieldList { get; set; }
-        List<Field> HiddenFieldList { get; set; }
-
         bool SerializeFields();
+
+        public List<Field> NonHiddenFieldList { get; set; }
+        public List<Field> HiddenFieldList { get; set; }
 
         bool AddField(Field field, FieldContainer fieldContainer = null);
 

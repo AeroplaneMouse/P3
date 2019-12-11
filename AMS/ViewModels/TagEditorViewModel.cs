@@ -19,9 +19,8 @@ namespace AMS.ViewModels
 
         #region Public Properties
 
-        public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_controller.NonHiddenFieldList);
+        public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_controller.ControlledTag.FieldList);
         public ObservableCollection<Field> ParentTagFields => new ObservableCollection<Field>(_controller.ParentTagFields);
-        public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_controller.HiddenFieldList);
 
         public string Name { get => _controller.ControlledTag.Name; set => _controller.ControlledTag.Name = value; }
         public string Color { get => _controller.ControlledTag.Color; set => _controller.ControlledTag.Color = value; }
@@ -230,7 +229,7 @@ namespace AMS.ViewModels
         private void UpdateAll()
         {
             OnPropertyChanged(nameof(NonHiddenFieldList));
-            OnPropertyChanged(nameof(HiddenFieldList));
+            //OnPropertyChanged(nameof(HiddenFieldList));
             OnPropertyChanged(nameof(SelectedParentTagIndex));
             OnPropertyChanged(nameof(ParentTagFields));
         }
@@ -242,8 +241,10 @@ namespace AMS.ViewModels
         private bool VerifyTagAndFields()
         {
             // Verifies whether fields contains correct information, or the required information.
-            List<Field> completeList = HiddenFieldList.ToList();
-            completeList.AddRange(NonHiddenFieldList.ToList());
+            //List<Field> completeList = HiddenFieldList.ToList();
+            //completeList.AddRange(NonHiddenFieldList.ToList());
+
+            List<Field> completeList = new List<Field>(NonHiddenFieldList);
 
             // Checks whether the name is null
             if (string.IsNullOrEmpty(_controller.ControlledTag.Name))

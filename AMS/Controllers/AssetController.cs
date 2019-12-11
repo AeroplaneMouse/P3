@@ -53,6 +53,7 @@ namespace AMS.Controllers
         {
             // Save the current department onto the asset.
             ControlledAsset.DepartmentdId = _session.user.DefaultDepartment;
+            SerializeFields();
 
             // Database saving
             ulong id = 0;
@@ -69,6 +70,7 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Update()
         {
+            SerializeFields();
             _assetRepository.AttachTags(ControlledAsset, CurrentlyAddedTags);
             return _assetRepository.Update(ControlledAsset);
         }
@@ -121,7 +123,8 @@ namespace AMS.Controllers
                         currentTag.DeSerializeFields();
                         foreach (var tagField in currentTag.FieldList)
                         {
-                            AddField(tagField, currentTag);
+                            //AddField(tagField, currentTag);
+                            AddField(tagField);
                         }
                     }
                 }
@@ -201,7 +204,8 @@ namespace AMS.Controllers
                 {
                     currentTag.DeSerializeFields();
                     foreach (var tagField in currentTag.FieldList)
-                        AddField(tagField, currentTag);
+                        //AddField(tagField, currentTag);
+                        AddField(tagField);
                 }
             }
         }
@@ -211,23 +215,25 @@ namespace AMS.Controllers
         /// </summary>
         public void LoadFields()
         {
-            foreach (var field in HiddenFieldList)
-            {
-                if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
-                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
 
-                if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
-                    field.Content = false.ToString();
-            }
 
-            foreach (var field in NonHiddenFieldList)
-            {
-                if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
-                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+            //foreach (var field in HiddenFieldList)
+            //{
+            //    if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
+            //        field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
 
-                if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
-                    field.Content = false.ToString();
-            }
+            //    if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
+            //        field.Content = false.ToString();
+            //}
+
+            //foreach (var field in NonHiddenFieldList)
+            //{
+            //    if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
+            //        field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+
+            //    if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
+            //        field.Content = false.ToString();
+            //}
         }
     }
 }

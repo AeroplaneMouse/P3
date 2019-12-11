@@ -105,6 +105,7 @@ namespace AMS.Controllers
         /// </summary>
         public void Update()
         {
+            SerializeFields();
             _tagRepository.Update(ControlledTag);
         }
 

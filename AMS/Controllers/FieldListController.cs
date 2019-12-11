@@ -43,9 +43,10 @@ namespace AMS.Controllers
         public bool AddField(Field inputField, FieldContainer fieldContainer = null)
         {
             // Does the field already exist in shown or hidden fields?
-            Field fieldInListByHashId = HiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId) ??
-                                        NonHiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId);
-            
+            //Field fieldInListByHashId = HiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId) ??
+            //                            NonHiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId);
+            Field fieldInListByHashId = _fieldContainer.FieldList.FirstOrDefault(p => p.HashId == inputField.HashId);
+
             // If field already exist check got updates
             if (fieldInListByHashId != null)
             {
@@ -63,22 +64,30 @@ namespace AMS.Controllers
 
                 fieldInListByHashId.IsCustom = false;
             }
-            
+
             // Checks whether the field is present in HiddenFieldList, if not, checks NonHiddenFieldList.
-            Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(inputField)) ??
-                                NonHiddenFieldList.FirstOrDefault(p => p.Equals(inputField));
+            //Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(inputField)) ??
+            //                    NonHiddenFieldList.FirstOrDefault(p => p.Equals(inputField));
+            Field fieldInList = _fieldContainer.FieldList.FirstOrDefault(p => p.Equals(inputField));
 
             //If the field is not in the list, add the field (With or without a relation to the fieldContainer)
             if (fieldInList == null && fieldInListByHashId == null)
             {
-                if (fieldContainer != null)
-                    inputField.TagIDs.Add(fieldContainer.ID);
+                //if (fieldContainer != null)
+                //    inputField.TagIDs.Add(fieldContainer.ID);
+                // If the fieldContainer is a tag, add the tags ID to the field
+                if (_fieldContainer is Tag)
+                    inputField.TagIDs.Add(_fieldContainer.ID);
 
-                NonHiddenFieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
+                _fieldContainer.FieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
                     inputField.HashId, inputField.Required, inputField.IsCustom, inputField.IsHidden,
                     inputField.TagIDs));
+
+                //NonHiddenFieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
+                //    inputField.HashId, inputField.Required, inputField.IsCustom, inputField.IsHidden,
+                //    inputField.TagIDs));
             }
-            
+
             if (fieldInList != null)
                 fieldInList.IsCustom = false;
 
@@ -94,38 +103,48 @@ namespace AMS.Controllers
         public bool RemoveField(Field field)
         {
             //If no input field is given, return.
-            if (field == null) return false;
+            //if (field == null) 
+            //    return false;
+
+            // Remove custom asset field or field when editing tag
+            if (field.IsCustom || _fieldContainer is Tag)
+                _fieldContainer.FieldList.Remove(field);
+            else
+                // Toggle the hidden state of the field.
+                field.IsHidden = !field.IsHidden;
+
 
             //Checks if the field is custom (Ie made on a asset)
-            if (field.IsCustom && !field.IsHidden)
-            {
-                NonHiddenFieldList.Remove(field);
-                return true;
-            }
+            //if (field.IsCustom && !field.IsHidden)
+            //{
+            //    NonHiddenFieldList.Remove(field);
+            //    return true;
+            //}
 
-            if (field.IsHidden)
-            {
-                field.IsHidden = false;
-                if (!NonHiddenFieldList.Contains(field))
-                {
-                    NonHiddenFieldList.Add(field);
-                }
+            //if (field.IsHidden)
+            //{
+            //    field.IsHidden = false;
+            //    if (!NonHiddenFieldList.Contains(field))
+            //    {
+            //        NonHiddenFieldList.Add(field);
+            //    }
 
-                HiddenFieldList.Remove(field);
-            }
-            else
-            {
-                if (!(_fieldContainer is Tag))
-                {
-                    field.IsHidden = !field.IsHidden;
-                    if (!HiddenFieldList.Contains(field))
-                    {
-                        HiddenFieldList.Add(field);
-                    }
-                }
+            //    HiddenFieldList.Remove(field);
+            //}
+            //else
+            //{
+            //    if (!(_fieldContainer is Tag))
+            //    {
+            //        field.IsHidden = !field.IsHidden;
+            //        if (!HiddenFieldList.Contains(field))
+            //        {
+            //            HiddenFieldList.Add(field);
+            //        }
+            //    }
 
-                NonHiddenFieldList.Remove(field);
-            }
+            //    //NonHiddenFieldList.Remove(field);
+            //    _fieldContainer.FieldList.Remove(field);
+            //}
 
             return true;
         }
@@ -158,8 +177,7 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool RemoveTagRelationsOnFields(ulong TagId)
         {
-            // Checks the hiddenlist and checks whether a field contains the tagID, if it does, remove it.
-            foreach (var field in HiddenFieldList)
+            foreach(Field field in _fieldContainer.FieldList)
             {
                 if (field.TagIDs.Contains(TagId))
                 {
@@ -167,13 +185,22 @@ namespace AMS.Controllers
                 }
             }
 
-            foreach (var field in NonHiddenFieldList)
-            {
-                if (field.TagIDs.Contains(TagId))
-                {
-                    field.TagIDs.Remove(TagId);
-                }
-            }
+            // Checks the hiddenlist and checks whether a field contains the tagID, if it does, remove it.
+            //foreach (var field in HiddenFieldList)
+            //{
+            //    if (field.TagIDs.Contains(TagId))
+            //    {
+            //        field.TagIDs.Remove(TagId);
+            //    }
+            //}
+
+            //foreach (var field in NonHiddenFieldList)
+            //{
+            //    if (field.TagIDs.Contains(TagId))
+            //    {
+            //        field.TagIDs.Remove(TagId);
+            //    }
+            //}
 
             return true;
         }
