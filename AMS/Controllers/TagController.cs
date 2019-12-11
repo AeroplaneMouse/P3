@@ -99,6 +99,20 @@ namespace AMS.Controllers
             ulong newTagId;
             _tagRepository.Insert(ControlledTag, out newTagId);
             TagID = newTagId;
+
+            // Check if any fields does not have a tagId set
+            foreach(Field field in ControlledTag.FieldList)
+            {
+                if (field.TagIDs.Count == 0)
+                {
+                    field.TagIDs.Add(TagID);
+                    ControlledTag.Changes.Add("field", TagID);
+                }
+            }
+
+            // Save the field changes to the database
+            if (ControlledTag.IsDirty())
+                Update();
         }
 
         /// <summary>

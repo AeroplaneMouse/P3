@@ -45,7 +45,7 @@ namespace AMS.Controllers
             // Check if field already exists on the fieldContainer
             Field field = _fieldContainer.FieldList.FirstOrDefault(f => f.HashId == inputField.HashId);
 
-            // If it does exist, update label and required
+            // If it exist, update label and required
             if (field != null)
             {
                 field.Label = inputField.Label;
@@ -68,7 +68,7 @@ namespace AMS.Controllers
 
 
             // If the fieldContainer is a tag, add the tags ID to the field
-            if (_fieldContainer is Tag)
+            if (_fieldContainer is Tag && _fieldContainer.ID != 0)
                 inputField.TagIDs.Add(_fieldContainer.ID);
 
             // Add the field to the fieldContainer
@@ -98,7 +98,11 @@ namespace AMS.Controllers
 
                 // Make custom, if there is no relations to tag and content is not empty
                 else if (field.TagIDs.Count == 0)
+                {
                     field.IsCustom = true;
+                    // Update hashID, since it is no a new field, and should have not relation to the tag it originated from.
+                    field.UpdateHashID();
+                }
                 
                 // Toggle the hidden state of the field.
                 else

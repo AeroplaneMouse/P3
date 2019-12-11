@@ -189,21 +189,25 @@ namespace AMS.Controllers
                 }
             }
 
-            // For every field, check if its related tags still have the field associated.
+            // For every field that is not custom, check if its related tags still have the field associated.
             foreach(Field field in ControlledAsset.FieldList)
             {
-                // Find any tagIDs that should no longer be related to the field
-                List<ulong> idsToRemove = new List<ulong>();
-                foreach(ulong id in field.TagIDs)
+                if (!field.IsCustom)
                 {
-                    ITagable tag = GetTagFromID(id);
-                    if (!IsTagContainingField(tag, field))
-                        idsToRemove.Add(id);
-                }
+                    // Find any tagIDs that should no longer be related to the field
+                    List<ulong> idsToRemove = new List<ulong>();
+                    foreach(ulong id in field.TagIDs)
+                    {
+                        ITagable tag = GetTagFromID(id);
+                        if (!IsTagContainingField(tag, field))
+                            idsToRemove.Add(id);
+                    }
 
-                // Remove the tagIDs from the field.
-                foreach (ulong id in idsToRemove)
-                    field.TagIDs.Remove(id);
+                    // Remove the tagIDs from the field.
+                    foreach (ulong id in idsToRemove)
+                        field.TagIDs.Remove(id);
+
+                }
             }
 
             // Check the TagFieldRelations, remove any field that has no relations
@@ -219,7 +223,7 @@ namespace AMS.Controllers
             List<Field> fieldsToRemove = new List<Field>();
             foreach(Field field in ControlledAsset.FieldList)
             {
-                if (field.TagIDs.Count == 0)
+                if (!field.IsCustom && field.TagIDs.Count == 0)
                     fieldsToRemove.Add(field);
             }
 

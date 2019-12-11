@@ -118,6 +118,11 @@ namespace AMS.Models
             return output;
         }
 
+        public void UpdateHashID()
+        {
+            this.HashId = CalculateMd5Hash(true);
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is Field == false)
