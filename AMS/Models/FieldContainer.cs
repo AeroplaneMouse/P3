@@ -12,10 +12,12 @@ namespace AMS.Models
         public string SerializedFields{
             get => this._serializedFields;
             set {
-                if (this.SerializedFields != null && TrackChanges)
-                {
-                    this.Changes["SerializedFields"] = this.SerializedFields;
-                }
+                string propertyName = "SerializedFields";
+                if (TrackChanges && !Changes.ContainsKey(propertyName) && _serializedFields != value)
+                    Changes[propertyName] = _serializedFields;
+                else if (Changes.ContainsKey(propertyName) && (string)this.Changes[propertyName] == value)
+                    this.Changes.Remove(propertyName);
+
                 this._serializedFields = value;
             }
         }
