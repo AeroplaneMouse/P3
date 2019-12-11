@@ -44,7 +44,7 @@ namespace AMS.ViewModels
         {
             // Return from splashpage if called from it.
             if (_caller is SplashViewModel)
-                Features.Main.SplashPage = Features.Create.Splash();
+                Features.SetSplashPage();
             else
                 Features.Navigate.Back();
         }
@@ -61,7 +61,7 @@ namespace AMS.ViewModels
             string conString = $"Server={ IP }; database={ Database }; UID={ Username }; password={ Password }; Charset={ Charset }; Connect Timeout={ Timeout }";
             new FileConfigurationHandler(null).SetConfigValue(conString);
             Features.AddNotification(new Models.Notification("Settings saved", Models.Notification.APPROVE));
-            Features.Main.Reload();
+            Features.ReloadAll();
         }
 
         public override void UpdateOnFocus() { }

@@ -19,8 +19,7 @@ namespace AMS.ViewModels
     public static class Features
     {
         public static MainViewModel Main;
-        public static Visibility OnlyVisibleForAdmin => Main.OnlyVisibleForAdmin;
-
+        
         #region Repositories
 
         private static IUserRepository _userRepository;
@@ -33,10 +32,7 @@ namespace AMS.ViewModels
         public static IUserRepository UserRepository => _userRepository ??= new UserRepository();
         public static IAssetRepository AssetRepository => _assetRepository ??= new AssetRepository();
         public static ITagRepository TagRepository => _tagRepository ??= new TagRepository();
-
-        public static IDepartmentRepository DepartmentRepository =>
-            _departmentRepository ??= new DepartmentRepository();
-
+        public static IDepartmentRepository DepartmentRepository => _departmentRepository ??= new DepartmentRepository();
         public static ICommentRepository CommentRepository => _commentRepository ??= new CommentRepository();
         public static ILogRepository LogRepository => _logRepository ??= new LogRepository();
 
@@ -44,17 +40,19 @@ namespace AMS.ViewModels
 
         #region Helpers
 
-        private static IExporter _printHelper = new PrintHelper();
-
-        private static IUserImporter _userImporter = new UserImporter(UserRepository);
-
+        private static IExporter _printHelper { get; } = new PrintHelper();
+        private static IUserImporter _userImporter { get; } = new UserImporter(UserRepository);
         private static TagHelper CreateTagHelper() => new TagHelper(TagRepository, UserRepository);
 
         #endregion
 
+        #region Connection to MainViewModel
+
+        // Whether or not a UI element is only visible for the Admin user
+        public static Visibility OnlyVisibleForAdmin => Main.OnlyVisibleForAdmin;
+
         // Notifications
-        public static void AddNotification(Notification n, int displayTime = 2500) =>
-            Main.AddNotification(n, displayTime);
+        public static void AddNotification(Notification n, int displayTime = 2500) => Main.AddNotification(n, displayTime);
 
         // Prompts
         public static void DisplayPrompt(Page prompt) => Main.DisplayPrompt(prompt);
@@ -64,6 +62,14 @@ namespace AMS.ViewModels
 
         // Current department
         public static Department GetCurrentDepartment() => Main.CurrentDepartment;
+
+        // Sets the Main's splash page to be the splash page
+        public static void SetSplashPage() => Main.SplashPage = Create.Splash();
+
+        // Reload the system
+        public static void ReloadAll() => Main.Reload();
+
+        #endregion
 
         // Navigation
         public static class Navigate
@@ -81,11 +87,7 @@ namespace AMS.ViewModels
                         return true;
                     }
 
-                    if (page.GetType() == typeof(Home) ||
-                        page.GetType() == typeof(AssetList) ||
-                        page.GetType() == typeof(TagList) ||
-                        page.GetType() == typeof(UserList) ||
-                        page.GetType() == typeof(LogList))
+                    if (CurrentPageIsPrimary())
                     {
                         Main.History.Clear();
                     }
@@ -93,7 +95,6 @@ namespace AMS.ViewModels
                     (page.DataContext as IPageUpdateOnFocus).UpdateOnFocus();
                     Main.History.Push(_currentPage);
                     _currentPage = page;
-
 
                     return true;
                 }
@@ -107,11 +108,7 @@ namespace AMS.ViewModels
                 {
                     _currentPage = Main.History.Pop();
 
-                    if (_currentPage.GetType() == typeof(Home) ||
-                        _currentPage.GetType() == typeof(AssetList) ||
-                        _currentPage.GetType() == typeof(TagList) ||
-                        _currentPage.GetType() == typeof(UserList) ||
-                        _currentPage.GetType() == typeof(LogList))
+                    if (CurrentPageIsPrimary())
                     {
                         Main.History.Clear();
                     }
@@ -122,6 +119,15 @@ namespace AMS.ViewModels
                 }
 
                 return false;
+            }
+
+            private static bool CurrentPageIsPrimary()
+            {
+                return _currentPage.GetType() == typeof(Home)      ||
+                       _currentPage.GetType() == typeof(AssetList) ||
+                       _currentPage.GetType() == typeof(TagList)   ||
+                       _currentPage.GetType() == typeof(UserList)  ||
+                       _currentPage.GetType() == typeof(LogList);
             }
         }
 
@@ -139,8 +145,8 @@ namespace AMS.ViewModels
             public static Page AssetPresenter(Asset asset, List<ITagable> tagables)
             {
                 return new AssetPresenter(tagables, new AssetController(asset, AssetRepository, GetCurrentSession()),
-                    new CommentListController(GetCurrentSession(), CommentRepository, GetCurrentDepartment(), asset),
-                    new LogListController(LogRepository, _printHelper, asset));
+                                                    new CommentListController(GetCurrentSession(), CommentRepository, GetCurrentDepartment(), asset),
+                                                    new LogListController(LogRepository, _printHelper, asset));
             }
 
             /// <summary>
@@ -150,8 +156,7 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page AssetEditor(Asset asset = null)
             {
-                return new AssetEditor(new AssetController(asset ?? new Asset(), AssetRepository, GetCurrentSession()),
-                    CreateTagHelper());
+                return new AssetEditor(new AssetController(asset ?? new Asset(), AssetRepository, GetCurrentSession()), CreateTagHelper());
             }
 
             /// <summary>
@@ -179,9 +184,8 @@ namespace AMS.ViewModels
             /// <returns></returns>
             public static Page Home()
             {
-                return new Home(
-                    new HomeController(UserRepository, AssetRepository, TagRepository, DepartmentRepository),
-                    new CommentListController(GetCurrentSession(), CommentRepository, GetCurrentDepartment(), null));
+                return new Home(new HomeController(UserRepository, AssetRepository, TagRepository, DepartmentRepository),
+                                new CommentListController(GetCurrentSession(), CommentRepository, GetCurrentDepartment(), null));
             }
 
             public static Page ShortcutsList()
@@ -235,7 +239,7 @@ namespace AMS.ViewModels
             public static Page TagList()
             {
                 return new TagList(new TagListController(TagRepository),
-                    new TagController(new Tag(), TagRepository, DepartmentRepository));
+                                   new TagController(new Tag(), TagRepository, DepartmentRepository));
             }
 
             /// <summary>

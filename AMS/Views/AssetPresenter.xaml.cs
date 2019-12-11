@@ -48,7 +48,7 @@ namespace AMS.Views
                 viewModel.CheckAll = false;
 
             // Only change visibility if current user if admin
-            if (Features.Main.CurrentSession.IsAdmin())
+            if (Features.GetCurrentSession().IsAdmin())
             {
                 // Setting single item selected visibility
                 viewModel.SingleSelected = viewModel.SelectedItems.Count == 1 ?

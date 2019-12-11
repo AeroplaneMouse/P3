@@ -122,7 +122,7 @@ namespace AMS.ViewModels
             // Identifying the department to be the currently selected department.
             Department currentDepartment = _controller.IsEditing
                 ? _controller.DepartmentList.Find(d => d.ID == _controller.DepartmentID)
-                : Features.Main.CurrentDepartment;
+                : Features.GetCurrentDepartment();
 
             // Setting the title of the page
             PageTitle = _controller.IsEditing

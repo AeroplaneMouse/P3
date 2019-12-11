@@ -437,7 +437,7 @@ namespace AMS.ViewModels
                     Notification.WARNING));
                 return false;
             }
-            else if (Features.Main.CurrentDepartment.ID == 0 && !_isEditing)
+            else if (Features.GetCurrentDepartment().ID == 0 && !_isEditing)
             {
                 Features.AddNotification(new Notification("Please select another department than \"All departments\"",
                     Notification.WARNING));
