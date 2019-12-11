@@ -11,7 +11,7 @@ namespace AMS.Controllers.Interfaces
         public List<Field> NonHiddenFieldList { get; set; }
         public List<Field> HiddenFieldList { get; set; }
 
-        bool AddField(Field field, FieldContainer fieldContainer = null);
+        bool AddField(Field field);
 
         bool RemoveField(Field inputField);
         

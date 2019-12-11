@@ -35,63 +35,48 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Add a field to the field list.
+        /// Add a field to the fieldContainers list. If it's already there, update label and required.
+        /// If a field with same label and of same type, combine the two.
         /// </summary>
-        /// <param name="inputField"></param>
-        /// <param name="fieldContainer">Fieldcontainer is used when wanting to add a relation to a field when adding the field</param>
-        /// <returns></returns>
-        public bool AddField(Field inputField, FieldContainer fieldContainer = null)
+        /// <param name="inputField">The new field to be added</param>
+        /// <returns>Wether or not the input field was added to the list</returns>
+        public bool AddField(Field inputField)
         {
-            // Does the field already exist in shown or hidden fields?
-            //Field fieldInListByHashId = HiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId) ??
-            //                            NonHiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId);
-            Field fieldInListByHashId = _fieldContainer.FieldList.FirstOrDefault(p => p.HashId == inputField.HashId);
+            // Check if field already exists on the fieldContainer
+            Field field = _fieldContainer.FieldList.FirstOrDefault(f => f.HashId == inputField.HashId);
 
-            // If field already exist check got updates
-            if (fieldInListByHashId != null)
+            // If it does exist, update label and required
+            if (field != null)
             {
-                // Checks if a field label has been updated
-                if (fieldInListByHashId.Label != inputField.Label)
-                    fieldInListByHashId.Label = inputField.Label;
-
-                // Checks if a fields required property has been updated
-                if (fieldInListByHashId.Required != inputField.Required)
-                    fieldInListByHashId.Required = inputField.Required;
-
-                // Adds a reference to the field container if its added.
-                if (fieldContainer != null && !fieldInListByHashId.TagIDs.Contains(fieldContainer.ID))
-                    fieldInListByHashId.TagIDs.Add(fieldContainer.ID);
-
-                fieldInListByHashId.IsCustom = false;
+                field.Label = inputField.Label;
+                field.Required = inputField.Required;
+                return false;
             }
 
-            // Checks whether the field is present in HiddenFieldList, if not, checks NonHiddenFieldList.
-            //Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(inputField)) ??
-            //                    NonHiddenFieldList.FirstOrDefault(p => p.Equals(inputField));
-            Field fieldInList = _fieldContainer.FieldList.FirstOrDefault(p => p.Equals(inputField));
 
-            //If the field is not in the list, add the field (With or without a relation to the fieldContainer)
-            if (fieldInList == null && fieldInListByHashId == null)
+            // Check if a field with same label or of same type is on the fieldContainer.
+            field = _fieldContainer.FieldList.FirstOrDefault(f => f.Equals(inputField));
+
+            // If so, combine them and set content if content is empty
+            if (field != null && field.Content != String.Empty)
             {
-                //if (fieldContainer != null)
-                //    inputField.TagIDs.Add(fieldContainer.ID);
-                // If the fieldContainer is a tag, add the tags ID to the field
-                if (_fieldContainer is Tag)
-                    inputField.TagIDs.Add(_fieldContainer.ID);
-
-                _fieldContainer.FieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
-                    inputField.HashId, inputField.Required, inputField.IsCustom, inputField.IsHidden,
-                    inputField.TagIDs));
-
-                //NonHiddenFieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
-                //    inputField.HashId, inputField.Required, inputField.IsCustom, inputField.IsHidden,
-                //    inputField.TagIDs));
+                field.Content = inputField.Content;
+                // Add the ID of the inputfields originating tag.
+                field.TagIDs.Add(inputField.TagIDs.First());
+                return false;
             }
 
-            if (fieldInList != null)
-                fieldInList.IsCustom = false;
 
-            return _fieldContainer.FieldList.Contains(inputField);
+            // If the fieldContainer is a tag, add the tags ID to the field
+            if (_fieldContainer is Tag)
+                inputField.TagIDs.Add(_fieldContainer.ID);
+
+            // Add the field to the fieldContainer
+            _fieldContainer.FieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
+                inputField.HashId, inputField.Required, inputField.IsCustom, inputField.IsHidden,
+                inputField.TagIDs));
+
+            return true;
         }
 
         /// <summary>
