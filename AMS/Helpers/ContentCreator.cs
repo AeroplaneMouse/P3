@@ -24,6 +24,28 @@ namespace AMS.Helpers
 
         #endregion
 
+        #region Controllers
+
+        private IAssetController GetAssetController(Asset asset) => new AssetController(asset, Features.AssetRepository, Features.GetCurrentSession());
+
+        private IAssetListController GetAssetListController() => new AssetListController(Features.AssetRepository, _printHelper);
+
+        private ICommentListController GetCommentListController(Asset asset) => 
+            new CommentListController(Features.GetCurrentSession(), Features.CommentRepository, Features.GetCurrentDepartment(), asset);
+
+        private ILogListController GetLogListController(Asset asset) => new LogListController(Features.LogRepository, _printHelper, asset);
+
+        private IHomeController GetHomeController() => 
+            new HomeController(Features.UserRepository, Features.AssetRepository, Features.TagRepository, Features.DepartmentRepository);
+
+        private ITagController GetTagController(Tag tag) => new TagController(tag, Features.TagRepository, Features.DepartmentRepository);
+
+        private ITagListController GetTagListController() => new TagListController(Features.TagRepository);
+
+        private IUserListController GetUserListController() => new UserListController(_userImporter, Features.UserRepository, Features.DepartmentRepository);
+
+        #endregion
+
         #region Pages
 
         /// <summary>
@@ -34,9 +56,7 @@ namespace AMS.Helpers
         /// <returns></returns>
         public Page AssetPresenter(Asset asset, List<ITagable> tagables)
         {
-            return new AssetPresenter(tagables, new AssetController(asset, Features.AssetRepository, Features.GetCurrentSession()),
-                                                new CommentListController(Features.GetCurrentSession(), Features.CommentRepository, Features.GetCurrentDepartment(), asset),
-                                                new LogListController(Features.LogRepository, _printHelper, asset));
+            return new AssetPresenter(tagables, GetAssetController(asset), GetCommentListController(asset), GetLogListController(asset));
         }
 
         /// <summary>
@@ -46,7 +66,7 @@ namespace AMS.Helpers
         /// <returns></returns>
         public Page AssetEditor(Asset asset = null)
         {
-            return new AssetEditor(new AssetController(asset ?? new Asset(), Features.AssetRepository, Features.GetCurrentSession()), CreateTagHelper());
+            return new AssetEditor(GetAssetController(asset ?? new Asset()), CreateTagHelper());
         }
 
         /// <summary>
@@ -65,7 +85,7 @@ namespace AMS.Helpers
         /// <returns></returns>
         public Page AssetList()
         {
-            return new AssetList(new AssetListController(Features.AssetRepository, _printHelper), CreateTagHelper());
+            return new AssetList(GetAssetListController(), CreateTagHelper());
         }
 
         /// <summary>
@@ -74,8 +94,7 @@ namespace AMS.Helpers
         /// <returns></returns>
         public Page Home()
         {
-            return new Home(new HomeController(Features.UserRepository, Features.AssetRepository, Features.TagRepository, Features.DepartmentRepository),
-                            new CommentListController(Features.GetCurrentSession(), Features.CommentRepository, Features.GetCurrentDepartment(), null));
+            return new Home(GetHomeController(), GetCommentListController(null));
         }
 
         public Page ShortcutsList()
@@ -99,7 +118,7 @@ namespace AMS.Helpers
         /// <returns></returns>
         public Page LogList()
         {
-            return new LogList(new LogListController(Features.LogRepository, _printHelper));
+            return new LogList(GetLogListController(null));
         }
 
         /// <summary>
@@ -119,7 +138,7 @@ namespace AMS.Helpers
         /// <returns></returns>
         public Page TagEditor(Tag tag)
         {
-            return new TagEditor(new TagController(tag ?? new Tag(), Features.TagRepository, Features.DepartmentRepository));
+            return new TagEditor(GetTagController(tag ?? new Tag()));
         }
 
         /// <summary>
@@ -128,8 +147,7 @@ namespace AMS.Helpers
         /// <returns></returns>
         public Page TagList()
         {
-            return new TagList(new TagListController(Features.TagRepository),
-                               new TagController(new Tag(), Features.TagRepository, Features.DepartmentRepository));
+            return new TagList(GetTagListController(), GetTagController(new Tag()));
         }
 
         /// <summary>
@@ -138,7 +156,7 @@ namespace AMS.Helpers
         /// <returns></returns>
         public Page UserList()
         {
-            return new UserList(new UserListController(_userImporter, Features.UserRepository, Features.DepartmentRepository));
+            return new UserList(GetUserListController());
         }
 
         /// <summary>
