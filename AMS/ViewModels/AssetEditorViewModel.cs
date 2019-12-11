@@ -78,6 +78,7 @@ namespace AMS.ViewModels
         public ICommand RemoveTagCommand { get; set; }
         public ICommand ApplyTagOrEnterParentCommand { get; set; }
         public ICommand InsertNextOrSelectedSuggestionCommand { get; set; }
+        public ICommand InsertPreviousCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
         public ICommand EnterSuggestionListCommand { get; set; }
         public ICommand ShowFieldEditPromptCommand { get; set; }
@@ -134,6 +135,7 @@ namespace AMS.ViewModels
             });
 
             InsertNextOrSelectedSuggestionCommand = new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
+            InsertPreviousCommand = new RelayCommand(InsertPrevious);
             ClearInputCommand = new RelayCommand(ClearInput);
             BackspaceCommand = new RelayCommand<object>((parameter) => RemoveCharacterOrExitTagMode(parameter as TextBox));
 
@@ -271,13 +273,35 @@ namespace AMS.ViewModels
             }
             else if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
             {
-                if (!(_tagTabIndex <= TagSearchSuggestions.Count() - 1))
+                _tagTabIndex++;
+
+                if (!(_tagTabIndex < TagSearchSuggestions.Count()) || !(_tagTabIndex >= 0))
                 {
                     _tagTabIndex = 0;
                 }
+                
+                TagSearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
+            }
+
+            UpdateAll();
+        }
+
+        /// <summary>
+        /// Inserts the next suggestion into the tag search query, or the selected element from the list
+        /// </summary>
+        /// <param name="input">The selected element (optional)</param>
+        private void InsertPrevious()
+        {   
+            if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+            {
+                _tagTabIndex--;
+                
+                if (!(_tagTabIndex < TagSearchSuggestions.Count()) || !(_tagTabIndex >= 0))
+                {
+                    _tagTabIndex = TagSearchSuggestions.Count() - 1;
+                }
 
                 TagSearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
-                _tagTabIndex++;
             }
 
             UpdateAll();
@@ -500,7 +524,7 @@ namespace AMS.ViewModels
 
         private void RemoveCharacterOrExitTagMode(TextBox textBox)
         {
-            if (TagSearchQuery.Length > 0)
+            if (TagSearchQuery != null && TagSearchQuery.Length > 0)
             {
                 int cursorIndex = textBox.CaretIndex;
                 if (cursorIndex > 0)
