@@ -15,7 +15,6 @@ namespace AMS.Models
             {
                 return this._name;
             }
-
             set 
             {
                 if (TrackChanges)
