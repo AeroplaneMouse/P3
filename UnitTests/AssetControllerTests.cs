@@ -253,7 +253,7 @@ namespace UnitTests
             otherAsset.ControlledAsset.Name = "AssetTests_Asset";
             otherAsset.ControlledAsset.Description = "Desription";
 
-            otherAsset.ControlledAsset.DepartmentID = 4;
+            otherAsset.ControlledAsset.DepartmentdId = 4;
             otherAsset.AttachTags(_tagOne);
             otherAsset.AttachTags(_tagTwo);
 
@@ -377,7 +377,8 @@ namespace UnitTests
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
                 new object[] { rowId, null, null, null, null, null, null, null }, null, null);
         }
-        // Create asset with id.
+        
+        // Create tag with id.
         private Tag CreateTestTagWithId(ulong rowId)
         {
             return (Tag) Activator.CreateInstance(typeof(Tag),
