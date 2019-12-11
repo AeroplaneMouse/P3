@@ -193,8 +193,7 @@
                                     <DataTemplate>
                                         <ComboBox ItemsSource="{Binding DataContext.DepartmentList, UpdateSourceTrigger=PropertyChanged, ElementName=StartElement}"
                                                   MinWidth="160"
-                                                  SelectedValuePath="{Binding ID}"
-                                                  SelectedValue="{Binding Path=DepartmentIndex}"
+                                                  SelectedIndex="{Binding Path=DepartmentIndex}"
                                                   Template="{StaticResource UserListDepartmentComboBoxTemplate}"
                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}">
                                             <ComboBox.ItemTemplate>
