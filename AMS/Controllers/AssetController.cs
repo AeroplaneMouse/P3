@@ -162,7 +162,7 @@ namespace AMS.Controllers
                     // Checks if the ITagable is a Tag, remove its fields.
                     if (tag is Tag currentTag)
                     {
-                        // DeSerialize fields if there aren't any. It might be a parent tag.
+                        // DeSerialize fields if there aren't any. It might be a parent tag where its fields are not deSerialized.
                         if(currentTag.FieldList.Count == 0)
                             currentTag.DeSerializeFields();
 
@@ -192,6 +192,7 @@ namespace AMS.Controllers
             // For every field that is not custom, check if its related tags still have the field associated.
             foreach(Field field in ControlledAsset.FieldList)
             {
+                // Only act on non-custom fields
                 if (!field.IsCustom)
                 {
                     // Find any tagIDs that should no longer be related to the field
@@ -199,7 +200,7 @@ namespace AMS.Controllers
                     foreach(ulong id in field.TagIDs)
                     {
                         ITagable tag = GetTagFromID(id);
-                        if (!IsTagContainingField(tag, field))
+                        if (!IsTagContainingFieldOrSimilar(tag, field))
                             idsToRemove.Add(id);
                     }
 
@@ -243,16 +244,16 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Checks wether or not a tag contains the given field.
+        /// Checks wether or not a tag contains the given field or a similar one. Where similar is one with the same hash
         /// </summary>
         /// <param name="tag">The tag which should be check to have the given field</param>
         /// <param name="field">The field to be check if its contained</param>
-        /// <returns>Returns wethere or not the given field was contained in the given tag</returns>
-        private bool IsTagContainingField(ITagable tag, Field field)
+        /// <returns>Returns wethere or not the given field or a similar one was contained in the given tag</returns>
+        private bool IsTagContainingFieldOrSimilar(ITagable tag, Field field)
         {
             if (tag is Tag currentTag)
             {
-                Field containedField = currentTag.FieldList.FirstOrDefault(f => f.Hash == field.Hash);
+                Field containedField = currentTag.FieldList.FirstOrDefault(f => f.HashId == field.HashId || f.Hash == field.Hash);
                 return containedField != null;
             }
             else

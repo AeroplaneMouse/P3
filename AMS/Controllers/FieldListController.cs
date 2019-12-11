@@ -55,14 +55,15 @@ namespace AMS.Controllers
 
 
             // Check if a field with same label or of same type is on the fieldContainer.
-            field = _fieldContainer.FieldList.FirstOrDefault(f => f.Equals(inputField));
+            field = _fieldContainer.FieldList.FirstOrDefault(f => f.Hash == inputField.Hash);
 
-            // If so, combine them and set content if content is empty
-            if (field != null && field.Content != String.Empty)
+            // If so, combine them and set content if content is empty or equal
+            if (field != null && (field.Content == String.Empty || field.Content == inputField.Content))
             {
                 field.Content = inputField.Content;
-                // Add the ID of the inputfields originating tag.
-                field.TagIDs.Add(inputField.TagIDs.First());
+                // Add the ID of the inputfields originating tag, if it aren't already.
+                if (!field.TagIDs.Contains(inputField.TagIDs.First()))
+                    field.TagIDs.Add(inputField.TagIDs.First());
                 return false;
             }
 
@@ -146,15 +147,19 @@ namespace AMS.Controllers
             // Update all the fields
             foreach(Field field in _fieldContainer.FieldList)
             {
-                if (field.TagIDs.Contains(tag.TagId))
+                // Only act on non-custom fields
+                if (!field.IsCustom)
                 {
-                    field.TagIDs.Remove(tag.TagId);
-                    field.TagList.Remove(tag);
-                }
+                    if (field.TagIDs.Contains(tag.TagId))
+                    {
+                        field.TagIDs.Remove(tag.TagId);
+                        field.TagList.Remove(tag);
+                    }
 
-                // Check if the field has any relations to tags left on it
-                if (field.TagIDs.Count == 0)
-                    fieldsToRemove.Add(field);
+                    // Check if the field has any relations to tags left on it
+                    if (field.TagIDs.Count == 0)
+                        fieldsToRemove.Add(field);
+                }
             }
 
             // Remove the fields, that was marked

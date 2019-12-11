@@ -129,7 +129,7 @@ namespace AMS.Models
                 return false;
 
             Field other = (Field) obj;
-            return (this.Hash == other.Hash);
+            return (this.HashId == other.HashId);
         }
 
         /// <summary>
