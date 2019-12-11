@@ -16,54 +16,54 @@ namespace AMS.Models
 
         public string Name 
         {
-            get => this._name;
+            get => _name;
             set 
             {
                 if (TrackChanges)
-                    this.Changes["Name"] = this.Name;
-                this._name = value.ToLower();
+                    Changes["Name"] = Name;
+                _name = value.ToLower();
             }
         }
 
         public string Color 
         {
-            get => this._color;
+            get => _color;
             set 
             {
                 if (TrackChanges)
                 {
-                    this.Changes["Color"] = this.Color;
+                    Changes["Color"] = Color;
                 }
 
-                this._color = value;
+                _color = value;
             }
         }
 
         public ulong ParentId 
         {
-            get => this._parentId;
+            get => _parentId;
             set 
             {
                 if (TrackChanges)
                 {
-                    this.Changes["ParentId"] = this.ParentId;
+                    Changes["ParentId"] = ParentId;
                 }
 
-                this._parentId = value;
+                _parentId = value;
             }
         }
 
         public ulong DepartmentID 
         {
-            get => this._departmentID;
+            get => _departmentID;
             set 
             {
                 if (TrackChanges)
                 {
-                    this.Changes["DepartmentID"] = this.DepartmentID;
+                    Changes["DepartmentID"] = DepartmentID;
                 }
 
-                this._departmentID = value;
+                _departmentID = value;
             }
         }
 

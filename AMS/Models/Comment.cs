@@ -16,15 +16,15 @@ namespace AMS.Models
         {
             get 
             {
-                return this._content;
+                return _content;
             }
             set 
             {
                 if (TrackChanges)
                 {
-                    this.Changes["Content"] = this.Content;
+                    Changes["Content"] = Content;
                 }
-                this._content = value;
+                _content = value;
             }
         }
 

@@ -11,17 +11,14 @@ namespace AMS.Models
 
         public string Name 
         {
-            get 
-            {
-                return this._name;
-            }
+            get => _name;
             set 
             {
                 if (TrackChanges)
                 {
-                    this.Changes["Name"] = this.Name;
+                    Changes["Name"] = Name;
                 }
-                this._name = value;
+                _name = value;
             }
         }
 

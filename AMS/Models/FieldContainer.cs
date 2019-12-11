@@ -10,13 +10,14 @@ namespace AMS.Models
         private string _serializedFields;
 
         public string SerializedFields{
-            get => this._serializedFields;
-            set {
-                if (this.SerializedFields != null && TrackChanges)
+            get => _serializedFields;
+            set 
+            {
+                if (SerializedFields != null && TrackChanges)
                 {
-                    this.Changes["SerializedFields"] = this.SerializedFields;
+                    Changes["SerializedFields"] = SerializedFields;
                 }
-                this._serializedFields = value;
+                _serializedFields = value;
             }
         }
     }
