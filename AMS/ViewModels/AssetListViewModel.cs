@@ -23,7 +23,7 @@ namespace AMS.ViewModels
         private TagHelper _tagHelper;
         private bool _isStrict = true;
         private bool _searchInFields = false;
-        private int _tabIndex = 0;
+        private int _tagTabIndex = 0;
 
         public ObservableCollection<Asset> Items => new ObservableCollection<Asset>(_listController.AssetList);
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
@@ -92,6 +92,7 @@ namespace AMS.ViewModels
         public ICommand RemoveBySelectionCommand { get; set; }
         public ICommand EditBySelectionCommand { get; set; }
         public ICommand InsertNextOrSelectedSuggestionCommand { get; set; }
+        public ICommand InsertPreviousCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
         public ICommand EnterSuggestionListCommand { get; set; }
         public ICommand CheckAllChangedCommand { get; set; }
@@ -134,6 +135,7 @@ namespace AMS.ViewModels
             });
 
             InsertNextOrSelectedSuggestionCommand = new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
+            InsertPreviousCommand = new RelayCommand(InsertPrevious);
             ClearInputCommand = new RelayCommand(ClearInput);
             CheckAllChangedCommand = new RelayCommand<object>((parameter) => CheckAllChanged(parameter as ListView));
             BackspaceCommand = new RelayCommand<object>((parameter) => RemoveCharacterOrExitTagMode(parameter as TextBox));
@@ -257,12 +259,33 @@ namespace AMS.ViewModels
             }
             else if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
             {
-                if (!(_tabIndex <= TagSearchSuggestions.Count() - 1))
+                _tagTabIndex++;
+
+                if (!(_tagTabIndex < TagSearchSuggestions.Count()) || !(_tagTabIndex >= 0))
                 {
-                    _tabIndex = 0;
+                    _tagTabIndex = 0;
                 }
-                SearchQuery = TagSearchSuggestions[_tabIndex].TagLabel + ' ';
-                _tabIndex++;
+
+                SearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
+            }
+        }
+
+        /// <summary>
+        /// Inserts the next suggestion into the tag search query, or the selected element from the list
+        /// </summary>
+        /// <param name="input">The selected element (optional)</param>
+        private void InsertPrevious()
+        {
+            if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+            {
+                _tagTabIndex--;
+
+                if (!(_tagTabIndex < TagSearchSuggestions.Count()) || !(_tagTabIndex >= 0))
+                {
+                    _tagTabIndex = TagSearchSuggestions.Count() - 1;
+                }
+
+                SearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
             }
         }
 
@@ -288,7 +311,7 @@ namespace AMS.ViewModels
                     AppliedTags = _tagHelper.GetAppliedTags(true);
                 }
                 SearchQuery = "";
-                _tabIndex = 0;
+                _tagTabIndex = 0;
             }
             else
             {
@@ -297,7 +320,7 @@ namespace AMS.ViewModels
                     _tagHelper.AddTag(_tagHelper.GetParent());
                     AppliedTags = _tagHelper.GetAppliedTags(true);
                     ClearInput();
-                    _tabIndex = 0;
+                    _tagTabIndex = 0;
                 }
                 else
                 {
