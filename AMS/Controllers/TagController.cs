@@ -95,6 +95,7 @@ namespace AMS.Controllers
         /// </summary>
         public void Save()
         {
+            SerializeFields();
             ulong newTagId;
             _tagRepository.Insert(ControlledTag, out newTagId);
             TagID = newTagId;
