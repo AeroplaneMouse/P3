@@ -98,6 +98,10 @@ namespace AMS.Controllers
             ControlledAsset.Changes = new Dictionary<string, object>();
         }
 
+        /// <summary>
+        /// Attaches an ITagable and its fields to the controlled asset.
+        /// </summary>
+        /// <param name="tag">Tag ITagable that should be attached</param>
         public void AttachTags(ITagable tag)
         {
             List<ITagable> tagList = new List<ITagable>();
@@ -106,10 +110,9 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Attaches a tag and its fields to a asset.
+        /// Attaches a list of ITagable and their fields to the controlled asset.
         /// </summary>
-        /// <param name="tag"></param>
-        /// <returns></returns>
+        /// <param name="tags">The list of ITagable that should be attached</param>
         public void AttachTags(List<ITagable> tags)
         {
             foreach(ITagable tag in tags)
@@ -121,16 +124,16 @@ namespace AMS.Controllers
                     {
                         //DeSerialize the fields, so the fieldList is instantiated
                         currentTag.DeSerializeFields();
-                        foreach (var tagField in currentTag.FieldList)
-                        {
-                            //AddField(tagField, currentTag);
+
+                        // Adds all the fields to the asset
+                        foreach (Field tagField in currentTag.FieldList)
                             AddField(tagField);
-                        }
                     }
                 }
             }
 
-            LoadFields();
+            // Update the content of any field that has a placeholder text. (like "Current date")
+            UpdateFieldContent();
         }
 
         public void DetachTags(ITagable tag)
@@ -189,8 +192,6 @@ namespace AMS.Controllers
                     }
                 }
             }
-
-            LoadFields();
         }
 
         /// <summary>
@@ -234,6 +235,20 @@ namespace AMS.Controllers
             //    if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
             //        field.Content = false.ToString();
             //}
+        }
+
+        public void UpdateFieldContent()
+        {
+            foreach(Field field in ControlledAsset.FieldList)
+            {
+                // Date fields
+                if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
+                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+
+                // Checkbox fields
+                if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
+                    field.Content = false.ToString();
+            }
         }
     }
 }
