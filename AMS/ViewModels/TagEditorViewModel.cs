@@ -174,7 +174,7 @@ namespace AMS.ViewModels
             _controller.ControlledTag.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
             if (VerifyTagAndFields())
             {
-                string message = $"'{ _controller.Name }' has been ";
+                string message = $"'{ _controller.ControlledTag.Name }' has been ";
                 if (_controller.IsEditing)
                 {
                     _controller.Update();
