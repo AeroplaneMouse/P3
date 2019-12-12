@@ -331,7 +331,8 @@ namespace AMS.Database.Repositories
                 try
                 {
                     const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
-                                         "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                         "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren, " +
+                                         "IF(t.parent_id > 0, (SELECT p.label FROM tags AS p WHERE p.id = t.parent_id), '') AS parent_label " +
                                          "FROM tags AS t WHERE t.id=@id";
 
                     using (var cmd = new MySqlCommand(query, con))
@@ -373,7 +374,8 @@ namespace AMS.Database.Repositories
                 try
                 {
                     const string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
-                                         "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                         "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren, " +
+                                         "IF(t.parent_id > 0, (SELECT p.label FROM tags AS p WHERE p.id = t.parent_id), '') AS parent_label " +
                                          "FROM tags AS t " +
                                          "INNER JOIN asset_tags AS at ON at.tag_id = t.id " +
                                          "WHERE at.asset_id = @id";
@@ -433,7 +435,8 @@ namespace AMS.Database.Repositories
                     ulong department = Features.Main.CurrentDepartment.ID;
                     
                     string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
-                                         "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                         "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren, " +
+                                         "IF(t.parent_id > 0, (SELECT p.label FROM tags AS p WHERE p.id = t.parent_id), '') AS parent_label " +
                                          "FROM tags AS t WHERE t.parent_id=@id "+(department > 0 ? "AND (t.department_id = @department OR t.department_id IS NULL)" : "")+
                                          "ORDER BY countChildren DESC, t.label ASC";
 
@@ -487,7 +490,8 @@ namespace AMS.Database.Repositories
                 try 
                 {
                     string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, " +
-                                   "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                   "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren, " +
+                                   "IF(t.parent_id > 0, (SELECT p.label FROM tags AS p WHERE p.id = t.parent_id), '') AS parent_label " +
                                    "FROM tags AS t WHERE t.label LIKE @keyword";
 
                     if (Features.Main.CurrentDepartment.ID > 0)
@@ -540,7 +544,8 @@ namespace AMS.Database.Repositories
                 try
                 {
                     string query = "SELECT t.id, t.label, t.parent_id, t.department_id, t.color, t.options, t.created_at, t.updated_at, t.options, " +
-                                   "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren " +
+                                   "(SELECT COUNT(ct.id) FROM tags AS ct WHERE t.id = ct.parent_id) AS countChildren, " +
+                                   "IF(t.parent_id > 0, (SELECT p.label FROM tags AS p WHERE p.id = t.parent_id), '') AS parent_label " +
                                    "FROM tags AS t";
                     
                     if (Features.Main.CurrentDepartment.ID > 0)
@@ -665,7 +670,7 @@ namespace AMS.Database.Repositories
 
                                 Tag tag = (Tag) Activator.CreateInstance(typeof(Tag),
                                     BindingFlags.Instance | BindingFlags.NonPublic, null,
-                                    new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowContainsChildren, "[]", null, null }, null,
+                                    new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowContainsChildren, "[]", "", null, null }, null,
                                     null);
 
                                 if (tag.ParentId > 0 && tags_placeholder.ContainsKey(tag.ParentId))
@@ -712,12 +717,17 @@ namespace AMS.Database.Repositories
             string rowColor = reader.GetString("color");
             int rowNumberOfChildren = reader.GetInt32("countChildren");
             string rowOptions = reader.GetString("options");
+            string rowFullLebel = reader.GetString("parent_label");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
-
+            
+            if(rowFullLebel.Length > 0)
+                //rowFullLebel += char.ConvertFromUtf32(0x00002192)+rowLabel;
+                rowFullLebel += char.ConvertFromUtf32(0x202F)+char.ConvertFromUtf32(0x1f852)+char.ConvertFromUtf32(0x202F)+rowLabel;
+            
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowNumberOfChildren, rowOptions, rowCreatedAt, rowUpdatedAt }, null,
+                new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowNumberOfChildren, rowOptions, rowFullLebel, rowCreatedAt, rowUpdatedAt }, null,
                 null);
         }
     }

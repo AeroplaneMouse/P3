@@ -82,7 +82,7 @@ namespace AMS.Models
         }
 
         /*Constructor used by DB*/
-        private Tag(ulong id, string name, ulong department_id, ulong parent_id, string color, int numOfChildren, string serializedField, DateTime created_at, DateTime updated_at)
+        private Tag(ulong id, string name, ulong department_id, ulong parent_id, string color, int numOfChildren, string serializedField, string fullLabel, DateTime created_at, DateTime updated_at)
         {
             ID = id;
             Name = name;
@@ -90,7 +90,8 @@ namespace AMS.Models
             ParentId = parent_id;
             Color = color;
             NumberOfChildren = numOfChildren;
-            this.SerializedFields = serializedField;
+            SerializedFields = serializedField;
+            FullTagLabel = fullLabel;
             CreatedAt = created_at;
             UpdatedAt = updated_at;
             TrackChanges = true;
