@@ -98,7 +98,8 @@ namespace AMS.Controllers
                 else if (field.TagIDs.Count == 0)
                 {
                     field.IsCustom = true;
-                    // Update hashID, since it is no a new field, and should have not relation to the tag it originated from.
+                    field.IsHidden = false;
+                    // Update hashID, since it is now a new field, and shouldn't have any relation to the tag it originated from.
                     field.UpdateHashID();
                 }
                 
