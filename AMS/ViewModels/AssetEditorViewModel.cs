@@ -470,15 +470,15 @@ namespace AMS.ViewModels
             {
                 if (field.Required && string.IsNullOrEmpty(field.Content) && !field.IsHidden)
                 {
-                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
+                    Features.AddNotification(new Notification("The field " + field.Label + " is required but empty",
                         Notification.WARNING));
                     return false;
                 }
 
-                if (field.Required && field.Type == Field.FieldType.Date && (field.Content == "Current date" ||
-                    field.Content == "System.Windows.Controls.ComboBoxItem: Empty") && !field.IsHidden)
+                if (field.Required && field.Type == Field.FieldType.Date && (field.Content == "Current Date" ||
+                    field.Content == "None") && !field.IsHidden)
                 {
-                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
+                    Features.AddNotification(new Notification("The field " + field.Label + " is required but empty",
                         Notification.WARNING));
                     return false;
                 }
