@@ -20,7 +20,8 @@ namespace AMS.Controllers.Interfaces
         bool Update();
         bool Remove();
 
-        void LoadFields();
+        void UpdateFieldContent();
+
         void RevertChanges();
     }
 }

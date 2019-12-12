@@ -204,6 +204,7 @@ namespace AMS.ViewModels
             if (e.Result && e is FieldInputPromptEventArgs args)
             {
                 _assetController.AddField(args.Field);
+                _assetController.UpdateFieldContent();
             }
 
             UpdateAll();
@@ -412,7 +413,6 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(NonHiddenFieldList));
             OnPropertyChanged(nameof(HiddenFieldList));
-            _assetController.LoadFields();
         }
 
         /// <summary>
@@ -426,17 +426,13 @@ namespace AMS.ViewModels
             foreach (Field field in allFields)
                 UpdateTagRelationsOnSingleField(field, tagList);
 
-            //foreach (var field in HiddenFieldList)
-            //{
-            //    UpdateTagRelationsOnSingleField(field, tagList);
-            //}
-
-            //foreach (var field in NonHiddenFieldList)
-            //{
-            //    UpdateTagRelationsOnSingleField(field, tagList);
-            //}
         }
 
+        /// <summary>
+        /// Updates a fields tagList to the related tags, from the tagIDs saved on the field
+        /// </summary>
+        /// <param name="field">The field to update the TagList on</param>
+        /// <param name="tagList"></param>
         private void UpdateTagRelationsOnSingleField(Field field, ObservableCollection<ITagable> tagList)
         {
             field.TagList = new List<ITagable>();
@@ -448,19 +444,6 @@ namespace AMS.ViewModels
                     if (tag.TagId == id || tag.ParentId == id)
                         field.TagList.Add(tag);
                 }
-            }
-
-            //foreach (var id in field.TagIDs)
-            //{
-            //    foreach (ITagable tag in tagList.Where(p => p.TagId == id || p.ParentId == id))
-            //    {
-            //        field.TagList.Add(tag);
-            //    }
-            //}
-
-            if (!field.TagList.Any() && !field.IsCustom)
-            {
-                _assetController.RemoveField(field);
             }
         }
 
@@ -491,15 +474,15 @@ namespace AMS.ViewModels
             {
                 if (field.Required && string.IsNullOrEmpty(field.Content) && !field.IsHidden)
                 {
-                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
+                    Features.AddNotification(new Notification("The field " + field.Label + " is required but empty",
                         Notification.WARNING));
                     return false;
                 }
 
-                if (field.Required && field.Type == Field.FieldType.Date && (field.Content == "Current date" ||
-                    field.Content == "System.Windows.Controls.ComboBoxItem: Empty") && !field.IsHidden)
+                if (field.Required && field.Type == Field.FieldType.Date && (field.Content == "Current Date" ||
+                    field.Content == "None") && !field.IsHidden)
                 {
-                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
+                    Features.AddNotification(new Notification("The field " + field.Label + " is required but empty",
                         Notification.WARNING));
                     return false;
                 }

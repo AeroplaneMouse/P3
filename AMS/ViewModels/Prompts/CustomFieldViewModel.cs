@@ -29,7 +29,7 @@ namespace AMS.ViewModels.Prompts
             }
         }
 
-        public string SelectedDate { get; set; } = "Current Date";
+        public string SelectedDate { get; set; } = "System.Windows.Controls.ComboBoxItem: Current Date";
         public bool IsRequired { get; set; } = false;
         public Field.FieldType SelectedFieldType { get; set; }
         public List<Field.FieldType> FieldTypes { get; set; } = (List<Field.FieldType>)Field.GetTypes();
@@ -68,7 +68,7 @@ namespace AMS.ViewModels.Prompts
                 return;
 
             if (SelectedFieldType == Field.FieldType.Date)
-                DefaultValue = SelectedDate.Trim();
+                DefaultValue = SelectedDate.Replace("System.Windows.Controls.ComboBoxItem: ", "");
 
             _newField = new Field(Name, DefaultValue, SelectedFieldType, IsRequired, _isCustom);
 

@@ -16,12 +16,11 @@ namespace AMS.Controllers
     {
         private ITagRepository _tagRepository { get; set; }
         private IDepartmentRepository _departmentRepository { get; set; }
-        private Tag _controlledTag;
 
         public Tag ControlledTag
         {
-            get => _controlledTag;
-            set => _controlledTag = value;
+            get => (Tag)_fieldContainer;
+            set => _fieldContainer = value;
         }
 
         public List<Field> ParentTagFields { get; set; } = new List<Field>();
@@ -71,20 +70,20 @@ namespace AMS.Controllers
         public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository)
             : base(tag)
         {
-            _controlledTag = tag;
+            //_controlledTag = tag;
 
             _tagRepository = tagRep;
             _departmentRepository = departmentRepository;
 
-            if (_controlledTag.ID == 0)
+            if (ControlledTag.ID == 0)
             {
-                _controlledTag.Color = CreateRandomColor();
+                ControlledTag.Color = CreateRandomColor();
                 IsEditing = false;
             }
             else
             {
                 IsEditing = true;
-                _controlledTag.DeSerializeFields();
+                ControlledTag.DeSerializeFields();
             }
         }
 
@@ -97,8 +96,23 @@ namespace AMS.Controllers
         {
             SerializeFields();
             ulong newTagId;
-            _tagRepository.Insert(ControlledTag, out newTagId);
+            ControlledTag = _tagRepository.Insert(ControlledTag, out newTagId);
             TagID = newTagId;
+
+            // Check if any fields does not have a tagId set
+            ControlledTag.DeSerializeFields();
+            foreach(Field field in ControlledTag.FieldList)
+            {
+                if (field.TagIDs.Count == 0)
+                {
+                    field.TagIDs.Add(ControlledTag.ID);
+                    ControlledTag.Changes.Add("options", TagID);
+                }
+            }
+
+            // Save the field changes to the database
+            if (ControlledTag.IsDirty())
+                Update();
         }
 
         /// <summary>
@@ -150,8 +164,7 @@ namespace AMS.Controllers
         /// <param name="newTag"></param>
         public void ConnectParentTag()
         {
-            
-            Tag currentTag = _tagRepository.GetById(_controlledTag.ParentId);
+            Tag currentTag = _tagRepository.GetById(ControlledTag.ParentId);
             if (currentTag != null)
             {
                 //TODO Throws exception, når et tags parent id ændres
@@ -159,10 +172,7 @@ namespace AMS.Controllers
                 ParentTagFields = currentTag.FieldList;
             }
             else
-            {
                 ParentTagFields = new List<Field>();
-            }
-
         }
 
         #endregion
@@ -172,13 +182,13 @@ namespace AMS.Controllers
         /// </summary>
         public void RevertChanges()
         {
-            foreach (PropertyInfo property in _controlledTag.GetType().GetProperties())
+            foreach (PropertyInfo property in ControlledTag.GetType().GetProperties())
             {
-                if (_controlledTag.Changes.ContainsKey(property.Name))
-                    property.SetValue(_controlledTag, _controlledTag.Changes[property.Name].ToString());
+                if (ControlledTag.Changes.ContainsKey(property.Name))
+                    property.SetValue(ControlledTag, ControlledTag.Changes[property.Name].ToString());
             }
 
-            _controlledTag.Changes = new Dictionary<string, object>();
+            ControlledTag.Changes = new Dictionary<string, object>();
         }
     }
 }
