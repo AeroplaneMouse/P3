@@ -8,8 +8,8 @@ namespace AMS.Controllers.Interfaces
     {
         bool SerializeFields();
 
-        public List<Field> NonHiddenFieldList { get; set; }
-        public List<Field> HiddenFieldList { get; set; }
+        List<Field> NonHiddenFieldList { get; set; }
+        List<Field> HiddenFieldList { get; set; }
 
         bool AddField(Field field, FieldContainer fieldContainer = null);
 
