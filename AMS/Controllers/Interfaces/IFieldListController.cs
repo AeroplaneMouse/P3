@@ -8,15 +8,9 @@ namespace AMS.Controllers.Interfaces
     {
         bool SerializeFields();
 
-        public List<Field> NonHiddenFieldList { get; set; }
-        public List<Field> HiddenFieldList { get; set; }
-
         bool AddField(Field field);
-
         bool RemoveField(Field inputField);
         
-        bool HandleFieldsFromRemoveTag(Field inputField,Tag tag);
-
         bool RemoveTagRelationsOnFields(ITagable tag);
     }
 }

@@ -190,14 +190,26 @@ namespace AMS.Controllers
             }
 
             // For every field that is not custom, check if its related tags still have the field associated.
-            foreach(Field field in ControlledAsset.FieldList)
+            ValidateAndUpdateFieldToTagRelations();
+
+            // Check the TagFieldRelations, remove any field that has no relations
+            RemoveFieldsWithNoTagRelations();
+        }
+
+        /// <summary>
+        /// For every non-custom field, check if the fields relation to the tag is still valid. 
+        /// If not, remove the relation.
+        /// </summary>
+        private void ValidateAndUpdateFieldToTagRelations()
+        {
+            foreach (Field field in ControlledAsset.FieldList)
             {
                 // Only act on non-custom fields
                 if (!field.IsCustom)
                 {
                     // Find any tagIDs that should no longer be related to the field
                     List<ulong> idsToRemove = new List<ulong>();
-                    foreach(ulong id in field.TagIDs)
+                    foreach (ulong id in field.TagIDs)
                     {
                         ITagable tag = GetTagFromID(id);
                         if (!IsTagContainingFieldOrSimilar(tag, field))
@@ -210,9 +222,6 @@ namespace AMS.Controllers
 
                 }
             }
-
-            // Check the TagFieldRelations, remove any field that has no relations
-            RemoveFieldsWithNoTagRelations();
         }
 
         /// <summary>
@@ -261,31 +270,8 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Runs on startup, loads fields, and updates fields that are dependent on values.
+        /// Updates the content of fields if they have placeholders. (like "Current Date")
         /// </summary>
-        public void LoadFields()
-        {
-
-
-            //foreach (var field in HiddenFieldList)
-            //{
-            //    if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
-            //        field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-
-            //    if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
-            //        field.Content = false.ToString();
-            //}
-
-            //foreach (var field in NonHiddenFieldList)
-            //{
-            //    if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
-            //        field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
-
-            //    if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
-            //        field.Content = false.ToString();
-            //}
-        }
-
         public void UpdateFieldContent()
         {
             foreach(Field field in ControlledAsset.FieldList)

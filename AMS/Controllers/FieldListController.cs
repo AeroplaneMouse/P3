@@ -13,9 +13,6 @@ namespace AMS.Controllers
     {
         private FieldContainer _fieldContainer;
 
-        public List<Field> NonHiddenFieldList { get; set; } = new List<Field>();
-        public List<Field> HiddenFieldList { get; set; } = new List<Field>();
-
         protected FieldListController(FieldContainer element)
         {
             if (element == null)
@@ -111,27 +108,6 @@ namespace AMS.Controllers
             }
 
             return true;
-        }
-
-        public bool HandleFieldsFromRemoveTag(Field inputField, Tag tagable)
-        {
-            if (!inputField.IsCustom && inputField.Content ==
-                tagable.FieldList.SingleOrDefault(p => p.Hash == inputField.Hash)?.Content)
-            {
-                if (inputField.IsHidden)
-                    HiddenFieldList.Remove(inputField);
-                else
-                    NonHiddenFieldList.Remove(inputField);
-
-                return true;
-            }
-            else
-            {
-                inputField.IsCustom = true;
-                return true;
-            }
-
-            return false;
         }
 
         /// <summary>
