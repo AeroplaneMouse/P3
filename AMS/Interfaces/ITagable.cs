@@ -9,6 +9,7 @@ namespace AMS.Interfaces
         ulong TagId { get; }
         Type TagType { get; }
         string TagLabel { get; }
+        string FullTagLabel { get; set; }
         ulong ParentId { get; }
         int NumberOfChildren { get; }
         List<ITagable> Children { get; set; }

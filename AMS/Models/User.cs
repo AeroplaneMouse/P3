@@ -56,6 +56,7 @@ namespace AMS.Models
         public ulong TagId => ID;
         public Type TagType => this.GetType();
         public string TagLabel => Username;
+        public string FullTagLabel { get; set; }
         public ulong ParentId => 1;
         public int NumberOfChildren => 0;
         public List<ITagable> Children { get; set; }
