@@ -11,7 +11,7 @@ namespace AMS.Controllers
 {
     public abstract class FieldListController : IFieldListController
     {
-        private FieldContainer _fieldContainer;
+        protected FieldContainer _fieldContainer;
 
         protected FieldListController(FieldContainer element)
         {
