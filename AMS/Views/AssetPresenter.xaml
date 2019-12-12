@@ -213,7 +213,7 @@
                                                     <ItemsControl ItemsSource="{Binding TagList}">
                                                         <ItemsControl.ItemTemplate>
                                                             <DataTemplate>
-                                                                <Grid MaxWidth="100" HorizontalAlignment="Left">
+                                                                <Grid HorizontalAlignment="Left">
                                                                     <Label Style="{StaticResource TagLabelOnlyShow}"/>
                                                                 </Grid>
                                                             </DataTemplate>
