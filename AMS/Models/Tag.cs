@@ -118,6 +118,7 @@ namespace AMS.Models
         public ulong TagId => ID;
         public Type TagType => this.GetType();
         public string TagLabel => Name;
+        public string FullTagLabel { get; set; }
         public List<ITagable> Children { get; set; } = new List<ITagable>();
         public string TagColor { 
             get => Color;

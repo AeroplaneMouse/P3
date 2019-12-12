@@ -58,7 +58,10 @@ namespace AMS.ViewModels
             {
                 _tagSearchQuery = value;
                 if (!_tagSearchQuery.EndsWith(' '))
+                {
+                    _tagTabIndex = 0;
                     TagSearch();
+                }
             }
         }
 
@@ -276,12 +279,13 @@ namespace AMS.ViewModels
             {
                 _tagTabIndex++;
 
-                if (!(_tagTabIndex < TagSearchSuggestions.Count()) || !(_tagTabIndex >= 0))
+                if (!(_tagTabIndex <= TagSearchSuggestions.Count()) || !(_tagTabIndex > 0))
                 {
-                    _tagTabIndex = 0;
+                    _tagTabIndex = 1;
                 }
-                
-                TagSearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
+
+                TagSearchQuery = TagSearchSuggestions[_tagTabIndex - 1].TagLabel + ' ';
+
             }
         }
 
@@ -295,12 +299,12 @@ namespace AMS.ViewModels
             {
                 _tagTabIndex--;
                 
-                if (!(_tagTabIndex < TagSearchSuggestions.Count()) || !(_tagTabIndex >= 0))
+                if (!(_tagTabIndex <= TagSearchSuggestions.Count()) || !(_tagTabIndex > 0))
                 {
-                    _tagTabIndex = TagSearchSuggestions.Count() - 1;
+                    _tagTabIndex = TagSearchSuggestions.Count();
                 }
 
-                TagSearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
+                TagSearchQuery = TagSearchSuggestions[_tagTabIndex-1].TagLabel + ' ';
             }
 
             UpdateAll();
@@ -326,10 +330,10 @@ namespace AMS.ViewModels
                     // Attach tag and parent
                     _assetController.AttachTags(_tagHelper.AddTag(tag));
                     AppliedTags = _tagHelper.GetAppliedTags(false);
+                    ClearInput();
                 }
 
                 TagSearchQuery = "";
-                _tagTabIndex = 0;
                 UpdateAll();
             }
             else

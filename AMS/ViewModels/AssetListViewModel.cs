@@ -261,12 +261,12 @@ namespace AMS.ViewModels
             {
                 _tagTabIndex++;
 
-                if (!(_tagTabIndex < TagSearchSuggestions.Count()) || !(_tagTabIndex >= 0))
+                if (!(_tagTabIndex <= TagSearchSuggestions.Count()) || !(_tagTabIndex > 0))
                 {
-                    _tagTabIndex = 0;
+                    _tagTabIndex = 1;
                 }
 
-                SearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
+                SearchQuery = TagSearchSuggestions[_tagTabIndex-1].TagLabel + ' ';
             }
         }
 
@@ -280,12 +280,12 @@ namespace AMS.ViewModels
             {
                 _tagTabIndex--;
 
-                if (!(_tagTabIndex < TagSearchSuggestions.Count()) || !(_tagTabIndex >= 0))
+                if (!(_tagTabIndex <= TagSearchSuggestions.Count()) || !(_tagTabIndex > 0))
                 {
-                    _tagTabIndex = TagSearchSuggestions.Count() - 1;
+                    _tagTabIndex = TagSearchSuggestions.Count();
                 }
 
-                SearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
+                SearchQuery = TagSearchSuggestions[_tagTabIndex-1].TagLabel + ' ';
             }
         }
 

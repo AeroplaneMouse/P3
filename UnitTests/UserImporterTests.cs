@@ -107,7 +107,7 @@ namespace UnitTests
             DeleteFileAt(filePath);
         }
 
-        [TestMethod]
+        /*[TestMethod]
         public void ImportUsersFromFile_EncodingIsUTF8WithoutBOM_UsersReturnedInListWithSpecialCharacters()
         {
             // Arrange
@@ -121,7 +121,7 @@ namespace UnitTests
             Assert.IsTrue(users.Count() == 2 && users.Where(p => p.Username.ToLower().Contains('å')).Count() == 1);
 
             DeleteFileAt(filePath);
-        }
+        }*/
 
         #region Helpers
 
