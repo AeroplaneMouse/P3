@@ -164,10 +164,11 @@ namespace AMS.Controllers
                 if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == field.Content) return true;
 
                 //Checks whether its a date field, as this contains extra handling, and it does not get caught in the first statement.
-                if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Type != Field.FieldType.Date)
+                if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Type == Field.FieldType.Date)
+                    return false;
                 {
                     // Checks if the field on the tag contains is equals "Current Date" and the date on the FieldToBeRemoved is equals the date.today.
-                    if (currentTag.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == "Current Date" &&
+                    if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == "Current Date" &&
                         field.Content == DateTime.Today.ToString(CultureInfo.InvariantCulture)) return true;
                 }
             }
