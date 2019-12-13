@@ -74,6 +74,9 @@ namespace AMS.Models
             }
         }
 
+        public string TagColors { get; set; }
+        public string TagLabels { get; set; }
+
         public Asset()
         {
             FieldList = new List<Field>();
