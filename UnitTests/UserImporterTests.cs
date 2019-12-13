@@ -107,6 +107,7 @@ namespace UnitTests
             DeleteFileAt(filePath);
         }
 
+        /*
         [TestMethod]
         public void ImportUsersFromFile_EncodingIsUTF8WithoutBOM_UsersReturnedInListWithSpecialCharacters()
         {
@@ -122,6 +123,7 @@ namespace UnitTests
 
             DeleteFileAt(filePath);
         }
+        */
 
         #region Helpers
 
