@@ -11,8 +11,8 @@ namespace AMS.Authentication
     public class Session
     {
         public User user;
-        public string Username { get => GetIdentity().Split('\\')[1]; }
-        public string Domain { get => GetIdentity().Split('\\')[0]; }
+        public string Username { get => GetUsername(); }
+        public string Domain { get => GetDomain(); }
 
         private static string _dbKey = "";
 
@@ -52,12 +52,16 @@ namespace AMS.Authentication
         public bool IsAdmin() => user.IsAdmin;
         
         public static string GetIdentity() => WindowsIdentity.GetCurrent().Name;
-        
+
+        public static string GetDomain() => GetIdentity().Split('\\')[0];
+
+        public static string GetUsername() => GetIdentity().Split('\\')[1];
+
         public static string GetDBKey()
         {
             if (string.IsNullOrEmpty(_dbKey))
             {
-                FileConfigurationHandler fileConfigurationHandler = new FileConfigurationHandler(null);
+                FileConfigurationHandler fileConfigurationHandler = new FileConfigurationHandler(GetDomain());
                 _dbKey = fileConfigurationHandler.GetConfigValue();
             }
             return _dbKey;
