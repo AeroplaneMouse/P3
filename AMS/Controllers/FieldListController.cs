@@ -59,7 +59,7 @@ namespace AMS.Controllers
             {
                 field.Content = inputField.Content;
                 // Add the ID of the inputfields originating tag, if it aren't already.
-                if (!field.TagIDs.Contains(inputField.TagIDs.First()))
+                if (!field.TagIDs.Contains(inputField.TagIDs.FirstOrDefault()))
                     field.TagIDs.Add(inputField.TagIDs.First());
                 return false;
             }
@@ -127,6 +127,13 @@ namespace AMS.Controllers
                 // Only act on non-custom fields
                 if (!field.IsCustom)
                 {
+                    //if (field.TagIDs.Count == 1 && tag is Tag currentTag)
+                    //{
+                    //    Field tagField = currentTag.FieldList.FirstOrDefault(f => f.HashId == field.HashId);
+                    //    if (tagField != null && tagField.Content == field.Content)
+                    //        field.Content = "";
+                    //}
+
                     if (field.TagIDs.Contains(tag.TagId))
                     {
                         field.TagIDs.Remove(tag.TagId);
