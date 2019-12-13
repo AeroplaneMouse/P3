@@ -138,11 +138,11 @@ namespace AMS.Controllers
                         field.TagList.Remove(tag);
                     }
 
-                    if (ShouldFieldBeRemoved(field, tag))
+                    if (SetFieldContent(field, tag))
                     {
                         field.Content = String.Empty;
-                        fieldsToRemove.Add(field);
                     }
+                    fieldsToRemove.Add(field);
                 }
             }
 
@@ -153,7 +153,7 @@ namespace AMS.Controllers
             return true;
         }
 
-        private bool ShouldFieldBeRemoved(Field field, ITagable tag)
+        private bool SetFieldContent(Field field, ITagable tag)
         {
             Tag currentTag = tag as Tag;
             currentTag?.DeSerializeFields();
@@ -164,13 +164,12 @@ namespace AMS.Controllers
                 if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == field.Content) return true;
 
                 //Checks whether its a date field, as this contains extra handling, and it does not get caught in the first statement.
-                if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Type != Field.FieldType.Date) return false;
+                if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Type != Field.FieldType.Date)
                 {
                     // Checks if the field on the tag contains is equals "Current Date" and the date on the FieldToBeRemoved is equals the date.today.
                     if (currentTag.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == "Current Date" &&
                         field.Content == DateTime.Today.ToString(CultureInfo.InvariantCulture)) return true;
                 }
-
             }
 
             return false;
