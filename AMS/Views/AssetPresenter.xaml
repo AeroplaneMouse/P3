@@ -110,7 +110,7 @@
                      FontSize="{StaticResource FontSizeSmall}">
                 <Grid>
                     <!-- Content of the page -->
-                    <ScrollViewer Grid.Row="1" Margin="10">
+                    <ScrollViewer Grid.Row="1" Margin="10" VerticalScrollBarVisibility="Auto">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -188,7 +188,7 @@
                                 <ListView ItemsSource="{Binding FieldList}"
                                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                           ItemContainerStyle="{StaticResource ListViewWithTags}"
-                                          BorderBrush="Black"
+                                          BorderBrush="Transparent"
                                           Margin="0 0 0 0">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
