@@ -61,7 +61,6 @@ namespace AMS.Controllers
                 if (field.Content == string.Empty)
                     field.Content = inputField.Content;
 
-
                 // Add the ID of the inputfields originating tag, if it aren't already.
                 if (inputField.TagIDs.Any() && !field.TagIDs.Contains(inputField.TagIDs.First()))
                     field.TagIDs.Add(inputField.TagIDs.First());
@@ -125,7 +124,6 @@ namespace AMS.Controllers
         {
             List<Field> fieldsToRemove = new List<Field>();
 
-
             // Update all the fields
             foreach (Field field in _fieldContainer.FieldList)
             {
@@ -138,11 +136,14 @@ namespace AMS.Controllers
                         field.TagList.Remove(tag);
                     }
 
-                    if (SetFieldContent(field, tag))
+                    // Check if the field has any relations to tags left on it
+                    if (field.TagIDs.Count == 0)
                     {
-                        field.Content = String.Empty;
+                        if (SetFieldContent(field, tag))
+                            field.Content = String.Empty;
+
+                        fieldsToRemove.Add(field);
                     }
-                    fieldsToRemove.Add(field);
                 }
             }
 
@@ -157,20 +158,21 @@ namespace AMS.Controllers
         {
             Tag currentTag = tag as Tag;
             currentTag?.DeSerializeFields();
-            // Check if the field has any relations to tags left on it
-            if (field.TagIDs.Count == 0)
-            {
-                //Checks if the field has changed value from the field on the tag.
-                if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == field.Content) return true;
 
-                //Checks whether its a date field, as this contains extra handling, and it does not get caught in the first statement.
-                if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Type == Field.FieldType.Date)
-                    return false;
+            //Checks if the field has changed value from the field on the tag.
+            if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == field.Content) 
+                return true;
+
+            //Checks whether its a date field, as this contains extra handling, and it does not get caught in the first statement.
+            if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Type == Field.FieldType.Date)
+                return false;
+            {
+                // Checks if the field on the tag contains is equals "Current Date" and the date on the FieldToBeRemoved is equals the date.today.
+                if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == "Current Date" &&
+                    field.Content == DateTime.Today.ToString(CultureInfo.InvariantCulture))
                 {
-                    // Checks if the field on the tag contains is equals "Current Date" and the date on the FieldToBeRemoved is equals the date.today.
-                    if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == "Current Date" &&
-                        field.Content == DateTime.Today.ToString(CultureInfo.InvariantCulture)) return true;
-                }
+                    return true;
+                } 
             }
 
             return false;
