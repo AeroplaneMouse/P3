@@ -139,6 +139,8 @@ namespace AMS.Controllers
                     // Check if the field has any relations to tags left on it
                     if (field.TagIDs.Count == 0)
                     {
+                        // Clear the content of the field, if it matches the default tag field content.
+                        // This will make the remove method remove the field.
                         if (SetFieldContent(field, tag))
                             field.Content = String.Empty;
 
@@ -154,6 +156,13 @@ namespace AMS.Controllers
             return true;
         }
 
+        /// <summary>
+        /// Validates wether or not the content of the given field equals the 
+        /// content of one of the fields on the tag.
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         private bool SetFieldContent(Field field, ITagable tag)
         {
             Tag currentTag = tag as Tag;
