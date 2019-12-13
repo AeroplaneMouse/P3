@@ -39,7 +39,7 @@ namespace AMS.Helpers
         {
             _tags = _tagRepository.GetAll().ToList();
             _users = _userRepository.GetAll().ToList();
-            
+            /*
             foreach(Tag tag in _tags)
             {
                 if (tag.ParentId != 0)
@@ -52,6 +52,7 @@ namespace AMS.Helpers
             {
                 user.FullTagLabel = GetTagParent(user).TagLabel + ":" + user.TagLabel;
             }
+            */
         }
 
         public List<ITagable> Suggest(string input)

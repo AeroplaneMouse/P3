@@ -717,17 +717,22 @@ namespace AMS.Database.Repositories
             string rowColor = reader.GetString("color");
             int rowNumberOfChildren = reader.GetInt32("countChildren");
             string rowOptions = reader.GetString("options");
-            string rowFullLebel = reader.GetString("parent_label");
+            string rowFullLabel = reader.GetString("parent_label");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
-            
-            if(rowFullLebel.Length > 0)
-                //rowFullLebel += char.ConvertFromUtf32(0x00002192)+rowLabel;
-                rowFullLebel += char.ConvertFromUtf32(0x202F)+char.ConvertFromUtf32(0x1f852)+char.ConvertFromUtf32(0x202F)+rowLabel;
-            
+
+            if (rowFullLabel.Length > 0)
+                rowFullLabel += char.ConvertFromUtf32(0x202F) + char.ConvertFromUtf32(0x1f852) +
+                                char.ConvertFromUtf32(0x202F) + rowLabel;
+            else
+                rowFullLabel = rowLabel;
+
+            if (rowId == 1)
+                rowFullLabel = char.ConvertFromUtf32(0x1f465) + " " + rowLabel;
+
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowNumberOfChildren, rowOptions, rowFullLebel, rowCreatedAt, rowUpdatedAt }, null,
+                new object[] { rowId, rowLabel, rowDepartmentId, rowParentID, rowColor, rowNumberOfChildren, rowOptions, rowFullLabel, rowCreatedAt, rowUpdatedAt }, null,
                 null);
         }
     }

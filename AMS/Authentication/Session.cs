@@ -57,7 +57,7 @@ namespace AMS.Authentication
         {
             if (string.IsNullOrEmpty(_dbKey))
             {
-                FileConfigurationHandler fileConfigurationHandler = new FileConfigurationHandler(Features.GetCurrentSession());
+                FileConfigurationHandler fileConfigurationHandler = new FileConfigurationHandler(null);
                 _dbKey = fileConfigurationHandler.GetConfigValue();
             }
             return _dbKey;
