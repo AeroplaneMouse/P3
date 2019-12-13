@@ -105,8 +105,9 @@ namespace AMS.Controllers
             {
                 if (field.TagIDs.Count == 0)
                 {
+                    if (field.TagIDs.Contains(ControlledTag.ID)) continue;
                     field.TagIDs.Add(ControlledTag.ID);
-                    ControlledTag.Changes.Add("options", TagID);
+                    ControlledTag.Changes["options"] = TagID;
                 }
             }
 

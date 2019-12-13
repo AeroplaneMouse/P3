@@ -166,7 +166,7 @@ namespace AMS.Controllers
                         if(currentTag.FieldList.Count == 0)
                             currentTag.DeSerializeFields();
 
-                        // Remove relations to the tag from the fields and handle wether or not the field itself should be removed.
+                        // Remove relations to the tag from the fields and handle whether or not the field itself should be removed.
                         RemoveTagRelationsOnFields(currentTag);
                     }
                 }
@@ -278,7 +278,7 @@ namespace AMS.Controllers
             {
                 // Date fields
                 if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
-                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+                    field.Content = DateTime.Today.ToString(CultureInfo.InvariantCulture);
 
                 // Checkbox fields
                 if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
