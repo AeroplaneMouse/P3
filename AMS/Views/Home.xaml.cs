@@ -2,6 +2,7 @@
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using System.Windows.Controls;
+using AMS.ViewModels;
 
 namespace AMS.Views
 {
@@ -10,7 +11,7 @@ namespace AMS.Views
         public Home(IHomeController homeController, ICommentListController commentListController)
         {
             InitializeComponent();
-            DataContext = new ViewModels.HomeViewModel(homeController, commentListController);
+            DataContext = new HomeViewModel(homeController, commentListController);
         }
     }
 }

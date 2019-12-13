@@ -31,7 +31,7 @@ namespace AMS.Controllers
         private Session _session { get; set; }
         private Asset _asset { get; set; }
         private ICommentRepository _commentRep { get; set; }
-        private Department _department;
+        private Department _department { get; set; }
 
         public CommentListController(Session session, ICommentRepository commentRepository, Department department, Asset asset)
         {
@@ -92,6 +92,7 @@ namespace AMS.Controllers
 
         public void FetchComments()
         {
+            _department = Features.GetCurrentDepartment();
             CommentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetLatestComments(_department.ID);
         }
     }
