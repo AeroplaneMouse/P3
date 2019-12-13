@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using AMS.Authentication;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
@@ -19,6 +21,7 @@ namespace UnitTests
         private Mock<IAssetRepository> _mockedReppository;
         private Mock<Session> _sessionMock;
         private Mock<IUserRepository> _userRepMock;
+
         [TestInitialize]
         public void InitiateFieldsList()
         {
@@ -28,9 +31,9 @@ namespace UnitTests
 
             _fourthField = new Field("Label of fourth field", "content of fourth field",
                 Field.FieldType.Textarea, true, true);
-            
+
             _mockedReppository = new Mock<IAssetRepository>();
-            _mockedReppository.Setup(p=>p.GetTags(It.IsAny<Asset>())).Returns(new List<ITagable>());
+            _mockedReppository.Setup(p => p.GetTags(It.IsAny<Asset>())).Returns(new List<ITagable>());
             _userRepMock = new Mock<IUserRepository>();
             _userRepMock.Setup(p => p.GetByIdentity(It.IsAny<string>()))
                 .Returns(new User {Username = "TestUser", DefaultDepartment = 1});
@@ -41,27 +44,29 @@ namespace UnitTests
         public void AddField_ChecksFieldsContains()
         {
             //Arrange
-            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
-            {
-                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentdId = 1}
-            };
+            AssetController otherAssetController =
+                new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
+                {
+                    ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentdId = 1}
+                };
             //Act
             otherAssetController.AddField(_thirdField);
             otherAssetController.AddField(_fourthField);
 
             //Assert
-            Assert.IsTrue(otherAssetController.NonHiddenFieldList.Contains(_thirdField) &&
-                          otherAssetController.NonHiddenFieldList.Contains(_fourthField));
+            Assert.IsTrue(otherAssetController.ControlledAsset.FieldList.Contains(_thirdField) &&
+                          otherAssetController.ControlledAsset.FieldList.Contains(_fourthField));
         }
 
         [TestMethod]
         public void RemoveField_CheckFieldDoesNotContain()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
-            {
-                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentdId = 1}
-            };
+            AssetController otherAsset =
+                new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
+                {
+                    ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentdId = 1}
+                };
             otherAsset.AddField(_thirdField);
             otherAsset.AddField(_fourthField);
 
@@ -69,18 +74,19 @@ namespace UnitTests
             otherAsset.RemoveField(_fourthField);
 
             //Assert
-            Assert.IsFalse(otherAsset.HiddenFieldList.Contains(_fourthField) ||
-                           otherAsset.NonHiddenFieldList.Contains(_fourthField));
+            Assert.IsFalse(otherAsset.ControlledAsset.FieldList.Contains(_fourthField) ||
+                           otherAsset.ControlledAsset.FieldList.Contains(_fourthField));
         }
 
         [TestMethod]
         public void RemoveField_UsingInheritedField_CheckFieldIsHidden()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
-            {
-                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentdId = 1}
-            };
+            AssetController otherAsset =
+                new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
+                {
+                    ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentdId = 1}
+                };
             otherAsset.AddField(_thirdField);
             otherAsset.AddField(_thirdField);
 
@@ -88,60 +94,53 @@ namespace UnitTests
             otherAsset.RemoveField(_thirdField);
 
             //Assert
-            Assert.IsTrue(otherAsset.HiddenFieldList.Contains(_thirdField) && _thirdField.IsHidden);
+            Assert.IsTrue(otherAsset.ControlledAsset.FieldList.Contains(_thirdField) && _thirdField.IsHidden);
         }
 
         [TestMethod]
         public void AddField_UsingInheritedField_CheckFieldsContains()
         {
             //Arrange
-            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
-            {
-                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentdId = 1}
-            };
+            AssetController otherAssetController =
+                new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
+                {
+                    ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentdId = 1}
+                };
             otherAssetController.AddField(_fourthField);
 
             //Act
             otherAssetController.AddField(_thirdField);
 
             //Assert
-            Assert.IsTrue(otherAssetController.NonHiddenFieldList.Contains(_thirdField));
+            Assert.IsTrue(otherAssetController.ControlledAsset.FieldList.Contains(_thirdField));
         }
 
         [TestMethod]
-        public void RemoveFieldRelations_Returns_IdInField_NonHiddenFieldList()
+        public void RemoveFieldRelations_Returns_IdInField_FieldList()
         {
             //Arrange
-            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
-            {
-                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentdId = 1}
-            };
+            AssetController otherAssetController =
+                new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
+                {
+                    ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentdId = 1}
+                };
             otherAssetController.AddField(_fourthField);
             otherAssetController.AddField(_thirdField);
             //Act
-            otherAssetController.RemoveTagRelationsOnFields(5);
+            otherAssetController.RemoveTagRelationsOnFields(CreateTestTagWithId(5));
 
             //Assert
-            Assert.IsFalse(otherAssetController.NonHiddenFieldList.SingleOrDefault(p => p.TagIDs.Contains(5)) != null);
+            Assert.IsTrue(otherAssetController.ControlledAsset.FieldList.SingleOrDefault(p => p.TagIDs.Contains(5)) ==
+                          null);
         }
-        
-        [TestMethod]
-        public void RemoveFieldRelations_Returns_IdInField_HiddenFieldList()
+
+
+        private Tag CreateTestTagWithId(ulong rowId)
         {
-            //Arrange
-            AssetController otherAssetController = new AssetController(new Asset(), _mockedReppository.Object, _sessionMock.Object)
-            {
-                ControlledAsset = {Name = "AssetTests_Asset", Description = "Description", DepartmentdId = 1}
-            };
-            otherAssetController.AddField(_fourthField);
-            otherAssetController.AddField(_thirdField);
-
-            otherAssetController.RemoveField(_thirdField);
-            //Act
-            otherAssetController.RemoveTagRelationsOnFields(5);
-
-            //Assert
-            Assert.IsFalse(otherAssetController.HiddenFieldList.SingleOrDefault(p => p.TagIDs.Contains(5)) != null);
+            return (Tag) Activator.CreateInstance(typeof(Tag),
+                BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new object[] {rowId, "TagTest", null, null, null, null, null, null, null, null}, null,
+                null);
         }
     }
 }

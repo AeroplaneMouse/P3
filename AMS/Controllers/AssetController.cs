@@ -136,17 +136,6 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Detaches an ITagable and its fields from the controlled asset.
-        /// </summary>
-        /// <param name="tag">The ITagable that should be detached</param>
-        public void DetachTags(ITagable tag)
-        {
-            List<ITagable> tagList = new List<ITagable>();
-            tagList.Add(tag);
-            DetachTags(tagList);
-        }
-
-        /// <summary>
         /// Detaches a list of ITagable and their field from the controlled asset.
         /// </summary>
         /// <param name="tags">The list of ITagble that should be detached</param>
