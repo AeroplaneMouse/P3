@@ -316,6 +316,15 @@ namespace AMS.ViewModels
         /// </summary>
         private void ApplyTagOrEnterParent()
         {
+            if (TagSearchSuggestions == null)
+            {
+                string message = $"Please insert the name of a tag. To add a new tag, go to tags.";
+
+                Features.AddNotification(new Notification(message, background: Notification.WARNING),
+                    displayTime: 3500);
+                
+                return;
+            }
             ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == TagSearchQuery.Trim(' '));
             if (tag != null)
             {

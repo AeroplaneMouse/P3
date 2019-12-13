@@ -63,7 +63,7 @@ namespace AMS.Controllers
 
 
                 // Add the ID of the inputfields originating tag, if it aren't already.
-                if (!field.TagIDs.Contains(inputField.TagIDs.First()))
+                if (inputField.TagIDs.Any() && !field.TagIDs.Contains(inputField.TagIDs.First()))
                     field.TagIDs.Add(inputField.TagIDs.First());
                 return false;
             }
