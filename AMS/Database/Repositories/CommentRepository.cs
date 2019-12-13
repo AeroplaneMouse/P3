@@ -73,16 +73,16 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "UPDATE comments SET asset_id=@asset_id, user_id=@user_id, content=@content, updated_at=CURRENT_TIMESTAMP() " +
+                    const string query = "UPDATE comments SET content=@content, updated_at=CURRENT_TIMESTAMP() " +
                                          "WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
-                        cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@asset_id"].Value = entity.AssetID;
+                        //cmd.Parameters.Add("@asset_id", MySqlDbType.UInt64);
+                        //cmd.Parameters["@asset_id"].Value = entity.AssetID;
 
-                        cmd.Parameters.Add("@user_id", MySqlDbType.String);
-                        cmd.Parameters["@user_id"].Value = 0;
+                        //cmd.Parameters.Add("@user_id", MySqlDbType.String);
+                        //cmd.Parameters["@user_id"].Value = 0;
 
                         cmd.Parameters.Add("@content", MySqlDbType.String);
                         cmd.Parameters["@content"].Value = entity.Content;

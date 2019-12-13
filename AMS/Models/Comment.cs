@@ -12,6 +12,8 @@ namespace AMS.Models
         public string Username { get; set; }
         public string AssetName { get; set; }
 
+        public bool IsEditing { get; set; }
+
         public string Content 
         {
             get 
@@ -44,6 +46,7 @@ namespace AMS.Models
             base.CreatedAt = createdAt;
             base.UpdatedAt = updatedAt;
             TrackChanges = true;
+            IsEditing = false;
         }
     }
 }

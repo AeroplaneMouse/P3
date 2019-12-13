@@ -14,6 +14,8 @@ namespace AMS.ViewModels
         public string NewComment { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand DeleteCommand { get; set; }
+        public ICommand EditCommand { get; set; }
+        public ICommand UpdateCommand{ get; set; }
         public ObservableCollection<Comment> CommentList => new ObservableCollection<Comment>(_controller.CommentList);
         private ICommentListController _controller { get; set; }
 
@@ -23,6 +25,8 @@ namespace AMS.ViewModels
 
             SaveCommand = new Base.RelayCommand(SaveComment);
             DeleteCommand = new Base.RelayCommand<object>(DeleteComment);
+            EditCommand = new Base.RelayCommand<object>(EditComment);
+            UpdateCommand = new Base.RelayCommand<object>(UpdateComment);
         }
 
         public override void UpdateOnFocus()
@@ -45,6 +49,18 @@ namespace AMS.ViewModels
         {
             _controller.RemoveComment(comment as Comment);
             Features.AddNotification(new Notification("Comment was removed", Notification.INFO));
+            OnPropertyChanged(nameof(CommentList));
+        }
+
+        private void EditComment(object comment)
+        {
+            _controller.EditComment(comment as Comment);
+            OnPropertyChanged(nameof(CommentList));
+        }
+
+        private void UpdateComment(object comment)
+        {
+            _controller.UpdateComment(comment as Comment);
             OnPropertyChanged(nameof(CommentList));
         }
     }

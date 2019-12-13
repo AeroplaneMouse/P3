@@ -90,6 +90,23 @@ namespace AMS.Controllers
             FetchComments();
         }
 
+        public void EditComment(Comment comment)
+        {
+            if (comment != null)
+            {
+                comment.IsEditing ^= true;
+            }
+        }
+
+        public void UpdateComment(Comment comment)
+        {
+            if (comment != null)
+            {
+                comment.IsEditing = false;
+                _commentRep.Update(comment);
+            }
+        }
+
         public void FetchComments()
         {
             _department = Features.GetCurrentDepartment();

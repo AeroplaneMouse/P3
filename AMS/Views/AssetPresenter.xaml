@@ -14,6 +14,7 @@
 
     <Page.Resources>
         <converter:UsernameToVisibilityConverter x:Key="UsernameConverter" />
+        <converter:CommentEditingToVisibilityConverter x:Key="CommentEditingConverter"/>
     </Page.Resources>
 
     <Page.InputBindings>
@@ -298,33 +299,77 @@
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
+                                            
                                             <!--Comment information-->
                                             <StackPanel Grid.Column="0" Margin="0 0 50 0">
+                                                
+                                                <!-- Username -->
                                                 <TextBlock Text="{Binding Path=Username}"
                                                            Style="{StaticResource ParagraphStyle}"
                                                            Foreground="Black"
                                                            FontWeight="DemiBold"
                                                            TextWrapping="Wrap"/>
                                                 
+                                                <!-- Created at string -->
                                                 <TextBlock Text="{Binding Path=CreatedAtString}"
                                                            Style="{StaticResource ParagraphStyle}"
                                                            Foreground="Gray" />
-                                                <Button
-                                                    Command="{Binding DataContext.DeleteCommand, ElementName=CommentList}"
-                                                    CommandParameter="{Binding .}"
-                                                    Style="{StaticResource TrashButton}"
-                                                    Width="17"
-                                                    HorizontalAlignment="Left"
-                                                    Margin="0 4 0 0"
-                                                    Visibility="{Binding Path=Username, Converter={StaticResource UsernameConverter}}" />
+
+                                                <!-- Buttons -->
+                                                <StackPanel Orientation="Horizontal">
+                                                    
+                                                    <!-- Delete button -->
+                                                    <Button Command="{Binding DataContext.DeleteCommand, ElementName=CommentList}"
+                                                            CommandParameter="{Binding .}"
+                                                            Style="{StaticResource TrashButton}"
+                                                            Width="17"
+                                                            HorizontalAlignment="Left"
+                                                            Margin="0 4 0 0"
+                                                            Visibility="{Binding Path=Username, Converter={StaticResource UsernameConverter}}" />
+
+                                                    <!-- Edit button -->
+                                                    <Button Command="{Binding DataContext.EditCommand, ElementName=CommentList}"
+                                                            CommandParameter="{Binding .}"
+                                                            Style="{StaticResource EditButton}"
+                                                            Width="17"
+                                                            HorizontalAlignment="Left"
+                                                            Margin="4 4 0 0"
+                                                            Visibility="{Binding Path=Username, Converter={StaticResource UsernameConverter}}" />
+                                                    
+                                                </StackPanel>
+                                                
+                                                
+                                                
                                             </StackPanel>
+                                            
                                             <!--Comment content-->
                                             <TextBlock Grid.Column="1"
-                                                       Text="{Binding Path=Content}"
+                                                       Text="{Binding Path=Content, UpdateSourceTrigger=PropertyChanged}"
                                                        Style="{StaticResource ParagraphStyle}"
                                                        Foreground="Black"
                                                        TextWrapping="Wrap"
-                                                       VerticalAlignment="Center" />
+                                                       VerticalAlignment="Center" 
+                                                       Visibility="{Binding Path=!IsEditing, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CommentEditingConverter}}"/>
+
+                                            <!-- Edit box -->
+                                            <StackPanel Visibility="{Binding Path=IsEditing, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CommentEditingConverter}}"
+                                                        Grid.Column="1"
+                                                        Orientation="Horizontal">
+                                                
+                                                <TextBox Text="{Binding Path=Content, UpdateSourceTrigger=PropertyChanged}"
+                                                         Style="{StaticResource ParagraphTextBox}"
+                                                         Foreground="Black"
+                                                         TextWrapping="Wrap"
+                                                         VerticalAlignment="Center"/>
+
+                                                <Button Content="Save"
+                                                        Style="{StaticResource RegularAcceptButton}"
+                                                        Command="{Binding DataContext.UpdateCommand, ElementName=CommentList}"
+                                                        CommandParameter="{Binding .}"/>
+                                                
+                                            </StackPanel>
+                                            
+                                            
                                         </Grid>
                                         <Rectangle Grid.Row="1" Height="1" Fill="LightGray" Margin="0 10" />
                                     </Grid>
