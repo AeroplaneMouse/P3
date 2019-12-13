@@ -22,7 +22,7 @@ namespace AMS.ConfigurationHandler
             //Setup to read the salt from the start of the file
             byte[] passwordBytes = Encoding.UTF8.GetBytes(encryptionKey);
             byte[] salt = new byte[64];
-            string output = null;
+            string output = "";
 
             if (!File.Exists(path))
             {

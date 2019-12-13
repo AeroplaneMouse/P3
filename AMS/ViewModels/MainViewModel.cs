@@ -281,7 +281,7 @@ namespace AMS.ViewModels
             {
                 if (e.Result)
                 {
-                    new FileConfigurationHandler(CurrentSession).Clear();
+                    new FileConfigurationHandler(Session.GetDomain()).Clear();
                     Reload();
                 }
             }));
