@@ -74,8 +74,8 @@ namespace AMS.Models
             }
         }
 
-        public string TagColors { get; set; }
-        public string TagLabels { get; set; }
+        public string AssociatedTags { get; set; }
+        public string AssociatedUsers { get; set; }
 
         public Asset()
         {
