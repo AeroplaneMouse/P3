@@ -15,6 +15,7 @@
     <Page.Resources>
         <converter:UsernameToVisibilityConverter x:Key="UsernameConverter" />
         <converter:CommentEditingToVisibilityConverter x:Key="CommentEditingConverter"/>
+        <converter:CommentNotEditingToVisibilityConverter x:Key="CommentNotEditingConverter"/>
     </Page.Resources>
 
     <Page.InputBindings>
@@ -255,6 +256,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
+                        
                         <TextBox Grid.Column="0"
                                  Text="{Binding NewComment, UpdateSourceTrigger=PropertyChanged}"
                                  FontSize="{StaticResource FontSizeSmall}"
@@ -271,6 +273,7 @@
                             <TextBox.InputBindings>
                                 <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding SaveCommand}" />
                             </TextBox.InputBindings>
+                            
                         </TextBox>
                         <Button Grid.Column="1"
                                 Content="Send"
@@ -349,23 +352,39 @@
                                                        Foreground="Black"
                                                        TextWrapping="Wrap"
                                                        VerticalAlignment="Center" 
-                                                       Visibility="{Binding Path=!IsEditing, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CommentEditingConverter}}"/>
+                                                       Visibility="{Binding Path=IsEditing, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CommentNotEditingConverter}}"/>
 
                                             <!-- Edit box -->
                                             <StackPanel Visibility="{Binding Path=IsEditing, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CommentEditingConverter}}"
                                                         Grid.Column="1"
                                                         Orientation="Horizontal">
-                                                
+
                                                 <TextBox Text="{Binding Path=Content, UpdateSourceTrigger=PropertyChanged}"
-                                                         Style="{StaticResource ParagraphTextBox}"
                                                          Foreground="Black"
                                                          TextWrapping="Wrap"
-                                                         VerticalAlignment="Center"/>
+                                                         AcceptsReturn="True"
+                                                         MinHeight="70"
+                                                         MaxHeight="250"
+                                                         MaxWidth="400"
+                                                         MinWidth="400"
+                                                         VerticalScrollBarVisibility="Visible"
+                                                         Padding="10"
+                                                         VerticalAlignment="Center">
+
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Key="Esc" Command="{Binding DataContext.EditCommand, ElementName=CommentList}" CommandParameter="{Binding .}"/>
+                                                        <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding DataContext.UpdateCommand, ElementName=CommentList}" CommandParameter="{Binding .}"/>
+                                                        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding DataContext.UpdateCommand, ElementName=CommentList}" CommandParameter="{Binding .}"/>
+                                                    </TextBox.InputBindings>
+                                                    
+                                                </TextBox>
 
                                                 <Button Content="Save"
                                                         Style="{StaticResource RegularAcceptButton}"
                                                         Command="{Binding DataContext.UpdateCommand, ElementName=CommentList}"
-                                                        CommandParameter="{Binding .}"/>
+                                                        CommandParameter="{Binding .}"
+                                                        VerticalAlignment="Top"
+                                                        Margin="10 0 0 0"/>
                                                 
                                             </StackPanel>
                                             
