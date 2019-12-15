@@ -20,22 +20,40 @@ namespace AMS.Views
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             FrameworkElement element = container as FrameworkElement;
-            Field field = item as Field;
-            switch (field?.Type)
+            if (item is Field field)
             {
-                case Field.FieldType.Textarea: // Textbox
-                    return element?.FindResource("TextBoxFieldStyle") as DataTemplate;
-                case Field.FieldType.TextBox: // String
-                    return element?.FindResource("StringFieldStyle") as DataTemplate;
-                case Field.FieldType.NumberField: // Integer
-                    return element?.FindResource("IntegerFieldStyle") as DataTemplate;
-                case Field.FieldType.Date: // Date
-                    return element?.FindResource("DateFieldStyle") as DataTemplate;
-                case Field.FieldType.Checkbox: // Boolean
-                    return element?.FindResource("BooleanFieldStyle") as DataTemplate;
-                default:
-                    throw new NotSupportedException("Wrong formatting syntax.");
+                switch (field.Type)
+                {
+                    case Field.FieldType.Textarea: // Textbox
+                        return element?.FindResource("TextBoxFieldStyle") as DataTemplate;
+                    case Field.FieldType.TextBox: // String
+                        return element?.FindResource("StringFieldStyle") as DataTemplate;
+                    case Field.FieldType.NumberField: // Integer
+                        return element?.FindResource("IntegerFieldStyle") as DataTemplate;
+                    case Field.FieldType.Date: // Date
+                        return element?.FindResource("DateFieldStyle") as DataTemplate;
+                    case Field.FieldType.Checkbox: // Boolean
+                        return element?.FindResource("BooleanFieldStyle") as DataTemplate;
+                    default:
+                        throw new NotSupportedException("Wrong formatting syntax.");
+                }
             }
+            else
+            {
+                Function function = item as Function;
+                switch (function?.Type)
+                    {
+                        case Function.FunctionType.Expiration: // Textbox
+                            return element?.FindResource("DateFieldStyle") as DataTemplate;
+                        case Function.FunctionType.Logger: // String
+                            return element?.FindResource("FieldFromParentTag") as DataTemplate;
+                        case Function.FunctionType.TagRequire: // Integer
+                            return element?.FindResource("FieldFromParentTag") as DataTemplate;
+                        default:
+                            throw new NotSupportedException("Wrong formatting syntax.");
+                    }
+            }
+
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using AMS.Controllers;
 using AMS.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AMS.Models
 {
@@ -21,7 +23,7 @@ namespace AMS.Models
                 string propertyName = "Name";
                 if (TrackChanges && !Changes.ContainsKey(propertyName) && _name != value)
                     Changes[propertyName] = _name;
-                else if (Changes.ContainsKey(propertyName) && (string)this.Changes[propertyName] == value)
+                else if (Changes.ContainsKey(propertyName) && (string) this.Changes[propertyName] == value)
                     this.Changes.Remove(propertyName);
 
                 _name = value;
@@ -36,7 +38,7 @@ namespace AMS.Models
                 string propertyName = "Description";
                 if (TrackChanges && !Changes.ContainsKey(propertyName) && _description != value)
                     Changes[propertyName] = _description;
-                else if (Changes.ContainsKey(propertyName) && (string)this.Changes[propertyName] == value)
+                else if (Changes.ContainsKey(propertyName) && (string) this.Changes[propertyName] == value)
                     this.Changes.Remove(propertyName);
 
                 _description = value;
@@ -51,7 +53,7 @@ namespace AMS.Models
                 string propertyName = "Identifier";
                 if (TrackChanges && !Changes.ContainsKey(propertyName) && _identifier != value)
                     Changes[propertyName] = _identifier;
-                else if (Changes.ContainsKey(propertyName) && (string)this.Changes[propertyName] == value)
+                else if (Changes.ContainsKey(propertyName) && (string) this.Changes[propertyName] == value)
                     this.Changes.Remove(propertyName);
 
                 _identifier = value;
@@ -66,17 +68,17 @@ namespace AMS.Models
                 string propertyName = "DepartmentId";
                 if (TrackChanges && !Changes.ContainsKey(propertyName) && _departmentId != value)
                     Changes[propertyName] = _departmentId;
-                else if (Changes.ContainsKey(propertyName) && (ulong)this.Changes[propertyName] == value)
+                else if (Changes.ContainsKey(propertyName) && (ulong) this.Changes[propertyName] == value)
                     this.Changes.Remove(propertyName);
 
                 _departmentId = value;
-
             }
         }
 
         public Asset()
         {
             FieldList = new List<Field>();
+            Functions = new List<Function>();
         }
 
         [JsonConstructor]
@@ -110,17 +112,6 @@ namespace AMS.Models
         public override bool Equals(object obj)
         {
             return obj is Asset other && ID == other.ID;
-        }
-
-        public bool DeSerializeFields()
-        {
-            if (!string.IsNullOrEmpty(this.SerializedFields))
-            {
-                this.FieldList = JsonConvert.DeserializeObject<List<Field>>(this.SerializedFields);
-                return true;
-            }
-
-            return false;
         }
     }
 }

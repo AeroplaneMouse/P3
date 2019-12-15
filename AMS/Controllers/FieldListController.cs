@@ -7,12 +7,27 @@ using AMS.Controllers.Interfaces;
 using AMS.Interfaces;
 using AMS.Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace AMS.Controllers
 {
     public abstract class FieldListController : IFieldListController
     {
         protected FieldContainer _fieldContainer;
+        
+        [JsonObject]
+        public struct SerializationStruct
+        {
+
+            [JsonConstructor]
+            public SerializationStruct(List<Field> fields,List<Function> functions)
+            {
+                Fields = fields;
+                Functions = functions;
+            }
+            public List<Field> Fields;
+            public List<Function> Functions;
+        }
 
         protected FieldListController(FieldContainer element)
         {
@@ -28,7 +43,11 @@ namespace AMS.Controllers
         /// <returns>Serialization completed</returns>
         public bool SerializeFields()
         {
-            _fieldContainer.SerializedFields = JsonConvert.SerializeObject(_fieldContainer.FieldList);
+            JArray jArray = new JArray();
+            _fieldContainer.Functions.Add(new Function("Labvel","Some fancy",Function.FunctionType.Expiration));
+            jArray.Add(JsonConvert.SerializeObject(_fieldContainer.Functions));
+            jArray.Add(JsonConvert.SerializeObject(_fieldContainer.FieldList));
+            _fieldContainer.SerializedFields = JsonConvert.SerializeObject(jArray);
             return !string.IsNullOrEmpty(_fieldContainer.SerializedFields);
         }
 
