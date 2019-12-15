@@ -54,9 +54,9 @@ namespace AMS.Helpers
         /// <param name="asset"></param>
         /// <param name="tagables"></param>
         /// <returns></returns>
-        public Page AssetPresenter(Asset asset, List<ITagable> tagables)
+        public Page AssetPresenter(Asset asset, List<ITagable> tagables, int tabIndex = 0)
         {
-            return new AssetPresenter(tagables, GetAssetController(asset), GetCommentListController(asset), GetLogListController(asset));
+            return new AssetPresenter(tagables, GetAssetController(asset), GetCommentListController(asset), GetLogListController(asset), tabIndex);
         }
 
         /// <summary>

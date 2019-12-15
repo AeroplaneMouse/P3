@@ -76,7 +76,8 @@
 
         <TabControl Grid.Row="1"
                     Margin="10"
-                    x:Name="StartElement">
+                    x:Name="StartElement"
+                    SelectedIndex="{Binding SelectedTabIndex}">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Template">
@@ -272,6 +273,7 @@
                                  Padding="10">
                             <TextBox.InputBindings>
                                 <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding SaveCommand}" />
+                                <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding SaveCommand}" />
                             </TextBox.InputBindings>
                             
                         </TextBox>
@@ -283,10 +285,12 @@
                                 Height="36"
                                 VerticalAlignment="Top" />
                     </Grid>
-                    <!--Show list of comments-->
+                    
+                    <!-- List of comments -->
                     <ScrollViewer Grid.Row="1"
                                   HorizontalScrollBarVisibility="Disabled"
                                   VerticalScrollBarVisibility="Auto">
+                        
                         <ItemsControl ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged}"
                                       Margin="10 0"
                                       x:Name="CommentList">
@@ -320,7 +324,7 @@
 
                                                 <!-- Buttons -->
                                                 <StackPanel Orientation="Horizontal">
-                                                    
+
                                                     <!-- Delete button -->
                                                     <Button Command="{Binding DataContext.DeleteCommand, ElementName=CommentList}"
                                                             CommandParameter="{Binding .}"
@@ -338,11 +342,9 @@
                                                             HorizontalAlignment="Left"
                                                             Margin="4 4 0 0"
                                                             Visibility="{Binding Path=Username, Converter={StaticResource UsernameConverter}}" />
-                                                    
+
                                                 </StackPanel>
-                                                
-                                                
-                                                
+
                                             </StackPanel>
                                             
                                             <!--Comment content-->
@@ -376,9 +378,10 @@
                                                         <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding DataContext.UpdateCommand, ElementName=CommentList}" CommandParameter="{Binding .}"/>
                                                         <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding DataContext.UpdateCommand, ElementName=CommentList}" CommandParameter="{Binding .}"/>
                                                     </TextBox.InputBindings>
-                                                    
-                                                </TextBox>
 
+                                                </TextBox>
+                                                
+                                                <!-- Save button -->
                                                 <Button Content="Save"
                                                         Style="{StaticResource RegularAcceptButton}"
                                                         Command="{Binding DataContext.UpdateCommand, ElementName=CommentList}"

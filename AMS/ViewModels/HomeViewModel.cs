@@ -53,7 +53,7 @@ namespace AMS.ViewModels
             if (SelectedComment != null)
             {
                 var asset = _homeController.GetAsset(SelectedComment.AssetID);
-                Features.Navigate.To(Features.Create.AssetPresenter(asset, _homeController.GetTags(asset)));
+                Features.Navigate.To(Features.Create.AssetPresenter(asset, _homeController.GetTags(asset), 1));
             }
         }
     }

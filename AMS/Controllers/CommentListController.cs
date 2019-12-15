@@ -33,12 +33,16 @@ namespace AMS.Controllers
         private ICommentRepository _commentRep { get; set; }
         private Department _department { get; set; }
 
+        private Dictionary<ulong, string> _oldCommentContent { get; set; }
+
         public CommentListController(Session session, ICommentRepository commentRepository, Department department, Asset asset)
         {
             _session = session;
             _commentRep = commentRepository;
             _department = department;
             _asset = asset;
+
+            _oldCommentContent = new Dictionary<ulong, string>();
 
             FetchComments();
         }
@@ -94,6 +98,19 @@ namespace AMS.Controllers
         {
             if (comment != null)
             {
+                if (!comment.IsEditing)
+                {
+                    _oldCommentContent.Add(comment.ID, comment.Content);
+                }
+
+                else
+                {
+                    comment.Content = _oldCommentContent[comment.ID];
+                    _oldCommentContent.Remove(comment.ID);
+
+                    Features.AddNotification(new Notification("Changes cancelled", Notification.INFO));
+                }
+
                 comment.IsEditing ^= true;
             }
         }
@@ -104,6 +121,8 @@ namespace AMS.Controllers
             {
                 comment.IsEditing = false;
                 _commentRep.Update(comment);
+
+                Features.AddNotification(new Notification("Changes saved", Notification.APPROVE));
             }
         }
 
