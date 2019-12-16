@@ -102,6 +102,11 @@ namespace AMS.Helpers
             return new ShortcutsList();
         }
 
+        public Page HowToUse()
+        {
+            return new HowToUse();
+        }
+
         /// <summary>
         /// Returns a new Splash page
         /// </summary>
