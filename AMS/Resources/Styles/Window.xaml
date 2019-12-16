@@ -22,7 +22,7 @@
         <!-- Makes the content of the button a textblock. Should be icon! -->
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}" x:Name="TestSaasd">
+                <ControlTemplate TargetType="{x:Type Button}">
                     <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
                         <TextBlock VerticalAlignment="Center" 
                                    HorizontalAlignment="Center" 

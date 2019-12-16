@@ -8,10 +8,10 @@ namespace AMS.Controllers.Interfaces
 {
     public interface IHomeController 
     {
-        ulong NumberOfUsers { get; set; }
-        ulong NumberOfAssets { get; set; }
-        ulong NumberOfTags { get; set; }
-        ulong NumberOfDepartments { get; set; }
+        ulong NumberOfUsers { get; }
+        ulong NumberOfAssets { get; }
+        ulong NumberOfTags { get; }
+        ulong NumberOfDepartments { get; }
 
         List<ITagable> GetTags(Asset asset);
         Asset GetAsset(ulong id);
