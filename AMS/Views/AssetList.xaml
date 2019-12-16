@@ -303,8 +303,7 @@
                                     <DataTemplate>
                                         <ListView ItemsSource="{Binding Path=., Converter={StaticResource AssociatedTagsConverter}}"
                                                   ItemContainerStyle="{StaticResource ListViewWithTags}"
-                                                  Style="{ StaticResource HideIfEmpty }"
-                                                  Grid.Row="1" Margin="0 5 0 -4">
+                                                  Style="{ StaticResource HideIfEmpty }">
                                             <ListView.Template>
                                                 <ControlTemplate>
                                                     <WrapPanel IsItemsHost="True"/>
@@ -313,7 +312,7 @@
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>
                                                     <Grid HorizontalAlignment="Left">
-                                                        <Label Style="{StaticResource TagLabelOnlyShow}"/>
+                                                        <Label Style="{StaticResource TagLabelOnlyShow}" Margin="0 0 1 0"/>
                                                     </Grid>
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>

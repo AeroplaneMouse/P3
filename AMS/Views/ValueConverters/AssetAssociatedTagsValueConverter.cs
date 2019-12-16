@@ -12,33 +12,50 @@ namespace AMS.Views.ValueConverters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            //Stopwatch stopwatch = new Stopwatch();
-
+            const int MaxTags = 5;
             List<Tag> tags = new List<Tag>();
 
             Asset asset = value as Asset;
 
             if (asset != null)
             {
-                //stopwatch.Start();
                 // Spilt string into tag:color elements
-                string[] tagsWithColors = asset.AssociatedTags.Split(',');
+                string[] usersAndColor = asset.AssociatedUsers.Split(':');
+                string color = usersAndColor[0];
 
-                foreach(string tagStr in tagsWithColors)
+                string[] users = usersAndColor[1].Split(',');
+
+                foreach(string userLabel in users)
                 {
-                    // Spilt color and label
-                    string[] elements = tagStr.Split(':');
-                    string label = elements[0];
-                    string color = elements[1];
-
                     // Add tag to list
-                    tags.Add(new Tag() { Color = color, FullTagLabel = label });
+                    tags.Add(new Tag() { Color = color, FullTagLabel = $"{ char.ConvertFromUtf32(0x1f464) } { userLabel }" });
                     
                     // Stop at x tags
-                    if (tags.Count > 4)
+                    if (tags.Count > MaxTags - 1)
                         break;
                 }
-                //stopwatch.Stop();
+
+                // Add other normal tags if there is space
+                if (tags.Count < MaxTags)
+                {
+
+                    string[] tagsWithColors = asset.AssociatedTags.Remove(0,1).Split(',');
+
+                    foreach (string tagStr in tagsWithColors)
+                    {
+                        string[] elements = tagStr.Split(':');
+                        color = elements[0];
+                        string label = elements[1].Replace("->", $"{ char.ConvertFromUtf32(0x202F) }{ char.ConvertFromUtf32(0x1f852) }{ char.ConvertFromUtf32(0x202F) }");
+
+                        // Add tag to list
+                        tags.Add(new Tag() { Color = color, FullTagLabel = label });
+
+                         // Stop at x tags
+                        if (tags.Count > MaxTags - 1)
+                            break;
+
+                    }
+                }
             }
 
             //Console.WriteLine($"Time: { stopwatch.ElapsedTicks }");
