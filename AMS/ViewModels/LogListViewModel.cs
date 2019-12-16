@@ -19,6 +19,11 @@ namespace AMS.ViewModels
 
         public ObservableCollection<LogEntry> Entries => new ObservableCollection<LogEntry>(_logListController.EntryList);
 
+        public bool SearchCreates { get; set; }
+        public bool SearchUpdates { get; set; }
+        public bool SearchDeletes { get; set; }
+        public bool SearchErrors { get; set; }
+
         public bool CheckAll { get; set; }
         public string SearchQuery { 
             get => _searchQuery;
@@ -89,10 +94,20 @@ namespace AMS.ViewModels
         {
             if (_searchQuery == null)
                 return;
-            
-            Console.WriteLine(SearchQuery);
-            
-            _logListController.Search(_searchQuery);
+
+            List<string> types = new List<string>();
+
+            if (SearchCreates)
+                types.Add("Create");
+            if (SearchUpdates)
+                types.Add("Update");
+            if (SearchDeletes)
+                types.Add("Delete");
+            if (SearchErrors)
+                types.Add("Error");
+
+
+            _logListController.Search(_searchQuery, types);
             OnPropertyChanged(nameof(Entries));
         }
 
