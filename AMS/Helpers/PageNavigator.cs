@@ -34,7 +34,7 @@ namespace AMS.Helpers
                     Features.Main.History.Clear();
                 }
 
-                (page.DataContext as IPageUpdateOnFocus).UpdateOnFocus();
+                //(page.DataContext as IPageUpdateOnFocus).UpdateOnFocus();
                 Features.Main.History.Push(_currentPage);
                 _currentPage = page;
 
