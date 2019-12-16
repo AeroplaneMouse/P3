@@ -88,8 +88,7 @@ namespace AMS.Models
         }
         
         [JsonConstructor]
-        private Field(string label, string content, FieldType type, bool required,
-            bool isCustom,List<ulong> tagIDs)
+        private Field(string label, string content, FieldType type, bool required, bool isCustom,List<ulong> tagIDs)
         {
             this.HashId = CalculateMd5Hash(true);
             this.Label = label;
