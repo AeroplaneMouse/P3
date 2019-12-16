@@ -7,6 +7,17 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon />
     <StartupObject />
+    <Win32Resource />
+    <Authors>AAU - DS303E19</Authors>
+    <Company>AAU - DS303E19</Company>
+    <Product>Asset Management System</Product>
+    <Copyright>AAU 2019</Copyright>
+    <RepositoryUrl>https://github.com/tlorentzen/P3</RepositoryUrl>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
