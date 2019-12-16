@@ -290,8 +290,8 @@ namespace AMS.Database.Repositories
                 _query.Reset();
                 _query.AddTable("assets AS a");
                 _query.Columns.AddRange(new[] { "a.id", "a.name", "a.description", "a.identifier", "a.department_id", "a.options", "a.created_at", "a.updated_at", 
-                                                          "GROUP_CONCAT(DISTINCT CONCAT_WS(':', t.color, IF(t.parent_id > 0, CONCAT_WS('->',(SELECT label FROM tags WHERE id = t.parent_id), t.label), t.label)) SEPARATOR ',') AS tags", 
-                                                          "CONCAT(CONCAT((SELECT color FROM tags WHERE id=1), ':'), GROUP_CONCAT(DISTINCT u.username SEPARATOR ',')) AS users" });
+                                                          "COALESCE(GROUP_CONCAT(DISTINCT CONCAT_WS(':', t.color, IF(t.parent_id > 0, CONCAT_WS('->',(SELECT label FROM tags WHERE id = t.parent_id), t.label), t.label)) SEPARATOR ','), '')  AS tags", 
+                                                          "COALESCE(CONCAT(CONCAT((SELECT color FROM tags WHERE id=1), ':'), GROUP_CONCAT(DISTINCT u.username SEPARATOR ',')), '')  AS users" });
 
                 try
                 {
