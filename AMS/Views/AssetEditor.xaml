@@ -165,7 +165,7 @@
                                    IsOpen="{Binding TagSuggestionIsOpen}"
                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                   StaysOpen="False"
+                                   StaysOpen="True"
                                    MaxHeight="200"
                                    AllowsTransparency="True"
                                    Width="{Binding ElementName=SearchElement, Path=ActualWidth}"
