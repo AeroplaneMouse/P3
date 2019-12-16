@@ -74,8 +74,8 @@ namespace AMS.Models
             }
         }
 
-        public string AssociatedTags { get; set; } = ",#FF9999:networ->switch,#FF9999:network->router,#9999FF:feature->one,#9999FF:feature->two";
-        public string AssociatedUsers { get; set; } = "#FF8888:Daniel,Thomas";
+        public string AssociatedTags { get; set; } = "";
+        public string AssociatedUsers { get; set; } = "";
 
         public Asset()
         {
@@ -85,7 +85,7 @@ namespace AMS.Models
         [JsonConstructor]
         private Asset(ulong id, string name, string description, string identifier, ulong departmentId,
             string serializedFields,
-            DateTime created_at, DateTime updated_at)
+            DateTime created_at, DateTime updated_at, string tags, string users)
         {
             ID = id;
             Name = name;
@@ -95,6 +95,8 @@ namespace AMS.Models
             SerializedFields = serializedFields;
             CreatedAt = created_at;
             UpdatedAt = updated_at;
+            AssociatedTags = tags;
+            AssociatedUsers = users;
             TrackChanges = true;
         }
 

@@ -26,6 +26,9 @@ namespace AMS.Database
 
         public string Render()
         {
+            int counter = 0;
+            int statementCount = Statements.Count;
+            
             if (JoinType == "")
             {
                 return Name;
@@ -33,7 +36,20 @@ namespace AMS.Database
             
             StringBuilder query_path = new StringBuilder();
             query_path.AppendFormat("{0} {1} ON ", JoinType, Name);
-            query_path.Append(string.Join(" AND ", from item in Statements select $"{item.Column} {item.Operators} {item.Value}"));
+
+            foreach (var item in Statements)
+            {
+                query_path.Append(item.Render());
+
+                if (counter < statementCount && statementCount-1 != counter)
+                {
+                    query_path.Append(" AND ");
+                }
+
+                counter++;
+            }
+            
+            //query_path.Append(string.Join(" AND ", from item in Statements select $"{item.Column} {item.Operators} {item.Value}"));
             return query_path.ToString();
         }
     }

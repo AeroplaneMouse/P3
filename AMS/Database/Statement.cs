@@ -49,7 +49,7 @@ namespace AMS.Database
                 }
                 else
                 {
-                    _queryPath.AppendFormat("{0} {1} {2}", Column, Operators, GetStringWithSingleQuotes(MySqlHelper.EscapeString(Value)));
+                    _queryPath.AppendFormat("{0} {1} {2}", Column, Operators, MySqlHelper.EscapeString(Value));
                 }
             }
 

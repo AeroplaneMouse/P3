@@ -289,7 +289,9 @@ namespace AMS.Database.Repositories
             {
                 _query.Reset();
                 _query.AddTable("assets AS a");
-                _query.Columns.AddRange(new[] { "a.id", "a.name", "a.description", "a.identifier", "a.department_id", "a.options", "a.created_at", "a.updated_at" });
+                _query.Columns.AddRange(new[] { "a.id", "a.name", "a.description", "a.identifier", "a.department_id", "a.options", "a.created_at", "a.updated_at", 
+                                                          "GROUP_CONCAT(DISTINCT CONCAT_WS(':', t.color, IF(t.parent_id > 0, CONCAT_WS('->',(SELECT label FROM tags WHERE id = t.parent_id), t.label), t.label)) SEPARATOR ',') AS tags", 
+                                                          "CONCAT(CONCAT((SELECT color FROM tags WHERE id=1), ':'), GROUP_CONCAT(DISTINCT u.username SEPARATOR ',')) AS users" });
 
                 try
                 {
@@ -297,7 +299,28 @@ namespace AMS.Database.Repositories
                         _query.Where("a.department_id", Features.Main.CurrentDepartment.ID.ToString());
                         
                     _query.Where("a.deleted_at", "IS NULL", "");
-
+                    
+                    var pivotAssetTags = new Table("asset_tags AS at", "LEFT JOIN");
+                    pivotAssetTags.AddConnection("at.asset_id", "a.id");
+                    _query.Tables.Add(pivotAssetTags);
+                    
+                    var pivotTags = new Table("tags AS t", "LEFT JOIN");
+                    pivotTags.AddConnection("t.id", "at.tag_id");
+                    pivotTags.AddConnection("t.id", "1", "!=");
+                    
+                    Statement st = new Statement("t.parent_id", "0", ">");
+                    st.AddOrStatement("(SELECT COUNT(id) FROM tags WHERE parent_id = t.id)", "0");
+                    pivotTags.Statements.Add(st);
+                    _query.Tables.Add(pivotTags);
+                    
+                    var pivotAssetUsers = new Table("asset_users AS au", "LEFT JOIN");
+                    pivotAssetUsers.AddConnection("a.id", "au.asset_id");
+                    _query.Tables.Add(pivotAssetUsers);
+                    
+                    var pivotUsers = new Table("users AS u", "LEFT JOIN");
+                    pivotUsers.AddConnection("u.id", "au.user_id");
+                    _query.Tables.Add(pivotUsers);
+                    
                     if (keyword.Length > 0 && !keyword.Equals("%"))
                     {
                         if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
@@ -317,9 +340,9 @@ namespace AMS.Database.Repositories
 
                     if (tags != null && tags.Count > 0)
                     {
-                        var pivot = new Table("asset_tags AS at", "INNER JOIN");
-                        pivot.AddConnection("at.asset_id", "a.id");
-                        _query.Tables.Add(pivot);
+                        //var pivot = new Table("asset_tags AS at", "INNER JOIN");
+                        //pivot.AddConnection("at.asset_id", "a.id");
+                        //_query.Tables.Add(pivot);
                         _query.Where("at.tag_id", "(" + string.Join(",", tags) + ")", "IN");
 
                         if (strict)
@@ -328,9 +351,9 @@ namespace AMS.Database.Repositories
 
                     if (users != null && users.Count > 0)
                     {
-                        var pivot = new Table("asset_users AS au", "INNER JOIN");
-                        pivot.AddConnection("au.asset_id", "a.id");
-                        _query.Tables.Add(pivot);
+                        //var pivot = new Table("asset_users AS au", "INNER JOIN");
+                        //pivot.AddConnection("au.asset_id", "a.id");
+                        //_query.Tables.Add(pivot);
                         _query.Where("au.user_id", "(" + string.Join(",", users) + ")", "IN");
 
                         if (strict)
@@ -340,6 +363,8 @@ namespace AMS.Database.Repositories
                     _query.OrderBy("a.id", false);
                     _query.GroupBy = "a.id";
                     _query.Limit = 1000;
+                    
+                    Console.WriteLine(_query.PrepareSelect());
                    
                     using (var cmd = new MySqlCommand(_query.PrepareSelect(), con))
                     {
@@ -498,9 +523,14 @@ namespace AMS.Database.Repositories
             string rowOptions = reader.GetString("options");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
+
+            var ordinalTags = reader.GetOrdinal("tags");
+            string rowTags = (reader.IsDBNull(ordinalTags) ? "" : reader.GetString("tags"));
+            var ordinalUsers = reader.GetOrdinal("users");
+            string rowUsers = (reader.IsDBNull(ordinalUsers) ? "" : reader.GetString("users"));
             
             return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { rowId, rowName, rowDescription, rowIdentifier, rowDepartmentId, rowOptions, rowCreatedAt, rowUpdatedAt }, null, null);
+                new object[] { rowId, rowName, rowDescription, rowIdentifier, rowDepartmentId, rowOptions, rowCreatedAt, rowUpdatedAt, rowTags, rowUsers }, null, null);
         }
     }
 }
