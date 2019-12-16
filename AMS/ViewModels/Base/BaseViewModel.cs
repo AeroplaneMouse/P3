@@ -17,8 +17,10 @@ namespace AMS.ViewModels.Base
             PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
 
-        // When the page that this view model is attached to recieves focus again,
-        // update whatever is necessary to update
+        /// <summary>
+        /// When the page that this view model is attached to recieves focus again,
+        /// update whatever is necessary to update
+        /// </summary>
         public abstract void UpdateOnFocus();
     }
 }

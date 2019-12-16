@@ -20,7 +20,11 @@ namespace AMS.ViewModels.Base
             _func = func;
         }
 
-      
+        /// <summary>
+        /// Checks whether the action can execute, based on the func passed to the command
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
         public bool CanExecute(object parameter)
         {
             if (_func != null)

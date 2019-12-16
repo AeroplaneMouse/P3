@@ -36,11 +36,11 @@ namespace AMS.ViewModels.Prompts
         public string PromptHeaderAndAcceptButtonText { get; set; }
 
 
-        public CustomFieldViewModel(string message, PromptEventHandler handler, bool isCustom = false, Field inputField = null)
-            : base(message, handler)
+        public CustomFieldViewModel(string message, PromptEventHandler handler, bool isCustom = false, Field inputField = null) : base(message, handler)
         {
             _isCustom = isCustom;
             _oldField = inputField;
+
             if (_oldField != null)
             {
                 PromptHeaderAndAcceptButtonText = "Edit field";
@@ -50,8 +50,10 @@ namespace AMS.ViewModels.Prompts
 
                 if (SelectedFieldType == Field.FieldType.Checkbox)
                     DefaultBool = inputField.Content == "True";
+
                 else if (SelectedFieldType == Field.FieldType.Date)
                     SelectedDate = inputField.Content;
+
                 else
                     DefaultValue = inputField.Content;
             }
@@ -72,7 +74,7 @@ namespace AMS.ViewModels.Prompts
 
             _newField = new Field(Name, DefaultValue, SelectedFieldType, IsRequired, _isCustom);
 
-            if (_oldField == null)
+            if (_oldField == null) 
                 PromptElapsed?.Invoke(this, new FieldInputPromptEventArgs(true, _newField));
 
             PromptElapsed?.Invoke(this, new FieldEditPromptEventArgs(true, _oldField, _newField));
@@ -83,6 +85,7 @@ namespace AMS.ViewModels.Prompts
             PromptElapsed?.Invoke(this, new PromptEventArgs(false));
         }
     }
+
     public class DefaultValueDesignSelector : DataTemplateSelector
     {
         /// <summary>
