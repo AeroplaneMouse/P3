@@ -27,7 +27,9 @@ namespace AMS.Controllers.Interfaces
 
         bool Remove(bool removeChildren = false);
 
-        //void RemoveChildren();
+        void AddFunction(Function function);
+        
+        void RemoveFunction(Function function);
 
         void Update();
 

@@ -14,6 +14,21 @@ namespace AMS.Models
         private string _color;
         private ulong _parentId;
         private ulong _departmentId;
+        public SerializationOrderStruct SerializationOrder = new SerializationOrderStruct();
+        
+        public struct SerializationOrderStruct
+        {
+            public List<Field> Fields;
+            public List<Function> Functions;
+
+            public SerializationOrderStruct(List<Field> fields, List<Function> functions)
+            {
+                Fields = fields;
+                Functions = functions;
+            }
+        }
+        
+        public List<Function> Functions = new List<Function>();
 
         public string Name
         {

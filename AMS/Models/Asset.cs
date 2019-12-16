@@ -78,7 +78,6 @@ namespace AMS.Models
         public Asset()
         {
             FieldList = new List<Field>();
-            Functions = new List<Function>();
         }
 
         [JsonConstructor]

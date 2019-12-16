@@ -6,7 +6,7 @@ using AMS.Models;
 using MySql.Data.MySqlClient;
 using System.Reflection;
 using System.Collections.ObjectModel;
-
+using System.Text.RegularExpressions;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Interfaces;
 using AMS.Logging.Interfaces;
@@ -24,7 +24,6 @@ namespace AMS.Database.Repositories
         {
             _query = new QueryGenerator();
             _logger = new Logger(Features.LogRepository);
-            
         }
 
         /// <summary>
@@ -62,10 +61,10 @@ namespace AMS.Database.Repositories
                     con.Close();
                 }
             }
-            
+
             return count;
         }
-        
+
         /// <summary>
         /// Inserts the given asset into the database
         /// </summary>
@@ -82,8 +81,9 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "INSERT INTO assets (name, identifier, description, department_id, options, updated_at) " +
-                                         "VALUES (@name, @identifier, @description, @department, @options, CURRENT_TIMESTAMP())";
+                    const string query =
+                        "INSERT INTO assets (name, identifier, description, department_id, options, updated_at) " +
+                        "VALUES (@name, @identifier, @description, @department, @options, CURRENT_TIMESTAMP())";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -100,10 +100,11 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@department"].Value = entity.DepartmentdId;
 
                         cmd.Parameters.Add("@options", MySqlDbType.JSON);
-                        cmd.Parameters["@options"].Value = entity.SerializedFields == null ? "[]" : entity.SerializedFields;
+                        cmd.Parameters["@options"].Value =
+                            entity.SerializedFields == null ? "[]" : entity.SerializedFields;
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
-                        id = (ulong)cmd.LastInsertedId;
+                        id = (ulong) cmd.LastInsertedId;
                     }
 
                     _logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
@@ -120,7 +121,7 @@ namespace AMS.Database.Repositories
 
             return querySuccess ? GetById(id) : null;
         }
-        
+
         /// <summary>
         /// Updates the given asset in the database
         /// </summary>
@@ -136,8 +137,9 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "UPDATE assets SET name=@name, identifier=@identifier, description=@description, options=@options, updated_at=CURRENT_TIMESTAMP() " +
-                                         "WHERE id=@id";
+                    const string query =
+                        "UPDATE assets SET name=@name, identifier=@identifier, description=@description, options=@options, updated_at=CURRENT_TIMESTAMP() " +
+                        "WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -158,7 +160,7 @@ namespace AMS.Database.Repositories
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
-                    
+
                     _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
@@ -198,7 +200,7 @@ namespace AMS.Database.Repositories
 
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
-                    
+
                     _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
                 }
                 catch (MySqlException e)
@@ -229,8 +231,9 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT id, name, description, identifier, department_id, options, created_at, updated_at " +
-                                         "FROM assets WHERE id=@id AND deleted_at IS NULL";
+                    const string query =
+                        "SELECT id, name, description, identifier, department_id, options, created_at, updated_at " +
+                        "FROM assets WHERE id=@id AND deleted_at IS NULL";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -243,6 +246,7 @@ namespace AMS.Database.Repositories
                             {
                                 asset = DataMapper(reader);
                             }
+
                             reader.Close();
                         }
                     }
@@ -279,7 +283,8 @@ namespace AMS.Database.Repositories
         /// <param name="users">List of user ids</param>
         /// <param name="strict">Enable strict search</param>
         /// <returns>An ObservableCollection of assets, containing the found assets (empty if no assets were found)</returns>
-        public List<Asset> Search(string keyword, List<ulong> tags=null, List<ulong> users=null, bool strict=false, bool searchInFields=false)
+        public List<Asset> Search(string keyword, List<ulong> tags = null, List<ulong> users = null,
+            bool strict = false, bool searchInFields = false)
         {
             var con = new MySqlHandler().GetConnection();
             List<Asset> assets = new List<Asset>();
@@ -289,29 +294,33 @@ namespace AMS.Database.Repositories
             {
                 _query.Reset();
                 _query.AddTable("assets AS a");
-                _query.Columns.AddRange(new[] { "a.id", "a.name", "a.description", "a.identifier", "a.department_id", "a.options", "a.created_at", "a.updated_at" });
+                _query.Columns.AddRange(new[]
+                {
+                    "a.id", "a.name", "a.description", "a.identifier", "a.department_id", "a.options", "a.created_at",
+                    "a.updated_at"
+                });
 
                 try
                 {
                     if (Features.Main.CurrentDepartment.ID > 0)
                         _query.Where("a.department_id", Features.Main.CurrentDepartment.ID.ToString());
-                        
+
                     _query.Where("a.deleted_at", "IS NULL", "");
 
                     if (keyword.Length > 0 && !keyword.Equals("%"))
                     {
                         if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
                             keyword = "%" + keyword + "%";
-                  
+
                         Statement statement = new Statement();
-                        if(int.TryParse(keyword.Replace("%", ""), out int assetIdKeyword))
+                        if (int.TryParse(keyword.Replace("%", ""), out int assetIdKeyword))
                             statement.AddOrStatement("a.id", assetIdKeyword.ToString());
                         statement.AddOrStatement("a.name", keyword, "LIKE");
                         statement.AddOrStatement("a.identifier", keyword, "LIKE");
-                        
+
                         if (searchInFields)
                             statement.AddOrStatement("JSON_EXTRACT(a.options, '$[*].Content')", keyword, "LIKE");
-                        
+
                         _query.Where(statement);
                     }
 
@@ -323,7 +332,8 @@ namespace AMS.Database.Repositories
                         _query.Where("at.tag_id", "(" + string.Join(",", tags) + ")", "IN");
 
                         if (strict)
-                            _query.HavingStatements.Add(new Statement("COUNT(DISTINCT at.tag_id)", tags.Count.ToString()));
+                            _query.HavingStatements.Add(new Statement("COUNT(DISTINCT at.tag_id)",
+                                tags.Count.ToString()));
                     }
 
                     if (users != null && users.Count > 0)
@@ -334,13 +344,14 @@ namespace AMS.Database.Repositories
                         _query.Where("au.user_id", "(" + string.Join(",", users) + ")", "IN");
 
                         if (strict)
-                            _query.HavingStatements.Add(new Statement("COUNT(DISTINCT au.user_id)", users.Count.ToString()));
+                            _query.HavingStatements.Add(new Statement("COUNT(DISTINCT au.user_id)",
+                                users.Count.ToString()));
                     }
 
                     _query.OrderBy("a.id", false);
                     _query.GroupBy = "a.id";
                     _query.Limit = 1000;
-                   
+
                     using (var cmd = new MySqlCommand(_query.PrepareSelect(), con))
                     {
                         using (var reader = cmd.ExecuteReader())
@@ -349,6 +360,7 @@ namespace AMS.Database.Repositories
                             {
                                 assets.Add(DataMapper(reader));
                             }
+
                             reader.Close();
                         }
                     }
@@ -376,12 +388,13 @@ namespace AMS.Database.Repositories
         {
             var con = new MySqlHandler().GetConnection();
             bool querySuccess = false;
-            
-            List<User> users = listOfTags.OfType<User>().ToList();
-            List<Tag> tags = listOfTags.OfType<Tag>().ToList();
+            List<ITagable> tagsToAdd = GetListOfTagsToAdd(listOfTags,GetTags(asset).ToList());
+
+            List<User> users = tagsToAdd.OfType<User>().ToList();
+            List<Tag> tags = tagsToAdd.OfType<Tag>().ToList();
             int userCounter = users.Count;
             int tagCounter = tags.Count;
-            
+
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
@@ -389,14 +402,15 @@ namespace AMS.Database.Repositories
                 MySqlTransaction transaction = con.BeginTransaction();
                 command.Transaction = transaction;
                 command.Connection = con;
-                
+
                 try
                 {
-                    ClearTags(asset, command);
-                    
+                    RemoveNoLongerNeededTags(asset, command,
+                        GetListOfTagsToRemove(listOfTags, GetTags(asset).ToList()));
+
                     string tagLabels = "\"" + String.Join("\", \"", tags);
 
-                    StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users VALUES ");
+                    StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users (asset_id, user_id) VALUES ");
 
                     for (int i = 0; i < userCounter; i++)
                     {
@@ -406,7 +420,7 @@ namespace AMS.Database.Repositories
                             userQuery.Append(",");
                     }
 
-                    StringBuilder tagQuery = new StringBuilder("INSERT INTO asset_tags VALUES ");
+                    StringBuilder tagQuery = new StringBuilder("INSERT INTO asset_tags (asset_id, tag_id) VALUES ");
 
                     for (int i = 0; i < tagCounter; i++)
                     {
@@ -415,24 +429,26 @@ namespace AMS.Database.Repositories
                         if (i != tagCounter - 1)
                             tagQuery.Append(",");
                     }
-                    
+
                     Console.WriteLine(tagQuery.ToString());
-                    
+
                     if (users.Count > 0)
                     {
                         command.CommandText = userQuery.ToString();
                         command.ExecuteNonQuery();
                     }
-                    
+
                     if (tags.Count > 0)
                     {
                         command.CommandText = tagQuery.ToString();
                         command.ExecuteNonQuery();
                     }
-                    
+
                     _logger.AddEntry("Tag attached", tagLabels + " was attached to the asset with ID: "
-                        + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.", Features.GetCurrentSession().user.ID);
-                    
+                                                               + asset.ID + " and name: " + asset.Name +
+                                                               ". Other tags have been removed.",
+                        Features.GetCurrentSession().user.ID);
+
                     transaction.Commit();
                 }
                 catch (MySqlException e)
@@ -457,7 +473,7 @@ namespace AMS.Database.Repositories
         public IEnumerable<ITagable> GetTags(Asset asset)
         {
             var taggedWith = new List<ITagable>();
-            
+
             taggedWith.AddRange(Features.TagRepository.GetTagsForAsset(asset.ID));
             taggedWith.AddRange(Features.UserRepository.GetUsersForAsset(asset.ID));
 
@@ -468,19 +484,55 @@ namespace AMS.Database.Repositories
         /// Removes all tags from the given asset
         /// </summary>
         /// <param name="asset"></param>
-        private void ClearTags(Asset asset, MySqlCommand command)
+        private void RemoveNoLongerNeededTags(Asset asset, MySqlCommand command, List<ITagable> tagables)
         {
-            command.CommandText = "DELETE FROM asset_tags WHERE asset_id = @id";
-            command.Parameters.Add("@id", MySqlDbType.UInt64);
-            command.Parameters["@id"].Value = asset.ID;
-            command.ExecuteNonQuery();
-            command.Parameters.Clear();
+            if (tagables.Count == 0)
+            {
+                return;
+            }
+            string completeTagsList = String.Join(",", from tag in tagables where tag is Tag select tag.TagId);
+            string completeUsersList = String.Join(",", from tag in tagables where tag is User select tag.TagId);
+
+            if (completeTagsList != "")
+            {
+                command.CommandText = $"DELETE FROM asset_tags WHERE asset_id = @id AND tag_id IN ({completeTagsList})";
+                command.Parameters.Add("@id", MySqlDbType.UInt64);
+                command.Parameters["@id"].Value = asset.ID;
+                command.ExecuteNonQuery();
+                command.Parameters.Clear();
+            }
+
+
+            if (completeUsersList != "")
+            {
+                command.CommandText = $"DELETE FROM asset_tags WHERE asset_id = @id AND tag_id IN ({completeUsersList})";
+                command.Parameters.Add("@id", MySqlDbType.UInt64);
+                command.Parameters["@id"].Value = asset.ID;
+                command.ExecuteNonQuery();
+                command.Parameters.Clear();  
+            }
             
-            command.CommandText = "DELETE FROM asset_users WHERE asset_id = @id";
-            command.Parameters.Add("@id", MySqlDbType.UInt64);
-            command.Parameters["@id"].Value = asset.ID;
-            command.ExecuteNonQuery();
-            command.Parameters.Clear();
+        }
+
+        private List<ITagable> GetListOfTagsToRemove(List<ITagable> currentlyConnectedTags,
+            List<ITagable> tagsFromDatabase)
+        {
+            List<ITagable> result = new List<ITagable>();
+            foreach (var currentTag in tagsFromDatabase)
+            {
+                if (!currentlyConnectedTags.Contains(currentTag))
+                {
+                    result.Add(currentTag);
+                }
+            }
+
+            return result;
+        }
+        
+        private List<ITagable> GetListOfTagsToAdd(List<ITagable> currentlyConnectedTags,
+            List<ITagable> tagsFromDatabase)
+        {
+            return currentlyConnectedTags.Where(tagable => !tagsFromDatabase.Contains(tagable)).ToList();
         }
 
         /// <summary>
@@ -498,9 +550,13 @@ namespace AMS.Database.Repositories
             string rowOptions = reader.GetString("options");
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
-            
-            return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null, 
-                new object[] { rowId, rowName, rowDescription, rowIdentifier, rowDepartmentId, rowOptions, rowCreatedAt, rowUpdatedAt }, null, null);
+
+            return (Asset) Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new object[]
+                {
+                    rowId, rowName, rowDescription, rowIdentifier, rowDepartmentId, rowOptions, rowCreatedAt,
+                    rowUpdatedAt
+                }, null, null);
         }
     }
 }

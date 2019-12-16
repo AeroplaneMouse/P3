@@ -43,11 +43,17 @@ namespace AMS.Controllers
         /// <returns>Serialization completed</returns>
         public bool SerializeFields()
         {
-            JArray jArray = new JArray();
-            _fieldContainer.Functions.Add(new Function("Labvel","Some fancy",Function.FunctionType.Expiration));
-            jArray.Add(JsonConvert.SerializeObject(_fieldContainer.Functions));
-            jArray.Add(JsonConvert.SerializeObject(_fieldContainer.FieldList));
-            _fieldContainer.SerializedFields = JsonConvert.SerializeObject(jArray);
+            var settings = new JsonSerializerSettings{TypeNameHandling = TypeNameHandling.Objects};
+            if (_fieldContainer is Tag tag)
+            {
+               SerializationStruct serializationStruct = new SerializationStruct(tag.FieldList,tag.Functions);
+               _fieldContainer.SerializedFields = JsonConvert.SerializeObject(serializationStruct, settings);
+            }
+
+            if (_fieldContainer is Asset)
+            {
+                _fieldContainer.SerializedFields = JsonConvert.SerializeObject(_fieldContainer.FieldList, settings);
+            }
             return !string.IsNullOrEmpty(_fieldContainer.SerializedFields);
         }
 

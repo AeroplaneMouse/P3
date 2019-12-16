@@ -21,6 +21,9 @@ namespace AMS.ViewModels
 
         public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_controller.ControlledTag.FieldList);
         public ObservableCollection<Field> ParentTagFields => new ObservableCollection<Field>(_controller.ParentTagFields);
+        
+        public ObservableCollection<Function> Functions => new ObservableCollection<Function>(_controller.ControlledTag.Functions);
+        public ObservableCollection<Function> ParentFunctions => new ObservableCollection<Function>(_controller.ControlledTag.Functions);
 
         public string Name { get => _controller.ControlledTag.Name; set => _controller.ControlledTag.Name = value; }
         public string Color { get => _controller.ControlledTag.Color; set => _controller.ControlledTag.Color = value; }
@@ -76,6 +79,8 @@ namespace AMS.ViewModels
         public ICommand CancelCommand { get; set; }
         public ICommand ShowFieldEditPromptCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
+        
+        public ICommand AddFunctionCommand { get; set; }
 
         #endregion
 
@@ -137,6 +142,8 @@ namespace AMS.ViewModels
             // Initialize commands
             SaveTagCommand = new RelayCommand(SaveTag);
             AddFieldCommand = new RelayCommand(AddField);
+            
+            AddFunctionCommand = new RelayCommand(AddFunction);
             RemoveFieldCommand = new Base.RelayCommand<object>((parameter) => RemoveField(parameter));
 
             RemoveCommand = new RelayCommand(RemoveTag);
@@ -194,12 +201,26 @@ namespace AMS.ViewModels
         {
             Features.DisplayPrompt(new Views.Prompts.CustomField(null, AddNewFieldConfirmed));
         }
+        
+        private void AddFunction()
+        {
+            Features.DisplayPrompt(new Views.Prompts.CustomFunction(null, AddNewCommandConfirmed));
+        }
 
         private void AddNewFieldConfirmed(object sender, PromptEventArgs e)
         {
             if (e is FieldInputPromptEventArgs args)
             {
                 _controller.AddField(args.Field);
+                UpdateAll();
+            }
+        }
+        
+        private void AddNewCommandConfirmed(object sender, PromptEventArgs e)
+        {
+            if (e is FunctionInputPromptEventArgs args)
+            {
+                _controller.AddFunction(args.Function);
                 UpdateAll();
             }
         }
@@ -232,6 +253,7 @@ namespace AMS.ViewModels
             //OnPropertyChanged(nameof(HiddenFieldList));
             OnPropertyChanged(nameof(SelectedParentTagIndex));
             OnPropertyChanged(nameof(ParentTagFields));
+            OnPropertyChanged(nameof(Functions));
         }
 
         /// <summary>

@@ -108,6 +108,14 @@ namespace AMS.ViewModels.Prompts
                     _ => element?.FindResource("Box") as DataTemplate
                 };
             }
+            if (item is Function.FunctionType functionType)
+            {
+                return functionType switch
+                {
+                    Function.FunctionType.Expiration => element?.FindResource("Expiration") as DataTemplate,
+                    _ => element?.FindResource("Expiration") as DataTemplate
+                };
+            }
             else
                 throw new NotSupportedException("Wrong formatting syntax.");
         }

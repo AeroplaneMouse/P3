@@ -8,7 +8,6 @@ namespace AMS.Models
     public abstract class FieldContainer : Model
     {
         public List<Field> FieldList = new List<Field>();
-        public List<Function> Functions = new List<Function>();
 
         private string _serializedFields;
 
@@ -33,11 +32,19 @@ namespace AMS.Models
         /// <returns>Load successfull</returns>
         public bool DeSerializeFields()
         {
-            if (!string.IsNullOrEmpty(this.SerializedFields))
+            if (!string.IsNullOrEmpty(this.SerializedFields) && _serializedFields != "[]")
             {
-                JArray jArray = JArray.Parse(SerializedFields);
-                Functions = JsonConvert.DeserializeObject<List<Function>>(jArray[0].ToString());
-                FieldList = JsonConvert.DeserializeObject<List<Field>>(jArray[1].ToString());
+                if (this is Tag tag)
+                {
+                    tag.SerializationOrder = JsonConvert.DeserializeObject<Tag.SerializationOrderStruct>(_serializedFields);
+                    tag.FieldList = tag.SerializationOrder.Fields;
+                    tag.Functions = tag.SerializationOrder.Functions;
+                }
+
+                if (this is Asset)
+                {
+                    
+                }
                 return true;
             }
 

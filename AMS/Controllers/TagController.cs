@@ -19,11 +19,13 @@ namespace AMS.Controllers
 
         public Tag ControlledTag
         {
-            get => (Tag)_fieldContainer;
+            get => (Tag) _fieldContainer;
             set => _fieldContainer = value;
         }
 
         public List<Field> ParentTagFields { get; set; } = new List<Field>();
+
+        public List<Function> ParentFunctions { get; set; } = new List<Function>();
         public bool IsEditing { get; set; }
 
         public ulong TagID { get; set; }
@@ -101,7 +103,7 @@ namespace AMS.Controllers
 
             // Check if any fields does not have a tagId set
             ControlledTag.DeSerializeFields();
-            foreach(Field field in ControlledTag.FieldList)
+            foreach (Field field in ControlledTag.FieldList)
             {
                 if (field.TagIDs.Count == 0)
                 {
@@ -131,6 +133,20 @@ namespace AMS.Controllers
         /// <param name="removeChildren">Rather or not to remove the children of the tag as well</param>
         /// <returns></returns>
         public bool Remove(bool removeChildren = false) => _tagRepository.Delete(ControlledTag, removeChildren);
+
+        public void AddFunction(Function function)
+        {
+            if (ControlledTag.Functions.FirstOrDefault(p => p.Hash == function.Hash) == null &&
+                ParentFunctions.FirstOrDefault(p => p.Hash == function.Hash) == null)
+            {
+                ControlledTag.Functions.Add(function);
+            }
+        }
+
+        public void RemoveFunction(Function function)
+        {
+            ControlledTag.Functions.RemoveAll(p => p.Hash == function.Hash);
+        }
 
         /// <summary>
         /// Returns a tag with the given tag, or null if tag does not exist
@@ -171,6 +187,7 @@ namespace AMS.Controllers
                 //TODO Throws exception, når et tags parent id ændres
                 currentTag.DeSerializeFields();
                 ParentTagFields = currentTag.FieldList;
+                ParentFunctions = currentTag.Functions;
             }
             else
                 ParentTagFields = new List<Field>();

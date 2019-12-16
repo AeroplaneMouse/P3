@@ -522,19 +522,6 @@ namespace AMS.ViewModels
                     }
                 }
             }
-
-            foreach (var function in _assetController.ControlledAsset.Functions)
-            {
-                if (function.Type == Function.FunctionType.TagRequire &&
-                    _assetController.CurrentlyAddedTags.SingleOrDefault(p => p.TagId.ToString() == function.Content) ==
-                    null)
-                {
-                    Features.AddNotification(new Notification("Another tag is required to save",
-                        Notification.WARNING));
-                    return false;
-                }
-            }
-
             return true;
         }
 

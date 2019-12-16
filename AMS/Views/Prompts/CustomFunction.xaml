@@ -1,0 +1,117 @@
+<Page x:Class="AMS.Views.Prompts.CustomFunction"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:AMS.Views.Prompts"
+      xmlns:prompts="clr-namespace:AMS.ViewModels.Prompts"
+      mc:Ignorable="d"
+      Title="CustomFunction" Height="450" Width="800"
+      FocusManager.FocusedElement="{Binding ElementName=StartElement}">
+    <Page.Resources>
+        <DataTemplate x:Key="Expiration">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Text="Set the epiration date and notification time."
+                           TextWrapping="Wrap" />
+                <TextBox Style="{StaticResource ParagraphTextBox}"
+                         MinHeight="70"
+                         MaxHeight="180"
+                         Text="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.DefaultValue, UpdateSourceTrigger=PropertyChanged}"
+                         Grid.Row="1" />
+            </Grid>
+        </DataTemplate>
+        <prompts:DefaultValueDesignSelector x:Key="MyDefaultValueDesignSelector" />
+    </Page.Resources>
+
+    <Page.InputBindings>
+        <KeyBinding Key="Return" Command="{Binding AcceptCommand}" />
+        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding AcceptCommand}" />
+    </Page.InputBindings>
+
+    <Grid>
+        <Canvas Style="{StaticResource PromptBackground}" />
+        <Border Style="{StaticResource PromptBorder}"
+                Width="400"
+                Height="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel>
+                    <!-- Title -->
+                    <Border CornerRadius="3 3 0 0"
+                            Background="{StaticResource BackgroundDarkBrush}">
+                        <Grid>
+                            <TextBlock Text="{Binding PromptHeaderAndAcceptButtonText}"
+                                       Style="{StaticResource HeaderStyle}"
+                                       Foreground="White"
+                                       Margin="10 0 0 0"
+                                       VerticalAlignment="Center" />
+
+                            <Button Style="{StaticResource RegularCancelButton}"
+                                    Width="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ActualHeight}"
+                                    Height="25"
+                                    MinWidth="0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Right"
+                                    Command="{Binding CancelCommand}"
+                                    Content="X"
+                                    Margin="0 5 10 5"
+                                    FontWeight="Bold" />
+                        </Grid>
+                    </Border>
+
+                    <!-- Content -->
+                    <Grid Margin="10"
+                          Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                       Text="Function type:" />
+                            <ComboBox Margin="0 0 0 10"
+                                      Name="FieldTypeSelector"
+                                      ItemsSource="{Binding FunctionTypes}"
+                                      SelectedItem="{Binding SelectedFunctionType, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <TextBlock Style="{StaticResource ParagraphStyle}"
+                                       Text="Function name:" />
+                            <TextBox Style="{StaticResource ParagraphTextBox}"
+                                     Margin="0 0 0 10"
+                                     Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+
+                            <TextBlock Text="Value:"
+                                       Style="{StaticResource ParagraphStyle}" DataContext="{Binding}" />
+
+                            <ContentPresenter Margin="0 0 0 10"
+                                              ContentTemplateSelector="{StaticResource MyDefaultValueDesignSelector}"
+                                              Content="{Binding SelectedFunctionType}" />
+                        </StackPanel>
+
+                    </Grid>
+
+                    <Rectangle Style="{StaticResource HorizontalSeparator}"
+                               Margin="10" />
+
+                    <!-- Accept button -->
+                    <Button Style="{StaticResource RegularAcceptButton}"
+                            Margin="0 0 10 10"
+                            Command="{Binding AcceptCommand}"
+                            HorizontalAlignment="Right"
+                            IsEnabled="{Binding IsFieldNameNotNull}"
+                            Content="Save function"
+                            x:Name="StartElement" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

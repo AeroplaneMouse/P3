@@ -23,6 +23,7 @@
                 <ResourceDictionary Source="Resources/Styles/Prompt.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Notifications.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Fields.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Functions.xaml" />
                 <ResourceDictionary Source="Resources/Styles/ComboBox.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

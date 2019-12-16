@@ -127,8 +127,6 @@ namespace AMS.Controllers
                         // Adds all the fields to the asset
                         foreach (Field tagField in currentTag.FieldList)
                             AddField(tagField);
-
-                        ControlledAsset.Functions.AddRange(currentTag.Functions);
                     }
                     
                 }
@@ -160,8 +158,6 @@ namespace AMS.Controllers
 
                         // Remove relations to the tag from the fields and handle whether or not the field itself should be removed.
                         RemoveTagRelationsOnFields(currentTag);
-
-                        ControlledAsset.Functions.RemoveAll(p => p.TagIDs.Count == 1 && p.TagIDs.Contains(currentTag.ID));
                     }
                 }
             }

@@ -27,19 +27,16 @@ namespace AMS.Models
         }
 
         public List<ulong> TagIDs { get; set; }
-
-        [JsonIgnore] public List<ITagable> TagList { get; set; }
-
-        [JsonIgnore] public bool HasNoTagRelations => TagList.Count == 0;
-
         public string HashId { get; set; }
 
-        public bool IsCustom { get; set; }
-
-        public bool IsHidden { get; set; }
         public string Label { get; set; }
         public string Content { get; set; }
-        public bool Required { get; set; }
+
+        public string ExtraContent
+        {
+            get;
+            set;
+        }
 
         public string Hash
         {
@@ -53,35 +50,26 @@ namespace AMS.Models
         /// </summary>
         /// <param name="label">The label of the field</param>
         /// <param name="content">The content added to the field</param>
-        /// <param name="isCustom"></param>
-        /// <param name="required">A boolean, whether the field is required or not</param>
         /// <param name="type">Selecting the type of the field. 1= TextBox,2 = String,3= Int, 4 = Date, 5 = Boolean</param>
-        public Function(string label, string content, FunctionType type, bool required = false,
-            bool isCustom = false)
+        public Function(string label, string content, FunctionType type)
         {
             // Creates unique hash
             this.HashId = CalculateMd5Hash(true);
             this.Label = label;
             this.Content = content;
             Type = type;
-            this.Required = required;
             //this.Hash = CalculateMd5Hash();
-            this.IsCustom = isCustom;
-            this.IsHidden = false;
             this.TagIDs = new List<ulong>();
         }
 
-        public Function(string label, string content, FunctionType type, string hashId, bool required,
-            bool isCustom, bool isHidden, List<ulong> tagIDs)
+        public Function(string label, string content, FunctionType type, string hashId, List<ulong> tagIDs)
         {
             this.Label = label;
             this.Content = content;
             Type = type;
             this.HashId = hashId;
-            this.Required = required;
             //this.Hash = CalculateMd5Hash();
-            this.IsCustom = isCustom;
-            this.IsHidden = isHidden;
+
             this.TagIDs = tagIDs;
         }
 
@@ -93,8 +81,6 @@ namespace AMS.Models
             this.Label = label;
             this.Content = content;
             Type = type;
-            this.IsCustom = isCustom;
-            this.Required = required;
             //this.Hash = CalculateMd5Hash();
             this.TagIDs = tagIDs ?? new List<ulong>();
         }
@@ -109,7 +95,6 @@ namespace AMS.Models
             {
                 {"Label", Label},
                 {"Description", Content},
-                {"Required", Required.ToString()},
                 {"Type", Type.ToString()},
             };
             return output;
@@ -157,6 +142,6 @@ namespace AMS.Models
             return sb.ToString();
         }
 
-        public override string ToString() => $"{Label} : {Content} : {Type} : {Required} : {IsHidden}";
+        public override string ToString() => $"{Label} : {Content} : {Type}";
     }
 }

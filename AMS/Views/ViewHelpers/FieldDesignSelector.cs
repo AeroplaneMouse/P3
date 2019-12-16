@@ -40,20 +40,20 @@ namespace AMS.Views
             }
             else
             {
+                //Todo move to own location
                 Function function = item as Function;
                 switch (function?.Type)
-                    {
-                        case Function.FunctionType.Expiration: // Textbox
-                            return element?.FindResource("DateFieldStyle") as DataTemplate;
-                        case Function.FunctionType.Logger: // String
-                            return element?.FindResource("FieldFromParentTag") as DataTemplate;
-                        case Function.FunctionType.TagRequire: // Integer
-                            return element?.FindResource("FieldFromParentTag") as DataTemplate;
-                        default:
-                            throw new NotSupportedException("Wrong formatting syntax.");
-                    }
+                {
+                    case Function.FunctionType.Expiration: // Expiration
+                        return element?.FindResource("Function") as DataTemplate;
+                    case Function.FunctionType.Logger: // Logger
+                        return element?.FindResource("Function") as DataTemplate;
+                    case Function.FunctionType.TagRequire: // Integer
+                        return element?.FindResource("Function") as DataTemplate;
+                    default:
+                        throw new NotSupportedException("Wrong formatting syntax.");
+                }
             }
-
         }
     }
 }
