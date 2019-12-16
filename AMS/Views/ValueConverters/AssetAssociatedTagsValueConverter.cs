@@ -12,8 +12,8 @@ namespace AMS.Views.ValueConverters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
+            //Stopwatch stopwatch = new Stopwatch();
+            //stopwatch.Start();
 
             const int MaxTags = 5;
             List<Tag> tags = new List<Tag>();
@@ -43,7 +43,6 @@ namespace AMS.Views.ValueConverters
                     }
                 }
 
-
                 // Add other normal tags if there is space
                 if (tags.Count < MaxTags && asset.AssociatedTags.Length > 0)
                 {
@@ -65,9 +64,9 @@ namespace AMS.Views.ValueConverters
                     }
                 }
             }
-            stopwatch.Stop();
+            //stopwatch.Stop();
 
-            Console.WriteLine($"Time: { stopwatch.ElapsedTicks }");
+            //Console.WriteLine($"Time: { stopwatch.ElapsedTicks }");
 
             return tags;
         }
