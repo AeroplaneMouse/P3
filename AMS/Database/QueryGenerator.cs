@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace AMS.Database
 {
-    public class QueryGenerator : IDisposable
+    public class QueryGenerator
     {
         public List<string> Columns;
         public List<List<string>> Values;
@@ -112,13 +112,6 @@ namespace AMS.Database
             if (_orderBys.Count > 0)
             {
                 _query.Append($" ORDER BY {_orderBys.First().Key} {_orderBys.First().Value}");
-                
-                /*
-                foreach (KeyValuePair<string, string> keyValuePair in _orderBys.Skip(0))
-                {
-                    _query.Append($", {keyValuePair.Key} {keyValuePair.Value}");
-                }
-                */
             }
 
             if (Limit > 0)
@@ -127,103 +120,6 @@ namespace AMS.Database
             }
 
             return _query.ToString();
-        }
-
-        /// <summary>
-        /// Creates a query to insert a new row into the first table of the query, with the values of the query
-        /// </summary>
-        /// <returns>Insert query</returns>
-        public string PrepareInsert()
-        {
-            _query.Clear();
-            if (Tables.Count > 0 && Columns.Count == Values.Count)
-            {
-                _query.Append("INSERT INTO " + Tables[0].Name);
-                _query.Append(" ( " + GetColumns() + " ) VALUES ");
-
-                List<String> objects = new List<string>();
-
-                foreach (var item in Values)
-                {
-                    objects.Add("(" + string.Join(", ", item) + ")");
-                }
-
-                _query.Append(string.Join(",", objects));
-                
-                return _query.ToString();
-            }
-
-            return "";
-        }
-
-        /// <summary>
-        /// Creates a query to update the columns of the query for an element in the first table of the query, with the values of the query
-        /// </summary>
-        /// <returns>Update query</returns>
-        public string PrepareUpdate()
-        {
-            /*
-            _query.Clear();
-            //Checks if there is added any tables and if the number of columns and values are the same, to ensure success
-            if (Tables.Count > 0 && Columns.Count == Values.Count)
-            {
-                //Create the query string
-                _query.Append("UPDATE " + Tables[0].Name+ " SET ");
-                int counter = Tables.Count;
-                
-
-                    _query.Append(string.Join(", ", Values.ForEach() new Statement(Columns[i], Values[i]).Render());
-                     columnValuePairs += $", {(new Statement(Columns[i], Values[i])).Render()}";
-                
-
-                _query.Append(" SET " + columnValuePairs);
-                
-                if (WhereStatements.Count > 0)
-                {
-                    _query.Append(" WHERE " + string.Join(" AND ", from item in WhereStatements select item.Render()));
-                }
-
-                return _query.ToString();
-            }
-
-            return "";
-            */
-            return null;
-        }
-        
-        /// <summary>
-        /// Creates a query to delete an element in the table of the query
-        /// </summary>
-        /// <returns>Delete query</returns>
-        public string PrepareDelete()
-        {
-            _query.Clear();
-            //Checks if there is added any tables and if the number of columns and values are the same, to ensure success
-            if (Tables.Count > 0 && Columns.Count == Values.Count)
-            {
-                //Create the query string
-                _query.Append("DELETE FROM " + Tables[0].Name);
-                if (WhereStatements.Count > 0)
-                {
-                    _query.Append(" WHERE " + string.Join(" AND ", from item in WhereStatements select item.Render()));
-                }
-                return _query.ToString();
-            }
-            return "";
-        }
-        
-        public void Dispose()
-        {
-        }
-
-        private string prepareValue(string value)
-        {
-            if (int.TryParse(value, out int returnedInt))
-            {
-                return value;
-            }
-
-            return "'" + value + "'";
         }
 
         public void Reset()
