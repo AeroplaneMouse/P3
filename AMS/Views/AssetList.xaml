@@ -23,6 +23,7 @@
                 </Grid.ColumnDefinitions>
             </Grid>
         </DataTemplate>
+        <converter:AssetAssociatedTagsValueConverter x:Key="AssociatedTagsConverter"/>
     </Page.Resources>
 
     <Page.InputBindings>
@@ -291,6 +292,32 @@
                                                    FontSize="{StaticResource FontSizeSmall}"
                                                    MinWidth="140"
                                                    Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+
+                            <!-- Tags -->
+                            <GridViewColumn>
+                                <GridViewColumnHeader Content="Tags"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ListView ItemsSource="{Binding Path=., Converter={StaticResource AssociatedTagsConverter}}"
+                                                  ItemContainerStyle="{StaticResource ListViewWithTags}"
+                                                  Style="{ StaticResource HideIfEmpty }"
+                                                  Grid.Row="1" Margin="0 5 0 -4">
+                                            <ListView.Template>
+                                                <ControlTemplate>
+                                                    <WrapPanel IsItemsHost="True"/>
+                                                </ControlTemplate>
+                                            </ListView.Template>
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid HorizontalAlignment="Left">
+                                                        <Label Style="{StaticResource TagLabelOnlyShow}"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ListView>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

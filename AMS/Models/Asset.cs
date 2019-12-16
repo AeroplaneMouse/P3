@@ -74,7 +74,7 @@ namespace AMS.Models
             }
         }
 
-        public string AssociatedTags { get; set; }
+        public string AssociatedTags { get; set; } = "network🠦switch:#FF9999,network🠦router:#FF9999,features🠦one:#9999FF,features🠦two:#9999FF,network🠦router:#FF9999,features🠦one:#9999FF,network🠦router:#FF9999,features🠦one:#9999FF,network🠦router:#FF9999,features🠦one:#9999FF,network🠦router:#FF9999,features🠦one:#9999FF,network🠦router:#FF9999,features🠦one:#9999FF,network🠦router:#FF9999,features🠦one:#9999FF,network🠦router:#FF9999,features🠦one:#9999FF,network🠦router:#FF9999,features🠦one:#9999FF,network🠦router:#FF9999,features🠦one:#9999FF,network🠦router:#FF9999,features🠦one:#9999FF";
         public string AssociatedUsers { get; set; }
 
         public Asset()

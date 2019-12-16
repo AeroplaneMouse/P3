@@ -319,7 +319,7 @@ namespace AMS.ViewModels
                         if (!actionSuccess)
                             extraMessage = "Error! Unable to remove tag(s).";
 
-                        Features.Navigate.Back();
+                        Features.Navigate.To(Features.Create.TagList());
                         Features.AddNotification(new Notification(extraMessage, background: actionSuccess ? Notification.APPROVE : Notification.ERROR), displayTime: 4000);
                     }
                 }));
@@ -336,7 +336,7 @@ namespace AMS.ViewModels
                             _controller.Remove();
                             UpdateOnFocus();
                             Features.AddNotification(new Notification($"{ _controller.ControlledTag.Name } has been removed.", background: Notification.APPROVE));
-                            Features.Navigate.Back();
+                            Features.Navigate.To(Features.Create.TagList());
                         }
                     }));
             }
