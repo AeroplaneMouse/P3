@@ -5,11 +5,17 @@ using MySql.Data.MySqlClient;
 using System.Collections.ObjectModel;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Logging;
+using AMS.ViewModels;
 
 namespace AMS.Database.Repositories
 {
     public class LogRepository : ILogRepository
     {
+        /// <summary>
+        /// Insert a LogEntry into the database.
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns>Rather the insertion was successful</returns>
         public bool Insert(LogEntry entity)
         {
             var con = new MySqlHandler().GetConnection();
@@ -48,7 +54,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+
                 }
                 finally
                 {
@@ -59,11 +65,24 @@ namespace AMS.Database.Repositories
             return querySuccess;
         }
 
+        /// <summary>
+        /// Returns entries matching the loggedItemId and type.
+        /// </summary>
+        /// <param name="loggedItemId"></param>
+        /// <param name="loggedItemType"></param>
+        /// <returns></returns>
         public IEnumerable<LogEntry> GetLogEntries(ulong loggedItemId, Type loggedItemType)
         {
             return GetLogEntries(loggedItemId, loggedItemType, null);
         }
 
+        /// <summary>
+        /// Returns entries matching the loggedItemId, type, and userId. If userId is null, all entries matching the remaining parameters are returned.
+        /// </summary>
+        /// <param name="loggedItemId"></param>
+        /// <param name="loggedItemType"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public IEnumerable<LogEntry> GetLogEntries(ulong loggedItemId, Type loggedItemType, string userId)
         {
             var con = new MySqlHandler().GetConnection();
@@ -105,7 +124,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    
                 }
                 finally
                 {
@@ -116,6 +135,11 @@ namespace AMS.Database.Repositories
             return entries;
         }
 
+        /// <summary>
+        /// Returns all LogEntries matching the keyword from the database.
+        /// </summary>
+        /// <param name="keyword"></param>
+        /// <returns></returns>
         public IEnumerable<LogEntry> Search(string keyword)
         {
             var con = new MySqlHandler().GetConnection();
@@ -152,7 +176,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    
                 }
                 finally
                 {
@@ -164,9 +188,9 @@ namespace AMS.Database.Repositories
         }
         
         /// <summary>
-        /// 
+        /// Constructs an instance of the LogEntry
         /// </summary>
-        /// <param name="reader"></param>
+        /// <param name="reader">The MySqlDataReader to be used for reading the columns</param>
         /// <returns></returns>
         public LogEntry DataMapper(MySqlDataReader reader)
         {

@@ -29,6 +29,10 @@ namespace AMS.ViewModels.Commands
             return true;
         }
 
+        /// <summary>
+        /// Creates a prompt where the user will accept the deletion of the input department
+        /// </summary>
+        /// <param name="parameter">ID of the department that is to be deleted</param>
         public void Execute(object parameter)
         {
             // Retrieving department ID
@@ -39,7 +43,7 @@ namespace AMS.ViewModels.Commands
             }
             catch (Exception)
             {
-                Features.AddNotification(new Notification("An unknown error occurred. Unable to remove department.", background: Notification.ERROR), displayTime: 3500);
+                Features.AddNotification(new Notification("An unknown error occurred. Unable to remove department.", Notification.ERROR), 3500);
                 return;
             }
 
@@ -55,13 +59,18 @@ namespace AMS.ViewModels.Commands
                     Features.DisplayPrompt(new Confirm($"Are you sure you want to delete\n{ _department.Name }?", PromptElapsed));
                 }
                 else
-                    Features.AddNotification(new Notification("You cannot remove your current department. Please change your department and then try again.", background: Notification.ERROR),
-                        3500);
+                    Features.AddNotification(new Notification("You cannot remove your current department. Please change your department and then try again.", Notification.ERROR), 3500);
             }
             else
-                Features.AddNotification(new Notification("Removing department failed. Department not found!", background: Notification.ERROR));
+                Features.AddNotification(new Notification("Removing department failed. Department not found!", Notification.ERROR));
         }
 
+        /// <summary>
+        /// When the prompt created by <see cref="Execute(object)"/> is closed,
+        /// delete the department
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void PromptElapsed(object sender, PromptEventArgs e)
         {
             if (e.Result)
@@ -70,10 +79,10 @@ namespace AMS.ViewModels.Commands
                 if (Features.DepartmentRepository.Delete(_department))
                 {
                     _main.OnPropertyChanged(nameof(_main.Departments));
-                    Features.AddNotification(new Notification($"{ _department.Name } has now been removed from the system.", background: Notification.APPROVE));
+                    Features.AddNotification(new Notification($"{ _department.Name } has now been removed from the system.", Notification.APPROVE));
                 }
                 else
-                    Features.AddNotification(new Notification("An unknown error occurred. Unable to remove department.", background: Notification.ERROR));
+                    Features.AddNotification(new Notification("An unknown error occurred. Unable to remove department.", Notification.ERROR));
             }
         }
     }

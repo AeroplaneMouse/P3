@@ -48,6 +48,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(CommentList));
         }
 
+        // Opens the AssetView for the currently selected commment
         public void View()
         {
             if (SelectedComment != null)

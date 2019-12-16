@@ -289,6 +289,10 @@ namespace AMS.ViewModels
             }));
         }
 
+        /// <summary>
+        /// Simple way to navigate to one of the five primary pages
+        /// </summary>
+        /// <param name="pageNumber"></param>
         private void GoToPage(int pageNumber)
         {
             SelectedNavigationItem = pageNumber;

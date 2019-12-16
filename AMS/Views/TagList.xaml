@@ -34,7 +34,7 @@
             <TextBlock Text="{Binding CurrentDepartment}"
                        FontSize="{StaticResource FontSizeRegular}"
                        VerticalAlignment="Center"
-                       Foreground="{StaticResource GrayForLessImportantElementsBrush}"/>
+                       Foreground="Gray"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal"

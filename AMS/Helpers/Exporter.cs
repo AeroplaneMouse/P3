@@ -9,6 +9,7 @@ namespace AMS.Helpers
 {
     public class Exporter 
     {
+        // Names of properties that should not be exported
         private readonly List<string> _excludedProperties = new List<string> {{"FieldsList"}, {"CreatedAtString"}, {"UpdatedAtString"}, {"Changes"}, {"DateToStringConverter"} };
         private readonly StreamWriter _streamWriter;
         public Exporter(StreamWriter streamWriter)
@@ -17,7 +18,7 @@ namespace AMS.Helpers
         }
 
         /// <summary>
-        /// Writes the information about the items to file with given path
+        /// Writes the information about the given items to the stream
         /// </summary>
         /// <param name="items"></param>
         /// <param name="objectType"></param>
@@ -66,7 +67,7 @@ namespace AMS.Helpers
         }
         
         /// <summary>
-        /// Creates a string containing the column headers
+        /// Creates a string containing the column headers consisting of the names of the properties
         /// </summary>
         /// <param name="objectType"></param>
         /// <returns>String with column headers</returns>

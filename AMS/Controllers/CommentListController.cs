@@ -122,6 +122,8 @@ namespace AMS.Controllers
                 comment.IsEditing = false;
                 _commentRep.Update(comment);
 
+                _oldCommentContent.Remove(comment.ID);
+
                 Features.AddNotification(new Notification("Changes saved", Notification.APPROVE));
             }
         }

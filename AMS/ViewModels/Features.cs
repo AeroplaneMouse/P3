@@ -27,8 +27,6 @@ namespace AMS.ViewModels
         // Page and window creation
         private static ContentCreator _creator;
         public static ContentCreator Create => _creator ??= new ContentCreator();
-        
-        #region Repositories
 
         private static IUserRepository _userRepository;
         private static IAssetRepository _assetRepository;
@@ -37,6 +35,7 @@ namespace AMS.ViewModels
         private static ICommentRepository _commentRepository;
         private static ILogRepository _logRepository;
 
+        // References to each Repository in the system
         public static IUserRepository UserRepository => _userRepository ??= new UserRepository();
         public static IAssetRepository AssetRepository => _assetRepository ??= new AssetRepository();
         public static ITagRepository TagRepository => _tagRepository ??= new TagRepository();
@@ -44,7 +43,6 @@ namespace AMS.ViewModels
         public static ICommentRepository CommentRepository => _commentRepository ??= new CommentRepository();
         public static ILogRepository LogRepository => _logRepository ??= new LogRepository();
 
-        #endregion
 
         // Whether or not a UI element is only visible for the Admin user
         public static Visibility OnlyVisibleForAdmin => Main.OnlyVisibleForAdmin;

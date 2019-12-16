@@ -44,7 +44,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -86,7 +86,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -128,7 +128,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -167,7 +167,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -213,7 +213,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -255,7 +255,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {

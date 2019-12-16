@@ -18,6 +18,12 @@ namespace AMS.Helpers
     {
         private Page _currentPage;
 
+        /// <summary>
+        /// Navigates to the given page by using the ContentFrame.Navigate.
+        /// Also adds the page that is being navigated from to the page history.
+        /// </summary>
+        /// <param name="page"></param>
+        /// <returns>Whether navigation was successful</returns>
         public bool To(Page page)
         {
             if (Features.Main.ContentFrame.Navigate(page))
@@ -44,6 +50,10 @@ namespace AMS.Helpers
             return false;
         }
 
+        /// <summary>
+        /// Navigates back the previous page 
+        /// </summary>
+        /// <returns>Whether navigation was successful</returns>
         public bool Back()
         {
             if (Features.Main.History.Count > 0)
@@ -63,6 +73,10 @@ namespace AMS.Helpers
             return false;
         }
 
+        /// <summary>
+        /// Determines if the current page is a primary page.
+        /// </summary>
+        /// <returns>Whether the current page is primary</returns>
         private bool CurrentPageIsPrimary()
         {
             return _currentPage.GetType() == typeof(Home) ||

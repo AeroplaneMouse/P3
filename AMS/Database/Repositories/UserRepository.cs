@@ -4,6 +4,8 @@ using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using AMS.Models;
 using AMS.Database.Repositories.Interfaces;
+using AMS.Logging;
+using AMS.ViewModels;
 
 namespace AMS.Database.Repositories
 {
@@ -11,6 +13,7 @@ namespace AMS.Database.Repositories
     {
         private Tag _tag;
         private string _FullTagPartOne;
+        private Logger _logger = new Logger(Features.LogRepository);
 
         public UserRepository()
         {    
@@ -47,7 +50,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -90,7 +93,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -129,7 +132,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -181,7 +184,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -232,7 +235,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -265,7 +268,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -306,7 +309,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -352,7 +355,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {

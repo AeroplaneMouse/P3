@@ -55,7 +55,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -110,7 +110,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -163,7 +163,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -203,7 +203,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -249,7 +249,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -355,7 +355,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -396,7 +396,7 @@ namespace AMS.Database.Repositories
                     
                     string tagLabels = "\"" + String.Join("\", \"", tags);
 
-                    StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users VALUES ");
+                    StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users (asset_id, user_id) VALUES ");
 
                     for (int i = 0; i < userCounter; i++)
                     {
@@ -406,7 +406,7 @@ namespace AMS.Database.Repositories
                             userQuery.Append(",");
                     }
 
-                    StringBuilder tagQuery = new StringBuilder("INSERT INTO asset_tags VALUES ");
+                    StringBuilder tagQuery = new StringBuilder("INSERT INTO asset_tags (asset_id, tag_id) VALUES ");
 
                     for (int i = 0; i < tagCounter; i++)
                     {
@@ -415,8 +415,6 @@ namespace AMS.Database.Repositories
                         if (i != tagCounter - 1)
                             tagQuery.Append(",");
                     }
-                    
-                    Console.WriteLine(tagQuery.ToString());
                     
                     if (users.Count > 0)
                     {
@@ -438,7 +436,7 @@ namespace AMS.Database.Repositories
                 catch (MySqlException e)
                 {
                     transaction.Rollback();
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {

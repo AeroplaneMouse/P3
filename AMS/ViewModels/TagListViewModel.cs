@@ -61,6 +61,9 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(Tags));
         }
 
+        /// <summary>
+        /// Remove the selected tag from the system
+        /// </summary>
         private void RemoveTag()
         {
             string message = String.Empty;
@@ -124,6 +127,9 @@ namespace AMS.ViewModels
             }
         }
 
+        /// <summary>
+        /// Searches the system for tags
+        /// </summary>
         private void Search()
         {
             _tagListController.GetTreeviewData(_searchQuery);
