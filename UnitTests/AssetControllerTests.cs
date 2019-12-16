@@ -41,14 +41,13 @@ namespace UnitTests
             
             _userRepMock = new Mock<IUserRepository>();
             _userRepMock.Setup(p => p.GetByIdentity(It.IsAny<string>()))
-                .Returns(new User {Username = "TestUser", DefaultDepartment = 1});
+                        .Returns(new User {Username = "TestUser", DefaultDepartment = 1});
+
             _sessionMock = new Mock<Session>(_userRepMock.Object);
 
             //Field setup
-            _fieldOne = new Field("Label of first field", "content of first field",
-                Field.FieldType.TextBox);
-            _fieldTwo = new Field("Label of second field", "content of second field",
-                Field.FieldType.Checkbox, false, true);
+            _fieldOne = new Field("Label of first field", "content of first field", Field.FieldType.TextBox);
+            _fieldTwo = new Field("Label of second field", "content of second field", Field.FieldType.Checkbox, false, true);
 
             //Asset controller setup
             _assetController = new AssetController(CreateTestAssetWithId((ulong)1), _assetRepMock.Object, _sessionMock.Object);
@@ -75,8 +74,7 @@ namespace UnitTests
             otherAsset.ControlledAsset.DepartmentID = 1;
 
             otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.TextBox));
-            otherAsset.AddField(new Field("Label of second field", "content of second field",
-                Field.FieldType.Checkbox));
+            otherAsset.AddField(new Field("Label of second field", "content of second field", Field.FieldType.Checkbox));
 
             //Act
             bool result = _assetController.ControlledAsset.Equals(otherAsset.ControlledAsset);
