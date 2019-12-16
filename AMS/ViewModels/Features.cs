@@ -90,10 +90,8 @@ namespace AMS.ViewModels
                         Main.History.Clear();
                     }
 
-                    (page.DataContext as IPageUpdateOnFocus).UpdateOnFocus();
                     Main.History.Push(_currentPage);
                     _currentPage = page;
-
 
                     return true;
                 }
