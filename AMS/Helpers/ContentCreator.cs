@@ -16,15 +16,9 @@ namespace AMS.Helpers
 {
     public class ContentCreator
     {
-        #region Helpers
-
         private static IExporter _printHelper { get; } = new PrintHelper();
         private static IUserImporter _userImporter { get; } = new UserImporter(Features.UserRepository);
         private static TagHelper CreateTagHelper() => new TagHelper(Features.TagRepository, Features.UserRepository);
-
-        #endregion
-
-        #region Controllers
 
         private IAssetController GetAssetController(Asset asset) => new AssetController(asset, Features.AssetRepository, Features.GetCurrentSession());
 
@@ -43,10 +37,6 @@ namespace AMS.Helpers
         private ITagListController GetTagListController() => new TagListController(Features.TagRepository);
 
         private IUserListController GetUserListController() => new UserListController(_userImporter, Features.UserRepository, Features.DepartmentRepository);
-
-        #endregion
-
-        #region Pages
 
         /// <summary>
         /// Returns a new AssetPresenter page
@@ -168,10 +158,6 @@ namespace AMS.Helpers
             return new SettingsEditor(caller);
         }
 
-        #endregion
-
-        #region Windows
-
         /// <summary>
         /// Returns the main window of the application
         /// </summary>
@@ -180,7 +166,5 @@ namespace AMS.Helpers
         {
             return new Main(Features.UserRepository, Features.DepartmentRepository);
         }
-
-        #endregion
     }
 }
