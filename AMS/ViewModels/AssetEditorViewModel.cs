@@ -143,6 +143,7 @@ namespace AMS.ViewModels
             BackspaceCommand = new RelayCommand<object>((parameter) => RemoveCharacterOrExitTagMode(parameter as TextBox));
 
             UpdateAll();
+            _assetController.UpdateFieldContent();
         }
 
         /// <summary>
