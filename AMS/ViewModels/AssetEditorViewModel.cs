@@ -373,7 +373,7 @@ namespace AMS.ViewModels
         /// <summary>
         /// Runs the tagsearch process.
         /// </summary>
-        private void TagSearch()
+        public void TagSearch()
         {
             UpdateTagSuggestions();
         }
@@ -519,6 +519,11 @@ namespace AMS.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Updates the edited field to the new value
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditFieldConfirmed(object sender, PromptEventArgs e)
         {
             if (e is FieldEditPromptEventArgs args)
@@ -531,12 +536,21 @@ namespace AMS.ViewModels
             }
         }
 
+        /// <summary>
+        /// Removes the 
+        /// </summary>
+        /// <param name="textBox"></param>
         private void RemoveCharacterOrExitTagMode(TextBox textBox)
         {
             if (TagSearchQuery != null && TagSearchQuery.Length > 0)
             {
                 int cursorIndex = textBox.CaretIndex;
-                if (cursorIndex > 0)
+                if (textBox.SelectedText.Length > 0)
+                {
+                    TagSearchQuery = TagSearchQuery.Remove(textBox.SelectionStart, textBox.SelectionLength);
+                    textBox.CaretIndex = cursorIndex;
+                }
+                else if (cursorIndex > 0)
                 {
                     TagSearchQuery = TagSearchQuery.Remove(cursorIndex - 1, 1);
                     textBox.CaretIndex = cursorIndex - 1;
