@@ -63,6 +63,11 @@ namespace AMS.Controllers
             _exporter.Print(assets);
         }
 
+        /// <summary>
+        /// Gets the tags currently attached to the input asset
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <returns></returns>
         public List<ITagable> GetTags(Asset asset)
         {
             return _assetRepository.GetTags(asset).ToList();

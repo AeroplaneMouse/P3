@@ -48,7 +48,7 @@ namespace AMS.ViewModels
             SearchCommand = new RelayCommand(() => Search());
             EditCommand = new RelayCommand(() => {
                 if (SelectedItem != null)
-                    Features.Navigate.To(Features.Create.TagEditor(_tagListController.getTag(SelectedItem.ID)));
+                    Features.Navigate.To(Features.Create.TagEditor(_tagListController.GetTag(SelectedItem.ID)));
             });
             
             Search();

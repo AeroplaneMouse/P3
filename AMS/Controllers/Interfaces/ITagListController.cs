@@ -12,11 +12,9 @@ namespace AMS.Controllers.Interfaces
     {
         List<Tag> TagsList { get; set; }
 
-        void Search(string query);
-
         void Remove(Tag tag);
 
-        Tag getTag(ulong tagID);
+        Tag GetTag(ulong tagID);
 
         List<Tag> GetParentTags();
 

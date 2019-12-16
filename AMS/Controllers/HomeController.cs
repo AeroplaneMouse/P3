@@ -11,26 +11,10 @@ namespace AMS.Controllers
 {
     public class HomeController : IHomeController
     {
-        public ulong NumberOfUsers
-        {
-            get => (ulong)_userRepository.GetAll().Count(p => p.IsEnabled);
-            set => NumberOfUsers = value;
-        }
-        public ulong NumberOfAssets
-        {
-            get => _assetRepository.GetCount();
-            set => NumberOfAssets = value;
-        }
-        public ulong NumberOfTags
-        {
-            get => _tagRepository.GetCount();
-            set => NumberOfTags = value;
-        }
-        public ulong NumberOfDepartments
-        {
-            get => _departmentRepository.GetCount();
-            set => NumberOfDepartments = value;
-        }
+        public ulong NumberOfUsers => (ulong)_userRepository.GetAll().Count(p => p.IsEnabled);
+        public ulong NumberOfAssets => _assetRepository.GetCount();
+        public ulong NumberOfTags => _tagRepository.GetCount();
+        public ulong NumberOfDepartments => _departmentRepository.GetCount();
 
         private IUserRepository _userRepository { get; set; }
         private IAssetRepository _assetRepository { get; set; }
@@ -46,11 +30,21 @@ namespace AMS.Controllers
             _departmentRepository = departmentRepository;
         }
 
+        /// <summary>
+        /// Gets the tags currently attached to the input asset
+        /// </summary>
+        /// <param name="asset"></param>
+        /// <returns></returns>
         public List<ITagable> GetTags(Asset asset)
         {
             return _assetRepository.GetTags(asset).ToList();
         }
 
+        /// <summary>
+        /// Gets an asset by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public Asset GetAsset(ulong id)
         {
             return _assetRepository.GetById(id);

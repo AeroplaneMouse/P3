@@ -94,15 +94,21 @@ namespace AMS.Controllers
             FetchComments();
         }
 
+        /// <summary>
+        /// Changes the input comments editing status
+        /// </summary>
+        /// <param name="comment"></param>
         public void EditComment(Comment comment)
         {
             if (comment != null)
             {
+                // If the comment is not being edited, save its content to the dict
                 if (!comment.IsEditing)
                 {
                     _oldCommentContent.Add(comment.ID, comment.Content);
                 }
 
+                // Else, fetch the content from the dict, and remove that comment from the dict
                 else
                 {
                     comment.Content = _oldCommentContent[comment.ID];
@@ -111,10 +117,15 @@ namespace AMS.Controllers
                     Features.AddNotification(new Notification("Changes cancelled", Notification.INFO));
                 }
 
+                // Change the comment's editing status to the opposite
                 comment.IsEditing ^= true;
             }
         }
 
+        /// <summary>
+        /// Updates the comment's content in the database
+        /// </summary>
+        /// <param name="comment"></param>
         public void UpdateComment(Comment comment)
         {
             if (comment != null)
@@ -128,6 +139,9 @@ namespace AMS.Controllers
             }
         }
 
+        /// <summary>
+        /// Fetches all comments from within the current department
+        /// </summary>
         public void FetchComments()
         {
             _department = Features.GetCurrentDepartment();
