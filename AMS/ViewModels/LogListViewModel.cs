@@ -15,12 +15,9 @@ namespace AMS.ViewModels
     public class LogListViewModel : BaseViewModel
     {
         private string _searchQuery = "";
-        private ILogListController _logListController;
+        private ILogListController _logListController { get; set; }
 
-        public ObservableCollection<LogEntry> Entries
-        {
-            get => new ObservableCollection<LogEntry>(_logListController.EntryList);
-        }
+        public ObservableCollection<LogEntry> Entries => new ObservableCollection<LogEntry>(_logListController.EntryList);
 
         public bool CheckAll { get; set; }
         public string SearchQuery { 
@@ -50,6 +47,10 @@ namespace AMS.ViewModels
             CheckAllChangedCommand = new RelayCommand<object>((parameter) => CheckAllChanged(parameter as ListView));
         }
 
+        /// <summary>
+        /// Selects or unselects all elements in the log list
+        /// </summary>
+        /// <param name="list"></param>
         private void CheckAllChanged(ListView list)
         {
             if (SelectedItems.Count == 0)

@@ -396,7 +396,7 @@ namespace AMS.Database.Repositories
                     
                     string tagLabels = "\"" + String.Join("\", \"", tags);
 
-                    StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users VALUES ");
+                    StringBuilder userQuery = new StringBuilder("INSERT INTO asset_users (asset_id, user_id) VALUES ");
 
                     for (int i = 0; i < userCounter; i++)
                     {
@@ -406,7 +406,7 @@ namespace AMS.Database.Repositories
                             userQuery.Append(",");
                     }
 
-                    StringBuilder tagQuery = new StringBuilder("INSERT INTO asset_tags VALUES ");
+                    StringBuilder tagQuery = new StringBuilder("INSERT INTO asset_tags (asset_id, tag_id) VALUES ");
 
                     for (int i = 0; i < tagCounter; i++)
                     {

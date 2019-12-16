@@ -13,8 +13,6 @@ namespace AMS.Controllers
 {
     public class UserListController : IUserListController
     {
-        #region Public Properties
-
         public List<UserWithStatus> UserList
         {
             get
@@ -111,38 +109,22 @@ namespace AMS.Controllers
             }
         }
 
-        #endregion
-
-        #region Private Properties
-
         private IUserRepository _userRep { get; set; }
-
         private IDepartmentRepository _departmentRep { get; set; }
-
         private IUserImporter _importer { get; set; }
 
         // Lists
         private List<UserWithStatus> _importedUsersList { get; set; }
-
         private List<UserWithStatus> _existingUsersList { get; set; }
-
         private List<UserWithStatus> _finalUsersList { get; set; }
-
         private List<Department> _departmentList { get; set; }
 
 
         // Checkboxes
         private bool _isShowingAdded { get; set; }
-
         private bool _isShowingRemoved { get; set; }
-
         private bool _isShowingConflicting { get; set; }
-
         private bool _isShowingDisabled { get; set; }
-
-        #endregion
-
-        #region Constructor
 
         public UserListController(IUserImporter importer, IUserRepository userRep, IDepartmentRepository departmentRep)
         {
@@ -163,10 +145,10 @@ namespace AMS.Controllers
             UpdateShownUsers(_finalUsersList);
         }
 
-        #endregion
-
-        #region Public Methods
-
+        /// <summary>
+        /// Applies the changes made to the list of users, to the database
+        /// </summary>
+        /// <returns></returns>
         public bool ApplyChanges()
         {
             // Check if there are any conflicts left
@@ -204,6 +186,9 @@ namespace AMS.Controllers
             return true;
         }
 
+        /// <summary>
+        /// Cancel the changes made to the list of users
+        /// </summary>
         public void CancelChanges()
         {
             GetExistingUsers();
@@ -211,6 +196,10 @@ namespace AMS.Controllers
             UpdateShownUsers(_finalUsersList);
         }
 
+        /// <summary>
+        /// Keeps the input user in an import conflict
+        /// </summary>
+        /// <param name="user"></param>
         public void KeepUser(object user)
         {
             // Get the kept user
@@ -251,6 +240,10 @@ namespace AMS.Controllers
             }
         }
 
+        /// <summary>
+        /// Changes the status of a user, based on their current status
+        /// </summary>
+        /// <param name="user"></param>
         public void ChangeStatusOfUser(object user)
         {
             if (user == null)
@@ -278,6 +271,9 @@ namespace AMS.Controllers
             UpdateShownUsers(_finalUsersList);
         }
        
+        /// <summary>
+        /// Gets the users already in the system
+        /// </summary>
         public void GetExistingUsers()
         {
             _existingUsersList = _importer.ImportUsersFromDatabase();
@@ -292,6 +288,9 @@ namespace AMS.Controllers
                 });
         }
 
+        /// <summary>
+        /// Imports users from a CSV file
+        /// </summary>
         public void GetUsersFromFile()
         {
             string filePath = _importer.GetUsersFilePath();
@@ -304,15 +303,20 @@ namespace AMS.Controllers
             }
         }
 
-        #endregion
-
-        #region Private Methods
-
+        /// <summary>
+        /// Returns true if the input user is in the input list
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="user"></param>
+        /// <returns></returns>
         private bool UserIsInList(List<UserWithStatus> list, User user)
         {
             return list.Any(u => u.Username.CompareTo(user.Username) == 0);
         }
 
+        /// <summary>
+        /// Combines the <see cref="_existingUsersList"/> with the <see cref="_importedUsersList"/>
+        /// </summary>
         private void CombineLists()
         {
             _finalUsersList = new List<UserWithStatus>();
@@ -366,6 +370,10 @@ namespace AMS.Controllers
                 });
         }
 
+        /// <summary>
+        /// Updates which users are shown on the page
+        /// </summary>
+        /// <param name="list"></param>
         private void UpdateShownUsers(List<UserWithStatus> list)
         {
             list.ForEach(u =>
@@ -383,7 +391,5 @@ namespace AMS.Controllers
                         u.IsShown = IsShowingDisabled;
                 });
         }
-
-        #endregion
     }
 }

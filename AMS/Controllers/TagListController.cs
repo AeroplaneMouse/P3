@@ -14,8 +14,7 @@ namespace AMS.Controllers
 {
     public class TagListController : ITagListController
     {
-        private readonly ITagRepository _rep;
-        private IExporter _exporter;
+        private ITagRepository _rep { get; set; }
 
         public List<Tag> TagsList { get; set; }
         
@@ -25,11 +24,6 @@ namespace AMS.Controllers
         {
             _rep = tagRepository;
             TagsList = new List<Tag>();
-        }
-
-        public void Search(string query)
-        {
-            TagsList = _rep.Search("").ToList();
         }
 
         public void Remove(Tag tag)
@@ -46,21 +40,34 @@ namespace AMS.Controllers
         /// </summary>
         /// <param name="tag"></param>
         /// <returns></returns>
-        public Tag getTag(ulong tagID)
+        public Tag GetTag(ulong tagID)
         {
             return _rep.GetById(tagID);
         }
 
+        /// <summary>
+        /// Get the list of parent tags
+        /// </summary>
+        /// <returns></returns>
         public List<Tag> GetParentTags()
         {
             return _rep.GetParentTags().ToList();
         }
         
+        /// <summary>
+        /// Gets the child tags of an input parent tag
+        /// </summary>
+        /// <param name="id">ID of the parent tag</param>
+        /// <returns></returns>
         public List<Tag> GetChildTags(ulong id)
         {
             return _rep.GetChildTags(id).ToList();
         }
 
+        /// <summary>
+        /// Gets all the tags stored in the system
+        /// </summary>
+        /// <param name="keyword"></param>
         public void GetTreeviewData(string keyword="")
         {
             TagsList = _rep.GetTreeViewDataList(keyword).ToList();

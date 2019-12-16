@@ -11,8 +11,8 @@ namespace AMS.Controllers
 {
     public class LogListController : ILogListController
     {
-        private readonly ILogRepository _logRepository;
-        private readonly IExporter _exporter;
+        private ILogRepository _logRepository { get; set; }
+        private IExporter _exporter { get; set; }
         private List<LogEntry> _entryList;
         private Asset _asset;
 
@@ -39,6 +39,7 @@ namespace AMS.Controllers
 
             if (_asset == null)
                 Search("");
+
             else
                 EntryList = _logRepository.GetLogEntries(_asset.ID, typeof(Asset)).ToList();
         }
@@ -61,12 +62,15 @@ namespace AMS.Controllers
             _exporter.Print(entries);
         }
 
-        public void UpdateEntries()
-        {
+        /// <summary>
+        /// Searches for log entries
+        /// </summary>
+        public void UpdateEntries()
+        {
             if (_asset == null)
                 Search("");
             else
-                EntryList = _logRepository.GetLogEntries(_asset.ID, typeof(Asset)).ToList();
+                EntryList = _logRepository.GetLogEntries(_asset.ID, typeof(Asset)).ToList();
         }
     }
 }
