@@ -69,7 +69,7 @@ namespace AMS.ViewModels
             _tagController.ControlledTag = _tagController.GetTagById(SelectedItem.ID);
             
             // Check if parent
-            if (_tagController.ParentId == 0 && _tagController.ControlledTag.NumberOfChildren > 0)
+            if (_tagController.ControlledTag.ParentId == 0 && _tagController.ControlledTag.NumberOfChildren > 0)
             {
                 message = "You are about to remove a parent tag!\n"
                         + $"There are { _tagController.ControlledTag.NumberOfChildren } children attached to this parent.\n\n"
@@ -84,7 +84,7 @@ namespace AMS.ViewModels
                 {
                     if (e is ExpandedPromptEventArgs args)
                     {
-                        string extraMessage = $"{ _tagController.Name } has been removed";
+                        string extraMessage = $"{ _tagController.ControlledTag.Name } has been removed";
                         bool actionSuccess;
                         if (args.ButtonNumber == 0)
                         {
@@ -105,20 +105,20 @@ namespace AMS.ViewModels
 
             else
             {
-                if (_tagController.Id == 1)
+                if (_tagController.ControlledTag.TagId == 1)
                 {
-                    Features.AddNotification(new Notification($"{_tagController.Name} cannot be removed, it is essential", Notification.WARNING));
+                    Features.AddNotification(new Notification($"{_tagController.ControlledTag.Name} cannot be removed, it is essential", Notification.WARNING));
                 }
                 else
                 {
                     Features.DisplayPrompt(new Views.Prompts.Confirm(
                         "You are about to remove a tag which cannot be UNDONE!\n"
                         + "Are you sure?\n"
-                        + $"Tag: { _tagController.Name }", (sender, e) =>
+                        + $"Tag: { _tagController.ControlledTag.Name }", (sender, e) =>
                         {
                             _tagController.Remove();
                             UpdateOnFocus();
-                            Features.AddNotification(new Notification($"{ _tagController.Name } has been removed.", background: Notification.APPROVE));
+                            Features.AddNotification(new Notification($"{ _tagController.ControlledTag.Name } has been removed.", background: Notification.APPROVE));
                         }));
                 }
             }

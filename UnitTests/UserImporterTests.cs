@@ -107,24 +107,6 @@ namespace UnitTests
             DeleteFileAt(filePath);
         }
 
-        /*
-        [TestMethod]
-        public void ImportUsersFromFile_EncodingIsUTF8WithoutBOM_UsersReturnedInListWithSpecialCharacters()
-        {
-            // Arrange
-            string filePath = "userFileTest.txt";
-            CreateFileAt(filePath, new UTF8Encoding(false));
-
-            // Act
-            List<UserWithStatus> users = _userImporter.ImportUsersFromFile(filePath);
-            
-            // Assert
-            Assert.IsTrue(users.Count() == 2 && users.Where(p => p.Username.ToLower().Contains('å')).Count() == 1);
-
-            DeleteFileAt(filePath);
-        }
-        */
-
         #region Helpers
 
         // Make test file

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using AMS.Controllers.Interfaces;
 using AMS.Interfaces;
@@ -11,9 +12,7 @@ namespace AMS.Controllers
 {
     public abstract class FieldListController : IFieldListController
     {
-        private FieldContainer _fieldContainer;
-        public List<Field> NonHiddenFieldList { get; set; } = new List<Field>();
-        public List<Field> HiddenFieldList { get; set; } = new List<Field>();
+        protected FieldContainer _fieldContainer;
 
         protected FieldListController(FieldContainer element)
         {
@@ -34,157 +33,158 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Add a field to the field list.
+        /// Add a field to the fieldContainers list. If it's already there, update label and required.
+        /// If a field with same label and of same type, combine the two.
         /// </summary>
-        /// <param name="inputField"></param>
-        /// <param name="fieldContainer">Fieldcontainer is used when wanting to add a relation to a field when adding the field</param>
-        /// <returns></returns>
-        public bool AddField(Field inputField, FieldContainer fieldContainer = null)
+        /// <param name="inputField">The new field to be added</param>
+        /// <returns>Wether or not the input field was added to the list</returns>
+        public bool AddField(Field inputField)
         {
-            Field fieldInListByHashId = HiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId) ??
-                                        NonHiddenFieldList.FirstOrDefault(p => p.HashId == inputField.HashId);
+            // Check if field already exists on the fieldContainer
+            Field field = _fieldContainer.FieldList.FirstOrDefault(f => f.HashId == inputField.HashId);
 
-            if (fieldInListByHashId != null)
+            // If it exist, update label and required
+            if (field != null)
             {
-                // Checks if a field label has been updated
-                if (fieldInListByHashId.HashId == inputField.HashId && fieldInListByHashId.Label != inputField.Label)
-                    fieldInListByHashId.Label = inputField.Label;
-
-                // Checks if a fields required property has been updated
-                if (fieldInListByHashId.HashId == inputField.HashId && fieldInListByHashId.Required != inputField.Required)
-                    fieldInListByHashId.Required = inputField.Required;
-
-                // Adds a reference to the field container if its added.
-                if (fieldContainer != null && !fieldInListByHashId.TagIDs.Contains(fieldContainer.ID))
-                {
-                    fieldInListByHashId.TagIDs.Add(fieldContainer.ID);
-                }
-                fieldInListByHashId.IsCustom = false;
+                field.Label = inputField.Label;
+                field.Required = inputField.Required;
+                return false;
             }
 
-            
-            // Checks whether the field is present in HiddenFieldList, if not, checks NonHiddenFieldList.
-            Field fieldInList = HiddenFieldList.FirstOrDefault(p => p.Equals(inputField)) ??
-                                NonHiddenFieldList.FirstOrDefault(p => p.Equals(inputField));
 
-            //If the field is not in the list, add the field (With or without a relation to the fieldContainer)
-            if (fieldInList == null && fieldInListByHashId == null)
+            // Check if a field with same label or of same type is on the fieldContainer.
+            field = _fieldContainer.FieldList.FirstOrDefault(f => f.Hash == inputField.Hash);
+
+            // If so, combine them and set content if content is empty or equal
+            if (field != null)
             {
-                if (fieldContainer != null)
-                {
-                    inputField.TagIDs.Add(fieldContainer.ID);
-                }
+                if (field.Content == string.Empty)
+                    field.Content = inputField.Content;
 
-
-                NonHiddenFieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
-                    inputField.HashId, inputField.Required, inputField.IsCustom, inputField.IsHidden,
-                    inputField.TagIDs));
-            }
-            
-            if (fieldInList != null)
-            {
-
-                fieldInList.IsCustom = false;
+                // Add the ID of the inputfields originating tag, if it aren't already.
+                if (inputField.TagIDs.Any() && !field.TagIDs.Contains(inputField.TagIDs.First()))
+                    field.TagIDs.Add(inputField.TagIDs.First());
+                return false;
             }
 
-            return _fieldContainer.FieldList.Contains(inputField);
+
+            // If the fieldContainer is a tag, add the tags ID to the field
+            if (_fieldContainer is Tag && _fieldContainer.ID != 0)
+                inputField.TagIDs.Add(_fieldContainer.ID);
+
+            // Add the field to the fieldContainer
+            _fieldContainer.FieldList.Add(new Field(inputField.Label, inputField.Content, inputField.Type,
+                inputField.HashId, inputField.Required, inputField.IsCustom, inputField.IsHidden,
+                inputField.TagIDs));
+
+            return true;
         }
 
         /// <summary>
-        /// Remove a field, or its relation to a tag, from the fields list.
+        /// Removes custom fields and empty fields with no tag relations. Non empty field with no tag relations is made custom.
+        /// Fields with tag relations would have its IsHidden property toggled.
         /// </summary>
         /// <param name="field">The field to update/remove</param>
-        /// <param name="fieldContainer"></param>
-        /// <returns>Rather the field was removed</returns>
+        /// <returns>Always returns true</returns>
         public bool RemoveField(Field field)
         {
-            //If no input field is given, return.
-            if (field == null) return false;
-
-            //Checks if the field is custom (Ie made on a asset)
-            if (field.IsCustom && !field.IsHidden)
-            {
-                NonHiddenFieldList.Remove(field);
-                return true;
-            }
-
-            if (field.IsHidden)
-            {
-                field.IsHidden = !field.IsHidden;
-                if (!NonHiddenFieldList.Contains(field))
-                {
-                    NonHiddenFieldList.Add(field);
-                }
-
-                HiddenFieldList.Remove(field);
-            }
+            // Remove custom asset field or field when editing tag
+            if (field.IsCustom || _fieldContainer is Tag)
+                _fieldContainer.FieldList.Remove(field);
             else
             {
-                if (!(_fieldContainer is Tag))
+                // Remove field if it has not relations to tags and do not contain anything
+                if (field.TagIDs.Count == 0 && field.Content == String.Empty)
+                    _fieldContainer.FieldList.Remove(field);
+
+                // Make custom, if there is no relations to tag and content is not empty
+                else if (field.TagIDs.Count == 0)
                 {
-                    field.IsHidden = !field.IsHidden;
-                    if (!HiddenFieldList.Contains(field))
-                    {
-                        HiddenFieldList.Add(field);
-                    }
+                    field.IsCustom = true;
+                    field.IsHidden = false;
+                    // Update hashID, since it is now a new field, and shouldn't have any relation to the tag it originated from.
+                    field.UpdateHashID();
                 }
 
-                NonHiddenFieldList.Remove(field);
+                // Toggle the hidden state of the field.
+                else
+                    field.IsHidden = !field.IsHidden;
             }
 
             return true;
         }
 
-        public bool HandleFieldsFromRemoveTag(Field inputField, Tag tagable)
+        /// <summary>
+        /// Removes any relation to the given tag. If there are no relations left on the field,
+        /// remove the field, if it's empty, otherwise make it custom.
+        /// </summary>
+        /// <param name="tag">The tag for which all the fields relation to, should be removed.</param>
+        /// <returns>Always return true</returns>
+        public bool RemoveTagRelationsOnFields(ITagable tag)
         {
-            if (!inputField.IsCustom && inputField.Content ==
-                tagable.FieldList.SingleOrDefault(p => p.Hash == inputField.Hash)?.Content)
-            {
-                if (inputField.IsHidden)
-                {
-                    HiddenFieldList.Remove(inputField);
-                }
-                else
-                {
-                    NonHiddenFieldList.Remove(inputField);
-                }
+            List<Field> fieldsToRemove = new List<Field>();
 
-                return true;
-            }
-            else
+            // Update all the fields
+            foreach (Field field in _fieldContainer.FieldList)
             {
-                inputField.IsCustom = true;
+                // Only act on non-custom fields
+                if (!field.IsCustom)
+                {
+                    if (field.TagIDs.Contains(tag.TagId))
+                    {
+                        field.TagIDs.Remove(tag.TagId);
+                        field.TagList.Remove(tag);
+                    }
+
+                    // Check if the field has any relations to tags left on it
+                    if (field.TagIDs.Count == 0)
+                    {
+                        // Clear the content of the field, if it matches the default tag field content.
+                        // This will make the remove method remove the field.
+                        if (SetFieldContent(field, tag))
+                            field.Content = String.Empty;
+
+                        fieldsToRemove.Add(field);
+                    }
+                }
+            }
+
+            // Remove the fields, that was marked
+            foreach (Field field in fieldsToRemove)
+                RemoveField(field);
+
+            return true;
+        }
+
+        /// <summary>
+        /// Validates wether or not the content of the given field equals the 
+        /// content of one of the fields on the tag.
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        private bool SetFieldContent(Field field, ITagable tag)
+        {
+            Tag currentTag = tag as Tag;
+            currentTag?.DeSerializeFields();
+
+            //Checks if the field has changed value from the field on the tag.
+            if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == field.Content) 
                 return true;
+
+            //Checks whether its a date field, as this contains extra handling, and it does not get caught in the first statement.
+            if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Type == Field.FieldType.Date)
+                return false;
+            {
+                // Checks if the field on the tag contains is equals "Current Date" and the date on the FieldToBeRemoved is equals the date.today.
+                if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == "Current Date" &&
+                    field.Content == DateTime.Today.ToString(CultureInfo.InvariantCulture))
+                {
+                    return true;
+                } 
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Removes the relation between a tagID and any of the fields.
-        /// </summary>
-        /// <param name="TagId"></param>
-        /// <returns></returns>
-        public bool RemoveTagRelationsOnFields(ulong TagId)
-        {
-            // Checks the hiddenlist and checks whether a field contains the tagID, if it does, remove it.
-            foreach (var field in HiddenFieldList)
-            {
-                if (field.TagIDs.Contains(TagId))
-                {
-                    field.TagIDs.Remove(TagId);
-                }
-            }
-
-            foreach (var field in NonHiddenFieldList)
-            {
-                if (field.TagIDs.Contains(TagId))
-                {
-                    field.TagIDs.Remove(TagId);
-                }
-            }
-
-            return true;
         }
     }
 }

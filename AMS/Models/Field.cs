@@ -46,7 +46,7 @@ namespace AMS.Models
         public string Label { get; set; }
         public string Content { get; set; }
         public bool Required { get; set; }
-        public string Hash { get; }
+        public string Hash { get => CalculateMd5Hash(); }
 
         public FieldType Type { get; set; }
 
@@ -58,7 +58,6 @@ namespace AMS.Models
         /// <param name="isCustom"></param>
         /// <param name="required">A boolean, whether the field is required or not</param>
         /// <param name="type">Selecting the type of the field. 1= TextBox,2 = String,3= Int, 4 = Date, 5 = Boolean</param>
-        /// <param name="defaultValue">The default value which should be entered into the field</param>
         public Field(string label, string content, FieldType type, bool required = false,
             bool isCustom = false)
         {
@@ -68,7 +67,7 @@ namespace AMS.Models
             this.Content = content;
             Type = type;
             this.Required = required;
-            this.Hash = CalculateMd5Hash();
+            //this.Hash = CalculateMd5Hash();
             this.IsCustom = isCustom;
             this.IsHidden = false;
             this.TagIDs = new List<ulong>();
@@ -82,7 +81,7 @@ namespace AMS.Models
             Type = type;
             this.HashId = hashId;
             this.Required = required;
-            this.Hash = CalculateMd5Hash();
+            //this.Hash = CalculateMd5Hash();
             this.IsCustom = isCustom;
             this.IsHidden = isHidden;
             this.TagIDs = tagIDs;
@@ -98,7 +97,7 @@ namespace AMS.Models
             Type = type;
             this.IsCustom = isCustom;
             this.Required = required;
-            this.Hash = CalculateMd5Hash();
+            //this.Hash = CalculateMd5Hash();
             this.TagIDs = tagIDs ?? new List<ulong>();
         }
 
@@ -118,13 +117,18 @@ namespace AMS.Models
             return output;
         }
 
+        public void UpdateHashID()
+        {
+            this.HashId = CalculateMd5Hash(true);
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is Field == false)
                 return false;
 
             Field other = (Field) obj;
-            return (this.Hash == other.Hash);
+            return (this.HashId == other.HashId);
         }
 
         /// <summary>

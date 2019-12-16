@@ -35,7 +35,6 @@ namespace AMS.Models
 
                 return DefaultDepartment == 0 ? 0 : _departmentList.Select(p => p.ID).ToList().IndexOf(DefaultDepartment);
             }
-            
             set
             {
                 if (_departmentList == null)
@@ -54,6 +53,7 @@ namespace AMS.Models
         public ulong TagId => ID;
         public Type TagType => this.GetType();
         public string TagLabel => Username;
+        public string FullTagLabel { get; set; }
         public ulong ParentId => 1;
         public int NumberOfChildren => 0;
         public List<ITagable> Children { get; set; }
@@ -68,7 +68,7 @@ namespace AMS.Models
         #endregion
 
         /* Constructor used by DB */
-        private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, DateTime createdAt, DateTime updated_at)
+        private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, string fullTagLabel, DateTime createdAt, DateTime updated_at)
         {
             ID = id;
             Username = username;
@@ -77,6 +77,7 @@ namespace AMS.Models
             IsEnabled = is_enabled;
             DefaultDepartment = defaultDepartment;
             IsAdmin = is_admin;
+            FullTagLabel = fullTagLabel;
             CreatedAt = createdAt;
             UpdatedAt = updated_at;
         }

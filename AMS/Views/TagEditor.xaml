@@ -140,14 +140,14 @@
 
                     <!-- FieldList -->
                     <StackPanel Margin="20 10 10 0">
-                        <ListView ItemsSource="{Binding NonHiddenFieldList, UpdateSourceTrigger=PropertyChanged}"
+                        <ListView ItemsSource="{Binding NonHiddenFieldList}"
                                   ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                   ItemContainerStyle="{StaticResource ListViewWithTags}"
                                   BorderBrush="Transparent"
                                   Margin="0 0 0 0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <Label Style="{StaticResource FieldAddedInTagEditor}"/>
+                                    <Label x:Name="PART_field" Style="{StaticResource FieldAddedInTagEditor}"/>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>

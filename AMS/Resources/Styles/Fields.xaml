@@ -26,7 +26,7 @@
     
     <!-- Style for adding a field with placeholder -->
     <Style TargetType="TextBox" x:Key="ParagraphTextBoxWithPlaceholder" BasedOn="{StaticResource TextBoxWithPlaceholder}">
-        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         <Setter Property="FontWeight" Value="Light"/>
         <Setter Property="SnapsToDevicePixels" Value="True"/>
     </Style>
@@ -440,7 +440,11 @@
     <DataTemplate x:Key="DateFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
             <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <DatePicker Grid.Row="1" Grid.ColumnSpan="3" SelectedDate="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseDatePickerStyle}"/>
+            <DatePicker Grid.Row="1" Grid.ColumnSpan="3" SelectedDate="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource BaseDatePickerStyle}">
+                <DatePicker.LayoutTransform>
+                    <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                </DatePicker.LayoutTransform>
+            </DatePicker>
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>
@@ -450,7 +454,11 @@
     <DataTemplate x:Key="BooleanFieldStyle">
         <ItemsControl Style="{StaticResource AddedFieldGrid}">
             <Label Grid.Row="0" Grid.Column="0" Style="{StaticResource AddedFieldLabel}" Content="{Binding Label}" />
-            <CheckBox Grid.Row="1" Grid.ColumnSpan="3" IsChecked="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Name="CheckBox" />
+            <CheckBox Grid.Row="1" Grid.ColumnSpan="3" IsChecked="{Binding Content, UpdateSourceTrigger=PropertyChanged}" Name="CheckBox">
+                <CheckBox.LayoutTransform>
+                    <ScaleTransform ScaleX="1.4" ScaleY="1.4" />
+                </CheckBox.LayoutTransform>
+            </CheckBox>
             <TextBlock Style="{StaticResource FieldOriginatingFromTagsTextblock}"/>
             <ItemsControl Style="{StaticResource AddedFieldTags}"/>
         </ItemsControl>

@@ -59,7 +59,7 @@ namespace AMS.ViewModels
                 Password = _oldPassword;
 
             string conString = $"Server={ IP }; database={ Database }; UID={ Username }; password={ Password }; Charset={ Charset }; Connect Timeout={ Timeout }";
-            new FileConfigurationHandler(null).SetConfigValue(conString);
+            new FileConfigurationHandler(Session.GetDomain()).SetConfigValue(conString);
             Features.AddNotification(new Models.Notification("Settings saved", Models.Notification.APPROVE));
             Features.ReloadAll();
         }
@@ -99,7 +99,7 @@ namespace AMS.ViewModels
             if (!String.IsNullOrEmpty(path))
             {
                 // Load settings from file and save them to local config file
-                FileConfigurationHandler configurationhandler = new FileConfigurationHandler(Features.GetCurrentSession());
+                FileConfigurationHandler configurationhandler = new FileConfigurationHandler(Session.GetDomain());
                 string conString  = configurationhandler.LoadConfigValueFromExternalFile(path);
                 ExtractSettingsFromString(conString);
                 Features.AddNotification(new Models.Notification("Settings have been loaded...", Models.Notification.INFO), displayTime: 3000);

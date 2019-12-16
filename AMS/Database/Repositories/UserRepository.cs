@@ -9,6 +9,15 @@ namespace AMS.Database.Repositories
 {
     public class UserRepository : IUserRepository
     {
+        private Tag _tag;
+        private string _FullTagPartOne;
+
+        public UserRepository()
+        {    
+            // Fetch user tag.
+            _tag = new TagRepository().GetById(1);
+            _FullTagPartOne = char.ConvertFromUtf32(0x1f464)+" ";
+        }
 
         public IEnumerable<User> GetAll(bool includeDisabled=false)
         {
@@ -22,7 +31,7 @@ namespace AMS.Database.Repositories
                 try
                 {
                     string query = "SELECT id, description, domain, username, enabled, admin, default_department, created_at, updated_at " +
-                                         "FROM users " + (!includeDisabled ? "WHERE enabled = 1" : "");
+                                   "FROM users " + (!includeDisabled ? "WHERE enabled = 1" : "");
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -277,7 +286,8 @@ namespace AMS.Database.Repositories
             {
                 try
                 {
-                    const string query = "SELECT id, username, domain, description, enabled, admin, default_department, created_at, updated_at FROM users WHERE id=@id";
+                    const string query = "SELECT id, username, domain, description, enabled, admin, default_department, created_at, updated_at " +
+                                         "FROM users WHERE id=@id";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -320,7 +330,7 @@ namespace AMS.Database.Repositories
                 try
                 {
                     const string query = "SELECT id, domain, description, enabled, username, admin, default_department, created_at, updated_at " +
-                                            "FROM users WHERE username=@username AND domain=@domain AND enabled=1";
+                                         "FROM users WHERE username=@username AND domain=@domain AND enabled=1";
 
                     using (var cmd = new MySqlCommand(query, con))
                     {
@@ -365,9 +375,11 @@ namespace AMS.Database.Repositories
             DateTime rowCreatedAt = reader.GetDateTime("created_at");
             DateTime rowUpdatedAt = reader.GetDateTime("updated_at");
 
+            string rowFullTagLabel = _FullTagPartOne+rowUsername;
+
             return (User) Activator.CreateInstance(typeof(User),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowUsername, rowDomain, rowDescription, rowEnabled, rowDefaultDepartment, rowAdmin, rowCreatedAt, rowUpdatedAt }, null, null);
+                new object[] { rowId, rowUsername, rowDomain, rowDescription, rowEnabled, rowDefaultDepartment, rowAdmin, rowFullTagLabel, rowCreatedAt, rowUpdatedAt }, null, null);
         }
     }
 }

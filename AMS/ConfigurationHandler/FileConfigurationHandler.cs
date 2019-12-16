@@ -10,12 +10,11 @@ namespace AMS.ConfigurationHandler
     {
         private readonly Session _session;
         private const string Path = "./DBConfig.txt";
-        private string Domain = "Domain";
+        private string Domain;
 
-        // Added constructor to get values from session
-        public FileConfigurationHandler(Session session)
+        public FileConfigurationHandler(string domain)
         {
-            _session = session;
+            Domain = domain;
         }
 
         public string GetConfigValue()

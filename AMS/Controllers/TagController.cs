@@ -1,4 +1,4 @@
-﻿using AMS.Controllers.Interfaces;
+using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Logging;
 using AMS.Models;
@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Security.RightsManagement;
 
 namespace AMS.Controllers
@@ -15,23 +16,17 @@ namespace AMS.Controllers
     {
         private ITagRepository _tagRepository { get; set; }
         private IDepartmentRepository _departmentRepository { get; set; }
-        private Tag _controlledTag;
 
         public Tag ControlledTag
         {
-            get => _controlledTag;
-            set => _controlledTag = value;
+            get => (Tag)_fieldContainer;
+            set => _fieldContainer = value;
         }
 
         public List<Field> ParentTagFields { get; set; } = new List<Field>();
         public bool IsEditing { get; set; }
-        
-        public ulong TagID;
-        public ulong Id { get; set; }
-        public string Name { get; set; }
-        public string Color { get; set; }
-        public ulong ParentId { get; set; }
-        public ulong DepartmentID { get; set; }
+
+        public ulong TagID { get; set; }
 
         public List<Tag> ParentTagList
         {
@@ -75,83 +70,60 @@ namespace AMS.Controllers
         public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository)
             : base(tag)
         {
-            _controlledTag = tag;
+            //_controlledTag = tag;
 
             _tagRepository = tagRep;
             _departmentRepository = departmentRepository;
 
-            if (_controlledTag.ID == 0)
+            if (ControlledTag.ID == 0)
             {
-                _controlledTag.Color = CreateRandomColor();
-                Color = _controlledTag.Color;
+                ControlledTag.Color = CreateRandomColor();
                 IsEditing = false;
             }
             else
             {
                 IsEditing = true;
-                _controlledTag.DeSerializeFields();
+                ControlledTag.DeSerializeFields();
             }
-            
-            
-            Id = _controlledTag.ID;
-            Name = _controlledTag.Name;
-            Color = _controlledTag.Color;
-            ParentId = _controlledTag.ParentId;
-            DepartmentID = _controlledTag.DepartmentID;
-
-            NonHiddenFieldList = _controlledTag.FieldList.Where(f => f.IsHidden == false).ToList();
-            HiddenFieldList = _controlledTag.FieldList.Where(f => f.IsHidden == true).ToList();
         }
 
         #region Public Methods
 
         /// <summary>
-        /// Saves the tag.
+        /// Saves the tag as a new tag in the database
         /// </summary>
         public void Save()
         {
-            UpdateControlledProperties();
-            _tagRepository.Insert(ControlledTag, out TagID);
+            SerializeFields();
+            ulong newTagId;
+            ControlledTag = _tagRepository.Insert(ControlledTag, out newTagId);
+            TagID = newTagId;
+
+            // Check if any fields does not have a tagId set
+            ControlledTag.DeSerializeFields();
+            foreach(Field field in ControlledTag.FieldList)
+            {
+                if (field.TagIDs.Count == 0)
+                {
+                    if (field.TagIDs.Contains(ControlledTag.ID)) continue;
+                    field.TagIDs.Add(ControlledTag.ID);
+                    ControlledTag.Changes["options"] = TagID;
+                }
+            }
+
+            // Save the field changes to the database
+            if (ControlledTag.IsDirty())
+                Update();
         }
 
         /// <summary>
-        /// Updates the tag.
+        /// Updates the tag in the database
         /// </summary>
         public void Update()
         {
-            UpdateControlledProperties();
+            SerializeFields();
             _tagRepository.Update(ControlledTag);
         }
-
-        /// <summary>
-        /// Updates the properties of the controlled tag, to the new values 
-        /// of the views properties.
-        /// </summary>
-        private void UpdateControlledProperties()
-        {
-            // Save name
-            if (Name != _controlledTag.Name)
-                _controlledTag.Name = Name;
-
-            // Save parent id
-            if (ParentId != _controlledTag.ParentId)
-                _controlledTag.ParentId = ParentId;
-
-            // Save department id
-            if (_controlledTag.DepartmentID != DepartmentID)
-                _controlledTag.DepartmentID = (ParentId != 0 ? _tagRepository.GetById(ParentId).DepartmentID : DepartmentID);
-
-            // Save color
-            if (Color != _controlledTag.Color)
-                _controlledTag.Color = Color;
-
-            // Save fields
-            List<Field> fieldList = NonHiddenFieldList;
-            fieldList.AddRange(HiddenFieldList);
-            _controlledTag.FieldList = fieldList;
-            SerializeFields();
-        }
-
 
         /// <summary>
         /// Removes the controlled tag from the repository, and optionally its children
@@ -193,10 +165,15 @@ namespace AMS.Controllers
         /// <param name="newTag"></param>
         public void ConnectParentTag()
         {
-            Tag currentTag = _tagRepository.GetById(_controlledTag.ParentId);
-            //TODO Throws exception, når et tags parent id ændres
-            currentTag.DeSerializeFields();
-            ParentTagFields = currentTag.FieldList;
+            Tag currentTag = _tagRepository.GetById(ControlledTag.ParentId);
+            if (currentTag != null)
+            {
+                //TODO Throws exception, når et tags parent id ændres
+                currentTag.DeSerializeFields();
+                ParentTagFields = currentTag.FieldList;
+            }
+            else
+                ParentTagFields = new List<Field>();
         }
 
         #endregion
@@ -206,7 +183,13 @@ namespace AMS.Controllers
         /// </summary>
         public void RevertChanges()
         {
-            _controlledTag = _tagRepository.GetById(_controlledTag.ID);
+            foreach (PropertyInfo property in ControlledTag.GetType().GetProperties())
+            {
+                if (ControlledTag.Changes.ContainsKey(property.Name))
+                    property.SetValue(ControlledTag, ControlledTag.Changes[property.Name].ToString());
+            }
+
+            ControlledTag.Changes = new Dictionary<string, object>();
         }
     }
 }

@@ -111,6 +111,7 @@
                                     <KeyBinding Key="Enter" Command="{Binding ApplyTagOrEnterParentCommand}"/>
                                     <KeyBinding Key="Escape" Command="{Binding ClearInputCommand}"/>
                                     <KeyBinding Key="Tab" Command="{Binding InsertNextOrSelectedSuggestionCommand}"/>
+                                    <KeyBinding Key="Tab" Modifiers="Shift" Command="{Binding InsertPreviousCommand}"/>
                                     <KeyBinding Key="Down" Command="{Binding EnterSuggestionListCommand}" CommandParameter="{Binding ElementName=TagSuggestionList}"/>
                                     <KeyBinding Key="Backspace" Command="{Binding BackspaceCommand}" CommandParameter="{Binding ElementName=StartElement, Path=.}"/>
                                 </TextBox.InputBindings>
@@ -239,6 +240,18 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <CheckBox IsChecked="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=IsSelected, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            
+                            <!-- ID -->
+                            <GridViewColumn Width="Auto">
+                                <GridViewColumnHeader Content="ID" Tag="ID"/>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Path=ID}"
+                                                   Style="{StaticResource ParagraphStyle}"
+                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>

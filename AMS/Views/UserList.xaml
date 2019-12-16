@@ -192,8 +192,8 @@
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <ComboBox ItemsSource="{Binding DataContext.DepartmentList, UpdateSourceTrigger=PropertyChanged, ElementName=StartElement}"
-                                                  SelectedIndex="{Binding Path=DepartmentIndex}"
                                                   MinWidth="160"
+                                                  SelectedIndex="{Binding Path=DepartmentIndex}"
                                                   Template="{StaticResource UserListDepartmentComboBoxTemplate}"
                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}">
                                             <ComboBox.ItemTemplate>

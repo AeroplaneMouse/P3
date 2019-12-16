@@ -18,7 +18,8 @@ namespace AMS.Helpers
         private bool _hasSuggestions;
         private readonly ITagRepository _tagRepository;
         private readonly IUserRepository _userRepository;
-        private  List<ITagable> SuggestedTags;
+        private List<ITagable> SuggestedTags;
+        private List<ITagable> EffectedTags; // List of tags that was effected by add or removing a tag.
         private ObservableCollection<ITagable> AppliedTags { get; set; }
 
         public TagHelper(ITagRepository tagRepository, IUserRepository userRepository)
@@ -28,6 +29,7 @@ namespace AMS.Helpers
 
             AppliedTags = new ObservableCollection<ITagable>();
             SuggestedTags = new List<ITagable>();
+            EffectedTags = new List<ITagable>();
 
             Reload();
             SetParent();
@@ -80,8 +82,10 @@ namespace AMS.Helpers
             return _hasSuggestions;
         }
 
-        public void AddTag(ITagable tag)
+        public List<ITagable> AddTag(ITagable tag)
         {
+            EffectedTags.Clear();
+            
             if (!AppliedTags.Contains(tag))
             {
                 if (tag.ParentId == 0 && tag.NumberOfChildren > 0)
@@ -96,13 +100,20 @@ namespace AMS.Helpers
                     ApplyParentIfNeeded(tag);
                     AppliedTags.Add(tag);
                 }
+                
+                EffectedTags.Add(tag);
             }
+            
+            return EffectedTags;
         }
 
-        public void RemoveTag(ITagable tag)
+        public List<ITagable> RemoveTag(ITagable tag)
         {
+            EffectedTags.Clear();
             RemoveParentIfNeeded(tag);
+            EffectedTags.Add(tag);
             AppliedTags.Remove(tag);
+            return EffectedTags;
         }
 
         private Tag GetTagParent(ITagable tag)
@@ -131,6 +142,7 @@ namespace AMS.Helpers
                 return false;
             
             AppliedTags.Add(parent);
+            EffectedTags.Add(parent);
             return true;
         }
 
@@ -147,6 +159,7 @@ namespace AMS.Helpers
                     var parent = GetTagParent(tag);
 
                     if(parent != null && AppliedTags.Contains(parent)){
+                        EffectedTags.Add(parent);
                         AppliedTags.Remove(parent);
                         return true;
                     }
@@ -164,6 +177,7 @@ namespace AMS.Helpers
                     try
                     {
                         var parentUserTag = AppliedTags.SingleOrDefault(u => u.TagId == 1 && u.TagType == typeof(Tag));
+                        EffectedTags.Add(parentUserTag);
                         AppliedTags.Remove(parentUserTag);
                         return true;
                     }
@@ -188,7 +202,7 @@ namespace AMS.Helpers
             return AppliedTags.Count(t => t.ParentId == tag.TagId) == tag.NumberOfChildren;
         }
 
-        public bool AllParentChildrenTagged()
+        public bool AllChildrenOfCurrentParentAttached()
         {
             if (IsParentSet())
                 return AppliedTags.Count(t => t.ParentId == _parent.ID) == _parent.NumberOfChildren;
@@ -196,7 +210,7 @@ namespace AMS.Helpers
             return false;
         }
         
-        public bool ContainsAllChildrenFromParent()
+        public bool ContainsAllChildrenFromCurrentParent()
         {
             if (IsParentSet())
                 return ContainsAllChildrenOfParent(_parent);

@@ -25,27 +25,28 @@ namespace AMS.ViewModels
         private TagHelper _tagHelper { get; set; }
         private int _tagTabIndex { get; set; }
 
-        public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.NonHiddenFieldList);
-        public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.HiddenFieldList);
+        public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.ControlledAsset.FieldList.Where(f => !f.IsHidden));
+        public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.ControlledAsset.FieldList.Where(f => f.IsHidden));
+
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
 
         public string Name
         {
-            get => _assetController.Name;
-            set => _assetController.Name = value;
+            get => _assetController.ControlledAsset.Name;
+            set => _assetController.ControlledAsset.Name = value;
         }
 
         public string Identifier
         {
-            get => _assetController.Identifier;
-            set => _assetController.Identifier = value;
+            get => _assetController.ControlledAsset.Identifier;
+            set => _assetController.ControlledAsset.Identifier = value;
         }
 
         public string Description
         {
-            get => _assetController.Description;
-            set => _assetController.Description = value;
+            get => _assetController.ControlledAsset.Description;
+            set => _assetController.ControlledAsset.Description = value;
         }
 
         public string Title { get; set; }
@@ -57,7 +58,10 @@ namespace AMS.ViewModels
             {
                 _tagSearchQuery = value;
                 if (!_tagSearchQuery.EndsWith(' '))
+                {
+                    _tagTabIndex = 0;
                     TagSearch();
+                }
             }
         }
 
@@ -77,6 +81,7 @@ namespace AMS.ViewModels
         public ICommand RemoveTagCommand { get; set; }
         public ICommand ApplyTagOrEnterParentCommand { get; set; }
         public ICommand InsertNextOrSelectedSuggestionCommand { get; set; }
+        public ICommand InsertPreviousCommand { get; set; }
         public ICommand ClearInputCommand { get; set; }
         public ICommand EnterSuggestionListCommand { get; set; }
         public ICommand ShowFieldEditPromptCommand { get; set; }
@@ -107,10 +112,9 @@ namespace AMS.ViewModels
             RemoveTagCommand = new RelayCommand<object>((parameter) =>
             {
                 ITagable tag = parameter as ITagable;
-                _tagHelper.RemoveTag(tag);
-                _assetController.DetachTag(tag);
+                _assetController.DetachTags(_tagHelper.RemoveTag(tag));
                 AppliedTags = _tagHelper.GetAppliedTags(false);
-                
+
                 UpdateAll();
             });
 
@@ -123,7 +127,7 @@ namespace AMS.ViewModels
             RemoveCommand = new RelayCommand(() =>
             {
                 Features.DisplayPrompt(new Views.Prompts.Confirm(
-                    $"Are you sure you want to remove {_assetController.Name}?", (sender, e) =>
+                    $"Are you sure you want to remove {_assetController.ControlledAsset.Name}?", (sender, e) =>
                     {
                         if (e.Result)
                         {
@@ -133,8 +137,8 @@ namespace AMS.ViewModels
                     }));
             });
 
-            InsertNextOrSelectedSuggestionCommand =
-                new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
+            InsertNextOrSelectedSuggestionCommand = new RelayCommand<object>((parameter) => InsertNextOrSelectedSuggestion(parameter));
+            InsertPreviousCommand = new RelayCommand(InsertPrevious);
             ClearInputCommand = new RelayCommand(ClearInput);
             BackspaceCommand = new RelayCommand<object>((parameter) => RemoveCharacterOrExitTagMode(parameter as TextBox));
 
@@ -200,7 +204,9 @@ namespace AMS.ViewModels
             if (e.Result && e is FieldInputPromptEventArgs args)
             {
                 _assetController.AddField(args.Field);
+                _assetController.UpdateFieldContent();
             }
+
             UpdateAll();
         }
 
@@ -214,6 +220,7 @@ namespace AMS.ViewModels
             {
                 _assetController.RemoveField(field);
             }
+
             UpdateAll();
         }
 
@@ -251,9 +258,7 @@ namespace AMS.ViewModels
                 {
                     if (_tagHelper.IsParentSet() || (tag.NumberOfChildren == 0 && tag.TagId != 1))
                     {
-                        _tagHelper.AddTag(tag);
-                        _assetController.AttachTag(tag);
-                        _assetController.AttachTag(_tagHelper.GetParent());
+                        _assetController.AttachTags(_tagHelper.AddTag(tag));
                         AppliedTags = _tagHelper.GetAppliedTags(false);
                         UpdateTagSuggestions();
                     }
@@ -269,17 +274,40 @@ namespace AMS.ViewModels
 
                     TagSearchQuery = "";
                 }
+                UpdateAll();
             }
             else if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
             {
-                if (!(_tagTabIndex <= TagSearchSuggestions.Count() - 1))
+                _tagTabIndex++;
+
+                if (!(_tagTabIndex <= TagSearchSuggestions.Count()) || !(_tagTabIndex > 0))
                 {
-                    _tagTabIndex = 0;
+                    _tagTabIndex = 1;
                 }
 
-                TagSearchQuery = TagSearchSuggestions[_tagTabIndex].TagLabel + ' ';
-                _tagTabIndex++;
+                TagSearchQuery = TagSearchSuggestions[_tagTabIndex - 1].TagLabel + ' ';
+
             }
+        }
+
+        /// <summary>
+        /// Inserts the next suggestion into the tag search query, or the selected element from the list
+        /// </summary>
+        /// <param name="input">The selected element (optional)</param>
+        private void InsertPrevious()
+        {   
+            if (TagSearchSuggestions != null && TagSearchSuggestions.Count > 0)
+            {
+                _tagTabIndex--;
+                
+                if (!(_tagTabIndex <= TagSearchSuggestions.Count()) || !(_tagTabIndex > 0))
+                {
+                    _tagTabIndex = TagSearchSuggestions.Count();
+                }
+
+                TagSearchQuery = TagSearchSuggestions[_tagTabIndex-1].TagLabel + ' ';
+            }
+
             UpdateAll();
         }
 
@@ -288,6 +316,15 @@ namespace AMS.ViewModels
         /// </summary>
         private void ApplyTagOrEnterParent()
         {
+            if (TagSearchSuggestions == null)
+            {
+                string message = $"Please insert the name of a tag. To add a new tag, go to tags.";
+
+                Features.AddNotification(new Notification(message, background: Notification.WARNING),
+                    displayTime: 3500);
+                
+                return;
+            }
             ITagable tag = TagSearchSuggestions.SingleOrDefault<ITagable>(t => t.TagLabel == TagSearchQuery.Trim(' '));
             if (tag != null)
             {
@@ -301,14 +338,12 @@ namespace AMS.ViewModels
                 else
                 {
                     // Attach tag and parent
-                    _tagHelper.AddTag(tag);
-                    _assetController.AttachTag(tag);
-                    _assetController.AttachTag(_tagHelper.GetParent());
+                    _assetController.AttachTags(_tagHelper.AddTag(tag));
                     AppliedTags = _tagHelper.GetAppliedTags(false);
+                    ClearInput();
                 }
 
                 TagSearchQuery = "";
-                _tagTabIndex = 0;
                 UpdateAll();
             }
             else
@@ -387,7 +422,6 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(NonHiddenFieldList));
             OnPropertyChanged(nameof(HiddenFieldList));
-            _assetController.LoadFields();
         }
 
         /// <summary>
@@ -397,31 +431,28 @@ namespace AMS.ViewModels
         private void UpdateTagRelationsOnFields(ObservableCollection<ITagable> tagList)
         {
             // Runs through the list of tagID's, and adds the tag with the same tagID to the TagList on the field.
-            foreach (var field in HiddenFieldList)
-            {
+            List<Field> allFields = new List<Field>(_assetController.ControlledAsset.FieldList);
+            foreach (Field field in allFields)
                 UpdateTagRelationsOnSingleField(field, tagList);
-            }
 
-            foreach (var field in NonHiddenFieldList)
-            {
-                UpdateTagRelationsOnSingleField(field, tagList);
-            }
         }
 
+        /// <summary>
+        /// Updates a fields tagList to the related tags, from the tagIDs saved on the field
+        /// </summary>
+        /// <param name="field">The field to update the TagList on</param>
+        /// <param name="tagList"></param>
         private void UpdateTagRelationsOnSingleField(Field field, ObservableCollection<ITagable> tagList)
         {
             field.TagList = new List<ITagable>();
-            foreach (var id in field.TagIDs)
+            foreach(ulong id in field.TagIDs)
             {
-                foreach (ITagable tag in tagList.Where(p => p.TagId == id || p.ParentId == id))
+                // Add tag object to field if the field has the tags id or parent id associated with it.
+                foreach(ITagable tag in tagList)
                 {
-                    field.TagList.Add(tag);
+                    if (tag.TagId == id || tag.ParentId == id)
+                        field.TagList.Add(tag);
                 }
-            }
-
-            if (!field.TagList.Any() && !field.IsCustom)
-            {
-                _assetController.RemoveField(field);
             }
         }
 
@@ -452,12 +483,15 @@ namespace AMS.ViewModels
             {
                 if (field.Required && string.IsNullOrEmpty(field.Content) && !field.IsHidden)
                 {
-                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
+                    Features.AddNotification(new Notification("The field " + field.Label + " is required but empty",
                         Notification.WARNING));
                     return false;
-                }if (field.Required && field.Type == Field.FieldType.Date && field.Content == "Current date" && field.Content == "Empty" && !field.IsHidden)
+                }
+
+                if (field.Required && field.Type == Field.FieldType.Date && (field.Content == "Current Date" ||
+                    field.Content == "None") && !field.IsHidden)
                 {
-                    Features.AddNotification(new Notification("The field " + field.Label + " is required and empty",
+                    Features.AddNotification(new Notification("The field " + field.Label + " is required but empty",
                         Notification.WARNING));
                     return false;
                 }
@@ -499,7 +533,7 @@ namespace AMS.ViewModels
 
         private void RemoveCharacterOrExitTagMode(TextBox textBox)
         {
-            if (TagSearchQuery.Length > 0)
+            if (TagSearchQuery != null && TagSearchQuery.Length > 0)
             {
                 int cursorIndex = textBox.CaretIndex;
                 if (cursorIndex > 0)
