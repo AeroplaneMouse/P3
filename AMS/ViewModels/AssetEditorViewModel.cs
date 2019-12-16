@@ -519,6 +519,11 @@ namespace AMS.ViewModels
             return true;
         }
 
+        /// <summary>
+        /// Updates the edited field to the new value
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void EditFieldConfirmed(object sender, PromptEventArgs e)
         {
             if (e is FieldEditPromptEventArgs args)
