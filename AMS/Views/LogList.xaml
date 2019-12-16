@@ -58,16 +58,16 @@
                         Content="Search"/>
                     
                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding SearchCreates, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Create" Margin="2 0 10 0" ToolTip="Show logged 'Create' events"/>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Create" Margin="2 0 10 0" ToolTip="Show logged 'Create' events" IsEnabled="True"/>
 
                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding SearchUpdates, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Update" Margin="2 0 10 0" ToolTip="Show logged 'Update' events"/>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Update" Margin="2 0 10 0" ToolTip="Show logged 'Update' events" IsEnabled="True"/>
                     
                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding SearchDeletes, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Delete" Margin="2 0 10 0" ToolTip="Show logged 'Delete' events"/>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Delete" Margin="2 0 10 0" ToolTip="Show logged 'Delete' events" IsEnabled="True"/>
 
                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding SearchErrors, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Errors" Margin="2 0 10 0" ToolTip="Show logged 'Errors' events"/>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Errors" Margin="2 0 10 0" ToolTip="Show logged 'Errors' events" IsEnabled="True"/>
 
                 </StackPanel>
 

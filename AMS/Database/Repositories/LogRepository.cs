@@ -147,14 +147,16 @@ namespace AMS.Database.Repositories
             List<LogEntry> entries = new List<LogEntry>();
 
             string typeQuery = "";
-
-            if(types?.Count > 0)
+            
+            if(types != null && types.Count > 0)
             {
-                typeQuery += "WHERE l.entry_type LIKE " + types[0] + " ";
+                typeQuery += "WHERE (l.entry_type = '" + types[0] + "' ";
                 foreach (string type in types.Skip(1))
                 {
-                    typeQuery += "OR l.entry_type LIKE " + type + " ";
+                    typeQuery += "OR l.entry_type = '" + type + "' ";
                 }
+
+                typeQuery += ") AND ";
             }
 
             // Opening connection

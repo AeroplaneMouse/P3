@@ -19,10 +19,10 @@ namespace AMS.ViewModels
 
         public ObservableCollection<LogEntry> Entries => new ObservableCollection<LogEntry>(_logListController.EntryList);
 
-        public bool SearchCreates { get; set; }
-        public bool SearchUpdates { get; set; }
-        public bool SearchDeletes { get; set; }
-        public bool SearchErrors { get; set; }
+        public bool SearchCreates { get; set; } = true;
+        public bool SearchUpdates { get; set; } = true;
+        public bool SearchDeletes { get; set; } = true;
+        public bool SearchErrors { get; set; } = true;
 
         public bool CheckAll { get; set; }
         public string SearchQuery { 
