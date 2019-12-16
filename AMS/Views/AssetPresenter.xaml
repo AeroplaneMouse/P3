@@ -394,7 +394,7 @@
                                                          VerticalAlignment="Center">
 
                                                     <TextBox.InputBindings>
-                                                        <KeyBinding Key="Esc" Command="{Binding DataContext.EditCommand, ElementName=CommentList}" CommandParameter="{Binding .}"/>
+                                                        <KeyBinding Key="Escape" Command="{Binding DataContext.EditCommand, ElementName=CommentList}" CommandParameter="{Binding .}"/>
                                                         <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding DataContext.UpdateCommand, ElementName=CommentList}" CommandParameter="{Binding .}"/>
                                                         <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding DataContext.UpdateCommand, ElementName=CommentList}" CommandParameter="{Binding .}"/>
                                                     </TextBox.InputBindings>

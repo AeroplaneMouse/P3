@@ -13,6 +13,10 @@ namespace AMS.Helpers
         // A list of the properties that should not be exported 
         private List<string> _excludedProperties = new List<string> {{"FieldsList"}, {"CreatedAtString"}, {"UpdatedAtString"}, {"Changes"}, {"DateToStringConverter"} };
 
+        /// <summary>
+        /// Creates a fileDialog, and then writes the given items to the resulting file using Exporter.
+        /// </summary>
+        /// <param name="items"></param>
         public void Print(IEnumerable<object> items)
         {
             Type objectType = items.FirstOrDefault().GetType();

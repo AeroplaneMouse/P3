@@ -8,7 +8,6 @@ using AMS.Interfaces;
 using AMS.Logging;
 using AMS.Logging.Interfaces;
 using AMS.Models;
-using Asset_Management_System.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
