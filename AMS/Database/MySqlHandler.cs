@@ -68,38 +68,5 @@ namespace AMS.Database
         {
             return _connection.Database;
         }
-
-        //public bool RawQuery(string rawQuery, MySqlParameterCollection par = null)
-        //{
-        //    var con = GetConnection();
-        //    var result = false;
-
-        //    try
-        //    {
-        //        con.Open();
-        //        using (var cmd = new MySqlCommand(rawQuery, con))
-        //        {
-        //            if (par != null)
-        //            {
-        //                foreach (var param in par)
-        //                {
-        //                    cmd.Parameters.Add(param);
-        //                }
-        //            }
-
-        //            result = cmd.ExecuteNonQuery() > 0;
-        //        }
-        //    }
-        //    catch (MySqlException e)
-        //    {
-        //        Console.WriteLine(e);
-        //    }
-        //    finally
-        //    {
-        //        con.Close();
-        //    }
-
-        //    return result;
-        //}
     }
 }

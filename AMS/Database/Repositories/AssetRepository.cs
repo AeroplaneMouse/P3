@@ -55,7 +55,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -110,7 +110,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -163,7 +163,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -203,7 +203,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -249,7 +249,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -355,7 +355,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
@@ -416,8 +416,6 @@ namespace AMS.Database.Repositories
                             tagQuery.Append(",");
                     }
                     
-                    Console.WriteLine(tagQuery.ToString());
-                    
                     if (users.Count > 0)
                     {
                         command.CommandText = userQuery.ToString();
@@ -438,7 +436,7 @@ namespace AMS.Database.Repositories
                 catch (MySqlException e)
                 {
                     transaction.Rollback();
-                    Console.WriteLine(e);
+                    _logger.AddEntry(e);
                 }
                 finally
                 {
