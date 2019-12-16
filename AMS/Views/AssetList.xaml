@@ -298,7 +298,7 @@
 
                             <!-- Tags -->
                             <GridViewColumn>
-                                <GridViewColumnHeader Content="Tags"/>
+                                <GridViewColumnHeader Content="First 5 tags"/>
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <ListView ItemsSource="{Binding Path=., Converter={StaticResource AssociatedTagsConverter}}"
