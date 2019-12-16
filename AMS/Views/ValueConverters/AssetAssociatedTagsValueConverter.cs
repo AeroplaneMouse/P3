@@ -12,6 +12,9 @@ namespace AMS.Views.ValueConverters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             const int MaxTags = 5;
             List<Tag> tags = new List<Tag>();
 
@@ -21,30 +24,35 @@ namespace AMS.Views.ValueConverters
             {
                 // Spilt string into tag:color elements
                 string[] usersAndColor = asset.AssociatedUsers.Split(':');
-                string color = usersAndColor[0];
 
-                string[] users = usersAndColor[1].Split(',');
-
-                foreach(string userLabel in users)
+                // Check if there are users
+                if (usersAndColor.Length > 1)
                 {
-                    // Add tag to list
-                    tags.Add(new Tag() { Color = color, FullTagLabel = $"{ char.ConvertFromUtf32(0x1f464) } { userLabel }" });
+                    string color = usersAndColor[0];
+
+                    string[] users = usersAndColor[1].Split(',');
+
+                    foreach(string userLabel in users)
+                    {
+                        // Add tag to list
+                        tags.Add(new Tag() { Color = color, FullTagLabel = $"{ char.ConvertFromUtf32(0x1f464) } { userLabel }" });
                     
-                    // Stop at x tags
-                    if (tags.Count > MaxTags - 1)
-                        break;
+                        // Stop at x tags
+                        if (tags.Count > MaxTags - 1)
+                            break;
+                    }
                 }
 
-                // Add other normal tags if there is space
-                if (tags.Count < MaxTags)
-                {
 
+                // Add other normal tags if there is space
+                if (tags.Count < MaxTags && asset.AssociatedTags.Length > 0)
+                {
                     string[] tagsWithColors = asset.AssociatedTags.Remove(0,1).Split(',');
 
                     foreach (string tagStr in tagsWithColors)
                     {
                         string[] elements = tagStr.Split(':');
-                        color = elements[0];
+                        string color = elements[0];
                         string label = elements[1].Replace("->", $"{ char.ConvertFromUtf32(0x202F) }{ char.ConvertFromUtf32(0x1f852) }{ char.ConvertFromUtf32(0x202F) }");
 
                         // Add tag to list
@@ -57,8 +65,9 @@ namespace AMS.Views.ValueConverters
                     }
                 }
             }
+            stopwatch.Stop();
 
-            //Console.WriteLine($"Time: { stopwatch.ElapsedTicks }");
+            Console.WriteLine($"Time: { stopwatch.ElapsedTicks }");
 
             return tags;
         }
