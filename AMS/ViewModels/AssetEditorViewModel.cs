@@ -373,7 +373,7 @@ namespace AMS.ViewModels
         /// <summary>
         /// Runs the tagsearch process.
         /// </summary>
-        private void TagSearch()
+        public void TagSearch()
         {
             UpdateTagSuggestions();
         }
