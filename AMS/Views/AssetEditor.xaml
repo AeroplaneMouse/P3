@@ -191,6 +191,8 @@
                                     </ListBox.InputBindings>
                                 </ListBox>
                             </Popup>
+                            
+                            
                         </StackPanel>
                     </Grid>
 

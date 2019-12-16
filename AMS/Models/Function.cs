@@ -20,9 +20,9 @@ namespace AMS.Models
         {
             return new List<FunctionType>()
             {
-                FunctionType.Expiration,
-                FunctionType.TagRequire,
-                FunctionType.Logger
+                FunctionType.Expiration
+                //FunctionType.TagRequire,
+                //FunctionType.Logger
             };
         }
 

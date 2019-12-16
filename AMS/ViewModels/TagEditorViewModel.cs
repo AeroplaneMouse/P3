@@ -78,7 +78,11 @@ namespace AMS.ViewModels
         public ICommand RemoveFieldCommand { get; set; }
         public ICommand CancelCommand { get; set; }
         public ICommand ShowFieldEditPromptCommand { get; set; }
+        
+        public ICommand ShowFunctionEditPromptCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
+        
+        public ICommand RemoveFunctionCommand { get; set; }
         
         public ICommand AddFunctionCommand { get; set; }
 
@@ -153,6 +157,12 @@ namespace AMS.ViewModels
             {
                 if (parameter is Field field)
                     Features.DisplayPrompt(new Views.Prompts.CustomField(null, EditFieldConfirmed, false, field));
+            });
+            
+            ShowFunctionEditPromptCommand = new RelayCommand<object>((parameter) =>
+            {
+                if (parameter is Function function)
+                    Features.DisplayPrompt(new Views.Prompts.CustomFunction(null, EditFunctionConfirmed,  function));
             });
         }
 
@@ -235,6 +245,16 @@ namespace AMS.ViewModels
             }
         }
         
+        private void RemoveFunction(object function)
+        {
+            if (function is Function inputFunction)
+            {
+                inputFunction.TagIDs.Add(_controller.ControlledTag.ID);
+                _controller.RemoveFunction(inputFunction);
+                UpdateAll();
+            }
+        }
+        
         /// <summary>
         /// Returns to the tag list without saving anything
         /// </summary>
@@ -304,6 +324,17 @@ namespace AMS.ViewModels
                 args.OldField.Required = args.NewField.Required;
                 args.OldField.Type = args.NewField.Type;
                 args.OldField.Content = args.NewField.Content;
+                UpdateAll();
+            }
+        }
+        
+        private void EditFunctionConfirmed(object sender, PromptEventArgs e)
+        {
+            if (e is FunctionEditPromptEventArgs args)
+            {
+                args.OldFunction.Label = args.NewFunction.Label;
+                args.OldFunction.Type = args.NewFunction.Type;
+                args.OldFunction.Content = args.NewFunction.Content;
                 UpdateAll();
             }
         }
