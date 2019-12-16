@@ -44,11 +44,11 @@ namespace AMS.ViewModels
             (Tabs[2] as LogListViewModel).UpdateOnFocus();
 
             OnPropertyChanged(nameof(Tabs));
-
-            // Update asset from database
-
         }
 
+        /// <summary>
+        /// Removes the viewed asset
+        /// </summary>
         private void Remove()
         {
             Features.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { _assetController.ControlledAsset.Name }?", (sender, e) =>
@@ -62,11 +62,17 @@ namespace AMS.ViewModels
             }));
         }
 
+        /// <summary>
+        /// Edits the viewed asset
+        /// </summary>
         private void Edit ()
         {
             Features.Navigate.To(Features.Create.AssetEditor(_assetController));
         }
 
+        /// <summary>
+        /// Goes back to the previous page
+        /// </summary>
         private void Cancel()
         {
             if (!Features.Navigate.Back())

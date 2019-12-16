@@ -25,8 +25,14 @@ namespace AMS.ViewModels
         private TagHelper _tagHelper { get; set; }
         private int _tagTabIndex { get; set; }
 
-        public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_assetController.ControlledAsset.FieldList.Where(f => !f.IsHidden));
-        public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>(_assetController.ControlledAsset.FieldList.Where(f => f.IsHidden));
+        public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>
+        (
+            _assetController.ControlledAsset.FieldList.Where(f => !f.IsHidden)
+        );
+        public ObservableCollection<Field> HiddenFieldList => new ObservableCollection<Field>
+        (
+            _assetController.ControlledAsset.FieldList.Where(f => f.IsHidden)
+        );
 
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }

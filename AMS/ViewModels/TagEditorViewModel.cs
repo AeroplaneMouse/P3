@@ -12,12 +12,9 @@ namespace AMS.ViewModels
 {
     class TagEditorViewModel : Base.BaseViewModel
     {
-        private ITagController _controller;
-        private bool _dropdownsEnabled = true;
-        private int _selectedParentTagIndex;
+        private ITagController _controller { get; set; }
+        private int _selectedParentTagIndex { get; set; }
 
-
-        #region Public Properties
 
         public ObservableCollection<Field> NonHiddenFieldList => new ObservableCollection<Field>(_controller.ControlledTag.FieldList);
         public ObservableCollection<Field> ParentTagFields => new ObservableCollection<Field>(_controller.ParentTagFields);
@@ -66,10 +63,6 @@ namespace AMS.ViewModels
         public bool ParentSelectionEnabled { get; set; } = true;
         public bool DepartmentSelectionEnabled { get; set; } = true;
 
-        #endregion
-
-        #region Commands
-
         public ICommand SaveTagCommand { get; set; }
         public ICommand AddFieldCommand { get; set; }
         public ICommand RemoveFieldCommand { get; set; }
@@ -77,9 +70,6 @@ namespace AMS.ViewModels
         public ICommand ShowFieldEditPromptCommand { get; set; }
         public ICommand RemoveCommand { get; set; }
 
-        #endregion
-
-        #region Constructor
 
         public TagEditorViewModel(ITagController tagController)
         {
@@ -103,7 +93,9 @@ namespace AMS.ViewModels
             //Set the selected parent to the parent of the chosen tag
             int i = ParentTagList.Count - 1;
             while (i > 0 && ParentTagList[i].ID != _controller.ControlledTag.ParentId)
+            {
                 i--;
+            }
 
             if (i > 0)
                 _selectedParentTagIndex = i;
@@ -116,9 +108,7 @@ namespace AMS.ViewModels
                 : Features.Main.CurrentDepartment;
 
             // Setting the title of the page
-            PageTitle = _controller.IsEditing
-                ? "Edit tag"
-                : "Add tag";
+            PageTitle = _controller.IsEditing ? "Edit tag" : "Add tag";
 
             if (_controller.IsEditing && _selectedParentTagIndex != 0)
                 _controller.ConnectParentTag();
@@ -131,6 +121,7 @@ namespace AMS.ViewModels
             {
                 if (d.ID == currentDepartment.ID)
                     SelectedDepartmentIndex = index;
+
                 index++;
             }
 
@@ -149,9 +140,6 @@ namespace AMS.ViewModels
             });
         }
 
-        #endregion
-
-        #region Methods
 
         public override void UpdateOnFocus()
         {
@@ -190,11 +178,19 @@ namespace AMS.ViewModels
             }
         }
 
+        /// <summary>
+        /// Displays a prompt for the user to choose which field to add to the tag
+        /// </summary>
         private void AddField()
         {
             Features.DisplayPrompt(new Views.Prompts.CustomField(null, AddNewFieldConfirmed));
         }
 
+        /// <summary>
+        /// Adds the field to the tag
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddNewFieldConfirmed(object sender, PromptEventArgs e)
         {
             if (e is FieldInputPromptEventArgs args)
@@ -204,6 +200,10 @@ namespace AMS.ViewModels
             }
         }
 
+        /// <summary>
+        /// Removes a field from the tag
+        /// </summary>
+        /// <param name="field">The field to be removed</param>
         private void RemoveField(object field)
         {
             if (field is Field inputField)
@@ -286,6 +286,9 @@ namespace AMS.ViewModels
             }
         }
 
+        /// <summary>
+        /// Removes a tag from the system
+        /// </summary>
         private void RemoveTag()
         {
             string message = String.Empty;
@@ -342,6 +345,9 @@ namespace AMS.ViewModels
             }
         }
 
+        /// <summary>
+        /// When the parent tag of the tag being edited is changed, change the department to the parent's department
+        /// </summary>
         private void UpdateDepartmentSelectionToParentDepartment()
         {
             int i = DepartmentList.Count - 1;
@@ -349,7 +355,5 @@ namespace AMS.ViewModels
                 i--;
             SelectedDepartmentIndex = i;
         }
-
-        #endregion
     }
 }

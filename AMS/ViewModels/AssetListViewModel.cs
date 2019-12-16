@@ -18,18 +18,20 @@ namespace AMS.ViewModels
 {
     public class AssetListViewModel : BaseViewModel
     {
-        private IAssetListController _listController;
-        private string _searchQuery = String.Empty;
-        private TagHelper _tagHelper;
-        private bool _isStrict = true;
-        private bool _searchInFields = false;
-        private int _tagTabIndex = 0;
+        private IAssetListController _listController { get; set; }
+        private string _searchQuery { get; set; } = String.Empty;
+        private TagHelper _tagHelper { get; set; }
+        private bool _isStrict { get; set; } = true;
+        private bool _searchInFields { get; set; } = false;
+        private int _tagTabIndex { get; set; } = 0;
 
         public ObservableCollection<Asset> Items => new ObservableCollection<Asset>(_listController.AssetList);
         public List<Asset> SelectedItems { get; set; } = new List<Asset>();
-        public bool IsStrict { 
+        public bool IsStrict 
+        { 
             get => _isStrict; 
-            set {
+            set 
+            {
                 _isStrict = value;
                 RefreshList();
             }
@@ -57,19 +59,16 @@ namespace AMS.ViewModels
                 _searchQuery = value;
 
                 if (!inTagMode && _searchQuery == "#")
-                {
                     EnterTagMode();
-                }
 
                 if (inTagMode && !_searchQuery.EndsWith(' '))
-                {
                     UpdateTagSuggestions();
-                }
 
                 if (!inTagMode)
                     RefreshList();
             }
         }
+
         public string CurrentGroup { get; set; }
         public Visibility CurrentGroupVisibility { get; set; } = Visibility.Collapsed;
         public Visibility TagSuggestionsVisibility { get; set; } = Visibility.Collapsed;
@@ -108,7 +107,7 @@ namespace AMS.ViewModels
 
             // Initialize commands
 
-            // Admin only functions
+            // Admin only commands
             if (Features.GetCurrentSession().IsAdmin())
             {
                 AddNewCommand = new RelayCommand(() => EditAsset(null));
@@ -119,15 +118,16 @@ namespace AMS.ViewModels
                 PrintCommand = new RelayCommand(Export);
             }
 
+            // Other commands
             EnterSuggestionListCommand = new RelayCommand<object>((parameter) => FocusSuggestionList(parameter));
-
-            // Other functions
             ApplyTagOrEnterParentCommand = new RelayCommand(ApplyTagOrEnterParent);
+
             SearchCommand = new RelayCommand(RefreshList);
             ViewCommand = new RelayCommand(ViewAsset);
             ViewWithParameterCommand = new RelayCommand<object>(ViewAsset);
             
-            RemoveTagCommand = new RelayCommand<object>((parameter) => {
+            RemoveTagCommand = new RelayCommand<object>((parameter) => 
+            {
                 ITagable tag = parameter as ITagable;
                 _tagHelper.RemoveTag(tag);
                 AppliedTags = _tagHelper.GetAppliedTags(true);
@@ -140,8 +140,6 @@ namespace AMS.ViewModels
             CheckAllChangedCommand = new RelayCommand<object>((parameter) => CheckAllChanged(parameter as ListView));
             BackspaceCommand = new RelayCommand<object>((parameter) => RemoveCharacterOrExitTagMode(parameter as TextBox));
         }
-
-        #region Methods
 
         /// <summary>
         /// Reflects the updates in the in data in the view
@@ -189,8 +187,7 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
-        /// Changes the content to AssetEditor with the selected asset
-        /// if asset is null, a new asset will be created.
+        /// Changes the page to AssetEditor with the selected asset.
         /// </summary>
         private void EditAsset(Asset asset)
         {
@@ -198,6 +195,9 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(Items));
         }
 
+        /// <summary>
+        /// Edits the selected asset
+        /// </summary>
         private void EditBySelection()
         {
             // Only ONE item can be edited
@@ -501,23 +501,26 @@ namespace AMS.ViewModels
                 _listController.Export(Items.ToList());
         }
 
+        /// <summary>
+        /// Enables the user to use "Backspace" to get out of tag mode
+        /// </summary>
+        /// <param name="textBox"></param>
         private void RemoveCharacterOrExitTagMode(TextBox textBox)
         {
-            if(SearchQuery.Length > 0)
+            if (SearchQuery.Length > 0)
             {
                 int cursorIndex = textBox.CaretIndex;
-                if(cursorIndex > 0)
+                if (cursorIndex > 0)
                 {
                     SearchQuery = SearchQuery.Remove(cursorIndex - 1, 1);
                     textBox.CaretIndex = cursorIndex - 1;
                 }
             }
+
             else
             {
                 ClearInput();
             }
         }
-
-        #endregion
     }
 }
