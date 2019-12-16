@@ -264,7 +264,7 @@
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Name}"
                                                    Style="{StaticResource ParagraphStyle}"
-                                                   MinWidth="420"
+                                                   MinWidth="350"
                                                    Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
@@ -277,7 +277,7 @@
                                     <DataTemplate>
                                         <TextBlock Text="{Binding Path=Identifier}"
                                                    Style="{StaticResource ParagraphStyle}"
-                                                   MinWidth="280"
+                                                   MinWidth="200"
                                                    Foreground="{Binding RelativeSource={RelativeSource AncestorType=ListViewItem}, Path=Foreground}"/>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
