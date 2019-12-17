@@ -13,6 +13,7 @@ To do this, write us an email with the information that you see on the error scr
 For example:
 
 !!! Access denied !!!
+
 User "DOMAIN-NAME\username" is not authorized to access this application.
 
 We want the "DOMAIN-NAME\username" part
