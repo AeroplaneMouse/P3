@@ -68,7 +68,9 @@ namespace AMS.Models
         #endregion
 
         /* Constructor used by DB */
-        private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, string fullTagLabel, DateTime createdAt, DateTime updated_at)
+        private User(ulong id, string username, string domain, 
+                     string description, bool is_enabled, ulong defaultDepartment, 
+                     bool is_admin, string fullTagLabel, DateTime createdAt, DateTime updated_at)
         {
             ID = id;
             Username = username;
