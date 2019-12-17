@@ -46,16 +46,10 @@ namespace AMS.Helpers
 
         private List<ITagable> GetParentTagListWithoutDuplicates(List<ITagable> tags)
         {
-            List<ITagable> cleanTagList = tags.Where(t => t.ParentId == 0 && !ContainsAllChildrenOfParent(t)).ToList();
-
-            var duplicates = cleanTagList
+            List<ITagable> cleanTagList = tags.Where(t => t.ParentId == 0 && !ContainsAllChildrenOfParent(t))
                             .GroupBy(t => t.TagLabel)
-                            .Where(g => g.Count() > 1)
-                            .Select(g => g.Key);
-            foreach(string label in duplicates)
-            {
-                cleanTagList.Remove(cleanTagList.FirstOrDefault(t => t.TagLabel == label));
-            }
+                            .Select(x => x.FirstOrDefault())
+                            .ToList();
 
             return cleanTagList;
         }
