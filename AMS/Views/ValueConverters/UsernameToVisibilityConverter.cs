@@ -1,4 +1,5 @@
-﻿using AMS.ViewModels;
+﻿using AMS.Authentication;
+using AMS.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -14,7 +15,7 @@ namespace AMS.Views.ValueConverters
         {
             string user = value as string;
 
-            if (Features.GetCurrentSession().Username.CompareTo(user) == 0 || Features.GetCurrentSession().IsAdmin() == true)
+            if (Session.GetUsername().CompareTo(user) == 0 || Features.GetCurrentSession().IsAdmin())
             {
                 return Visibility.Visible;
             }

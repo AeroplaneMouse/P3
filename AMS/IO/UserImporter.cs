@@ -49,7 +49,7 @@ namespace AMS.IO
                     User u = new User();
 
                     u.Username = p[0];
-                    u.Domain = session.Domain;
+                    u.Domain = Session.GetDomain();
                     u.IsEnabled = true;
                     u.IsAdmin = false;
                     u.Description = p[2] ?? String.Empty;
