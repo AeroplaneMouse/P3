@@ -59,7 +59,7 @@ namespace AMS.Models
         public List<ITagable> Children { get; set; }
         public string TagColor
         {
-            get { return _color ??= Features.TagRepository.GetById(1).TagColor; }
+            get => _color ??= Features.TagRepository.GetById(1).TagColor;
             set => _color = value;
         }
 

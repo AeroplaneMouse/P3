@@ -46,7 +46,7 @@ namespace AMS.Models
         public string Label { get; set; }
         public string Content { get; set; }
         public bool Required { get; set; }
-        public string Hash { get => CalculateMd5Hash(); }
+        public string Hash => CalculateMd5Hash();
 
         public FieldType Type { get; set; }
 
@@ -139,10 +139,12 @@ namespace AMS.Models
         private string CalculateMd5Hash(bool uniqueHash = false)
         {
             string hashString = "";
+
             if (uniqueHash)
-                hashString += this.Label + Type.ToString() + DateTime.Now;
+                hashString += Label + Type.ToString() + DateTime.Now;
+
             else
-                hashString += this.Label + Type.ToString();
+                hashString += Label + Type.ToString();
 
             // step 1, calculate MD5 hash from input
             MD5 md5 = MD5.Create();

@@ -7,8 +7,6 @@ namespace AMS.Models
     {
         private string _name;
 
-        //public event PropertyChangedEventHandler PropertyChanged;
-
         public string Name 
         {
             get => _name;

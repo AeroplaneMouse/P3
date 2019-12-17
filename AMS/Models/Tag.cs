@@ -20,12 +20,14 @@ namespace AMS.Models
             set 
             {
                 string propertyName = "Name";
+
                 if (TrackChanges && !Changes.ContainsKey(propertyName) && _name != value)
                     Changes[propertyName] = _name;
-                else if (Changes.ContainsKey(propertyName) && (string)this.Changes[propertyName] == value.ToLower())
-                    this.Changes.Remove(propertyName);
 
-                this._name = value.ToLower();
+                else if (Changes.ContainsKey(propertyName) && (string)Changes[propertyName] == value.ToLower())
+                    Changes.Remove(propertyName);
+
+                _name = value.ToLower();
             }
         }
 
@@ -35,10 +37,12 @@ namespace AMS.Models
             set 
             {
                 string propertyName = "Color";
+
                 if (TrackChanges && !Changes.ContainsKey(propertyName) && _color != value)
                     Changes[propertyName] = _color;
-                else if (Changes.ContainsKey(propertyName) && (string)this.Changes[propertyName] == value)
-                    this.Changes.Remove(propertyName);
+
+                else if (Changes.ContainsKey(propertyName) && (string)Changes[propertyName] == value)
+                    Changes.Remove(propertyName);
 
                 _color = value;
             }
@@ -50,10 +54,12 @@ namespace AMS.Models
             set 
             {
                 string propertyName = "ParentId";
+
                 if (TrackChanges && !Changes.ContainsKey(propertyName) && _parentId != value)
                     Changes[propertyName] = _parentId;
-                else if (Changes.ContainsKey(propertyName) && (ulong)this.Changes[propertyName] == value)
-                    this.Changes.Remove(propertyName);
+
+                else if (Changes.ContainsKey(propertyName) && (ulong)Changes[propertyName] == value)
+                    Changes.Remove(propertyName);
 
                 _parentId = value;
             }
@@ -61,16 +67,18 @@ namespace AMS.Models
 
         public ulong DepartmentID 
         {
-            get => this._departmentId;
+            get => _departmentId;
             set 
             {
                 string propertyName = "DepartmentId";
+
                 if (TrackChanges && !Changes.ContainsKey(propertyName) && _departmentId != value)
                     Changes[propertyName] = _departmentId;
-                else if (Changes.ContainsKey(propertyName) && (ulong)this.Changes[propertyName] == value)
-                    this.Changes.Remove(propertyName);
 
-                this._departmentId = value;
+                else if (Changes.ContainsKey(propertyName) && (ulong)Changes[propertyName] == value)
+                    Changes.Remove(propertyName);
+
+                _departmentId = value;
             }
         }
 
