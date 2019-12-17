@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:AMS.Views.Prompts"
       xmlns:prompts="clr-namespace:AMS.ViewModels.Prompts"
       mc:Ignorable="d"
-      Title="CustomFunction" Height="450" Width="800"
+      Title="CustomFunction" Height="Auto" Width="AUto"
       FocusManager.FocusedElement="{Binding ElementName=StartElement}">
     <Page.Resources>
         <DataTemplate x:Key="Expiration">
