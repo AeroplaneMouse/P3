@@ -585,5 +585,18 @@ namespace UnitTests
             //Assert
             Assert.IsTrue(!result);
         }
+
+        [TestMethod]
+        public void AddEntry_ReceivesNullException_ReturnsEmptyDescription()
+        {
+            //Arrange
+            _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(e => e.Description == ""))).Returns(true);
+
+            //Act
+            bool result = _Log.AddEntry(null);
+
+            //Assert
+            Assert.IsTrue(result);
+        }
     }
 }
