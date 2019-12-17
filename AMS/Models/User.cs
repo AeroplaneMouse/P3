@@ -59,7 +59,7 @@ namespace AMS.Models
         public List<ITagable> Children { get; set; }
         public string TagColor
         {
-            get { return _color ??= Features.TagRepository.GetById(1).TagColor; }
+            get => _color ??= Features.TagRepository.GetById(1).TagColor;
             set => _color = value;
         }
 
@@ -68,7 +68,9 @@ namespace AMS.Models
         #endregion
 
         /* Constructor used by DB */
-        private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, string fullTagLabel, DateTime createdAt, DateTime updated_at)
+        private User(ulong id, string username, string domain, 
+                     string description, bool is_enabled, ulong defaultDepartment, 
+                     bool is_admin, string fullTagLabel, DateTime createdAt, DateTime updated_at)
         {
             ID = id;
             Username = username;

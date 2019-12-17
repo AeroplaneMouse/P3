@@ -17,7 +17,7 @@ namespace UnitTests
             string result = tag.ToString();
 
             //Assert
-            Assert.AreEqual("Tag_label", result);
+            Assert.AreEqual("tag_label", result);
         }
     }
 }
