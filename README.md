@@ -12,7 +12,7 @@ Once you have the right connection, you will need to be authenticated to actuall
 To do this, write us an email with the information that you see on the error screen on the program.
 For example:
 
-\t\t\t\t\t\t\t\t\t\t\t\t!!! Access denied !!!
+!!! Access denied !!!
 User "DOMAIN-NAME\username" is not authorized to access this application.
 
 We want the "DOMAIN-NAME\username" part
