@@ -33,13 +33,13 @@ namespace UnitTests
         public void Search_CallsRepositorySearch_ReturnsTrue()
         {
             //Arrange
-            _logRepMock.Setup(p => p.Search(It.IsAny<string>())).Returns(new List<LogEntry>());
+            _logRepMock.Setup(p => p.Search(It.IsAny<string>(), null)).Returns(new List<LogEntry>());
 
             //Act
-            _logListController.Search("");
+            _logListController.Search("", null);
 
             //Assert
-            _logRepMock.Verify((p => p.Search(It.IsAny<string>())), Times.AtLeastOnce);
+            _logRepMock.Verify((p => p.Search(It.IsAny<string>(), null)), Times.AtLeastOnce);
         }
         
         [TestMethod]

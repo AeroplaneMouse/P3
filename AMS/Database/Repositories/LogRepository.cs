@@ -141,16 +141,16 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public IEnumerable<LogEntry> Search(string keyword, List<string> types)
+        public IEnumerable<LogEntry> Search(string keyword, List<string> types = null)
         {
             var con = new MySqlHandler().GetConnection();
             List<LogEntry> entries = new List<LogEntry>();
 
-            string typeQuery = "";
+            string typeQuery = "WHERE ";
             
             if(types != null && types.Count > 0)
             {
-                typeQuery += "WHERE (l.entry_type = '" + types[0] + "' ";
+                typeQuery += "(l.entry_type = '" + types[0] + "' ";
                 foreach (string type in types.Skip(1))
                 {
                     typeQuery += "OR l.entry_type = '" + type + "' ";
@@ -168,13 +168,11 @@ namespace AMS.Database.Repositories
                                    "l.logged_item_id, l.logged_item_type, l.changes, l.created_at " +
                                    "FROM log AS l INNER JOIN users AS u ON(l.user_id = u.id) " +
                                    typeQuery +
-                                   "WHERE l.user_id LIKE @keyword OR l.description LIKE @keyword OR l.entry_type LIKE @keyword OR l.created_at LIKE @keyword " +
+                                   "(l.user_id LIKE @keyword OR l.description LIKE @keyword OR l.entry_type LIKE @keyword OR l.created_at LIKE @keyword) " +
                                    "ORDER BY l.id desc LIMIT 1000";
 
                     if (!keyword.Contains("%"))
                         keyword = "%" + keyword + "%";
-
-                    Console.WriteLine(query);
 
                     using (var cmd = new MySqlCommand(query, con))
                     {

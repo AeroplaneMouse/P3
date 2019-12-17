@@ -15,25 +15,64 @@ namespace AMS.ViewModels
     public class LogListViewModel : BaseViewModel
     {
         private string _searchQuery = "";
+        private bool _searchCreates = false;
+        private bool _searchUpdates = false;
+        private bool _searchDeletes = false;
+        private bool _searchErrors = false;
+        private bool _searchTagAttaches = false;
+
         private ILogListController _logListController { get; set; }
 
         public ObservableCollection<LogEntry> Entries => new ObservableCollection<LogEntry>(_logListController.EntryList);
 
-        public bool SearchCreates { get; set; } = true;
-        public bool SearchUpdates { get; set; } = true;
-        public bool SearchDeletes { get; set; } = true;
-        public bool SearchErrors { get; set; } = true;
+        public bool SearchCreates {
+            get => _searchCreates;
+            set {
+                _searchCreates = value;
+                Search();
+            }
+        }
+
+        public bool SearchUpdates {
+            get => _searchUpdates;
+            set {
+                _searchUpdates = value;
+                Search();
+            }
+        }
+
+        public bool SearchDeletes {
+            get => _searchDeletes;
+            set {
+                _searchDeletes = value;
+                Search();
+            }
+        }
+
+        public bool SearchErrors {
+            get => _searchErrors;
+            set {
+                _searchErrors = value;
+                Search();
+            }
+        }
+        public bool SearchTagAttaches {
+            get => _searchTagAttaches;
+            set {
+                _searchTagAttaches = value;
+                Search();
+            }
+        }
 
         public bool CheckAll { get; set; }
-        public string SearchQuery { 
+        public string SearchQuery {
             get => _searchQuery;
-            set
-            {
+            set {
                 _searchQuery = value;
                 Search();
-            } 
+            }
         }
-        
+
         public List<LogEntry> SelectedItems { get; set; } = new List<LogEntry>();
         public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
         public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
@@ -41,7 +80,7 @@ namespace AMS.ViewModels
         public ICommand SearchCommand { get; set; }
         public ICommand PrintCommand { get; set; }
         public ICommand CheckAllChangedCommand { get; set; }
-        
+
         public LogListViewModel(ILogListController logListController)
         {
             _logListController = logListController;
@@ -103,6 +142,8 @@ namespace AMS.ViewModels
                 types.Add("Update");
             if (SearchDeletes)
                 types.Add("Delete");
+            if (SearchTagAttaches)
+                types.Add("Tag attached");
             if (SearchErrors)
                 types.Add("Error");
 

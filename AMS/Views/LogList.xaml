@@ -53,21 +53,24 @@
                     </TextBox>
 
                     <Button Style="{StaticResource RegularButton}"
-                        Margin="10 0 0 0"
+                        Margin="10 0 10 0"
                         Command="{Binding SearchCommand}"
                         Content="Search"/>
                     
                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding SearchCreates, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Create" Margin="2 0 10 0" ToolTip="Show logged 'Create' events" IsEnabled="True"/>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Create" Margin="2 0 10 0" ToolTip="Show logged 'Create' events"/>
 
                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding SearchUpdates, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Update" Margin="2 0 10 0" ToolTip="Show logged 'Update' events" IsEnabled="True"/>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Update" Margin="2 0 10 0" ToolTip="Show logged 'Update' events"/>
                     
                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding SearchDeletes, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Delete" Margin="2 0 10 0" ToolTip="Show logged 'Delete' events" IsEnabled="True"/>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Delete" Margin="2 0 10 0" ToolTip="Show logged 'Delete' events"/>
+
+                    <CheckBox VerticalAlignment="Center" IsChecked="{Binding SearchTagAttaches, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Tag attached" Margin="2 0 10 0" ToolTip="Show logged 'Tag attached' events"/>
 
                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding SearchErrors, UpdateSourceTrigger=PropertyChanged}"/>
-                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Errors" Margin="2 0 10 0" ToolTip="Show logged 'Errors' events" IsEnabled="True"/>
+                    <TextBlock VerticalAlignment="Center" Style="{StaticResource ParagraphStyle}" Text="Error" Margin="2 0 10 0" ToolTip="Show logged 'Error' events"/>
 
                 </StackPanel>
 
