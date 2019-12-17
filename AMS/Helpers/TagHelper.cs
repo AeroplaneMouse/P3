@@ -44,10 +44,9 @@ namespace AMS.Helpers
             _users = _userRepository.GetAll().ToList();
         }
 
-        private List<ITagable> GetParentTagListWithoutDuplicates(List<ITagable> tags)
+        private List<ITagable> GetTagListWithoutDuplicates(List<ITagable> tags)
         {
-            List<ITagable> cleanTagList = tags.Where(t => t.ParentId == 0 && !ContainsAllChildrenOfParent(t))
-                            .GroupBy(t => t.TagLabel)
+            List<ITagable> cleanTagList = tags.GroupBy(t => t.TagLabel)
                             .Select(x => x.FirstOrDefault())
                             .ToList();
 
@@ -121,13 +120,19 @@ namespace AMS.Helpers
                 {
                     if (CanApplyParentTags)
                     {
-                        AppliedTags.Add(tag);
+                        foreach(ITagable tagInAllTagsList in _tags.Where(t => t.TagLabel == tag.TagLabel))
+                        {
+                            AppliedTags.Add(tagInAllTagsList);
+                        }
                     }
                 }
                 else
                 {
+                    foreach (ITagable tagInAllTagsList in _tags.Where(t => t.TagLabel == tag.TagLabel))
+                    {
+                        AppliedTags.Add(tagInAllTagsList);
+                    }
                     ApplyParentIfNeeded(tag);
-                    AppliedTags.Add(tag);
                 }
                 
                 EffectedTags.Add(tag);
@@ -343,11 +348,8 @@ namespace AMS.Helpers
         {
             SuggestedTags.Clear();
             SuggestedTags.AddRange(tag != null ? _tags.Where(t => t.ParentId == tag.ID || (t.FullTagLabel.StartsWith(tag.TagLabel) && t.FullTagLabel.Contains(char.ConvertFromUtf32(0x1f852)))).ToList() : _tags.Where(t => t.ParentId == 0).ToList());
-            
-            if (tag == null)
-            {
-                SuggestedTags = GetParentTagListWithoutDuplicates(SuggestedTags);
-            }
+
+            SuggestedTags = GetTagListWithoutDuplicates(SuggestedTags);
 
             _parent = tag;
         }
