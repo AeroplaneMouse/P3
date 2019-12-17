@@ -128,9 +128,16 @@ namespace AMS.Helpers
                 }
                 else
                 {
-                    foreach (ITagable tagInAllTagsList in _tags.Where(t => t.TagLabel == tag.TagLabel))
+                    if (tag is User)
                     {
-                        AppliedTags.Add(tagInAllTagsList);
+                        AppliedTags.Add(tag);
+                    }
+                    else
+                    {
+                        foreach (ITagable tagInAllTagsList in _tags.Where(t => t.TagLabel == tag.TagLabel))
+                        {
+                            AppliedTags.Add(tagInAllTagsList);
+                        }
                     }
                     ApplyParentIfNeeded(tag);
                 }

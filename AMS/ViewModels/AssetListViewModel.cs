@@ -191,6 +191,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset(Asset asset)
         {
+            Features.Main.CurrentDepartment = Features.Main.Departments.Where(d => d.ID == asset.DepartmentdId).FirstOrDefault();
             Features.Navigate.To(Features.Create.AssetEditor(asset));
             OnPropertyChanged(nameof(Items));
         }
