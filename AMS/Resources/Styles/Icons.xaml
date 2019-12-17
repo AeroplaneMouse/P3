@@ -21,7 +21,9 @@
     <BitmapImage x:Key="View_Black" UriSource="/Resources/Images/Logos/View/view_black.png"/>
     <BitmapImage x:Key="View_White" UriSource="/Resources/Images/Logos/View/view_white.png"/>
     
-    <!-- Maximize -->
-    <BitmapImage x:Key="Maximize_White" UriSource="/Resources/Images/Logos/maximizeButton.png"/>
+    <!-- WindowControl -->
+    <BitmapImage x:Key="Maximize_White" UriSource="/Resources/Images/Logos/WindowControlButtons/maximizeButton.png"/>
+    <BitmapImage x:Key="RestoreDown_White" UriSource="/Resources/Images/Logos/WindowControlButtons/RestoreDown.png"/>
+
 
 </ResourceDictionary>
