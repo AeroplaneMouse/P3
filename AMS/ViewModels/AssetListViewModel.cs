@@ -21,7 +21,7 @@ namespace AMS.ViewModels
         private IAssetListController _listController { get; set; }
         private string _searchQuery { get; set; } = String.Empty;
         private TagHelper _tagHelper { get; set; }
-        private bool _isStrict { get; set; } = true;
+        private bool _isStrict { get; set; } = Features.GetCurrentDepartment().ID == 0 ? false : true ;
         private bool _searchInFields { get; set; } = false;
         private int _tagTabIndex { get; set; } = 0;
 
