@@ -8,7 +8,7 @@ namespace AMS.Controllers.Interfaces
     {
         List<LogEntry> EntryList { get; set; }
 
-        void Search(string query);
+        void Search(string query, List<string> types);
 
         void Export(List<LogEntry> entries);
 

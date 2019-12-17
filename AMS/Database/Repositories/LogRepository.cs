@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Logging;
 using AMS.ViewModels;
+using System.Linq;
 
 namespace AMS.Database.Repositories
 {
@@ -140,10 +141,23 @@ namespace AMS.Database.Repositories
         /// </summary>
         /// <param name="keyword"></param>
         /// <returns></returns>
-        public IEnumerable<LogEntry> Search(string keyword)
+        public IEnumerable<LogEntry> Search(string keyword, List<string> types = null)
         {
             var con = new MySqlHandler().GetConnection();
             List<LogEntry> entries = new List<LogEntry>();
+
+            string typeQuery = "WHERE ";
+            
+            if(types != null && types.Count > 0)
+            {
+                typeQuery += "(l.entry_type = '" + types[0] + "' ";
+                foreach (string type in types.Skip(1))
+                {
+                    typeQuery += "OR l.entry_type = '" + type + "' ";
+                }
+
+                typeQuery += ") AND ";
+            }
 
             // Opening connection
             if (MySqlHandler.Open(ref con))
@@ -153,7 +167,8 @@ namespace AMS.Database.Repositories
                     string query = "SELECT l.id, u.username, u.domain, l.entry_type, l.description, " +
                                    "l.logged_item_id, l.logged_item_type, l.changes, l.created_at " +
                                    "FROM log AS l INNER JOIN users AS u ON(l.user_id = u.id) " +
-                                   "WHERE l.user_id LIKE @keyword OR l.description LIKE @keyword OR l.entry_type LIKE @keyword OR l.created_at LIKE @keyword " +
+                                   typeQuery +
+                                   "(l.user_id LIKE @keyword OR l.description LIKE @keyword OR l.entry_type LIKE @keyword OR l.created_at LIKE @keyword) " +
                                    "ORDER BY l.id desc LIMIT 1000";
 
                     if (!keyword.Contains("%"))
@@ -176,7 +191,7 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    
+                    Console.WriteLine(e);
                 }
                 finally
                 {

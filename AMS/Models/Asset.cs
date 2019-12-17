@@ -19,10 +19,12 @@ namespace AMS.Models
             set
             {
                 string propertyName = "Name";
+
                 if (TrackChanges && !Changes.ContainsKey(propertyName) && _name != value)
                     Changes[propertyName] = _name;
-                else if (Changes.ContainsKey(propertyName) && (string)this.Changes[propertyName] == value)
-                    this.Changes.Remove(propertyName);
+
+                else if (Changes.ContainsKey(propertyName) && (string)Changes[propertyName] == value)
+                    Changes.Remove(propertyName);
 
                 _name = value;
             }
@@ -34,10 +36,12 @@ namespace AMS.Models
             set
             {
                 string propertyName = "Description";
+
                 if (TrackChanges && !Changes.ContainsKey(propertyName) && _description != value)
                     Changes[propertyName] = _description;
-                else if (Changes.ContainsKey(propertyName) && (string)this.Changes[propertyName] == value)
-                    this.Changes.Remove(propertyName);
+
+                else if (Changes.ContainsKey(propertyName) && (string)Changes[propertyName] == value)
+                    Changes.Remove(propertyName);
 
                 _description = value;
             }
@@ -49,10 +53,12 @@ namespace AMS.Models
             set
             {
                 string propertyName = "Identifier";
+
                 if (TrackChanges && !Changes.ContainsKey(propertyName) && _identifier != value)
                     Changes[propertyName] = _identifier;
-                else if (Changes.ContainsKey(propertyName) && (string)this.Changes[propertyName] == value)
-                    this.Changes.Remove(propertyName);
+
+                else if (Changes.ContainsKey(propertyName) && (string)Changes[propertyName] == value)
+                    Changes.Remove(propertyName);
 
                 _identifier = value;
             }
@@ -64,10 +70,12 @@ namespace AMS.Models
             set
             {
                 string propertyName = "DepartmentId";
+
                 if (TrackChanges && !Changes.ContainsKey(propertyName) && _departmentId != value)
                     Changes[propertyName] = _departmentId;
-                else if (Changes.ContainsKey(propertyName) && (ulong)this.Changes[propertyName] == value)
-                    this.Changes.Remove(propertyName);
+
+                else if (Changes.ContainsKey(propertyName) && (ulong)Changes[propertyName] == value)
+                    Changes.Remove(propertyName);
 
                 _departmentId = value;
 
@@ -80,9 +88,9 @@ namespace AMS.Models
         }
 
         [JsonConstructor]
-        private Asset(ulong id, string name, string description, string identifier, ulong departmentId,
-            string serializedFields,
-            DateTime created_at, DateTime updated_at)
+        private Asset(ulong id, string name, string description, 
+                      string identifier, ulong departmentId, string serializedFields, 
+                      DateTime created_at, DateTime updated_at)
         {
             ID = id;
             Name = name;
@@ -107,16 +115,13 @@ namespace AMS.Models
         /// <returns>Name of the asset</returns>
         public override string ToString() => Name;
 
-        public override bool Equals(object obj)
-        {
-            return obj is Asset other && ID == other.ID;
-        }
+        public override bool Equals(object obj) => obj is Asset other && ID == other.ID;
 
         public bool DeSerializeFields()
         {
-            if (!string.IsNullOrEmpty(this.SerializedFields))
+            if (!string.IsNullOrEmpty(SerializedFields))
             {
-                this.FieldList = JsonConvert.DeserializeObject<List<Field>>(this.SerializedFields);
+                FieldList = JsonConvert.DeserializeObject<List<Field>>(SerializedFields);
                 return true;
             }
 

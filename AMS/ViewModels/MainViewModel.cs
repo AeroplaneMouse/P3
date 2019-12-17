@@ -169,7 +169,7 @@ namespace AMS.ViewModels
             CurrentDepartmentVisibility = Visibility.Visible;
             CurrentSession = session;
             CurrentDatabase = new MySqlHandler().GetDatabaseName();
-            CurrentUser = CurrentSession.Username;
+            CurrentUser = Session.GetUsername();
             OnPropertyChanged(nameof(CurrentUser));
 
             // Show settings menu

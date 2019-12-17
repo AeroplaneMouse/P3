@@ -10,6 +10,6 @@ namespace AMS.Database.Repositories.Interfaces
         
         IEnumerable<LogEntry> GetLogEntries(ulong logableId, Type logableType);
         IEnumerable<LogEntry> GetLogEntries(ulong logableId, Type logableType, string username);
-        IEnumerable<LogEntry> Search(string keyword);
+        IEnumerable<LogEntry> Search(string keyword, List<string> types = null);
     }
 }

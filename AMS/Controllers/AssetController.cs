@@ -267,7 +267,7 @@ namespace AMS.Controllers
             {
                 // Date fields
                 if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
-                    field.Content = DateTime.Today.ToString(CultureInfo.InvariantCulture);
+                    field.Content = DateTime.Today.ToString(CultureInfo.InvariantCulture).Split(' ')[0];
 
                 // Checkbox fields
                 if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
