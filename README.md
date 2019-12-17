@@ -7,7 +7,7 @@ Access information can be found in db-settings.txt in the root of this repositor
 A local database can be set up using the db-setup.sql script.
 
 Once you have the right connection, you will need to be authenticated to actually gain access to the system.
-To do this, write us an email with the information that you see on the error screen on the program:
+To do this, write us an email with the information that you see on the error screen on the program, when you try to log in:
 
 !!! Access denied !!!<br>
 User "DOMAIN-NAME\username" is not authorized to access this application.
