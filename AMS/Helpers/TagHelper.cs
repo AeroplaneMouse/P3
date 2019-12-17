@@ -44,9 +44,9 @@ namespace AMS.Helpers
             _users = _userRepository.GetAll().ToList();
         }
 
-        private List<ITagable> HandleDuplicateTags(List<ITagable> tags)
+        private List<ITagable> GetParentTagListWithoutDuplicates(List<ITagable> tags)
         {
-            List<ITagable> cleanTagList = tags.Where(t => t.ParentId == 0).ToList();
+            List<ITagable> cleanTagList = tags.Where(t => t.ParentId == 0 && !ContainsAllChildrenOfParent(t)).ToList();
 
             var duplicates = cleanTagList
                             .GroupBy(t => t.TagLabel)
@@ -188,13 +188,23 @@ namespace AMS.Helpers
             if (CanApplyParentTags || (tag.ParentId == 0 && tag.NumberOfChildren > 0))
                 return false;
             
-            var parent = GetTagParent(tag);
+            List<Tag> parents = new List<Tag>();
+            foreach (Tag tagWithParentLabel in _tags.Where(t => t.ParentId == 0 && t.TagLabel == _parent.TagLabel))
+            {
+                parents.Add(tagWithParentLabel);
+            }
 
-            if (parent == null || AppliedTags.Contains(parent))
+            if (parents == null)
                 return false;
-            
-            AppliedTags.Add(parent);
-            EffectedTags.Add(parent);
+
+            foreach (Tag parentTag in parents)
+            {
+                if (!AppliedTags.Contains(parentTag))
+                {
+                    AppliedTags.Add(parentTag);
+                    EffectedTags.Add(parentTag);
+                }
+            }
             return true;
         }
 
@@ -338,8 +348,13 @@ namespace AMS.Helpers
         public void SetParent(Tag tag=null)
         {
             SuggestedTags.Clear();
-            SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentId == tag.ID).ToList() : _tags.Where(a => a.ParentId == 0).ToList());
-            SuggestedTags = HandleDuplicateTags(SuggestedTags);
+            SuggestedTags.AddRange(tag != null ? _tags.Where(t => t.ParentId == tag.ID || (t.FullTagLabel.StartsWith(tag.TagLabel) && t.FullTagLabel.Contains(char.ConvertFromUtf32(0x1f852)))).ToList() : _tags.Where(t => t.ParentId == 0).ToList());
+            
+            if (tag == null)
+            {
+                SuggestedTags = GetParentTagListWithoutDuplicates(SuggestedTags);
+            }
+
             _parent = tag;
         }
         

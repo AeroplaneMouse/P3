@@ -309,6 +309,7 @@ namespace AMS.ViewModels
                 {
                     _tagHelper.AddTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(true);
+                    ClearInput();
                 }
                 SearchQuery = "";
                 _tagTabIndex = 0;
