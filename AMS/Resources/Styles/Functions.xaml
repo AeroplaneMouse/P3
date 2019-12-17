@@ -1,8 +1,116 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-        <!-- Style for fields added through the parent tag in the tag editor -->
+    
+    <!-- Style for fields added through the parent tag in the tag editor -->
     <Style TargetType="{x:Type Label}" x:Key="Function" BasedOn="{StaticResource BaseLabelStyle}">
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="MinWidth" Value="50" />
+        <Setter Property="Padding" Value="5, 2, 0, 2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Label}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="{Binding Label}"
+                                   FontWeight="Medium"
+                                   Grid.Row="0" MinWidth="300" />
+
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Text="Default value:"
+                                   TextWrapping="Wrap"
+                                   Grid.Row="1" Grid.Column="0" />
+                        <TextBlock Style="{StaticResource ParagraphStyle}"
+                                   Foreground="{StaticResource GrayForLessImportantElementsBrush}"
+                                   Text="{Binding Content}"
+                                   TextWrapping="Wrap"
+                                   Grid.Row="2" Grid.Column="0" />
+
+                        <Button OverridesDefaultStyle="True"
+                                x:Name="PART_FieldEditButton"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.ShowFunctionEditPromptCommand}"
+                                CommandParameter="{Binding Path=.}">
+                            >
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Image Source="{StaticResource Edit_Black}" VerticalAlignment="Center"
+                                           Height="14"
+                                           Cursor="Hand" />
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <Button OverridesDefaultStyle="True"
+                                x:Name="PART_FieldButton"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveFunctionCommand}"
+                                CommandParameter="{Binding Path=.}"
+                                Grid.Row="0"
+                                Grid.Column="2">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <TextBlock Foreground="Black"
+                                               Style="{StaticResource ParagraphStyle}"
+                                               VerticalAlignment="Center"
+                                               Margin="0 0 3 0"
+                                               Cursor="Hand"
+                                               Text="X" />
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <TextBlock TextWrapping="Wrap"
+                                   Grid.Row="3" Grid.Column="0">
+                            <TextBlock.Style>
+                                <Style BasedOn="{StaticResource ParagraphStyle}" TargetType="TextBlock">
+                                    <Setter Property="Foreground"
+                                            Value="{StaticResource GrayForLessImportantElementsBrush}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="1">
+                                            <Setter Property="Text" Value="Type: Expiration" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="2">
+                                            <Setter Property="Text" Value="Type: Tag" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="3">
+                                            <Setter Property="Text" Value="Type: Log" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+
+                        <Rectangle Grid.Row="4" Grid.Column="0" Height="2" HorizontalAlignment="Stretch"
+                                   Margin="0,10,10,10">
+                            <Rectangle.Fill>
+                                <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                    <GradientStop Color="LightGray" Offset="0" />
+                                    <GradientStop Color="Transparent" Offset="1.0" />
+                                </LinearGradientBrush>
+                            </Rectangle.Fill>
+                        </Rectangle>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--Functions from other tags -->
+    <Style TargetType="{x:Type Label}" x:Key="FunctionsNoEdit" BasedOn="{StaticResource BaseLabelStyle}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
         <Setter Property="MinWidth" Value="50" />
         <Setter Property="Padding" Value="5, 2, 0, 2" />
         <Setter Property="Template">
@@ -37,65 +145,34 @@
                                    TextWrapping="Wrap"
                                    Grid.Row="2" Grid.Column="0" />
                         
-                        <Button OverridesDefaultStyle="True" 
-                                x:Name="PART_FieldEditButton"
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.ShowFunctionEditPromptCommand}"
-                                CommandParameter="{Binding Path=.}">>
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Image Source="{StaticResource Edit_Black}" VerticalAlignment="Center"
-                                           Height="14"
-                                           Cursor="Hand">
-                                    </Image>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
-
-                        <Button OverridesDefaultStyle="True" 
-                                x:Name="PART_FieldButton"
-                                Command="{Binding RelativeSource={RelativeSource AncestorType=Page}, Path=DataContext.RemoveFunctionCommand}"
-                                CommandParameter="{Binding Path=.}"
-                                Grid.Row="0"
-                                Grid.Column="2">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <TextBlock Foreground="Black" 
-                                               Style="{StaticResource ParagraphStyle}" 
-                                               VerticalAlignment="Center"
-                                               Margin="0 0 3 0"
-                                               Cursor="Hand"
-                                               Text="X"/>
-                                </ControlTemplate>
-                            </Button.Template>
-                        </Button>
 
                         <TextBlock TextWrapping="Wrap"
                                    Grid.Row="3" Grid.Column="0">
                             <TextBlock.Style>
                                 <Style BasedOn="{StaticResource ParagraphStyle}" TargetType="TextBlock">
-                                    <Setter Property="Foreground" Value="{StaticResource GrayForLessImportantElementsBrush}"/>
+                                    <Setter Property="Foreground"
+                                            Value="{StaticResource GrayForLessImportantElementsBrush}" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding Type}" Value="1">
-                                            <Setter Property="Text" Value="Type: Expiration"/>
+                                            <Setter Property="Text" Value="Type: Expiration" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Type}" Value="2">
-                                            <Setter Property="Text" Value="Type: Tag"/>
+                                            <Setter Property="Text" Value="Type: Tag" />
                                         </DataTrigger>
                                         <DataTrigger Binding="{Binding Type}" Value="3">
-                                            <Setter Property="Text" Value="Type: Log"/>
+                                            <Setter Property="Text" Value="Type: Log" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
 
-                        <Rectangle Grid.Row="4" Grid.Column="0" Height="2" HorizontalAlignment="Stretch" Margin="0,10,10,10">
+                        <Rectangle Grid.Row="4" Grid.Column="0" Height="2" HorizontalAlignment="Stretch"
+                                   Margin="0,10,10,10">
                             <Rectangle.Fill>
                                 <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
-                                    <GradientStop Color="LightGray" Offset="0"/>
-                                    <GradientStop Color="Transparent" Offset="1.0"/>
+                                    <GradientStop Color="LightGray" Offset="0" />
+                                    <GradientStop Color="Transparent" Offset="1.0" />
                                 </LinearGradientBrush>
                             </Rectangle.Fill>
                         </Rectangle>

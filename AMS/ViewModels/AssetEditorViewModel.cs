@@ -30,6 +30,8 @@ namespace AMS.ViewModels
 
         public ObservableCollection<Field> HiddenFieldList =>
             new ObservableCollection<Field>(_assetController.ControlledAsset.FieldList.Where(f => f.IsHidden));
+        
+        public ObservableCollection<Function> CurrentlyAddedFunctions => new ObservableCollection<Function>(_assetController.CurrentlyAddedFunctions);
 
         public ObservableCollection<ITagable> AppliedTags { get; set; } = new ObservableCollection<ITagable>();
         public ObservableCollection<ITagable> TagSearchSuggestions { get; set; }
@@ -428,6 +430,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(NonHiddenFieldList));
             OnPropertyChanged(nameof(HiddenFieldList));
+            OnPropertyChanged(nameof(CurrentlyAddedFunctions));
         }
 
         /// <summary>

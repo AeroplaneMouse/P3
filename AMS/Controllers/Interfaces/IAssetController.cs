@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Windows.Documents;
 using AMS.Interfaces;
@@ -10,6 +11,8 @@ namespace AMS.Controllers.Interfaces
     {
         Asset ControlledAsset { get; set; }
         List<ITagable> CurrentlyAddedTags { get; set; }
+        
+        List<Function> CurrentlyAddedFunctions { get; set; }
 
         void AttachTags(List<ITagable> tags);
         void AttachTags(ITagable tag);

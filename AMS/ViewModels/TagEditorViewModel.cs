@@ -23,7 +23,7 @@ namespace AMS.ViewModels
         public ObservableCollection<Field> ParentTagFields => new ObservableCollection<Field>(_controller.ParentTagFields);
         
         public ObservableCollection<Function> Functions => new ObservableCollection<Function>(_controller.ControlledTag.Functions);
-        public ObservableCollection<Function> ParentFunctions => new ObservableCollection<Function>(_controller.ControlledTag.Functions);
+        public ObservableCollection<Function> ParentFunctions => new ObservableCollection<Function>(_controller.ParentFunctions);
 
         public string Name { get => _controller.ControlledTag.Name; set => _controller.ControlledTag.Name = value; }
         public string Color { get => _controller.ControlledTag.Color; set => _controller.ControlledTag.Color = value; }
@@ -274,6 +274,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(SelectedParentTagIndex));
             OnPropertyChanged(nameof(ParentTagFields));
             OnPropertyChanged(nameof(Functions));
+            OnPropertyChanged(nameof(ParentFunctions));
         }
 
         /// <summary>

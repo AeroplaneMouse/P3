@@ -134,6 +134,10 @@ namespace AMS.Controllers
         /// <returns></returns>
         public bool Remove(bool removeChildren = false) => _tagRepository.Delete(ControlledTag, removeChildren);
 
+        /// <summary>
+        /// Add function
+        /// </summary>
+        /// <param name="function"></param>
         public void AddFunction(Function function)
         {
             if (ControlledTag.Functions.FirstOrDefault(p => p.Hash == function.Hash) == null &&
@@ -143,6 +147,10 @@ namespace AMS.Controllers
             }
         }
 
+        /// <summary>
+        /// Remove function.
+        /// </summary>
+        /// <param name="function"></param>
         public void RemoveFunction(Function function)
         {
             ControlledTag.Functions.RemoveAll(p => p.Hash == function.Hash);
@@ -190,7 +198,10 @@ namespace AMS.Controllers
                 ParentFunctions = currentTag.Functions;
             }
             else
+            {
                 ParentTagFields = new List<Field>();
+                ParentFunctions = new List<Function>();
+            }
         }
 
         #endregion

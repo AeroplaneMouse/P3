@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using AMS.Authentication;
 using AMS.Controllers.Interfaces;
 using AMS.Database.Repositories.Interfaces;
@@ -20,6 +21,7 @@ namespace AMS.Controllers
         private Session _session;
 
         public Asset ControlledAsset { get; set; }
+
         public List<ITagable> CurrentlyAddedTags
         {
             get
@@ -31,6 +33,8 @@ namespace AMS.Controllers
             }
             set => _tags = value;
         }
+
+        public List<Function> CurrentlyAddedFunctions { get; set; } = new List<Function>();
 
         public AssetController(Asset asset, IAssetRepository assetRepository, Session session)
             : base(asset)
@@ -114,7 +118,7 @@ namespace AMS.Controllers
         /// <param name="tags">The list of ITagable that should be attached</param>
         public void AttachTags(List<ITagable> tags)
         {
-            foreach(ITagable tag in tags)
+            foreach (ITagable tag in tags)
             {
                 if (!CurrentlyAddedTags.Contains(tag))
                 {
@@ -127,8 +131,14 @@ namespace AMS.Controllers
                         // Adds all the fields to the asset
                         foreach (Field tagField in currentTag.FieldList)
                             AddField(tagField);
+
+                        foreach (var function in currentTag.Functions.Where(function =>
+                            !CurrentlyAddedFunctions.Contains(function)))
+                        {
+                            function.TagIDs.Add(currentTag.ID);
+                            CurrentlyAddedFunctions.Add(function);
+                        }
                     }
-                    
                 }
             }
 
@@ -153,8 +163,10 @@ namespace AMS.Controllers
                     if (tag is Tag currentTag)
                     {
                         // DeSerialize fields if there aren't any. It might be a parent tag where its fields are not deSerialized.
-                        if(currentTag.FieldList.Count == 0)
+                        if (currentTag.FieldList.Count == 0)
                             currentTag.DeSerializeFields();
+
+                        RemoveFunctionsIfNeeded(currentTag);
 
                         // Remove relations to the tag from the fields and handle whether or not the field itself should be removed.
                         RemoveTagRelationsOnFields(currentTag);
@@ -209,7 +221,6 @@ namespace AMS.Controllers
                     // Remove the tagIDs from the field.
                     foreach (ulong id in idsToRemove)
                         field.TagIDs.Remove(id);
-
                 }
             }
         }
@@ -221,7 +232,7 @@ namespace AMS.Controllers
         private void RemoveFieldsWithNoTagRelations()
         {
             List<Field> fieldsToRemove = new List<Field>();
-            foreach(Field field in ControlledAsset.FieldList)
+            foreach (Field field in ControlledAsset.FieldList)
             {
                 if (!field.IsCustom && field.TagIDs.Count == 0)
                     fieldsToRemove.Add(field);
@@ -252,7 +263,8 @@ namespace AMS.Controllers
         {
             if (tag is Tag currentTag)
             {
-                Field containedField = currentTag.FieldList.FirstOrDefault(f => f.HashId == field.HashId || f.Hash == field.Hash);
+                Field containedField =
+                    currentTag.FieldList.FirstOrDefault(f => f.HashId == field.HashId || f.Hash == field.Hash);
                 return containedField != null;
             }
             else
@@ -264,7 +276,7 @@ namespace AMS.Controllers
         /// </summary>
         public void UpdateFieldContent()
         {
-            foreach(Field field in ControlledAsset.FieldList)
+            foreach (Field field in ControlledAsset.FieldList)
             {
                 // Date fields
                 if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
@@ -273,6 +285,27 @@ namespace AMS.Controllers
                 // Checkbox fields
                 if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))
                     field.Content = false.ToString();
+            }
+        }
+
+        private void RemoveFunctionsIfNeeded(Tag tag)
+        {
+            List<Function> removeList = new List<Function>();
+            foreach (var function in CurrentlyAddedFunctions)
+            {
+                if (function.TagIDs.Contains(tag.ID))
+                {
+                    function.TagIDs.Remove(tag.ID);
+                    if (function.TagIDs.Count == 0)
+                    {
+                        removeList.Add(function);
+                    }
+                }
+            }
+
+            foreach (var function in removeList)
+            {
+                CurrentlyAddedFunctions.RemoveAll(currentFunction=>currentFunction.Hash == function.Hash);
             }
         }
     }

@@ -153,63 +153,79 @@
                             </ListView.ItemTemplate>
                         </ListView>
                     </StackPanel>
-                </StackPanel>
-
-                <!-- Separator -->
-                <Rectangle Style="{StaticResource VerticalSeparator}"
-                           Grid.Column="3"
-                           Margin="10 0 10 0" />
-                <!-- Fields -->
-                <StackPanel Grid.Column="4">
-                    <StackPanel Orientation="Horizontal"
-                                Margin="0 0 0 10">
-                        <TextBlock Style="{StaticResource HeaderStyle}"
-                                   Margin="0 0 10 0"
-                                   Text="Fields" />
-
-                        <Button Style="{StaticResource RegularButton}"
-                                Command="{Binding AddFieldCommand}"
-                                Padding="0 0 0 5"
-                                Height="Auto"
-                                MinWidth="0"
-                                Width="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ActualHeight}"
-                                HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                Content="+" />
+                    <TextBlock Style="{StaticResource HeaderStyle}"
+                               Margin="0 0 10 0"
+                               Text="Parent functions" />
+                        <StackPanel Margin="20 10 10 0">
+                            <ListView ItemsSource="{Binding ParentFunctions}"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                      ItemContainerStyle="{StaticResource ListViewWithTags}"
+                                      BorderBrush="Transparent"
+                                      Margin="0 0 0 0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label x:Name="PART_field" Style="{StaticResource FunctionsNoEdit}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
                     </StackPanel>
 
-                    <!-- FieldList -->
-                    <StackPanel Margin="20 10 10 0">
-                        <ListView ItemsSource="{Binding NonHiddenFieldList}"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                  ItemContainerStyle="{StaticResource ListViewWithTags}"
-                                  BorderBrush="Transparent"
-                                  Margin="0 0 0 0">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Label x:Name="PART_field" Style="{StaticResource FieldAddedInTagEditor}" />
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </StackPanel>
+                    <!-- Separator -->
+                    <Rectangle Style="{StaticResource VerticalSeparator}"
+                               Grid.Column="3"
+                               Margin="10 0 10 0" />
+                    <!-- Fields -->
+                    <StackPanel Grid.Column="4">
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0 0 0 10">
+                            <TextBlock Style="{StaticResource HeaderStyle}"
+                                       Margin="0 0 10 0"
+                                       Text="Fields" />
 
-                    <!-- Fields from parent -->
-                    <TextBlock Style="{StaticResource TitleOfFieldListStyle}"
-                               Text="Fields from parent"
-                               Margin="10 20 10 0" />
-                    <StackPanel Margin="20 10 10 0">
-                        <ListView ItemsSource="{Binding ParentTagFields, UpdateSourceTrigger=PropertyChanged}"
-                                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                  ItemContainerStyle="{StaticResource ListViewWithTags}"
-                                  BorderBrush="Transparent"
-                                  Margin="0 0 0 0">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <Label Style="{StaticResource FieldFromParentTag}" />
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
+                            <Button Style="{StaticResource RegularButton}"
+                                    Command="{Binding AddFieldCommand}"
+                                    Padding="0 0 0 5"
+                                    Height="Auto"
+                                    MinWidth="0"
+                                    Width="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ActualHeight}"
+                                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                    Content="+" />
+                        </StackPanel>
+
+                        <!-- FieldList -->
+                        <StackPanel Margin="20 10 10 0">
+                            <ListView ItemsSource="{Binding NonHiddenFieldList}"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                      ItemContainerStyle="{StaticResource ListViewWithTags}"
+                                      BorderBrush="Transparent"
+                                      Margin="0 0 0 0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label x:Name="PART_field" Style="{StaticResource FieldAddedInTagEditor}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+
+                        <!-- Fields from parent -->
+                        <TextBlock Style="{StaticResource TitleOfFieldListStyle}"
+                                   Text="Fields from parent"
+                                   Margin="10 20 10 0" />
+                        <StackPanel Margin="20 10 10 0">
+                            <ListView ItemsSource="{Binding ParentTagFields, UpdateSourceTrigger=PropertyChanged}"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                      ItemContainerStyle="{StaticResource ListViewWithTags}"
+                                      BorderBrush="Transparent"
+                                      Margin="0 0 0 0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Label Style="{StaticResource FieldFromParentTag}" />
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
             </Grid>
         </ScrollViewer>
     </Grid>

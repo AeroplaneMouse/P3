@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
-using System.Windows;
-using System.Windows.Controls;
 using AMS.Events;
 using AMS.Models;
 
@@ -58,7 +56,8 @@ namespace AMS.ViewModels.Prompts
                 Console.WriteLine(someDate);
                 if (someDate.ToString(CultureInfo.InvariantCulture) != "01/01/0001 00:00:00")
                 {
-                    DefaultValue = someDate.ToString(CultureInfo.InvariantCulture);
+                    
+                    DefaultValue = (someDate - DateTime.Today).Days.ToString();
                 }
                 else
                 {
