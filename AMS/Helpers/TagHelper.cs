@@ -44,6 +44,22 @@ namespace AMS.Helpers
             _users = _userRepository.GetAll().ToList();
         }
 
+        private List<ITagable> HandleDuplicateTags(List<ITagable> tags)
+        {
+            List<ITagable> cleanTagList = tags.Where(t => t.ParentId == 0).ToList();
+
+            var duplicates = cleanTagList
+                            .GroupBy(t => t.TagLabel)
+                            .Where(g => g.Count() > 1)
+                            .Select(g => g.Key);
+            foreach(string label in duplicates)
+            {
+                cleanTagList.Remove(cleanTagList.FirstOrDefault(t => t.TagLabel == label));
+            }
+
+            return cleanTagList;
+        }
+
         /// <summary>
         /// Finds and returns the ITagables that match the search query
         /// </summary>
@@ -70,7 +86,9 @@ namespace AMS.Helpers
                 {
                     if ((item.NumberOfChildren > 0 || item.TagId == 1) 
                         && (!AppliedTags.Contains(item) || !ContainsAllChildrenOfParent(item)))
+                    {
                         result.Add(item);
+                    }
                     
                     else if (item.NumberOfChildren == 0 && !AppliedTags.Contains(item))
                         result.Add(item);
@@ -321,6 +339,7 @@ namespace AMS.Helpers
         {
             SuggestedTags.Clear();
             SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentId == tag.ID).ToList() : _tags.Where(a => a.ParentId == 0).ToList());
+            SuggestedTags = HandleDuplicateTags(SuggestedTags);
             _parent = tag;
         }
         
