@@ -273,6 +273,7 @@ namespace AMS.Database.Repositories
         /// A '%' at the start of the keyword will search for entries ending on the rest of the keyword.
         /// A '%' at the end of the keyword will search for entries starting with the rest of the keyword.
         /// If no '%' is added, the search will return every entry containing the keyword (slower).
+        /// Using own query generator.
         /// </summary>
         /// <param name="keyword">The search query to search by</param>
         /// <param name="tags">List of tag ids</param>
@@ -287,6 +288,7 @@ namespace AMS.Database.Repositories
             // Opening connection
             if (MySqlHandler.Open(ref con))
             {
+                // Clear query and add primary table and columns to fetch.
                 _query.Reset();
                 _query.AddTable("assets AS a");
                 _query.Columns.AddRange(new[] { "a.id", "a.name", "a.description", "a.identifier", "a.department_id", "a.options", "a.created_at", "a.updated_at" });
@@ -295,48 +297,56 @@ namespace AMS.Database.Repositories
                 {
                     if (Features.GetCurrentDepartment().ID > 0)
                         _query.Where("a.department_id", Features.GetCurrentDepartment().ID.ToString());
-                        
+                    
+                    // Do not include deleted items
                     _query.Where("a.deleted_at", "IS NULL", "");
 
+                    // Prepare keyword for search
                     if (keyword.Length > 0 && !keyword.Equals("%"))
                     {
                         if (!keyword.StartsWith("%") && !keyword.EndsWith("%"))
                             keyword = "%" + keyword + "%";
-                  
+                        
+                        // Make free text search on id, name and identifier
                         Statement statement = new Statement();
                         if(int.TryParse(keyword.Replace("%", ""), out int assetIdKeyword))
                             statement.AddOrStatement("a.id", assetIdKeyword.ToString());
                         statement.AddOrStatement("a.name", keyword, "LIKE");
                         statement.AddOrStatement("a.identifier", keyword, "LIKE");
                         
+                        // If search in fields include JSON search in query
                         if (searchInFields)
                             statement.AddOrStatement("JSON_EXTRACT(a.options, '$[*].Content')", keyword, "LIKE");
                         
                         _query.Where(statement);
                     }
-
+                    
+                    // If current search include tags to base the search on add query
                     if (tags != null && tags.Count > 0)
                     {
                         var pivot = new Table("asset_tags AS at", "INNER JOIN");
                         pivot.AddConnection("at.asset_id", "a.id");
                         _query.Tables.Add(pivot);
                         _query.Where("at.tag_id", "(" + string.Join(",", tags) + ")", "IN");
-
+                        
+                        // If strict all applied tags are required on the asset
                         if (strict)
                             _query.HavingStatements.Add(new Statement("COUNT(DISTINCT at.tag_id)", tags.Count.ToString()));
                     }
-
+                    
+                    // If current search include users to base the search on add query
                     if (users != null && users.Count > 0)
                     {
                         var pivot = new Table("asset_users AS au", "INNER JOIN");
                         pivot.AddConnection("au.asset_id", "a.id");
                         _query.Tables.Add(pivot);
                         _query.Where("au.user_id", "(" + string.Join(",", users) + ")", "IN");
-
+                        
+                        // If strict all applied users are required on the asset
                         if (strict)
                             _query.HavingStatements.Add(new Statement("COUNT(DISTINCT au.user_id)", users.Count.ToString()));
                     }
-
+                
                     _query.OrderBy("a.id", false);
                     _query.GroupBy = "a.id";
                     _query.Limit = 1000;
