@@ -6,11 +6,13 @@ using AMS.Models;
 using System.Linq;
 using AMS.Interfaces;
 using Type = System.Type;
+using AMS.ViewModels;
 
 namespace AMS.Helpers
 {
     public class TagHelper
     {
+        private Logging.Logger _logger = new Logging.Logger(Features.LogRepository);
         private Tag _parent;
         public bool CanApplyParentTags = false;
         private List<Tag> _tags;
@@ -167,12 +169,9 @@ namespace AMS.Helpers
                 List<ITagable> currentlyAppliedTags = new List<ITagable>(AppliedTags.Where(t => t.FullTagLabel == tag.FullTagLabel));
                 foreach (ITagable appliedTag in currentlyAppliedTags)
                 {
-                    Console.WriteLine(AppliedTags.Count());
-                    Console.WriteLine(appliedTag.FullTagLabel);
                     RemoveParentIfNeeded(appliedTag);
                     AppliedTags.Remove(appliedTag);
                     EffectedTags.Add(appliedTag);
-                    Console.WriteLine(AppliedTags.Count());
                 }
             }
             return EffectedTags;
@@ -274,7 +273,7 @@ namespace AMS.Helpers
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        _logger.AddEntry(e);
                     }
                 }
             }
