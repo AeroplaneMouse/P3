@@ -62,7 +62,7 @@ namespace AMS.Controllers
                 // Creates a new comment based on the information available
                 Comment newComment = new Comment 
                 {
-                    Username = _session.Username,
+                    Username = Session.GetUsername(),
                     Content = contentInput,
                     AssetID = _asset.ID
                 };
