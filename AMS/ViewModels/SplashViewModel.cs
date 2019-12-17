@@ -34,10 +34,7 @@ namespace AMS.ViewModels
             Setup();
         }
 
-        public override void UpdateOnFocus()
-        {
-            
-        }
+        public override void UpdateOnFocus() { }
 
         /// <summary>
         /// Establishing a connection to the database and authorizing the user. This function runs asynchronous
@@ -61,6 +58,10 @@ namespace AMS.ViewModels
             } while (reconnectRequired && !_configuring);
         }
 
+        /// <summary>
+        /// Checks if the logged in user has access to the system
+        /// </summary>
+        /// <returns></returns>
         private bool Authenticate()
         {
             // Connecting to database
@@ -107,6 +108,9 @@ namespace AMS.ViewModels
             }
         }
 
+        /// <summary>
+        /// A delay before reconnecting
+        /// </summary>
         private void Reconnect()
         {
             const string baseText = "Reconnecting in";
@@ -118,6 +122,9 @@ namespace AMS.ViewModels
             AdditionalText = "";
         }
 
+        /// <summary>
+        /// Prompts the user to input a config file
+        /// </summary>
         private void LoadConfig()
         {
             // Stop reconnecting

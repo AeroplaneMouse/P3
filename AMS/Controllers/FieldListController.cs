@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using AMS.Controllers.Interfaces;
 using AMS.Interfaces;
@@ -55,11 +56,13 @@ namespace AMS.Controllers
             field = _fieldContainer.FieldList.FirstOrDefault(f => f.Hash == inputField.Hash);
 
             // If so, combine them and set content if content is empty or equal
-            if (field != null && (field.Content == String.Empty || field.Content == inputField.Content))
+            if (field != null)
             {
-                field.Content = inputField.Content;
+                if (field.Content == string.Empty)
+                    field.Content = inputField.Content;
+
                 // Add the ID of the inputfields originating tag, if it aren't already.
-                if (inputField.TagIDs.Count > 0 && !field.TagIDs.Contains(inputField.TagIDs.First()))
+                if (inputField.TagIDs.Any() && !field.TagIDs.Contains(inputField.TagIDs.First()))
                     field.TagIDs.Add(inputField.TagIDs.First());
                 return false;
             }
@@ -102,7 +105,7 @@ namespace AMS.Controllers
                     // Update hashID, since it is now a new field, and shouldn't have any relation to the tag it originated from.
                     field.UpdateHashID();
                 }
-                
+
                 // Toggle the hidden state of the field.
                 else
                     field.IsHidden = !field.IsHidden;
@@ -122,7 +125,7 @@ namespace AMS.Controllers
             List<Field> fieldsToRemove = new List<Field>();
 
             // Update all the fields
-            foreach(Field field in _fieldContainer.FieldList)
+            foreach (Field field in _fieldContainer.FieldList)
             {
                 // Only act on non-custom fields
                 if (!field.IsCustom)
@@ -142,7 +145,14 @@ namespace AMS.Controllers
 
                     // Check if the field has any relations to tags left on it
                     if (field.TagIDs.Count == 0)
+                    {
+                        // Clear the content of the field, if it matches the default tag field content.
+                        // This will make the remove method remove the field.
+                        if (SetFieldContent(field, tag))
+                            field.Content = String.Empty;
+
                         fieldsToRemove.Add(field);
+                    }
                 }
             }
 
@@ -151,6 +161,38 @@ namespace AMS.Controllers
                 RemoveField(field);
 
             return true;
+        }
+
+        /// <summary>
+        /// Validates wether or not the content of the given field equals the 
+        /// content of one of the fields on the tag.
+        /// </summary>
+        /// <param name="field"></param>
+        /// <param name="tag"></param>
+        /// <returns></returns>
+        private bool SetFieldContent(Field field, ITagable tag)
+        {
+            Tag currentTag = tag as Tag;
+            currentTag?.DeSerializeFields();
+
+            //Checks if the field has changed value from the field on the tag.
+            if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == field.Content) 
+                return true;
+
+            //Checks whether its a date field, as this contains extra handling, and it does not get caught in the first statement.
+            if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Type == Field.FieldType.Date)
+                return false;
+            else
+            {
+                // Checks if the field on the tag contains is equals "Current Date" and the date on the FieldToBeRemoved is equals the date.today.
+                if (currentTag?.FieldList.SingleOrDefault(p => p.Equals(field))?.Content == "Current Date" &&
+                    field.Content == DateTime.Today.ToString(CultureInfo.InvariantCulture))
+                {
+                    return true;
+                } 
+            }
+
+            return false;
         }
     }
 }

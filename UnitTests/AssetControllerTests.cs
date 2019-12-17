@@ -38,20 +38,20 @@ namespace UnitTests
             _assetRepMock.Setup(p => p.Insert(It.IsAny<Asset>(), out id)).Returns(It.IsAny<Asset>());
             _assetRepMock.Setup(p => p.Update(It.IsAny<Asset>())).Returns(true);
             _assetRepMock.Setup(p => p.AttachTags(It.IsAny<Asset>(), It.IsAny<List<ITagable>>())).Returns(true);
-            
+
             _userRepMock = new Mock<IUserRepository>();
             _userRepMock.Setup(p => p.GetByIdentity(It.IsAny<string>()))
-                .Returns(new User {Username = "TestUser", DefaultDepartment = 1});
+                        .Returns(new User {Username = "TestUser", DefaultDepartment = 1});
+
             _sessionMock = new Mock<Session>(_userRepMock.Object);
 
             //Field setup
-            _fieldOne = new Field("Label of first field", "content of first field",
-                Field.FieldType.TextBox);
-            _fieldTwo = new Field("Label of second field", "content of second field",
-                Field.FieldType.Checkbox, false, true);
+            _fieldOne = new Field("Label of first field", "content of first field", Field.FieldType.TextBox);
+            _fieldTwo = new Field("Label of second field", "content of second field", Field.FieldType.Checkbox, false, true);
 
             //Asset controller setup
-            _assetController = new AssetController(CreateTestAssetWithId((ulong)1), _assetRepMock.Object, _sessionMock.Object);
+            _assetController = new AssetController(CreateTestAssetWithId((ulong) 1), _assetRepMock.Object,
+                _sessionMock.Object);
             _assetController.ControlledAsset.Name = "AssetTests_Asset";
             _assetController.ControlledAsset.Description = "Desription";
             _assetController.ControlledAsset.DepartmentdId = 1;
@@ -69,14 +69,14 @@ namespace UnitTests
         public void Equals_ReceivesAnEqualAsset_ReturnsTrue()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(CreateTestAssetWithId(1), _assetRepMock.Object, _sessionMock.Object);
+            AssetController otherAsset =
+                new AssetController(CreateTestAssetWithId(1), _assetRepMock.Object, _sessionMock.Object);
             otherAsset.ControlledAsset.Name = "AssetTests_Asset";
             otherAsset.ControlledAsset.Description = "Desription";
             otherAsset.ControlledAsset.DepartmentdId = 1;
 
             otherAsset.AddField(new Field("Label of first field", "content of first field", Field.FieldType.TextBox));
-            otherAsset.AddField(new Field("Label of second field", "content of second field",
-                Field.FieldType.Checkbox));
+            otherAsset.AddField(new Field("Label of second field", "content of second field", Field.FieldType.Checkbox));
 
             //Act
             bool result = _assetController.ControlledAsset.Equals(otherAsset.ControlledAsset);
@@ -89,7 +89,8 @@ namespace UnitTests
         public void Equals_ReceivesDifferentAsset_ReturnsFalse()
         {
             //Arrange
-            AssetController otherAsset = new AssetController(CreateTestAssetWithId(2), _assetRepMock.Object, _sessionMock.Object);
+            AssetController otherAsset =
+                new AssetController(CreateTestAssetWithId(2), _assetRepMock.Object, _sessionMock.Object);
             otherAsset.ControlledAsset.Name = "AssetTests_Asset";
             otherAsset.ControlledAsset.Description = "Desription";
             otherAsset.ControlledAsset.DepartmentdId = 4;
@@ -98,7 +99,7 @@ namespace UnitTests
 
             //Act
             bool result = _assetController.ControlledAsset.Equals(otherAsset.ControlledAsset);
-            
+
             //Assert
             Assert.IsFalse(result);
         }
@@ -115,7 +116,7 @@ namespace UnitTests
             //Assert
             _assetRepMock.Verify(p => p.Insert(It.IsAny<Asset>(), out id), Times.Once());
         }
-        
+
         [TestMethod]
         public void SaveAsset_RepositoryInsertSetsIdValid_ReturnsTrue()
         {
@@ -129,7 +130,7 @@ namespace UnitTests
             //Assert
             Assert.IsTrue(result);
         }
-        
+
         [TestMethod]
         public void SaveAsset_RepositoryInsertSetsIdInvalid_ReturnsFalse()
         {
@@ -158,7 +159,7 @@ namespace UnitTests
             //Assert
             _assetRepMock.Verify(p => p.Delete(It.IsAny<Asset>()), Times.Once());
         }
-        
+
         [TestMethod]
         public void DeleteAsset_RepositoryDeleteReturnsTrue_ReturnsTrue()
         {
@@ -172,7 +173,7 @@ namespace UnitTests
             //Assert
             Assert.IsTrue(result);
         }
-        
+
         [TestMethod]
         public void DeleteAsset_RepositoryDeleteReturnsFalse_ReturnsFalse()
         {
@@ -200,7 +201,7 @@ namespace UnitTests
             //Assert
             _assetRepMock.Verify(p => p.Update(It.IsAny<Asset>()), Times.Once());
         }
-        
+
         [TestMethod]
         public void UpdateAsset_RepositoryUpdateReturnsTrue_ReturnsTrue()
         {
@@ -214,7 +215,7 @@ namespace UnitTests
             //Assert
             Assert.IsTrue(result);
         }
-        
+
         [TestMethod]
         public void UpdateAsset_RepositoryUpdateReturnsFalse_ReturnsFalse()
         {
@@ -258,7 +259,9 @@ namespace UnitTests
             otherAsset.AttachTags(_tagTwo);
 
             //Act
-            otherAsset.DetachTags(_tagTwo);
+            List<ITagable> tagsToRemove = new List<ITagable>();
+            tagsToRemove.Add(_tagTwo);
+            otherAsset.DetachTags(tagsToRemove);
 
             //Assert
             Assert.IsFalse(otherAsset.CurrentlyAddedTags.Contains(_tagTwo));
@@ -268,7 +271,8 @@ namespace UnitTests
         public void AttatchTag_WithField_Returns_FieldInFieldsList()
         {
             //Arrange 
-            AssetController otherAssetController = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
+            AssetController otherAssetController =
+                new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
             otherAssetController.ControlledAsset.Name = "AssetTests_Asset";
             otherAssetController.ControlledAsset.Description = "Desription";
             otherAssetController.ControlledAsset.DepartmentdId = 4;
@@ -286,15 +290,15 @@ namespace UnitTests
 
             //Assert
             Assert.IsTrue(
-                _assetController.NonHiddenFieldList.SingleOrDefault(field => field.Equals(localField)) != null ||
-                _assetController.HiddenFieldList.SingleOrDefault(field => field.Equals(localField)) != null);
+                _assetController.ControlledAsset.FieldList.SingleOrDefault(field => field.Equals(localField)) != null);
         }
 
         [TestMethod]
         public void AttachTag_WithFieldAlreadyOnAsset_TagInCurrentlyAddedTagsList()
         {
             //Arrange 
-            AssetController otherAssetController = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
+            AssetController otherAssetController =
+                new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
             otherAssetController.ControlledAsset.Name = "AssetTests_Asset";
             otherAssetController.ControlledAsset.Description = "Desription";
             otherAssetController.ControlledAsset.DepartmentdId = 4;
@@ -318,7 +322,8 @@ namespace UnitTests
         public void DetachTag_WithField_TagInCurrentlyAddedTagsList()
         {
             //Arrange 
-            AssetController otherAssetController = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
+            AssetController otherAssetController =
+                new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
             otherAssetController.ControlledAsset.Name = "AssetTests_Asset";
             otherAssetController.ControlledAsset.Description = "Desription";
             otherAssetController.ControlledAsset.DepartmentdId = 4;
@@ -335,7 +340,9 @@ namespace UnitTests
 
 
             //Act
-            otherAssetController.DetachTags(localTag);
+            List<ITagable> tagsToRemove = new List<ITagable>();
+            tagsToRemove.Add(localTag);
+            otherAssetController.DetachTags(tagsToRemove);
 
             //Assert
             Assert.IsFalse(otherAssetController.CurrentlyAddedTags.Contains(localTag) &&
@@ -346,7 +353,8 @@ namespace UnitTests
         public void AttachTag_WithFieldAlreadyOnAsset_Returns_FieldPresentInListElementAdded()
         {
             //Arrange 
-            AssetController otherAssetController = new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
+            AssetController otherAssetController =
+                new AssetController(new Asset(), _assetRepMock.Object, _sessionMock.Object);
             otherAssetController.ControlledAsset.Name = "AssetTests_Asset";
             otherAssetController.ControlledAsset.Description = "Desription";
             otherAssetController.ControlledAsset.DepartmentdId = 4;
@@ -374,16 +382,16 @@ namespace UnitTests
         // Create asset with id.
         private Asset CreateTestAssetWithId(ulong rowId)
         {
-            return (Asset)Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, null, null, null, null, null, null, null }, null, null);
+            return (Asset) Activator.CreateInstance(typeof(Asset), BindingFlags.Instance | BindingFlags.NonPublic, null,
+                new object[] {rowId, null, null, null, null, null, null, null}, null, null);
         }
-        
+
         // Create tag with id.
         private Tag CreateTestTagWithId(ulong rowId)
         {
             return (Tag) Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, "TagTest", null, null, null, null, null, null, null }, null,
+                new object[] {rowId, "TagTest", null, null, null, null, null, null, null, null}, null,
                 null);
         }
     }

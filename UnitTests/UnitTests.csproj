@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AMS\AMS.csproj" />
-    <ProjectReference Include="..\Asset Management System\Asset Management System.csproj" />
   </ItemGroup>
 
   <ItemGroup>

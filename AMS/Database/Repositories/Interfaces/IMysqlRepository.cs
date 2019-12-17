@@ -2,7 +2,7 @@
 
 namespace AMS.Database.Repositories.Interfaces
 {
-    public interface IMysqlRepository<T> : IRepository<T>
+    public interface IMySqlRepository<T> : IRepository<T>
     {
         T DataMapper(MySqlDataReader reader);
     }

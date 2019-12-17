@@ -14,11 +14,13 @@ namespace AMS.ViewModels
         public ulong NumberOfAssets => _homeController.NumberOfAssets;
         public ulong NumberOfTags => _homeController.NumberOfTags;
         public ulong NumberOfDepartments => _homeController.NumberOfDepartments;
-        public List<Comment> CommentList { get => _commentListController.CommentList; }
+        public List<Comment> CommentList => _commentListController.CommentList;
+        public Comment SelectedComment { get; set; }
         public string CurrentDepartment => "(" + Features.GetCurrentDepartment().Name + ")";
 
+
         public ICommand ViewCommand { get; set; }
-        public Comment SelectedComment{ get; set; }
+        
 
         /// <summary>
         /// Default contructor
@@ -46,12 +48,13 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(CommentList));
         }
 
+        // Opens the AssetView for the currently selected commment
         public void View()
         {
             if (SelectedComment != null)
             {
                 var asset = _homeController.GetAsset(SelectedComment.AssetID);
-                Features.Navigate.To(Features.Create.AssetPresenter(asset, _homeController.GetTags(asset)));
+                Features.Navigate.To(Features.Create.AssetPresenter(asset, _homeController.GetTags(asset), 1));
             }
         }
     }

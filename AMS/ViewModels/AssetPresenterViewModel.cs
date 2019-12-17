@@ -10,13 +10,14 @@ namespace AMS.ViewModels
         private IAssetController _assetController { get; set; }
 
         public ObservableCollection<object> Tabs { get; }
+        public int SelectedTabIndex { get; set; }
         public string Name => _assetController.ControlledAsset.Name;
-        public string ID => $" (id: { _assetController.ControlledAsset.ID })";
+        public string ID => $" (ID: { _assetController.ControlledAsset.ID })";
         public ICommand RemoveCommand { get; set; }
         public ICommand EditCommand { get; set; }
         public ICommand CancelCommand { get; set; }
    
-        public AssetPresenterViewModel(IAssetController assetController, ICommentListController commentListController, ILogListController logListController)
+        public AssetPresenterViewModel(IAssetController assetController, ICommentListController commentListController, ILogListController logListController, int tabIndex = 0)
         {
             _assetController = assetController;
 
@@ -25,6 +26,8 @@ namespace AMS.ViewModels
             Tabs.Add(new AssetDetailsViewModel(_assetController));
             Tabs.Add(new CommentViewModel(commentListController));
             Tabs.Add(new LogListViewModel(logListController));
+
+            SelectedTabIndex = tabIndex;
 
             EditCommand = new Base.RelayCommand(() => Edit(), () => Features.GetCurrentSession().IsAdmin());
             RemoveCommand = new Base.RelayCommand(() => Remove(), () => Features.GetCurrentSession().IsAdmin());
@@ -41,11 +44,11 @@ namespace AMS.ViewModels
             (Tabs[2] as LogListViewModel).UpdateOnFocus();
 
             OnPropertyChanged(nameof(Tabs));
-
-            // Update asset from database
-
         }
 
+        /// <summary>
+        /// Removes the viewed asset
+        /// </summary>
         private void Remove()
         {
             Features.DisplayPrompt(new Views.Prompts.Confirm($"Are you sure you want to remove { _assetController.ControlledAsset.Name }?", (sender, e) =>
@@ -59,11 +62,17 @@ namespace AMS.ViewModels
             }));
         }
 
+        /// <summary>
+        /// Edits the viewed asset
+        /// </summary>
         private void Edit ()
         {
             Features.Navigate.To(Features.Create.AssetEditor(_assetController));
         }
 
+        /// <summary>
+        /// Goes back to the previous page
+        /// </summary>
         private void Cancel()
         {
             if (!Features.Navigate.Back())

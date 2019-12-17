@@ -74,10 +74,7 @@ namespace AMS.ConfigurationHandler
                             var result = Encoding.UTF8.GetString(fileRead.ToArray());
                             output = result;
                         }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e);
-                        }
+                        catch (Exception e) { }
                         finally
                         {
                             cs.Flush();
@@ -132,10 +129,7 @@ namespace AMS.ConfigurationHandler
                         //Tries and catches regarding opening and reading file
                         cs.Write(buffer, 0, buffer.Length);
                     }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                    }
+                    catch (Exception e) { }
 
                     cs.Flush();
                     cs.Close();

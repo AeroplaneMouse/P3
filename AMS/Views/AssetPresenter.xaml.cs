@@ -24,10 +24,10 @@ namespace AMS.Views
     /// </summary>
     public partial class AssetPresenter : Page
     {
-        public AssetPresenter(List<ITagable> tagList, IAssetController assetController, ICommentListController commentListController, ILogListController logListController)
+        public AssetPresenter(List<ITagable> tagList, IAssetController assetController, ICommentListController commentListController, ILogListController logListController, int tabIndex = 0)
         {
             InitializeComponent();
-            DataContext = new AssetPresenterViewModel(assetController, commentListController, logListController);
+            DataContext = new AssetPresenterViewModel(assetController, commentListController, logListController, tabIndex);
         }
 
         private GridViewColumnHeader _lastHeaderClicked;
@@ -48,7 +48,7 @@ namespace AMS.Views
                 viewModel.CheckAll = false;
 
             // Only change visibility if current user if admin
-            if (Features.Main.CurrentSession.IsAdmin())
+            if (Features.GetCurrentSession().IsAdmin())
             {
                 // Setting single item selected visibility
                 viewModel.SingleSelected = viewModel.SelectedItems.Count == 1 ?

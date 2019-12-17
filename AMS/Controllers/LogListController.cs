@@ -11,10 +11,12 @@ namespace AMS.Controllers
 {
     public class LogListController : ILogListController
     {
-        private readonly ILogRepository _logRepository;
-        private readonly IExporter _exporter;
+        private ILogRepository _logRepository { get; set; }
+        private IExporter _exporter { get; set; }
         private List<LogEntry> _entryList;
         private Asset _asset;
+        
+        public List<string> types;
 
         public List<LogEntry> EntryList
         {
@@ -22,7 +24,7 @@ namespace AMS.Controllers
             {
                 if (_entryList == null)
                 {
-                    _entryList = _logRepository.Search("").ToList();
+                    _entryList = _logRepository.Search("", types).ToList();
                 }
 
                 return _entryList.OrderByDescending(p => p.CreatedAt).ToList();
@@ -38,7 +40,8 @@ namespace AMS.Controllers
             _asset = asset;
 
             if (_asset == null)
-                Search("");
+                Search("", types);
+
             else
                 EntryList = _logRepository.GetLogEntries(_asset.ID, typeof(Asset)).ToList();
         }
@@ -47,9 +50,10 @@ namespace AMS.Controllers
         /// Filters the list of entries based on given query
         /// </summary>
         /// <param name="query"></param>
-        public void Search(string query)
+        public void Search(string query, List<string> updateTypes)
         {
-            EntryList = _logRepository.Search(query).ToList();
+            types = updateTypes;
+            EntryList = _logRepository.Search(query, types).ToList();
         }
 
         /// <summary>
@@ -61,12 +65,15 @@ namespace AMS.Controllers
             _exporter.Print(entries);
         }
 
-        public void UpdateEntries()
-        {
+        /// <summary>
+        /// Searches for log entries
+        /// </summary>
+        public void UpdateEntries()
+        {
             if (_asset == null)
-                Search("");
+                Search("", types);
             else
-                EntryList = _logRepository.GetLogEntries(_asset.ID, typeof(Asset)).ToList();
+                EntryList = _logRepository.GetLogEntries(_asset.ID, typeof(Asset)).ToList();
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Asset_Management_System.Models;
+﻿using AMS.Models;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests
 {
@@ -17,7 +17,7 @@ namespace UnitTests
             string result = tag.ToString();
 
             //Assert
-            Assert.AreEqual("Tag_label", result);
+            Assert.AreEqual("tag_label", result);
         }
     }
 }

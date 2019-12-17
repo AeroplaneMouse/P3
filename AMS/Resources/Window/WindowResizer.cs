@@ -6,7 +6,8 @@ using System.Windows.Interop;
 namespace AMS.Resources.Window
 {
     /// <summary>
-    /// Fixes the issue with Windows of Style <see cref="WindowStyle.None"/> covering the taskbar
+    /// Fixes the issue with Windows of Style <see cref="WindowStyle.None"/> covering the taskbar.
+    /// From AngelSix's fasseto-word repository: https://github.com/angelsix/fasetto-word
     /// </summary>
     public class WindowResizer
     {

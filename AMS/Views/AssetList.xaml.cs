@@ -44,7 +44,7 @@ namespace AMS.Views
                 viewModel.CheckAll = false;
 
             // Only change visibility if current user if admin
-            if (Features.Main.CurrentSession.IsAdmin())
+            if (Features.GetCurrentSession().IsAdmin())
             {
                 // Setting single item selected visibility
                 viewModel.SingleSelected = viewModel.SelectedItems.Count == 1 ?
@@ -58,7 +58,7 @@ namespace AMS.Views
             }
         }
 
-        // This code is based on: https://docs.microsoft.com/en-us/dotnet/framework/wpf/controls/how-to-sort-a-gridview-column-when-a-header-is-clicked?redirectedfrom=MSDN
+        // This code is based on: https://docs.microsoft.com/en-us/dotnet/framework/wpf/controls/how-to-sort-a-gridview-column-when-a-header-is-clicked
         private void ColumnHeader_Click(object sender, RoutedEventArgs e)
         {
             if (sender == null) return;

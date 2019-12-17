@@ -1,0 +1,987 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AMS.Authentication.Session" Collapsed="true">
+    <Position X="26.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAgAAAAAAQAAACAAGgAEAAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Authentication\Session.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ConfigurationHandler.FileConfigurationHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="35.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAIAAAAAAAAAAgFAAAQgAAAAAABAAAA=</HashCode>
+      <FileName>ConfigurationHandler\FileConfigurationHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.ConfigurationHandler.FileEncryption" Collapsed="true">
+    <Position X="37" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAACAAAAAAAQAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>ConfigurationHandler\FileEncryption.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Controllers.AssetController" Collapsed="true">
+    <Position X="10.75" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAIAAAAoggAAAAAgBJAQAAACAAAAgAAAAQAAAAAg=</HashCode>
+      <FileName>Controllers\AssetController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Controllers.AssetListController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="31.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQCAAgAEAAAAABAAAAAAAAEAAAAAAAAAgAAA=</HashCode>
+      <FileName>Controllers\AssetListController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Controllers.CommentListController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAACAAABAAAAAAAAAEAUgAAAAAIAACAA=</HashCode>
+      <FileName>Controllers\CommentListController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Controllers.FieldListController" Collapsed="true">
+    <Position X="12" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>iAAAFAgEAAAAAAAAAAAAQAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Controllers\FieldListController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Controllers.HomeController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAkgUBAAgAAAAAAACAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\HomeController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Controllers.LogListController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="33.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAkAAAAABAEAAAAAAAQAAAAAAAggAAA=</HashCode>
+      <FileName>Controllers\LogListController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Controllers.TagController" Collapsed="true">
+    <Position X="13" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCIIgIQAAIgAAAAAAJLAQAgAAAAQAAAhAAgUAAAAA=</HashCode>
+      <FileName>Controllers\TagController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Controllers.TagListController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="31.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAICAAAAAAAAEAAAAABAAAAAAAAAQgAAAABAggAAA=</HashCode>
+      <FileName>Controllers\TagListController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Controllers.UserListController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BADAAAcIEAAAACAA0AAgAALAAAAAAAEZAIAAAgAAEAM=</HashCode>
+      <FileName>Controllers\UserListController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Database.Repositories.AssetRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="35.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAAEAAQAAAAAQgAAAAgAAAIAEAAAAAAAAAAAAgAIA=</HashCode>
+      <FileName>Database\Repositories\AssetRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Database.Repositories.CommentRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="26.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAEAAAAAAgAAAIAEAAAABAgAAAAAAAIA=</HashCode>
+      <FileName>Database\Repositories\CommentRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Database.Repositories.DepartmentRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="35.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAgAAAIAEAAAAAAgAAAAAAAIA=</HashCode>
+      <FileName>Database\Repositories\DepartmentRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Database.Repositories.LogRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="37" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAgAAAAAAAAAQAAAAAAAAgAAA=</HashCode>
+      <FileName>Database\Repositories\LogRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Database.Repositories.TagRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="33.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAgEAAAAAAAAAAEBAAgAAAIAEAAAgAAgAgAAggAIA=</HashCode>
+      <FileName>Database\Repositories\TagRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Database.Repositories.UserRepository" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEAEAAAAAAAAAAAAAAgAAAAAEAAAAAAgAEAAAAAIA=</HashCode>
+      <FileName>Database\Repositories\UserRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Database.MySqlHandler" Collapsed="true">
+    <Position X="28.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAAABAIAAAAAJAABAA=</HashCode>
+      <FileName>Database\MySqlHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Database.QueryGenerator" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="33.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAgAACAACAABEAwAAiAQQAAAAEAACAABIAgAAiAAAA=</HashCode>
+      <FileName>Database\QueryGenerator.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Database.Statement" Collapsed="true">
+    <Position X="33.5" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAABAAAAAAAAAAAAEABAgAAAAoAA=</HashCode>
+      <FileName>Database\Statement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Database.Table" Collapsed="true">
+    <Position X="24.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAEAAAAAAAAAAAQAAAAABAAAABAAAAAAAAA=</HashCode>
+      <FileName>Database\Table.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Events.ExpandedPromptEventArgs" Collapsed="true">
+    <Position X="7.75" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAA=</HashCode>
+      <FileName>Events\ExpandedPromptEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Events.FieldEditPromptEventArgs" Collapsed="true">
+    <Position X="1" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAEA=</HashCode>
+      <FileName>Events\FieldEditPromptEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Events.FieldInputPromptEventArgs" Collapsed="true">
+    <Position X="3.25" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Events\FieldInputPromptEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Events.PromptEventArgs" Collapsed="true">
+    <Position X="4.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Events\PromptEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Events.TextInputPromptEventArgs" Collapsed="true">
+    <Position X="5.5" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Events\TextInputPromptEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Helpers.Exporter" Collapsed="true">
+    <Position X="28.25" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAgAAAAAAAAAIAAEAAAAAAAABAA=</HashCode>
+      <FileName>Helpers\Exporter.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Helpers.PrintHelper" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="31.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAAAAAAAAIAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Helpers\PrintHelper.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Helpers.TagHelper" Collapsed="true">
+    <Position X="28.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EgCEAAAiAAAAAAVAAQAICEASAICAQIAECEAAAAQAAEA=</HashCode>
+      <FileName>Helpers\TagHelper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.IO.UserImporter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="37" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAgAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAEAI=</HashCode>
+      <FileName>IO\UserImporter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Logging.Change" Collapsed="true">
+    <Position X="37" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Logging\Change.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Logging.LogEntry" Collapsed="true">
+    <Position X="28.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAhgAgAASAAAQgAAAAAAAAAABAgAAAAABA=</HashCode>
+      <FileName>Logging\LogEntry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Logging.Logger" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAgAAAAAAAAAAAAAAAAAAAAAIAAAAQAAQAAAEAAAA=</HashCode>
+      <FileName>Logging\Logger.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Models.Asset" Collapsed="true">
+    <Position X="15.75" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAggAAEgAAAgAQAAAAAIIAAAAACQAAAAAA=</HashCode>
+      <FileName>Models\Asset.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Models.Comment" Collapsed="true">
+    <Position X="11.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAAABAQgCAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Comment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Models.Department" Collapsed="true">
+    <Position X="13.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAAAAEAAAAAAQAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>Models\Department.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Models.Field" Collapsed="true">
+    <Position X="31.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAEgMAAAAEoAEAAAAAAAAAAUAAAQIAQAIAEAA=</HashCode>
+      <FileName>Models\Field.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Models.FieldContainer" Collapsed="true">
+    <Position X="17" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAQAAAgAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\FieldContainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Models.Model" Collapsed="true">
+    <Position X="13.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAiAgAACAAAAAAAAAAAAAAAAABAAAIAgA=</HashCode>
+      <FileName>Models\Model.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Models.Notification" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="30" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIACABAAgAgAAAgABAEAAAAAAAAKAAAAAgJAAAAIA=</HashCode>
+      <FileName>Models\Notification.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.Models.Tag" Collapsed="true">
+    <Position X="18" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAQIgAAEgIAUAAQAAACAIAQIAgACgAAAAAE=</HashCode>
+      <FileName>Models\Tag.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Models.User" Collapsed="true">
+    <Position X="9" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAQoAAAEgYE0AAQACgAAAAQIEgAAAAAAAAE=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Models.UserWithStatus" Collapsed="true">
+    <Position X="9" Y="10.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgAAIAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\UserWithStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Resources.Window.WindowResizer" Collapsed="true">
+    <Position X="31.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAACAAAAIEAAAAAACAAAACAIAAAAAAA=</HashCode>
+      <FileName>Resources\Window\WindowResizer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Resources.Window.MONITORINFO" Collapsed="true">
+    <Position X="26.5" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAEAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAACAAAA=</HashCode>
+      <FileName>Resources\Window\WindowResizer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.Base.BaseViewModel" Collapsed="true">
+    <Position X="23" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAIAAAAAQAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Base\BaseViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.ViewModels.Base.RelayCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="35.25" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAQAAFAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>ViewModels\Base\RelayCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.ViewModels.Base.RelayCommand&lt;T&gt;" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="37" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAQAAEAAAAAAAAAAAAAAAAAAgAAAAAA=</HashCode>
+      <FileName>ViewModels\Base\RelayCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.ViewModels.Commands.EditDepartmentCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.75" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAQAAFAAAAAAAIAAAAAAAAACAAAACAA=</HashCode>
+      <FileName>ViewModels\Commands\EditDepartmentCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.ViewModels.Commands.RemoveDepartmentCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAQAAFAAAAAAAIAAAAAAAAACAAAACAA=</HashCode>
+      <FileName>ViewModels\Commands\RemoveDepartmentCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AMS.ViewModels.Prompts.ConfirmViewModel" Collapsed="true">
+    <Position X="14" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAQAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Prompts\ConfirmViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.Prompts.CustomFieldViewModel" Collapsed="true">
+    <Position X="16.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAQAgBAAAAIAQAAEQgAIBAAAAAACAAQAAEQCA=</HashCode>
+      <FileName>ViewModels\Prompts\CustomFieldViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.Prompts.DefaultValueDesignSelector" Collapsed="true">
+    <Position X="33.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Prompts\CustomFieldViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.Prompts.ExpandedConfirmViewModel" Collapsed="true">
+    <Position X="18.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIBAAAAAQAAgAAAAAAAAACAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Prompts\ExpandedConfirmViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.Prompts.PromptViewModel" Collapsed="true">
+    <Position X="17.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QIAAAAAAQCAAAAAAAAAAAAQAAIAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Prompts\PromptViewModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.ViewModels.Prompts.TextInputViewModel" Collapsed="true">
+    <Position X="20.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAQAAAAACAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Prompts\TextInputViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.AssetDetailsViewModel" Collapsed="true">
+    <Position X="27.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAgIBEAAAAAAAQAAAAAAEAAAAAAQAAAAAA=</HashCode>
+      <FileName>ViewModels\AssetDetailsViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.AssetEditorViewModel" Collapsed="true">
+    <Position X="32" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>yQEgEBoAQEAgVEEAgBABAiQQEgJJwAACDgoERAAEACQ=</HashCode>
+      <FileName>ViewModels\AssetEditorViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.AssetListViewModel" Collapsed="true">
+    <Position X="36.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>A8hgCAtAAEoA3AAggAgBBCQSGgAIQAKCiFokBACAGCw=</HashCode>
+      <FileName>ViewModels\AssetListViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.AssetPresenterViewModel" Collapsed="true">
+    <Position X="41" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAQAAAxAEAAAAABAQAAAAAAEACAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\AssetPresenterViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.CommentViewModel" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAACAAAAGAAAAAAAQAAAQAAAAAAAAAAEAEAAA=</HashCode>
+      <FileName>ViewModels\CommentViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.Features" Collapsed="true">
+    <Position X="30" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gCACACggAgSAoAAAAAEAGACAAAAAAMQAgAAQDAAIABA=</HashCode>
+      <FileName>ViewModels\Features.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.HomeViewModel" Collapsed="true">
+    <Position X="5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAEAEFAAAACAAABAAAQCAQABAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>ViewModels\HomeViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.LogListViewModel" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAACAAAAAgAiCAAAAAABAQAEAABAAABgBAABAAgEAg=</HashCode>
+      <FileName>ViewModels\LogListViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.LogPresenterViewModel" Collapsed="true">
+    <Position X="9.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAQAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\LogPresenterViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.MainViewModel" Collapsed="true">
+    <Position X="11.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QBEAD22IEtgAQhAAiCEQWEzDABAAgAgIiGYqIAgMEAQ=</HashCode>
+      <FileName>ViewModels\MainViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.SettingsEditorViewModel" Collapsed="true">
+    <Position X="23" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QASBAIAAQEAABIAAAQAABAQAIAAAAAICAAAAAAAEAAA=</HashCode>
+      <FileName>ViewModels\SettingsEditorViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.ShortcutsListViewModel" Collapsed="true">
+    <Position X="25.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>ViewModels\ShortcutsListViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.SplashViewModel" Collapsed="true">
+    <Position X="29.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BQAAIAAkCAAAAAAAAAAAAAagAIAAAAAAAAACAAAAAoA=</HashCode>
+      <FileName>ViewModels\SplashViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.TagEditorViewModel" Collapsed="true">
+    <Position X="34.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ygAAEQAMQAMAhBAAAJAAAAQAAwCQgCIAQhgAgEAAIEA=</HashCode>
+      <FileName>ViewModels\TagEditorViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.TagListViewModel" Collapsed="true">
+    <Position X="38.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AkAAAABIAAAAxAAAAAAAAAQCAAAAAEAAgBAAAAEgAgA=</HashCode>
+      <FileName>ViewModels\TagListViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.ViewModels.UserListViewModel" Collapsed="true">
+    <Position X="43.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>RIAAgIAIQBAAAEABMAAAAAQAAAQEAAAJAAIAAAAAAAE=</HashCode>
+      <FileName>ViewModels\UserListViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Views.Prompts.Confirm" Collapsed="true">
+    <Position X="28.25" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Prompts\Confirm.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.Prompts.CustomField" Collapsed="true">
+    <Position X="30" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Prompts\CustomField.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.Prompts.ExpandedConfirm" Collapsed="true">
+    <Position X="26.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Prompts\ExpandedConfirm.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.Prompts.TextInput" Collapsed="true">
+    <Position X="35.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Prompts\TextInput.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.ValueConverters.AssetIDToAssetValueConverter" Collapsed="true">
+    <Position X="28.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ValueConverters\AssetIDToAssetValueConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.ValueConverters.DateValueConverter" Collapsed="true">
+    <Position X="31.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ValueConverters\DateValueConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.ValueConverters.DepartmentStringValueConverter" Collapsed="true">
+    <Position X="37" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ValueConverters\DepartmentStringValueConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.ValueConverters.UsernameToVisibilityConverter" Collapsed="true">
+    <Position X="28.25" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ValueConverters\UsernameToVisibilityConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.StatusToToolTipConverter" Collapsed="true">
+    <Position X="35.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ValueConverters\StatusToToolTipConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.StatusToVisibilityConverter" Collapsed="true">
+    <Position X="37" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ValueConverters\StatusToVisibilityConverter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.FieldDesignSelector" Collapsed="true">
+    <Position X="33.5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ViewHelpers\FieldDesignSelector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AMS.Views.AssetEditor" Collapsed="true">
+    <Position X="26.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\AssetEditor.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.AssetList" Collapsed="true">
+    <Position X="30" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAwAAAAAAAAEAABAAAAAAAAAAA=</HashCode>
+      <FileName>Views\AssetList.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.AssetPresenter" Collapsed="true">
+    <Position X="33.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAgAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Views\AssetPresenter.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.Home" Collapsed="true">
+    <Position X="24.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Home.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.LogList" Collapsed="true">
+    <Position X="31.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAwAAAAAAAAEAABAAAAAAAAAAA=</HashCode>
+      <FileName>Views\LogList.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.LogPresenter" Collapsed="true">
+    <Position X="35.25" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\LogPresenter.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.Main" Collapsed="true">
+    <Position X="24.75" Y="9.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Main.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.SettingsEditor" Collapsed="true">
+    <Position X="28.25" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\SettingsEditor.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.ShortcutsList" Collapsed="true">
+    <Position X="30" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\ShortcutsList.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.Splash" Collapsed="true">
+    <Position X="31.75" Y="10.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\Splash.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.TagEditor" Collapsed="true">
+    <Position X="26.5" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\TagEditor.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.TagList" Collapsed="true">
+    <Position X="30" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Views\TagList.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.Views.UserList" Collapsed="true">
+    <Position X="24.75" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAwAAAAAAAAEAABAAAAAAAAAAA=</HashCode>
+      <FileName>Views\UserList.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="AMS.App" Collapsed="true">
+    <Position X="24.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>App.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="AMS.Resources.Window.Rectangle" Collapsed="true">
+    <Position X="28.25" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAQAAAAAAAIAAAACACAAAAAAAA=</HashCode>
+      <FileName>Resources\Window\WindowResizer.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="AMS.Resources.Window.MINMAXINFO" Collapsed="true">
+    <Position X="24.75" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQBAAAAAAACAAAIAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Resources\Window\WindowResizer.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="AMS.Resources.Window.POINT" Collapsed="true">
+    <Position X="26.5" Y="13.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAYAA=</HashCode>
+      <FileName>Resources\Window\WindowResizer.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="AMS.ConfigurationHandler.IConFigurationHandler" Collapsed="true">
+    <Position X="28.25" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAABAAAQAAAAAAAAAAAA=</HashCode>
+      <FileName>ConfigurationHandler\IConFigurationHandler.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Controllers.Interfaces.IAssetController" Collapsed="true">
+    <Position X="0.75" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAIAAAAogAAAAAAABJAQAAAAAAAAAAAAAQAAAAAg=</HashCode>
+      <FileName>Controllers\Interfaces\IAssetController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Controllers.Interfaces.IAssetListController" Collapsed="true">
+    <Position X="24.75" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAQCAAAAAAAAAABAAAAAAAAEAAAAAAAAAgAAA=</HashCode>
+      <FileName>Controllers\Interfaces\IAssetListController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Controllers.Interfaces.ICommentListController" Collapsed="true">
+    <Position X="26.5" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAACAAABAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Interfaces\ICommentListController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Controllers.Interfaces.IFieldListController" Collapsed="true">
+    <Position X="2" Y="14.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>iAAAEAgEAAAAAAAAAAAAQAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <FileName>Controllers\Interfaces\IFieldListController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Controllers.Interfaces.IHomeController" Collapsed="true">
+    <Position X="31.75" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAEAUBAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\Interfaces\IHomeController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Controllers.Interfaces.ILogListController" Collapsed="true">
+    <Position X="35.25" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAgAAAAABAEAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Controllers\Interfaces\ILogListController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Controllers.Interfaces.ITagController" Collapsed="true">
+    <Position X="3" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCIIAIQAAIgAAAAAAIJAQAAAAAAAAAAhAAgUAAAAA=</HashCode>
+      <FileName>Controllers\Interfaces\ITagController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Controllers.Interfaces.ITagListController" Collapsed="true">
+    <Position X="30" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AABAACAAAAAAAAAAAAAABAAAAAAAAAAgAAAABAggAAA=</HashCode>
+      <FileName>Controllers\Interfaces\ITagListController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Controllers.Interfaces.IUserListController" Collapsed="true">
+    <Position X="33.5" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BACAAAMIAAAAAAAAEAAAAADAAAAAAAAJAAAAAAAAAAE=</HashCode>
+      <FileName>Controllers\Interfaces\IUserListController.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Database.Repositories.Interfaces.IAssetRepository" Collapsed="true">
+    <Position X="5.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgQAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Database\Repositories\Interfaces\IAssetRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Database.Repositories.Interfaces.ICommentRepository" Collapsed="true">
+    <Position X="12.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAAAAAAAAABAgAAAAAAAAA=</HashCode>
+      <FileName>Database\Repositories\Interfaces\ICommentRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Database.Repositories.Interfaces.IDepartmentRepository" Collapsed="true">
+    <Position X="3.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Database\Repositories\Interfaces\IDepartmentRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Database.Repositories.Interfaces.ILogRepository" Collapsed="true">
+    <Position X="37" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAgAAA=</HashCode>
+      <FileName>Database\Repositories\Interfaces\ILogRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Database.Repositories.Interfaces.IMySqlRepository&lt;T&gt;" Collapsed="true">
+    <Position X="5.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Database\Repositories\Interfaces\IMySqlRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Database.Repositories.Interfaces.IRepository&lt;T&gt;" Collapsed="true">
+    <Position X="5.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAIA=</HashCode>
+      <FileName>Database\Repositories\Interfaces\IRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Database.Repositories.Interfaces.ISearchableRepository&lt;T&gt;" Collapsed="true">
+    <Position X="0.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Database\Repositories\Interfaces\ISearchableRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Database.Repositories.Interfaces.ITagRepository" Collapsed="true">
+    <Position X="5.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AARAAAAAAAAAAAAAAAAAAAAAAAEAAAgAAgAgAAgAAAA=</HashCode>
+      <FileName>Database\Repositories\Interfaces\ITagRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Database.Repositories.Interfaces.IUserRepository" Collapsed="true">
+    <Position X="7.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAEAAAAAAA=</HashCode>
+      <FileName>Database\Repositories\Interfaces\IUserRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Interfaces.IExporter" Collapsed="true">
+    <Position X="30" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAA=</HashCode>
+      <FileName>Interfaces\IExporter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Interfaces.IPageUpdateOnFocus" Collapsed="true">
+    <Position X="24.75" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IPageUpdateOnFocus.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Interfaces.ITagable" Collapsed="true">
+    <Position X="28.25" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAIAUAAAAAAAAAAQIAgAAAAAAAAE=</HashCode>
+      <FileName>Interfaces\ITagable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Interfaces.IUserImporter" Collapsed="true">
+    <Position X="31.75" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAgAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interfaces\IUserImporter.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.Logging.Interfaces.Ilogger" Collapsed="true">
+    <Position X="33.5" Y="15" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Logging\Interfaces\Ilogger.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="AMS.ViewModels.Prompts.IPrompt" Collapsed="true">
+    <Position X="26.5" Y="15.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAAACAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\Prompts\IPrompt.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="AMS.Resources.Window.MonitorOptions" Collapsed="true">
+    <Position X="24.75" Y="16.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAIAQAAAAAAAA=</HashCode>
+      <FileName>Resources\Window\WindowResizer.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Delegate Name="AMS.Events.NotificationEventHandler" Collapsed="true">
+    <Position X="28.25" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Events\EventHandlers.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="AMS.Events.SqlConnectionEventHandler" Collapsed="true">
+    <Position X="31.75" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Events\EventHandlers.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="AMS.Events.PromptEventHandler" Collapsed="true">
+    <Position X="30" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Events\EventHandlers.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="AMS.Events.ExpandedPromptEventHandler" Collapsed="true">
+    <Position X="24.75" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Events\EventHandlers.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="AMS.Events.TextInputPromptEventHandler" Collapsed="true">
+    <Position X="33.5" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Events\EventHandlers.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Delegate Name="AMS.Events.FieldInputPromptEventHandler" Collapsed="true">
+    <Position X="26.5" Y="17.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAEAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Events\EventHandlers.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

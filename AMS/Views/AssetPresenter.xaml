@@ -14,6 +14,8 @@
 
     <Page.Resources>
         <converter:UsernameToVisibilityConverter x:Key="UsernameConverter" />
+        <converter:CommentEditingToVisibilityConverter x:Key="CommentEditingConverter"/>
+        <converter:CommentNotEditingToVisibilityConverter x:Key="CommentNotEditingConverter"/>
     </Page.Resources>
 
     <Page.InputBindings>
@@ -74,7 +76,8 @@
 
         <TabControl Grid.Row="1"
                     Margin="10"
-                    x:Name="StartElement">
+                    x:Name="StartElement"
+                    SelectedIndex="{Binding SelectedTabIndex}">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Template">
@@ -110,13 +113,13 @@
                      FontSize="{StaticResource FontSizeSmall}">
                 <Grid>
                     <!-- Content of the page -->
-                    <ScrollViewer Grid.Row="1" Margin="10">
+                    <ScrollViewer Grid.Row="1" Margin="10" VerticalScrollBarVisibility="Auto">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="15.052" />
-                                <ColumnDefinition Width="334.948" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="400" />
+                                <ColumnDefinition Width="4*" />
                             </Grid.ColumnDefinitions>
 
                             <!-- Details -->
@@ -193,6 +196,9 @@
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
                                                 <Grid.RowDefinitions>
                                                     <RowDefinition Height="Auto" />
                                                     <RowDefinition Height="Auto" />
@@ -200,27 +206,44 @@
                                                     <RowDefinition />
                                                 </Grid.RowDefinitions>
 
+                                                <!-- Title -->
                                                 <TextBlock Style="{StaticResource SmallHeaderStyle}"
                                                                Text="{Binding Label}"
-                                                               Grid.Row="0" MinWidth="300" />
+                                                               Grid.Row="0" />
 
+                                                <!-- Content -->
                                                 <TextBlock Style="{StaticResource ParagraphStyle}"
                                                            Text="{Binding Content}"
                                                            TextWrapping="Wrap"
                                                            Grid.Row="1"/>
 
-                                                <StackPanel Grid.Row="2">
-                                                    <ItemsControl ItemsSource="{Binding TagList}">
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <Grid HorizontalAlignment="Left">
-                                                                    <Label Style="{StaticResource TagLabelOnlyShow}"/>
-                                                                </Grid>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
-                                                </StackPanel>
-                                                <Rectangle Grid.Row="3" Height="2" HorizontalAlignment="Stretch" Margin="0,10,10,10">
+                                                <!-- Tags -->
+                                                <ListView ItemsSource="{Binding TagList}"
+                                                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                                          ItemContainerStyle="{StaticResource ListViewWithTags}"
+                                                          BorderBrush="Transparent"
+                                                          Grid.Row="2"
+                                                          Margin="0 0 0 0">
+                                                    <ListView.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <WrapPanel
+                                                                Orientation="Horizontal"
+                                                                VerticalAlignment="Top"
+                                                                HorizontalAlignment="Left"
+                                                                OverridesDefaultStyle="True" />
+                                                        </ItemsPanelTemplate>
+                                                    </ListView.ItemsPanel>
+                                                    <ListView.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Grid>
+                                                                <Label Style="{StaticResource TagLabelOnlyShow}" FontWeight="UltraBold" />
+                                                            </Grid>
+                                                        </DataTemplate>
+                                                    </ListView.ItemTemplate>
+                                                </ListView>
+                                                
+                                                <!-- Border -->
+                                                <Rectangle Grid.Row="3" Height="2" HorizontalAlignment="Left" Width="350" Margin="0,10,10,10">
                                                     <Rectangle.Fill>
                                                         <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
                                                             <GradientStop Color="LightGray" Offset="0"/>
@@ -254,6 +277,7 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
+                        
                         <TextBox Grid.Column="0"
                                  Text="{Binding NewComment, UpdateSourceTrigger=PropertyChanged}"
                                  FontSize="{StaticResource FontSizeSmall}"
@@ -269,7 +293,9 @@
                                  Padding="10">
                             <TextBox.InputBindings>
                                 <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding SaveCommand}" />
+                                <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding SaveCommand}" />
                             </TextBox.InputBindings>
+                            
                         </TextBox>
                         <Button Grid.Column="1"
                                 Content="Send"
@@ -279,10 +305,12 @@
                                 Height="36"
                                 VerticalAlignment="Top" />
                     </Grid>
-                    <!--Show list of comments-->
+                    
+                    <!-- List of comments -->
                     <ScrollViewer Grid.Row="1"
                                   HorizontalScrollBarVisibility="Disabled"
                                   VerticalScrollBarVisibility="Auto">
+                        
                         <ItemsControl ItemsSource="{Binding CommentList, UpdateSourceTrigger=PropertyChanged}"
                                       Margin="10 0"
                                       x:Name="CommentList">
@@ -298,33 +326,92 @@
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
+                                            
                                             <!--Comment information-->
                                             <StackPanel Grid.Column="0" Margin="0 0 50 0">
+                                                
+                                                <!-- Username -->
                                                 <TextBlock Text="{Binding Path=Username}"
                                                            Style="{StaticResource ParagraphStyle}"
                                                            Foreground="Black"
                                                            FontWeight="DemiBold"
                                                            TextWrapping="Wrap"/>
                                                 
+                                                <!-- Created at string -->
                                                 <TextBlock Text="{Binding Path=CreatedAtString}"
                                                            Style="{StaticResource ParagraphStyle}"
                                                            Foreground="Gray" />
-                                                <Button
-                                                    Command="{Binding DataContext.DeleteCommand, ElementName=CommentList}"
-                                                    CommandParameter="{Binding .}"
-                                                    Style="{StaticResource TrashButton}"
-                                                    Width="17"
-                                                    HorizontalAlignment="Left"
-                                                    Margin="0 4 0 0"
-                                                    Visibility="{Binding Path=Username, Converter={StaticResource UsernameConverter}}" />
+
+                                                <!-- Buttons -->
+                                                <StackPanel Orientation="Horizontal">
+
+                                                    <!-- Delete button -->
+                                                    <Button Command="{Binding DataContext.DeleteCommand, ElementName=CommentList}"
+                                                            CommandParameter="{Binding .}"
+                                                            Style="{StaticResource TrashButton}"
+                                                            Width="17"
+                                                            HorizontalAlignment="Left"
+                                                            Margin="0 4 0 0"
+                                                            Visibility="{Binding Path=Username, Converter={StaticResource UsernameConverter}}" />
+
+                                                    <!-- Edit button -->
+                                                    <Button Command="{Binding DataContext.EditCommand, ElementName=CommentList}"
+                                                            CommandParameter="{Binding .}"
+                                                            Style="{StaticResource EditButton}"
+                                                            Width="17"
+                                                            HorizontalAlignment="Left"
+                                                            Margin="4 4 0 0"
+                                                            Visibility="{Binding Path=Username, Converter={StaticResource UsernameConverter}}" />
+
+                                                </StackPanel>
+
                                             </StackPanel>
+                                            
                                             <!--Comment content-->
                                             <TextBlock Grid.Column="1"
-                                                       Text="{Binding Path=Content}"
+                                                       Text="{Binding Path=Content, UpdateSourceTrigger=PropertyChanged}"
                                                        Style="{StaticResource ParagraphStyle}"
                                                        Foreground="Black"
                                                        TextWrapping="Wrap"
-                                                       VerticalAlignment="Center" />
+                                                       VerticalAlignment="Center" 
+                                                       Visibility="{Binding Path=IsEditing, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CommentNotEditingConverter}}"/>
+
+                                            <!-- Edit box -->
+                                            <StackPanel Visibility="{Binding Path=IsEditing, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource CommentEditingConverter}}"
+                                                        Grid.Column="1"
+                                                        Orientation="Horizontal">
+
+                                                <TextBox Text="{Binding Path=Content, UpdateSourceTrigger=PropertyChanged}"
+                                                         Foreground="Black"
+                                                         TextWrapping="Wrap"
+                                                         AcceptsReturn="True"
+                                                         MinHeight="70"
+                                                         MaxHeight="250"
+                                                         MaxWidth="400"
+                                                         MinWidth="400"
+                                                         VerticalScrollBarVisibility="Visible"
+                                                         Padding="10"
+                                                         VerticalAlignment="Center">
+
+                                                    <TextBox.InputBindings>
+                                                        <KeyBinding Key="Escape" Command="{Binding DataContext.EditCommand, ElementName=CommentList}" CommandParameter="{Binding .}"/>
+                                                        <KeyBinding Modifiers="Ctrl" Key="Return" Command="{Binding DataContext.UpdateCommand, ElementName=CommentList}" CommandParameter="{Binding .}"/>
+                                                        <KeyBinding Modifiers="Ctrl" Key="S" Command="{Binding DataContext.UpdateCommand, ElementName=CommentList}" CommandParameter="{Binding .}"/>
+                                                    </TextBox.InputBindings>
+
+                                                </TextBox>
+                                                
+                                                <!-- Save button -->
+                                                <Button Content="Save"
+                                                        Style="{StaticResource RegularAcceptButton}"
+                                                        Command="{Binding DataContext.UpdateCommand, ElementName=CommentList}"
+                                                        CommandParameter="{Binding .}"
+                                                        VerticalAlignment="Top"
+                                                        Margin="10 0 0 0"/>
+                                                
+                                            </StackPanel>
+                                            
+                                            
                                         </Grid>
                                         <Rectangle Grid.Row="1" Height="1" Fill="LightGray" Margin="0 10" />
                                     </Grid>

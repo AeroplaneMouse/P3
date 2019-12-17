@@ -8,7 +8,6 @@ using AMS.Interfaces;
 using AMS.Logging;
 using AMS.Logging.Interfaces;
 using AMS.Models;
-using Asset_Management_System.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
@@ -350,6 +349,7 @@ namespace UnitTests
                 "#d3d3d3",
                 10,
                 "[]",
+                "tag name",
                 new DateTime(2019, 12, 4, 13, 57, 56),
                 new DateTime(2019, 12, 4, 13, 57, 59)
             };
@@ -419,6 +419,7 @@ namespace UnitTests
                 "#d3d3d3",
                 10,
                 "[]",
+                "tag name",
                 new DateTime(2019, 12, 4, 13, 57, 56),
                 new DateTime(2019, 12, 4, 13, 57, 59)
             };
@@ -540,7 +541,7 @@ namespace UnitTests
             _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(le => le.Description.EndsWith(messageAndStackTrace)))).Returns(true);
 
             //Act
-            bool result = _Log.AddEntry("Exception", "Start of description", 1, "[]", e);
+            bool result = _Log.AddEntry(e);
 
             //Assert
             Assert.IsTrue(result);
@@ -583,6 +584,19 @@ namespace UnitTests
 
             //Assert
             Assert.IsTrue(!result);
+        }
+
+        [TestMethod]
+        public void AddEntry_ReceivesNullException_ReturnsEmptyDescription()
+        {
+            //Arrange
+            _logRepMock.Setup(lr => lr.Insert(It.Is<LogEntry>(e => e.Description == ""))).Returns(true);
+
+            //Act
+            bool result = _Log.AddEntry(null);
+
+            //Assert
+            Assert.IsTrue(result);
         }
     }
 }

@@ -4,7 +4,7 @@ using AMS.Models;
 
 namespace AMS.Database.Repositories.Interfaces
 {
-    public interface ICommentRepository : IMysqlRepository<Comment>
+    public interface ICommentRepository : IMySqlRepository<Comment>
     {
         List<Comment> GetByAssetId(ulong assetId);
 

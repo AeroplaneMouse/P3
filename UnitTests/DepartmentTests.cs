@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Asset_Management_System.Models;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using AMS.Models;
 
 namespace UnitTests
 {

@@ -1,0 +1,77 @@
+﻿<Page x:Class="AMS.Views.HowToUse"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:AMS.Views"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="HowToUse">
+
+    <Grid>
+        <!-- Header -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Style="{StaticResource TitleStyle}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Left"
+                   Margin="10, 11, 0, 11"
+                   Text="How To Use" 
+                   Grid.Row="0"/>
+        <Rectangle Style="{StaticResource HorizontalSeparator}"
+                   VerticalAlignment="Bottom" Grid.Row="1" />
+        <ScrollViewer Grid.Row="2" Margin="10" HorizontalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="600"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock FontWeight="DemiBold" FontSize="{StaticResource FontSizeSmall}">
+                        How to search for an asset
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource ParagraphStyle}" TextWrapping="Wrap">
+                        In order to find a specific asset, go to the asset page by clicking on “Asset” on the left side menu. 
+                        Here you can search for an asset by entering a keyword in the search bar.<LineBreak/>
+                        <LineBreak/>
+                        By typing # followed by the name of a tag, you can search for assets with that tag attached. 
+                        You can do this multiple times. The tags added to the search will be shown below the search bar. 
+                        Click on them to delete them from the search. Press backspace or escape to exit tag mode. <LineBreak/>
+                        <LineBreak/>
+                        The list of assets will update continuously as you search. 
+                        The contents of this list is dependent on which department is selected. 
+                        See below on how to change department. <LineBreak/>
+                    </TextBlock>
+                
+                    <TextBlock FontWeight="DemiBold" FontSize="{StaticResource FontSizeSmall}">
+                        How to change departments
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource ParagraphStyle}" TextWrapping="Wrap">
+                        Different departments have different assets and tags associated with them. 
+                        The selected department can be seen in the top right corner of the application. 
+                        To change department click on the currently selected department, 
+                        and choose a different department from the drop down menu. <LineBreak/>
+                        <LineBreak/>
+                        The option “All Departments” shows all assets and tags in the system.
+                        <LineBreak/>
+                    </TextBlock>
+
+                    <TextBlock FontWeight="DemiBold" FontSize="{StaticResource FontSizeSmall}">
+                        How to comment on an asset
+                    </TextBlock>
+                    <TextBlock Style="{StaticResource ParagraphStyle}" TextWrapping="Wrap">
+                        To comment on an asset, go to that asset’s page through the asset list page 
+                        by clicking on “Asset” on the left side menu. Here you can search for the asset. 
+                        Double click it or press the eye icon to go to the page for the chosen asset. 
+                        From here go to the “Comment” tab, type in your comment and press the “Send” button or 
+                        “Ctrl + Enter” on the keyboard. It is possible to make line breaks by pressing the enter key.
+                        <LineBreak/>
+                    </TextBlock>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</Page>

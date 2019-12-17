@@ -155,7 +155,7 @@
                                     <KeyBinding Key="Tab" Command="{Binding InsertNextOrSelectedSuggestionCommand}"/>
                                     <KeyBinding Key="Tab" Modifiers="Shift" Command="{Binding InsertPreviousCommand}"/>
                                     <KeyBinding Key="Down" Command="{Binding EnterSuggestionListCommand}" CommandParameter="{Binding ElementName=TagSuggestionList}"/>
-                                    <KeyBinding Key="Backspace" Command="{Binding BackspaceCommand}" CommandParameter="{Binding ElementName=SearchElement, Path=.}"/>
+                                    <KeyBinding Key="Back" Command="{Binding BackspaceCommand}" CommandParameter="{Binding ElementName=SearchElement, Path=.}"/>
                                 </TextBox.InputBindings>
                             </TextBox>
 
@@ -165,7 +165,7 @@
                                    IsOpen="{Binding TagSuggestionIsOpen}"
                                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                    ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                   StaysOpen="False"
+                                   StaysOpen="True"
                                    MaxHeight="200"
                                    AllowsTransparency="True"
                                    Width="{Binding ElementName=SearchElement, Path=ActualWidth}"

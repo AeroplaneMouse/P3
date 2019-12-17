@@ -16,9 +16,12 @@
     <BitmapImage x:Key="Edit_Gray" UriSource="/Resources/Images/Logos/Edit/edit_gray.png"/>
     <BitmapImage x:Key="Edit_Black" UriSource="/Resources/Images/Logos/Edit/edit_black.png"/>
 
-    <!-- Edit -->
+    <!-- View -->
     <BitmapImage x:Key="View_Gray" UriSource="/Resources/Images/Logos/View/view_gray.png"/>
     <BitmapImage x:Key="View_Black" UriSource="/Resources/Images/Logos/View/view_black.png"/>
     <BitmapImage x:Key="View_White" UriSource="/Resources/Images/Logos/View/view_white.png"/>
     
+    <!-- Maximize -->
+    <BitmapImage x:Key="Maximize_White" UriSource="/Resources/Images/Logos/maximizeButton.png"/>
+
 </ResourceDictionary>

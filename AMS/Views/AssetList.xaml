@@ -48,7 +48,7 @@
             <TextBlock Text="{Binding CurrentDepartment}"
                        FontSize="{StaticResource FontSizeRegular}"
                        VerticalAlignment="Center"
-                       Foreground="{StaticResource GrayForLessImportantElementsBrush}"/>
+                       Foreground="Gray"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10" Grid.Row="0">
@@ -114,7 +114,7 @@
                                     <KeyBinding Key="Tab" Command="{Binding InsertNextOrSelectedSuggestionCommand}"/>
                                     <KeyBinding Key="Tab" Modifiers="Shift" Command="{Binding InsertPreviousCommand}"/>
                                     <KeyBinding Key="Down" Command="{Binding EnterSuggestionListCommand}" CommandParameter="{Binding ElementName=TagSuggestionList}"/>
-                                    <KeyBinding Key="Backspace" Command="{Binding BackspaceCommand}" CommandParameter="{Binding ElementName=StartElement, Path=.}"/>
+                                    <KeyBinding Key="Back" Command="{Binding BackspaceCommand}" CommandParameter="{Binding ElementName=StartElement, Path=.}"/>
                                 </TextBox.InputBindings>
                             </TextBox>
                                 

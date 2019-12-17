@@ -1,15 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>AMS</RootNamespace>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon />
+    <ApplicationIcon>logo-ams_large.ico</ApplicationIcon>
     <StartupObject />
+    <Win32Resource />
+    <Authors>AAU - DS303E19</Authors>
+    <Company>AAU - DS303E19</Company>
+    <Product>Asset Management System</Product>
+    <Copyright>AAU 2019</Copyright>
+    <RepositoryUrl>https://github.com/tlorentzen/P3</RepositoryUrl>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Images\Logos\maximizeButton.png" />
     <None Remove="Resources\Images\Logos\View\view_black.png" />
     <None Remove="Resources\Images\Logos\View\view_gray.png" />
     <None Remove="Resources\Images\Logos\View\view_white.png" />
@@ -32,6 +44,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Resource Include="Resources\Images\Logos\maximizeButton.png" />
     <Resource Include="Resources\Images\Logos\placeholder-beaut.png" />
     <Resource Include="Resources\Images\Logos\logo-light.png" />
     <Resource Include="Resources\Images\Logos\logo-dark.png" />

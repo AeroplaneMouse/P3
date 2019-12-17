@@ -3,15 +3,15 @@ using System.Windows.Input;
 
 namespace AMS.ViewModels.Base
 {
+    // Command heavily inspired by the RelayCommand found in AngelSix's fasseto-word repository: https://github.com/angelsix/fasetto-word
     internal class RelayCommand : ICommand
     {
         // The action to run
         private readonly Action _action;
+
+        // The function that checks if the action should run
         private readonly Func<bool> _func;
 
-        /// <summary>
-        /// The event that is fired when the <see cref="CanExecute(object)"/> value has changed
-        /// </summary>
         public event EventHandler CanExecuteChanged = (sender, e) => { };
 
         public RelayCommand(Action action, Func<bool> func = null)
@@ -21,7 +21,7 @@ namespace AMS.ViewModels.Base
         }
 
         /// <summary>
-        /// A relay command can always execute
+        /// Checks whether the action can execute, based on the func passed to the command
         /// </summary>
         /// <param name="parameter"></param>
         /// <returns></returns>
@@ -42,26 +42,20 @@ namespace AMS.ViewModels.Base
             _action();
         }
     }
-    
+
+    // Command heavily inspired by the RelayCommand found in AngelSix's fasseto-word repository: https://github.com/angelsix/fasetto-word
     public class RelayCommand<T> : ICommand
     {
-        private readonly Action<T> _execute;
-        private readonly Predicate<T> _canExecute;
+        private readonly Action<T> _action;
 
-        /// <summary>
-        /// Creates a new command.
-        /// </summary>
-        /// <param name="execute">The execution logic.</param>
-        /// <param name="canExecute">The execution status logic.</param>
-        public RelayCommand(Action<T> execute, Predicate<T> canExecute = null)
+        public RelayCommand(Action<T> action)
         {
-            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            _canExecute = canExecute;
+            _action = action ?? throw new ArgumentNullException(nameof(action));
         }
 
         public bool CanExecute(object parameter)
         {
-            return _canExecute?.Invoke((T) parameter) ?? true;
+            return true;
         }
         
         public event EventHandler CanExecuteChanged
@@ -72,7 +66,7 @@ namespace AMS.ViewModels.Base
         
         public void Execute(object parameter)
         {
-            _execute((T) parameter);
+            _action((T) parameter);
         }
     }
 }

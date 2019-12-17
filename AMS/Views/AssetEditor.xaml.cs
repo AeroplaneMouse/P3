@@ -5,6 +5,8 @@ using System.Windows.Controls;
 using AMS.Database.Repositories.Interfaces;
 using AMS.Controllers.Interfaces;
 using AMS.Helpers;
+using System.Windows;
+using System;
 
 namespace AMS.Views
 {
@@ -14,6 +16,19 @@ namespace AMS.Views
         {
             InitializeComponent();
             DataContext = new AssetEditorViewModel(assetController, tagHelper);
+            SearchElement.GotFocus += tagInputBoxFocus;
+            SearchElement.LostFocus += tagInputBoxFocusLost;
+        }
+
+        private void tagInputBoxFocusLost(object sender, RoutedEventArgs e)
+        {
+            TagSuggestionPopup.IsOpen = false;
+        }
+
+        private void tagInputBoxFocus(object sender, RoutedEventArgs e)
+        {
+            ((AssetEditorViewModel)DataContext).TagSearch();
+            TagSuggestionPopup.IsOpen = true;
         }
     }
 }

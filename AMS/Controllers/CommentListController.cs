@@ -31,7 +31,9 @@ namespace AMS.Controllers
         private Session _session { get; set; }
         private Asset _asset { get; set; }
         private ICommentRepository _commentRep { get; set; }
-        private Department _department;
+        private Department _department { get; set; }
+
+        private Dictionary<ulong, string> _oldCommentContent { get; set; }
 
         public CommentListController(Session session, ICommentRepository commentRepository, Department department, Asset asset)
         {
@@ -39,6 +41,8 @@ namespace AMS.Controllers
             _commentRep = commentRepository;
             _department = department;
             _asset = asset;
+
+            _oldCommentContent = new Dictionary<ulong, string>();
 
             FetchComments();
         }
@@ -58,7 +62,7 @@ namespace AMS.Controllers
                 // Creates a new comment based on the information available
                 Comment newComment = new Comment 
                 {
-                    Username = _session.Username,
+                    Username = Session.GetUsername(),
                     Content = contentInput,
                     AssetID = _asset.ID
                 };
@@ -90,8 +94,57 @@ namespace AMS.Controllers
             FetchComments();
         }
 
+        /// <summary>
+        /// Changes the input comments editing status
+        /// </summary>
+        /// <param name="comment"></param>
+        public void EditComment(Comment comment)
+        {
+            if (comment != null)
+            {
+                // If the comment is not being edited, save its content to the dict
+                if (!comment.IsEditing)
+                {
+                    _oldCommentContent.Add(comment.ID, comment.Content);
+                }
+
+                // Else, fetch the content from the dict, and remove that comment from the dict
+                else
+                {
+                    comment.Content = _oldCommentContent[comment.ID];
+                    _oldCommentContent.Remove(comment.ID);
+
+                    Features.AddNotification(new Notification("Changes cancelled", Notification.INFO));
+                }
+
+                // Change the comment's editing status to the opposite
+                comment.IsEditing ^= true;
+            }
+        }
+
+        /// <summary>
+        /// Updates the comment's content in the database
+        /// </summary>
+        /// <param name="comment"></param>
+        public void UpdateComment(Comment comment)
+        {
+            if (comment != null)
+            {
+                comment.IsEditing = false;
+                _commentRep.Update(comment);
+
+                _oldCommentContent.Remove(comment.ID);
+
+                Features.AddNotification(new Notification("Changes saved", Notification.APPROVE));
+            }
+        }
+
+        /// <summary>
+        /// Fetches all comments from within the current department
+        /// </summary>
         public void FetchComments()
         {
+            _department = Features.GetCurrentDepartment();
             CommentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetLatestComments(_department.ID);
         }
     }

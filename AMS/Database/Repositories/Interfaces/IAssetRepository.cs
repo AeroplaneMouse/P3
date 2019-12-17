@@ -6,7 +6,7 @@ using AMS.Models;
 
 namespace AMS.Database.Repositories.Interfaces
 {
-    public interface IAssetRepository : IMysqlRepository<Asset>, ISearchableRepository<Asset>
+    public interface IAssetRepository : IMySqlRepository<Asset>, ISearchableRepository<Asset>
     {
         ulong GetCount();
 

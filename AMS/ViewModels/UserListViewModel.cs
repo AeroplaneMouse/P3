@@ -14,19 +14,10 @@ namespace AMS.ViewModels
 {
     public class UserListViewModel : Base.BaseViewModel
     {
-        #region Public Properties
-
         public string Title { get; set; }
 
-        public ObservableCollection<UserWithStatus> ShownUsersList
-        {
-            get => new ObservableCollection<UserWithStatus>(_userListController.UserList);
-        }
-
-        public ObservableCollection<Department> DepartmentList
-        {
-            get => new ObservableCollection<Department>(_userListController.DepartmentList);
-        }
+        public ObservableCollection<UserWithStatus> ShownUsersList => new ObservableCollection<UserWithStatus>(_userListController.UserList);
+        public ObservableCollection<Department> DepartmentList => new ObservableCollection<Department>(_userListController.DepartmentList);
 
         // Checkboxes
         public bool IsShowingAdded
@@ -69,25 +60,13 @@ namespace AMS.ViewModels
             }
         }
 
-        #endregion
-
-        #region Private Properties
-
         private IUserListController _userListController { get; set; }
-
-        #endregion
-
-        #region Commands
 
         public ICommand CancelCommand { get; set; }
         public ICommand ApplyCommand { get; set; }
         public ICommand KeepUserCommand { get; set; }
         public ICommand ImportUsersCommand { get; set; }
         public ICommand ChangeStatusCommand { get; set; }
-
-        #endregion
-
-        #region Constructor
 
         public UserListViewModel(IUserListController userListController)
         {
@@ -105,10 +84,6 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(ShownUsersList));
         }
 
-        #endregion
-
-        #region Public Methods
-
         public override void UpdateOnFocus()
         {
             OnPropertyChanged(nameof(ShownUsersList));
@@ -119,22 +94,30 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(IsShowingRemoved));
         }
 
-        #endregion
-
-        #region Private Methods
-
+        /// <summary>
+        /// Changes the status of the input user
+        /// </summary>
+        /// <param name="user"></param>
         private void ChangeStatus(object user)
         {
             _userListController.ChangeStatusOfUser(user);
             OnPropertyChanged(nameof(ShownUsersList));
         }
 
+        /// <summary>
+        /// Imports users from a file
+        /// </summary>
         private void Import()
         {
             _userListController.GetUsersFromFile();
             OnPropertyChanged(nameof(ShownUsersList));
         }
 
+        /// <summary>
+        /// Cancels all changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Cancel(object sender, PromptEventArgs e)
         {
             if (e.Result)
@@ -147,6 +130,11 @@ namespace AMS.ViewModels
             }
         }
 
+        /// <summary>
+        /// Applies the changes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Apply(object sender, PromptEventArgs e)
         {
             if (e.Result)
@@ -161,12 +149,14 @@ namespace AMS.ViewModels
             }
         }
 
+        /// <summary>
+        /// Keeps the selected user in an import conflict
+        /// </summary>
+        /// <param name="user"></param>
         private void KeepUser(object user)
         {
             _userListController.KeepUser(user);
             OnPropertyChanged(nameof(ShownUsersList));
         }
-
-        #endregion
     }
 }

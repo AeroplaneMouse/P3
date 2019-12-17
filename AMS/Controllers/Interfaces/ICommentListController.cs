@@ -10,7 +10,11 @@ namespace AMS.Controllers.Interfaces
 
         ulong AddNewComment(string contentInput);
 
-        void RemoveComment(Comment comment); 
+        void RemoveComment(Comment comment);
+
+        void EditComment(Comment comment);
+
+        void UpdateComment(Comment comment);
 
         void FetchComments();
     }

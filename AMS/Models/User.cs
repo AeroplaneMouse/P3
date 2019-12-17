@@ -1,9 +1,6 @@
-﻿using AMS.Database.Repositories;
-using AMS.Database.Repositories.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using AMS.Interfaces;
 using System.Windows.Media;
 using AMS.ViewModels;
@@ -12,6 +9,8 @@ namespace AMS.Models
 {
     public class User : Model, ITagable
     {
+        private string _color;
+        
         public string Name => Username;
         public string Username { get; set; }
         public bool IsAdmin { get; set; }
@@ -19,8 +18,6 @@ namespace AMS.Models
         public string Description { get; set; }
         public bool IsEnabled { get; set; }
         public string Domain { get; set; }
-
-        private string _color;
 
         private List<Department> _departmentList { get; set; }
 
@@ -62,7 +59,7 @@ namespace AMS.Models
         public List<ITagable> Children { get; set; }
         public string TagColor
         {
-            get { return _color ??= Features.TagRepository.GetById(1).TagColor; }
+            get => _color ??= Features.TagRepository.GetById(1).TagColor;
             set => _color = value;
         }
 
@@ -71,7 +68,9 @@ namespace AMS.Models
         #endregion
 
         /* Constructor used by DB */
-        private User(ulong id, string username, string domain, string description, bool is_enabled, ulong defaultDepartment, bool is_admin, string fullTagLabel, DateTime createdAt, DateTime updated_at)
+        private User(ulong id, string username, string domain, 
+                     string description, bool is_enabled, ulong defaultDepartment, 
+                     bool is_admin, string fullTagLabel, DateTime createdAt, DateTime updated_at)
         {
             ID = id;
             Username = username;

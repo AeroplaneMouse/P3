@@ -22,7 +22,7 @@
         <!-- Makes the content of the button a textblock. Should be icon! -->
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}" x:Name="TestSaasd">
+                <ControlTemplate TargetType="{x:Type Button}">
                     <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
                         <TextBlock VerticalAlignment="Center" 
                                    HorizontalAlignment="Center" 
@@ -43,6 +43,35 @@
         </Style.Triggers>
     </Style>
     
+    <!-- Window maximize button -->
+    <Style TargetType="{x:Type Button}" x:Key="WindowMaximizeButton">
+        
+        <!-- So it can be clicked -->
+        <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="0 0 0 3" />
+        <Setter Property="Width" Value="50"/>
+        <Setter Property="Foreground" Value="{StaticResource BackgroundDarkBrush}" />
+        <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                        <ContentPresenter ContentSource="{TemplateBinding Content}" Width="18" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+
+        <!-- Adds the hover effect -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <!-- Window control close button needs to be red -->
     <Style TargetType="{x:Type Button}" x:Key="WindowCloseButton" BasedOn="{StaticResource WindowControlButton}">
         <Style.Triggers>

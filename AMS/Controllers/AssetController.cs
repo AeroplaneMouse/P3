@@ -136,17 +136,6 @@ namespace AMS.Controllers
         }
 
         /// <summary>
-        /// Detaches an ITagable and its fields from the controlled asset.
-        /// </summary>
-        /// <param name="tag">The ITagable that should be detached</param>
-        public void DetachTags(ITagable tag)
-        {
-            List<ITagable> tagList = new List<ITagable>();
-            tagList.Add(tag);
-            DetachTags(tagList);
-        }
-
-        /// <summary>
         /// Detaches a list of ITagable and their field from the controlled asset.
         /// </summary>
         /// <param name="tags">The list of ITagble that should be detached</param>
@@ -166,7 +155,7 @@ namespace AMS.Controllers
                         if(currentTag.FieldList.Count == 0)
                             currentTag.DeSerializeFields();
 
-                        // Remove relations to the tag from the fields and handle wether or not the field itself should be removed.
+                        // Remove relations to the tag from the fields and handle whether or not the field itself should be removed.
                         RemoveTagRelationsOnFields(currentTag);
                     }
                 }
@@ -278,7 +267,7 @@ namespace AMS.Controllers
             {
                 // Date fields
                 if (field.Type == Field.FieldType.Date && string.Equals(field.Content, "Current Date"))
-                    field.Content = DateTime.Now.ToString(CultureInfo.InvariantCulture);
+                    field.Content = DateTime.Today.ToString(CultureInfo.InvariantCulture).Split(' ')[0];
 
                 // Checkbox fields
                 if (field.Type == Field.FieldType.Checkbox && string.IsNullOrEmpty(field.Content))

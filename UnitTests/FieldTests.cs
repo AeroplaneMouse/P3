@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Asset_Management_System.Models;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using AMS.Models;
 
 namespace UnitTests
 {
@@ -17,7 +17,7 @@ namespace UnitTests
             //int fieldType = 1;
 
 
-            Field field = new Field(name, content, Field.FieldType.Textarea, defaultValue);
+            Field field = new Field(name, content, Field.FieldType.Textarea );
             string expected = "Content";
 
             //Act
@@ -35,7 +35,7 @@ namespace UnitTests
             int fieldType = 1;
 
 
-            Field field = new Field(name, content, Field.FieldType.Textarea, defaultValue);
+            Field field = new Field(name, content, Field.FieldType.Textarea);
             string expected = "New content";
 
             //Act
@@ -50,7 +50,7 @@ namespace UnitTests
         public void GetHashCode_ReturnsCorrectChecksumForField()
         {
             //Arrange
-            Field field = new Field("Field", "Some content", Field.FieldType.TextBox, "Default");
+            Field field = new Field("Field", "Some content", Field.FieldType.TextBox);
             string expected = "E3020BEA2EBE803400AACF38FEBCA1AB".ToUpper();
 
             //Act
@@ -64,8 +64,8 @@ namespace UnitTests
         public void Equals_ReceivesAnEqualField_ReturnsTrue()
         {
             //Arrange
-            Field field = new Field("Field", "Some content", Field.FieldType.TextBox, "Default");
-            Field otherField = new Field("Field", "Some content", Field.FieldType.TextBox, "Default");
+            Field field = new Field("Field", "Some content", Field.FieldType.TextBox);
+            Field otherField = new Field("Field", "Some content", Field.FieldType.TextBox);
 
             //Act
             bool result = field.Equals(otherField);
@@ -78,7 +78,7 @@ namespace UnitTests
         public void Equals_ReceivesAnAsset_ReturnsFalse()
         {
             //Arrange
-            Field field = new Field("Field", "Some content", Field.FieldType.TextBox, "Default");
+            Field field = new Field("Field", "Some content", Field.FieldType.TextBox);
             Asset asset = new Asset();
 
             //Act
@@ -92,8 +92,8 @@ namespace UnitTests
         public void Equals_ReceivesADifferentField_ReturnsFalse()
         {
             //Arrange
-            Field field = new Field("Field", "Some content", Field.FieldType.TextBox, "Default");
-            Field otherField = new Field("Different field", "Some different content", Field.FieldType.TextBox, "Different default");
+            Field field = new Field("Field", "Some content", Field.FieldType.TextBox);
+            Field otherField = new Field("Different field", "Some different content", Field.FieldType.TextBox);
 
             //Act
             bool result = field.Equals(otherField);

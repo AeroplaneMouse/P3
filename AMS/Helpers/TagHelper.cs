@@ -35,26 +35,20 @@ namespace AMS.Helpers
             SetParent();
         }
 
+        /// <summary>
+        /// Reloads the tag and user lists
+        /// </summary>
         public void Reload()
         {
             _tags = _tagRepository.GetAll().ToList();
             _users = _userRepository.GetAll().ToList();
-            /*
-            foreach(Tag tag in _tags)
-            {
-                if (tag.ParentId != 0)
-                    tag.FullTagLabel = GetTagParent(tag)?.TagLabel + ":" + tag.TagLabel;
-                else
-                    tag.FullTagLabel = tag.TagLabel;
-            }
-
-            foreach (User user in _users)
-            {
-                user.FullTagLabel = GetTagParent(user).TagLabel + ":" + user.TagLabel;
-            }
-            */
         }
 
+        /// <summary>
+        /// Finds and returns the ITagables that match the search query
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns>List of suggestions for the search query</returns>
         public List<ITagable> Suggest(string input)
         {
             List<ITagable> result = new List<ITagable>();
@@ -91,11 +85,20 @@ namespace AMS.Helpers
             return result;
         }
 
+        /// <summary>
+        /// Returns whether there are any suggestions for the search query
+        /// </summary>
+        /// <returns></returns>
         public bool HasSuggestions()
         {
             return _hasSuggestions;
         }
 
+        /// <summary>
+        /// Adds a tag to the AppliedTags list, and the list of effected Tags.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         public List<ITagable> AddTag(ITagable tag)
         {
             EffectedTags.Clear();
@@ -121,6 +124,11 @@ namespace AMS.Helpers
             return EffectedTags;
         }
 
+        /// <summary>
+        /// Removes a tag from the AppliedTags list, and returns the list of effected Tags.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         public List<ITagable> RemoveTag(ITagable tag)
         {
             EffectedTags.Clear();
@@ -130,6 +138,11 @@ namespace AMS.Helpers
             return EffectedTags;
         }
 
+        /// <summary>
+        /// Finds and returns the parentTag of the given ITagable
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns>Parent tag of given ITagble</returns>
         private Tag GetTagParent(ITagable tag)
         {
             if (tag.TagType == typeof(Tag))
@@ -145,6 +158,13 @@ namespace AMS.Helpers
             return tag.TagType == typeof(User) ? _tags.Single(u => u.ID == 1) : null;
         }
 
+        /// <summary>
+        /// Determines if the parentTag of the given ITagable should be applied.
+        /// If so adds the parentTag to the AppliedTags list
+        /// and the EffectedTags list.
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns>Whether the parentTag was applied</returns>
         private bool ApplyParentIfNeeded(ITagable tag)
         {
             if (CanApplyParentTags || (tag.ParentId == 0 && tag.NumberOfChildren > 0))
@@ -160,6 +180,13 @@ namespace AMS.Helpers
             return true;
         }
 
+        /// <summary>
+        /// Determines if the parentTag should be removed.
+        /// If so removes it from the AppliedTags list,
+        /// and adds it the EffectedTags list
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         private bool RemoveParentIfNeeded(ITagable tag)
         {
             if (CanApplyParentTags || tag.ParentId == 0)
@@ -205,6 +232,11 @@ namespace AMS.Helpers
             return false;
         }
 
+        /// <summary>
+        /// Determines and returns if the AppliedTags list contain all the child Tags of the given ITagable
+        /// </summary>
+        /// <param name="tag"></param>
+        /// <returns></returns>
         private bool ContainsAllChildrenOfParent(ITagable tag)
         {
             if (tag.ParentId > 0)
@@ -216,6 +248,10 @@ namespace AMS.Helpers
             return AppliedTags.Count(t => t.ParentId == tag.TagId) == tag.NumberOfChildren;
         }
 
+        /// <summary>
+        /// Determines and returns if all the children of the current parentTag are in the AppliedTags list
+        /// </summary>
+        /// <returns></returns>
         public bool AllChildrenOfCurrentParentAttached()
         {
             if (IsParentSet())
@@ -224,6 +260,10 @@ namespace AMS.Helpers
             return false;
         }
         
+        /// <summary>
+        /// Determines and returns if all the children of the current parentTag are in the AppliedTags list
+        /// </summary>
+        /// <returns></returns>
         public bool ContainsAllChildrenFromCurrentParent()
         {
             if (IsParentSet())
@@ -232,6 +272,12 @@ namespace AMS.Helpers
             return true;
         }
 
+        /// <summary>
+        /// Returns the AppliedTags list.
+        /// If parameter includeParents is true, also adds the Tags with child Tags to the list.
+        /// </summary>
+        /// <param name="includeParents"></param>
+        /// <returns></returns>
         public ObservableCollection<ITagable> GetAppliedTags(bool includeParents=false)
         {
             if (includeParents)
@@ -240,18 +286,37 @@ namespace AMS.Helpers
             return new ObservableCollection<ITagable>(AppliedTags.Where(t => t.ParentId > 0 || (t.ParentId == 0 && t.NumberOfChildren == 0 && (t.TagId != 1 && t.TagType == typeof(Tag)))));
         }
         
+        /// <summary>
+        /// Assigns the given list of ITagable to the AppliedTags list
+        /// </summary>
+        /// <param name="tags"></param>
         public void SetAppliedTags(ObservableCollection<ITagable> tags)
         {
             AppliedTags = tags;
         }
         
+        /// <summary>
+        /// Returns a list of the ID's of the ITagables in the AppliedTags list
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public List<ulong> GetAppliedTagIds(Type type)
         {
             return AppliedTags.Where(t => t.TagType == type).Select(t => t.TagId).ToList();
         }
 
+        /// <summary>
+        /// Returns the currently set ParentTag
+        /// </summary>
+        /// <returns></returns>
         public Tag GetParent() => _parent;
         
+        /// <summary>
+        /// Assigns the given Tag to the current parentTag.
+        /// If a tag is given adds all children of this tag to the SuggestedTags list.
+        /// If no tag is given, adds all the tags with no parentTag to the SuggestedTags list.
+        /// </summary>
+        /// <param name="tag"></param>
         public void SetParent(Tag tag=null)
         {
             SuggestedTags.Clear();
@@ -259,6 +324,10 @@ namespace AMS.Helpers
             _parent = tag;
         }
         
+        /// <summary>
+        /// Returns whether the current parentTag is set.
+        /// </summary>
+        /// <returns></returns>
         public bool IsParentSet() => _parent != null;
     }
 }

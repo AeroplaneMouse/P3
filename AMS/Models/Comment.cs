@@ -12,19 +12,21 @@ namespace AMS.Models
         public string Username { get; set; }
         public string AssetName { get; set; }
 
+        public bool IsEditing { get; set; }
+
         public string Content 
         {
             get 
             {
-                return this._content;
+                return _content;
             }
             set 
             {
                 if (TrackChanges)
                 {
-                    this.Changes["Content"] = this.Content;
+                    Changes["Content"] = Content;
                 }
-                this._content = value;
+                _content = value;
             }
         }
 
@@ -44,6 +46,7 @@ namespace AMS.Models
             base.CreatedAt = createdAt;
             base.UpdatedAt = updatedAt;
             TrackChanges = true;
+            IsEditing = false;
         }
     }
 }

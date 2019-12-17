@@ -109,6 +109,7 @@ namespace AMS.ViewModels
         public ICommand RemoveNotificationCommand { get; private set; }
         public ICommand ReloadCommand { get; private set; }
         public ICommand ShowShortcutsCommand { get; private set; }
+        public ICommand ShowHowToUseCommand { get; private set; }
 
         // Settings command
         public ICommand ChangeSettingsCommand { get; private set; }
@@ -166,7 +167,7 @@ namespace AMS.ViewModels
             CurrentDepartmentVisibility = Visibility.Visible;
             CurrentSession = session;
             CurrentDatabase = new MySqlHandler().GetDatabaseName();
-            CurrentUser = CurrentSession.Username;
+            CurrentUser = Session.GetUsername();
             OnPropertyChanged(nameof(CurrentUser));
 
             // Show settings menu
@@ -230,6 +231,7 @@ namespace AMS.ViewModels
         {
             RemoveNotificationCommand = new Base.RelayCommand<object>((parameter) => RemoveNotification(parameter as Notification));
             ShowShortcutsCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.ShortcutsList()));
+            ShowHowToUseCommand = new Base.RelayCommand(() => Features.Navigate.To(Features.Create.HowToUse()));
 
             // Change page commands
             ShowHomePageCommand = new Base.RelayCommand(() => GoToPage(0));
@@ -287,6 +289,10 @@ namespace AMS.ViewModels
             }));
         }
 
+        /// <summary>
+        /// Simple way to navigate to one of the five primary pages
+        /// </summary>
+        /// <param name="pageNumber"></param>
         private void GoToPage(int pageNumber)
         {
             SelectedNavigationItem = pageNumber;

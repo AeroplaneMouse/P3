@@ -7,18 +7,16 @@ namespace AMS.Models
     {
         private string _name;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public string Name {
-            get {
-                return this._name;
-            }
-            set {
+        public string Name 
+        {
+            get => _name;
+            set 
+            {
                 if (TrackChanges)
                 {
-                    this.Changes["Name"] = this.Name;
+                    Changes["Name"] = Name;
                 }
-                this._name = value;
+                _name = value;
             }
         }
 

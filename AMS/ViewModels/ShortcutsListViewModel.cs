@@ -34,7 +34,7 @@ namespace AMS.ViewModels
             ShortcutsList["Edit item"].Add("Esc / Ctrl + Q", "Cancel / Go back");
 
             ShortcutsList.Add("Asset inspection", new Dictionary<string, string>());
-            ShortcutsList["Asset inspection"].Add("Ctrl + Enter", "Save new comment");
+            ShortcutsList["Asset inspection"].Add("Ctrl + Enter / Ctrl + S", "Save new comment");
 
             OnPropertyChanged(nameof(ShortcutsList));
         }

@@ -13,25 +13,24 @@ namespace AMS.IO
 {
     public class UserImporter : IUserImporter
     {
-        #region Private Properties
-
         private IUserRepository _userRep { get; set; }
-
-        #endregion
-
-        #region Constructor
 
         public UserImporter(IUserRepository repository) => _userRep = repository;
 
-        #endregion
-
-        #region Public Methods
-
+        /// <summary>
+        /// Imports all users from the database, and converts them to <see cref="UserWithStatus"/>
+        /// </summary>
+        /// <returns>A list of existing users</returns>
         public List<UserWithStatus> ImportUsersFromDatabase()
         {
             return (_userRep.GetAll(true) ?? new List<UserWithStatus>()).Select(u => new UserWithStatus(u)).ToList();
         }
 
+        /// <summary>
+        /// Imports users from a given file, and converts them to <see cref="UserWithStatus"/>
+        /// </summary>
+        /// <param name="filePath"></param>
+        /// <returns>A list of imported users</returns>
         public List<UserWithStatus> ImportUsersFromFile(string filePath)
         {
             var session = new Session(_userRep);
@@ -50,7 +49,7 @@ namespace AMS.IO
                     User u = new User();
 
                     u.Username = p[0];
-                    u.Domain = session.Domain;
+                    u.Domain = Session.GetDomain();
                     u.IsEnabled = true;
                     u.IsAdmin = false;
                     u.Description = p[2] ?? String.Empty;
@@ -67,7 +66,10 @@ namespace AMS.IO
             }
         }
         
-
+        /// <summary>
+        /// Prompts the user for a file, from which users will be imported
+        /// </summary>
+        /// <returns></returns>
         public string GetUsersFilePath()
         {
             var dialog = new Microsoft.Win32.OpenFileDialog();
@@ -79,10 +81,6 @@ namespace AMS.IO
 
             return dialog.FileName;
         }
-
-        #endregion
-
-        #region Private Methods
 
         // Borrowed from https://stackoverflow.com/questions/3825390/effective-way-to-find-any-files-encoding, answer 1
         // Checks the byte order mark of the file, and return the encoding that it should be read with. 
@@ -113,7 +111,5 @@ namespace AMS.IO
             return Encoding.GetEncoding(1252);
             
         }
-
-        #endregion
     }
 }

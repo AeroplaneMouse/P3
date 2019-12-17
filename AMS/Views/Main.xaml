@@ -65,10 +65,11 @@
                                         <!-- Menu bar -->
                                         <Menu Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource MenuContainer}">
                                             <MenuItem Header="_Settings" Style="{StaticResource MenuItemButton}" Visibility="{Binding SettingsVisibility}">
-                                                <MenuItem Header="_Change" Command="{Binding ChangeSettingsCommand}"/>
-                                                <MenuItem Header="_Clear" Command="{Binding ClearSettingsCommand}"/>
+                                                <MenuItem Header="_Change setup" Command="{Binding ChangeSettingsCommand}"/>
+                                                <MenuItem Header="_Clear setup" Command="{Binding ClearSettingsCommand}"/>
                                             </MenuItem>
                                             <MenuItem Header="_Help" Style="{StaticResource MenuItemButton}">
+                                                <MenuItem Header="_How to use" Command="{Binding ShowHowToUseCommand}"/>
                                                 <MenuItem Header="_Shortcuts" Command="{Binding ShowShortcutsCommand}"/>
                                                 <MenuItem Header="_Reload" Command="{Binding ReloadCommand}"/>
                                                 <MenuItem Header="_Exit" Command="{Binding CloseCommand}"/>
@@ -95,7 +96,11 @@
 
                                             <!-- Window buttons -->
                                             <Button Content="-" Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}"/>
-                                            <Button Content="[ ]" Command="{Binding MaximizeCommand}" Style="{StaticResource WindowControlButton}"/>
+                                            <Button Command="{Binding MaximizeCommand}" Style="{StaticResource WindowMaximizeButton}">
+                                                <Button.Content>
+                                                    <Image Source="{StaticResource Maximize_White}"/>
+                                                </Button.Content>
+                                            </Button>
                                             <Button Content="X" Command="{Binding CloseCommand}" Style="{StaticResource WindowCloseButton}"/>
                                         </StackPanel>
 

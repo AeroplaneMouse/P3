@@ -4,7 +4,7 @@ using AMS.Models;
 
 namespace AMS.Database.Repositories.Interfaces
 {
-    public interface IUserRepository : IMysqlRepository<User>
+    public interface IUserRepository : IMySqlRepository<User>
     {
         User GetByIdentity(string identity);
         
