@@ -156,9 +156,25 @@ namespace AMS.Helpers
         public List<ITagable> RemoveTag(ITagable tag)
         {
             EffectedTags.Clear();
-            RemoveParentIfNeeded(tag);
-            EffectedTags.Add(tag);
-            AppliedTags.Remove(tag);
+            if (tag is User)
+            {
+                RemoveParentIfNeeded(tag);
+                AppliedTags.Remove(tag);
+                EffectedTags.Add(tag);
+            }
+            else
+            {
+                List<ITagable> currentlyAppliedTags = new List<ITagable>(AppliedTags.Where(t => t.FullTagLabel == tag.FullTagLabel));
+                foreach (ITagable appliedTag in currentlyAppliedTags)
+                {
+                    Console.WriteLine(AppliedTags.Count());
+                    Console.WriteLine(appliedTag.FullTagLabel);
+                    RemoveParentIfNeeded(appliedTag);
+                    AppliedTags.Remove(appliedTag);
+                    EffectedTags.Add(appliedTag);
+                    Console.WriteLine(AppliedTags.Count());
+                }
+            }
             return EffectedTags;
         }
 

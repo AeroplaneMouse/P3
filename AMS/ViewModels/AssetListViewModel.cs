@@ -152,6 +152,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(SearchQuery));
             OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(CurrentDepartment));
+            _tagHelper.Reload();
 
             RefreshList();
         }
@@ -191,7 +192,10 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset(Asset asset)
         {
-            Features.Main.CurrentDepartment = Features.Main.Departments.Where(d => d.ID == asset.DepartmentdId).FirstOrDefault();
+            if(asset != null)
+            {
+                Features.Main.CurrentDepartment = Features.Main.Departments.Where(d => d.ID == asset.DepartmentdId).FirstOrDefault();
+            }
             Features.Navigate.To(Features.Create.AssetEditor(asset));
             OnPropertyChanged(nameof(Items));
         }
