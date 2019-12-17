@@ -10,7 +10,7 @@ ds303e19@cs.aau.dk
 
 ## Medlemmer
 
-| Initial | Navn | Email | Telefon |
+| Initial | Navn | Email |
 | ------------- | ------------- | ------------- |
 | TGL | Thomas Gjedsted Lorentzen | tglo18@student.aau.dk |
 | NFSV | Niels Vistisen | nvisti18@student.aau.dk  |
