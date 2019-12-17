@@ -10,16 +10,17 @@ ds303e19@cs.aau.dk
 
 ## Medlemmer
 
-| Initial | Navn | Email |
-| ------------- | ------------- | ------------- |
-| TGL | Thomas Gjedsted Lorentzen | tglo18@student.aau.dk |
-| NFSV | Niels Vistisen | nvisti18@student.aau.dk  |
-| ASJ | Ane Søgaard Jørgensen | asja18@student.aau.dk |
-| JSK | Jakob Sønderby Kristensen | jkr18@student.aau.dk |
-| MVT | Michelle Volf Terpling | mterpl18@student.aau.dk |
-| AMN | Alexander Nykjær| anykja18@student.aau.dk|
-| FLY | Daniel Fly | dfly18@student.aau.dk |
+| Initial | Navn |
+| ------------- | ------------- |
+| TGL | Thomas Gjedsted Lorentzen |
+| NFSV | Niels Vistisen |
+| ASJ | Ane Søgaard Jørgensen |
+| JSK | Jakob Sønderby Kristensen |
+| MVT | Michelle Volf Terpling |
+| AMN | Alexander Nykjær |
+| FLY | Daniel Fly |
 
 ## Vejleder
 Lu Chen 
-luchen@cs.aau.dk
+
+
