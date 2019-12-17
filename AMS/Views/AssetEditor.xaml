@@ -4,12 +4,13 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:AMS.Views"
+      xmlns:viewHelpers="clr-namespace:AMS.Views.ViewHelpers"
       mc:Ignorable="d"
       Title="AssetEditor"
       FocusManager.FocusedElement="{Binding ElementName=StartElement}">
 
     <Page.Resources>
-        <local:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+        <viewHelpers:FieldDesignSelector x:Key="MyFieldDesignSelector" />
     </Page.Resources>
 
     <Page.InputBindings>

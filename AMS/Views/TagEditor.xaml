@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       xmlns:local="clr-namespace:AMS.Views"
+      xmlns:viewHelpers="clr-namespace:AMS.Views.ViewHelpers"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       ShowsNavigationUI="False"
@@ -12,7 +13,7 @@
       FocusManager.FocusedElement="{Binding ElementName=StartElement}">
 
     <Page.Resources>
-        <local:FieldDesignSelector x:Key="MyFieldDesignSelector" />
+        <viewHelpers:FieldDesignSelector x:Key="MyFieldDesignSelector" />
     </Page.Resources>
 
     <Page.InputBindings>
