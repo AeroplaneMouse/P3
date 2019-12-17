@@ -1,0 +1,9 @@
+Database connections
+--------------------
+It is possible to connect to a database on AAU´s 
+network and from home through VPN.
+
+UID:      ds303e19
+password: Cisptf8CuT4hLj4T
+Host:     192.38.49.9
+database: ds303e19
