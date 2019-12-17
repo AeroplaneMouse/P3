@@ -149,6 +149,8 @@ namespace AMS.ViewModels
             
             AddFunctionCommand = new RelayCommand(AddFunction);
             RemoveFieldCommand = new Base.RelayCommand<object>((parameter) => RemoveField(parameter));
+            
+            RemoveFunctionCommand = new Base.RelayCommand<object>((parameter) => RemoveFunction(parameter));
 
             RemoveCommand = new RelayCommand(RemoveTag);
             CancelCommand = new RelayCommand(Cancel);
