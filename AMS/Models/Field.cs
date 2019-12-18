@@ -63,11 +63,11 @@ namespace AMS.Models
         {
             // Creates unique hash
             this.HashId = CalculateMd5Hash(true);
+            
             this.Label = label;
             this.Content = content;
             Type = type;
             this.Required = required;
-            //this.Hash = CalculateMd5Hash();
             this.IsCustom = isCustom;
             this.IsHidden = false;
             this.TagIDs = new List<ulong>();
@@ -81,7 +81,6 @@ namespace AMS.Models
             Type = type;
             this.HashId = hashId;
             this.Required = required;
-            //this.Hash = CalculateMd5Hash();
             this.IsCustom = isCustom;
             this.IsHidden = isHidden;
             this.TagIDs = tagIDs;
@@ -96,7 +95,6 @@ namespace AMS.Models
             Type = type;
             this.IsCustom = isCustom;
             this.Required = required;
-            //this.Hash = CalculateMd5Hash();
             this.TagIDs = tagIDs ?? new List<ulong>();
         }
 
@@ -141,7 +139,7 @@ namespace AMS.Models
             string hashString = "";
 
             if (uniqueHash)
-                hashString += Label + Type.ToString() + DateTime.Now;
+                hashString += Label + Type.ToString() + DateTime.Now.Millisecond;
 
             else
                 hashString += Label + Type.ToString();
