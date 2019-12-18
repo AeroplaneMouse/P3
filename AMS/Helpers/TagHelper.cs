@@ -46,15 +46,6 @@ namespace AMS.Helpers
             _users = _userRepository.GetAll().ToList();
         }
 
-        private List<ITagable> GetTagListWithoutDuplicates(List<ITagable> tags)
-        {
-            List<ITagable> cleanTagList = tags.GroupBy(t => t.TagLabel)
-                            .Select(x => x.FirstOrDefault())
-                            .ToList();
-
-            return cleanTagList;
-        }
-
         /// <summary>
         /// Finds and returns the ITagables that match the search query
         /// </summary>
@@ -122,9 +113,10 @@ namespace AMS.Helpers
                 {
                     if (CanApplyParentTags)
                     {
-                        foreach(ITagable tagInAllTagsList in _tags.Where(t => t.TagLabel == tag.TagLabel))
+                        foreach(ITagable tagInAllTagsList in _tags.Where(t => t.FullTagLabel == tag.FullTagLabel))
                         {
                             AppliedTags.Add(tagInAllTagsList);
+                            EffectedTags.Add(tagInAllTagsList);
                         }
                     }
                 }
@@ -133,18 +125,18 @@ namespace AMS.Helpers
                     if (tag is User)
                     {
                         AppliedTags.Add(tag);
+                        EffectedTags.Add(tag);
                     }
                     else
                     {
-                        foreach (ITagable tagInAllTagsList in _tags.Where(t => t.TagLabel == tag.TagLabel))
+                        foreach (ITagable tagInAllTagsList in _tags.Where(t => t.FullTagLabel == tag.FullTagLabel))
                         {
                             AppliedTags.Add(tagInAllTagsList);
+                            EffectedTags.Add(tagInAllTagsList);
                         }
                     }
                     ApplyParentIfNeeded(tag);
                 }
-                
-                EffectedTags.Add(tag);
             }
             
             return EffectedTags;
@@ -210,7 +202,7 @@ namespace AMS.Helpers
                 return false;
             
             List<Tag> parents = new List<Tag>();
-            foreach (Tag tagWithParentLabel in _tags.Where(t => t.ParentId == 0 && (_parent != null ? t.TagLabel == _parent.TagLabel : true)))
+            foreach (Tag tagWithParentLabel in _tags.Where(t => t.ParentId == 0 && (_parent != null ? t.FullTagLabel == _parent.FullTagLabel : true)))
             {
                 parents.Add(tagWithParentLabel);
             }
@@ -381,5 +373,19 @@ namespace AMS.Helpers
         /// </summary>
         /// <returns></returns>
         public bool IsParentSet() => _parent != null;
+
+        /// <summary>
+        /// Returns the given list of ITagables with only a single tag with each tagLabel
+        /// </summary>
+        /// <param name="tags"></param>
+        /// <returns></returns>
+        private List<ITagable> GetTagListWithoutDuplicates(List<ITagable> tags)
+        {
+            List<ITagable> cleanTagList = tags.GroupBy(t => t.TagLabel)
+                            .Select(x => x.FirstOrDefault())
+                            .ToList();
+
+            return cleanTagList;
+        }
     }
 }
