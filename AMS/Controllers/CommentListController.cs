@@ -7,6 +7,7 @@ using AMS.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using AMS.Database.Repositories;
+using AMS.Helpers;
 using AMS.ViewModels;
 
 namespace AMS.Controllers 
@@ -31,15 +32,22 @@ namespace AMS.Controllers
         private Session _session { get; set; }
         private Asset _asset { get; set; }
         private ICommentRepository _commentRep { get; set; }
-        private Department _department { get; set; }
+
+        private Department _department
+        {
+            get { return _departmentHelper.GetCurrentDepartment(); }
+            set => _department = value;
+        }
+
+        private DepartmentHelper _departmentHelper;
 
         private Dictionary<ulong, string> _oldCommentContent { get; set; }
 
-        public CommentListController(Session session, ICommentRepository commentRepository, Department department, Asset asset)
+        public CommentListController(Session session, ICommentRepository commentRepository, DepartmentHelper departmentHelper, Asset asset)
         {
             _session = session;
             _commentRep = commentRepository;
-            _department = department;
+            _departmentHelper = departmentHelper;
             _asset = asset;
 
             _oldCommentContent = new Dictionary<ulong, string>();
@@ -52,7 +60,6 @@ namespace AMS.Controllers
         /// the comments for the chosen asset.
         /// </summary>
         /// <param name="contentInput"></param>
-        /// <param name="assetId"></param>
         /// <returns> The id of the new comment </returns>
         public ulong AddNewComment(string contentInput)
         {
@@ -83,7 +90,6 @@ namespace AMS.Controllers
         /// Removes a comment from an asset, and refreshes the list of comments
         /// </summary>
         /// <param name="comment"></param>
-        /// <param name="assetId"></param>
         public void RemoveComment(Comment comment)
         {
             if (comment != null)
@@ -144,7 +150,6 @@ namespace AMS.Controllers
         /// </summary>
         public void FetchComments()
         {
-            _department = Features.GetCurrentDepartment();
             CommentList = (_asset != null) ? _commentRep.GetByAssetId(_asset.ID) : _commentRep.GetLatestComments(_department.ID);
         }
     }

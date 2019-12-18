@@ -33,7 +33,7 @@ namespace UnitTests
             ulong id = 0;
             Tag tag = new Tag();
 
-            _tagRepMock.Setup(repository => repository.Insert(It.IsAny<Tag>(), out id)).Returns(It.IsAny<Tag>());
+            _tagRepMock.Setup(repository => repository.Insert(It.IsAny<Tag>(), out id)).Returns(tag);
 
             ITagController tagController = new TagController(tag, _tagRepMock.Object, _depRepMock.Object);
             tagController.ControlledTag = tag;
@@ -51,7 +51,7 @@ namespace UnitTests
         {
             //Arrange
             ulong id = 0;
-            _tagRepMock.Setup(p => p.Insert(It.IsAny<Tag>(), out id));
+            _tagRepMock.Setup(p => p.Insert(It.IsAny<Tag>(), out id)).Returns(_tagController.ControlledTag);
             //Act
             _tagController.Save();
 
