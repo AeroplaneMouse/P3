@@ -25,7 +25,7 @@ namespace AMS.Helpers
         private IAssetListController GetAssetListController() => new AssetListController(Features.AssetRepository, _printHelper);
 
         private ICommentListController GetCommentListController(Asset asset) => 
-            new CommentListController(Features.GetCurrentSession(), Features.CommentRepository, Features.GetCurrentDepartment(), asset);
+            new CommentListController(Features.GetCurrentSession(), Features.CommentRepository, new DepartmentHelper(), asset);
 
         private ILogListController GetLogListController(Asset asset) => new LogListController(Features.LogRepository, _printHelper, asset);
 
