@@ -100,7 +100,6 @@ namespace UnitTests
             // Act
             List<UserWithStatus> users = _userImporter.ImportUsersFromFile(filePath);
 
-            Console.WriteLine(users.Count);
             // Assert
             Assert.IsTrue(users.Count() == 2 && users.Where(p => p.Username.ToLower().Contains('å')).Count() == 1);
 
