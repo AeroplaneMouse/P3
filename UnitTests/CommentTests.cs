@@ -8,6 +8,7 @@ using AMS.Authentication;
 using Moq;
 using AMS.Database.Repositories.Interfaces;
 using System.Collections.Generic;
+using AMS.Helpers;
 using AMS.ViewModels.Base;
 
 namespace UnitTests
@@ -28,6 +29,7 @@ namespace UnitTests
         private Mock<IUserRepository> _userRepMock;
         private Mock<Session> _sessionMock;
         private Mock<Department> _departmentMock;
+        private Mock<DepartmentHelper> _depHelperMock;
 
 
         [TestInitialize]
@@ -38,9 +40,11 @@ namespace UnitTests
             _userRepMock = new Mock<IUserRepository>();
             _sessionMock = new Mock<Session>(_userRepMock.Object);
             _departmentMock = new Mock<Department>();
+            _depHelperMock = new Mock<DepartmentHelper>();
+            
             // Gives asset to avoid nullReferenceException
             Asset testAsset = new Asset();
-            _controller = new CommentListController(_sessionMock.Object, _commentRepMock.Object, _departmentMock.Object, testAsset);
+            _controller = new CommentListController(_sessionMock.Object, _commentRepMock.Object, _depHelperMock.Object, testAsset);
         }
 
         [TestMethod]
