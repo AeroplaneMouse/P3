@@ -210,7 +210,7 @@ namespace AMS.Helpers
                 return false;
             
             List<Tag> parents = new List<Tag>();
-            foreach (Tag tagWithParentLabel in _tags.Where(t => t.ParentId == 0 && t.TagLabel == _parent.TagLabel))
+            foreach (Tag tagWithParentLabel in _tags.Where(t => t.ParentId == 0 && (_parent != null ? t.TagLabel == _parent.TagLabel : true)))
             {
                 parents.Add(tagWithParentLabel);
             }
