@@ -191,7 +191,6 @@ namespace AMS.Database.Repositories
                 }
                 catch (MySqlException e)
                 {
-                    Console.WriteLine(e);
                 }
                 finally
                 {

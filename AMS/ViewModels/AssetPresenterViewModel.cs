@@ -1,6 +1,7 @@
 ﻿using AMS.Controllers.Interfaces;
 using AMS.Models;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace AMS.ViewModels
@@ -67,6 +68,7 @@ namespace AMS.ViewModels
         /// </summary>
         private void Edit ()
         {
+            Features.Main.CurrentDepartment = Features.Main.Departments.Where(d => d.ID == _assetController.ControlledAsset.DepartmentdId).FirstOrDefault();
             Features.Navigate.To(Features.Create.AssetEditor(_assetController));
         }
 

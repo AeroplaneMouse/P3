@@ -115,7 +115,7 @@ namespace UnitTests
         {
             return (Tag)Activator.CreateInstance(typeof(Tag),
                 BindingFlags.Instance | BindingFlags.NonPublic, null,
-                new object[] { rowId, rowLabel, null, null, null, null, null, null, null }, null, null);
+                new object[] { rowId, rowLabel, null, null, null, null, null, null, null,null }, null, null);
         }
     }
 }

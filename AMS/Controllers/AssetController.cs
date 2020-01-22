@@ -94,6 +94,8 @@ namespace AMS.Controllers
                     property.SetValue(ControlledAsset, ControlledAsset.Changes[property.Name].ToString());
             }
 
+            _tags = _assetRepository.GetTags(ControlledAsset).ToList();
+
             ControlledAsset.Changes = new Dictionary<string, object>();
         }
 

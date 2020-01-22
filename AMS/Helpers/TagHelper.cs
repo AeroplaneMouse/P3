@@ -6,11 +6,13 @@ using AMS.Models;
 using System.Linq;
 using AMS.Interfaces;
 using Type = System.Type;
+using AMS.ViewModels;
 
 namespace AMS.Helpers
 {
     public class TagHelper
     {
+        private Logging.Logger _logger = new Logging.Logger(Features.LogRepository);
         private Tag _parent;
         public bool CanApplyParentTags = false;
         private List<Tag> _tags;
@@ -70,7 +72,9 @@ namespace AMS.Helpers
                 {
                     if ((item.NumberOfChildren > 0 || item.TagId == 1) 
                         && (!AppliedTags.Contains(item) || !ContainsAllChildrenOfParent(item)))
+                    {
                         result.Add(item);
+                    }
                     
                     else if (item.NumberOfChildren == 0 && !AppliedTags.Contains(item))
                         result.Add(item);
@@ -109,16 +113,30 @@ namespace AMS.Helpers
                 {
                     if (CanApplyParentTags)
                     {
-                        AppliedTags.Add(tag);
+                        foreach(ITagable tagInAllTagsList in _tags.Where(t => t.FullTagLabel == tag.FullTagLabel))
+                        {
+                            AppliedTags.Add(tagInAllTagsList);
+                            EffectedTags.Add(tagInAllTagsList);
+                        }
                     }
                 }
                 else
                 {
+                    if (tag is User)
+                    {
+                        AppliedTags.Add(tag);
+                        EffectedTags.Add(tag);
+                    }
+                    else
+                    {
+                        foreach (ITagable tagInAllTagsList in _tags.Where(t => t.FullTagLabel == tag.FullTagLabel))
+                        {
+                            AppliedTags.Add(tagInAllTagsList);
+                            EffectedTags.Add(tagInAllTagsList);
+                        }
+                    }
                     ApplyParentIfNeeded(tag);
-                    AppliedTags.Add(tag);
                 }
-                
-                EffectedTags.Add(tag);
             }
             
             return EffectedTags;
@@ -132,9 +150,22 @@ namespace AMS.Helpers
         public List<ITagable> RemoveTag(ITagable tag)
         {
             EffectedTags.Clear();
-            RemoveParentIfNeeded(tag);
-            EffectedTags.Add(tag);
-            AppliedTags.Remove(tag);
+            if (tag is User)
+            {
+                RemoveParentIfNeeded(tag);
+                AppliedTags.Remove(tag);
+                EffectedTags.Add(tag);
+            }
+            else
+            {
+                List<ITagable> currentlyAppliedTags = new List<ITagable>(AppliedTags.Where(t => t.FullTagLabel == tag.FullTagLabel));
+                foreach (ITagable appliedTag in currentlyAppliedTags)
+                {
+                    RemoveParentIfNeeded(appliedTag);
+                    AppliedTags.Remove(appliedTag);
+                    EffectedTags.Add(appliedTag);
+                }
+            }
             return EffectedTags;
         }
 
@@ -170,13 +201,23 @@ namespace AMS.Helpers
             if (CanApplyParentTags || (tag.ParentId == 0 && tag.NumberOfChildren > 0))
                 return false;
             
-            var parent = GetTagParent(tag);
+            List<Tag> parents = new List<Tag>();
+            foreach (Tag tagWithParentLabel in _tags.Where(t => t.ParentId == 0 && (_parent != null ? t.FullTagLabel == _parent.FullTagLabel : true)))
+            {
+                parents.Add(tagWithParentLabel);
+            }
 
-            if (parent == null || AppliedTags.Contains(parent))
+            if (parents == null)
                 return false;
-            
-            AppliedTags.Add(parent);
-            EffectedTags.Add(parent);
+
+            foreach (Tag parentTag in parents)
+            {
+                if (!AppliedTags.Contains(parentTag))
+                {
+                    AppliedTags.Add(parentTag);
+                    EffectedTags.Add(parentTag);
+                }
+            }
             return true;
         }
 
@@ -224,7 +265,7 @@ namespace AMS.Helpers
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e);
+                        _logger.AddEntry(e);
                     }
                 }
             }
@@ -320,7 +361,10 @@ namespace AMS.Helpers
         public void SetParent(Tag tag=null)
         {
             SuggestedTags.Clear();
-            SuggestedTags.AddRange(tag != null ? _tags.Where(a => a.ParentId == tag.ID).ToList() : _tags.Where(a => a.ParentId == 0).ToList());
+            SuggestedTags.AddRange(tag != null ? _tags.Where(t => t.ParentId == tag.ID || (t.FullTagLabel.StartsWith(tag.TagLabel) && t.FullTagLabel.Contains(char.ConvertFromUtf32(0x1f852)))).ToList() : _tags.Where(t => t.ParentId == 0).ToList());
+
+            SuggestedTags = GetTagListWithoutDuplicates(SuggestedTags);
+
             _parent = tag;
         }
         
@@ -329,5 +373,19 @@ namespace AMS.Helpers
         /// </summary>
         /// <returns></returns>
         public bool IsParentSet() => _parent != null;
+
+        /// <summary>
+        /// Returns the given list of ITagables with only a single tag with each tagLabel
+        /// </summary>
+        /// <param name="tags"></param>
+        /// <returns></returns>
+        private List<ITagable> GetTagListWithoutDuplicates(List<ITagable> tags)
+        {
+            List<ITagable> cleanTagList = tags.GroupBy(t => t.TagLabel)
+                            .Select(x => x.FirstOrDefault())
+                            .ToList();
+
+            return cleanTagList;
+        }
     }
 }

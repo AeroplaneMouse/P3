@@ -3,7 +3,7 @@
   <Class Name="AMS.Authentication.Session" Collapsed="true">
     <Position X="26.5" Y="10.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAgAAAAAAQAAACAAGgAEAAAAAAAAAAAAAQA=</HashCode>
+      <HashCode>AQQAAAAAAAgAAAAAAQAAACAAGgAEAAAAAAAAAAAAAQg=</HashCode>
       <FileName>Authentication\Session.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -25,7 +25,7 @@
   <Class Name="AMS.Controllers.AssetController" Collapsed="true">
     <Position X="10.75" Y="12.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAIAAAAoggAAAAAgBJAQAAACAAAAgAAAAQAAAAAg=</HashCode>
+      <HashCode>AgQAAIAgAAIAgAIAAggAJACAAACAAAAgAAAQAAAAAgg=</HashCode>
       <FileName>Controllers\AssetController.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -41,7 +41,7 @@
   <Class Name="AMS.Controllers.CommentListController" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="24.75" Y="6.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAABAAAAACAAABAAAAAAAAAEAUgAAAAAIAACAA=</HashCode>
+      <HashCode>gAAAAAAABAAAAACAAABAQAAAAEAAEAUgAAAAAIAACAA=</HashCode>
       <FileName>Controllers\CommentListController.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -49,7 +49,7 @@
   <Class Name="AMS.Controllers.FieldListController" Collapsed="true">
     <Position X="12" Y="11.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>iAAAFAgEAAAAAAAAAAAAQAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <HashCode>gAAABAAEAAAAAAAAAAAAQAAAAAAAAAAAAAJAAAAAAAA=</HashCode>
       <FileName>Controllers\FieldListController.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -65,7 +65,7 @@
   <Class Name="AMS.Controllers.LogListController" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="33.5" Y="8.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ACAAAAAAAAAAAAkAAAAABAEAAAAAAAQAAAAAAAggAAA=</HashCode>
+      <HashCode>ACAAAAAAAAAAAAkAAAAABAEAAAAAAAQAAAAAAAogAAA=</HashCode>
       <FileName>Controllers\LogListController.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -73,7 +73,7 @@
   <Class Name="AMS.Controllers.TagController" Collapsed="true">
     <Position X="13" Y="12.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQCIIgIQAAIgAAAAAAJLAQAgAAAAQAAAhAAgUAAAAA=</HashCode>
+      <HashCode>AAQAIIgIQAAIAAAAAAAILAAAAAAAAQAAABAAAUAAAAA=</HashCode>
       <FileName>Controllers\TagController.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -81,7 +81,7 @@
   <Class Name="AMS.Controllers.TagListController" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="31.75" Y="11.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAICAAAAAAAAEAAAAABAAAAAAAAAQgAAAABAggAAA=</HashCode>
+      <HashCode>IABAIAAAAAAAAAAAAAAABAAAAAAAAAQgAAAABAgAAAA=</HashCode>
       <FileName>Controllers\TagListController.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -137,7 +137,7 @@
   <Class Name="AMS.Database.Repositories.UserRepository" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="30" Y="12.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQEAEAAAAAAAAAAAAAAgAAAAAEAAAAAAgAEAAAAAIA=</HashCode>
+      <HashCode>AAQEAEBAACAAAAAAAAAAgAAAIAEAAAAAAgAEAAAAAIA=</HashCode>
       <FileName>Database\Repositories\UserRepository.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
@@ -152,10 +152,9 @@
   <Class Name="AMS.Database.QueryGenerator" Collapsed="true" BaseTypeListCollapsed="true">
     <Position X="33.5" Y="9.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIAgAACAACAABEAwAAiAQQAAAAEAACAABIAgAAiAAAA=</HashCode>
+      <HashCode>AIAAAACAAAAABEAgAAAAQQAAAAEAACAABIAgAAiAAAA=</HashCode>
       <FileName>Database\QueryGenerator.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="AMS.Database.Statement" Collapsed="true">
     <Position X="33.5" Y="10.5" Width="1.5" />
@@ -224,7 +223,7 @@
   <Class Name="AMS.Helpers.TagHelper" Collapsed="true">
     <Position X="28.25" Y="11.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>EgCEAAAiAAAAAAVAAQAICEASAICAQIAECEAAAAQAAEA=</HashCode>
+      <HashCode>AgCFAAAiEAAACAVAAQAICEASAICAQIAECEAAAAQAAAA=</HashCode>
       <FileName>Helpers\TagHelper.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -261,14 +260,14 @@
   <Class Name="AMS.Models.Asset" Collapsed="true">
     <Position X="15.75" Y="10.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAIAAAAAAggAAEgAAAgAQAAAAAIIAAAAACQAAAAAA=</HashCode>
+      <HashCode>AAAAMAAAAAAgAAAEgAAAgAQAAAAAIIAAAAAAQAAAAgA=</HashCode>
       <FileName>Models\Asset.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AMS.Models.Comment" Collapsed="true">
     <Position X="11.25" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAgAAAAABAQgCAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAQgAAAAABAQgCAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Comment.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -282,7 +281,7 @@
   <Class Name="AMS.Models.Field" Collapsed="true">
     <Position X="31.75" Y="7.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAAAAAAEgMAAAAEoAEAAAAAAAAAAUAAAQIAQAIAEAA=</HashCode>
+      <HashCode>RAAAAAAAEgMAAAAEoAEAAAAAAAAAAUAAAQIAQAIAEAA=</HashCode>
       <FileName>Models\Field.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -311,7 +310,7 @@
   <Class Name="AMS.Models.Tag" Collapsed="true">
     <Position X="18" Y="10.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAIAAAAAQIgAAEgIAUAAQAAACAIAQIAgACgAAAAAE=</HashCode>
+      <HashCode>AAAAIAAAIAQIgAAEgIAUAAQAAACAIAQIAgAAgAAAAgE=</HashCode>
       <FileName>Models\Tag.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -319,7 +318,7 @@
   <Class Name="AMS.Models.User" Collapsed="true">
     <Position X="9" Y="8.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAIAAQoAAAEgYE0AAQACgAAAAQIEgAAAAAAAAE=</HashCode>
+      <HashCode>AAAAAAAIIAQoAAAEgYE0AAQACgAAAAQIEgAAAAAAAAE=</HashCode>
       <FileName>Models\User.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -438,28 +437,28 @@
   <Class Name="AMS.ViewModels.AssetEditorViewModel" Collapsed="true">
     <Position X="32" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>yQEgEBoAQEAgVEEAgBABAiQQEgJJwAACDgoERAAEACQ=</HashCode>
+      <HashCode>yQEgEBpAQEAgVEEAgBABAiQQEgJJwAACDgoERAAEAiQ=</HashCode>
       <FileName>ViewModels\AssetEditorViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AMS.ViewModels.AssetListViewModel" Collapsed="true">
     <Position X="36.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>A8hgCAtAAEoA3AAggAgBBCQSGgAIQAKCiFokBACAGCw=</HashCode>
+      <HashCode>A8lgCAtAAEoA3AAggAgBBCQSEgAIQAKCiFokBACAGiw=</HashCode>
       <FileName>ViewModels\AssetListViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AMS.ViewModels.AssetPresenterViewModel" Collapsed="true">
     <Position X="41" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QAAAAAAAQAAAxAEAAAAABAQAAAAAAEACAAAAAAAAAAA=</HashCode>
+      <HashCode>QAAAAAAAQAAAxAEEAAAABAQAAAAAAEACAAAAAAAAAAA=</HashCode>
       <FileName>ViewModels\AssetPresenterViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AMS.ViewModels.CommentViewModel" Collapsed="true">
     <Position X="2.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABAAAAAAACAAAAGAAAAAAAQAAAQAAAAAAAAAAEAEAAA=</HashCode>
+      <HashCode>ABAAAEAAACAAQAGAAAAAQAQAAEQAAAAAAAAAAEAEAAA=</HashCode>
       <FileName>ViewModels\CommentViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -494,7 +493,7 @@
   <Class Name="AMS.ViewModels.MainViewModel" Collapsed="true">
     <Position X="11.75" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>QBEAD22IEtgAQhAAiCEQWEzDABAAgAgIiGYqIAgMEAQ=</HashCode>
+      <HashCode>QBEAD22IEtggQhAAiCEQWEzDABAAgAgIiGYqKAgMEAQ=</HashCode>
       <FileName>ViewModels\MainViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -522,7 +521,7 @@
   <Class Name="AMS.ViewModels.TagEditorViewModel" Collapsed="true">
     <Position X="34.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ygAAEQAMQAMAhBAAAJAAAAQAAwCQgCIAQhgAgEAAIEA=</HashCode>
+      <HashCode>wgAAEQAMQAMAhAAAAJAAAAQAAwCQgCIAAhgAgEAAIEA=</HashCode>
       <FileName>ViewModels\TagEditorViewModel.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -630,7 +629,7 @@
   <Class Name="AMS.Views.AssetEditor" Collapsed="true">
     <Position X="26.5" Y="5.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAEAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Views\AssetEditor.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
@@ -769,7 +768,7 @@
   <Interface Name="AMS.Controllers.Interfaces.IAssetController" Collapsed="true">
     <Position X="0.75" Y="15.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAIAAAAogAAAAAAABJAQAAAAAAAAAAAAAQAAAAAg=</HashCode>
+      <HashCode>AgQAAIAgAAIAAAAAAAAAJACAAAAAAAAAAAAAAAAAAAg=</HashCode>
       <FileName>Controllers\Interfaces\IAssetController.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -783,14 +782,14 @@
   <Interface Name="AMS.Controllers.Interfaces.ICommentListController" Collapsed="true">
     <Position X="26.5" Y="15" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAABAAAAACAAABAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAABAAAAACAAABAQAAAAEAAAAEAAAAAAAAAAAA=</HashCode>
       <FileName>Controllers\Interfaces\ICommentListController.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="AMS.Controllers.Interfaces.IFieldListController" Collapsed="true">
     <Position X="2" Y="14.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>iAAAEAgEAAAAAAAAAAAAQAAAAAAAAAAAAABAAAAAAAA=</HashCode>
+      <HashCode>gAAAAAAEAAAAAAAAAAAAQAAAAAAAAAAAAABAAAAAAAA=</HashCode>
       <FileName>Controllers\Interfaces\IFieldListController.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -811,14 +810,14 @@
   <Interface Name="AMS.Controllers.Interfaces.ITagController" Collapsed="true">
     <Position X="3" Y="15.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQCIIAIQAAIgAAAAAAIJAQAAAAAAAAAAhAAgUAAAAA=</HashCode>
+      <HashCode>AAQAIIAIQAAIAAAAAAAIJAAAAAAAAAAAABAAAUAAAAA=</HashCode>
       <FileName>Controllers\Interfaces\ITagController.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="AMS.Controllers.Interfaces.ITagListController" Collapsed="true">
     <Position X="30" Y="15.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AABAACAAAAAAAAAAAAAABAAAAAAAAAAgAAAABAggAAA=</HashCode>
+      <HashCode>IABAAAAAAAAAAAAAAAAABAAAAAAAAAAgAAAABAgAAAA=</HashCode>
       <FileName>Controllers\Interfaces\ITagListController.cs</FileName>
     </TypeIdentifier>
   </Interface>
@@ -909,7 +908,7 @@
   <Interface Name="AMS.Interfaces.ITagable" Collapsed="true">
     <Position X="28.25" Y="15.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAQAAAAAAIAUAAAAAAAAAAQIAgAAAAAAAAE=</HashCode>
+      <HashCode>AAAAAAAAIAQAAAAAAIAUAAAAAAAAAAQIAgAAAAAAAAE=</HashCode>
       <FileName>Interfaces\ITagable.cs</FileName>
     </TypeIdentifier>
   </Interface>

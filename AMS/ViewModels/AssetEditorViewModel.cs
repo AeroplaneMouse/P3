@@ -374,6 +374,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(Identifier));
             OnPropertyChanged(nameof(Description));
             OnPropertyChanged(nameof(TagSearchQuery));
+            _tagHelper.Reload();
             UpdateAll();
         }
 

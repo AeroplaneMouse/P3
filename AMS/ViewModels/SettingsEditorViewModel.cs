@@ -9,6 +9,7 @@ namespace AMS.ViewModels
     {
         private string _oldPassword;
         private object _caller;
+        private Logging.Logger _logger = new Logging.Logger(Features.LogRepository);
 
         public ICommand SaveCommand { get; set; }
         public ICommand CancelCommand { get; set; }
@@ -86,7 +87,7 @@ namespace AMS.ViewModels
             }
             catch(Exception e)
             {
-                Console.WriteLine(e.Message);
+                _logger.AddEntry(e);
             }
         }
 

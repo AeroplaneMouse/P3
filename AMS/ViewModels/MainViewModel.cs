@@ -48,6 +48,8 @@ namespace AMS.ViewModels
         public int TitleHeight { get; private set; }
         public GridLength TitleHeightGridLength { get => new GridLength(TitleHeight + ResizeBorder); }
         public int NavigationHeight { get; private set; }
+        public Visibility MaximizeButtonVisibility { get; private set; } = Visibility.Visible;
+        public Visibility RestoreDownButtonVisibility { get; private set; } = Visibility.Collapsed;
 
         #endregion
 
@@ -259,7 +261,12 @@ namespace AMS.ViewModels
         {
             // Window commands
             MinimizeCommand = new Base.RelayCommand(() => _window.WindowState = WindowState.Minimized);
-            MaximizeCommand = new Base.RelayCommand(() => _window.WindowState ^= WindowState.Maximized); // Changes between normal and maximized
+            MaximizeCommand = new Base.RelayCommand(() => 
+            {
+                _window.WindowState ^= WindowState.Maximized;    // Changes between normal and maximized
+                MaximizeButtonVisibility ^= Visibility.Collapsed;
+                RestoreDownButtonVisibility ^= Visibility.Collapsed;
+            }); 
             CloseCommand = new Base.RelayCommand(() => _window.Close());
             SystemMenuCommand = new Base.RelayCommand(() => SystemCommands.ShowSystemMenu(_window, _window.PointToScreen(
                 new Point(

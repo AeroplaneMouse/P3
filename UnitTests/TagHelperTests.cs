@@ -22,6 +22,7 @@ namespace UnitTests
         public void InitiateTagHelper()
         {
             _tagRepMock = new Mock<ITagRepository>();
+            _tagRepMock.Setup(t => t.GetAll()).Returns(new List<Tag>() { new Tag { Name = "TestTag" } });
             _userRepMock = new Mock<IUserRepository>();
 
             _tagHelper = new TagHelper(_tagRepMock.Object, _userRepMock.Object);

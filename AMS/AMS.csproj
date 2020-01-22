@@ -25,10 +25,15 @@
     <None Remove="Resources\Images\Logos\View\view_black.png" />
     <None Remove="Resources\Images\Logos\View\view_gray.png" />
     <None Remove="Resources\Images\Logos\View\view_white.png" />
+    <None Remove="Resources\Images\Logos\WindowControlButtons\restoreDown.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Page Remove="Resources\Styles\Fonts.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\Logos\WindowControlButtons\restoreDown.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,7 +49,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Resource Include="Resources\Images\Logos\maximizeButton.png" />
+    <Resource Include="Resources\Images\Logos\WindowControlButtons\maximizeButton.png" />
     <Resource Include="Resources\Images\Logos\placeholder-beaut.png" />
     <Resource Include="Resources\Images\Logos\logo-light.png" />
     <Resource Include="Resources\Images\Logos\logo-dark.png" />

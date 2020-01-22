@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Threading;
 using AMS.Models;
 
 namespace UnitTests
@@ -51,7 +52,7 @@ namespace UnitTests
         {
             //Arrange
             Field field = new Field("Field", "Some content", Field.FieldType.TextBox);
-            string expected = "E3020BEA2EBE803400AACF38FEBCA1AB".ToUpper();
+            string expected = "A372CC6EDC6253D4805CB9D58133217C".ToUpper();
 
             //Act
             string result = field.Hash;
@@ -93,6 +94,9 @@ namespace UnitTests
         {
             //Arrange
             Field field = new Field("Field", "Some content", Field.FieldType.TextBox);
+            //Sleep added as the hashID for fields, depend on the current time in milliseconds,
+            //and it is impossible to create to fields within the same millisecond within the software.
+            Thread.Sleep(1);
             Field otherField = new Field("Different field", "Some different content", Field.FieldType.TextBox);
 
             //Act

@@ -96,11 +96,18 @@
 
                                             <!-- Window buttons -->
                                             <Button Content="-" Command="{Binding MinimizeCommand}" Style="{StaticResource WindowControlButton}"/>
-                                            <Button Command="{Binding MaximizeCommand}" Style="{StaticResource WindowMaximizeButton}">
-                                                <Button.Content>
-                                                    <Image Source="{StaticResource Maximize_White}"/>
-                                                </Button.Content>
-                                            </Button>
+                                            <Grid>
+                                                <Button Command="{Binding MaximizeCommand}" Style="{StaticResource WindowMaximizeButton}" Visibility="{Binding MaximizeButtonVisibility}">
+                                                    <Button.Content>
+                                                        <Image Source="{StaticResource Maximize_White}"/>
+                                                    </Button.Content>
+                                                </Button>
+                                                <Button Command="{Binding MaximizeCommand}" Style="{StaticResource WindowMaximizeButton}" Visibility="{Binding RestoreDownButtonVisibility}">
+                                                    <Button.Content>
+                                                        <Image Source="{StaticResource RestoreDown_White}"/>
+                                                    </Button.Content>
+                                                </Button>
+                                            </Grid>
                                             <Button Content="X" Command="{Binding CloseCommand}" Style="{StaticResource WindowCloseButton}"/>
                                         </StackPanel>
 

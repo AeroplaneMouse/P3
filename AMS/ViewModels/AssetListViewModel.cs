@@ -21,7 +21,7 @@ namespace AMS.ViewModels
         private IAssetListController _listController { get; set; }
         private string _searchQuery { get; set; } = String.Empty;
         private TagHelper _tagHelper { get; set; }
-        private bool _isStrict { get; set; } = true;
+        private bool _isStrict { get; set; } = Features.GetCurrentDepartment().ID == 0 ? false : true ;
         private bool _searchInFields { get; set; } = false;
         private int _tagTabIndex { get; set; } = 0;
 
@@ -152,6 +152,7 @@ namespace AMS.ViewModels
             OnPropertyChanged(nameof(SearchQuery));
             OnPropertyChanged(nameof(AppliedTags));
             OnPropertyChanged(nameof(CurrentDepartment));
+            _tagHelper.Reload();
 
             RefreshList();
         }
@@ -191,6 +192,10 @@ namespace AMS.ViewModels
         /// </summary>
         private void EditAsset(Asset asset)
         {
+            if(asset != null)
+            {
+                Features.Main.CurrentDepartment = Features.Main.Departments.Where(d => d.ID == asset.DepartmentdId).FirstOrDefault();
+            }
             Features.Navigate.To(Features.Create.AssetEditor(asset));
             OnPropertyChanged(nameof(Items));
         }
@@ -309,6 +314,7 @@ namespace AMS.ViewModels
                 {
                     _tagHelper.AddTag(tag);
                     AppliedTags = _tagHelper.GetAppliedTags(true);
+                    ClearInput();
                 }
                 SearchQuery = "";
                 _tagTabIndex = 0;
