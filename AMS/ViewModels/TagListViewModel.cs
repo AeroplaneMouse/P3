@@ -26,7 +26,7 @@ namespace AMS.ViewModels
         public ICommand AddNewCommand { get; set; }
         public ICommand SearchCommand { get; set; }
 
-        public Visibility RemoveSelectedVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility SelectedItemOptionsVisibility { get; set; } = Visibility.Collapsed;
 
         public string SearchQuery
         {
