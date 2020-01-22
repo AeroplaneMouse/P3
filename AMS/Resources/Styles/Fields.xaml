@@ -371,7 +371,7 @@
         <Setter Property="ItemTemplate">
             <Setter.Value>
                 <DataTemplate>
-                    <Grid MaxWidth="100" HorizontalAlignment="Left">
+                    <Grid HorizontalAlignment="Left">
                         <Label Style="{StaticResource TagLabelOnlyShow}" Margin="0 2 0 0"/>
                     </Grid>
                 </DataTemplate>
