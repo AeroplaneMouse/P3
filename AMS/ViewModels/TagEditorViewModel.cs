@@ -164,23 +164,34 @@ namespace AMS.ViewModels
             {
                 bool result;
                 string message = $"'{ _controller.ControlledTag.Name }' has been ";
+                SolidColorBrush background;
 
-                if (_controller.IsEditing)
+                if (_controller.ControlledTag.IsDirty())
                 {
-                    result =_controller.Update();
-                    message += "updated";
+                    if (_controller.IsEditing)
+                    {
+                        result = _controller.Update();
+                        message += "updated";
+                    }
+                    else
+                    {
+                        result = _controller.Save();
+                        message += "added";
+                    }
+
+                    // Change message if save was unsuccessfull
+                    if (!result)
+                        message = $"Error! Unable to { (_controller.IsEditing ? "update" : "add") } '{ _controller.ControlledTag.Name }'. This might be because the name is already in use.";
+                    
+                    background = result ? Notification.APPROVE : Notification.ERROR;
                 }
                 else
                 {
-                    result = _controller.Save();
-                    message += "added";
+                    message = "No changes made";
+                    result = true;
+                    background = Notification.WARNING;
                 }
 
-                // Change message if save was unsuccessfull
-                if (!result)
-                    message = $"Error! Unable to { (_controller.IsEditing ? "update" : "add") } '{ _controller.ControlledTag.Name }'. This might be because the name is already in use.";
-
-                SolidColorBrush background = result ? Notification.APPROVE : Notification.ERROR;
                 Features.AddNotification(new Notification(message, background), displayTime: 4000);
                 
                 // Return to tag list, if save was successfull

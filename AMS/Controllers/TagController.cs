@@ -98,7 +98,7 @@ namespace AMS.Controllers
             Tag savedTag = _tagRepository.Insert(ControlledTag, out newTagId);
 
             // Check if the tag was insertet successfully
-            if (ControlledTag != null && TagID != 0)
+            if (ControlledTag != null && newTagId != 0)
             {
                 // Update local tag with actual database tag
                 ControlledTag = savedTag;
