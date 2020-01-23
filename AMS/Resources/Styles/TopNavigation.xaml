@@ -11,6 +11,7 @@
     
     <!-- Menu button -->
     <Style TargetType="MenuItem" x:Key="MenuItemButton">
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         <Setter Property="FontWeight" Value="Light"/>
@@ -52,40 +53,57 @@
             <Trigger Property="IsSubmenuOpen" Value="True">
                 <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}"/>
             </Trigger>
+            <!--<Trigger Property="IsFocused" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundGrayBrush}"/>
+            </Trigger>-->
         </Style.Triggers>
     </Style>
-
-    <!-- Department content MenuItem button -->
-    <Style TargetType="MenuItem" x:Key="Department">
+    
+    <!-- Regular Menu items-->
+    <Style TargetType="MenuItem" x:Key="RegularMenuItem">
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeSmall}"/>
         <Setter Property="FontWeight" Value="Light"/>
-        <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SelectDepartmentCommand}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="MenuItem">
-                    <Border Padding="{TemplateBinding Padding}"
-                            Background="{TemplateBinding Background}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="30"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <ContentPresenter Content="{TemplateBinding Header}"
+                                              Grid.Column="1"
+                                              Margin="0 2 40 2"/>
+                        </Grid>
+
+
+                            <!--<ContentPresenter Content="{TemplateBinding Header}"
                                               Margin="0 3 40 3"
                                               Grid.Column="1"
-                                              VerticalAlignment="Center"/>
-                        </Grid>
+                                              VerticalAlignment="Center"/>-->
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
             </Trigger>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundDarkBrush}"/>
+            </Trigger>
         </Style.Triggers>
+    </Style>
+
+    <!-- Department content MenuItem button -->
+    <Style TargetType="MenuItem" x:Key="Department" BasedOn="{StaticResource RegularMenuItem}">
+        <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}, Path=DataContext.SelectDepartmentCommand}"/>
     </Style>
     
     <Style TargetType="MenuItem" x:Key="DepartmentItem">
