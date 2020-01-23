@@ -202,7 +202,8 @@
                                                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                                                FontSize="{StaticResource FontSizeXSmall}"
                                                                Foreground="White"
-                                                               Text="{Binding CurrentDatabase}"
+                                                               Text="{Binding CurrentDatabaseShort}"
+                                                               ToolTip="{Binding CurrentDatabase}"
                                                                HorizontalAlignment="Center"
                                                                Margin="10 0 10 10"/>
                                                 </StackPanel>
