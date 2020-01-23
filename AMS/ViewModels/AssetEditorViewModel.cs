@@ -232,9 +232,26 @@ namespace AMS.ViewModels
         }
 
         /// <summary>
-        /// Runs the cancel command, and returns.
+        /// Display confirm cancel prompt if asset is dirty
         /// </summary>
         public void Cancel()
+        {
+            if (_assetController.ControlledAsset.IsDirty())
+            {
+                Features.DisplayPrompt(new Views.Prompts.Confirm("Warning!\nChanges has been made. Do you want to remove changes and exit?", (sender, e) =>
+                {
+                    if (e.Result)
+                        CancelChangesAndReturn();
+                }));
+            }
+            else
+                CancelChangesAndReturn();
+        }
+
+        /// <summary>
+        /// Rolls back any changes and returns to the previous page
+        /// </summary>
+        private void CancelChangesAndReturn()
         {
             _assetController.RevertChanges();
             if (!Features.Navigate.Back())
