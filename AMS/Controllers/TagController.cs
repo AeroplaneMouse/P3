@@ -91,37 +91,48 @@ namespace AMS.Controllers
         /// <summary>
         /// Saves the tag as a new tag in the database
         /// </summary>
-        public void Save()
+        public bool Save()
         {
             SerializeFields();
             ulong newTagId;
-            ControlledTag = _tagRepository.Insert(ControlledTag, out newTagId);
-            TagID = newTagId;
+            Tag savedTag = _tagRepository.Insert(ControlledTag, out newTagId);
 
-            // Check if any fields does not have a tagId set
-            ControlledTag.DeSerializeFields();
-            foreach(Field field in ControlledTag.FieldList)
+            // Check if the tag was insertet successfully
+            if (ControlledTag != null && TagID != 0)
             {
-                if (field.TagIDs.Count == 0)
+                // Update local tag with actual database tag
+                ControlledTag = savedTag;
+                TagID = newTagId;
+                
+                // Check if any fields does not have a tagId set
+                ControlledTag.DeSerializeFields();
+                foreach (Field field in ControlledTag.FieldList)
                 {
-                    if (field.TagIDs.Contains(ControlledTag.ID)) continue;
-                    field.TagIDs.Add(ControlledTag.ID);
-                    ControlledTag.Changes["options"] = TagID;
+                    if (field.TagIDs.Count == 0)
+                    {
+                        if (field.TagIDs.Contains(ControlledTag.ID)) continue;
+                        field.TagIDs.Add(ControlledTag.ID);
+                        ControlledTag.Changes["options"] = TagID;
+                    }
                 }
-            }
 
-            // Save the field changes to the database
-            if (ControlledTag.IsDirty())
-                Update();
+                // Save the field changes to the database
+                if (ControlledTag.IsDirty())
+                    Update();
+                
+                return true;
+            }
+            else
+                return false;
         }
 
         /// <summary>
         /// Updates the tag in the database
         /// </summary>
-        public void Update()
+        public bool Update()
         {
             SerializeFields();
-            _tagRepository.Update(ControlledTag);
+            return _tagRepository.Update(ControlledTag);
         }
 
         /// <summary>

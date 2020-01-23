@@ -7,6 +7,7 @@ using System.Windows.Input;
 using AMS.Controllers.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Media;
 
 namespace AMS.ViewModels
 {
@@ -161,20 +162,30 @@ namespace AMS.ViewModels
             _controller.ControlledTag.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
             if (VerifyTagAndFields())
             {
+                bool result;
                 string message = $"'{ _controller.ControlledTag.Name }' has been ";
+
                 if (_controller.IsEditing)
                 {
-                    _controller.Update();
+                    result =_controller.Update();
                     message += "updated";
                 }
                 else
                 {
-                    _controller.Save();
+                    result = _controller.Save();
                     message += "added";
                 }
 
-                Features.AddNotification(new Notification(message, background: Notification.APPROVE), displayTime: 3500);
-                Features.Navigate.Back();
+                // Change message if save was unsuccessfull
+                if (!result)
+                    message = $"Error! Unable to { (_controller.IsEditing ? "update" : "add") } '{ _controller.ControlledTag.Name }'. This might be because the name is already in use.";
+
+                SolidColorBrush background = result ? Notification.APPROVE : Notification.ERROR;
+                Features.AddNotification(new Notification(message, background), displayTime: 4000);
+                
+                // Return to tag list, if save was successfull
+                if (result)
+                    Features.Navigate.Back();
             }
         }
 

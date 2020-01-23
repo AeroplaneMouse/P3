@@ -8,37 +8,18 @@ namespace AMS.Controllers.Interfaces
 {
     public interface ITagController : IFieldListController
     {
-        #region Properties
-
-        Tag ControlledTag { get; set; }
-        
-        List<Field> ParentTagFields { get; set; }
-
         bool IsEditing { get; set; }
-
+        Tag ControlledTag { get; set; }
+        List<Field> ParentTagFields { get; set; }
         List<Tag> ParentTagList { get; }
         List<Department> DepartmentList { get; }
 
-        #endregion
-
-        #region Methods
-
-        void Save();
-
+        bool Save();
+        bool Update();
         bool Remove(bool removeChildren = false);
-
-        //void RemoveChildren();
-
-        void Update();
-
         string CreateRandomColor();
-
         void ConnectParentTag();
-
         Tag GetTagById(ulong id);
-
         void RevertChanges();
-
-        #endregion
     }
 }
