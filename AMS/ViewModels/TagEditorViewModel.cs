@@ -235,17 +235,32 @@ namespace AMS.ViewModels
                 UpdateAll();
             }
         }
-        
+
         /// <summary>
-        /// Returns to the tag list without saving anything
+        /// Displays confirm cancel prompt if tag is dirty
         /// </summary>
         private void Cancel()
         {
-            if (!Features.Navigate.Back())
+            if (_controller.ControlledTag.IsDirty())
             {
-                _controller.RevertChanges();
-                Features.Navigate.To(Features.Create.TagList());
+                Features.DisplayPrompt(new Views.Prompts.Confirm("Warning!\nChanges has been made. Do you want to remove changes and exit?", (sender, e) =>
+                {
+                    if (e.Result)
+                        CancelChangesAndReturn();
+                }));
             }
+            else
+                CancelChangesAndReturn();
+        }
+
+        /// <summary>
+        /// Rolls back any changes and returns to the previous page
+        /// </summary>
+        private void CancelChangesAndReturn()
+        {
+            _controller.RevertChanges();
+            if (!Features.Navigate.Back())
+                Features.Navigate.To(Features.Create.TagList());
         }
 
         private void UpdateAll()
