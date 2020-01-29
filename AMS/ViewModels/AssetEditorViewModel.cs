@@ -138,6 +138,7 @@ namespace AMS.ViewModels
                         if (e.Result)
                         {
                             _assetController.Remove();
+                            Features.AddNotification(new Notification($"{ _assetController.ControlledAsset.Name } has been removed", Notification.APPROVE));
                             Features.Navigate.To(Features.Create.AssetList());
                         }
                     }));
