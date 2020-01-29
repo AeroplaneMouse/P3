@@ -191,21 +191,21 @@
                                                 </StackPanel>
                                                 
                                                 <!-- Current database -->
-                                                <StackPanel VerticalAlignment="Bottom">
+                                                <StackPanel VerticalAlignment="Bottom"
+                                                            Margin="1 0 1 10">
                                                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                                                FontSize="{StaticResource FontSizeXSmall}"
                                                                Foreground="White"
                                                                FontWeight="Bold"
                                                                Text="Current database"
                                                                HorizontalAlignment="Center"/>
-                                                    
+
                                                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                                                FontSize="{StaticResource FontSizeXSmall}"
                                                                Foreground="White"
                                                                Text="{Binding CurrentDatabaseShort}"
                                                                ToolTip="{Binding CurrentDatabase}"
-                                                               HorizontalAlignment="Center"
-                                                               Margin="10 0 10 10"/>
+                                                               HorizontalAlignment="Center"/>
                                                 </StackPanel>
                                             </Grid>
                                         </Border>

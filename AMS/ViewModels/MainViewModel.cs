@@ -60,8 +60,8 @@ namespace AMS.ViewModels
         public string CurrentDatabaseShort { 
             get
             {
-                if (CurrentDatabase.Length > 20)
-                    return CurrentDatabase.Substring(0, 18) + "...";
+                if (CurrentDatabase.Length > 17)
+                    return CurrentDatabase.Substring(0, 16) + "...";
                 else
                     return CurrentDatabase;
             } 
