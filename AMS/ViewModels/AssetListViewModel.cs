@@ -499,12 +499,14 @@ namespace AMS.ViewModels
         /// </summary>
         private void Export()
         {
+            // Export selected items
             if (SelectedItems.Count > 0)
-                // Export selected items
                 _listController.Export(SelectedItems);
-            else
-                // Export all items found by search
+            // Export all items found by search if any
+            else if (Items.Count > 0)
                 _listController.Export(Items.ToList());
+            else
+                Features.AddNotification(new Notification("Nothing to export...", background: Notification.INFO));
         }
 
         /// <summary>
