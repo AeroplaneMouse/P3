@@ -275,6 +275,15 @@ namespace AMS.Database.Repositories
                     if (removeChildren && entity.ParentId == 0)
                         DeleteChildren(entity.ID, command);
                     
+                    // Update children's parent id to zero
+                    else if (!removeChildren && entity.ParentId == 0)
+                    {
+                        command.CommandText = "UPDATE tags SET parent_id=0 WHERE parent_id=@pid";
+                        command.Parameters.Add("@pid", MySqlDbType.UInt64);
+                        command.Parameters["@pid"].Value = entity.ID;
+                        command.ExecuteNonQuery();
+                    }
+
                     command.CommandText = "DELETE FROM tags WHERE id=@id";
                     command.Parameters.Add("@id", MySqlDbType.UInt64);
                     command.Parameters["@id"].Value = entity.ID;
