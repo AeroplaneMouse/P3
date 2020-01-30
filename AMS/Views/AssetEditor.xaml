@@ -82,13 +82,15 @@
                     </StackPanel>
                     <TextBox Style="{StaticResource ParagraphTextBoxWithSpace}"
                              Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                             x:Name="StartElement"/>
+                             x:Name="StartElement"
+                             TabIndex="0"/>
 
                     <!-- Identifier -->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                Text="Identifier" />
                     <TextBox Style="{StaticResource ParagraphTextBoxWithSpace}"
-                             Text="{Binding Identifier, UpdateSourceTrigger=PropertyChanged}"/>
+                             Text="{Binding Identifier, UpdateSourceTrigger=PropertyChanged}"
+                             TabIndex="1"/>
 
                     <!-- Description-->
                     <TextBlock Style="{StaticResource ParagraphStyle}"
@@ -97,8 +99,9 @@
                              Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
                              TextWrapping="Wrap"
                              AcceptsReturn="True"
-                             AcceptsTab="True"
-                             MinHeight="80" />
+                             AcceptsTab="False"
+                             MinHeight="80"
+                             TabIndex="2"/>
                 </StackPanel>
 
                 <Rectangle Style="{StaticResource VerticalSeparator}"
@@ -147,7 +150,7 @@
                                      VerticalContentAlignment="Center"
                                      Height="30"
                                      x:Name="SearchElement"
-                                     TabIndex="0">
+                                     TabIndex="3">
 
                                 <TextBox.InputBindings>
                                     <KeyBinding Key="Enter" Command="{Binding ApplyTagOrEnterParentCommand}"/>
