@@ -56,7 +56,7 @@ namespace AMS.ViewModels
         public Stack<Page> History { get; private set; } = new Stack<Page>();
 
         public string CurrentUser { get; set; }
-        public string CurrentDatabase { get; set; }
+        public string CurrentDatabase { get; set; } = String.Empty;
         public string CurrentDatabaseShort { 
             get
             {
