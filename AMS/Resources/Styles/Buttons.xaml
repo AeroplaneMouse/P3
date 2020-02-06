@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
 
-    <DrawingBrush Viewport="0,0,8,8" ViewportUnits="Absolute" TileMode="Tile" x:Key="DashedBorderLine">
+    <DrawingBrush Viewport="0,0,12,12" ViewportUnits="Absolute" TileMode="Tile" x:Key="DashedBorderLine">
         <DrawingBrush.Drawing>
             <DrawingGroup>
                 <GeometryDrawing Brush="Black">
@@ -65,11 +65,9 @@
 
     <!-- System icon button-->
     <Style TargetType="{x:Type Button}" x:Key="SystemIconButton" BasedOn="{StaticResource Hoverless}">
-
         <!-- So it can be clicked -->
         <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
         <Setter Property="Padding" Value="1" />
-
     </Style>
 
     <!-- Navigation bar button -->
@@ -163,21 +161,30 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    <!-- Regular button with focus border -->
+    <Style TargetType="{x:Type Button}" x:Key="RegularButtonWithFocusBorder" BasedOn="{StaticResource RegularButton}">
+        <Style.Triggers>
+            <Trigger Property="IsFocused" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource DashedBorderLine}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
     <!-- Regular cancel button -->
-    <Style TargetType="Button" x:Key="RegularCancelButton" BasedOn="{StaticResource RegularButton}">
+    <Style TargetType="Button" x:Key="RegularCancelButton" BasedOn="{StaticResource RegularButtonWithFocusBorder}">
         <!-- Adds the hover effect -->
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
                 <Setter Property="BorderBrush" Value="{StaticResource CancelRedBrush}"/>
-                    <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="Foreground" Value="Black"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
     <!-- Regular Yes Button -->
-    <Style TargetType="Button" x:Key="RegularYesButton" BasedOn="{StaticResource RegularButton}">
+    <Style TargetType="Button" x:Key="RegularYesButton" BasedOn="{StaticResource RegularButtonWithFocusBorder}">
         <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
         
         <Style.Triggers>
@@ -188,7 +195,7 @@
     </Style>
 
     <!-- Regular No button -->
-    <Style TargetType="Button" x:Key="RegularNoButton" BasedOn="{StaticResource RegularButton}">
+    <Style TargetType="Button" x:Key="RegularNoButton" BasedOn="{StaticResource RegularButtonWithFocusBorder}">
         <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
 
         <Style.Triggers>
@@ -199,16 +206,14 @@
     </Style>
 
     <!-- Regular remove button -->
-    <Style TargetType="Button" x:Key="RegularRemoveButton" BasedOn="{StaticResource RegularButton}">
+    <Style TargetType="Button" x:Key="RegularRemoveButton" BasedOn="{StaticResource RegularButtonWithFocusBorder}">
         <Setter Property="Background" Value="{StaticResource CancelRedBrush}"/>
     </Style>
 
     <!-- Regular accept button -->
-    <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButton}">
+    <Style TargetType="Button" x:Key="RegularAcceptButton" BasedOn="{StaticResource RegularButtonWithFocusBorder}">
         <Setter Property="Background" Value="{StaticResource AcceptGreenBrush}"/>
     </Style>
-
-    
 
     <!-- Department content menu item button -->
     <Style TargetType="Button" x:Key="DepartmentButton">

@@ -31,9 +31,9 @@ namespace AMS.Views
             if (Features.OnlyVisibleForAdmin == Visibility.Visible)
             {
                 if (vm.SelectedItem == null)
-                    vm.RemoveSelectedVisibility = Visibility.Collapsed;
+                    vm.SelectedItemOptionsVisibility = Visibility.Collapsed;
                 else
-                    vm.RemoveSelectedVisibility = Visibility.Visible;
+                    vm.SelectedItemOptionsVisibility = Visibility.Visible;
             }
         }
     }

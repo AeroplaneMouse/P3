@@ -64,15 +64,15 @@
 
                                         <!-- Menu bar -->
                                         <Menu Grid.Column="1" HorizontalAlignment="Left" Style="{StaticResource MenuContainer}">
-                                            <MenuItem Header="_Settings" Style="{StaticResource MenuItemButton}" Visibility="{Binding SettingsVisibility}">
-                                                <MenuItem Header="_Change setup" Command="{Binding ChangeSettingsCommand}"/>
-                                                <MenuItem Header="_Clear setup" Command="{Binding ClearSettingsCommand}"/>
+                                            <MenuItem Header="_Settings" Style="{StaticResource MenuItemButton}" Visibility="{Binding SettingsVisibility}" ItemContainerStyle="{StaticResource RegularMenuItem}">
+                                                <MenuItem Header="Change setup" Command="{Binding ChangeSettingsCommand}" />
+                                                <MenuItem Header="Clear setup" Command="{Binding ClearSettingsCommand}"/>
                                             </MenuItem>
-                                            <MenuItem Header="_Help" Style="{StaticResource MenuItemButton}">
-                                                <MenuItem Header="_How to use" Command="{Binding ShowHowToUseCommand}"/>
-                                                <MenuItem Header="_Shortcuts" Command="{Binding ShowShortcutsCommand}"/>
-                                                <MenuItem Header="_Reload" Command="{Binding ReloadCommand}"/>
-                                                <MenuItem Header="_Exit" Command="{Binding CloseCommand}"/>
+                                            <MenuItem Header="_Help" Style="{StaticResource MenuItemButton}" ItemContainerStyle="{StaticResource RegularMenuItem}">
+                                                <MenuItem Header="How to use" Command="{Binding ShowHowToUseCommand}" />
+                                                <MenuItem Header="Shortcuts" Command="{Binding ShowShortcutsCommand}" />
+                                                <MenuItem Header="Reload" Command="{Binding ReloadCommand}"/>
+                                                <MenuItem Header="Exit" Command="{Binding CloseCommand}"/>
                                             </MenuItem>
                                         </Menu>
 
@@ -191,20 +191,21 @@
                                                 </StackPanel>
                                                 
                                                 <!-- Current database -->
-                                                <StackPanel VerticalAlignment="Bottom">
+                                                <StackPanel VerticalAlignment="Bottom"
+                                                            Margin="1 0 1 10">
                                                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                                                FontSize="{StaticResource FontSizeXSmall}"
                                                                Foreground="White"
                                                                FontWeight="Bold"
                                                                Text="Current database"
                                                                HorizontalAlignment="Center"/>
-                                                    
+
                                                     <TextBlock Style="{StaticResource ParagraphStyle}"
                                                                FontSize="{StaticResource FontSizeXSmall}"
                                                                Foreground="White"
-                                                               Text="{Binding CurrentDatabase}"
-                                                               HorizontalAlignment="Center"
-                                                               Margin="10 0 10 10"/>
+                                                               Text="{Binding CurrentDatabaseShort}"
+                                                               ToolTip="{Binding CurrentDatabase}"
+                                                               HorizontalAlignment="Center"/>
                                                 </StackPanel>
                                             </Grid>
                                         </Border>

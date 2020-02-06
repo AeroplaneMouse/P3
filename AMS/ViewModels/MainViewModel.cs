@@ -57,6 +57,15 @@ namespace AMS.ViewModels
 
         public string CurrentUser { get; set; }
         public string CurrentDatabase { get; set; }
+        public string CurrentDatabaseShort { 
+            get
+            {
+                if (CurrentDatabase.Length > 17)
+                    return CurrentDatabase.Substring(0, 16) + "...";
+                else
+                    return CurrentDatabase;
+            } 
+        }
         public Session CurrentSession { get; private set; }
         public Department CurrentDepartment
         {

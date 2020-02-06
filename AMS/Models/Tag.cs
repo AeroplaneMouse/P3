@@ -86,7 +86,7 @@ namespace AMS.Models
 
         public Tag()
         {
-            
+            TrackChanges = true;
         }
 
         /*Constructor used by DB*/

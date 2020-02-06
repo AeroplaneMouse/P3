@@ -51,7 +51,7 @@
                     Margin="10">
 
             <!-- Edit button -->
-            <Button Style="{StaticResource RegularButton}"
+            <Button Style="{StaticResource RegularButtonWithFocusBorder}"
                     Command="{Binding EditCommand}"
                     Content="Edit" 
                     Visibility="{x:Static viewModel:Features.OnlyVisibleForAdmin}"/>

@@ -26,7 +26,7 @@ namespace AMS.ViewModels
         public ICommand AddNewCommand { get; set; }
         public ICommand SearchCommand { get; set; }
 
-        public Visibility RemoveSelectedVisibility { get; set; } = Visibility.Collapsed;
+        public Visibility SelectedItemOptionsVisibility { get; set; } = Visibility.Collapsed;
 
         public string SearchQuery
         {
@@ -105,13 +105,11 @@ namespace AMS.ViewModels
                     }
                 }));
             }
-
             else
             {
+                // The user tag cannot be removed from the system
                 if (_tagController.ControlledTag.TagId == 1)
-                {
                     Features.AddNotification(new Notification($"{_tagController.ControlledTag.Name} cannot be removed, it is essential", Notification.WARNING));
-                }
                 else
                 {
                     Features.DisplayPrompt(new Views.Prompts.Confirm(
@@ -119,9 +117,12 @@ namespace AMS.ViewModels
                         + "Are you sure?\n"
                         + $"Tag: { _tagController.ControlledTag.Name }", (sender, e) =>
                         {
-                            _tagController.Remove();
-                            UpdateOnFocus();
-                            Features.AddNotification(new Notification($"{ _tagController.ControlledTag.Name } has been removed.", background: Notification.APPROVE));
+                            if (e.Result)
+                            {
+                                _tagController.Remove();
+                                UpdateOnFocus();
+                                Features.AddNotification(new Notification($"{ _tagController.ControlledTag.Name } has been removed.", background: Notification.APPROVE));
+                            }
                         }));
                 }
             }

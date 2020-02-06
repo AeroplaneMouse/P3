@@ -7,6 +7,7 @@ using System.Windows.Input;
 using AMS.Controllers.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows.Media;
 
 namespace AMS.ViewModels
 {
@@ -161,20 +162,41 @@ namespace AMS.ViewModels
             _controller.ControlledTag.DepartmentID = DepartmentList[SelectedDepartmentIndex].ID;
             if (VerifyTagAndFields())
             {
+                bool result;
                 string message = $"'{ _controller.ControlledTag.Name }' has been ";
-                if (_controller.IsEditing)
+                SolidColorBrush background;
+
+                if (_controller.ControlledTag.IsDirty())
                 {
-                    _controller.Update();
-                    message += "updated";
+                    if (_controller.IsEditing)
+                    {
+                        result = _controller.Update();
+                        message += "updated";
+                    }
+                    else
+                    {
+                        result = _controller.Save();
+                        message += "added";
+                    }
+
+                    // Change message if save was unsuccessfull
+                    if (!result)
+                        message = $"Error! Unable to { (_controller.IsEditing ? "update" : "add") } '{ _controller.ControlledTag.Name }'. This might be because the name is already in use.";
+                    
+                    background = result ? Notification.APPROVE : Notification.ERROR;
                 }
                 else
                 {
-                    _controller.Save();
-                    message += "added";
+                    message = "No changes made";
+                    result = true;
+                    background = Notification.WARNING;
                 }
 
-                Features.AddNotification(new Notification(message, background: Notification.APPROVE), displayTime: 3500);
-                Features.Navigate.Back();
+                Features.AddNotification(new Notification(message, background), displayTime: 4000);
+                
+                // Return to tag list, if save was successfull
+                if (result)
+                    Features.Navigate.Back();
             }
         }
 
@@ -213,17 +235,32 @@ namespace AMS.ViewModels
                 UpdateAll();
             }
         }
-        
+
         /// <summary>
-        /// Returns to the tag list without saving anything
+        /// Displays confirm cancel prompt if tag is dirty
         /// </summary>
         private void Cancel()
         {
-            if (!Features.Navigate.Back())
+            if (_controller.ControlledTag.IsDirty())
             {
-                _controller.RevertChanges();
-                Features.Navigate.To(Features.Create.TagList());
+                Features.DisplayPrompt(new Views.Prompts.Confirm("Warning!\nChanges has been made. Do you want to remove changes and exit?", (sender, e) =>
+                {
+                    if (e.Result)
+                        CancelChangesAndReturn();
+                }));
             }
+            else
+                CancelChangesAndReturn();
+        }
+
+        /// <summary>
+        /// Rolls back any changes and returns to the previous page
+        /// </summary>
+        private void CancelChangesAndReturn()
+        {
+            _controller.RevertChanges();
+            if (!Features.Navigate.Back())
+                Features.Navigate.To(Features.Create.TagList());
         }
 
         private void UpdateAll()
