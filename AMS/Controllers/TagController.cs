@@ -67,23 +67,19 @@ namespace AMS.Controllers
             }
         }
 
-        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) : base(tag)
+        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) 
+            : base(tag)
         {
-            //_controlledTag = tag;
-
             _tagRepository = tagRep;
             _departmentRepository = departmentRepository;
 
-            if (ControlledTag.ID == 0)
-            {
-                ControlledTag.Color = CreateRandomColor();
-                IsEditing = false;
-            }
-            else
-            {
-                IsEditing = true;
+            IsEditing = ControlledTag.ID > 0;
+
+            if (IsEditing)
                 ControlledTag.DeSerializeFields();
-            }
+            else
+                ControlledTag.Color = CreateRandomColor();
+
         }
 
         #region Public Methods
