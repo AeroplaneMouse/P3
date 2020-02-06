@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using AMS.Events;
 using AMS.Models;
 using System.Linq;
@@ -8,6 +8,7 @@ using AMS.Controllers.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
+using System.Windows;
 
 namespace AMS.ViewModels
 {
@@ -27,7 +28,7 @@ namespace AMS.ViewModels
         public string PageTitle { get; set; }
         public List<Tag> ParentTagList { get => _controller.ParentTagList; }
         public List<Department> DepartmentList { get => _controller.DepartmentList; }
-
+        public Visibility EditingVisibility { get => _controller.IsEditing ? Visibility.Visible : Visibility.Collapsed; }
         public int SelectedParentTagIndex
         {
             get => _selectedParentTagIndex;

@@ -67,10 +67,9 @@ namespace AMS.Controllers
             }
         }
 
-        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) : base(tag)
+        public TagController(Tag tag, ITagRepository tagRep, IDepartmentRepository departmentRepository) 
+            : base(tag)
         {
-            //_controlledTag = tag;
-
             _tagRepository = tagRep;
             _departmentRepository = departmentRepository;
 
