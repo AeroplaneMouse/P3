@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using AMS.Events;
 using AMS.Models;
 using System.Linq;
@@ -241,7 +241,12 @@ namespace AMS.ViewModels
         /// </summary>
         private void Cancel()
         {
-            if (_controller.ControlledTag.IsDirty())
+            // Handle cancel on a new tag
+            if (!_controller.IsEditing)
+                Features.Navigate.To(Features.Create.TagList());
+
+            // Handle cancel on an edited tag
+            else if (_controller.ControlledTag.IsDirty())
             {
                 Features.DisplayPrompt(new Views.Prompts.Confirm("Warning!\nChanges has been made. Do you want to remove changes and exit?", (sender, e) =>
                 {
