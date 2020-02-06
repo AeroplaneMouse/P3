@@ -171,18 +171,10 @@ namespace AMS.ViewModels
                 return false;
 
             //Checks whether to save a new, or update an existing.
-            if (_assetController.IsEditing)
+            if (_assetController.IsEditing && !multiAdd)
             {
-                if (!multiAdd)
-                {
-                    _assetController.Update();
-                    Features.AddNotification(new Notification("Asset updated", Notification.APPROVE));
-                }
-                else
-                {
-                    _assetController.Save();
-                    Features.AddNotification(new Notification("Asset added", Notification.APPROVE));
-                }
+                _assetController.Update();
+                Features.AddNotification(new Notification("Asset updated", Notification.APPROVE));
             }
             else
             {
