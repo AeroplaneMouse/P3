@@ -20,6 +20,7 @@ namespace AMS.Controllers
         private Session _session;
 
         public Asset ControlledAsset { get; set; }
+        public bool IsEditing { get; set; }
         public List<ITagable> CurrentlyAddedTags
         {
             get
@@ -39,6 +40,8 @@ namespace AMS.Controllers
 
             _assetRepository = assetRepository;
             _session = session;
+
+            IsEditing = ControlledAsset.ID > 0;
 
             ControlledAsset.DeSerializeFields();
             LoadTags();

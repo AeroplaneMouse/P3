@@ -20,7 +20,6 @@ namespace AMS.ViewModels
     public class AssetEditorViewModel : BaseViewModel
     {
         private IAssetController _assetController { get; set; }
-        private bool _isEditing { get; set; }
         private string _tagSearchQuery { get; set; }
         private TagHelper _tagHelper { get; set; }
         private int _tagTabIndex { get; set; }
@@ -76,6 +75,7 @@ namespace AMS.ViewModels
         public Visibility TagSuggestionsVisibility { get; set; } = Visibility.Collapsed;
         public Visibility SingleSelected { get; set; } = Visibility.Collapsed;
         public Visibility MultipleSelected { get; set; } = Visibility.Collapsed;
+        public Visibility EditingVisibility { get => _assetController.IsEditing ? Visibility.Visible : Visibility.Collapsed; }
         public bool TagSuggestionIsOpen { get; set; } = false;
         public ITagable TagParent { get; set; }
 
@@ -103,9 +103,8 @@ namespace AMS.ViewModels
             _tagHelper.SetAppliedTags(new ObservableCollection<ITagable>(_assetController.CurrentlyAddedTags));
             AppliedTags = _tagHelper.GetAppliedTags(false);
 
-            _isEditing = (_assetController.ControlledAsset.ID != 0);
 
-            Title = _isEditing ? "Edit asset" : "Add asset";
+            Title = _assetController.IsEditing ? "Edit asset" : "Add asset";
 
             // Commands
             SaveCommand = new RelayCommand(() => SaveAndExit());
@@ -172,7 +171,7 @@ namespace AMS.ViewModels
                 return false;
 
             //Checks whether to save a new, or update an existing.
-            if (_isEditing)
+            if (_assetController.IsEditing)
             {
                 if (!multiAdd)
                 {
@@ -494,7 +493,7 @@ namespace AMS.ViewModels
                     Notification.WARNING));
                 return false;
             }
-            else if (Features.GetCurrentDepartment().ID == 0 && !_isEditing)
+            else if (Features.GetCurrentDepartment().ID == 0 && !_assetController.IsEditing)
             {
                 Features.AddNotification(new Notification("Please select another department than \"All departments\"",
                     Notification.WARNING));

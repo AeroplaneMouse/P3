@@ -44,6 +44,7 @@
 
             <Button Style="{StaticResource RegularRemoveButton}"
                     Command="{Binding RemoveCommand}"
+                    Visibility="{Binding EditingVisibility}"
                     Margin="10 0 0 0"
                     Content="Remove tag" />
 

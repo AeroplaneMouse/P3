@@ -8,6 +8,7 @@ using AMS.Controllers.Interfaces;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Media;
+using System.Windows;
 
 namespace AMS.ViewModels
 {
@@ -27,7 +28,7 @@ namespace AMS.ViewModels
         public string PageTitle { get; set; }
         public List<Tag> ParentTagList { get => _controller.ParentTagList; }
         public List<Department> DepartmentList { get => _controller.DepartmentList; }
-
+        public Visibility EditingVisibility { get => _controller.IsEditing ? Visibility.Visible : Visibility.Collapsed; }
         public int SelectedParentTagIndex
         {
             get => _selectedParentTagIndex;
@@ -241,7 +242,12 @@ namespace AMS.ViewModels
         /// </summary>
         private void Cancel()
         {
-            if (_controller.ControlledTag.IsDirty())
+            // Handle cancel on a new tag
+            if (!_controller.IsEditing)
+                Features.Navigate.To(Features.Create.TagList());
+
+            // Handle cancel on an edited tag
+            else if (_controller.ControlledTag.IsDirty())
             {
                 Features.DisplayPrompt(new Views.Prompts.Confirm("Warning!\nChanges has been made. Do you want to remove changes and exit?", (sender, e) =>
                 {
