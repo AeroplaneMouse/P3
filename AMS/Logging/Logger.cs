@@ -166,7 +166,7 @@ namespace AMS.Logging
             {
                 if (entity.Changes.ContainsKey(property.Name))
                 {
-                    keyValuePairsOfChanges.Add(property.Name, new Change(entity.Changes[property.Name].ToString(), property.GetValue(entity)?.ToString()));
+                    keyValuePairsOfChanges.Add(property.Name, new Change(entity.Changes[property.Name]?.ToString(), property.GetValue(entity)?.ToString()));
                 }
             }
 
