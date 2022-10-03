@@ -1,4 +1,5 @@
 [![CodeQL](https://github.com/AeroplaneMouse/P3/actions/workflows/codeql-analysis.yml/badge.svg?branch=master)](https://github.com/AeroplaneMouse/P3/actions/workflows/codeql-analysis.yml)
+[![.NET](https://github.com/AeroplaneMouse/P3/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/AeroplaneMouse/P3/actions/workflows/dotnet.yml)
 # P3
 
 ## Get Started
