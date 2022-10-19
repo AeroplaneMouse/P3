@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
 using AMS.Controllers;
 using AMS.Controllers.Interfaces;
@@ -66,10 +67,10 @@ namespace UnitTests
             //Act
             _assetListController.Remove(asset1);
 
-            bool result = _assetListController.AssetList.IsNullOrEmpty();
+            bool result = _assetListController.AssetList.Any();
 
             //Assert
-            Assert.IsTrue(result);
+            Assert.IsFalse(result);
         }
         
         [TestMethod]
