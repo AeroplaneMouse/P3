@@ -39,7 +39,7 @@ namespace AMS.Database.Repositories
                         cmd.Parameters["@asset_id"].Value = entity.AssetID;
 
                         cmd.Parameters.Add("@user_id", MySqlDbType.UInt64);
-                        cmd.Parameters["@user_id"].Value = Features.GetCurrentSession().user.ID;
+                        cmd.Parameters["@user_id"].Value = Features.GetCurrentSession().User.ID;
 
                         cmd.Parameters.Add("@content", MySqlDbType.String);
                         cmd.Parameters["@content"].Value = entity.Content;
@@ -48,7 +48,7 @@ namespace AMS.Database.Repositories
                         id = (ulong)cmd.LastInsertedId;
                     }
 
-                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().User.ID, id);
                 }
                 catch (MySqlException e)
                 {
@@ -93,7 +93,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
                     
-                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().User.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -128,7 +128,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
 
-                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().User.ID);
                 }
                 catch (MySqlException e)
                 {

@@ -77,8 +77,8 @@ namespace AMS.ViewModels
                 // Update default department for user
                 if (_currentDepartment != null)
                 {
-                    CurrentSession.user.DefaultDepartment = _currentDepartment.ID;
-                    _userRep.Update(CurrentSession.user);
+                    CurrentSession.User.DefaultDepartment = _currentDepartment.ID;
+                    _userRep.Update(CurrentSession.User);
                 }
 
                 OnPropertyChanged(nameof(CurrentDepartment));
@@ -188,7 +188,7 @@ namespace AMS.ViewModels
             OnlyVisibleForAdmin = CurrentSession.IsAdmin() ? Visibility.Visible : Visibility.Collapsed;
 
             // Setting the current department, from the default department of the current user.
-            CurrentDepartment = _departmentRep.GetById(session.user.DefaultDepartment);
+            CurrentDepartment = _departmentRep.GetById(session.User.DefaultDepartment);
 
             if (CurrentDepartment == null)
                 CurrentDepartment = Department.GetDefault();

@@ -106,7 +106,7 @@ namespace AMS.Database.Repositories
                         id = (ulong)cmd.LastInsertedId;
                     }
 
-                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().User.ID, id);
                 }
                 catch (MySqlException e)
                 {
@@ -159,7 +159,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
                     
-                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().User.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -199,7 +199,7 @@ namespace AMS.Database.Repositories
                         querySuccess = cmd.ExecuteNonQuery() > 0;
                     }
                     
-                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().User.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -439,7 +439,7 @@ namespace AMS.Database.Repositories
                     }
                     
                     _logger.AddEntry("Tag attached", tagLabels + " was attached to the asset with ID: "
-                        + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.", Features.GetCurrentSession().user.ID);
+                        + asset.ID + " and name: " + asset.Name + ". Other tags have been removed.", Features.GetCurrentSession().User.ID);
                     
                     transaction.Commit();
                 }

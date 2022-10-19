@@ -54,7 +54,7 @@ namespace AMS.Controllers
         public bool Save()
         {
             // Save the current department onto the asset.
-            ControlledAsset.DepartmentdId = _session.user.DefaultDepartment;
+            ControlledAsset.DepartmentdId = _session.User.DefaultDepartment;
             SerializeFields();
 
             // Database saving

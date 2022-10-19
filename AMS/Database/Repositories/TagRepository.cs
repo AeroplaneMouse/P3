@@ -124,7 +124,7 @@ namespace AMS.Database.Repositories
                         id = (ulong)cmd.LastInsertedId;
                     }
 
-                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID, id);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().User.ID, id);
                 }
                 catch (MySqlException e)
                 {
@@ -227,7 +227,7 @@ namespace AMS.Database.Repositories
                     
                     transaction.Commit();
                     
-                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().User.ID);
                 }
                 catch (MySqlException e)
                 {
@@ -290,7 +290,7 @@ namespace AMS.Database.Repositories
                     command.ExecuteNonQuery();
                     transaction.Commit();
                     
-                    _logger.AddEntry(entity, Features.GetCurrentSession().user.ID);
+                    _logger.AddEntry(entity, Features.GetCurrentSession().User.ID);
                     querySuccess = true;
                 }
                 catch (MySqlException e)
