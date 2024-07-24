@@ -1,3 +1,6 @@
+CREATE DATABASE if not exists ds303e19;
+USE ds303e19;
+
 create table if not exists departments
 (
     id         bigint unsigned auto_increment      primary key,
